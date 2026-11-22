@@ -10,3 +10,4 @@
 2026-11-22T08:19:22Z END p=0.004 router exit 0: evaluation.router:make_tiered_decoder,42,45,87,0.0007279071089303368,7.80451884454525e-05,315.4639385072049 [load 13.01, evaluators 4, joint 0, loss.job 0, candidates 0, throttled so far 4653.0 s]
 2026-11-22T08:19:35Z START p=0.003 relay-bp [load 12.88, evaluators 4, joint 0, loss.job 0, candidates 0, throttled so far 4653.0 s]
 2026-11-22T08:19:45Z START p=0.003 router [load 13.12, evaluators 5, joint 0, loss.job 0, candidates 0, throttled so far 4653.0 s]
+2026-11-22T08:26:56Z END p=0.003 router exit 0: evaluation.router:make_tiered_decoder,3,3,6,5.001375527313723e-05,2.0419813083538685e-05,42.484572936862236 [load 14.68, evaluators 5, joint 0, loss.job 0, candidates 0, throttled so far 4781.6 s]

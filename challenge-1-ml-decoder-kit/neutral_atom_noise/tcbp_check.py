@@ -397,8 +397,10 @@ def score_command(args):
         raise SystemExit(f"{args.per_shot} was not made from {args.shots}")
     failed = {arm: per_shot[f"failed_{arm}"] > 0 for arm in ARMS}
     stem = Path(args.shots).stem
-    for name, decoder, spec in (("BP-OSD matched", "bposd", "matched"), ("BP-OSD generic (fitted p)", "bposd", None),
-                                ("relay-BP matched", "relay", "matched"), ("relay-BP generic (fitted p)", "relay", None)):
+    others = () if args.results is None else (
+        ("BP-OSD matched", "bposd", "matched"), ("BP-OSD generic (fitted p)", "bposd", None),
+        ("relay-BP matched", "relay", "matched"), ("relay-BP generic (fitted p)", "relay", None))
+    for name, decoder, spec in others:
         if spec is None:
             with open(Path(args.results).parent / "fit.json") as file:
                 p = json.load(file)[Path(args.shots).name][decoder]["p"]
@@ -451,8 +453,9 @@ def main(argv=None):
     many.add_argument("--preset", default="tcbp-jobs")
     many.add_argument("--limit", type=int, help="only the first this many shots of each task (dry runs)")
     score = sub.add_parser("score")
-    for name in ("per_shot", "shots", "results", "out"):
+    for name in ("per_shot", "shots", "out"):
         score.add_argument(f"--{name.replace('_', '-')}", required=True)
+    score.add_argument("--results", help="this branch's result folder, for its BP-OSD and relay-BP rows on the same file")
     args = parser.parse_args(argv)
     {"convert": convert_command, "decode": decode_command, "decode-many": decode_many_command,
      "score": score_command}[args.command](args)

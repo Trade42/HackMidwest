@@ -1,0 +1,7 @@
+checkout: bc3b7d4 server-jobs: gpu 047, TCBP-JOBS on the p = 0.005 train files (batch), for a learned selector
+Sun Nov 22 08:18:40 UTC 2026
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}, mode batch; 2 shot file(s)
+train_X.npz: X memory, p = 0.005, 20000 shots, data sha256 cfa08c9113b77521f7ba249ddffc0fb94cda783989066dbfa22b380d1747b26b
+  H is 936 x 8784; building the decoder ...

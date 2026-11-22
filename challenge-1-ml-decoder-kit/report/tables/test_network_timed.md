@@ -9,7 +9,7 @@
 | 0.004 | 1 core | plain lowest weight [run after the test results were seen (an ablation)] | 44 against 60 | 39 | 5 / 21 | 0.002 | 216 against 215 |
 | 0.004 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] (each gives its one-core row's answers on every shot) | 44 against 52 | 36 | 8 / 16 | 0.15 | 150 against 150 |
 | 0.005 | 1 core | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] | 479 against 481 | 414 | 65 / 67 | 0.93 | 825 against 815 |
-| 0.005 | 1 core | plain lowest weight | not measured (only offline) |  |  |  |  |
+| 0.005 | 1 core | plain lowest weight [run after the test results were seen (an ablation)] | 479 against 553 | 434 | 45 / 119 | 7e-09 | 825 against 817 |
 | 0.005 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] (each gives its one-core row's answers on every shot) | 479 against 481 | 414 | 65 / 67 | 0.93 | 608 against 604 |
 | 0.003, 0.004, 0.005 together | 1 core | the best hand-written rule (lowest weight among the converged candidates) | 526 against 537 |  | 73 / 84 | 0.42 |  |
-| 0.003, 0.004 together | 1 core | plain lowest weight | 47 against 64 |  | 5 / 22 | 0.002 |  |
+| 0.003, 0.004, 0.005 together | 1 core | plain lowest weight | 526 against 617 |  | 50 / 141 | 3e-11 |  |

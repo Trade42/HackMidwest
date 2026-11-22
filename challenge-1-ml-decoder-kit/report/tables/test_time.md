@@ -28,7 +28,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.005 | relay-BP (kit baseline) | 845 of 10,000 | 1,471 | the reference | 424 | 8,270 | CPU, 1 core |
 | 0.005 | relay-BP with a learned router | 807 of 10,000 | 1,928 | 1.31 | 303 | 12,708 | CPU, 1 core |
 | 0.005 | PriorTilt, one run | 601 of 10,000 | 264 | 0.18 | 120 | 2,167 | CPU, 1 core |
-| 0.005 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 527 of 10,000 | not timed in one process |  |  |  |  |
+| 0.005 | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | 553 of 10,000 | 817 | 0.56 | 244 | 9,776 | CPU, 1 core |
 | 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (run after the test results were seen, at the team's request; an ablation, not our decoder) | 481 of 10,000 | 815 | 0.55 | 244 | 9,755 | CPU, 1 core |
 | 0.005 | our hierarchy, neural tie-break | 479 of 10,000 | 825 | 0.56 | 246 | 9,885 | CPU, 1 core |
 | 0.005 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 479 of 10,000 | 608 | 0.41 | 138 | 7,794 | CPU, 2 cores |

@@ -6,8 +6,7 @@
 | relay-BP (kit baseline) | `decoders.py` (the kit) | pre-registered (the test run) | 5 pairs (X 2) · 85.3 ms per pair | 83 pairs (X 36) · 319 ms per pair | 845 pairs (X 432) · 1,471 ms per pair |
 | relay-BP with a learned router | `evaluation/router.py` (teammates) | pre-registered (the test run) | 6 pairs (X 3) · 41.0 ms per pair | 87 pairs (X 42) · 315 ms per pair | 807 pairs (X 415) · 1,928 ms per pair |
 | PriorTilt, one run | `hierarchy/priortilt_plugin.py` (IonQ's decoder) | pre-registered (the test run) | 4 pairs (X 2) · 22.7 ms per pair | 74 pairs (X 35) · 87.3 ms per pair | 601 pairs (X 303) · 264 ms per pair |
-| our hierarchy, lowest-weight tie-break | `hierarchy/` | after-test ablation | 4 pairs (X 2) · 46.9 ms per pair | 60 pairs (X 27) · 215 ms per pair |  |
-| our hierarchy, lowest-weight tie-break | `hierarchy/` | pre-registered (the test run), offline decode, no time |  |  | 527 pairs (X 269) · offline |
+| our hierarchy, lowest-weight tie-break | `hierarchy/` | after-test ablation | 4 pairs (X 2) · 46.9 ms per pair | 60 pairs (X 27) · 215 ms per pair | 553 pairs (X 279) · 817 ms per pair |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | `hierarchy/` | pre-registered (the test run) | 4 pairs (X 2) · 46.3 ms per pair | 52 pairs (X 25) · 218 ms per pair |  |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | `hierarchy/` | after-test ablation |  |  | 481 pairs (X 239) · 815 ms per pair |
 | our hierarchy, neural tie-break | `hierarchy/`, `neural/` | pre-registered (the test run) | 3 pairs (X 1) · 45.7 ms per pair | 44 pairs (X 18) · 216 ms per pair | 479 pairs (X 245) · 825 ms per pair |

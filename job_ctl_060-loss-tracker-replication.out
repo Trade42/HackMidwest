@@ -255,3 +255,9 @@ decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/dat
   200/500 shots, 49s, failures so far tracker=5
   300/500 shots, 62s, failures so far tracker=8
   400/500 shots, 77s, failures so far tracker=11
+  500/500 shots, 95s, failures so far tracker=16
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/000000-000500.npz.tmp.npz in 95s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 500..1000 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
+  100/500 shots, 20s, failures so far tracker=3
+  200/500 shots, 39s, failures so far tracker=6
+  300/500 shots, 51s, failures so far tracker=9

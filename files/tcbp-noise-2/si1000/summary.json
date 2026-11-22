@@ -125,59 +125,59 @@
  "capped_columns": {
   "m": 0,
   "g": 0,
-  "h": 30
+  "h": 43
  },
- "seconds": 136.78753900527954,
- "shots_scored": 200,
+ "seconds": 187.31608724594116,
+ "shots_scored": 300,
  "arms": {
   "m": {
-   "shots": 200,
+   "shots": 300,
    "failures": 0,
    "share": 0.0,
    "wilson95": [
-    0.0,
-    0.018845326668962936
+    8.673617379884035e-19,
+    0.012642971421476655
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 178,
-   "build_ms_mean": 40.76645836525131,
-   "decode_ms_mean": 4.564004731364548,
-   "build_decode_ms_mean": 45.33046309661586,
-   "build_decode_ms_median": 43.66735753137618,
+   "flag_not_converged": 268,
+   "build_ms_mean": 40.772277404709406,
+   "decode_ms_mean": 4.493946956160168,
+   "build_decode_ms_mean": 45.26622436086958,
+   "build_decode_ms_median": 43.654293462168425,
    "build_decode_ms_p99": 69.89959049155003
   },
   "g": {
-   "shots": 200,
+   "shots": 300,
    "failures": 0,
    "share": 0.0,
    "wilson95": [
-    0.0,
-    0.018845326668962936
+    8.673617379884035e-19,
+    0.012642971421476655
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 189,
-   "build_ms_mean": 40.901797754340805,
-   "decode_ms_mean": 6.749567069928162,
-   "build_decode_ms_mean": 47.65136482426897,
-   "build_decode_ms_median": 44.61724002612755,
+   "flag_not_converged": 285,
+   "build_ms_mean": 40.84090563158194,
+   "decode_ms_mean": 6.723321586614475,
+   "build_decode_ms_mean": 47.56422721819642,
+   "build_decode_ms_median": 44.69860054086894,
    "build_decode_ms_p99": 80.97315497696398
   },
   "h": {
-   "shots": 200,
+   "shots": 300,
    "failures": 0,
    "share": 0.0,
    "wilson95": [
-    0.0,
-    0.018845326668962936
+    8.673617379884035e-19,
+    0.012642971421476655
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 134,
-   "build_ms_mean": 42.025016855914146,
-   "decode_ms_mean": 2.1264609904028475,
-   "build_decode_ms_mean": 44.15147784631699,
-   "build_decode_ms_median": 42.849094490520656,
-   "build_decode_ms_p99": 54.24452753504738
+   "flag_not_converged": 195,
+   "build_ms_mean": 41.66307091324901,
+   "decode_ms_mean": 2.127512387232855,
+   "build_decode_ms_mean": 43.79058330048186,
+   "build_decode_ms_median": 42.82453149789944,
+   "build_decode_ms_p99": 53.60625182045623
   }
  },
- "saved_utc": "2026-11-22T16:37:52.425476+00:00"
+ "saved_utc": "2026-11-22T16:38:42.951040+00:00"
 }

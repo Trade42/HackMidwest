@@ -99,3 +99,39 @@ def test_an_arm_with_the_wrong_base_or_head_is_refused(setup, tmp_path):
         tcbp_retrain.main(["decode", "--plan", str(plan), "--root", str(root), "--logits-root", str(swapped),
                            "--settings", KNOBS, "--stop-at", "2099-01-01T00:00:00Z", "--out", str(tmp_path / "o2"),
                            "--decoder", "relay", "--limit", "1"])
+
+
+def test_the_refit_then_the_rf_arm(setup, tmp_path):
+    """fit on a train plan (arms m and r), then decode a plan with the arm rf at the chosen knobs."""
+    root, logits_root, _, heads = setup
+    common = ["--kit-head", sha256_of(heads["kit"]), "--retrained-head", sha256_of(heads["retrained"])]
+    train_plan, eval_plan = tmp_path / "train.json", tmp_path / "eval.json"
+    with pytest.raises(SystemExit, match="one train task"):
+        tcbp_retrain.main(["plan", "--root", str(root), "--task", "small:t:m,r", *common, "--out", str(train_plan)])
+        tcbp_retrain.main(["fit", "--plan", str(train_plan), "--root", str(root), "--logits-root", str(logits_root),
+                           "--stop-at", "2099-01-01T00:00:00Z", "--out", str(tmp_path / "fit.json"), "--decoder", "relay"])
+    tcbp_retrain.main(["plan", "--root", str(root), "--task", "small:t:m,r", *common, "--role", "train",
+                       "--out", str(train_plan)])
+    tcbp_retrain.main(["fit", "--plan", str(train_plan), "--root", str(root), "--logits-root", str(logits_root),
+                       "--stop-at", "2099-01-01T00:00:00Z", "--out", str(tmp_path / "fit.json"), "--decoder", "relay",
+                       "--limit", "1"])
+    fit = json.loads((tmp_path / "fit.json").read_text())
+    assert [row["arm"] for row in fit["rows"]] == ["m"] + ["r"] * len(tcbp_retrain.FIT_GRID)
+    assert fit["complete"] and fit["chosen"] in [{k: g[k] for k in ("mode", "alpha", "eps")} for g in tcbp_retrain.FIT_GRID]
+    assert {"alpha": 1.0, "eps": 1e-6, "mode": "logodds"} in tcbp_retrain.FIT_GRID
+    best = min(row["failures"] for row in fit["rows"][1:])
+    assert fit["rows"][1:][[row["failures"] for row in fit["rows"][1:]].index(best)]["failures"] == best
+    tcbp_retrain.main(["plan", "--root", str(root), "--task", "small:t:m,r,rf", *common, "--primary", "rf:m",
+                       "--out", str(eval_plan)])
+    with pytest.raises(SystemExit, match="--refit"):
+        decode((root, logits_root, eval_plan, heads), tmp_path / "no_refit", limit=1)
+    tcbp_retrain.main(["decode", "--plan", str(eval_plan), "--root", str(root), "--logits-root", str(logits_root),
+                       "--settings", KNOBS, "--stop-at", "2099-01-01T00:00:00Z", "--out", str(tmp_path / "dec"),
+                       "--decoder", "relay", "--limit", "2", "--refit", str(tmp_path / "fit.json")])
+    summary = json.loads((tmp_path / "dec" / "small" / "summary.json").read_text())
+    assert summary["knobs_per_arm"]["rf"] == fit["chosen"] and summary["knobs_per_arm"]["r"]["alpha"] == 0.4
+    tcbp_retrain.main(["score", "--plan", str(eval_plan), "--root", str(root), "--decoded", str(tmp_path / "dec"),
+                       "--out", str(tmp_path / "score.json")])
+    pairs = json.loads((tmp_path / "score.json").read_text())["tasks"]["small"]["pairs"]
+    assert (pairs[0]["kind"], pairs[0]["a"], pairs[0]["b"]) == ("primary", "rf", "m")
+    assert ("rf", "r") in [(q["a"], q["b"]) for q in pairs if q["kind"] == "secondary"]

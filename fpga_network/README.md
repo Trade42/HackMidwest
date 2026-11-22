@@ -15,10 +15,10 @@ FPGA.** A time for the network is the tie-breaker's time on the shots that need 
 1. The network does not fit inside the Urbana's chip: its weights need 10.7 Mb at 12 bits (7.15 Mb at 8) against the
    chip's 2.76 Mb of block RAM, so on that board they and the working values would live in its 128 MB DDR3 memory;
    of the 7-series chips compared, only the largest Artix-7 (XC7A200T) would hold it all, and only at 8 bits.
-2. Its numbers can be made small without changing what it does for us: with 12-bit weights and values (the running
-   sum and the small head kept at 16 bits) it gets as many of 5,000 validation shots wrong as at 16 bits (239; the
-   float network 237) and changes none of the 99 tie-break choices it makes in our decoder; 8 bits changes 7 of them
-   (simulated in software, on the final checkpoint).
+2. Its numbers can be made small without changing what it does for us: with 12-bit weights and values (only the small
+   head kept at 16 bits) it gets as many of 5,000 validation shots wrong as at 16 bits (239; the float network 237)
+   and changes none of the tie-break choices it makes in our decoder (0 of 99); 8 bits changes 7 of them (simulated
+   in software, on the final checkpoint).
 3. We built a 32-unit engine that walks the network layer by layer; in simulation it reproduces our integer reference
    bit for bit on whole shots, needs 22.7 million clocks per shot (0.23 s at an assumed 100 MHz, for the tie-breaker's
    rare shots only), and synthesises to 8,463 LUTs, 2,809 flip-flops and 73 DSP slices of the XC7S50, without its
@@ -31,7 +31,7 @@ FPGA.** A time for the network is the tie-breaker's time on the shots that need 
 Counted from the final checkpoint (step 120,000; the counts are those of the architecture): 893,697 weights; **493.5 million multiply-adds per shot** (PyTorch's counter
 finds 533.8 million, because the model computes and discards some products at the first and last rounds); the largest
 set of values kept at once is 354,816 numbers. Against the chips (AMD's DS180): the weights need 10.72 Mb at 12 bits and
-7.15 Mb at 8, one shot's values 5.22 or 4.76 Mb (the residual stream at 16 bits), and the XC7S50 has 2.76 Mb of block
+7.15 Mb at 8, one shot's values 4.26 Mb at 12 bits or 4.76 Mb at 8 (with the stream at 16), and the XC7S50 has 2.76 Mb of block
 RAM. At 12 bits no chip compared holds them; at 8 bits only the XC7A200T, just (13.02 Mb with the SiLU tables, of
 13.46 Mb). **Estimated** lower bound on time: multiply-adds / (DSP slices x 100 MHz) = 41 ms
 per shot on the XC7S50's 120 DSP slices, 6.7 ms on an XC7A200T's 740. Reading the weights from the Urbana's DDR3 once
@@ -43,17 +43,20 @@ On the final checkpoint (step 120,000), the team's `data/p0.004/validation_X.npz
 99 tie-break shots (24 of that file and 75 of `train_X.npz`), **simulated** in software (`WIDTHS.md` has the table
 and its reading; `WIDTHS_step70000.md` a first table on step 70,000):
 
-| weights and values (stream and head 16) | network wrong alone, of 5,000 | answers changed | tie-break choices changed, of 99 |
+| weights and values (stream and head 16, unless said) | network wrong alone, of 5,000 | answers changed | tie-break choices changed, of 99 |
 |---|---:|---:|---:|
 | float (as `neural.evaluate_stim` runs it; equals the laptop's GPU run: 237) | 237 | | |
 | 16 bits | 239 | 14 | 0 |
 | **12 bits** (percentile ranges) | 239 | 58 | **0** |
 | 10 bits (percentile ranges) | 238 | 95 | 1 (no tie-break failure more) |
 | 8 bits (percentile ranges) | 239 | 208 | 7 (one tie-break failure more, on train shots) |
+| 12 bits with the stream at 12 too (1,000 shots) | 58 of 1,000 (float 58) | 15 of 1,000 | 0 of 79 |
+| 8 bits with the stream at 8 too (1,000 shots) | 201 of 1,000 | 204 of 1,000 | 3 of 4 and 9 of 75 |
 | 6 and 4 bits | 412 and 500, of 500 | | |
 
-- **The smallest width that changes nothing that matters is 12 bits.** With none of 99 choices changed, the true
-  share is below 3.7% (95% Wilson interval).
+- **The smallest width that changes nothing that matters is 12 bits**, for the weights and every value including the
+  residual stream (only the small head at 16). With none of 99 choices changed, the true share is below 3.7% (95%
+  Wilson interval).
 - At 16 bits, 12 of the 14 changed answers are bits within 0.08 of zero; the other two are shots where the float
   network itself swings by 3 to 6 under a nudge of the size of the rounding (`logs/w16_changes_final.log`): the
   network's sensitivity, not an error. This stays inside the brief's limit of a few shots in a thousand.
@@ -74,8 +77,10 @@ two were made on smoke tests of 10 to 20 validation shots, and then checked on 1
 (`logs/diagnostics_train_shots.log`):
 - the small head at the end (33,281 weights, 0.1% of the work) stays at 16 bits: at 8 bits it alone moved the logits
   by 0.77 (median; on the train shots 1.12) where any other layer at 8 bits moved them by under 0.04;
-- the residual stream stays at 16 bits: at 8 bits it alone changed 9 of 10 answers (on the train shots 10 of 10); its
-  range grows from 3.8 to 45.6 over the blocks, so every block rounds it again, more coarsely.
+- the residual stream stays at 16 bits in most runs: at 8 bits it alone changed 9 of 10 answers (on the train shots
+  10 of 10); its range grows from 3.8 to 45.6 over the blocks, so every block rounds it again, more coarsely. The
+  final table then tested it directly: an 8-bit stream breaks the network, a 12-bit stream works as well as a 16-bit
+  one (`WIDTHS.md`).
 
 ### 3. A reference in whole numbers (`reference.py`)
 

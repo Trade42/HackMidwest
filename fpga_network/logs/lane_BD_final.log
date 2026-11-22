@@ -616,3 +616,66 @@ w4: 0 of 10 chunks of 50 shots already done
 {"run": "w4", "set": "validation", "checkpoint": "/home/sal/hackMidwest/orchestration/scratch/fpga/ckpt/x_final_step120000.pt", "checkpoint_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933", "step": 120000, "data": "challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz", "data_sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d", "machine": "luminaty (Ryzen 7 7730U)", "processes": 4, "weight_bits": 4, "value_bits": 4, "stream_bits": 16, "head_bits": 16, "calibration": "max", "shots": 500, "saturated_values": {"r.sum": 58}, "seconds": 56.6}
 === w4 exit 0
 === 2026-11-22T10:47:37Z lane D released
+=== 2026-11-22T10:53:48Z waiting for lane D for: w12s12p w12s12p:train w8s8p w8s8p:train
+=== 2026-11-22T10:57:42Z lane D taken
+=== 2026-11-22T10:57:42Z w12s12p, 86400 s left
+w12s12p: 0 of 20 chunks of 50 shots already done
+  chunk from shot 150 done (1 of 20, 18 s)
+  chunk from shot 100 done (2 of 20, 18 s)
+  chunk from shot 0 done (3 of 20, 18 s)
+  chunk from shot 50 done (4 of 20, 18 s)
+  chunk from shot 300 done (5 of 20, 36 s)
+  chunk from shot 200 done (6 of 20, 36 s)
+  chunk from shot 250 done (7 of 20, 36 s)
+  chunk from shot 350 done (8 of 20, 36 s)
+  chunk from shot 450 done (9 of 20, 54 s)
+  chunk from shot 400 done (10 of 20, 55 s)
+  chunk from shot 500 done (11 of 20, 55 s)
+  chunk from shot 550 done (12 of 20, 55 s)
+  chunk from shot 650 done (13 of 20, 75 s)
+  chunk from shot 600 done (14 of 20, 76 s)
+  chunk from shot 700 done (15 of 20, 76 s)
+  chunk from shot 750 done (16 of 20, 76 s)
+  chunk from shot 800 done (17 of 20, 95 s)
+  chunk from shot 850 done (18 of 20, 95 s)
+  chunk from shot 950 done (19 of 20, 96 s)
+  chunk from shot 900 done (20 of 20, 96 s)
+{"run": "w12s12p", "set": "validation", "checkpoint": "/home/sal/hackMidwest/orchestration/scratch/fpga/ckpt/x_final_step120000.pt", "checkpoint_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933", "step": 120000, "data": "challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz", "data_sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d", "machine": "luminaty (Ryzen 7 7730U)", "processes": 4, "weight_bits": 12, "value_bits": 12, "stream_bits": 12, "head_bits": 16, "calibration": "p99.99", "shots": 1000, "saturated_values": {"b0.o": 117, "s1": 2223, "b1.in": 7042, "b1.d": 311, "b1.o": 1653, "b2.c": 274, "b2.d": 421, "b3.c": 314, "b3.d": 1349, "b4.in": 77, "b4.d": 1915, "b4.o": 424, "s5": 4145, "s6": 1728, "b6.in": 199, "b7.in": 107, "b7.c": 233, "b7.o": 730, "s8": 1141, "r.in": 492, "b7.d": 82, "b3.in": 15, "b3.o": 81, "b2.o": 16, "b2.in": 5, "r.pool": 8, "b5.c": 1, "b6.c": 10, "b4.c": 2, "b6.d": 7, "s4": 6, "b6.o": 10, "r.sum": 1}, "seconds": 95.7}
+=== w12s12p exit 0
+=== 2026-11-22T10:59:20Z w12s12p:train, 86302 s left
+w12s12p: 0 of 2 chunks of 50 shots already done
+  chunk from shot 50 done (1 of 2, 7 s)
+  chunk from shot 0 done (2 of 2, 11 s)
+{"run": "w12s12p", "set": "train_tiebreak", "checkpoint": "/home/sal/hackMidwest/orchestration/scratch/fpga/ckpt/x_final_step120000.pt", "checkpoint_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933", "step": 120000, "data": "challenge-1-ml-decoder-kit/data/p0.004/train_X.npz, the 75 shots where P1 != P2, after shot 200", "data_sha256": "98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc", "machine": "luminaty (Ryzen 7 7730U)", "processes": 4, "weight_bits": 12, "value_bits": 12, "stream_bits": 12, "head_bits": 16, "calibration": "p99.99", "shots": 75, "saturated_values": {"b0.o": 14, "s1": 174, "b1.in": 476, "b1.d": 26, "b1.o": 82, "b2.c": 18, "b2.d": 23, "b3.c": 19, "b3.d": 63, "b4.d": 103, "b4.o": 25, "s5": 226, "s6": 110, "b6.in": 12, "b7.o": 103, "s8": 83, "r.in": 179, "b3.o": 4, "b7.c": 15, "b7.in": 9, "b2.o": 1, "b4.in": 1, "b7.d": 2}, "seconds": 11.4}
+=== w12s12p:train exit 0
+=== 2026-11-22T10:59:36Z w8s8p, 86286 s left
+w8s8p: 0 of 20 chunks of 50 shots already done
+  chunk from shot 150 done (1 of 20, 21 s)
+  chunk from shot 0 done (2 of 20, 21 s)
+  chunk from shot 50 done (3 of 20, 21 s)
+  chunk from shot 100 done (4 of 20, 21 s)
+  chunk from shot 250 done (5 of 20, 42 s)
+  chunk from shot 300 done (6 of 20, 42 s)
+  chunk from shot 350 done (7 of 20, 42 s)
+  chunk from shot 200 done (8 of 20, 43 s)
+  chunk from shot 450 done (9 of 20, 62 s)
+  chunk from shot 500 done (10 of 20, 63 s)
+  chunk from shot 400 done (11 of 20, 64 s)
+  chunk from shot 550 done (12 of 20, 66 s)
+  chunk from shot 600 done (13 of 20, 82 s)
+  chunk from shot 700 done (14 of 20, 83 s)
+  chunk from shot 650 done (15 of 20, 84 s)
+  chunk from shot 750 done (16 of 20, 86 s)
+  chunk from shot 800 done (17 of 20, 102 s)
+  chunk from shot 850 done (18 of 20, 103 s)
+  chunk from shot 900 done (19 of 20, 104 s)
+  chunk from shot 950 done (20 of 20, 106 s)
+{"run": "w8s8p", "set": "validation", "checkpoint": "/home/sal/hackMidwest/orchestration/scratch/fpga/ckpt/x_final_step120000.pt", "checkpoint_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933", "step": 120000, "data": "challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz", "data_sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d", "machine": "luminaty (Ryzen 7 7730U)", "processes": 4, "weight_bits": 8, "value_bits": 8, "stream_bits": 8, "head_bits": 16, "calibration": "p99.99", "shots": 1000, "saturated_values": {"b0.o": 94, "s1": 1178, "b1.in": 6337, "b1.d": 208, "b1.o": 1180, "b2.c": 252, "b2.d": 382, "b3.c": 316, "b3.d": 1212, "b4.in": 45, "b4.d": 1544, "b4.o": 348, "s5": 3606, "s6": 1582, "b7.c": 191, "b7.o": 612, "s8": 970, "r.in": 420, "b6.in": 175, "b7.d": 64, "b7.in": 80, "b3.in": 14, "b3.o": 71, "b2.o": 13, "b2.in": 4, "b6.o": 8, "r.pool": 12, "b5.c": 1, "b6.c": 8, "b4.c": 3, "b6.d": 3, "s4": 2, "r.sum": 1}, "seconds": 105.6}
+=== w8s8p exit 0
+=== 2026-11-22T11:01:25Z w8s8p:train, 86177 s left
+w8s8p: 0 of 2 chunks of 50 shots already done
+  chunk from shot 50 done (1 of 2, 7 s)
+  chunk from shot 0 done (2 of 2, 12 s)
+{"run": "w8s8p", "set": "train_tiebreak", "checkpoint": "/home/sal/hackMidwest/orchestration/scratch/fpga/ckpt/x_final_step120000.pt", "checkpoint_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933", "step": 120000, "data": "challenge-1-ml-decoder-kit/data/p0.004/train_X.npz, the 75 shots where P1 != P2, after shot 200", "data_sha256": "98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc", "machine": "luminaty (Ryzen 7 7730U)", "processes": 4, "weight_bits": 8, "value_bits": 8, "stream_bits": 8, "head_bits": 16, "calibration": "p99.99", "shots": 75, "saturated_values": {"b0.o": 11, "s1": 86, "b1.in": 429, "b1.d": 18, "b1.o": 56, "b2.c": 18, "b2.d": 22, "b3.c": 17, "b3.d": 53, "b4.d": 76, "b4.o": 18, "s5": 191, "s6": 102, "b6.in": 11, "b7.o": 83, "s8": 75, "r.in": 171, "r.pool": 3, "b3.o": 4, "b7.c": 13, "b7.in": 5, "b2.o": 1, "b3.in": 1, "b7.d": 2}, "seconds": 12.0}
+=== w8s8p:train exit 0
+=== 2026-11-22T11:01:41Z lane D released

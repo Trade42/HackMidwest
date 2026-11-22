@@ -146,15 +146,17 @@ def main():
     peak = act["largest set kept at once (stream + one step's input and output)"]
     for b in (16, 8, 6, 4):
         out(f"| {b} | {total_w * b / 1e6:.2f} | {peak * b / 1e6:.2f} | {(total_w + peak) * b / 1e6:.2f} |")
+    STREAM = {12: 12, 8: 16}       # WIDTHS.md: a 12-bit stream works at 12 bits; an 8-bit stream breaks the network
     def values_bits(b):
-        """One shot's values kept at once, with the residual stream at 16 bits and the rest at b (WIDTHS.md)."""
-        return act["residual stream"] * 16 + (peak - act["residual stream"]) * b
+        """One shot's values kept at once: the residual stream at STREAM[b] bits, the rest at b (WIDTHS.md)."""
+        return act["residual stream"] * STREAM.get(b, b) + (peak - act["residual stream"]) * b
     n_silu = 4 * c["depth"] + 1
     def tables_bits(b):
         """The SiLU tables: one per SiLU of the blocks and the readout at b bits, and the head's at 16 bits."""
         return n_silu * 2 ** b * b + 2 ** 16 * 16
     for b in (12, 8):
-        out(f"| {b}, with the residual stream at 16 (WIDTHS.md: the stream needs 16 bits) | {total_w * b / 1e6:.2f} | "
+        label = "12, the stream at 12 too (WIDTHS.md: run w12s12p)" if b == 12 else "8, the stream at 16 (an 8-bit stream breaks the network: WIDTHS.md)"
+        out(f"| {label} | {total_w * b / 1e6:.2f} | "
             f"{values_bits(b) / 1e6:.2f} | {(total_w * b + values_bits(b)) / 1e6:.2f} |")
     out("")
     n_tables = 4 * c["depth"] + 1           # every SiLU of the blocks and of the readout; the head has one more
@@ -168,7 +170,7 @@ def main():
     out("At 16 bits a table is large (65,536 entries); a hardware design would then approximate SiLU in pieces. That was "
         "not done here: the tables are exact.\n")
     out("A chip \"holds all\" when its block RAM takes the weights, one shot's values and the SiLU tables.\n")
-    out("| chip | LUTs | DSP slices | block RAM, Mb | holds at 12 bits (stream 16) | holds at 8 bits (stream 16) | time per shot at 100 MHz, every DSP busy |")
+    out("| chip | LUTs | DSP slices | block RAM, Mb | holds at 12 bits | holds at 8 bits (stream 16) | time per shot at 100 MHz, every DSP busy |")
     out("|---|---:|---:|---:|---|---|---:|")
     for name, (cells, slices, dsp, bram) in CHIPS.items():
         mb = bram * 36_864 / 1e6
@@ -192,14 +194,13 @@ def main():
         f"and stream into the chip layer by layer. One shot reads every weight once: about {read_ms:.2f} ms at the memory's "
         f"peak rate (an **estimate**: {total_w:,} bytes / {DDR3_PEAK_BYTES_PER_S / 1e9:.2f} GB/s; a real memory controller "
         f"reaches less), small beside the arithmetic below. A batch of shots shares one reading.")
-    out(f"- **One shot's values do not fit either**, once the residual stream keeps its 16 bits (WIDTHS.md): "
-        f"{values_bits(12) / 1e6:.2f} Mb at 12 bits and {values_bits(8) / 1e6:.2f} Mb at 8 bits, against the XC7S50's "
-        f"{bram50:.2f} Mb (the stream alone is {act['residual stream'] * 16 / 1e6:.2f} Mb). On the Urbana they too would "
-        f"go to the DDR3 memory, part by part.")
+    out(f"- **One shot's values do not fit either**: {values_bits(12) / 1e6:.2f} Mb at 12 bits, and {values_bits(8) / 1e6:.2f} Mb "
+        f"at 8 bits with the stream at 16 (WIDTHS.md: an 8-bit stream breaks the network), against the XC7S50's "
+        f"{bram50:.2f} Mb. On the Urbana they too would go to the DDR3 memory, part by part.")
     for b in (12, 8):
         need = total_w * b + values_bits(b) + tables_bits(b)
         big = [name for name, (_, _, _, bram) in CHIPS.items() if need <= bram * 36_864]
-        out(f"- **At {b} bits (stream 16), of the chips in the table, " + (f"only the {', '.join(big)} holds" if big else "none holds")
+        out(f"- **At {b} bits{' (stream 16)' if b == 8 else ''}, of the chips in the table, " + (f"only the {', '.join(big)} holds" if big else "none holds")
             + f" the weights, one shot's values and the SiLU tables together** ({need / 1e6:.2f} Mb"
             + (f", of {CHIPS[big[0]][3] * 36_864 / 1e6:.2f} Mb: just)." if big else ")."))
     out(f"  No Spartan-7 holds the weights alone at 8 bits: the largest, the XC7S100, has "

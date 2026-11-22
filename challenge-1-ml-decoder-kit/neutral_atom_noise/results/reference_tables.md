@@ -1,7 +1,9 @@
 | Basis | Factor | Decoder | Picture of the noise | Failures / shots | Failure fraction (95% Wilson) | Per cycle | Unconverged | Mean iterations | Mean ms per shot |
 |---|---|---|---|---|---|---|---|---|---|
 | X | kit p = 0.004 | relay-BP | generic, uniform p = 0.0040 | 3 / 2000 | 0.15% (0.051%–0.44%) | 1.25e-04 | 1 | 524 | 414 |
+| X | kit p = 0.004 | relay-BP | generic, uniform p = 0.0040 | 12 / 2000 | 0.60% (0.34%–1.05%) | 5.01e-04 | 4 | 546 | 525 |
 | X | kit p = 0.004 | BP-OSD | generic, uniform p = 0.0040 | 42 / 2000 | 2.10% (1.56%–2.83%) | 1.77e-03 | 733 | 52 | 383 |
+| X | kit p = 0.004 | BP-OSD | generic, uniform p = 0.0110 | 52 / 2000 | 2.60% (1.99%–3.39%) | 2.19e-03 | 754 | 52 | 451 |
 
 Paired, on the same shots (the generic row against the matched row of its point; **bold** marks the better generic row of a point):
 

@@ -56,23 +56,29 @@ today's hardware further above factor 1.
 | The truth reaches no decoder: a decoder gets the 936 X-check detector bits (and, with loss, the heralds); the observables are compared after decoding | by construction | `run._decode`; the loss shot files hold no loss times (`clifft_text(..., probes=False)`) |
 | Our loss loop equals `python -m loss.job` (`starter`) on the kit's noise: shots bit-identical, decoding identical shot for shot | pass on 12 shots in the suite; 100-shot run to come | `test_our_loss_loop_equals_*`, `loss_check.py` |
 | Clifft (used for loss) samples our circuit like Stim at loss 0 | pass | `test_clifft_samples_our_circuit_like_stim_*` |
-| Our loop on the kit's own noise gives the kit's failure rates | BP-OSD: consistent. Relay-BP: fewer failures than the kit's, about 2σ low (table below) | `runs/lane_b.sh reference`, `logs/reference.log` |
+| Our loop on the kit's own noise gives the kit's failure rates | pass, both decoders (two seeds for relay-BP; table below) | `runs/lane_b.sh reference`, `checks`; `logs/reference.log`, `logs/checks.log` |
+| A lost atom's partner keeps its own error in Clifft (our one-atom channels), unlike under a two-atom channel | pass | `test_the_partner_of_a_lost_atom_keeps_*` |
 
-**The reference.** The kit's own uniform noise at p = 0.004, X memory, 2,000 shots (seed 4100, sampled by
-`make_shots.py`), decoded by this folder's loop with the kit's priors; luminaty, lane B, 4 processes, 2026-11-22
-08:50-08:58 UTC:
+**The reference.** The kit's own uniform noise at p = 0.004, X memory, sampled by `make_shots.py` and decoded by
+this folder's loop with the kit's priors; luminaty, 4 processes, 2026-11-22 (lane B 08:50-08:58, lane D 10:53-11:05
+UTC). Results: `results/reference_*`.
 
-| Decoder | Failures / shots | Fraction (95% Wilson) | Kit README, X memory | Unconverged | Mean iterations |
-|---|---|---|---|---|---|
-| BP-OSD | 42 / 2,000 | 2.10% (1.56–2.83%) | 253 / 10,000 = 2.53% | 733 | 52 |
-| relay-BP | 3 / 2,000 | 0.15% (0.05–0.44%) | 45 / 10,000 = 0.45% | 1 | 524 |
+| Decoder | Shots (seed) | Failures | Fraction (95% Wilson) | Kit README, X memory | Unconverged | Mean iterations |
+|---|---|---|---|---|---|---|
+| BP-OSD | 2,000 (4100) | 42 | 2.10% (1.56–2.83%) | 253 / 10,000 = 2.53% | 733 | 52 |
+| relay-BP | 2,000 (4100) | 3 | 0.15% (0.05–0.44%) | | 1 | 524 |
+| relay-BP | 2,000 (4101) | 12 | 0.60% (0.34–1.05%) | | 4 | 547 |
+| relay-BP, both seeds | 4,000 | 15 | 0.38% (0.23–0.62%) | 45 / 10,000 = 0.45% | 5 | 535 |
 
-BP-OSD agrees. Relay-BP fails less often than the kit's runs: 3 against about 9 expected from the kit's 0.45% (10
-from the 0.50% pooled over the kit, `baselines.log` and the relay-BP authors, `loss/RESULTS.md` L0). A Poisson count
-of 3 or fewer when 9 to 10 are expected has a chance of about 1 to 2%. A broken decode path would give more failures,
-not fewer, and our mean iteration count (524) matches `loss/`'s relay-BP on the same noise (542, 10,000 shots). We
-report it as it is. Our relay-BP gets a fresh decoder with seed 1 for every shot, as `loss/` does; the kit's
-`baseline.py` reuses one decoder per process.
+Both decoders agree with the kit. The first relay-BP seed alone was low (3 against about 9 expected), so we ran a
+second seed before using any relay-BP row; pooled, the two agree with the kit's 0.45%. Our relay-BP gets a fresh
+decoder with seed 1 for every shot, as `loss/` does; the kit's `baseline.py` reuses one decoder per process.
+
+**A control for the fitted generic p.** Under our model, BP-OSD decodes best with a uniform p about 2 to 4 times the
+model's two-qubit error (question 1). Is that BP-OSD preferring inflated priors on any noise? No: on the kit's own
+noise at p = 0.004 (seed 4100), BP-OSD with p = 0.011 in its priors fails 52 of the same 2,000 shots against 42 with
+the true p (30 shots only the inflated priors get wrong, 20 only the true ones; exact sign test p = 0.20). So the
+shift of the best uniform p is a property of the neutral-atom shape, not of BP-OSD.
 
 ## Pilot (not results)
 

@@ -1,0 +1,7 @@
+# 2026-11-22T08:49Z, luminaty. Ranges from the 12-shot smoke calibration; the equality does not depend on the ranges (the run with the real calibration follows the width table).
+$ python fpga_network/reference.py --checkpoint <x_step70000.pt> --calibration <smoke>/calibration.json --run w16 --shots 10
+the widest possible sum of products, with sign: 40 bits (b1.in); float64 holds 53 exactly, so the torch version computes whole numbers exactly on any shot
+run w16 ((16, 16, 16) bits for weights, values, stream), checkpoint step 70000, the first 10 shots of validation_X.npz: integer reference equal to the torch fixed-point logits on 10 of 10 shots (all 12 logits, as whole numbers at 2^-21)
+$ python fpga_network/reference.py --checkpoint <x_step70000.pt> --calibration <smoke>/calibration.json --run w8p --shots 10
+the widest possible sum of products, with sign: 35 bits (h2); float64 holds 53 exactly, so the torch version computes whole numbers exactly on any shot
+run w8p ((8, 8, 16) bits for weights, values, stream), checkpoint step 70000, the first 10 shots of validation_X.npz: integer reference equal to the torch fixed-point logits on 10 of 10 shots (all 12 logits, as whole numbers at 2^-21)

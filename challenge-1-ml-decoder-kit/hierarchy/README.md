@@ -199,7 +199,8 @@ python -m hierarchy.plugin_options --out runs/hierarchy_options.json \
     --z-checkpoint <Z checkpoint> --z-candidates <validation_Z candidates> <train_Z candidates> --z-logits <their logits, same order>
 ```
 
-It prints one line per basis, `PLUGIN_RULE X network    (network 62 failures, converged 67, on 25000 shots)`.
+It prints one line per basis, `PLUGIN_RULE X network    (network 62 failures, converged 67, on 25000 shots; logits of checkpoint step 60000)`,
+and stops if the logits were made with another checkpoint than the one given.
 
 **Side by side.** With `"parallel": true` the two PriorTilt decodes of a shot run at the same
 time: the second one lives in a helper process that is started with the session and sees
@@ -477,7 +478,14 @@ alone, on the same shots.**
 "The network picks" is part 1's score, among the candidates that decoded the shot. What is
 learned: the network's weights, as in part 1. The rule is chosen on the `train_*` files and
 reported on the `validation_*` files; the tool refuses to mark a rule chosen on the file it
-scores (`--chosen-on`).
+scores (`--chosen-on`). The three tools that fit or choose (`select.py --fit-candidates`,
+`ensemble.py --chosen-on`, `plugin_options.py`) also refuse a file made from `test_*` or
+`go_*` shots: on held-out shots `ensemble.py` takes `--rule f` only.
+
+How the list grew, for the record: a to e were written before any member file existed.
+f, g and gw were added after the first tables without J had shown that no rule beat
+TCBP-JOBS, and before any table with J. h and ac were added after rule f's validation number
+had been seen. The choice among all of them was made by the tool on the training count alone.
 
 **The frozen rule is f.** In words: P1, P2 and TCBP-JOBS decode every shot. If all three give
 the same 12 bits, that is the answer. If not (0.5% of shots at p = 0.004), joint relay-BP
@@ -520,6 +528,32 @@ J are then scored with J on no shot. **At p = 0.005 joint decoding is not planne
 slow there, and by the relay-BP authors' data worse than separate decoding), so rule f
 returns T's answer on every shot there: the ensemble's row at p = 0.005 equals TCBP-JOBS
 alone, and claims nothing.
+
+### The other two noise levels, validation shots only
+
+Rule f was frozen on the p = 0.004 training shots. These rows apply it, unchanged, to the
+validation files of the other two levels (the server; printouts `ens_explore_p0.003.out` and
+`ens_explore_p0.005.out` on `server-logs`; candidates from `candidates.py` there and, for
+p = 0.005 X, from the laptop; TCBP-JOBS in batch mode).
+
+| validation, 5,000 shots per basis | p = 0.003: failures [X Z] | p = 0.005: failures [X Z] | p = 0.005: failed pairs, per cycle |
+|---|---|---|---|
+| R: relay-BP alone | [2 2] | [194 189] | 373, 6.4e-3 |
+| P1: PriorTilt once | [2 2] | [137 144] | 276, 4.7e-3 |
+| T: TCBP-JOBS alone | [0 1] | [91 97] | 187, 3.2e-3 |
+| ac: part 1, best rule without learning | [2 2] | [108 104] | 207, 3.5e-3 |
+| f: the frozen rule | [1 0] | [91 97]: T alone, as no J was run | 187, 3.2e-3 |
+| ORACLE among P1, P2, T, R (needs the truth) | [0 0] | [50 55] | |
+| shots where P1, P2, T are not unanimous | 4 and 4 | 185 and 179 (3.6%) | |
+
+- **p = 0.003 says nothing either way**: every decoder fails 0 to 3 times in 5,000 shots.
+  Joint relay-BP ran on the 8 listed shots (2 to 11 s each on average). On X it was wrong on
+  one of them while converged, where TCBP-JOBS was right; on Z it fixed TCBP-JOBS's one
+  failure. Rule f and TCBP-JOBS each have 1 failed pair of 5,000.
+- **p = 0.005**: part 1's hierarchy without learning is well below relay-BP (207 failed pairs
+  against 373) and above TCBP-JOBS (187). Rule f without J is TCBP-JOBS. A perfect choice
+  among P1, P2, T and R would reach 105 failures against 188, so there is room; joint
+  decoding on the 364 listed shots was not run.
 
 ### The ensemble's numbers at p = 0.004 (exploration shots)
 
@@ -574,6 +608,13 @@ on Z. As pairs (shot k of X with shot k of Z, `ensemble.py --pair`), validation:
 failed pairs of 5,000 (8.5e-4 per cycle), TCBP-JOBS 25 (4.2e-4), rule f 11 (1.8e-4 +- 0.6e-4).
 The kill line of this part (the ORACLE not below TCBP-JOBS) is not hit: 8 against 25.
 
+**What an offline row's time leaves out:** joint relay-BP builds a fresh decoder for every
+listed shot, outside its decode time (0.05 to 0.06 s against 24 to 29 s of decoding); the
+network's time is the batch-one mean of `neural.evaluate_stim`, added once per later-stage
+shot, while the logits themselves were computed in batches; and a member's time is its
+decode call alone, without turning the correction into 12 bits. The plugin's row through the
+evaluator has none of these gaps.
+
 **Time.** Not measured for the ensemble: TCBP-JOBS ran in batch mode here, without a time
 per shot. What the stages cost, each on its own machine: P1 + P2 about 105 ms per shot (the
 laptop); TCBP-JOBS 43 ms per pair in the teammates' own serial run
@@ -625,7 +666,10 @@ sha256 of the inputs that are not listed above:
 
 ## The run on the held-out shots: frozen commit and exact commands
 
-**Frozen commit: `FROZEN_SHA`** (the code; this README names it from the commit after).
+**Frozen commit: `921f2e8f8e05eff4ca3f60b565e48bbc08d42628`** (the code; this README names it from the
+commit after, which changes only this file). At that commit, on a clean tree, on this PC:
+`pytest -p no:cacheprovider test_kit.py evaluation neural hierarchy` gave 136 passed, and the
+preflight passed with a stand-in for TCBP-JOBS.
 What is frozen: the plugin and its rule procedure; the ensemble rule f; the reference rows
 relay-BP, PriorTilt once and TCBP-JOBS alone; the ablation rows aw and ac; the commands below.
 Nothing below was run on a `test_*` or `go_*` file by this task.
@@ -640,6 +684,8 @@ python -m hierarchy.plugin_options --out runs/hierarchy_options.json --x-checkpo
     --z-candidates <validation_Z and train_Z candidates at p = 0.004> --z-logits <their logits from the Z final checkpoint>
 python -m hierarchy.preflight --options runs/hierarchy_options.json --x data/p0.004/validation_X.npz --z data/p0.004/validation_Z.npz \
     --rule f --tcbp-python <TCBP python> --out runs/preflight_<time>            # must end with PREFLIGHT PASSED
+python -m hierarchy.parallel_check --options runs/hierarchy_options.json --x data/p0.004/validation_X.npz \
+    --z data/p0.004/validation_Z.npz --shots 100                                # before the side-by-side row: must exit 0
 
 # 1. part 1's row and the baselines, through the team's evaluator (one process; the main row is the sequential one)
 python -m evaluation.evaluate --test-x $D/test_X.npz --test-z $D/test_Z.npz --decoder hierarchy.plugin:make_decoder \
@@ -710,7 +756,7 @@ relay-BP only where the seeds differ. Both are stated with their rows.
 python -m pytest -p no:cacheprovider hierarchy
 ```
 
-31 tests, under two minutes on one CPU core that is not shared. Part 1: the rules against
+32 tests; 47 s on this PC's lane A (two shared cores). Part 1: the rules against
 hand-made cases; `select.py` on five hand-made shots whose outcome under every rule is known,
 on a session-mode file, with a fitted constant (and the warning when it is fitted on the
 scored shots) and with logits of other shots (refused); the refusal of `test_*` and `go_*`

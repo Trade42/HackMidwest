@@ -115,8 +115,13 @@ class HierarchySession:
         if unknown:
             raise ValueError(f"unknown options {sorted(unknown)}; known: {sorted(OPTIONS)}")
         asked = options.get("rule", "network")
-        if isinstance(asked, dict):                       # one rule per memory basis
-            asked = asked.get(problem.basis, "network")
+        if isinstance(asked, dict):                       # one rule per memory basis: every basis must be named
+            if set(asked) != {"X", "Z"}:
+                raise ValueError(f'a rule per basis names exactly "X" and "Z"; got {sorted(asked)}')
+            asked = asked[problem.basis]
+        wrong_keys = set(options.get("checkpoints") or {}) - {"X", "Z"}
+        if wrong_keys:
+            raise ValueError(f'checkpoints are given per basis, under "X" and "Z"; got {sorted(wrong_keys)}')
         if asked not in RULES:
             raise ValueError(f"rule must be one of {RULES}, got {asked!r}")
         self.problem = problem

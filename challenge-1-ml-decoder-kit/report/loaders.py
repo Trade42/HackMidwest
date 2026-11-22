@@ -271,7 +271,7 @@ def ensemble(folder, p, split="test"):
     if marked["X"] != marked["Z"]:
         raise Mismatch(f"{folder}: the frozen rule is {marked['X']} for X memory and {marked['Z']} for Z memory")
     return {"rows": rows, "rule": marked["X"], "members": {basis: tables[basis].get("members") for basis in "XZ"},
-            "network_ms": tables["X"].get("network_ms")}
+            "network_ms": tables["X"].get("network_ms"), "ablation": {basis: tables[basis].get("ablation") or {} for basis in "XZ"}}
 
 
 def tcbp_files(folder, names):

@@ -332,6 +332,10 @@ def ladder_tables(combined):
             for scope, mask in (("X memory, shots", lambda row: row["failed"]["X"]), ("Z memory, shots", lambda row: row["failed"]["Z"]),
                                 ("pairs (the kit's score)", lambda row: row["failed_pair"])):
                 paired = stats.paired(mask(rows[classical]), mask(rows["a"]))
+                theirs = combined[p]["ablation"].get(scope[0], {}).get(f"a_against_{classical}") if scope[0] in "XZ" else None
+                if theirs and (theirs["only_the_network_rule_fails"], theirs["only_the_rule_without_fails"]) != (paired["row_only"], paired["reference_only"]):
+                    raise Mismatch(f"test/ensemble_p{p}: {scope[0]} memory, the ensemble tool's ablation says {theirs['only_the_network_rule_fails']} / "
+                                   f"{theirs['only_the_rule_without_fails']} discordant shots, the per-shot files give {paired['row_only']} / {paired['reference_only']}")
                 count = hard.get(scope[0]) if scope[0] in "XZ" and scope.startswith(("X", "Z")) else None
                 ablation.append([p, scope, "" if count is None else count, int(mask(rows[classical]).sum()), int(mask(rows["a"]).sum()),
                                  f"{paired['row_only']} / {paired['reference_only']}", stats.p_text(paired["p"])])

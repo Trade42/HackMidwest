@@ -34,3 +34,4 @@ name, memory.used [MiB], utilization.gpu [%]
 NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
 evaluate wrong-p exit 0
 evaluate si1000 exit 0
+evaluate biased exit 0

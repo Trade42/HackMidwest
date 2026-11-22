@@ -15,7 +15,7 @@ priortilt/results_8b/selector_validation_X.npz on laptop-artifacts) and counts t
 The runs (fixed_point.FixedNet): weights of W bits with one power of two per output channel; intermediate values of
 the same width with one power of two per tensor; the residual stream and the small head at 16 bits in every run but
 "w8s8"; SiLU as a table; one rounding rule (add half, round down, saturate). Ranges are the largest value seen on
-the calibration shots, except "w8p": the 99.99th percentile, so the rarest 0.01% saturate.
+the calibration shots, except the runs ending in "p": the 99.99th percentile, so the rarest 0.01% saturate.
 """
 import argparse
 import hashlib
@@ -42,7 +42,11 @@ RUNS = {   # name: (weight bits, value bits, stream bits, calibration, shots sco
     "w16": (16, 16, 16, "max", 5000),
     "w12": (12, 12, 16, "max", 5000),
     "w10": (10, 10, 16, "max", 5000),
+    "w12p": (12, 12, 16, "p99.99", 5000),
+    "w10p": (10, 10, 16, "p99.99", 5000),
     "w8p": (8, 8, 16, "p99.99", 5000),
+    "w6p": (6, 6, 16, "p99.99", 500),
+    "w4p": (4, 4, 16, "p99.99", 500),
     "w8": (8, 8, 16, "max", 500),
     "w8s8": (8, 8, 8, "max", 500),
     "w6": (6, 6, 16, "max", 500),

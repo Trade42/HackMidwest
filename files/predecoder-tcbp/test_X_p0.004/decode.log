@@ -10,3 +10,7 @@ test_X.npz: 10000 shots, p=0.004, arms ['head'], decoder tcbp-jobs (cudaq-qec CU
   head: 6000 of 10000 shots, 388 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: 7000 of 10000 shots, 438 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: 8000 of 10000 shots, 489 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 9000 of 10000 shots, 540 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 10000 of 10000 shots, 591 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: failures 4 of 10000, 0.0004 [0.0002, 0.0010]; not reproduced 0; flagged not converged 5656; build 43.1 ms + decode 1.9 ms mean, p99 55 ms
+saved /home/blakew3/mlBranchMidwest/runs/predecoder-tcbp/test_X_p0.004/per_shot.npz; 591 s

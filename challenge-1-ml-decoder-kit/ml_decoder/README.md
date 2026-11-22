@@ -170,7 +170,8 @@ python -m evaluation.evaluate --test-x data/p0.0001/test_X.npz --test-z data/p0.
 ```
 
 `ml_decoder/ml_options_p0.0001.json` is committed. Log `logs/plugin_eval_p0.0001_merge-repo.log` (this branch merged
-with `main` at `c54ce0d`) and `logs/plugin_eval_p0.0001_head.log` (this branch alone); both print the same numbers.
+with `main` at `c54ce0d`; `main`'s later commits up to `13f7378` change no Python file) and
+`logs/plugin_eval_p0.0001_head.log` (this branch alone); both print the same numbers.
 Failures [0 0] of 2,000 pairs, 95% Wilson [0.00e+00, 1.92e-03] of pairs, so at most 1.60e-04 per cycle. A share of
 0.51725 of the shots went to relay-BP (`fallback_fraction`). The evaluator built both sessions with `create_session`
 and checked every shot with `validate_shot_result`. The log also prints the plugin's recorded settings for X and for
@@ -185,7 +186,7 @@ python -m pytest -p no:cacheprovider test_kit.py evaluation ml_decoder
 ```
 
 52 passed at this branch's head (`logs/pytest_head.log`): the kit's and the evaluator's 46, and the 6 in
-`test_ml_decoder.py`. 57 passed with `main` (`c54ce0d`) merged in (`logs/pytest_merge.log`). The 6 check that a
+`test_ml_decoder.py`. 57 passed with `main` (`13f7378`) merged in (`logs/pytest_merge.log`). The 6 check that a
 checkpoint keeps its fields and loads with `weights_only=True`, that `load_checkpoint` and the plugin refuse the other
 basis, that an older checkpoint loads with a warning, that the plugin's fallback is the kit's relay-BP settings with
 seed 1 unless `"relay"` changes them, and that a seeded shot-limited run repeats exactly.

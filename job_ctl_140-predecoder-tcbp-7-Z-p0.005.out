@@ -1,0 +1,13 @@
+INNER_SHA256SUMS_validation_Z: OK
+INNER_SHA256SUMS_test_Z: OK
+logits_validation_Z_p0.005.tar.gz: OK
+logits_test_Z_p0.005.tar.gz.part-00: OK
+logits_test_Z_p0.005.tar.gz.part-01: OK
+logits_test_Z_p0.005.tar.gz: OK
+logits.npy: OK
+logits.npy: OK
+/home/blakew3/mlBranchMidwest/runs/tcbp_p0.005/validation_Z.tcbp.npz: OK
+data/p0.005/validation_Z.npz: OK
+data/p0.005/test_Z.npz: OK
+predecoder/logs/fit_tcbp_X_p0.005.json: OK
+Sun Nov 22 16:13:09 UTC 2026

@@ -45,7 +45,9 @@ the pair score 281 failed pairs against TCBP-JOBS's 360 (exact p = 7.6e-6). With
 (the TCBP version; designed after the test results were seen; its two knobs fitted on train at p = 0.005 and frozen
 before validation, where it failed 33 against 91; then one registered run per test file) it fails **72 X shots
 against TCBP-JOBS's 186 at p = 0.005** (22 against 136 discordant, exact p = 2.9e-21), 4 against 20 at p = 0.004
-(p = 0.0004) and 0 against 1 at p = 0.003. It costs about 56 ms per shot on the A100 (network 9.4 ms, a per-shot
+(p = 0.0004) and 0 against 1 at p = 0.003; on Z at p = 0.005 (X's knobs unchanged, a validation gate passed first)
+61 against 177, and on **the kit's pair score at p = 0.005, 132 failed pairs against TCBP-JOBS's 360 and relay-BP's
+845** (41 against 269 discordant, exact p = 3.0e-42). It costs about 56 ms per shot on the A100 (network 9.4 ms, a per-shot
 decoder build 42.6 ms, the decode 3.8 ms; not a clean timing), against about 9 ms for TCBP-JOBS alone and about
 760 ms for relay-BP's timed row. TCBP-JOBS's own model fit varies from run to run (91, 96 and 100 failures on the
 same 5,000 validation shots); on the test shots the same-run control failed exactly the stored file's 186 shots.
@@ -106,7 +108,7 @@ were seen; `report/tables/master_comparison.md` holds every method with its labe
 | the predecoder: relay-BP with the head's priors | 2 | 15 | 151 (Z 132; pairs 281) | registered extension |
 | the predecoder, falling back to TCBP-JOBS where relay-BP did not converge | 1 | 10 | 107 (Z 100; pairs 206) | designed after the first test result |
 | TCBP-JOBS alone (stored test files) | 1 | 20 | 186 (Z 177; pairs 360) | reference |
-| **the TCBP version: TCBP-JOBS with the head's priors** | **0** | **4** | **72** | designed after the test results were seen; registered runs |
+| **the TCBP version: TCBP-JOBS with the head's priors** | **0** | **4** | **72 (Z 61; pairs 132)** | designed after the test results were seen; registered runs |
 
 
 ## 2. The challenge

@@ -1,0 +1,15 @@
+/home/sal/hackMidwest/orchestration/scratch/tcbp-zlowp/model/head.pt: OK
+/home/sal/hackMidwest/orchestration/scratch/tcbp-zlowp/model/cascade_Z_s1_final_step100000.pt: OK
+data/p0.004/test_Z.npz: OK
+data/p0.003/test_Z.npz: OK
+started 2026-11-22 17:52:40 UTC, , commit a8e2411935daac62ee97a17770c6e26bdd373a97
+locks A B C D held from 17:52:40 UTC
+test_Z.npz: 10000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/tcbp-zlowp/logits_test_Z_p0.004/logits.npy (335 s in batches of 32 on cpu)
+network + head, one shot at a time on cpu (16 threads), 200 shots: mean 25.0 ms, median 21.9 ms, p99 74.2 ms; batch one against batched: largest logit gap 0.00e+00
+the head's probabilities sum to 46.9 per shot (the kit's priors: 47.3)
+p 0.004 done 17:58:25 UTC
+test_Z.npz: 10000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/tcbp-zlowp/logits_test_Z_p0.003/logits.npy (326 s in batches of 32 on cpu)
+network + head, one shot at a time on cpu (16 threads), 200 shots: mean 31.4 ms, median 21.8 ms, p99 131.2 ms; batch one against batched: largest logit gap 0.00e+00
+the head's probabilities sum to 35.1 per shot (the kit's priors: 35.5)
+p 0.003 done 18:04:01 UTC
+ended 2026-11-22 18:04:01 UTC

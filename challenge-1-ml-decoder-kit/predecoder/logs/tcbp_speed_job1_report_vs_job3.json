@@ -1,0 +1,25 @@
+{
+ "summary": "/home/sal/hackMidwest/orchestration/scratch/tcbp-speed/server/job1/summary.json",
+ "reference": {
+  "file": "/home/sal/hackMidwest/orchestration/scratch/predecoder-tcbp/server/validation_X_p0.005_per_shot.npz",
+  "arm": "head",
+  "shots": 1000,
+  "logits_rows_equal": 1000,
+  "dense": {
+   "bits_differ": 0,
+   "faults_differ": 0
+  },
+  "csr": {
+   "bits_differ": 0,
+   "faults_differ": 0
+  },
+  "csc": {
+   "bits_differ": 0,
+   "faults_differ": 0
+  },
+  "dense_again": {
+   "bits_differ": 0,
+   "faults_differ": 0
+  }
+ }
+}

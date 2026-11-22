@@ -1,1 +1,5 @@
 2026-11-22T08:04:11Z TEST RUN DRIVER START: frozen fd3aed3c0d1f2e9e8bd181bd22c9853a19e2dfc5, rule f, X checkpoint 409f81bb3325fd15ce46e2656f14c025ed0f1287:cascade_X_s1/checkpoint_step80000.pt
+2026-11-22T08:05:39Z 0. frozen checkout: fd3aed3 integration: merge hierarchy at 45b50a92; hierarchy/ and neural/ equal 921f2e8f8e05eff4ca3f60b565e48bbc08d42628; the evaluator, the kit and the shot files equal the baseline rows' checkout
+2026-11-22T08:05:43Z 1. X checkpoint: sha256 ec72edf4492e5ad37179f876070388a8173b4612559e85e55f2a553df2e9a606
+2026-11-22T08:05:44Z 1. DRY RUN: the Z checkpoint is the given file /home/blakew3/mlBranchMidwest/runs/netZ/z_checkpoint_copy.pt
+2026-11-22T08:05:44Z 1. Z checkpoint: sha256 2e7d8faa43b2e08b110cae73b14d2ec4d2651995d10c1e1ca0d88dcef23a809d

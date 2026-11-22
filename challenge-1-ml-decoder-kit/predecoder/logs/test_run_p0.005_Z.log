@@ -1,0 +1,25 @@
+/home/sal/hackMidwest/orchestration/scratch/predecoder/z/head/head.pt: OK
+/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_Z_s1_final_step100000.pt: OK
+data/p0.005/test_Z.npz: OK
+/home/sal/hackMidwest/orchestration/scratch/predecoder/z/fit_Z_p0.004.json: OK
+[test-fresh] 16:00:12 UTC, commit 87b484a6, lanes ABCD
+test_Z.npz: 10000 shots, p=0.005, arms ['fresh', 'head']; head priors {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}; 100 tasks to run in 16 processes (16 CPUs here, luminaty)
+  10 of 100 tasks done (fresh from shot 600), 300 s
+  20 of 100 tasks done (fresh from shot 2500), 546 s
+  30 of 100 tasks done (fresh from shot 2800), 684 s
+  40 of 100 tasks done (fresh from shot 3500), 850 s
+  50 of 100 tasks done (fresh from shot 5300), 1005 s
+  60 of 100 tasks done (fresh from shot 6700), 1136 s
+  70 of 100 tasks done (fresh from shot 7400), 1331 s
+  80 of 100 tasks done (fresh from shot 7900), 1529 s
+  90 of 100 tasks done (fresh from shot 8800), 1688 s
+  100 of 100 tasks done (fresh from shot 9500), 1739 s
+relay-BP at the kit's settings; 1739 s. Time per shot: build + decode in these worker processes, plus the network and head (26.7 ms mean, cpu, from predecoder.evaluate)
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+fresh        398    0.0398 [0.0361, 0.0438]         230   3580      2364     16.8    2589.0   2605.8   21880
+head         132    0.0132 [0.0111, 0.0156]          73   1298       695     15.6     696.2    738.5   18284
+paired head against fresh: both fail 108, only head 24, only fresh 290, exact two-sided p = 3.6e-59
+  iterations, shot by shot: head fewer on 9565, fresh fewer on 375, the same on 60; p99 18062 against 18080
+kill line (head against fresh: fewer failures, paired, p < 0.05): PASSED
+[test-fresh] done 16:29:13 UTC
+test-fresh exit 0

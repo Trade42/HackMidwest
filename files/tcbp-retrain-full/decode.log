@@ -29,3 +29,5 @@ plan /home/blakew3/mlBranchMidwest/runs/tcbp-retrain-full/in/plan.json: tasks [(
   f0.8-seed4800 block 1200-1299 done, 819 s; failures so far m 15, g 446, h 164, hm 52, r 34 of 1300
   f0.8-seed4100 block 1200-1299 done, 843 s; failures so far m 15, h 136, hm 45, r 28 of 1300
   f0.8-seed4800 block 1300-1399 done, 883 s; failures so far m 16, g 481, h 176, hm 56, r 36 of 1400
+  f0.8-seed4100 block 1300-1399 done, 910 s; failures so far m 15, h 142, hm 47, r 30 of 1400
+  f0.8-seed4800 block 1400-1499 done, 949 s; failures so far m 17, g 519, h 189, hm 59, r 39 of 1500

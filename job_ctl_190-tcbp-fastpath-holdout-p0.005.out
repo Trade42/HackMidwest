@@ -5,3 +5,13 @@ logits.npy: OK
 c62d6efb3a1a5b584522233314c60285298ae349f997adb380c323a76fb96b68  /home/blakew3/mlBranchMidwest/runs/tcbp-fastpath/in_holdout/holdout_X_p0.005_s2026112251.npz
 7697010678a369c77949a6a4233a3087824fa4d2753bcadc4869f2eaee91b0d8  predecoder/logs/fit_tcbp_X_p0.005.json
 Sun Nov 22 18:48:11 UTC 2026
+decode exit 0
+  fresh: 2000 of 5000 shots, 461 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 3000 of 5000 shots, 524 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 4000 of 5000 shots, 585 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 5000 of 5000 shots, 645 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: failures 112 of 5000, 0.0224 [0.0187, 0.0269]; not reproduced 0; flagged not converged 4868; build 43.2 ms + decode 12.8 ms mean, p99 112 ms
+WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 while decoding 4096 syndromes. Set bp_batch_size > 1 at construction to decode syndromes in parallel.
+  batch check (kit's priors, built once, decode_batch, this run's model): failures 112; its 12 bits differ from the fresh arm's on 0 shots, its number of faults on 0
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-fastpath/holdout_X_p0.005/per_shot.npz; 710 s
+Sun Nov 22 19:00:09 UTC 2026

@@ -128,14 +128,14 @@ of what knowing the shape can give, not what a calibrated decoder would get.
 
 Every rate of the model times one factor; matched priors; X memory, 12 cycles. A shot fails when any of the 12
 logical bits is wrong. Test shots seed 4100 (luminaty, `logs/shots.log`); 2,000 shots per point except relay-BP at
-0.9 (500) and 1 (250), where its slow shots are costly.
+1, where its slow shots are costly (fewer shots, marked).
 
 | Factor | Two-qubit error per CX | relay-BP: failed shots (95% Wilson) | per cycle | BP-OSD: failed shots (95% Wilson) | per cycle |
 |---|---|---|---|---|---|
 | 0.6 | 0.89% | 2 / 2,000 = 0.10% (0.03–0.36%) | 8.3e-5 | 5 / 2,000 = 0.25% (0.11–0.58%) | 2.1e-4 |
 | 0.7 | 1.04% | 13 / 2,000 = 0.65% (0.38–1.11%) | 5.4e-4 | 31 / 2,000 = 1.55% (1.09–2.19%) | 1.3e-3 |
 | 0.8 | 1.19% | 39 / 2,000 = 1.95% (1.43–2.65%) | 1.6e-3 | 91 / 2,000 = 4.55% (3.72–5.55%) | 3.9e-3 |
-| 0.9 | 1.34% | 31 / 500 = 6.2% (4.4–8.7%) | 5.3e-3 | 238 / 2,000 = 11.9% (10.6–13.4%) | 1.1e-2 |
+| 0.9 | 1.34% | 118 / 2,000 = 5.9% (5.0–7.0%) | 5.1e-3 | 238 / 2,000 = 11.9% (10.6–13.4%) | 1.1e-2 |
 | 1 (the published figures) | 1.49% | 42 / 250 = 16.8% (12.7–21.9%) | 1.5e-2 | 599 / 2,000 = 30.0% (28.0–32.0%) | 2.9e-2 |
 
 **Relay-BP fails between 0.1% and 10% of shots from factor 0.6 to just above 0.9.** BP-OSD reaches 10% a little

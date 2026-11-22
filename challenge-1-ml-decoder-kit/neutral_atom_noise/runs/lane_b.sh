@@ -37,7 +37,7 @@ hold() {
     [ $budget -lt 1 ] && { echo "=== $(date -u +%FT%TZ) no time left before $UNTIL"; return 4; }
   fi
   echo "=== $(date -u +%FT%TZ) hold: lane ${LANE:-B}, lock $LOCK, CPUs $CPUS, head $(git rev-parse --short HEAD): job $*"
-  flock "$LOCK" nice -n 15 taskset -c "$CPUS" "$PY" -m neutral_atom_noise.job --basis X --shots 2000 --seed $SEED \
+  flock "$LOCK" nice -n 15 taskset -c "$CPUS" "$PY" -m neutral_atom_noise.job --basis "${BASIS:-X}" --shots 2000 --seed $SEED \
     --train-seed $TRAIN_SEED --train-shots 250 --workers 4 --part 125 --relay-part 50 --budget-minutes "$budget" --out "$OUT" "$@"
 }
 
@@ -162,3 +162,10 @@ lane_d() {
   LANE=D REPEAT=1 q2_06
   LANE=D REPEAT=1 q1_fit_bposd_09
 }
+
+# Z memory, if time allows (brief): its own folder and seed. Matched rows at 0.7 and 0.8, both decoders; generic at
+# the same two-qubit error at 0.8 (BP-OSD on 2,000 shots, relay-BP on 500).
+Z_OUT=$S/runs/Z_seed4200
+z_matched()   { BASIS=Z OUT=$Z_OUT SEED=4200 stream z_memory --factors 0.7,0.8 --decoders relay,bposd --rows matched; }
+z_generic()   { BASIS=Z OUT=$Z_OUT SEED=4200 stream z_memory --factors 0.8 --decoders bposd --rows generic-2q &&
+                BASIS=Z OUT=$Z_OUT SEED=4200 stream z_memory --factors 0.8 --decoders relay --rows generic-2q --first 500; }

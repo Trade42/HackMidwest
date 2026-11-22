@@ -1,6 +1,6 @@
 # What the network needs from an FPGA
 
-Made by `python fpga_network/sizing.py --checkpoint <checkpoint>` from `x_step70000.pt` (step 70000, width 128, depth 8, bottleneck 4, reads 1728 detector bits, X memory). Nothing here was run on an FPGA: the network numbers are counted from the model, the chip numbers come from AMD's data sheet, and every time is an **estimate** with its formula.
+Made by `python fpga_network/sizing.py --checkpoint <checkpoint>` from `x_final_step120000.pt` (step 120000, width 128, depth 8, bottleneck 4, reads 1728 detector bits, X memory). Nothing here was run on an FPGA: the network numbers are counted from the model, the chip numbers come from AMD's data sheet, and every time is an **estimate** with its formula.
 
 The network is our decoder's tie-breaker (hierarchy/): it runs only on the shots where the two fast decodes disagree, about 0.4% of shots at p = 0.004. Its time is never a whole decoder's time.
 

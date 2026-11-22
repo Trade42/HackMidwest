@@ -143,7 +143,7 @@ def shot_set(name, candidates=None, limit=None):
     return det[idx], obs[idx], idx, f"{CALIBRATION.relative_to(ROOT)}, the {len(idx)} shots where P1 != P2, after shot {CALIBRATION_SHOTS}"
 
 
-def do_run(checkpoint, out, run, processes, limit=None, which="validation", candidates=None):
+def do_run(checkpoint, out, run, processes, limit=None, which="validation", candidates=None, shots_override=None):
     from neural.train import load_decoder
     model, saved = load_decoder(checkpoint)
     det, obs, idx, about = shot_set(which, candidates, limit)
@@ -160,7 +160,7 @@ def do_run(checkpoint, out, run, processes, limit=None, which="validation", cand
         info |= {"what": "the checkpoint's model in float32, as neural.evaluate_stim.decode runs it", "shots": len(det)}
     else:
         wbits, abits, sbits, calib, shots = RUNS[run]
-        shots = min(shots, len(det))
+        shots = min(shots_override or shots, len(det))
         folded = fp.fold(model)
         ranges = calibrate(folded, out, info["checkpoint_sha256"], limit)
         _STATE.update(folded=folded, ranges=ranges, det=det[:shots])
@@ -310,6 +310,8 @@ def main():
     parser.add_argument("--processes", type=int, default=4)
     parser.add_argument("--table", action="store_true")
     parser.add_argument("--limit", type=int, help="smoke test only: score and calibrate on this many shots")
+    parser.add_argument("--shots", type=int, help="score the first N shots of the set (chunks are kept: a later, larger "
+                                                  "N reuses them)")
     parser.add_argument("--tie-break", help="the laptop's selector_validation_X.npz")
     parser.add_argument("--tie-break-train", help="the laptop's selector_train_X.npz (for --set train_tiebreak)")
     parser.add_argument("--set", choices=["validation", "train_tiebreak"], default="validation")
@@ -318,7 +320,7 @@ def main():
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     if args.run:
-        do_run(Path(args.checkpoint), out, args.run, args.processes, args.limit, args.set, args.tie_break_train)
+        do_run(Path(args.checkpoint), out, args.run, args.processes, args.limit, args.set, args.tie_break_train, args.shots)
     if args.table:
         table(out, args.tie_break, args.anchor, args.tie_break_train)
 

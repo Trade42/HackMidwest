@@ -42,3 +42,5 @@ PREFLIGHT PASSED in 159 s: the plugin, candidates, evaluate_stim, tcbp_member, j
 oracle_P1_P2_T_R_J                [0 0]             0  0.00e+00 +- 0.0e+00
 
 PREFLIGHT PASSED in 71 s: the plugin, candidates, evaluate_stim, tcbp_member (STAND-IN ONLY), joint_member and ensemble all ran on 16 validation shots per basis
+  mean time per shot on this machine: sequential 95.8 ms, side by side 66.0 ms (wall time, two cores)
+RESULT: the side-by-side mode gives the sequential answers on every shot

@@ -209,3 +209,114 @@ decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s0_s
   2500/2500 shots, 317s, failures so far blind=15
 wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/L0_X_p0.004_s0/blind/007500-010000.npz.tmp.npz in 317s
 decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 0..100 conditions ['blind'] workers 4
+  50/100 shots, 172s, failures so far blind=29
+  100/100 shots, 321s, failures so far blind=58
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/blind/000000-000100.npz.tmp.npz in 321s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 100..200 conditions ['blind'] workers 4
+  50/100 shots, 173s, failures so far blind=34
+  100/100 shots, 324s, failures so far blind=63
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/blind/000100-000200.npz.tmp.npz in 324s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 200..300 conditions ['blind'] workers 4
+  50/100 shots, 159s, failures so far blind=30
+  100/100 shots, 290s, failures so far blind=52
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/blind/000200-000300.npz.tmp.npz in 290s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 0..400 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 97s, failures so far starter=2 exact=2 oracle-round=0 starter@0.5/stop1=0
+  100/400 shots, 176s, failures so far starter=4 exact=5 oracle-round=1 starter@0.5/stop1=2
+  150/400 shots, 280s, failures so far starter=6 exact=6 oracle-round=3 starter@0.5/stop1=4
+  200/400 shots, 351s, failures so far starter=10 exact=8 oracle-round=5 starter@0.5/stop1=8
+  250/400 shots, 451s, failures so far starter=13 exact=10 oracle-round=7 starter@0.5/stop1=12
+  300/400 shots, 530s, failures so far starter=15 exact=12 oracle-round=8 starter@0.5/stop1=15
+  350/400 shots, 628s, failures so far starter=17 exact=15 oracle-round=9 starter@0.5/stop1=17
+  400/400 shots, 726s, failures so far starter=18 exact=16 oracle-round=11 starter@0.5/stop1=18
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/000000-000400.npz.tmp.npz in 726s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 400..800 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 108s, failures so far starter=1 exact=1 oracle-round=0 starter@0.5/stop1=1
+  100/400 shots, 173s, failures so far starter=2 exact=3 oracle-round=1 starter@0.5/stop1=2
+  150/400 shots, 225s, failures so far starter=2 exact=4 oracle-round=1 starter@0.5/stop1=2
+  200/400 shots, 358s, failures so far starter=7 exact=10 oracle-round=4 starter@0.5/stop1=8
+  250/400 shots, 482s, failures so far starter=9 exact=14 oracle-round=6 starter@0.5/stop1=10
+  300/400 shots, 535s, failures so far starter=9 exact=15 oracle-round=6 starter@0.5/stop1=10
+  350/400 shots, 600s, failures so far starter=10 exact=15 oracle-round=6 starter@0.5/stop1=13
+  400/400 shots, 686s, failures so far starter=11 exact=16 oracle-round=6 starter@0.5/stop1=16
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/000400-000800.npz.tmp.npz in 686s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 800..1200 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 130s, failures so far starter=3 exact=4 oracle-round=3 starter@0.5/stop1=3
+  100/400 shots, 192s, failures so far starter=5 exact=7 oracle-round=6 starter@0.5/stop1=5
+  150/400 shots, 297s, failures so far starter=6 exact=9 oracle-round=8 starter@0.5/stop1=6
+  200/400 shots, 397s, failures so far starter=8 exact=13 oracle-round=8 starter@0.5/stop1=9
+  250/400 shots, 488s, failures so far starter=12 exact=15 oracle-round=9 starter@0.5/stop1=13
+  300/400 shots, 544s, failures so far starter=12 exact=15 oracle-round=11 starter@0.5/stop1=13
+  350/400 shots, 657s, failures so far starter=15 exact=17 oracle-round=12 starter@0.5/stop1=15
+  400/400 shots, 746s, failures so far starter=16 exact=20 oracle-round=15 starter@0.5/stop1=16
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/000800-001200.npz.tmp.npz in 746s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 1200..1600 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 184s, failures so far starter=3 exact=1 oracle-round=1 starter@0.5/stop1=4
+  100/400 shots, 279s, failures so far starter=5 exact=4 oracle-round=3 starter@0.5/stop1=6
+  150/400 shots, 307s, failures so far starter=7 exact=5 oracle-round=3 starter@0.5/stop1=8
+  200/400 shots, 360s, failures so far starter=7 exact=5 oracle-round=3 starter@0.5/stop1=8
+  250/400 shots, 446s, failures so far starter=10 exact=8 oracle-round=5 starter@0.5/stop1=12
+  300/400 shots, 519s, failures so far starter=12 exact=11 oracle-round=7 starter@0.5/stop1=15
+  350/400 shots, 631s, failures so far starter=14 exact=14 oracle-round=9 starter@0.5/stop1=17
+  400/400 shots, 697s, failures so far starter=15 exact=18 oracle-round=10 starter@0.5/stop1=21
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/001200-001600.npz.tmp.npz in 697s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 1600..2000 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 78s, failures so far starter=2 exact=1 oracle-round=1 starter@0.5/stop1=2
+  100/400 shots, 177s, failures so far starter=4 exact=2 oracle-round=3 starter@0.5/stop1=4
+  150/400 shots, 249s, failures so far starter=7 exact=6 oracle-round=4 starter@0.5/stop1=7
+  200/400 shots, 333s, failures so far starter=8 exact=6 oracle-round=4 starter@0.5/stop1=7
+  250/400 shots, 461s, failures so far starter=12 exact=11 oracle-round=5 starter@0.5/stop1=12
+  300/400 shots, 553s, failures so far starter=15 exact=14 oracle-round=5 starter@0.5/stop1=16
+  350/400 shots, 630s, failures so far starter=19 exact=17 oracle-round=6 starter@0.5/stop1=21
+  400/400 shots, 749s, failures so far starter=21 exact=20 oracle-round=9 starter@0.5/stop1=23
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/001600-002000.npz.tmp.npz in 749s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 2000..2400 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 88s, failures so far starter=0 exact=0 oracle-round=1 starter@0.5/stop1=0
+  100/400 shots, 213s, failures so far starter=4 exact=3 oracle-round=3 starter@0.5/stop1=4
+  150/400 shots, 278s, failures so far starter=7 exact=6 oracle-round=5 starter@0.5/stop1=8
+  200/400 shots, 377s, failures so far starter=11 exact=10 oracle-round=7 starter@0.5/stop1=12
+  250/400 shots, 506s, failures so far starter=16 exact=16 oracle-round=11 starter@0.5/stop1=18
+  300/400 shots, 567s, failures so far starter=18 exact=18 oracle-round=12 starter@0.5/stop1=21
+  350/400 shots, 644s, failures so far starter=20 exact=19 oracle-round=14 starter@0.5/stop1=25
+  400/400 shots, 705s, failures so far starter=21 exact=22 oracle-round=14 starter@0.5/stop1=26
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/002000-002400.npz.tmp.npz in 705s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 2400..2800 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 71s, failures so far starter=0 exact=0 oracle-round=0 starter@0.5/stop1=0
+  100/400 shots, 133s, failures so far starter=0 exact=0 oracle-round=0 starter@0.5/stop1=0
+  150/400 shots, 252s, failures so far starter=3 exact=1 oracle-round=1 starter@0.5/stop1=5
+  200/400 shots, 362s, failures so far starter=6 exact=3 oracle-round=2 starter@0.5/stop1=8
+  250/400 shots, 447s, failures so far starter=7 exact=4 oracle-round=2 starter@0.5/stop1=9
+  300/400 shots, 582s, failures so far starter=10 exact=8 oracle-round=3 starter@0.5/stop1=13
+  350/400 shots, 702s, failures so far starter=16 exact=13 oracle-round=6 starter@0.5/stop1=19
+  400/400 shots, 780s, failures so far starter=17 exact=15 oracle-round=7 starter@0.5/stop1=21
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/002400-002800.npz.tmp.npz in 780s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 2800..3200 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 64s, failures so far starter=0 exact=0 oracle-round=1 starter@0.5/stop1=0
+  100/400 shots, 124s, failures so far starter=2 exact=2 oracle-round=4 starter@0.5/stop1=2
+  150/400 shots, 252s, failures so far starter=5 exact=5 oracle-round=6 starter@0.5/stop1=5
+  200/400 shots, 308s, failures so far starter=9 exact=9 oracle-round=7 starter@0.5/stop1=9
+  250/400 shots, 413s, failures so far starter=11 exact=10 oracle-round=8 starter@0.5/stop1=11
+  300/400 shots, 485s, failures so far starter=14 exact=14 oracle-round=10 starter@0.5/stop1=14
+  350/400 shots, 617s, failures so far starter=17 exact=18 oracle-round=11 starter@0.5/stop1=17
+  400/400 shots, 754s, failures so far starter=22 exact=21 oracle-round=14 starter@0.5/stop1=21
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/002800-003200.npz.tmp.npz in 754s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 3200..3600 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 75s, failures so far starter=0 exact=0 oracle-round=0 starter@0.5/stop1=1
+  100/400 shots, 197s, failures so far starter=4 exact=4 oracle-round=4 starter@0.5/stop1=5
+  150/400 shots, 254s, failures so far starter=5 exact=5 oracle-round=5 starter@0.5/stop1=6
+  200/400 shots, 382s, failures so far starter=6 exact=9 oracle-round=6 starter@0.5/stop1=8
+  250/400 shots, 508s, failures so far starter=10 exact=14 oracle-round=9 starter@0.5/stop1=12
+  300/400 shots, 665s, failures so far starter=14 exact=19 oracle-round=12 starter@0.5/stop1=16
+  350/400 shots, 774s, failures so far starter=19 exact=22 oracle-round=14 starter@0.5/stop1=21
+  400/400 shots, 922s, failures so far starter=24 exact=29 oracle-round=19 starter@0.5/stop1=27
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/003200-003600.npz.tmp.npz in 922s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 3600..4000 conditions ['starter', 'exact', 'oracle-round', 'starter@0.5/stop1'] workers 4
+  50/400 shots, 57s, failures so far starter=1 exact=1 oracle-round=0 starter@0.5/stop1=2
+  100/400 shots, 169s, failures so far starter=5 exact=4 oracle-round=1 starter@0.5/stop1=6
+  150/400 shots, 220s, failures so far starter=7 exact=6 oracle-round=2 starter@0.5/stop1=7
+  200/400 shots, 271s, failures so far starter=7 exact=7 oracle-round=2 starter@0.5/stop1=7
+  250/400 shots, 324s, failures so far starter=7 exact=8 oracle-round=2 starter@0.5/stop1=7
+  300/400 shots, 424s, failures so far starter=9 exact=8 oracle-round=2 starter@0.5/stop1=9
+  350/400 shots, 530s, failures so far starter=11 exact=9 oracle-round=2 starter@0.5/stop1=11
+  400/400 shots, 629s, failures so far starter=11 exact=12 oracle-round=2 starter@0.5/stop1=11
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/aware/003600-004000.npz.tmp.npz in 629s

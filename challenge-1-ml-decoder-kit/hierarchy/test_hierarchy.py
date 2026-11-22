@@ -20,7 +20,7 @@ import pytest
 import scipy.sparse as sp
 
 from evaluation.adapters import Problem, create_session, validate_shot_result
-from hierarchy import candidates, compare, ensemble, joint_member, rules, select, tcbp_member
+from hierarchy import candidates, compare, ensemble, joint_member, preflight, rules, select, tcbp_member
 from hierarchy.plugin import HierarchySession, Network
 from hierarchy.rules import ORDER
 from hierarchy.stages import Candidate, kit_problem, load_shots, sha256_of
@@ -677,3 +677,28 @@ def test_ensemble_command_selection_and_rule_choice(tmp_path, capsys):
         ensemble.main(["--members", files[0], other[1]])
     with pytest.raises(SystemExit, match="needs P1 and P2"):
         ensemble.main(["--members", files[1]])
+
+
+# ---------- preflight.py ----------
+
+def test_preflight_refuses_before_it_decodes(tmp_path, shot_files):
+    """The whole chain is the preflight's own run; here only what it must refuse."""
+    options = tmp_path / "options.json"
+    options.write_text(json.dumps({"rule": "weight"}))
+    base = ["--options", str(options), "--x", str(shot_files["X"]), "--z", str(shot_files["Z"]), "--out", str(tmp_path / "out")]
+    with pytest.raises(SystemExit, match="one of them"):
+        preflight.main(base)
+    with pytest.raises(SystemExit, match="one of them"):
+        preflight.main([*base, "--tcbp-stand-in", "--tcbp-python", "python"])
+    with pytest.raises(SystemExit, match="12 or more"):
+        preflight.main([*base, "--tcbp-stand-in", "--shots", "6"])
+    held_out = tmp_path / "test_X.npz"
+    held_out.write_bytes(shot_files["X"].read_bytes())
+    with pytest.raises(SystemExit, match="held-out"):
+        preflight.main([*base[:2], "--x", str(held_out), "--z", str(shot_files["Z"]), "--out", str(tmp_path / "out2"), "--tcbp-stand-in"])
+    with pytest.raises(SystemExit, match="X memory file"):
+        preflight.main([*base[:2], "--x", str(shot_files["Z"]), "--z", str(shot_files["X"]), "--out", str(tmp_path / "out3"), "--tcbp-stand-in"])
+    (tmp_path / "full").mkdir()
+    (tmp_path / "full" / "old.txt").write_text("left over")
+    with pytest.raises(SystemExit, match="not empty"):
+        preflight.main([*base[:6], "--out", str(tmp_path / "full"), "--tcbp-stand-in"])

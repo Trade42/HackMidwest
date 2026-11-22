@@ -124,59 +124,59 @@
  "capped_columns": {
   "m": 0,
   "g": 0,
-  "h": 48
+  "h": 60
  },
- "seconds": 189.72854375839233,
- "shots_scored": 300,
+ "seconds": 242.10442638397217,
+ "shots_scored": 400,
  "arms": {
   "m": {
-   "shots": 300,
-   "failures": 24,
-   "share": 0.08,
+   "shots": 400,
+   "failures": 33,
+   "share": 0.0825,
    "wilson95": [
-    0.054346855229617484,
-    0.11627324076442291
+    0.05934587607530088,
+    0.11359688981794784
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 297,
-   "build_ms_mean": 42.811887702749424,
-   "decode_ms_mean": 21.21811600246777,
-   "build_decode_ms_mean": 64.0300037052172,
-   "build_decode_ms_median": 58.7345469975844,
-   "build_decode_ms_p99": 111.48831627680909
+   "flag_not_converged": 397,
+   "build_ms_mean": 42.550006887468044,
+   "decode_ms_mean": 21.159838415915146,
+   "build_decode_ms_mean": 63.7098453033832,
+   "build_decode_ms_median": 58.560264529660344,
+   "build_decode_ms_p99": 111.3873728981707
   },
   "g": {
-   "shots": 300,
-   "failures": 52,
-   "share": 0.17333333333333334,
+   "shots": 400,
+   "failures": 69,
+   "share": 0.1725,
    "wilson95": [
-    0.1347006002256491,
-    0.22022614110304897
+    0.13863520704198948,
+    0.21259534584433135
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 300,
-   "build_ms_mean": 41.73150026588701,
-   "decode_ms_mean": 31.278799798261993,
-   "build_decode_ms_mean": 73.010300064149,
-   "build_decode_ms_median": 68.94553900929168,
-   "build_decode_ms_p99": 114.4304091390222
+   "flag_not_converged": 400,
+   "build_ms_mean": 41.97941331512993,
+   "decode_ms_mean": 31.389853030559607,
+   "build_decode_ms_mean": 73.36926634568954,
+   "build_decode_ms_median": 68.65864899009466,
+   "build_decode_ms_p99": 117.64010630431582
   },
   "h": {
-   "shots": 300,
-   "failures": 33,
-   "share": 0.11,
+   "shots": 400,
+   "failures": 42,
+   "share": 0.105,
    "wilson95": [
-    0.07940528510605593,
-    0.15045623260269586
+    0.0786237272569577,
+    0.13889098538455905
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 292,
-   "build_ms_mean": 41.695957327416785,
-   "decode_ms_mean": 14.141126779917006,
-   "build_decode_ms_mean": 55.837084107333794,
-   "build_decode_ms_median": 49.86470896983519,
+   "flag_not_converged": 391,
+   "build_ms_mean": 41.66867014399031,
+   "decode_ms_mean": 14.175809710286558,
+   "build_decode_ms_mean": 55.84447985427687,
+   "build_decode_ms_median": 49.88529853289947,
    "build_decode_ms_p99": 96.89713094965553
   }
  },
- "saved_utc": "2026-11-22T16:57:39.697275+00:00"
+ "saved_utc": "2026-11-22T16:58:32.065678+00:00"
 }

@@ -68,7 +68,7 @@ def new_figure(title, subtitle, size=None):
 
 def footnote(figure, text, room=True):
     """A note under the plot, in muted ink; the plot's bottom margin grows with the number of lines."""
-    lines = textwrap.wrap(text, 132)
+    lines = textwrap.wrap(text, 120)
     figure.text(0.02, 0.02, "\n".join(lines), fontsize=11.5, color=MUTED, va="bottom", linespacing=1.35)
     if room:
         figure.subplots_adjust(bottom=0.155 + 0.034 * len(lines))
@@ -308,59 +308,77 @@ def ler_vs_time(measured):
 
 def loss():
     pc, server = loaders.loss_pc(DATA / "loss" / "pc"), loaders.loss_server(DATA / "loss" / "server")
-    tracked, _ = loaders.loss_tracker(DATA / "loss" / "tracker")
-    points = {}
-    for row in list(pc.values()) + list(server.values()) + list(tracked.values()):
-        points.setdefault(row["condition"], {}).setdefault(row["s"], []).append(row)
-    # at a loss rate where the tracker was measured, the main line uses the tracker's own test shots, so its point and the others are paired
-    preferred = {row["s"]: row["seed"] for row in tracked.values() if row["condition"] == "tracker" and row["seed"] == 7300}
-    figure, axes = new_figure("Atom loss: what the loss flags give back",
-                              "X memory, p = 0.004, relay-BP; our simplified loss model; bars: 95% interval; lower is better")
-    labels, drawn = [], []
-    for condition in LOSS_CONDITIONS:
-        by_s = points.get(condition.key)
+    tracked, shares = loaders.loss_tracker(DATA / "loss" / "tracker")
+    figure, (left, right) = plt.subplots(1, 2, figsize=(11, 6.6), gridspec_kw={"width_ratios": [1.3, 1]})
+    figure.subplots_adjust(left=0.09, right=0.97, top=0.80, bottom=0.25, wspace=0.55)
+    figure.text(0.02, 0.955, "Atom loss: the flags give most of it back, the tracker more", fontsize=20, fontweight="bold", va="center")
+    figure.text(0.02, 0.895, "X memory, p = 0.004, relay-BP; our simplified loss model; bars: 95% interval; lower is better",
+                fontsize=14, color=SECONDARY, va="center")
+
+    # left: loss-blind against flag-aware over the loss rate, one dataset per rate (the largest of the loss study)
+    rows = [row for row in list(pc.values()) + list(server.values())]
+    labels = []
+    for condition in [c for c in LOSS_CONDITIONS if c.key in ("blind", "starter")]:
+        by_s = {}
+        for row in rows:
+            if row["condition"] == condition.key:
+                by_s.setdefault(row["s"], []).append(row)
         if not by_s:
             continue
-        best = {s: next((row for row in rows if row["seed"] == preferred.get(s)), None) or max(rows, key=lambda row: row["shots"]) for s, rows in by_s.items()}
+        best = {value: max(found, key=lambda row: row["shots"]) for value, found in by_s.items()}
         xs = sorted(best)
-        ys = [best[s]["failures"] / best[s]["shots"] for s in xs]
-        bounds = [stats.wilson(best[s]["failures"], best[s]["shots"]) for s in xs]
-        axes.errorbar(xs, ys, yerr=[[y - low for y, (low, _) in zip(ys, bounds)], [high - y for y, (_, high) in zip(ys, bounds)]],
-                      color=condition.colour, marker=condition.marker, linestyle=condition.line, capsize=4, elinewidth=1.6, zorder=3,
-                      **marker_style(condition.colour))
-        for s, rows in by_s.items():                       # a second dataset at the same loss rate: its own hollow point, never pooled
-            for row in rows:
-                if row is not best[s]:
-                    low, high = stats.wilson(row["failures"], row["shots"])
-                    share = row["failures"] / row["shots"]
-                    axes.errorbar([s * 1.07], [share], yerr=[[share - low], [high - share]], color=condition.colour, marker=condition.marker,
-                                  linestyle="none", capsize=3, elinewidth=1.2, zorder=3, **marker_style(condition.colour, hollow=True))
-        short = {"blind": "loss-blind", "starter": "flag-aware", "tracker": "ours: with the\nloss-time tracker", "oracle-round": "ORACLE: true loss\nround (a ceiling,\nnot a decoder)"}[condition.key]
-        labels.append((ys[-1], short, condition.colour, condition.marker, False))
-        drawn.append(condition.key)
+        ys = [best[x]["failures"] / best[x]["shots"] for x in xs]
+        bounds = [stats.wilson(best[x]["failures"], best[x]["shots"]) for x in xs]
+        left.errorbar(xs, ys, yerr=[[y - low for y, (low, _) in zip(ys, bounds)], [high - y for y, (_, high) in zip(ys, bounds)]],
+                      color=condition.colour, marker=condition.marker, capsize=4, elinewidth=1.6, zorder=3, **marker_style(condition.colour))
+        labels.append((ys[-1], {"blind": "ignores\nthe flags", "starter": "uses the\nflags"}[condition.key], condition.colour, condition.marker, False))
     lossless = DATA / "loss" / "pc" / "L0_X_p0.004.json"
+    left.set_xscale("log")
+    left.set_yscale("log")
+    left.set_ylim(0.004, 1.3)
+    left.set_xlim(1.5e-4, 2.6e-3)
     if lossless.is_file():
         base = json.loads(lossless.read_text(encoding="utf-8"))["relay_bp_on_clifft"]
-        axes.axhline(base["failures"] / base["shots"], color=MUTED, linewidth=1.2, zorder=2)
-        axes.text(1.5e-4, base["failures"] / base["shots"] * 1.08, f"no loss: {base['failures'] / base['shots']:.2%} of shots fail", fontsize=12.5, color=SECONDARY, va="bottom")
-    axes.set_xscale("log")
-    axes.set_yscale("log")
-    axes.set_ylim(0.005, 1.3)
-    axes.set_xlim(1.4e-4, 2.8e-3)
+        share = base["failures"] / base["shots"]
+        left.axhline(share, color=MUTED, linewidth=1.2, zorder=2)
+        left.text(2.5e-3, share * 0.88, f"no loss: {share:.2%}", fontsize=12.5, color=SECONDARY, va="top", ha="right")
     ticks = [2e-4, 5e-4, 1e-3, 2e-3]
-    axes.set_xticks(ticks, [f"{tick:g}" for tick in ticks])
-    axes.xaxis.set_minor_formatter(NullFormatter())
-    axes.set_yticks([0.01, 0.03, 0.1, 0.3, 1.0], ["1%", "3%", "10%", "30%", "100%"])
-    axes.yaxis.set_minor_formatter(NullFormatter())
-    axes.set_xlabel("loss probability s, per atom per CX gate")
-    axes.set_ylabel("share of shots that fail")
-    end_labels(axes, labels)
-    note = "Hollow points: another dataset at the same loss rate (another machine or seed), not pooled."
-    if preferred:
-        note += " At s = 0.001 the filled points are the tracker's own test shots (seed 7300), every condition on the same shots."
-    if "tracker" not in drawn:
-        note += " The loss-time tracker is not measured yet."
-    footnote(figure, note)
+    left.set_xticks(ticks, [f"{tick:g}" for tick in ticks])
+    left.xaxis.set_minor_formatter(NullFormatter())
+    left.set_yticks([0.01, 0.03, 0.1, 0.3, 1.0], ["1%", "3%", "10%", "30%", "100%"])
+    left.yaxis.set_minor_formatter(NullFormatter())
+    left.set_xlabel("loss probability s, per atom per gate")
+    left.set_ylabel("share of shots that fail")
+    end_labels(left, labels, x=1.03)
+    left.set_title("the flags", fontsize=14, color=SECONDARY, loc="left")
+
+    # right: the tracker's own test shots at s = 0.001, every condition on the same shots
+    right.set_title("knowing when, at s = 0.001", fontsize=14, color=SECONDARY, loc="left")
+    test = {key[-1]: row for key, row in tracked.items() if key[1] == 7300}
+    order = [("starter", "flags,\npublished", "#6250d6"), ("exact", "flags,\nexact\nweights", "#8b7fe0"),
+             ("tracker", "ours:\nwith the\ntracker", "#eb6834"), ("oracle-round", "ORACLE\n(a ceiling)", "#52514e")]
+    present = [(key, label, colour) for key, label, colour in order if key in test]
+    if not present:
+        right.axis("off")
+        right.text(0.5, 0.5, "the tracker: not measured", ha="center", va="center", fontsize=15, color=MUTED, transform=right.transAxes)
+    else:
+        for index, (key, label, colour) in enumerate(present):
+            row = test[key]
+            share = row["failures"] / row["shots"]
+            low, high = stats.wilson(row["failures"], row["shots"])
+            right.bar(index, share * 100, width=0.62, color=colour, edgecolor="none", zorder=3)
+            right.errorbar([index], [share * 100], yerr=[[share * 100 - low * 100], [high * 100 - share * 100]], color=INK, capsize=4, elinewidth=1.4, zorder=4)
+            right.text(index, high * 100 + 0.15, f"{row['failures']}", ha="center", va="bottom", fontsize=13, color=INK)
+        right.set_xticks(range(len(present)), [label for _, label, _ in present], fontsize=12.5)
+        right.set_ylim(0, max(stats.wilson(test[key]["failures"], test[key]["shots"])[1] for key, _, _ in present) * 100 * 1.25)
+        right.set_ylabel(f"% of {test[present[0][0]]['shots']:,} shots that fail")
+        right.grid(axis="x", visible=False)
+    entry = shares.get("test", {}).get(("tracker", "exact"))
+    note = "Left: the largest dataset of the loss study at each loss rate. Right: the tracker's own test shots (seed 7300), the tracker frozen beforehand; numbers on the bars are failures."
+    if entry:
+        note += (f" The tracker recovers {entry['share']:.0%} ({entry['share95'][0]:.0%} to {entry['share95'][1]:.0%}) of the gap between the flag-aware decoder "
+                 "with exact weights and the ORACLE.")
+    footnote(figure, note, room=False)
     return save(figure, "loss")
 
 

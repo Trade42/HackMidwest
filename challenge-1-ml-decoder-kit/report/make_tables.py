@@ -837,7 +837,7 @@ def loss_table():
         for condition in LOSS_CONDITIONS:
             row = source.get(condition.key)
             if row is None:
-                if condition.key in ("blind", "starter"):
+                if condition.key == "starter" or (condition.key == "blind" and seed < 7000):     # the tracker's datasets had no loss-blind decoder
                     lines.append([f"{s:g}", f"{machine}, seed {seed}", condition.label] + [NOT_MEASURED] * 3)
                 continue
             listed = row.get("paired_by_reference", {})
@@ -1000,8 +1000,8 @@ def tracker_facts(tracked, shares):
         fact(f"trk_{name.replace('-', '_')}_share", row and f"{row['failures'] / row['shots']:.2%}", source)
     for reference in ("exact", "starter"):
         versus = (test.get("tracker") or {}).get("paired_by_reference", {}).get(reference)
-        fact(f"trk_vs_{reference}", versus and (f"only {reference} fails {versus['reference_only']}, only the tracker {versus['row_only']}, "
-                                                f"exact p = {stats.p_text(versus['p'])}; {reference} ÷ tracker = {versus['ratio']:.2f} "
+        fact(f"trk_vs_{reference}", versus and (f"only the flag-aware decoder fails {versus['reference_only']} shots, only the tracker {versus['row_only']}, "
+                                                f"sign test p = {stats.p_text(versus['p'])}; {versus['ratio']:.2f} times fewer failures with the tracker "
                                                 f"({versus['ratio95'][0]:.2f} to {versus['ratio95'][1]:.2f})"), source)
     for name, label in (("test", "trk_gain"), ("replication_seed7310", "trk_gain_replication")):
         entry = shares.get(name, {}).get(("tracker", "exact"))
@@ -1012,17 +1012,35 @@ def tracker_facts(tracked, shares):
         table = json.loads(pooled.read_text(encoding="utf-8"))
         entry = next((e for e in table.get("gain_share", []) if e["condition"] == "tracker" and e["reference"] == "exact"), None)
     fact("trk_gain_pooled", entry and f"{entry['share']:.0%} ({entry['share95'][0]:.0%} to {entry['share95'][1]:.0%})", "data/loss/tracker/pooled_7300_7310.json")
-    accuracy = DATA / "loss" / "tracker" / "accuracy_test.md"
-    fact("trk_accuracy_file", "`report/data/loss/tracker/accuracy_test.md`" if accuracy.is_file() else None, "data/loss/tracker/accuracy_test.md")
+    accuracy = DATA / "loss" / "tracker" / "accuracy_test.json"
+    every = None
+    if accuracy.is_file():
+        table = json.loads(accuracy.read_text(encoding="utf-8"))
+        every = table["versions"][table["main"]["version"]]["all"]
+    fact("trk_top1", every and f"{every['top1']:.1%}", "data/loss/tracker/accuracy_test.json")
+    fact("trk_within1", every and f"{every['within1']:.1%}", "data/loss/tracker/accuracy_test.json")
+    fact("trk_atoms", every and f"{every['atoms']:,}", "data/loss/tracker/accuracy_test.json")
+    secondary = DATA / "loss" / "tracker" / "test_secondary.json"
+    pair = None
+    if secondary.is_file():
+        pair = next((entry for entry in json.loads(secondary.read_text(encoding="utf-8")).get("pairs", []) if entry["a"] == "tracker"), None)
+    fact("trk_secondary", pair and (f"an earlier version of the tracker fails {pair['b_failures']} of the same shots against the frozen one's {pair['a_failures']} "
+                                    f"(only the frozen one fails {pair['a_only']}, only the earlier one {pair['b_only']}, p = {stats.p_text(pair['sign_test_p'])})"),
+         "data/loss/tracker/test_secondary.json")
     value = lambda name: FACTS[name][0]
     if test.get("tracker") and test.get("exact"):
         sentence = (f"On the tracker's own test shots (a new set of {test['tracker']['shots']:,} shots at s = 0.001, the tracker frozen on validation shots "
                     f"beforehand), relay-BP given the tracker's estimate fails {value('trk_tracker')}, against {value('trk_exact')} for the flag-aware "
-                    f"decoder that spreads the loss time evenly ({value('trk_vs_exact')}) and {value('trk_oracle_round')} for the ORACLE. "
+                    f"decoder that does not know the loss time, with exact location weights ({value('trk_vs_exact')}), and {value('trk_oracle_round')} for the ORACLE. "
                     f"So the tracker recovers {value('trk_gain')} of the oracle's gain.")
         if value("trk_gain_replication") != NOT_MEASURED:
             sentence += f" A replication on the team's server, on other shots, gives {value('trk_gain_replication')}"
             sentence += f"; both together, {value('trk_gain_pooled')}." if value("trk_gain_pooled") != NOT_MEASURED else "."
+        if value("trk_top1") != NOT_MEASURED:
+            sentence += (f" Scored against the simulator's record of {value('trk_atoms')} lost data atoms, the tracker names the right round "
+                         f"{value('trk_top1')} of the time and is within one round {value('trk_within1')} of the time.")
+        if value("trk_secondary") != NOT_MEASURED:
+            sentence += f" The result does not hang on which version was frozen: {value('trk_secondary')}."
     else:
         sentence = "Its rows on its own test shots are not measured yet."
     fact("trk_sentence", sentence, source)

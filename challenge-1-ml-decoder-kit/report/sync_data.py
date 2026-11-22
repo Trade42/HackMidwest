@@ -90,6 +90,7 @@ SOURCES = [
     ("loss/tracker/", "tree", "loss_tracker/results/replication_seed7310.*", False),
     ("loss/tracker/", "tree", "loss_tracker/results/pooled_7300_7310.*", False),
     ("loss/tracker/", "tree", "loss_tracker/results/accuracy_test.*", False),
+    ("loss/tracker/", "tree", "loss_tracker/results/test_secondary.*", False),
     ("loss/server/L1_s2e-4_seed5100/tables.md", "origin/server-logs", "files/loss/L1_s2e-4_seed5100/tables.md", False),
     ("loss/server/L1_s5e-4_seed5200/tables.md", "origin/server-logs", "files/loss/L1_s5e-4_seed5200/tables.md", False),
     # two jobs wrote tables.md of the same folder: job A's tables (the oracles) are pinned at the commit that held them, job D's (the pieces of the map) are the file now

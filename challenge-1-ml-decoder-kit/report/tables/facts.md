@@ -256,10 +256,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_X_wrong3` | 0.7% | `tables/networks.md` |
 | `net_X_wrong4` | 4.2% | `tables/networks.md` |
 | `net_X_wrong5` | 18.7% | `tables/networks.md` |
-| `net_Z_step` | 76,000 | `tables/networks.md` |
-| `net_Z_wrong3` | 0.5% | `tables/networks.md` |
-| `net_Z_wrong4` | 4.5% | `tables/networks.md` |
-| `net_Z_wrong5` | 19.7% | `tables/networks.md` |
+| `net_Z_step` | 84,000 | `tables/networks.md` |
+| `net_Z_wrong3` | 0.8% | `tables/networks.md` |
+| `net_Z_wrong4` | 4.8% | `tables/networks.md` |
+| `net_Z_wrong5` | 19.4% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |
@@ -622,18 +622,21 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `tcbp_own5_rate` | 3.20e-03 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_xz` | 192, 188 | `tables/tcbp_own_shots.md` |
 | `tcbp_statement` | TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000). | `tables/test_all.md, tables/exploration_p0.004.md` |
-| `trk_accuracy_file` | not measured | `data/loss/tracker/accuracy_test.md` |
-| `trk_exact` | not measured | `data/loss/tracker/test.json` |
-| `trk_exact_share` | not measured | `data/loss/tracker/test.json` |
-| `trk_gain` | not measured | `data/loss/tracker/test.json` |
-| `trk_gain_pooled` | not measured | `data/loss/tracker/pooled_7300_7310.json` |
-| `trk_gain_replication` | not measured | `data/loss/tracker/replication_seed7310.json` |
-| `trk_oracle_round` | not measured | `data/loss/tracker/test.json` |
-| `trk_oracle_round_share` | not measured | `data/loss/tracker/test.json` |
-| `trk_sentence` | Its rows on its own test shots are not measured yet. | `data/loss/tracker/test.json` |
-| `trk_starter` | not measured | `data/loss/tracker/test.json` |
-| `trk_starter_share` | not measured | `data/loss/tracker/test.json` |
-| `trk_tracker` | not measured | `data/loss/tracker/test.json` |
-| `trk_tracker_share` | not measured | `data/loss/tracker/test.json` |
-| `trk_vs_exact` | not measured | `data/loss/tracker/test.json` |
-| `trk_vs_starter` | not measured | `data/loss/tracker/test.json` |
+| `trk_atoms` | 39,909 | `data/loss/tracker/accuracy_test.json` |
+| `trk_exact` | 196 of 4,000 | `data/loss/tracker/test.json` |
+| `trk_exact_share` | 4.90% | `data/loss/tracker/test.json` |
+| `trk_gain` | 58% (38% to 78%) | `data/loss/tracker/test.json` |
+| `trk_gain_pooled` | 54% (38% to 68%) | `data/loss/tracker/pooled_7300_7310.json` |
+| `trk_gain_replication` | 49% (25% to 70%) | `data/loss/tracker/replication_seed7310.json` |
+| `trk_oracle_round` | 112 of 4,000 | `data/loss/tracker/test.json` |
+| `trk_oracle_round_share` | 2.80% | `data/loss/tracker/test.json` |
+| `trk_secondary` | an earlier version of the tracker fails 144 of the same shots against the frozen one's 147 (only the frozen one fails 42, only the earlier one 39, p = 0.82) | `data/loss/tracker/test_secondary.json` |
+| `trk_sentence` | On the tracker's own test shots (a new set of 4,000 shots at s = 0.001, the tracker frozen on validation shots beforehand), relay-BP given the tracker's estimate fails 147 of 4,000, against 196 of 4,000 for the flag-aware decoder that does not know the loss time, with exact location weights (only the flag-aware decoder fails 81 shots, only the tracker 32, sign test p = 5e-06; 1.33 times fewer failures with the tracker (1.18 to 1.51)), and 112 of 4,000 for the ORACLE. So the tracker recovers 58% (38% to 78%) of the oracle's gain. A replication on the team's server, on other shots, gives 49% (25% to 70%); both together, 54% (38% to 68%). Scored against the simulator's record of 39,909 lost data atoms, the tracker names the right round 51.4% of the time and is within one round 79.8% of the time. The result does not hang on which version was frozen: an earlier version of the tracker fails 144 of the same shots against the frozen one's 147 (only the frozen one fails 42, only the earlier one 39, p = 0.82). | `data/loss/tracker/test.json` |
+| `trk_starter` | 192 of 4,000 | `data/loss/tracker/test.json` |
+| `trk_starter_share` | 4.80% | `data/loss/tracker/test.json` |
+| `trk_top1` | 51.4% | `data/loss/tracker/accuracy_test.json` |
+| `trk_tracker` | 147 of 4,000 | `data/loss/tracker/test.json` |
+| `trk_tracker_share` | 3.67% | `data/loss/tracker/test.json` |
+| `trk_vs_exact` | only the flag-aware decoder fails 81 shots, only the tracker 32, sign test p = 5e-06; 1.33 times fewer failures with the tracker (1.18 to 1.51) | `data/loss/tracker/test.json` |
+| `trk_vs_starter` | only the flag-aware decoder fails 75 shots, only the tracker 30, sign test p = 1e-05; 1.31 times fewer failures with the tracker (1.17 to 1.48) | `data/loss/tracker/test.json` |
+| `trk_within1` | 79.8% | `data/loss/tracker/accuracy_test.json` |

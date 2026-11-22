@@ -1,3 +1,3 @@
 network,basis,machine,parameters,last_step_in_log,planned_steps,shots_seen,median_shots_per_second,wrong_p0.003,wrong_p0.004,wrong_p0.005,source
 cascade_X_s1,X,"a laptop GPU (RTX 4060, 8 GB)",893697,110000,120000,14080000,723.0,0.0066,0.0418,0.1868,networks/cascade_X_s1.train.log
-cascade_Z_s1,Z,"the ICRN server (A100 slice, 20 GB)",893697,76000,100000,9728000,882.0,0.0052,0.0452,0.1974,networks/cascade_Z_s1.train.log
+cascade_Z_s1,Z,"the ICRN server (A100 slice, 20 GB)",893697,84000,100000,10752000,890.0,0.008,0.0476,0.1944,networks/cascade_Z_s1.train.log

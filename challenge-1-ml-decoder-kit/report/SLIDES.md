@@ -81,7 +81,7 @@ Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 - An ORACLE that is told the true round of each loss fails <!--f:loss_oracle_share-->2.7%<!--/f--> (<!--f:loss_oracle-->107 of 4,000<!--/f-->, the same shots):
   <!--f:loss_oracle_ratio-->1.64<!--/f--> times fewer than with the flags alone (<!--f:loss_oracle_ratio_interval-->1.42 to 1.94<!--/f-->).
   That is a ceiling, not a decoder. Our tracker estimates that round from the syndrome history: it recovers
-  <!--f:trk_gain-->not measured<!--/f--> of the oracle's gain on its own test shots.
+  <!--f:trk_gain-->58% (38% to 78%)<!--/f--> of the oracle's gain on its own test shots.
 
 Source: `report/tables/loss.md`. The loss model is our own simplified one, not Infleqtion's hardware model.
 

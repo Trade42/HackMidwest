@@ -30,6 +30,9 @@ $sums = Get-ChildItem "$A\cascade_X_s1" -Filter 'checkpoint_step*.pt' | Sort-Obj
 [IO.File]::WriteAllText("$A\cascade_X_s1\SHA256SUMS", (($sums -join "`n") + "`n"))
 & "$root\.venv-cpu\Scripts\python.exe" -I -B "$root\tools\scores_table.py" $A | Out-Null
 Copy-Item "$root\tools\scores_table.py", "$root\tools\snapshot_routine.ps1", "$root\tools\cascade_eval_one.ps1" "$A\cascade_X_s1\" -Force
+# git writes progress to stderr; PowerShell 5.1 would turn that into a terminating error under 'Stop'.
+# From here, success is judged by git's exit codes.
+$ErrorActionPreference = 'Continue'
 & git -C $A add -A
 $msgFile = "$env:TEMP\laptop_artifacts_msg_$Step.txt"
 $msg = "Cascade step ${Step}: snapshot, Stim scores on six team files, selection table`n`n" +
@@ -39,7 +42,8 @@ $msg = "Cascade step ${Step}: snapshot, Stim scores on six team files, selection
     "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`n" +
     "Claude-Session: https://claude.ai/code/session_01AptVDq1GzMDFNwVfYqnuE5`n"
 [IO.File]::WriteAllText($msgFile, $msg)
-& git -C $A commit -q -F $msgFile 2>&1 | Where-Object { $_ -notmatch 'LF will be replaced' }
+& git -C $A commit -q -F $msgFile 2>&1 | ForEach-Object { "$_" } | Where-Object { $_ -notmatch 'LF will be replaced' }
+if ($LASTEXITCODE -ne 0) { 'commit failed'; exit 1 }
 & git -C $A push origin laptop-artifacts 2>&1 | ForEach-Object { "$_" }
 if ($LASTEXITCODE -ne 0) { 'push failed'; exit 1 }
 "commit $(& git -C $A rev-parse HEAD)"

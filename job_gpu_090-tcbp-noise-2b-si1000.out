@@ -1,1 +1,28 @@
 Sun Nov 22 16:46:13 UTC 2026
+waited 390 s for the loss job to end
+Sun Nov 22 16:52:43 UTC 2026
+plan.json: OK
+si1000-p0.006/priors_generic.npy: OK
+si1000-p0.006/priors_matched.npy: OK
+si1000-p0.006/si1000-p0.006_X_kitformat_p0.006.npz: OK
+si1000-p0.006/transfer.json: OK
+si1000-p0.008/priors_generic.npy: OK
+si1000-p0.008/priors_matched.npy: OK
+si1000-p0.008/si1000-p0.008_X_kitformat_p0.008.npz: OK
+si1000-p0.008/transfer.json: OK
+head_X.pt: OK
+trunk_X.pt: OK
+plan.json: OK
+si1000-p0.006/priors_generic.npy: OK
+si1000-p0.006/priors_matched.npy: OK
+si1000-p0.006/si1000-p0.006_X_kitformat_p0.006.npz: OK
+si1000-p0.006/transfer.json: OK
+si1000-p0.008/priors_generic.npy: OK
+si1000-p0.008/priors_matched.npy: OK
+si1000-p0.008/si1000-p0.008_X_kitformat_p0.008.npz: OK
+si1000-p0.008/transfer.json: OK
+predecoder/logs/fit_tcbp_X_p0.005.json: OK
+PYT=/home/blakew3/.conda/envs/cascade/bin/python
+Sun Nov 22 16:53:45 UTC 2026
+name, memory.used [MiB], utilization.gpu [%]
+NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]

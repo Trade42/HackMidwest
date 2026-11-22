@@ -1,0 +1,18 @@
+{
+ "tasks": [
+  {
+   "name": "si1000-p0.006",
+   "data": "si1000-p0.006/si1000-p0.006_X_kitformat_p0.006.npz",
+   "generic": "si1000-p0.006/priors_generic.npy",
+   "matched": "si1000-p0.006/priors_matched.npy",
+   "transfer": "si1000-p0.006/transfer.json"
+  },
+  {
+   "name": "si1000-p0.008",
+   "data": "si1000-p0.008/si1000-p0.008_X_kitformat_p0.008.npz",
+   "generic": "si1000-p0.008/priors_generic.npy",
+   "matched": "si1000-p0.008/priors_matched.npy",
+   "transfer": "si1000-p0.008/transfer.json"
+  }
+ ]
+}

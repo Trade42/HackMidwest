@@ -5,3 +5,8 @@ validation_X.npz: 5000 shots, p=0.005, arms ['fresh']; head priors {'mode': 'lin
   20 of 50 tasks done (fresh from shot 1900), 329 s
   30 of 50 tasks done (fresh from shot 3000), 444 s
   40 of 50 tasks done (fresh from shot 4100), 557 s
+/home/blakew3/.conda/envs/cascade/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 6 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+p = 0.005: predecoder.compare exit 124 (124 = stopped at 2026-11-22 10:10:00 UTC; it resumes from parts/)
+Sun Nov 22 10:10:01 UTC 2026
+p = 0.003: not started (under 2 minutes left before 2026-11-22 10:10:00 UTC)

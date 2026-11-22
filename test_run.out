@@ -36,3 +36,6 @@ wrote /home/blakew3/mlBranchMidwest/runs/test/hierarchy_options.json: {"rule": {
 }
 options ok: /home/blakew3/mlBranchMidwest/runs/test/hierarchy_options.json {'X': 'network', 'Z': 'network'} sequential
 options ok: /home/blakew3/mlBranchMidwest/runs/test/hierarchy_options_parallel.json {'X': 'network', 'Z': 'network'} side by side
+oracle_P1_P2_T_R_J                [0 0]             0  0.00e+00 +- 0.0e+00
+
+PREFLIGHT PASSED in 159 s: the plugin, candidates, evaluate_stim, tcbp_member, joint_member and ensemble all ran on 16 validation shots per basis

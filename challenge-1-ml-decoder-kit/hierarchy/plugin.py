@@ -29,7 +29,7 @@ in those operators (rules.bits_for_network), so the rule is the same for both ki
 
 Options (a JSON object; every key is optional):
 
-  rule            "network" (default), "weight" or "converged"
+  rule            "network" (default), "weight" or "converged"; or one per basis: {"X": "network", "Z": "converged"}
   checkpoints     {"X": <checkpoint of neural.train>, "Z": <...>}. A basis without a checkpoint
                   uses the "weight" rule, and the session's recorded settings say so.
   seeds           PriorTilt's two seeds, default [1, 1001]
@@ -112,6 +112,8 @@ class HierarchySession:
         if unknown:
             raise ValueError(f"unknown options {sorted(unknown)}; known: {sorted(OPTIONS)}")
         asked = options.get("rule", "network")
+        if isinstance(asked, dict):                       # one rule per memory basis
+            asked = asked.get(problem.basis, "network")
         if asked not in RULES:
             raise ValueError(f"rule must be one of {RULES}, got {asked!r}")
         self.problem = problem

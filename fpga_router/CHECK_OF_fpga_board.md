@@ -10,7 +10,8 @@ in user space; Python 3.12.15, numpy 2.5.5, scipy 1.18.1 in a fresh venv built f
 
 **In short:** the design does what its README says, bit for bit, on all 5,000 validation shots of X memory at
 p = 0.004, including through the UART. Two things must change before the board: **two LED pins in the constraints
-file are wrong, and one of them (A18) is a ground ball of the chip, so Vivado cannot write the bitstream**
+file are wrong, and one of them (A18) is a ground ball of the chip, so Vivado is expected to refuse to write the
+bitstream**
 (finding 1, a two-line fix); and the exporter's rounded threshold lets a board image for Z at p = 0.003 accept a
 wrong candidate that the software escalates (finding 2, a three-line fix). The committed X p = 0.004 image is not
 affected by the second.
@@ -62,8 +63,9 @@ set_property -dict {PACKAGE_PIN B18 IOSTANDARD LVCMOS33} [get_ports {LED[9]}]
 
 So B18 is LED 9, not LED 8, and **A18 is not an I/O pin at all**: it is absent from the chip's package pin list
 (prjxray-db `spartan7/xc7s50csga324-1/package_pins.csv`, 212 pins, no A18), and RealDigital's schematic (sheet of
-IC11G, "POWER", XC7S50-CSGA324) lists A18 among the GND balls. Vivado will not place an output there, so the
-port stays unplaced and `write_bitstream` refuses the design (its check for I/O without a pin). The README's
+IC11G, "POWER", XC7S50-CSGA324) lists A18 among the GND balls. So Vivado cannot place an output there, and the
+port is expected to stay unplaced, which `write_bitstream` refuses (its check for I/O without a pin). This was not
+run here: there is no Vivado on luminaty; the pin facts are what was checked. The README's
 sentence "LED8/LED9 are B18/A18; these correct two wrong assignments in the older integration XDC" is the wrong
 way round: the older file (`fpga_router/urbana_router.xdc`) had C17 and B18, which match the master file.
 

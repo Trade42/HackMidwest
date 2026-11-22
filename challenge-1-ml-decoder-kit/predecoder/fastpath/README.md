@@ -20,7 +20,7 @@ advance (the rule may add no failure TH does not have), the best rule found send
 the mean from 51.1 ms to 49.3 ms (1.8 ms, 3.5%, inside the timers' noise), with its threshold on the edge of these
 shots. Its failures are TH's own 33, shot for shot. C1 (agreement with PriorTilt) adds 19 failures. Every check that
 sends more shots to F adds failures: F is wrong on 75 shots where TH is right, and those shots are not easy to spot
-cheaply. This is not worth a pipeline change.
+cheaply. Round 1's two checks are not worth a pipeline change (rounds 2 and 3 below found better ones).
 
 ## What was fixed first
 
@@ -273,10 +273,24 @@ against 53.9 ms.
 **Verdict, by the declared rule: holds with a cost.** Paired against TH: both fail 47, only the rule 1, only TH 1
 (exact p = 1.0). The rule fails the same number of shots as the TCBP version, 48. Of the 79 shots where only F
 fails, 78 went to TH. The one that did not, shot 4999 (entropy 60.8 bits), is far below the threshold, not at its edge.
-The next F-only shot is at 88.1 bits. The fast share, 35.3%, matches validation's 35.4%.
+The next F-only shot is at 88.1 bits. The fast share, 35.3%, matches validation's 35.4%. The exact one-sided 95%
+upper bound on the added-failure rate among the fast shots is 0.0027 (1 of 1,763; computed after the result,
+reporting only, as `CRITERION_4.md` asked): at most about 5 added per 5,000 shots, about 10% of TH's 48. The p = 1.0
+rests on 2 discordant shots, so this is no detectable loss at this resolution, not a proof of none. TH fails 48 here
+against 33 on validation; F fails 112 against 91 to 100, so this sample is harder, while the routing (35.3% against
+35.4%) is the same.
 
-**In one line:** on fresh shots at p = 0.005, the frozen rule keeps the TCBP version's accuracy (48 against 48) at
-28% less mean time (33.5 against 46.2 ms), with the same p99.
+**In one line:** on fresh shots at p = 0.005, the frozen rule shows no detectable loss of the TCBP version's accuracy
+(48 against 48) at 28% less mean time (33.5 against 46.2 ms), with the same p99.
+
+About the times:
+- 1.7 ms for the network is as dq-orch-6 gave it (18:43 UTC); it was not checked here.
+- 33.5 ms is put together from separate timers; the pipeline was never run as one timed process.
+- The routing used luminaty's CPU float32 logits. Whether the CUDA-graph network's logits route the same shots was
+  not tested.
+- Data for a rerun without luminaty's scratch, on laptop-artifacts: the held-out shots and logits at `a0cec813`
+  (`predecoder-tcbp/fastpath_holdout/`), the p = 0.004 validation logits at `424909f8`, and the p = 0.005 validation
+  logits at `64163747`.
 
 What is still open:
 - **The rule is for p = 0.005 only.** Its threshold does not carry to p = 0.004 (2 added there).

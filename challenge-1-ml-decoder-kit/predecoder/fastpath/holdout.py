@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+from scipy.stats import beta
 
 from predecoder.fastpath.fastpath2 import exact_p, wilson
 from predecoder.tcbp import row_hash
@@ -83,7 +84,10 @@ def main():
         "fast_fraction": round(float(easy.mean()), 4), "fast_shots": int(easy.sum()),
         "F_only_shots_total": int((f_fail & ~th_fail).sum()),
         "F_only_on_fast_path": added,
-        "added_rate_upper_95_on_fast_shots": round(3 / int(easy.sum()), 5) if added == 0 and easy.sum() else None,
+        # one-sided 95% upper bound (Clopper-Pearson; 3 / n for 0 seen). Reporting only: the k > 0 case was added
+        # after the held-out result, which it does not change
+        "added_rate_upper_95_on_fast_shots": round(float(beta.ppf(0.95, added + 1, int(easy.sum()) - added)), 5)
+        if easy.sum() else None,
         "entropy_bits": {"min": float(s.min()), "median": float(np.median(s)), "max": float(s.max())},
         "times_today": times(NET_MS),
         "times_round2_network": times(NET_MS_ROUND2),

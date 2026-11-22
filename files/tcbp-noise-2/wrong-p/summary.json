@@ -116,59 +116,59 @@
  "capped_columns": {
   "m": 0,
   "g": 0,
-  "h": 666
+  "h": 706
  },
- "seconds": 2106.7492847442627,
- "shots_scored": 3600,
+ "seconds": 2230.1135108470917,
+ "shots_scored": 3800,
  "arms": {
   "m": {
-   "shots": 3600,
-   "failures": 60,
-   "share": 0.016666666666666666,
+   "shots": 3800,
+   "failures": 65,
+   "share": 0.017105263157894738,
    "wilson95": [
-    0.012970584139922359,
-    0.02139315252671193
+    0.013443624855977089,
+    0.021742241938970404
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 3509,
-   "build_ms_mean": 42.81347205238288,
-   "decode_ms_mean": 14.978528819273278,
-   "build_decode_ms_mean": 57.79200087165615,
-   "build_decode_ms_median": 52.75414849165827,
-   "build_decode_ms_p99": 112.07628717413169
+   "flag_not_converged": 3702,
+   "build_ms_mean": 42.86497385097104,
+   "decode_ms_mean": 14.98181675667997,
+   "build_decode_ms_mean": 57.84679060765101,
+   "build_decode_ms_median": 52.855855494271964,
+   "build_decode_ms_p99": 113.33927145111373
   },
   "g": {
-   "shots": 3600,
-   "failures": 67,
-   "share": 0.01861111111111111,
+   "shots": 3800,
+   "failures": 72,
+   "share": 0.018947368421052633,
    "wilson95": [
-    0.014682133074300618,
-    0.023566347180456398
+    0.015073338512484095,
+    0.02379301816389956
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 3528,
-   "build_ms_mean": 42.76854463202957,
-   "decode_ms_mean": 14.343039688570165,
-   "build_decode_ms_mean": 57.111584320599725,
-   "build_decode_ms_median": 52.395057457033545,
-   "build_decode_ms_p99": 106.38253121636806
+   "flag_not_converged": 3723,
+   "build_ms_mean": 42.81391375872772,
+   "decode_ms_mean": 14.299162027616006,
+   "build_decode_ms_mean": 57.11307578634373,
+   "build_decode_ms_median": 52.40092845633626,
+   "build_decode_ms_p99": 106.32108937948941
   },
   "h": {
-   "shots": 3600,
-   "failures": 21,
-   "share": 0.005833333333333334,
+   "shots": 3800,
+   "failures": 22,
+   "share": 0.005789473684210527,
    "wilson95": [
-    0.0038185979034929905,
-    0.008901567343600343
+    0.0038264633879525637,
+    0.008750679849601324
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 2834,
-   "build_ms_mean": 42.80059340717142,
-   "decode_ms_mean": 7.214008605838495,
-   "build_decode_ms_mean": 50.01460201300991,
-   "build_decode_ms_median": 46.213460445869714,
-   "build_decode_ms_p99": 77.40586770582013
+   "flag_not_converged": 2989,
+   "build_ms_mean": 42.84527130265671,
+   "decode_ms_mean": 7.283330784350829,
+   "build_decode_ms_mean": 50.12860208700754,
+   "build_decode_ms_median": 46.34285351494327,
+   "build_decode_ms_p99": 77.42235415731548
   }
  },
- "saved_utc": "2026-11-22T17:10:42.435384+00:00"
+ "saved_utc": "2026-11-22T17:12:45.797979+00:00"
 }

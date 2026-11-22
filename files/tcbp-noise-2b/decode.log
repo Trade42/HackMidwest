@@ -38,3 +38,6 @@ plan /home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2b/plan.json: tasks ['si100
   si1000-p0.008 block 1600-1699 done, 962 s; failures so far m 1248, g 1445, h 1151 of 1700
   si1000-p0.006 block 1700-1799 done, 984 s; failures so far m 182, g 334, h 174 of 1800
   si1000-p0.008 block 1700-1799 done, 1017 s; failures so far m 1315, g 1529, h 1221 of 1800
+  si1000-p0.006 block 1800-1899 done, 1038 s; failures so far m 192, g 350, h 184 of 1900
+  si1000-p0.008 block 1800-1899 done, 1069 s; failures so far m 1387, g 1614, h 1293 of 1900
+  si1000-p0.006 block 1900-1999 done, 1091 s; failures so far m 203, g 374, h 196 of 2000

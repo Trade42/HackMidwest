@@ -270,6 +270,6 @@ def test_rows_run_after_the_test_results_are_labelled_where_they_appear():
             if after:
                 assert f"| {DECODERS[key].label}{row['label_note']} |" in table, (p, key)
                 line = next(line for line in sweep.splitlines() if line.startswith(f"| {DECODERS[key].label} |"))
-                assert line.split(" | ")[1 + P_VALUES.index(p)].endswith(f"**{AFTER_SHORT}**") or line.split(" | ")[1 + P_VALUES.index(p)].endswith(f"**{AFTER_SHORT}** |"), (p, key)
+                assert f"**{AFTER_SHORT}**" in line.split(" | ")[1 + P_VALUES.index(p)], (p, key)
     for p in ("0.003", "0.004"):            # the pre-registered arm of the test run itself
         assert measured[p]["hierarchy-converged"] is not None and not measured[p]["hierarchy-converged"]["after_test"]

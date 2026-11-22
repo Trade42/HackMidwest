@@ -214,6 +214,8 @@ def load_test_rows(data=DATA):
                     if run["end"] is None or run["exit"] != 0:
                         raise Mismatch(f"{folder}: run after the test results, but test_rows.out has no END line with exit 0 for it")
                     row["label_note"] += f" ({AFTER_TEST})"
+                    if spec.member and combined[p] and spec.member in combined[p]["rows"]:   # the pre-registered offline decode it replaces in the tables
+                        row["offline_before"] = combined[p]["rows"][spec.member]["failures_pair"]
                 retime = folder.with_name(folder.name + RETIME)
                 if spec.kind == "evaluator" and not row.get("offline") and (retime / "summary.json").is_file():
                     take_retime(row, retime, log, monitor, jobs, p)
@@ -386,7 +388,8 @@ def test_tables(measured):
             else:
                 time = f"{ms(row['mean_ms'])} ms" if row["mean_ms"] is not None else "time " + NOT_MEASURED
                 cells.append(f"{rate_text(row['rate'], row['error'])} · {row['failures_pair']} pairs · {time}"
-                             + (f" · **{AFTER_SHORT}**" if row.get("after_test") else ""))
+                             + (f" · **{AFTER_SHORT}**" if row.get("after_test") else "")
+                             + (f" · pre-registered offline decode: {row['offline_before']} pairs" if row.get("offline_before") is not None else ""))
         lines.append([DECODERS[key].label] + cells)
     slide_lines = []
     for key in ("bposd", "relay-bp", "router", "priortilt", "hierarchy", "hierarchy-parallel", "tcbp", "ensemble"):

@@ -128,8 +128,9 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 
 ## Backup slide. <!--f:net_timed_slide_title-->Timed against timed, the network is not significantly different from the best hand-written tie-break (47 against 56 failed pairs at p = 0.003, 0.004, exact p = 0.11)<!--/f-->
 
-Shows: `report/tables/test_network_timed.md`. These rows were run after the test results were seen, at the team's request.
-They are an ablation, not our decoder.
+Shows: `report/tables/test_network_timed.md`. The rows marked as run after the test results were seen are an ablation the
+team asked for, not our decoder. The best hand-written rule's one-core rows at p = 0.003 and 0.004 ran in the test run
+itself, among its pre-registered arms.
 
 - The same decoder ran on the same test pairs, through the same evaluator, with the network swapped for a hand-written tie-break.
 - <!--f:net_timed_per_p-->With the network against without it, timed rows on one core: at p = 0.003, against the best hand-written rule 3 against 4 failed pairs (only with the network 0, only without 1, exact p = 1.00; 45.7 against 46.3 ms per pair) and against plain lowest weight [run after the test results were seen (an ablation)] 3 against 4 failed pairs (only with the network 0, only without 1, exact p = 1.00; 45.7 against 46.9 ms per pair); at p = 0.004, against the best hand-written rule 44 against 52 failed pairs (only with the network 8, only without 16, exact p = 0.15; 216 against 218 ms per pair) and against plain lowest weight [run after the test results were seen (an ablation)] 44 against 60 failed pairs (only with the network 5, only without 21, exact p = 0.002; 216 against 215 ms per pair).<!--/f-->

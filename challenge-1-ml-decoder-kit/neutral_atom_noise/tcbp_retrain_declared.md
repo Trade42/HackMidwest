@@ -119,3 +119,16 @@ the matching ones above:
   - If r vs m is not significant, the result is "not shown at this size", not "no effect".
   - r vs h should still separate if r behaves as expected (h failed 10.5% in phase 1).
 - **Everything else stands:** the head, its checkpoint rule, the frozen knobs and the claim rule.
+
+## Amendment 2: the full run restored (declared before any decode)
+
+Written 2026-11-22 at about 18:36 UTC. At that time the head had finished training (laptop-artifacts `07930fcc`,
+`head.pt` sha256 `b42d71d5...`, step 20,000), and no decode with it, and no decode of the seed-4800 file, existed.
+
+**Why:** Sal, relayed by `dq-orch-6` at about 18:34 UTC, says there is more time than 30 minutes. **Amendment 1 is
+withdrawn, and the run is the one first declared above:**
+- both files (seed 4800, 4,000 shots, primary; seed 4100, 2,000 shots, secondary);
+- arms m, g, h, hm and r on seed 4800, and m, h, hm and r on seed 4100;
+- the stopping rule above, with the deadline the orchestrator writes into the job (its start + 45 minutes).
+
+Nothing else changes. With a deadline, the scored set is still the longest prefix of whole blocks.

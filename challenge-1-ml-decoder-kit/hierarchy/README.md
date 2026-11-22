@@ -1,17 +1,41 @@
-# hierarchy: two fast decodes, and a learned tie-breaker where they disagree
+# hierarchy: fast decoders first, slower ones only where they disagree
 
-The team's decoder for the required comparison with BP-OSD and relay-BP. It is a hierarchy:
+Two things live here, for the required comparison with BP-OSD and relay-BP.
+
+**Part 1, the plugin: a hierarchy with a tie-breaker.** It runs through the team's evaluator,
+one shot at a time, in one process.
 
 1. A fast decoder (PriorTilt) decodes the shot twice, under two random seeds.
 2. If the two answers agree, that is the answer. This happens on about 99.6% of shots at p = 0.004.
 3. If they differ, a third decoder (relay-BP) decodes the shot too, and a rule chooses among
-   the three answers. The rule is either the neural network of `neural/` ("network": the answer
-   the network finds most likely) or a rule without learning ("weight": the most probable
-   set of faults).
+   the three answers: the neural network of `neural/` ("network"), or a rule without
+   learning ("converged", "weight").
 
-On 25,000 exploration shots of X memory at p = 0.004 it fails 66 times where relay-BP fails
-122, in 71% of relay-BP's mean time (laptop times; table below). These are not test-set
-numbers: the one run on the test shots has not happened.
+**Part 2, the ensemble: more members, combined offline.** It adds TCBP-JOBS (the teammates'
+GPU decoder) as a third always-on member and joint relay-BP as the arbiter where the three
+disagree. It is combined from per-shot files; it is not one timed decoder.
+
+Where things stand at p = 0.004, on the 10,000 validation shots (5,000 X, 5,000 Z; no pair
+has both shots failing, so failures and failed pairs are the same number). **These are not
+test-set numbers.**
+
+| decoder | failures [X Z] | failed pairs of 5,000 | rate per cycle (the kit's) |
+|---|---|---|---|
+| relay-BP, kit settings | [31 20] | 51 | 8.5e-4 +- 1.2e-4 |
+| TCBP-JOBS alone | [16 9] | 25 | 4.2e-4 +- 0.8e-4 |
+| part 1's rule with the network, scored offline | [14 16] | 30 | 5.0e-4 +- 0.9e-4 |
+| part 1's plugin through the evaluator (X network, Z weight rule) | [20 17] | 37 | 6.2e-4 +- 1.0e-4 |
+| **the ensemble, rule f** | **[8 3]** | **11** | **1.8e-4 +- 0.6e-4** |
+
+What the numbers support, and what they do not:
+
+- The hierarchy fails clearly less often than relay-BP, in less mean time (paired tests below).
+- The ensemble fails less often than TCBP-JOBS alone on the same shots (11 against 25; paired
+  p = 0.008 on X and 0.03 on Z). The rule that does it uses joint decoding and no network.
+- **The network's own gain is not established.** As tie-breaker it beats the plain
+  lowest-weight rule (62 against 77 failures on 25,000 X shots, paired p = 0.006), but against
+  the best rule without learning ("converged") it is level (62 against 67, p = 0.40), and the
+  young Z network is behind it (83 against 73). The test run prints this comparison, paired.
 
 Run every command from `challenge-1-ml-decoder-kit/`.
 
@@ -24,6 +48,10 @@ Run every command from `challenge-1-ml-decoder-kit/`.
 | `tcbp_member.py` | part 2: TCBP-JOBS (the teammates' GPU decoder) on saved shot files |
 | `joint_member.py` | part 2: joint relay-BP on listed shots |
 | `ensemble.py` | part 2: the members' answers combined offline by one rule |
+| `plugin_options.py` | writes the plugin's options file: the network rule per basis only if it is no worse than the best rule without learning |
+| `priortilt_plugin.py` | a reference row for the evaluator: PriorTilt once |
+| `preflight.py` | runs every tool on a few validation shots; a run on held-out shots starts only if it passes |
+| `parallel_check.py` | checks the plugin's side-by-side mode against its sequential mode, shot for shot |
 | `stages.py` | the three decoders on the kit's problem, and the order they run in |
 | `rules.py` | how a rule chooses; shared by the plugin and by `select.py` |
 | `test_hierarchy.py` | tests |
@@ -43,17 +71,26 @@ picks one:
 - *weight* looks at the corrections themselves. Every decoder returns a set of faults; the
   weight of the set is the sum of `log((1 - prior) / prior)` over its faults, so a lower
   weight is a more probable explanation. The rule takes the lowest weight of the three.
+- *converged* is the same among the candidates that converged, that is, whose correction
+  really reproduces the syndrome (among all three if none did). An unconverged decoder
+  returns a guess, and its weight means little. This is the best rule without learning on
+  the exploration shots.
 - *network* asks the neural network of `neural/`, which reads the shot's detector bits and
   gives 12 logits, one per logical bit. A candidate's score is the sum over the 12 bits of
   `log sigmoid(logit)` where the candidate says 1 and `log sigmoid(-logit)` where it says 0:
   the log-probability the network gives to that candidate's 12 bits. The highest score wins.
   With an optional constant C the score is that sum minus weight / C.
 
-**Why the network is only a tie-breaker.** Alone, the network (step 30,000 of a run that is
-still training) gets 27% of these shots wrong, against 0.5% for relay-BP. But it does not
+**Why the network is only a tie-breaker.** Alone, the network (step 60,000 of a run that is
+still training) gets 12% of these shots wrong, against 0.5% for relay-BP. But it does not
 need to decode. It only has to say which of two or three given answers looks more likely,
-on 0.4% of the shots, and that it can do: it picks a right answer more often than the weight
-rule does.
+on 0.4% of the shots. It does that better than the plain weight rule, and so far about as
+well as the "converged" rule (numbers below).
+
+**Which rule the plugin uses is decided by a frozen procedure, not by hand.** Per basis:
+"network" if, with the final checkpoint, the network rule has no more failures than
+"converged" on the p = 0.004 train and validation shots of that basis; otherwise
+"converged". `plugin_options.py` applies it and writes the options file.
 
 **The cost.** Every shot pays for two PriorTilt decodes (about 52 ms each on the laptop,
 against 167 ms for relay-BP). 0.4% of shots also pay for relay-BP and one network call. The
@@ -66,9 +103,10 @@ worst shot costs more than relay-BP alone; the mean is lower.
 | PriorTilt's schedule | fitted by its authors per noise level, on their circuits (not ours). We use it unchanged. |
 | relay-BP | the kit's settings, unchanged |
 | "the two seeds disagree" as the test for a hard shot | not learned |
-| the "weight" rule | not learned |
+| the "weight" and "converged" rules | not learned |
 | the "network" rule | the network's weights are learned, on shots drawn from the kit's error model at many noise levels. It never saw the shot files used here. The rule on top of its logits has no fitted number. |
 | the constant C | fitted, when used. Off by default. |
+| which rule a basis uses | chosen by the procedure above on exploration shots, before any held-out shot is opened |
 
 ### State, and the two modes
 
@@ -141,14 +179,49 @@ python -m evaluation.evaluate --test-x <X shots> --test-z <Z shots> \
     --plugin-options runs/hierarchy_options.json --out runs/<new folder>
 ```
 
-Options, all optional: `rule` ("network" or "weight"), `checkpoints` (one per basis),
-`seeds` (default `[1, 1001]`), `constant`, `device` ("cpu", "cuda" or "auto"), `torch_threads`,
-`priortilt_repo`. A basis without a checkpoint uses the "weight" rule, and the settings saved
-in `summary.json` say so (`rule`, `rule_asked`, `rule_note`). The evaluator's timer wraps the
-whole `decode_shot`: both PriorTilt decodes, relay-BP, the network and the rule. The metrics
-of a shot say which stage answered (`stage`), whether the two seeds agreed (`agreed`), which
-candidate won (`winner`), and each decoder's convergence, iterations, weight and time; on a
-shot where the seeds differ also the three predictions and the network's logits.
+Options, all optional: `rule` ("network", "weight" or "converged", or one per basis as
+`{"X": "network", "Z": "converged"}`), `checkpoints` (one per basis), `seeds` (default
+`[1, 1001]`), `constant`, `device` ("cpu", "cuda" or "auto"), `torch_threads`, `parallel`,
+`priortilt_repo`. A basis asked for "network" without a checkpoint uses the "weight" rule, and
+the settings saved in `summary.json` say so (`rule`, `rule_asked`, `rule_note`). The
+evaluator's timer wraps the whole `decode_shot`: both PriorTilt decodes, relay-BP, the network
+and the rule. The metrics of a shot say which stage answered (`stage`), whether the two seeds
+agreed (`agreed`), which candidate won (`winner`), and each decoder's convergence,
+iterations, weight and time; on a shot where the seeds differ also the three predictions and
+the network's logits.
+
+**The options file is written by a command**, from the checkpoints and their logits on the
+p = 0.004 exploration shots (the frozen procedure of "The design"):
+
+```sh
+python -m hierarchy.plugin_options --out runs/hierarchy_options.json \
+    --x-checkpoint <X checkpoint> --x-candidates <validation_X candidates> <train_X candidates> --x-logits <their logits, same order> \
+    --z-checkpoint <Z checkpoint> --z-candidates <validation_Z candidates> <train_Z candidates> --z-logits <their logits, same order>
+```
+
+It prints one line per basis, `PLUGIN_RULE X network    (network 62 failures, converged 67, on 25000 shots)`.
+
+**Side by side.** With `"parallel": true` the two PriorTilt decodes of a shot run at the same
+time: the second one lives in a helper process that is started with the session and sees
+every shot in order. The answers are those of the sequential mode (`parallel_check.py`
+compares them shot for shot). The session then uses two cores, and its time per shot is wall
+time, not CPU time. It is off by default, and the sequential row is the main one.
+
+**Reference rows through the same evaluator:** `--decoder hierarchy.priortilt_plugin:make_decoder`
+is PriorTilt once (the same options file); `{"rule": "converged"}` and `{"rule": "weight"}`
+are the hierarchy without learning.
+
+### Before a run on held-out shots
+
+```sh
+python -m hierarchy.preflight --options runs/hierarchy_options.json --x data/p0.004/validation_X.npz \
+    --z data/p0.004/validation_Z.npz --rule f --tcbp-python <TCBP python> --out runs/preflight_<time>
+```
+
+It runs the plugin (made as the evaluator makes it, with that options file), `candidates.py`,
+`neural.evaluate_stim`, `tcbp_member.py` (in the TCBP Python), `joint_member.py` and
+`ensemble.py` on the first 16 shots of two validation files, and ends with `PREFLIGHT PASSED`
+and status 0 only if every step worked. It refuses `test_*` and `go_*` files.
 
 ### Score the rules offline
 
@@ -296,6 +369,16 @@ laptop while they ran, so no time from it is quoted for the decoders.
   build draws the same random numbers as the laptop's Windows build.
 - **1 process and 3 processes** give identical files on a 60-shot slice, and so does a plain
   export of the commit with a freshly built environment.
+- **The side-by-side mode equals the sequential one.** `python -m hierarchy.parallel_check
+  --x data/p0.004/validation_X.npz --z data/p0.004/validation_Z.npz --shots 200 --options <file>`
+  (rule "network" with the step-60,000 checkpoint for X, "converged" for Z; the paper's and the
+  kit's full budgets): on the first 200 shots of each file, 0 shots differ in predicted bits,
+  `agreed`, `stage`, `winner`, weights or iteration counts. Only one of those 400 shots
+  reaches relay-BP and the rule, so the escalation path is compared mostly by the unit test
+  (24 shots per basis with small budgets, many of them escalated; also 0 differences). Mean
+  wall time per shot here, both threads of two shared cores busy: X 460 ms sequential against
+  285 ms side by side, Z 134 ms against 91 ms. The gain is below a factor of two because a
+  shot waits for the slower of its two decodes.
 - **The network on a CPU.** The step-30,000 checkpoint loaded through the plugin gives, on
   120 validation shots, logits within 4.2e-5 of the laptop's GPU logits (the logits are of
   size about 4.5), with no sign change. Batch-one inference: 48 ms mean with 2 torch threads.
@@ -324,9 +407,32 @@ So three builds, the Windows laptop, this PC and the server, decode alike, and
 relay-BP's 31 failures on this file are now measured on three machines.
 
 **The plugin through `evaluation.evaluate` on `validation_X.npz` and `validation_Z.npz`**
-(a plumbing check on validation shots, network rule for X, weight rule for Z; the plugin's
-predictions must equal `select.py` on the session-mode candidates of the same shots, on every
-shot): not measured at the time of writing.
+(a plumbing check on VALIDATION shots, not a result; options: rule "network", the X
+checkpoint of step 30,000 on the CPU with one thread, no Z checkpoint, so Z used the weight
+rule; single process; files under `files/hier/` on `server-logs`):
+
+```sh
+python -m evaluation.evaluate --test-x data/p0.004/validation_X.npz --test-z data/p0.004/validation_Z.npz \
+    --decoder hierarchy.plugin:make_decoder --plugin-options runs/hier/options.json --out runs/hier/plumbing_p0.004
+python -m hierarchy.candidates --data data/p0.004/validation_X.npz data/p0.004/validation_Z.npz --out runs/hier/cand_session_p0.004 --mode session --processes 2
+python -m neural.evaluate_stim --checkpoint <the same checkpoint> --data data/p0.004/validation_X.npz --device cpu --threads 1 --save runs/hier/net30000_validation_X_cpu
+python -m hierarchy.select --candidates runs/hier/cand_session_p0.004/validation_X.session.npz --logits runs/hier/net30000_validation_X_cpu.npz \
+    --evaluator-shots runs/hier/plumbing_p0.004/01_hierarchy_plugin_make_decoder_shots.npz
+python -m hierarchy.select --candidates runs/hier/cand_session_p0.004/validation_Z.session.npz \
+    --evaluator-shots runs/hier/plumbing_p0.004/01_hierarchy_plugin_make_decoder_shots.npz
+```
+
+| | X (network rule) | Z (weight rule) |
+|---|---|---|
+| failures of 5,000, the plugin through the evaluator | 20 | 17 |
+| failures of 5,000, `select.py` on the session-mode candidates and the CPU logits | 20 | 17 |
+| shots where the two answers differ | 0 | 0 |
+| shots where the two seeds differ (relay-BP and the rule run) | 29 | 20 |
+
+The evaluator's summary of that run: failed pairs 37 of 5,000, 6.19e-4 +- 1.02e-4 per cycle;
+relay-BP and the rule ran on 0.49% of the shots; mean time per pair 235 ms on the busy server
+(inflated, not a result). The session-mode counts (20 and 17) differ from the chunk-mode
+counts of the same rules on the same shots (17 and 15): same decoders, other random draws.
 
 ## The ensemble (part 2)
 
@@ -357,16 +463,29 @@ alone, on the same shots.**
 |---|---|---|
 | a | P1 = P2 | the network picks among R, P1, P2 (part 1's rule) |
 | aw | P1 = P2 | the lowest weight of R, P1, P2 (part 1 without learning) |
+| ac | P1 = P2 | the lowest weight among the converged of R, P1, P2 (part 1's best rule without learning) |
 | b | P1 = P2 = T | the network picks among P1, P2, T, R |
 | bw | P1 = P2 = T | the lowest weight of P1, P2, T, R (no learning) |
 | c | P1 = P2 = T | the network picks among P1, P2, T, R and, where it exists, J |
 | d | two of P1, P2, T agree (the majority answers) | the network picks among P1, P2, T, R |
 | e | two of P1, P2, T agree | the network picks among P1, P2, T, R and, where it exists, J |
+| **f** | P1 = P2 = T | **J's answer where J converged; T's answer where it did not** (no learning) |
+| h | P1 = P2 = T | J's answer where J converged; where it did not, the network picks among T, P1, P2, R |
+| g | P1 = P2 = T | the answer most of J, T, P1, P2, R give; a tie goes to the network |
+| gw | P1 = P2 = T | the same, a tie going to the first of J, T, P1, P2, R in it (no learning) |
 
 "The network picks" is part 1's score, among the candidates that decoded the shot. What is
 learned: the network's weights, as in part 1. The rule is chosen on the `train_*` files and
 reported on the `validation_*` files; the tool refuses to mark a rule chosen on the file it
 scores (`--chosen-on`).
+
+**The frozen rule is f.** In words: P1, P2 and TCBP-JOBS decode every shot. If all three give
+the same 12 bits, that is the answer. If not (0.5% of shots at p = 0.004), joint relay-BP
+decodes the shot; its answer is taken if its correction reproduces the syndrome, and
+TCBP-JOBS's answer otherwise. Nothing in it is learned and nothing is fitted. Why it works:
+on the shots where the three disagree, joint relay-BP is wrong only 13% of the time, and
+nearly all of its wrong answers are flagged by non-convergence (27 of 32 on the 256 listed
+shots; no unconverged answer was right).
 
 **Commands.** `tcbp_member.py` runs in the teammates' TCBP environment (Linux, an NVIDIA
 GPU, `pip install cudaq-qec`; it imports neither torch nor PriorTilt). Everything else runs
@@ -396,8 +515,162 @@ in behind the same two calls, and the output is named `*.relay-plumbing.npz`. A 
 `test_*` or `go_*` needs `--final` in `candidates.py`, `tcbp_member.py`, `joint_member.py`
 and `neural.evaluate_stim`.
 
-**Numbers.** Not measured at the time of writing: the members' files are being made on the
-server.
+`--no-joint` tells `ensemble.py` that joint decoding was not run for a file; the rules with
+J are then scored with J on no shot. **At p = 0.005 joint decoding is not planned** (it is
+slow there, and by the relay-BP authors' data worse than separate decoding), so rule f
+returns T's answer on every shot there: the ensemble's row at p = 0.005 equals TCBP-JOBS
+alone, and claims nothing.
+
+### The ensemble's numbers at p = 0.004 (exploration shots)
+
+The members' files, all made from the committed `data/p0.004/` files (sha256 above):
+
+| member | files | made on | time per shot in the file |
+|---|---|---|---|
+| P1, P2, R | `priortilt/results_8b/selector_*.npz` on `laptop-artifacts` (chunk mode; equal to `candidates.py` shot for shot where compared) | the laptop | yes, beside a GPU training |
+| T | `files/tcbp_p0.004/*.tcbp.npz` on `server-logs`; `tcbp_member.py --batch`, preset `tcbp-jobs`, cudaq-qec 0.9.0 | the server, NVIDIA A100 | no (batch mode) |
+| J | `files/joint_p0.004/*.joint.npz` on `server-logs`; `joint_member.py` on the lists `files/sel_p0.004/*.selection.npz`, 9 processes | the server, AMD EPYC-Milan | yes: mean 24 to 29 s per listed shot, at most 69 s |
+| X network | `cascade_X_s1/eval/step60000_*_X_p0.004.npz` on `laptop-artifacts` (step 60,000, the kit's operators) | the laptop's GPU | 17 to 18 ms per call |
+| Z network | `files/netZ/netZ_*_Z_p0.004.npz` on `server-logs` (step 22,000, `--logicals light`) | the server's GPU | 16 to 17 ms per call |
+
+Every correction TCBP-JOBS returned reproduces its syndrome, and decoding the first 256
+shots of each file a second time changed none of its answers.
+
+**The rule was chosen on the training files** (`train_X` and `train_Z`, 40,000 shots) by the
+tool: fewest failures, ties to the earlier rule. Failures per rule, X + Z:
+
+| | R | P1 | T | a | aw | ac | b | bw | c | d | e | **f** | h | g | gw | ORACLE: P1, P2, T, R | ORACLE with J |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| train_X (20,000) | 91 | 76 | 37 | 48 | 59 | 51 | 42 | 44 | 41 | 41 | 41 | **20** | 22 | 32 | 29 | 23 | 15 |
+| train_Z (20,000) | 103 | 86 | 51 | 67 | 70 | 61 | 58 | 61 | 54 | 55 | 52 | **27** | 26 | 42 | 39 | 29 | 19 |
+| both (40,000) | 194 | 162 | 88 | 115 | 129 | 112 | 100 | 105 | 95 | 96 | 93 | **47** | 48 | 74 | 68 | 52 | 34 |
+
+**Reported on the validation files** (5,000 shots each; `--chosen-on` the two training files
+marks rule f):
+
+| | failures X | failures Z | X + Z of 10,000 | rate, 95% Wilson interval (X / Z) | later stage runs on |
+|---|---|---|---|---|---|
+| R: relay-BP alone | 31 | 20 | 51 | 0.62% [0.44, 0.88] / 0.40% [0.26, 0.62] | |
+| P1: PriorTilt once | 26 | 20 | 46 | | |
+| T: TCBP-JOBS alone | 16 | 9 | 25 | 0.32% [0.20, 0.52] / 0.18% [0.10, 0.34] | |
+| a: part 1 with the network | 14 | 16 | 30 | | 24 + 24 shots |
+| ac: part 1, best rule without learning | 16 | 12 | 28 | | 24 + 24 |
+| b: the network picks among P1, P2, T, R | 13 | 14 | 27 | | 27 + 27 |
+| c: the same with J | 12 | 12 | 24 | | 27 + 27 |
+| **f: J where it converged, else T** | **8** | **3** | **11** | 0.16% [0.08, 0.32] / 0.06% [0.02, 0.18] | 27 + 27 (0.54%) |
+| h: f, with the network where J did not converge | 8 | 4 | 12 | | 27 + 27 |
+| ORACLE among P1, P2, T, R, J (needs the truth) | 6 | 2 | 8 | | |
+
+Paired on the same validation shots (both fail, the rule alone, the other alone; exact
+two-sided binomial test on the discordant shots):
+
+| rule f against | X | Z |
+|---|---|---|
+| TCBP-JOBS alone | 8, 0, 8; p = 0.008 | 3, 0, 6; p = 0.031 |
+| relay-BP alone | 7, 1, 24; p = 2e-6 | 2, 1, 18; p = 8e-5 |
+
+On the training shots: against TCBP-JOBS 19, 1, 18 (p = 8e-5) on X and 27, 0, 24 (p = 1e-7)
+on Z. As pairs (shot k of X with shot k of Z, `ensemble.py --pair`), validation: relay-BP 51
+failed pairs of 5,000 (8.5e-4 per cycle), TCBP-JOBS 25 (4.2e-4), rule f 11 (1.8e-4 +- 0.6e-4).
+The kill line of this part (the ORACLE not below TCBP-JOBS) is not hit: 8 against 25.
+
+**Time.** Not measured for the ensemble: TCBP-JOBS ran in batch mode here, without a time
+per shot. What the stages cost, each on its own machine: P1 + P2 about 105 ms per shot (the
+laptop); TCBP-JOBS 43 ms per pair in the teammates' own serial run
+(`results/tcbp-jobs_p0.004_*.log`, other shots); joint relay-BP 24 to 29 s per listed shot on
+the busy server, on 0.54% of the shots, so about 0.15 s per shot on average. The run on the
+test shots times TCBP-JOBS serially on an idle GPU.
+
+**The network's own increment** (each rule with the network against the same rule without
+learning, paired; X network of step 60,000, Z network of step 22,000):
+
+| | X: failures, only-network-fails / only-other-fails, p | Z |
+|---|---|---|
+| a against aw (plain lowest weight), 25,000 shots per basis | 62 against 77; 6 / 21; p = 0.006 | 83 against 85; 11 / 13; p = 0.84 |
+| a against ac (lowest weight among the converged) | 62 against 67; 9 / 14; p = 0.40 | 83 against 73; 19 / 9; p = 0.087 |
+| h against f, 25,000 shots per basis | 30 against 28; 4 / 2 | 30 against 30; 3 / 3 |
+
+So the network beats the simplest rule on X and is not better than the best hand-written
+rule on either basis yet. The plugin therefore takes the network per basis only by the
+frozen procedure of part 1, with the final checkpoints. A larger held-out set for this
+comparison (80,000 fresh X shots) is being decoded; see `HANDOFF.md`.
+
+Commands (A = a checkout of `laptop-artifacts`, F = a checkout of `server-logs`'s `files/`):
+
+```sh
+for s in train validation; do for b in X Z; do
+  python -m hierarchy.ensemble --members $A/priortilt/results_8b/selector_${s}_$b.npz $F/tcbp_p0.004/${s}_$b.tcbp.npz \
+      $F/joint_p0.004/${s}_$b.joint.npz --logits <the basis' logits of that file> --save out/${s}_$b.json \
+      $( [ $s = validation ] && echo --chosen-on out/train_X.json out/train_Z.json )
+done; done
+python -m hierarchy.ensemble --pair out/validation_X.npz out/validation_Z.npz
+```
+
+sha256 of the inputs that are not listed above:
+
+| file | sha256 |
+|---|---|
+| `files/tcbp_p0.004/validation_X.tcbp.npz` | `7e8a1c6836d7394fe66d678f5894e7ff2824e71eacb8242c771cb3e1e08fab56` |
+| `files/tcbp_p0.004/validation_Z.tcbp.npz` | `4821ea1814bf2e00888ddea17382586d9aa5ab5f5ad5db560b07e710a1368f12` |
+| `files/tcbp_p0.004/train_X.tcbp.npz` | `a31a7910266bc65ff4fda840aea00a79e9ab16f8ba201443b8ec511c3a1d747e` |
+| `files/tcbp_p0.004/train_Z.tcbp.npz` | `8b9b42235806d9d4d11d8c4580e99eba7ef8562a06241e75c825f44496565d23` |
+| `files/joint_p0.004/validation_X.joint.npz` | `24f0e9563fe99ce3e8be8480399f2a85e6dcf86fe08fa1e390e4732e70c38c7f` |
+| `files/joint_p0.004/validation_Z.joint.npz` | `a70b5ec4fda59bc348bde60894cfba20932638d84f8e8542cce2f8194dbca7f1` |
+| `files/joint_p0.004/train_X.joint.npz` | `f8756681efe00b382fb6bff5d01e636c681b1d8f2a7c349dfb4e2201fbe296ec` |
+| `files/joint_p0.004/train_Z.joint.npz` | `a8f92a91aee91e627b91b95b0f33cbdf849c1add22294a8f9467b5fb451ecff1` |
+| `files/netZ/netZ_validation_Z_p0.004.npz` | `e681aa4c48c690bb46cb7c6f5005ae88313b535a5239de938eef6868c1fd5771` |
+| `files/netZ/netZ_train_Z_p0.004.npz` | `a196570bea96398d088f917a6981bb4a8efd4f05dd2f3604b51acab2dce3203c` |
+| `cascade_X_s1/eval/step60000_validation_X_p0.004.npz` | `0b1723c9b9612f134f86bf4467a2b96c94f52dbe6323fc751d7c8f5558adcbab` |
+| `cascade_X_s1/eval/step60000_train_X_p0.004.npz` | `5b5901f9688231be4baa8deb8d4504ec7d6ee4f17251eedaf8abecb37f63c474` |
+
+## The run on the held-out shots: frozen commit and exact commands
+
+**Frozen commit: `FROZEN_SHA`** (the code; this README names it from the commit after).
+What is frozen: the plugin and its rule procedure; the ensemble rule f; the reference rows
+relay-BP, PriorTilt once and TCBP-JOBS alone; the ablation rows aw and ac; the commands below.
+Nothing below was run on a `test_*` or `go_*` file by this task.
+
+For each p in 0.003, 0.004, 0.005, with D = `data/p<p>` and O = `runs/test_p<p>`, from
+`challenge-1-ml-decoder-kit/` at the frozen commit, `PRIORTILT_REPO` set:
+
+```sh
+# 0. once, before any test file: the plugin's rule per basis from the final checkpoints, then the preflight
+python -m hierarchy.plugin_options --out runs/hierarchy_options.json --x-checkpoint <X final> --z-checkpoint <Z final> \
+    --x-candidates <validation_X and train_X candidates at p = 0.004> --x-logits <their logits from the X final checkpoint> \
+    --z-candidates <validation_Z and train_Z candidates at p = 0.004> --z-logits <their logits from the Z final checkpoint>
+python -m hierarchy.preflight --options runs/hierarchy_options.json --x data/p0.004/validation_X.npz --z data/p0.004/validation_Z.npz \
+    --rule f --tcbp-python <TCBP python> --out runs/preflight_<time>            # must end with PREFLIGHT PASSED
+
+# 1. part 1's row and the baselines, through the team's evaluator (one process; the main row is the sequential one)
+python -m evaluation.evaluate --test-x $D/test_X.npz --test-z $D/test_Z.npz --decoder hierarchy.plugin:make_decoder \
+    --decoder relay-bp --decoder bposd --plugin-options runs/hierarchy_options.json --out $O/evaluate
+#    extra timed rows, each in its own --out folder: the same options with "parallel": true (two cores);
+#    {"rule": "converged"}; --decoder hierarchy.priortilt_plugin:make_decoder
+
+# 2. the members on every shot
+python -m hierarchy.candidates --final --data $D/test_X.npz $D/test_Z.npz --out $O/cand --processes 12
+<TCBP python> -m hierarchy.tcbp_member --final --data $D/test_X.npz $D/test_Z.npz --out $O/tcbp        # serial: a time per shot
+python -m neural.evaluate_stim --final --checkpoint <X final> --data $D/test_X.npz --save $O/net_X
+python -m neural.evaluate_stim --final --checkpoint <Z final> --data $D/test_Z.npz --save $O/net_Z
+
+# 3. p = 0.003 and 0.004 only: the shots where P1, P2 and T are not unanimous, and joint relay-BP on them
+for b in X Z; do python -m hierarchy.ensemble --members $O/cand/test_$b.chunks.npz $O/tcbp/test_$b.tcbp.npz \
+    --write-selection $O/sel/test_$b.selection.npz; done
+python -m hierarchy.joint_member --final --data $D/test_X.npz $D/test_Z.npz \
+    --selection $O/sel/test_X.selection.npz $O/sel/test_Z.selection.npz --out $O/joint --processes 12
+
+# 4. the tables: every member alone, every rule, rule f marked, the paired tests and the network's increment; then the pair score
+for b in X Z; do python -m hierarchy.ensemble --members $O/cand/test_$b.chunks.npz $O/tcbp/test_$b.tcbp.npz \
+    $O/joint/test_$b.joint.npz --logits $O/net_$b.npz --rule f --save $O/ensemble_$b.json; done
+#    at p = 0.005, where step 3 is not run: leave the joint file out and add --no-joint
+python -m hierarchy.ensemble --pair $O/ensemble_X.npz $O/ensemble_Z.npz
+```
+
+What to expect: about 50 listed shots per basis at p = 0.004 (0.45 to 0.56% on the
+exploration files), fewer at p = 0.003; the joint step then costs under an hour of one core.
+The members of step 2 do not depend on the rule. `candidates.py` decodes in chunk mode, so
+relay-BP's answers there come from a decoder that saw every shot; the plugin of step 1 runs
+relay-BP only where the seeds differ. Both are stated with their rows.
 
 ## Physics checks
 
@@ -419,6 +692,14 @@ server.
   operators. The rule turns each candidate's 12 kit bits into the network's operators before
   scoring (`rules.bits_for_network`), with `neural/`'s own `kit_bits` and matrix. A test
   checks that turning them back with `kit_bits` gives the candidate again.
+- **The ensemble's members decode the same saved shots.** `ensemble.py` stops if two member
+  files name different data files (sha256) or hold another truth, and `joint_member.py` stops
+  on a selection list made from another data file. TCBP-JOBS and joint relay-BP get the kit's
+  H, L and priors of the file's basis and p (joint: `dem_matrices(circuit)` with all 1,728
+  detectors, the same 12 observables). `tcbp_member.py` checks every returned correction
+  against the syndrome itself (H e = s).
+- **No rule is chosen on the shots it is reported on.** `ensemble.py --chosen-on` refuses the
+  .json of the file it scores; the ORACLE rows and the scoring are the only users of the truth.
 - **Times** state the machine and what the timer wraps. In `candidates.py` the timer wraps
   one decode call, as in the kit's `decoders.score`; a rule's time in `select.py` is the sum
   of the calls it makes. In the evaluator the timer wraps the whole `decode_shot`.
@@ -429,16 +710,23 @@ server.
 python -m pytest -p no:cacheprovider hierarchy
 ```
 
-23 tests, about a minute and a half on one loaded CPU core. They cover: the rules against
+31 tests, under two minutes on one CPU core that is not shared. Part 1: the rules against
 hand-made cases; `select.py` on five hand-made shots whose outcome under every rule is known,
 on a session-mode file, with a fitted constant (and the warning when it is fitted on the
 scored shots) and with logits of other shots (refused); the refusal of `test_*` and `go_*`
 files; `candidates.py` with 1 and with 4 processes on a small file (every array equal except
 the times), a stopped run that continues, and a folder with other settings (refused); the
-plugin with stub decoders and a stub network that prefers each candidate in turn; the
-network's input; and the whole chain on 24 shots per basis: the plugin through the real
-`evaluation.evaluate`, against `select.py` on session-mode candidates, for X with a network
-and Z without, and for Z with a `--logicals light` network.
+plugin with stub decoders and a stub network that prefers each candidate in turn, its three
+rules and the rule per basis; the network's input; the whole chain on 24 shots per basis:
+the plugin through the real `evaluation.evaluate`, against `select.py` on session-mode
+candidates, for X with a network and Z without, and for Z with a `--logicals light` network;
+the side-by-side mode against the sequential one; the reference plugin against P1.
+Part 2: `ensemble.py` on seven hand-made shots whose outcome under every rule is known
+(unanimity accepts; a split goes to the scorer; a member that did not decode a shot is left
+out), the selection list, the rule choice and its refusal on the scored file, the per-shot
+output, the pair score and `--no-joint`; `tcbp_member.py` in its plumbing mode, serial and
+batched, and its refusals; `joint_member.py` on two listed shots, resumed, and its refusals;
+`plugin_options.py`; what `preflight.py` refuses.
 
 The decoding tests need PriorTilt and are skipped without it; the network tests need torch.
 They use the first 24 shots of the committed `train_*` files and small iteration budgets
@@ -446,23 +734,23 @@ They use the first 24 shots of the committed `train_*` files and small iteration
 
 ## Next
 
-Not done here, on purpose: this task builds what was measured, and adds no decoder idea.
-
-1. **The one run on the test shots**, through the evaluator, after every choice is frozen.
-2. **The other two noise levels.** `candidates.py` on the p = 0.003 and p = 0.005 files, then
-   `select.py` with the network's logits there. PriorTilt ships a schedule for each.
-3. **A Z network.** The plugin takes a checkpoint per basis, also one trained with
-   `--logicals light`. Until one exists, Z uses the weight rule.
-4. **A stage for the shots where no candidate converged** (11 of 25,000 X shots, all of them
-   failures under every rule). `plugin.py` marks the place, and the metrics flag those shots
-   (`any_converged`). Candidates: a larger budget, joint decoding of both check types.
-5. **Run relay-BP more often.** The floor with relay-BP only on disagreement is 50 failures;
-   with relay-BP on every shot it is 41. A cheap test for "P1 and P2 agree but are wrong"
-   would be needed.
-6. **More seeds, or a majority,** as further candidates for the network to choose from.
+1. **The one run on the test shots**, by the commands above, after the preflight has passed.
+2. **The network's increment on a larger held-out set.** 80,000 fresh X shots at p = 0.004
+   are being decoded for it (see `HANDOFF.md`). On today's evidence the learned tie-breaker
+   is not better than the best rule without learning.
+3. **Joint decoding at p = 0.005** on the shots where the members disagree. Not measured: it
+   is slow there, and worse than separate decoding as a decoder of every shot. As an arbiter
+   on a few percent of the shots it may still help; rule f needs it to differ from TCBP-JOBS.
+4. **The 32 shots in 40,000 where P1, P2 and TCBP-JOBS agree and are wrong** are now the
+   larger part of rule f's 47 failures. Only a member that runs on every shot can catch them.
+   One idea, not built: let the network overrule a unanimous answer when it is confident
+   (a threshold fitted on train).
+5. **The ensemble as one timed decoder.** Today it is combined offline. As a pipeline it
+   needs TCBP-JOBS and PriorTilt side by side, and joint relay-BP on 0.5% of the shots at
+   about half a minute each: fine for the mean, poor for the worst shot.
+6. **A stage for the shots where no candidate converged** in part 1 (11 of 25,000 X shots,
+   all failures). `plugin.py` marks the place; joint relay-BP is the natural candidate.
 7. **A constant C** (network minus weight / C) is implemented and off: on validation shots it
-   changed nothing. Worth another look with a better network.
+   changed nothing.
 8. **Per-shot seeds.** Seeding PriorTilt from the shot would make an answer independent of the
    shot order, so chunk mode and session mode would agree shot for shot.
-9. **Tail latency.** A hard shot pays for three decoders one after the other; they could run
-   side by side.

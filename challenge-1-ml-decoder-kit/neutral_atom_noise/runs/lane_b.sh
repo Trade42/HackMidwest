@@ -115,8 +115,11 @@ lane_b_alone() {
   REPEAT=1 q1_matched_relay
   REPEAT=1 q1_generic_relay
 }
-# Lane C after dq-hierarchy's ablation logits: the rest of BP-OSD's generic rows, the 100-shot loss check, question 2.
+# Lane C after dq-hierarchy's ablation logits: the fitted generic p for BP-OSD again (10:39 UTC: the first fit's best
+# point was the edge of its grid, so job.py now extends the grid), the rest of BP-OSD's generic rows, the 100-shot
+# loss check, question 2.
 lane_c() {
+  LANE=C REPEAT=1 q1_fit_bposd
   LANE=C REPEAT=1 q1_generic_bposd
   LANE=C loss_check
   LANE=C REPEAT=1 q2_starter

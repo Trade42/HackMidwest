@@ -54,21 +54,44 @@ def decode_all(shots_path, shots, decoder, priors, flags, args, folder, deadline
             run_part(str(shots_path), decoder, priors, flags, start, stop, args.workers, folder, command=command, pool=pool)
 
 
+EDGE_STEP, EDGE_STEPS = 1.4, 4      # a best p at the edge of the grid moves the grid outward, at most 4 steps
+
+
 def fit_generic(factor, decoder, flags, args, out, deadline):
-    """The uniform p that decodes the TRAIN shots best. Returns its fit.json entry."""
+    """The uniform p that decodes the TRAIN shots best. Returns its fit.json entry.
+
+    The grid is --grid times the generic-2q p. If the best point is at an edge of the grid, the grid is extended
+    beyond that edge by a factor 1.4 per step (at most 4 steps) until the best point is inside it.
+    """
     train = make(args.basis, factor, None, args.loss, args.train_shots, args.train_seed, out / "shots")
     base = neutral_atom(factor).two_qubit_error()
-    grid = []
-    for multiplier in args.grid:
-        priors = f"uniform:{multiplier * base:.6g}"
-        decode_all(train, args.train_shots, decoder, priors, flags, args, out / "train", deadline)
-        row = load_results(out / "train")[(train.name, decoder, priors, flags)]
-        grid.append({"multiplier": multiplier, "p": float(priors.removeprefix("uniform:")), "priors": priors,
-                     "failures": int(row["failed"].sum()), "shots": len(row["failed"]),
-                     "unconverged": int((~row["converged"]).sum()), "mean_iterations": float(row["iterations"].mean())})
-    best = min(grid, key=lambda g: (g["failures"], g["mean_iterations"]))
+    multipliers, grid = sorted(args.grid), {}
+    for _ in range(EDGE_STEPS + 1):
+        for multiplier in multipliers:
+            if multiplier not in grid:
+                grid[multiplier] = _train_point(train, base, multiplier, decoder, flags, args, out, deadline)
+        best = min(grid.values(), key=lambda g: (g["failures"], g["mean_iterations"]))
+        ordered = sorted(grid)
+        if best["multiplier"] == ordered[-1]:
+            multipliers = [round(ordered[-1] * EDGE_STEP, 4)]
+        elif best["multiplier"] == ordered[0]:
+            multipliers = [round(ordered[0] / EDGE_STEP, 4)]
+        else:
+            break
     return {"p": best["p"], "multiplier": best["multiplier"], "priors": best["priors"], "train_file": train.name,
-            "train_seed": args.train_seed, "grid": grid, "rule": "fewest failures, then fewest mean iterations"}
+            "train_seed": args.train_seed, "grid": [grid[m] for m in sorted(grid)],
+            "inside_grid": sorted(grid)[0] < best["multiplier"] < sorted(grid)[-1],
+            "rule": "fewest failures, then fewest mean iterations; a best point at the edge extends the grid by 1.4 per step"}
+
+
+def _train_point(train, base, multiplier, decoder, flags, args, out, deadline):
+    """Decode the train shots with the kit's uniform model at multiplier x base. Returns its grid entry."""
+    priors = f"uniform:{multiplier * base:.6g}"
+    decode_all(train, args.train_shots, decoder, priors, flags, args, out / "train", deadline)
+    row = load_results(out / "train")[(train.name, decoder, priors, flags)]
+    return {"multiplier": multiplier, "p": float(priors.removeprefix("uniform:")), "priors": priors,
+            "failures": int(row["failed"].sum()), "shots": len(row["failed"]),
+            "unconverged": int((~row["converged"]).sum()), "mean_iterations": float(row["iterations"].mean())}
 
 
 def main():

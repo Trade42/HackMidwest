@@ -128,6 +128,8 @@ def main(argv=None):
     parser.add_argument("--alphas", type=float, nargs="+", default=[0.3, 0.4, 0.5, 0.6, 0.7])
     parser.add_argument("--eps", type=float, nargs="+", default=[1e-4])
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--control-only", action="store_true",
+                        help="decode the control row (the kit's priors) only, into the cache; it needs no head")
     parser.add_argument("--out", required=True, help="the JSON file of the fit")
     args = parser.parse_args(argv)
     weights = args.weights or [1.0] * len(args.data)
@@ -145,7 +147,7 @@ def main(argv=None):
     problem = kit_problem(files[0][0].basis, files[0][0].p)
     if any(data.p != problem.p or data.basis != problem.basis for data, _, _ in files):
         raise SystemExit("all files must have the same basis and p")
-    settings_grid = grid(args.modes, args.alphas, args.eps)
+    settings_grid = grid(args.modes, args.alphas, args.eps)[:1 if args.control_only else None]
     keys = [json.dumps(setting, sort_keys=True) for setting in settings_grid]
     cache = Path(args.out).with_suffix(".parts")
     cache.mkdir(parents=True, exist_ok=True)
@@ -157,8 +159,8 @@ def main(argv=None):
                                                        (problem.H.tocsr(), problem.L, str(logits_path), problem.priors)) as pool:
             for setting, key in zip(settings_grid, keys):
                 # One file per (shot file, head, setting): a stopped fit continues where it stopped.
-                what = json.dumps({"data": data.sha256, "head": meta["model"]["head_sha256"], "shots": shots, "setting": setting},
-                                  sort_keys=True)
+                head = None if setting["alpha"] == 0 else meta["model"]["head_sha256"]     # alpha 0: the kit's priors, no head
+                what = json.dumps({"data": data.sha256, "head": head, "shots": shots, "setting": setting}, sort_keys=True)
                 path = cache / f"{hashlib.sha256(what.encode()).hexdigest()[:16]}.npy"
                 if not path.exists():
                     tasks = [(k, setting, data.basis_input[k], data.observables[k]) for k in range(shots)]
@@ -186,6 +188,9 @@ def main(argv=None):
         rows.append(row)
         print(f"{row['mode']:8s} {row['alpha']:6g} {row['eps']:8g} " + " ".join(f"{f:24d}" for f in failures)
               + f" {row['score']:8.1f} {row['hard_weighted']:16.1f} {row['mean_iterations']:10.1f}")
+    if args.control_only:
+        print("control only: nothing chosen")
+        return
     chosen = choose(rows[1:])
     print(f"chosen: mode {chosen['mode']}, alpha {chosen['alpha']:g}, eps {chosen['eps']:g} ({RULE}); row 1 is the kit's "
           f"priors")

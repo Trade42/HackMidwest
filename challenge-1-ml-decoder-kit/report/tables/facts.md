@@ -53,7 +53,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `abl_pooled_p` | 0.15 | `tables/test_ablation.md` |
 | `abl_pooled_priortilt_share` | 63% | `tables/test_ablation.md` |
 | `abl_timed` | In the timed rows, where both tie-breaks have one (p = 0.003, 0.004), the network fails 47 pairs and the best hand-written rule 56 (only the network rule fails 8, only the hand-written rule 17, exact p = 0.11, not a significant difference); at p = 0.005 the hand-written rule has no timed row. The timed and the offline decodes draw other random numbers, so they need not agree on which rule is ahead. | `tables/test_comparisons.md` |
-| `abl_timed_slide` | In the timed rows at p = 0.003 and 0.004 the network is ahead (47 against 56 failed pairs, test p = 0.11): not significant either way. | `tables/test_comparisons.md` |
+| `abl_timed_slide` | In the timed rows at p = 0.003 and 0.004 the network is ahead (47 against 56 failed pairs, exact p = 0.11): not significant either way. | `tables/test_comparisons.md` |
 | `abl_verdict` | no better than | `tables/test_ablation.md` |
 | `c3_ensemble_vs_hierarchy_both` | 2 | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_hierarchy_only_first` | 0 | `tables/test_comparisons.md` |

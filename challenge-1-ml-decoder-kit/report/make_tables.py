@@ -1564,7 +1564,7 @@ def timed_ablation(measured):
     fact("abl_timed", text, "tables/test_comparisons.md")
     direction = "ahead" if levels and network < classical else "behind" if levels and network > classical else "level"
     fact("abl_timed_slide", levels and (f"In the timed rows at p = {' and '.join(levels)} the network is {direction} ({network} against {classical} failed "
-                                        f"pairs, test p = {stats.p_text(p_value)}): " + ("a significant difference." if p_value < 0.05
+                                        f"pairs, exact p = {stats.p_text(p_value)}): " + ("a significant difference." if p_value < 0.05
                                         else "not significant either way.")), "tables/test_comparisons.md")
 
 
@@ -1711,7 +1711,8 @@ def readme_section(measured):
         table.append([DECODERS[key].label] + cells)
     lines += markdown(header, table).split("\n")
     lines += ["",
-              "Test shots (10,000 pairs per p): logical error rate per cycle ± the kit's error, mean time per pair. " + tcbp,
+              "Test shots (10,000 pairs per p): logical error rate per cycle ± the kit's error, mean time per pair (CPU rows: the whole decode of "
+              "a pair in one process; TCBP-JOBS: a GPU decode call alone, not comparable with the CPU rows). " + tcbp,
               "", "![Logical error rate per cycle against p](challenge-1-ml-decoder-kit/report/figures/ler_vs_p.png)", "",
               "Write-up, with every table made by a script from committed files: [report/REPORT.md](challenge-1-ml-decoder-kit/report/REPORT.md). "
               "Everything we built and why: [information.md](information.md)."]
@@ -1739,7 +1740,7 @@ def inject(tables):
         unknown = sorted(set(re.findall(r"<!--f:(\w+)-->", text)) - set(FACTS))
         if unknown:
             raise Mismatch(f"{document.name} quotes facts that do not exist: {unknown}")
-        value = (lambda name: FACTS[name][0].replace("exact p = ", "test p = ")) if document.name == "SLIDES.md" else (lambda name: FACTS[name][0])
+        value = lambda name: FACTS[name][0]
         text = re.sub(r"<!--f:(\w+)-->.*?<!--/f-->", lambda found: f"<!--f:{found.group(1)}-->{value(found.group(1))}<!--/f-->", text, flags=re.S)
         document.write_text(text, encoding="utf-8")
 

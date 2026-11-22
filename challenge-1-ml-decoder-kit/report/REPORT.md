@@ -195,8 +195,8 @@ Each with its count and its file in `APPENDIX.md`, "What we measured before buil
 - **Longer training of the network** improved it a lot as a decoder and only a little as a tie-breaker: the hard
   shots are hard for the network too.
 - **A learned predecoder** that hands relay-BP per-shot priors did not pass the accuracy test declared before it
-  was run, on validation shots at p = 0.004. Its code is on the branch `predecoder`, which is not part of this
-  submission, so no number from it is quoted here.
+  was run, on validation shots at p = 0.004; a secondary run at p = 0.005 is under an independent review. Its code
+  is on the branch `predecoder`, which is not part of this submission, so no number from it is quoted here.
 - **Letting the network answer first** where it is confident, and the hierarchy elsewhere, gave no gain in accuracy
   at p = 0.005 on the exploration shots, with its threshold fitted on other shots; at the looser threshold it saved
   time at equal failures. It has no row on the test shots.

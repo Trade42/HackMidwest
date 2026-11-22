@@ -27,3 +27,4 @@ validation_Z.npz: Z memory, p = 0.004, 5000 shots, data sha256 843c4daf24e2b56c5
   H is 936 x 8784; building the decoder ...
   model fitted in 117.6 s, decoder built in 45 ms
 WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 while decoding 4096 syndromes. Set bp_batch_size > 1 at construction to decode syndromes in parallel.
+    shots 0 to 4095 decoded

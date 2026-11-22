@@ -79,3 +79,9 @@ def test_check_with_the_stand_in_matches_the_head_arm(tmp_path):
     assert (tmp_path / "speed" / "profile_dense.txt").read_text().strip()
     assert summary["profile"]["variants"].startswith("skipped")
     assert VALIDATION.exists()
+    tcbp_speed.main(["report", "--summary", str(tmp_path / "speed" / "summary.json"), "--per-shot",
+                     str(tmp_path / "speed" / "check_per_shot.npz"), "--reference", str(tmp_path / "head" / "per_shot.npz"),
+                     "--out", str(tmp_path / "report.json")])
+    report = json.loads((tmp_path / "report.json").read_text())["reference"]
+    assert report["logits_rows_equal"] == 4
+    assert all(report[arm] == {"bits_differ": 0, "faults_differ": 0} for arm in tcbp_speed.ARMS)

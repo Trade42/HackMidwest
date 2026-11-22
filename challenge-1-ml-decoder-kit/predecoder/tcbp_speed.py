@@ -9,7 +9,7 @@ into a dense tensor and then converted to sparse storage, on every call, and tha
 preferred input - no dense allocation occurs". This tool changes that one argument and nothing else: one model fit,
 one options dict and the same priors for every arm; only the form of H differs (tcbp.Builder.with_h_format).
 
-One command, run once on the server in the teammates' TCBP environment (cudaq-qec 0.9.0, an NVIDIA GPU):
+`run`, once on the server in the teammates' TCBP environment (cudaq-qec 0.9.0, an NVIDIA GPU); `report` on any machine:
 
   python -m predecoder.tcbp_speed run --data data/p0.005/validation_X.npz --logits <logits folder> \\
       --settings predecoder/logs/fit_tcbp_X_p0.005.json --limit 1000 --out <folder>
@@ -31,6 +31,9 @@ One command, run once on the server in the teammates' TCBP environment (cudaq-qe
      An arm is the same as dense when its 12 bits, its faults and its whole correction equal dense's on every shot.
      If dense and dense again differ on any shot, the decoder is not repeatable in this run and no arm can be called
      the same: the summary says so.
+
+  python -m predecoder.tcbp_speed report --summary <folder>/summary.json --per-shot <folder>/check_per_shot.npz \\
+      --reference <tcbp.py decode folder>/per_shot.npz            the tables, and the arms against another run's head arm
 
 Not tried (the brief's other ideas):
   - a built decoder whose priors are changed in place: the Python Decoder of 0.9.0 offers decode, decode_async,
@@ -379,6 +382,57 @@ def run(args):
     print(f"saved {out}; {time.time() - started:.0f} s", flush=True)
 
 
+# ---------- report (this PC; no decoder) ----------
+
+def report_command(args):
+    """The tables of a run's summary.json, and its arms against another run's per-shot file of tcbp.py decode."""
+    with open(args.summary) as file:
+        summary = json.load(file)
+    result = {"summary": str(args.summary)}
+    profile_result = summary.get("profile", {})
+    if isinstance(profile_result.get("variants"), dict):
+        print("timed builds (each: one untimed, then the rest one at a time; get_decoder, then freeing the decoder), ms:")
+        for name, row in profile_result["variants"].items():
+            if "error" in row:
+                print(f"  {name:58s} FAILED: {row['error']}")
+            else:
+                print(f"  {name:58s} build mean {row['build_ms']['mean']:6.1f}  median {row['build_ms']['median']:6.1f}  "
+                      f"p90 {row['build_ms']['p90']:6.1f};  free mean {row['free_ms']['mean']:5.1f}")
+        print("python parts (median ms):", {k: (round(v, 3) if isinstance(v, float) else v)
+                                           for k, v in profile_result.get("python_parts", {}).items()})
+    print(f"check: {summary['shots']} shots, arms {summary.get('arms_run')}, sparse dtypes {summary.get('sparse_dtypes')}, "
+          f"repeatable {summary.get('repeatable')}")
+    for arm, row in summary.get("check", {}).items():
+        ms = row["ms"]
+        print(f"  {arm:12s} failures {row['failures']:3d}  total {ms['seconds_total']['mean']:6.1f} ms (median "
+              f"{ms['seconds_total']['median']:6.1f}, p99 {ms['seconds_total']['p99']:6.1f}) = priors {ms['seconds_priors']['mean']:.2f} "
+              f"+ build {ms['seconds_build']['mean']:.1f} + decode {ms['seconds_decode']['mean']:.1f} + free {ms['seconds_free']['mean']:.1f}"
+              + ("" if arm == "dense" else f"; vs dense: bits {row['bits_differ']}, faults {row['faults_differ']}, "
+                 f"corrections {row['corrections_differ']}"))
+    if args.reference:
+        with np.load(args.per_shot) as file:
+            ours = {key: file[key] for key in file.files}
+        with np.load(args.reference) as file:
+            theirs = {key: file[key] for key in file.files}
+        shots = len(ours["truth"])
+        if not np.array_equal(theirs["truth"][:shots], ours["truth"]):
+            raise SystemExit(f"{args.reference} was not made from the same shots")
+        fields = list(ours["fields"])
+        arm = args.reference_arm
+        result["reference"] = {"file": str(args.reference), "arm": arm, "shots": shots,
+                               "logits_rows_equal": int((theirs[f"logits_hash_{arm}"][:shots] == ours["logits_hash"]).sum())}
+        print(f"against {args.reference} ({arm} arm, another run and another model fit), first {shots} shots: logits rows "
+              f"equal on {result['reference']['logits_rows_equal']}")
+        for name in summary.get("arms_run", []):
+            bits = int((ours[f"predicted_code_{name}"] != theirs[f"predicted_code_{arm}"][:shots]).sum())
+            faults = int((ours[f"rows_{name}"][:, fields.index("n_faults")] != theirs[f"n_faults_{arm}"][:shots]).sum())
+            result["reference"][name] = {"bits_differ": bits, "faults_differ": faults}
+            print(f"  {name:12s} bits differ on {bits}, faults on {faults}")
+    if args.out:
+        with open(args.out, "w") as file:
+            json.dump(result, file, indent=1)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -395,8 +449,14 @@ def main(argv=None):
     sub.add_argument("--opt", type=json.loads, default={})
     sub.add_argument("--final", action="store_true", help="allow a held-out file (test_*, go_*)")
     sub.add_argument("--out", required=True)
+    sub = commands.add_parser("report")
+    sub.add_argument("--summary", required=True, help="summary.json of run")
+    sub.add_argument("--per-shot", help="check_per_shot.npz of the same run")
+    sub.add_argument("--reference", help="per_shot.npz of tcbp.py decode on the same shot file (another run)")
+    sub.add_argument("--reference-arm", default="head")
+    sub.add_argument("--out")
     args = parser.parse_args(argv)
-    run(args)
+    {"run": run, "report": report_command}[args.command](args)
 
 
 if __name__ == "__main__":

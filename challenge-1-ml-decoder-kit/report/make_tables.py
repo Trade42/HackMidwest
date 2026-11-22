@@ -731,7 +731,30 @@ def exploration_table():
     return write("exploration_p0.004", text, records), facts
 
 
-def failure_split(combined):
+def time_split_table(measured):
+    """Where our timed decoder's time goes, per noise level, from its per-shot stage times."""
+    lines = []
+    for p in P_VALUES:
+        for key in ("hierarchy", "hierarchy-converged"):
+            row = measured[p].get(key)
+            if row is None or row.get("offline"):
+                continue
+            shots = loaders.plugin_shots(DATA / "test" / f"eval_p{p}_{key}")
+            if shots is None:
+                continue
+            per_pair = lambda stage: sum(np.nan_to_num(shots[f"seconds_{stage}_{basis}"]) for basis in "XZ").mean() * 1e3
+            disagree = sum(int((~shots[f"agreed_{basis}"]).sum()) for basis in "XZ")
+            lines.append([p, DECODERS[key].label, f"{disagree} of {2 * len(shots['agreed_X']):,}", ms(per_pair("P1") + per_pair("P2")),
+                          ms(per_pair("R")), ms(per_pair("network")), ms(row["mean_ms"]) + ("" if row.get("time_clean", True) else " (not clean)")])
+            fact(f"split{p[-1]}_{key.replace('-', '_')}_disagree", disagree, "tables/time_split.md")
+    return write("time_split", "Where our decoder's time goes on the test shots, per pair (an X shot and a Z shot), averaged over all 10,000 pairs. "
+                 "The two PriorTilt runs decode every shot; relay-BP and the tie-break run only on the shots where the two runs disagree. "
+                 "From the plugin's own per-shot timers; the last column is the evaluator's timer, which wraps everything.\n\n"
+                 + markdown(["p", "Row", "Shots where the two runs disagree", "Two PriorTilt runs, ms", "relay-BP, ms", "the network, ms",
+                             "Whole decode, ms (the evaluator)"], lines) if lines else NOT_MEASURED)
+
+
+def failure_split(combined, measured=None):
     """Where the failures are: {set of shots: [(what, shots where the two fast decodes agree, where they disagree)]}.
 
     One entry for the exploration shots at p = 0.004 (the laptop's per-shot files) and one per noise
@@ -745,6 +768,14 @@ def failure_split(combined):
         sets["exploration shots, p = 0.004"] = (agreed, [("one fast decode (PriorTilt, seed A)", shots["failed_P1"].astype(bool)),
                                                         ("the hierarchy, lowest-weight tie-break", failed)])
     for p in P_VALUES:
+        timed = (measured or {}).get(p, {}).get("hierarchy")
+        shots = loaders.plugin_shots(DATA / "test" / f"eval_p{p}_hierarchy") if timed is not None else None
+        if shots is not None and timed["failed_pair"] is not None:
+            with np.load(DATA / timed["per_shot_file"], allow_pickle=False) as file:
+                failed = np.concatenate([file["failed_X"].astype(bool), file["failed_Z"].astype(bool)])
+            agreed = np.concatenate([shots["agreed_X"], shots["agreed_Z"]])
+            sets[f"test shots, p = {p}, the timed decoder"] = (agreed, [("our decoder, neural tie-break", failed)])
+            continue
         rows = combined[p]["rows"] if combined.get(p) else {}
         if "aw" in rows and rows["aw"]["later"] and "P1" in rows:
             join = lambda row: np.concatenate([row["failed"]["X"], row["failed"]["Z"]])
@@ -756,9 +787,9 @@ def failure_split(combined):
             for name, (agreed, masks) in sets.items()}
 
 
-def failure_split_table(combined):
+def failure_split_table(combined, measured=None):
     lines = [[name, what, f"{same + differ:,}", f"{same:,}", f"{differ:,}", f"{differ / (same + differ):.1%}" if same + differ else ""]
-             for name, bars in failure_split(combined).items() for what, same, differ in bars]
+             for name, bars in failure_split(combined, measured).items() for what, same, differ in bars]
     return write("where_failures", "Where the failures are. \"Agree\" means the two runs of PriorTilt (two random seeds) predict the same 12 bits; the hierarchy "
                  "then takes that answer, and a wrong one cannot be repaired by any tie-break. X and Z memory shots are counted together.\n\n"
                  + markdown(["Shots", "Set", "Shots in the set", "The two runs agree", "They disagree", "Share in \"disagree\""], lines))
@@ -1381,7 +1412,7 @@ def main(argv=None):
         tables = {f"test_p{p}": per_p[p] for p in P_VALUES} | {"test_time": per_p["time"]} | {
             "test_sweep": sweep, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
             "test_comparisons": comparisons_table(measured), "test_ladder": ladder, "test_ablation": ablated,
-            "where_failures": failure_split_table(combined), "exploration_p0.005": exploration_p5_table(),
+            "where_failures": failure_split_table(combined, measured), "exploration_p0.005": exploration_p5_table(), "time_split": time_split_table(measured),
             "exploration_ensemble": exploration_ensemble_table(), "ablation_80k": ablation_80k_table(),
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
             "resources": resources_table(measured)}

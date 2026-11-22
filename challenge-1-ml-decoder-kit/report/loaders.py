@@ -285,6 +285,15 @@ def ensemble(folder, p, split="test"):
             "network_ms": tables["X"].get("network_ms"), "ablation": {basis: tables[basis].get("ablation") or {} for basis in "XZ"}}
 
 
+def plugin_shots(folder):
+    """Our plugin's per-shot stages (derived from its *_metrics.json by sync_data.py), or None."""
+    file = Path(folder) / "plugin_shots.npz"
+    if not file.is_file():
+        return None
+    with np.load(file, allow_pickle=False) as data:
+        return {key: data[key] for key in data.files}
+
+
 def tcbp_files(folder, names):
     """TCBP-JOBS's per-shot answers (hierarchy.tcbp_member) for shot files, joined in the order given: failure mask and data sha256."""
     failed, sha = [], []

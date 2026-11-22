@@ -179,6 +179,51 @@ def describe(where, path, commit):
     return f"branch `{where.split('@')[0].removeprefix('origin/')}` at commit `{commit[:12]}`, `{path}`"
 
 
+STAGES = {"agree": 0, "weight": 1, "converged": 2, "network": 3}
+WINNERS = {"P1": 0, "P2": 1, "R": 2}
+
+
+def derive_plugin_metrics(records, now):
+    """Our plugin's per-shot record (*_metrics.json, about 9 MB a row) reduced to a small .npz of what the report reads:
+    per basis, whether the two fast decodes agreed, the stage that answered, the winning candidate, and each stage's time.
+    The source file's branch, commit and sha256 are recorded beside the derived file's own sha256."""
+    import io
+    import numpy as np
+    derived = []
+    for path, tail in expand("origin/server-logs", "files/clean/eval_p*/*_metrics.json"):
+        if "hierarchy" not in path:
+            continue
+        name = "test/" + tail.rsplit("/", 1)[0] + "/plugin_shots.npz"
+        got = read_source("origin/server-logs", path)
+        if got is None:
+            continue
+        data, commit = got
+        source_sha = sha256(data)
+        if name in records and records[name].get("source_sha256") == source_sha and (DATA / name).is_file():
+            continue
+        metrics = json.loads(data)
+        arrays = {}
+        for basis in "XZ":
+            shots = metrics[basis]
+            arrays[f"agreed_{basis}"] = np.array([shot["agreed"] for shot in shots], bool)
+            arrays[f"stage_{basis}"] = np.array([STAGES[shot["stage"]] for shot in shots], np.int8)
+            arrays[f"winner_{basis}"] = np.array([WINNERS.get(shot.get("winner"), -1) for shot in shots], np.int8)
+            arrays[f"any_converged_{basis}"] = np.array([shot.get("any_converged", True) for shot in shots], bool)
+            for stage in ("P1", "P2", "R", "network"):
+                arrays[f"seconds_{stage}_{basis}"] = np.array([shot.get(f"seconds_{stage}", np.nan) for shot in shots], np.float64)
+        buffer = io.BytesIO()
+        np.savez_compressed(buffer, stage_codes=np.array(list(STAGES)), winner_codes=np.array(list(WINNERS)), **arrays)
+        target = DATA / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(buffer.getvalue())
+        records[name] = {"file": name, "from": f"derived by `report/sync_data.py` from {describe('origin/server-logs', path, commit)} "
+                                              f"(sha256 `{source_sha[:16]}…`)", "branch": "origin/server-logs", "commit": commit, "path": path,
+                         "source_sha256": source_sha, "sha256": sha256(target.read_bytes()), "bytes": target.stat().st_size,
+                         "copied_utc": now, "grows": False}
+        derived.append(name)
+    return derived
+
+
 def write_sources_md(records):
     lines = ["# Where every file in this folder came from", "",
              "Written by `python -m report.sync_data`; do not edit by hand. The tables and figures of the report read",
@@ -236,6 +281,7 @@ def main(argv=None):
             records[name] = {"file": name, "from": describe(where, path, commit), "branch": where, "commit": commit,
                              "path": path, "sha256": digest, "bytes": len(data), "copied_utc": now, "grows": grows}
             (changed if old else copied).append(name)
+    copied += derive_plugin_metrics(records, now)
     RECORD.parent.mkdir(parents=True, exist_ok=True)
     RECORD.write_text(json.dumps(records, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     write_sources_md(records)

@@ -330,6 +330,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `rule_Z_network` | 68 | `data/test/test_run.out` |
 | `rule_Z_shots` | 25,000 | `data/test/test_run.out` |
 | `rule_Z_step` | 100,000 | `data/test/test_run.out` |
+| `split3_hierarchy_disagree` | 2 | `tables/time_split.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |
 | `t3_bposd_mean_ms` | 129 (not clean) | `tables/test_p0.003.md` |

@@ -425,9 +425,9 @@ def learning_curves():
 
 # ---------- 6. where the failures are ----------
 
-def where_failures(combined):
-    sets = failure_split(combined)
-    name = "test shots, p = 0.004" if "test shots, p = 0.004" in sets else next(iter(sets), None)
+def where_failures(combined, measured):
+    sets = failure_split(combined, measured)
+    name = next((name for name in sets if name.startswith("test shots, p = 0.004")), None) or next(iter(sets), None)
     figure, axes = plt.subplots(figsize=(11, 5.6 if not name or len(sets[name]) < 4 else 6.6))
     figure.subplots_adjust(left=0.03, right=0.97, top=0.76, bottom=0.2)
     figure.text(0.02, 0.945, "Most failures sit where two fast decodes disagree", fontsize=20, fontweight="bold", va="center")
@@ -468,7 +468,7 @@ def main(argv=None):
     parser.parse_args(argv)
     try:
         measured, _, combined = load_test_rows()
-        names = [ler_vs_p(measured), time_vs_p(measured), ler_vs_time(measured), loss(), learning_curves(), where_failures(combined)]
+        names = [ler_vs_p(measured), time_vs_p(measured), ler_vs_time(measured), loss(), learning_curves(), where_failures(combined, measured)]
     except Mismatch as problem:
         print(f"STOPPED: {problem}", file=sys.stderr)
         return 1

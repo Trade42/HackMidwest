@@ -838,13 +838,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "64a522c98335f1771b9aa76747ff4aef5b313e30",
-  "copied_utc": "2026-11-22 10:33",
+  "commit": "10798d554dce0e6f1ec5608be8f0e6bf9fcec4b3",
+  "copied_utc": "2026-11-22 10:36",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `64a522c98335`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `10798d554dce`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "deb9634acc2dcaa1a2d1371718e913c33c015201d67040af02130ddc7bcf4ea1"
+  "sha256": "278461b8bac9c3b23adf549308ff0369b26d2a6a704db009dfc09675821e445d"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -1046,14 +1046,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 12840,
-  "commit": "64a522c98335f1771b9aa76747ff4aef5b313e30",
-  "copied_utc": "2026-11-22 10:33",
+  "bytes": 12896,
+  "commit": "10798d554dce0e6f1ec5608be8f0e6bf9fcec4b3",
+  "copied_utc": "2026-11-22 10:36",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `64a522c98335`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `10798d554dce`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "e2a523b3a49df6c09bb6c0ad601c763255693d8943075e7dcac0db3869489528"
+  "sha256": "f23c52497678dcc8c1bcb177bd18e51c1e82e152e3354fcbbcd71679bfac4290"
  },
  "test/eval_p0.003_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",
@@ -1098,6 +1098,18 @@
   "grows": false,
   "path": "files/clean/eval_p0.003_hierarchy/01_hierarchy_plugin_make_decoder_shots.npz",
   "sha256": "fdb68180bdfecb591580a0a50472dd09137cb238c4ba555d2ca78555940018f9"
+ },
+ "test/eval_p0.003_hierarchy/plugin_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 187390,
+  "commit": "10798d554dce0e6f1ec5608be8f0e6bf9fcec4b3",
+  "copied_utc": "2026-11-22 10:36",
+  "file": "test/eval_p0.003_hierarchy/plugin_shots.npz",
+  "from": "derived by `report/sync_data.py` from branch `server-logs` at commit `10798d554dce`, `files/clean/eval_p0.003_hierarchy/01_hierarchy_plugin_make_decoder_metrics.json` (sha256 `11262bf3f243e877\u2026`)",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_hierarchy/01_hierarchy_plugin_make_decoder_metrics.json",
+  "sha256": "e3669bcb155c41ba7b86b0b27e0b66cede148bf4d9b5726f35b47cd0be231f81",
+  "source_sha256": "11262bf3f243e87736db94d23ee649cca55d51ede25108078828ab4d6e8a8146"
  },
  "test/eval_p0.003_hierarchy/summary.csv": {
   "branch": "origin/server-logs",

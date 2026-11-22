@@ -788,3 +788,9 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 
   200/500 shots, 41s, failures so far blind=22
   250/500 shots, 50s, failures so far blind=32
   300/500 shots, 64s, failures so far blind=38
+  350/500 shots, 75s, failures so far blind=46
+  400/500 shots, 86s, failures so far blind=53
+  450/500 shots, 99s, failures so far blind=63
+  500/500 shots, 111s, failures so far blind=69
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/parts/blind/000000-000500.npz.tmp.npz in 111s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 500..800 conditions ['blind'] workers 10

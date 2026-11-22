@@ -35,3 +35,4 @@ WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 whi
   saved /home/blakew3/mlBranchMidwest/runs/tcbp_p0.004/validation_Z.tcbp.npz
 train_Z.npz: Z memory, p = 0.004, 20000 shots, data sha256 14dce11586fa51256f476224d0fe3965e0562f2d8f68cba6192883a65fb6b24a
     shots 0 to 4095 decoded
+    shots 4096 to 8191 decoded

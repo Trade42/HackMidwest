@@ -1,0 +1,45 @@
+{
+ "stim_version_here": "1.16.0",
+ "datasets": [
+  {
+   "file": "validation_X.npz",
+   "path": "/home/sal/hackMidwest/repo/challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz",
+   "sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d",
+   "basis": "X",
+   "p": 0.004,
+   "seed": 201,
+   "shots": 5000,
+   "detectors": 1728
+  },
+  {
+   "file": "validation_Z.npz",
+   "path": "/home/sal/hackMidwest/repo/challenge-1-ml-decoder-kit/data/p0.004/validation_Z.npz",
+   "sha256": "843c4daf24e2b56c5988670550bbcdbac8f50b18dbb9d24beb64969146cb8e20",
+   "basis": "Z",
+   "p": 0.004,
+   "seed": 202,
+   "shots": 5000,
+   "detectors": 1728
+  },
+  {
+   "file": "train_X.npz",
+   "path": "/home/sal/hackMidwest/repo/challenge-1-ml-decoder-kit/data/p0.004/train_X.npz",
+   "sha256": "98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc",
+   "basis": "X",
+   "p": 0.004,
+   "seed": 101,
+   "shots": 20000,
+   "detectors": 1728
+  },
+  {
+   "file": "train_Z.npz",
+   "path": "/home/sal/hackMidwest/repo/challenge-1-ml-decoder-kit/data/p0.004/train_Z.npz",
+   "sha256": "14dce11586fa51256f476224d0fe3965e0562f2d8f68cba6192883a65fb6b24a",
+   "basis": "Z",
+   "p": 0.004,
+   "seed": 102,
+   "shots": 20000,
+   "detectors": 1728
+  }
+ ]
+}

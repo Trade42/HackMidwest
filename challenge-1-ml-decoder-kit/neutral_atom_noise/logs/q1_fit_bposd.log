@@ -1,0 +1,287 @@
+=== 2026-11-22T10:21:42Z hold: lane B, lock /home/sal/hackMidwest/dq/run/sim-b.lock, CPUs 8-11, head 76daf07: job --factors 0.8 --decoders bposd --rows generic-fit
+{"file": "X_f0.8_seed4100.npz", "sha256": "4e6e2867557ced29a25b1c0380b1aa2b6f2d9922bdb4fe1300e2de0a409365e8", "kept": true}
+{"file": "X_f0.8_seed5100.npz", "sha256": "8500b9e5dff2d260b7094048b52dd015f7b0bc043986abadfd6c7a163094f833", "kept": true}
+10:21:47 UTC X_f0.8_seed5100__bposd__uniform0.0041629__000000-000125.npz: bposd, priors uniform:0.0041629, flags None, 4 workers
+  125/125 shots, 50 s, 52 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0041629__000000-000125.npz", "failures": 52, "shots": 125, "unconverged": 124, "mean_iterations": 80.0, "mean_ms": 1424.9, "seconds": 50.0}
+10:22:37 UTC X_f0.8_seed5100__bposd__uniform0.0041629__000125-000250.npz: bposd, priors uniform:0.0041629, flags None, 4 workers
+  125/125 shots, 49 s, 57 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0041629__000125-000250.npz", "failures": 57, "shots": 125, "unconverged": 121, "mean_iterations": 78.9, "mean_ms": 1561.9, "seconds": 49.2}
+10:23:26 UTC X_f0.8_seed5100__bposd__uniform0.005947__000000-000125.npz: bposd, priors uniform:0.005947, flags None, 4 workers
+  125/125 shots, 49 s, 49 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.005947__000000-000125.npz", "failures": 49, "shots": 125, "unconverged": 124, "mean_iterations": 79.5, "mean_ms": 1387.9, "seconds": 49.0}
+10:24:15 UTC X_f0.8_seed5100__bposd__uniform0.005947__000125-000250.npz: bposd, priors uniform:0.005947, flags None, 4 workers
+  125/125 shots, 43 s, 50 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.005947__000125-000250.npz", "failures": 50, "shots": 125, "unconverged": 122, "mean_iterations": 79.0, "mean_ms": 1356.1, "seconds": 42.9}
+10:24:58 UTC X_f0.8_seed5100__bposd__uniform0.0083258__000000-000125.npz: bposd, priors uniform:0.0083258, flags None, 4 workers
+  125/125 shots, 50 s, 44 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0083258__000000-000125.npz", "failures": 44, "shots": 125, "unconverged": 123, "mean_iterations": 79.4, "mean_ms": 1439.6, "seconds": 50.4}
+10:25:48 UTC X_f0.8_seed5100__bposd__uniform0.0083258__000125-000250.npz: bposd, priors uniform:0.0083258, flags None, 4 workers
+  125/125 shots, 49 s, 49 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0083258__000125-000250.npz", "failures": 49, "shots": 125, "unconverged": 121, "mean_iterations": 78.8, "mean_ms": 1552.9, "seconds": 48.9}
+10:26:37 UTC X_f0.8_seed5100__bposd__uniform0.011894__000000-000125.npz: bposd, priors uniform:0.011894, flags None, 4 workers
+  125/125 shots, 54 s, 45 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.011894__000000-000125.npz", "failures": 45, "shots": 125, "unconverged": 120, "mean_iterations": 78.9, "mean_ms": 1508.4, "seconds": 53.9}
+10:27:31 UTC X_f0.8_seed5100__bposd__uniform0.011894__000125-000250.npz: bposd, priors uniform:0.011894, flags None, 4 workers
+  125/125 shots, 47 s, 44 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.011894__000125-000250.npz", "failures": 44, "shots": 125, "unconverged": 120, "mean_iterations": 78.2, "mean_ms": 1496.3, "seconds": 47.1}
+{"fit": "X_f0.8_seed4100.npz", "decoder": "bposd", "flags": null, "p": 0.011894, "multiplier": 1.0, "priors": "uniform:0.011894", "train_file": "X_f0.8_seed5100.npz", "train_seed": 5100, "grid": [{"multiplier": 0.35, "p": 0.0041629, "priors": "uniform:0.0041629", "failures": 109, "shots": 250, "unconverged": 245, "mean_iterations": 79.444}, {"multiplier": 0.5, "p": 0.005947, "priors": "uniform:0.005947", "failures": 99, "shots": 250, "unconverged": 246, "mean_iterations": 79.256}, {"multiplier": 0.7, "p": 0.0083258, "priors": "uniform:0.0083258", "failures": 93, "shots": 250, "unconverged": 244, "mean_iterations": 79.136}, {"multiplier": 1.0, "p": 0.011894, "priors": "uniform:0.011894", "failures": 89, "shots": 250, "unconverged": 240, "mean_iterations": 78.548}], "rule": "fewest failures, then fewest mean iterations"}
+| Basis | Factor | Decoder | Picture of the noise | Failures / shots | Failure fraction (95% Wilson) | Per cycle | Unconverged | Mean iterations | Mean ms per shot |
+|---|---|---|---|---|---|---|---|---|---|
+| X | 0.6 | relay-BP | matched | 2 / 2000 | 0.10% (0.027%–0.36%) | 8.34e-05 | 0 | 156 | 155 |
+| X | 0.6 | BP-OSD | matched | 5 / 2000 | 0.25% (0.11%–0.58%) | 2.09e-04 | 558 | 38 | 319 |
+| X | 0.7 | relay-BP | matched | 13 / 2000 | 0.65% (0.38%–1.11%) | 5.43e-04 | 4 | 398 | 255 |
+| X | 0.7 | BP-OSD | matched | 31 / 2000 | 1.55% (1.09%–2.19%) | 1.30e-03 | 840 | 49 | 456 |
+| X | 0.8 | relay-BP | matched | 39 / 2000 | 1.95% (1.43%–2.65%) | 1.64e-03 | 18 | 978 | 787 |
+| X | 0.8 | BP-OSD | matched | 91 / 2000 | 4.55% (3.72%–5.55%) | 3.87e-03 | 1177 | 60 | 998 |
+| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119), also the best p on train shots | 613 / 2000 | 30.65% (28.67%–32.71%) | 3.00e-02 | 1883 | 78 | 1394 |
+| X | 0.9 | BP-OSD | matched | 238 / 2000 | 11.90% (10.55%–13.39%) | 1.05e-02 | 1482 | 69 | 830 |
+| X | 0.9 | BP-OSD | generic, same two-qubit error (p = 0.0134) | 559 / 1000 | 55.90% (52.81%–58.95%) | 6.60e-02 | 977 | 79 | 1693 |
+| X | 1 | BP-OSD | matched | 599 / 2000 | 29.95% (27.98%–31.99%) | 2.92e-02 | 1750 | 75 | 963 |
+
+Paired, on the same shots (the generic row against the matched row of its point; **bold** marks the better generic row of a point):
+
+| Basis | Factor | Decoder | Generic picture | Shots | Failures: generic, matched | Only generic wrong | Only matched wrong | Exact sign test p | Mean iterations: generic ÷ matched | Unconverged: generic, matched |
+|---|---|---|---|---|---|---|---|---|---|---|
+| X | 0.8 | BP-OSD | **generic, same two-qubit error (p = 0.0119), also the best p on train shots** | 2000 | 613, 91 | 540 | 18 | 7.1e-135 | 78 ÷ 60 = 1.3 | 1883, 1177 |
+| X | 0.9 | BP-OSD | **generic, same two-qubit error (p = 0.0134)** | 1000 | 559, 135 | 431 | 7 | 1.7e-117 | 79 ÷ 69 = 1.2 | 977, 737 |
+
+Iterations are belief-propagation iterations per shot, the same on any machine. Relay-BP often has its answer inside its first leg of 80 iterations and never runs more than 80 + 300 x 60 = 18,080. BP-OSD stops BP at 80 iterations and then runs OSD on every unconverged shot, so for BP-OSD the unconverged count is the costly part.
+
+job done after 394 s
+=== 2026-11-22T10:28:22Z q1_fit_bposd done
+=== 2026-11-22T10:39:03Z hold: lane C, lock /home/sal/hackMidwest/dq/run/sim.lock, CPUs 12-15, head 76daf07: job --factors 0.8 --decoders bposd --rows generic-fit
+{"file": "X_f0.8_seed4100.npz", "sha256": "4e6e2867557ced29a25b1c0380b1aa2b6f2d9922bdb4fe1300e2de0a409365e8", "kept": true}
+{"file": "X_f0.8_seed5100.npz", "sha256": "8500b9e5dff2d260b7094048b52dd015f7b0bc043986abadfd6c7a163094f833", "kept": true}
+10:39:08 UTC X_f0.8_seed5100__bposd__uniform0.0166516__000000-000125.npz: bposd, priors uniform:0.0166516, flags None, 4 workers
+  125/125 shots, 57 s, 42 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0166516__000000-000125.npz", "failures": 42, "shots": 125, "unconverged": 115, "mean_iterations": 77.1, "mean_ms": 1651.8, "seconds": 56.8}
+10:40:05 UTC X_f0.8_seed5100__bposd__uniform0.0166516__000125-000250.npz: bposd, priors uniform:0.0166516, flags None, 4 workers
+  125/125 shots, 56 s, 35 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0166516__000125-000250.npz", "failures": 35, "shots": 125, "unconverged": 119, "mean_iterations": 78.2, "mean_ms": 1788.7, "seconds": 56.3}
+10:41:02 UTC X_f0.8_seed5100__bposd__uniform0.0233122__000000-000125.npz: bposd, priors uniform:0.0233122, flags None, 4 workers
+  125/125 shots, 57 s, 39 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0233122__000000-000125.npz", "failures": 39, "shots": 125, "unconverged": 111, "mean_iterations": 75.6, "mean_ms": 1600.3, "seconds": 56.5}
+10:41:58 UTC X_f0.8_seed5100__bposd__uniform0.0233122__000125-000250.npz: bposd, priors uniform:0.0233122, flags None, 4 workers
+  125/125 shots, 58 s, 36 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0233122__000125-000250.npz", "failures": 36, "shots": 125, "unconverged": 116, "mean_iterations": 77.5, "mean_ms": 1830.5, "seconds": 57.5}
+10:42:56 UTC X_f0.8_seed5100__bposd__uniform0.0326371__000000-000125.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 51 s, 31 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0326371__000000-000125.npz", "failures": 31, "shots": 125, "unconverged": 108, "mean_iterations": 74.5, "mean_ms": 1432.5, "seconds": 51.3}
+10:43:47 UTC X_f0.8_seed5100__bposd__uniform0.0326371__000125-000250.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 45 s, 27 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.0326371__000125-000250.npz", "failures": 27, "shots": 125, "unconverged": 112, "mean_iterations": 76.4, "mean_ms": 1432.4, "seconds": 45.0}
+10:44:32 UTC X_f0.8_seed5100__bposd__uniform0.045692__000000-000125.npz: bposd, priors uniform:0.045692, flags None, 4 workers
+  125/125 shots, 49 s, 30 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.045692__000000-000125.npz", "failures": 30, "shots": 125, "unconverged": 101, "mean_iterations": 72.3, "mean_ms": 1363.4, "seconds": 49.1}
+10:45:21 UTC X_f0.8_seed5100__bposd__uniform0.045692__000125-000250.npz: bposd, priors uniform:0.045692, flags None, 4 workers
+  125/125 shots, 46 s, 31 failures
+{"result": "X_f0.8_seed5100__bposd__uniform0.045692__000125-000250.npz", "failures": 31, "shots": 125, "unconverged": 111, "mean_iterations": 75.7, "mean_ms": 1468.1, "seconds": 46.3}
+{"fit": "X_f0.8_seed4100.npz", "decoder": "bposd", "flags": null, "p": 0.0326371, "multiplier": 2.744, "priors": "uniform:0.0326371", "train_file": "X_f0.8_seed5100.npz", "train_seed": 5100, "grid": [{"multiplier": 0.35, "p": 0.0041629, "priors": "uniform:0.0041629", "failures": 109, "shots": 250, "unconverged": 245, "mean_iterations": 79.444}, {"multiplier": 0.5, "p": 0.005947, "priors": "uniform:0.005947", "failures": 99, "shots": 250, "unconverged": 246, "mean_iterations": 79.256}, {"multiplier": 0.7, "p": 0.0083258, "priors": "uniform:0.0083258", "failures": 93, "shots": 250, "unconverged": 244, "mean_iterations": 79.136}, {"multiplier": 1.0, "p": 0.011894, "priors": "uniform:0.011894", "failures": 89, "shots": 250, "unconverged": 240, "mean_iterations": 78.548}, {"multiplier": 1.4, "p": 0.0166516, "priors": "uniform:0.0166516", "failures": 77, "shots": 250, "unconverged": 234, "mean_iterations": 77.644}, {"multiplier": 1.96, "p": 0.0233122, "priors": "uniform:0.0233122", "failures": 75, "shots": 250, "unconverged": 227, "mean_iterations": 76.568}, {"multiplier": 2.744, "p": 0.0326371, "priors": "uniform:0.0326371", "failures": 58, "shots": 250, "unconverged": 220, "mean_iterations": 75.444}, {"multiplier": 3.8416, "p": 0.045692, "priors": "uniform:0.045692", "failures": 61, "shots": 250, "unconverged": 212, "mean_iterations": 73.98}], "inside_grid": true, "rule": "fewest failures, then fewest mean iterations; a best point at the edge extends the grid by 1.4 per step"}
+10:46:08 UTC X_f0.8_seed4100__bposd__uniform0.0326371__000000-000125.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 51 s, 28 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__000000-000125.npz", "failures": 28, "shots": 125, "unconverged": 104, "mean_iterations": 74.6, "mean_ms": 1326.1, "seconds": 50.9}
+10:46:59 UTC X_f0.8_seed4100__bposd__uniform0.0326371__000125-000250.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 43 s, 22 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__000125-000250.npz", "failures": 22, "shots": 125, "unconverged": 113, "mean_iterations": 76.3, "mean_ms": 1369.3, "seconds": 43.0}
+10:47:42 UTC X_f0.8_seed4100__bposd__uniform0.0326371__000250-000375.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 34 s, 29 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__000250-000375.npz", "failures": 29, "shots": 125, "unconverged": 111, "mean_iterations": 75.0, "mean_ms": 1062.3, "seconds": 33.6}
+10:48:16 UTC X_f0.8_seed4100__bposd__uniform0.0326371__000375-000500.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 34 s, 28 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__000375-000500.npz", "failures": 28, "shots": 125, "unconverged": 111, "mean_iterations": 75.8, "mean_ms": 1072.5, "seconds": 33.9}
+10:48:49 UTC X_f0.8_seed4100__bposd__uniform0.0326371__000500-000625.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 34 s, 31 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__000500-000625.npz", "failures": 31, "shots": 125, "unconverged": 113, "mean_iterations": 76.4, "mean_ms": 1076.4, "seconds": 34.0}
+10:49:23 UTC X_f0.8_seed4100__bposd__uniform0.0326371__000625-000750.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 31 s, 25 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__000625-000750.npz", "failures": 25, "shots": 125, "unconverged": 106, "mean_iterations": 74.2, "mean_ms": 979.9, "seconds": 30.8}
+10:49:54 UTC X_f0.8_seed4100__bposd__uniform0.0326371__000750-000875.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 33 s, 29 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__000750-000875.npz", "failures": 29, "shots": 125, "unconverged": 111, "mean_iterations": 74.7, "mean_ms": 1038.5, "seconds": 32.7}
+10:50:27 UTC X_f0.8_seed4100__bposd__uniform0.0326371__000875-001000.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 30 s, 29 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__000875-001000.npz", "failures": 29, "shots": 125, "unconverged": 106, "mean_iterations": 74.3, "mean_ms": 953.3, "seconds": 30.3}
+10:50:57 UTC X_f0.8_seed4100__bposd__uniform0.0326371__001000-001125.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 28 s, 29 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__001000-001125.npz", "failures": 29, "shots": 125, "unconverged": 113, "mean_iterations": 75.6, "mean_ms": 886.0, "seconds": 28.0}
+budget of 12.0 minutes spent: rerun the same command to go on
+| Basis | Factor | Decoder | Picture of the noise | Failures / shots | Failure fraction (95% Wilson) | Per cycle | Unconverged | Mean iterations | Mean ms per shot |
+|---|---|---|---|---|---|---|---|---|---|
+| X | 0.6 | relay-BP | matched | 2 / 2000 | 0.10% (0.027%–0.36%) | 8.34e-05 | 0 | 156 | 155 |
+| X | 0.6 | BP-OSD | matched | 5 / 2000 | 0.25% (0.11%–0.58%) | 2.09e-04 | 558 | 38 | 319 |
+| X | 0.7 | relay-BP | matched | 13 / 2000 | 0.65% (0.38%–1.11%) | 5.43e-04 | 4 | 398 | 255 |
+| X | 0.7 | BP-OSD | matched | 31 / 2000 | 1.55% (1.09%–2.19%) | 1.30e-03 | 840 | 49 | 456 |
+| X | 0.7 | BP-OSD | generic, same two-qubit error (p = 0.0104) | 26 / 375 | 6.93% (4.78%–9.96%) | 5.97e-03 | 310 | 73 | 1259 |
+| X | 0.8 | relay-BP | matched | 39 / 2000 | 1.95% (1.43%–2.65%) | 1.64e-03 | 18 | 978 | 787 |
+| X | 0.8 | BP-OSD | matched | 91 / 2000 | 4.55% (3.72%–5.55%) | 3.87e-03 | 1177 | 60 | 998 |
+| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119) | 613 / 2000 | 30.65% (28.67%–32.71%) | 3.00e-02 | 1883 | 78 | 1394 |
+| X | 0.8 | BP-OSD | generic, best p on train shots (p = 0.0326) | 250 / 1125 | 22.22% (19.89%–24.74%) | 2.07e-02 | 988 | 75 | 1085 |
+| X | 0.9 | relay-BP | matched | 31 / 500 | 6.20% (4.40%–8.67%) | 5.32e-03 | 16 | 2589 | 2464 |
+| X | 0.9 | relay-BP | generic, same two-qubit error (p = 0.0134) | 78 / 150 | 52.00% (44.06%–59.84%) | 5.93e-02 | 75 | 13644 | 13066 |
+| X | 0.9 | BP-OSD | matched | 238 / 2000 | 11.90% (10.55%–13.39%) | 1.05e-02 | 1482 | 69 | 830 |
+| X | 0.9 | BP-OSD | generic, same two-qubit error (p = 0.0134) | 1113 / 2000 | 55.65% (53.46%–57.81%) | 6.55e-02 | 1965 | 79 | 1793 |
+| X | 1 | relay-BP | matched | 42 / 250 | 16.80% (12.68%–21.93%) | 1.52e-02 | 30 | 5481 | 4967 |
+| X | 1 | BP-OSD | matched | 599 / 2000 | 29.95% (27.98%–31.99%) | 2.92e-02 | 1750 | 75 | 963 |
+
+Paired, on the same shots (the generic row against the matched row of its point; **bold** marks the better generic row of a point):
+
+| Basis | Factor | Decoder | Generic picture | Shots | Failures: generic, matched | Only generic wrong | Only matched wrong | Exact sign test p | Mean iterations: generic ÷ matched | Unconverged: generic, matched |
+|---|---|---|---|---|---|---|---|---|---|---|
+| X | 0.7 | BP-OSD | **generic, same two-qubit error (p = 0.0104)** | 375 | 26, 9 | 21 | 4 | 0.00091 | 73 ÷ 47 = 1.6 | 310, 149 |
+| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119) | 2000 | 613, 91 | 540 | 18 | 7.1e-135 | 78 ÷ 60 = 1.3 | 1883, 1177 |
+| X | 0.8 | BP-OSD | **generic, best p on train shots (p = 0.0326)** | 1125 | 250, 46 | 212 | 8 | 1.5e-52 | 75 ÷ 60 = 1.3 | 988, 653 |
+| X | 0.9 | relay-BP | **generic, same two-qubit error (p = 0.0134)** | 150 | 78, 7 | 71 | 0 | 8.5e-22 | 13644 ÷ 2257 = 6.0 | 75, 2 |
+| X | 0.9 | BP-OSD | **generic, same two-qubit error (p = 0.0134)** | 2000 | 1113, 238 | 887 | 12 | 2.6e-244 | 79 ÷ 69 = 1.2 | 1965, 1482 |
+
+Iterations are belief-propagation iterations per shot, the same on any machine. Relay-BP often has its answer inside its first leg of 80 iterations and never runs more than 80 + 300 x 60 = 18,080. BP-OSD stops BP at 80 iterations and then runs OSD on every unconverged shot, so for BP-OSD the unconverged count is the costly part.
+
+job paused after 738 s
+=== 2026-11-22T10:51:47Z hold: lane C, lock /home/sal/hackMidwest/dq/run/sim.lock, CPUs 12-15, head 3918fae: job --factors 0.8 --decoders bposd --rows generic-fit
+{"file": "X_f0.8_seed4100.npz", "sha256": "4e6e2867557ced29a25b1c0380b1aa2b6f2d9922bdb4fe1300e2de0a409365e8", "kept": true}
+{"file": "X_f0.8_seed5100.npz", "sha256": "8500b9e5dff2d260b7094048b52dd015f7b0bc043986abadfd6c7a163094f833", "kept": true}
+{"fit": "X_f0.8_seed4100.npz", "decoder": "bposd", "flags": null, "p": 0.0326371, "multiplier": 2.744, "priors": "uniform:0.0326371", "train_file": "X_f0.8_seed5100.npz", "train_seed": 5100, "grid": [{"multiplier": 0.35, "p": 0.0041629, "priors": "uniform:0.0041629", "failures": 109, "shots": 250, "unconverged": 245, "mean_iterations": 79.444}, {"multiplier": 0.5, "p": 0.005947, "priors": "uniform:0.005947", "failures": 99, "shots": 250, "unconverged": 246, "mean_iterations": 79.256}, {"multiplier": 0.7, "p": 0.0083258, "priors": "uniform:0.0083258", "failures": 93, "shots": 250, "unconverged": 244, "mean_iterations": 79.136}, {"multiplier": 1.0, "p": 0.011894, "priors": "uniform:0.011894", "failures": 89, "shots": 250, "unconverged": 240, "mean_iterations": 78.548}, {"multiplier": 1.4, "p": 0.0166516, "priors": "uniform:0.0166516", "failures": 77, "shots": 250, "unconverged": 234, "mean_iterations": 77.644}, {"multiplier": 1.96, "p": 0.0233122, "priors": "uniform:0.0233122", "failures": 75, "shots": 250, "unconverged": 227, "mean_iterations": 76.568}, {"multiplier": 2.744, "p": 0.0326371, "priors": "uniform:0.0326371", "failures": 58, "shots": 250, "unconverged": 220, "mean_iterations": 75.444}, {"multiplier": 3.8416, "p": 0.045692, "priors": "uniform:0.045692", "failures": 61, "shots": 250, "unconverged": 212, "mean_iterations": 73.98}], "inside_grid": true, "rule": "fewest failures, then fewest mean iterations; a best point at the edge extends the grid by 1.4 per step"}
+10:51:51 UTC X_f0.8_seed4100__bposd__uniform0.0326371__001125-001250.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 35 s, 28 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__001125-001250.npz", "failures": 28, "shots": 125, "unconverged": 110, "mean_iterations": 75.5, "mean_ms": 961.0, "seconds": 35.1}
+10:52:26 UTC X_f0.8_seed4100__bposd__uniform0.0326371__001250-001375.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 31 s, 34 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__001250-001375.npz", "failures": 34, "shots": 125, "unconverged": 106, "mean_iterations": 74.0, "mean_ms": 956.2, "seconds": 30.5}
+10:52:57 UTC X_f0.8_seed4100__bposd__uniform0.0326371__001375-001500.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 31 s, 25 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__001375-001500.npz", "failures": 25, "shots": 125, "unconverged": 102, "mean_iterations": 72.1, "mean_ms": 978.8, "seconds": 31.0}
+10:53:28 UTC X_f0.8_seed4100__bposd__uniform0.0326371__001500-001625.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 38 s, 22 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__001500-001625.npz", "failures": 22, "shots": 125, "unconverged": 111, "mean_iterations": 75.0, "mean_ms": 1209.9, "seconds": 38.0}
+10:54:06 UTC X_f0.8_seed4100__bposd__uniform0.0326371__001625-001750.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 38 s, 30 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__001625-001750.npz", "failures": 30, "shots": 125, "unconverged": 111, "mean_iterations": 76.4, "mean_ms": 1194.0, "seconds": 38.0}
+10:54:44 UTC X_f0.8_seed4100__bposd__uniform0.0326371__001750-001875.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 39 s, 32 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__001750-001875.npz", "failures": 32, "shots": 125, "unconverged": 116, "mean_iterations": 76.8, "mean_ms": 1249.3, "seconds": 39.5}
+10:55:23 UTC X_f0.8_seed4100__bposd__uniform0.0326371__001875-002000.npz: bposd, priors uniform:0.0326371, flags None, 4 workers
+  125/125 shots, 41 s, 21 failures
+{"result": "X_f0.8_seed4100__bposd__uniform0.0326371__001875-002000.npz", "failures": 21, "shots": 125, "unconverged": 113, "mean_iterations": 75.9, "mean_ms": 1291.3, "seconds": 40.9}
+| Basis | Factor | Decoder | Picture of the noise | Failures / shots | Failure fraction (95% Wilson) | Per cycle | Unconverged | Mean iterations | Mean ms per shot |
+|---|---|---|---|---|---|---|---|---|---|
+| X | 0.6 | relay-BP | matched | 2 / 2000 | 0.10% (0.027%–0.36%) | 8.34e-05 | 0 | 156 | 155 |
+| X | 0.6 | BP-OSD | matched | 5 / 2000 | 0.25% (0.11%–0.58%) | 2.09e-04 | 558 | 38 | 319 |
+| X | 0.7 | relay-BP | matched | 13 / 2000 | 0.65% (0.38%–1.11%) | 5.43e-04 | 4 | 398 | 255 |
+| X | 0.7 | BP-OSD | matched | 31 / 2000 | 1.55% (1.09%–2.19%) | 1.30e-03 | 840 | 49 | 456 |
+| X | 0.7 | BP-OSD | generic, same two-qubit error (p = 0.0104) | 26 / 375 | 6.93% (4.78%–9.96%) | 5.97e-03 | 310 | 73 | 1259 |
+| X | 0.8 | relay-BP | matched | 39 / 2000 | 1.95% (1.43%–2.65%) | 1.64e-03 | 18 | 978 | 787 |
+| X | 0.8 | relay-BP | generic, same two-qubit error (p = 0.0119) | 7 / 50 | 14.00% (6.95%–26.19%) | 1.25e-02 | 8 | 6915 | 6831 |
+| X | 0.8 | BP-OSD | matched | 91 / 2000 | 4.55% (3.72%–5.55%) | 3.87e-03 | 1177 | 60 | 998 |
+| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119) | 613 / 2000 | 30.65% (28.67%–32.71%) | 3.00e-02 | 1883 | 78 | 1394 |
+| X | 0.8 | BP-OSD | generic, best p on train shots (p = 0.0326) | 442 / 2000 | 22.10% (20.34%–23.97%) | 2.06e-02 | 1757 | 75 | 1100 |
+| X | 0.9 | relay-BP | matched | 31 / 500 | 6.20% (4.40%–8.67%) | 5.32e-03 | 16 | 2589 | 2464 |
+| X | 0.9 | relay-BP | generic, same two-qubit error (p = 0.0134) | 132 / 250 | 52.80% (46.62%–58.90%) | 6.06e-02 | 126 | 13813 | 12208 |
+| X | 0.9 | BP-OSD | matched | 238 / 2000 | 11.90% (10.55%–13.39%) | 1.05e-02 | 1482 | 69 | 830 |
+| X | 0.9 | BP-OSD | generic, same two-qubit error (p = 0.0134) | 1113 / 2000 | 55.65% (53.46%–57.81%) | 6.55e-02 | 1965 | 79 | 1793 |
+| X | 1 | relay-BP | matched | 42 / 250 | 16.80% (12.68%–21.93%) | 1.52e-02 | 30 | 5481 | 4967 |
+| X | 1 | BP-OSD | matched | 599 / 2000 | 29.95% (27.98%–31.99%) | 2.92e-02 | 1750 | 75 | 963 |
+
+Paired, on the same shots (the generic row against the matched row of its point; **bold** marks the better generic row of a point):
+
+| Basis | Factor | Decoder | Generic picture | Shots | Failures: generic, matched | Only generic wrong | Only matched wrong | Exact sign test p | Mean iterations: generic ÷ matched | Unconverged: generic, matched |
+|---|---|---|---|---|---|---|---|---|---|---|
+| X | 0.7 | BP-OSD | **generic, same two-qubit error (p = 0.0104)** | 375 | 26, 9 | 21 | 4 | 0.00091 | 73 ÷ 47 = 1.6 | 310, 149 |
+| X | 0.8 | relay-BP | **generic, same two-qubit error (p = 0.0119)** | 50 | 7, 0 | 7 | 0 | 0.016 | 6915 ÷ 654 = 10.6 | 8, 0 |
+| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119) | 2000 | 613, 91 | 540 | 18 | 7.1e-135 | 78 ÷ 60 = 1.3 | 1883, 1177 |
+| X | 0.8 | BP-OSD | **generic, best p on train shots (p = 0.0326)** | 2000 | 442, 91 | 372 | 21 | 3.6e-84 | 75 ÷ 60 = 1.3 | 1757, 1177 |
+| X | 0.9 | relay-BP | **generic, same two-qubit error (p = 0.0134)** | 250 | 132, 14 | 118 | 0 | 6e-36 | 13813 ÷ 2630 = 5.3 | 126, 7 |
+| X | 0.9 | BP-OSD | **generic, same two-qubit error (p = 0.0134)** | 2000 | 1113, 238 | 887 | 12 | 2.6e-244 | 79 ÷ 69 = 1.2 | 1965, 1482 |
+
+Iterations are belief-propagation iterations per shot, the same on any machine. Relay-BP often has its answer inside its first leg of 80 iterations and never runs more than 80 + 300 x 60 = 18,080. BP-OSD stops BP at 80 iterations and then runs OSD on every unconverged shot, so for BP-OSD the unconverged count is the costly part.
+
+job done after 256 s
+=== 2026-11-22T10:56:07Z q1_fit_bposd done
+=== 2026-11-22T11:43:36Z hold: lane D, lock /home/sal/hackMidwest/dq/run/sim-d.lock, CPUs 0-3, head 68ea816: job --factors 0.9 --decoders bposd --rows generic-fit --train-seed 5101 --grid 1.96,2.744,3.8416 --first 625
+{"file": "X_f0.9_seed4100.npz", "sha256": "efe3d9b398141ec56c22f7c8463fd2de3fc30942672b071899eba280f13a4eb1", "kept": true}
+{"file": "X_f0.9_seed5101.npz", "sha256": "16cc5f5f607c728be6d00293131641fdc04061824a5b85e5ac2a1e23d49757de", "basis": "X", "factor": 0.9, "uniform_p": null, "loss": false, "shots": 250, "seed": 5101, "machine": "luminaty", "detection_events_per_shot": 353.78}
+11:43:40 UTC X_f0.9_seed5101__bposd__uniform0.0262161__000000-000125.npz: bposd, priors uniform:0.0262161, flags None, 4 workers
+  125/125 shots, 46 s, 55 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.0262161__000000-000125.npz", "failures": 55, "shots": 125, "unconverged": 119, "mean_iterations": 78.2, "mean_ms": 1292.8, "seconds": 45.7}
+11:44:26 UTC X_f0.9_seed5101__bposd__uniform0.0262161__000125-000250.npz: bposd, priors uniform:0.0262161, flags None, 4 workers
+  125/125 shots, 40 s, 52 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.0262161__000125-000250.npz", "failures": 52, "shots": 125, "unconverged": 120, "mean_iterations": 78.9, "mean_ms": 1279.1, "seconds": 40.2}
+11:45:06 UTC X_f0.9_seed5101__bposd__uniform0.0367025__000000-000125.npz: bposd, priors uniform:0.0367025, flags None, 4 workers
+  125/125 shots, 44 s, 56 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.0367025__000000-000125.npz", "failures": 56, "shots": 125, "unconverged": 114, "mean_iterations": 76.3, "mean_ms": 1215.9, "seconds": 43.6}
+11:45:49 UTC X_f0.9_seed5101__bposd__uniform0.0367025__000125-000250.npz: bposd, priors uniform:0.0367025, flags None, 4 workers
+  125/125 shots, 41 s, 47 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.0367025__000125-000250.npz", "failures": 47, "shots": 125, "unconverged": 118, "mean_iterations": 78.8, "mean_ms": 1301.7, "seconds": 40.9}
+11:46:30 UTC X_f0.9_seed5101__bposd__uniform0.0513835__000000-000125.npz: bposd, priors uniform:0.0513835, flags None, 4 workers
+  125/125 shots, 43 s, 55 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.0513835__000000-000125.npz", "failures": 55, "shots": 125, "unconverged": 109, "mean_iterations": 74.5, "mean_ms": 1208.4, "seconds": 43.4}
+11:47:14 UTC X_f0.9_seed5101__bposd__uniform0.0513835__000125-000250.npz: bposd, priors uniform:0.0513835, flags None, 4 workers
+  125/125 shots, 38 s, 42 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.0513835__000125-000250.npz", "failures": 42, "shots": 125, "unconverged": 114, "mean_iterations": 77.0, "mean_ms": 1221.6, "seconds": 38.5}
+11:47:52 UTC X_f0.9_seed5101__bposd__uniform0.0719363__000000-000125.npz: bposd, priors uniform:0.0719363, flags None, 4 workers
+  125/125 shots, 39 s, 49 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.0719363__000000-000125.npz", "failures": 49, "shots": 125, "unconverged": 106, "mean_iterations": 73.1, "mean_ms": 1079.8, "seconds": 39.4}
+11:48:32 UTC X_f0.9_seed5101__bposd__uniform0.0719363__000125-000250.npz: bposd, priors uniform:0.0719363, flags None, 4 workers
+  125/125 shots, 39 s, 38 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.0719363__000125-000250.npz", "failures": 38, "shots": 125, "unconverged": 113, "mean_iterations": 76.8, "mean_ms": 1246.6, "seconds": 39.3}
+11:49:11 UTC X_f0.9_seed5101__bposd__uniform0.100711__000000-000125.npz: bposd, priors uniform:0.100711, flags None, 4 workers
+  125/125 shots, 43 s, 54 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.100711__000000-000125.npz", "failures": 54, "shots": 125, "unconverged": 103, "mean_iterations": 72.6, "mean_ms": 1170.2, "seconds": 42.8}
+11:49:54 UTC X_f0.9_seed5101__bposd__uniform0.100711__000125-000250.npz: bposd, priors uniform:0.100711, flags None, 4 workers
+  125/125 shots, 39 s, 46 failures
+{"result": "X_f0.9_seed5101__bposd__uniform0.100711__000125-000250.npz", "failures": 46, "shots": 125, "unconverged": 110, "mean_iterations": 75.3, "mean_ms": 1219.2, "seconds": 38.7}
+{"fit": "X_f0.9_seed4100.npz", "decoder": "bposd", "flags": null, "p": 0.0719363, "multiplier": 5.3782, "priors": "uniform:0.0719363", "train_file": "X_f0.9_seed5101.npz", "train_seed": 5101, "grid": [{"multiplier": 1.96, "p": 0.0262161, "priors": "uniform:0.0262161", "failures": 107, "shots": 250, "unconverged": 239, "mean_iterations": 78.56}, {"multiplier": 2.744, "p": 0.0367025, "priors": "uniform:0.0367025", "failures": 103, "shots": 250, "unconverged": 232, "mean_iterations": 77.544}, {"multiplier": 3.8416, "p": 0.0513835, "priors": "uniform:0.0513835", "failures": 97, "shots": 250, "unconverged": 223, "mean_iterations": 75.712}, {"multiplier": 5.3782, "p": 0.0719363, "priors": "uniform:0.0719363", "failures": 87, "shots": 250, "unconverged": 219, "mean_iterations": 74.94}, {"multiplier": 7.5295, "p": 0.100711, "priors": "uniform:0.100711", "failures": 100, "shots": 250, "unconverged": 213, "mean_iterations": 73.976}], "inside_grid": true, "rule": "fewest failures, then fewest mean iterations; a best point at the edge extends the grid by 1.4 per step"}
+11:50:33 UTC X_f0.9_seed4100__bposd__uniform0.0719363__000000-000125.npz: bposd, priors uniform:0.0719363, flags None, 4 workers
+  125/125 shots, 47 s, 54 failures
+{"result": "X_f0.9_seed4100__bposd__uniform0.0719363__000000-000125.npz", "failures": 54, "shots": 125, "unconverged": 115, "mean_iterations": 77.3, "mean_ms": 1292.5, "seconds": 47.4}
+11:51:20 UTC X_f0.9_seed4100__bposd__uniform0.0719363__000125-000250.npz: bposd, priors uniform:0.0719363, flags None, 4 workers
+  125/125 shots, 41 s, 50 failures
+{"result": "X_f0.9_seed4100__bposd__uniform0.0719363__000125-000250.npz", "failures": 50, "shots": 125, "unconverged": 119, "mean_iterations": 78.0, "mean_ms": 1312.9, "seconds": 41.3}
+11:52:02 UTC X_f0.9_seed4100__bposd__uniform0.0719363__000250-000375.npz: bposd, priors uniform:0.0719363, flags None, 4 workers
+  125/125 shots, 40 s, 52 failures
+{"result": "X_f0.9_seed4100__bposd__uniform0.0719363__000250-000375.npz", "failures": 52, "shots": 125, "unconverged": 114, "mean_iterations": 77.1, "mean_ms": 1260.9, "seconds": 40.0}
+11:52:42 UTC X_f0.9_seed4100__bposd__uniform0.0719363__000375-000500.npz: bposd, priors uniform:0.0719363, flags None, 4 workers
+  125/125 shots, 39 s, 46 failures
+{"result": "X_f0.9_seed4100__bposd__uniform0.0719363__000375-000500.npz", "failures": 46, "shots": 125, "unconverged": 111, "mean_iterations": 75.8, "mean_ms": 1245.5, "seconds": 39.4}
+11:53:21 UTC X_f0.9_seed4100__bposd__uniform0.0719363__000500-000625.npz: bposd, priors uniform:0.0719363, flags None, 4 workers
+  125/125 shots, 41 s, 51 failures
+{"result": "X_f0.9_seed4100__bposd__uniform0.0719363__000500-000625.npz", "failures": 51, "shots": 125, "unconverged": 116, "mean_iterations": 77.3, "mean_ms": 1292.9, "seconds": 40.9}
+| Basis | Factor | Decoder | Picture of the noise | Failures / shots | Failure fraction (95% Wilson) | Per cycle | Unconverged | Mean iterations | Mean ms per shot |
+|---|---|---|---|---|---|---|---|---|---|
+| X | 0.6 | relay-BP | matched | 2 / 2000 | 0.10% (0.027%–0.36%) | 8.34e-05 | 0 | 156 | 155 |
+| X | 0.6 | BP-OSD | matched | 5 / 2000 | 0.25% (0.11%–0.58%) | 2.09e-04 | 558 | 38 | 319 |
+| X | 0.7 | relay-BP | matched | 13 / 2000 | 0.65% (0.38%–1.11%) | 5.43e-04 | 4 | 398 | 255 |
+| X | 0.7 | relay-BP | generic, same two-qubit error (p = 0.0104) | 27 / 500 | 5.40% (3.74%–7.74%) | 4.62e-03 | 27 | 3571 | 2933 |
+| X | 0.7 | BP-OSD | matched | 31 / 2000 | 1.55% (1.09%–2.19%) | 1.30e-03 | 840 | 49 | 456 |
+| X | 0.7 | BP-OSD | generic, same two-qubit error (p = 0.0104) | 227 / 2000 | 11.35% (10.03%–12.81%) | 9.99e-03 | 1681 | 74 | 1193 |
+| X | 0.8 | relay-BP | matched | 39 / 2000 | 1.95% (1.43%–2.65%) | 1.64e-03 | 18 | 978 | 787 |
+| X | 0.8 | relay-BP | generic, same two-qubit error (p = 0.0119) | 112 / 500 | 22.40% (18.96%–26.26%) | 2.09e-02 | 102 | 8413 | 7593 |
+| X | 0.8 | relay-BP | generic, best p on train shots (p = 0.0457) | 65 / 500 | 13.00% (10.33%–16.23%) | 1.15e-02 | 54 | 4626 | 3530 |
+| X | 0.8 | BP-OSD | matched | 91 / 2000 | 4.55% (3.72%–5.55%) | 3.87e-03 | 1177 | 60 | 998 |
+| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119) | 613 / 2000 | 30.65% (28.67%–32.71%) | 3.00e-02 | 1883 | 78 | 1394 |
+| X | 0.8 | BP-OSD | generic, best p on train shots (p = 0.0326) | 442 / 2000 | 22.10% (20.34%–23.97%) | 2.06e-02 | 1757 | 75 | 1100 |
+| X | 0.9 | relay-BP | matched | 118 / 2000 | 5.90% (4.95%–7.02%) | 5.05e-03 | 66 | 2391 | 1991 |
+| X | 0.9 | relay-BP | generic, same two-qubit error (p = 0.0134) | 132 / 250 | 52.80% (46.62%–58.90%) | 6.06e-02 | 126 | 13813 | 12208 |
+| X | 0.9 | BP-OSD | matched | 238 / 2000 | 11.90% (10.55%–13.39%) | 1.05e-02 | 1482 | 69 | 830 |
+| X | 0.9 | BP-OSD | generic, same two-qubit error (p = 0.0134) | 1113 / 2000 | 55.65% (53.46%–57.81%) | 6.55e-02 | 1965 | 79 | 1793 |
+| X | 0.9 | BP-OSD | generic, best p on train shots (p = 0.0719) | 253 / 625 | 40.48% (36.70%–44.38%) | 4.23e-02 | 575 | 77 | 1281 |
+| X | 1 | relay-BP | matched | 129 / 750 | 17.20% (14.67%–20.07%) | 1.56e-02 | 88 | 5484 | 4373 |
+| X | 1 | BP-OSD | matched | 599 / 2000 | 29.95% (27.98%–31.99%) | 2.92e-02 | 1750 | 75 | 963 |
+
+Paired, on the same shots (the generic row against the matched row of its point; **bold** marks the better generic row of a point):
+
+| Basis | Factor | Decoder | Generic picture | Shots | Failures: generic, matched | Only generic wrong | Only matched wrong | Exact sign test p | Mean iterations: generic ÷ matched | Unconverged: generic, matched |
+|---|---|---|---|---|---|---|---|---|---|---|
+| X | 0.7 | relay-BP | **generic, same two-qubit error (p = 0.0104)** | 500 | 27, 3 | 25 | 1 | 8e-07 | 3571 ÷ 286 = 12.5 | 27, 0 |
+| X | 0.7 | BP-OSD | **generic, same two-qubit error (p = 0.0104)** | 2000 | 227, 31 | 202 | 6 | 5.2e-52 | 74 ÷ 49 = 1.5 | 1681, 840 |
+| X | 0.8 | relay-BP | generic, same two-qubit error (p = 0.0119) | 500 | 112, 9 | 104 | 1 | 5.2e-30 | 8413 ÷ 1113 = 7.6 | 102, 4 |
+| X | 0.8 | relay-BP | **generic, best p on train shots (p = 0.0457)** | 500 | 65, 9 | 57 | 1 | 4.1e-16 | 4626 ÷ 1113 = 4.2 | 54, 4 |
+| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119) | 2000 | 613, 91 | 540 | 18 | 7.1e-135 | 78 ÷ 60 = 1.3 | 1883, 1177 |
+| X | 0.8 | BP-OSD | **generic, best p on train shots (p = 0.0326)** | 2000 | 442, 91 | 372 | 21 | 3.6e-84 | 75 ÷ 60 = 1.3 | 1757, 1177 |
+| X | 0.9 | relay-BP | **generic, same two-qubit error (p = 0.0134)** | 250 | 132, 14 | 118 | 0 | 6e-36 | 13813 ÷ 2630 = 5.3 | 126, 7 |
+| X | 0.9 | BP-OSD | generic, same two-qubit error (p = 0.0134) | 2000 | 1113, 238 | 887 | 12 | 2.6e-244 | 79 ÷ 69 = 1.2 | 1965, 1482 |
+| X | 0.9 | BP-OSD | **generic, best p on train shots (p = 0.0719)** | 625 | 253, 82 | 182 | 11 | 4.4e-41 | 77 ÷ 69 = 1.1 | 575, 466 |
+
+Iterations are belief-propagation iterations per shot, the same on any machine. Relay-BP often has its answer inside its first leg of 80 iterations and never runs more than 80 + 300 x 60 = 18,080. BP-OSD stops BP at 80 iterations and then runs OSD on every unconverged shot, so for BP-OSD the unconverged count is the costly part.
+
+job done after 624 s
+=== 2026-11-22T11:54:04Z q1_fit_bposd done

@@ -1,2 +1,6 @@
 waiting for the loss chain and the hierarchy chain
 Sun Nov 22 06:10:14 UTC 2026
+both ended
+Sun Nov 22 07:12:45 UTC 2026
+checkout: 6ea830c loss: job.py, a self-contained sample-decode-summarize job for another machine (no lanes, no scratch)
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 0..500 conditions ['starter-nofinal', 'starter-nohook', 'starter-ratebase'] workers 10

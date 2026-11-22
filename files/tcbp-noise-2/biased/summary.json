@@ -1,0 +1,178 @@
+{
+ "task": "biased",
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2/biased/biased_X_kitformat_p0.005991.npz",
+  "sha256": "a36b59595c835a608ec72de8fd819cceaf7ef73b872397dc22dee3229fbcea0e",
+  "basis": "X",
+  "p": 0.005991,
+  "seed": 7200,
+  "shots": 4000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "transfer": {
+  "task": "biased",
+  "what": {
+   "model": "Z-biased one-qubit Pauli noise",
+   "p": 0.003,
+   "eta": 100,
+   "pX_pY_pZ": [
+    1.4851485148514851e-05,
+    1.4851485148514851e-05,
+    0.0029702970297029703
+   ],
+   "stim": "1.16.0"
+  },
+  "shots": 4000,
+  "seed": 7200,
+  "basis": "X",
+  "converted": "biased_X_kitformat_p0.005991.npz",
+  "converted_sha256": "a36b59595c835a608ec72de8fd819cceaf7ef73b872397dc22dee3229fbcea0e",
+  "p": 0.005991,
+  "columns": 8784,
+  "rows": 936,
+  "h_l_sha256": "a4a80003a0b234e0e10b5d65d38ce5181c39670732e0f473df0aee1796c2c8b0",
+  "generic": {
+   "what": "kit uniform model at p = 0.005991",
+   "max": 0.021948306822329035,
+   "min": 0.0016001605136695158,
+   "sum": 70.61212511962364,
+   "capped_columns": 0,
+   "sha256": "822835f794c1d3b88e34385cdbc64ee2561f9496cd0c96e44aa0b5b70dc1c234"
+  },
+  "matched": {
+   "max": 0.023416563441155735,
+   "min": 0.002985148514851415,
+   "sum": 73.85131482239544,
+   "columns_fired": 8784,
+   "capped_columns": 0,
+   "sha256": "5eb6ab0360be366e489f6f4a369e27ba06669bdcd03e2cf40fc4e5adf6faaf3e"
+  },
+  "zero_syndrome_fraction": 0.0
+ },
+ "decoder": "tcbp-jobs",
+ "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
+ "preset": "tcbp-jobs",
+ "head_knobs": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "prior_cap": 0.5,
+ "logits": {
+  "data": {
+   "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2/biased/biased_X_kitformat_p0.005991.npz",
+   "sha256": "a36b59595c835a608ec72de8fd819cceaf7ef73b872397dc22dee3229fbcea0e",
+   "basis": "X",
+   "p": 0.005991,
+   "seed": 7200,
+   "shots": 4000,
+   "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+  },
+  "shots": 4000,
+  "columns": 8784,
+  "model": {
+   "head": "/home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2/head_X.pt",
+   "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+   "head_step": 30000,
+   "trunk": "/home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2/trunk_X.pt",
+   "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+   "trunk_step": 120000,
+   "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+   "device": "cuda",
+   "torch": "2.15.0+cu132",
+   "torch_threads": 1,
+   "precision": "float32",
+   "gpu": "NVIDIA A100-SXM4-80GB MIG 2g.20gb"
+  },
+  "seconds_batched_total": 9.59587836265564,
+  "per_shot_seconds": {
+   "what": "network + head, one shot at a time, on the device named",
+   "shots": 0,
+   "mean": null,
+   "median": null,
+   "p99": null
+  },
+  "batch_one_against_batched_largest_logit_gap": null,
+  "mean_probability_sum_per_shot": 74.79449609375,
+  "kit_prior_sum": 70.61212511962364
+ },
+ "stop_at": "2026-11-22T17:35:00Z",
+ "block": 100,
+ "arm_order": [
+  "m",
+  "g",
+  "h"
+ ],
+ "task_order": [
+  "wrong-p",
+  "si1000",
+  "biased"
+ ],
+ "model_seconds": 54.25393273506779,
+ "machine": {
+  "node": "jupyter-blakew3",
+  "processor": "x86_64",
+  "cpus": 24,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "omp_threads": "1"
+ },
+ "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process",
+ "capped_columns": {
+  "m": 0,
+  "g": 0,
+  "h": 31
+ },
+ "seconds": 104.79673314094543,
+ "shots_scored": 100,
+ "arms": {
+  "m": {
+   "shots": 100,
+   "failures": 7,
+   "share": 0.07,
+   "wilson95": [
+    0.0343192608798127,
+    0.13749514806152413
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 100,
+   "build_ms_mean": 40.8093362650834,
+   "decode_ms_mean": 16.198545686202124,
+   "build_decode_ms_mean": 57.007881951285526,
+   "build_decode_ms_median": 53.17006754921749,
+   "build_decode_ms_p99": 94.14249715395273
+  },
+  "g": {
+   "shots": 100,
+   "failures": 6,
+   "share": 0.06,
+   "wilson95": [
+    0.027786123800628143,
+    0.12476815511608857
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 100,
+   "build_ms_mean": 40.84298489615321,
+   "decode_ms_mean": 16.673672050237656,
+   "build_decode_ms_mean": 57.51665694639087,
+   "build_decode_ms_median": 52.97751002945006,
+   "build_decode_ms_p99": 89.91156149888413
+  },
+  "h": {
+   "shots": 100,
+   "failures": 10,
+   "share": 0.1,
+   "wilson95": [
+    0.0552291368050726,
+    0.17436566221012445
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 92,
+   "build_ms_mean": 40.777215036796406,
+   "decode_ms_mean": 10.807659841375425,
+   "build_decode_ms_mean": 51.58487487817183,
+   "build_decode_ms_median": 48.753760929685086,
+   "build_decode_ms_p99": 85.53799399291167
+  }
+ },
+ "saved_utc": "2026-11-22T16:37:20.439951+00:00"
+}

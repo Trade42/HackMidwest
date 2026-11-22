@@ -2,3 +2,8 @@
   import cudaq
 plan /home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2/plan.json: tasks ['wrong-p', 'si1000', 'biased']; decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs; head knobs {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, cap 0.5; stop at 2026-11-22T17:35:00Z; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
   model fitted in 54.3 s (one model, shared by every task); GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  wrong-p block 0-99 done, 71 s; failures so far m 2, g 2, h 0 of 100
+  si1000 block 0-99 done, 86 s; failures so far m 0, g 0, h 0 of 100
+  biased block 0-99 done, 105 s; failures so far m 7, g 6, h 10 of 100
+  wrong-p block 100-199 done, 121 s; failures so far m 6, g 6, h 1 of 200
+  si1000 block 100-199 done, 137 s; failures so far m 0, g 0, h 0 of 200

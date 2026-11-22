@@ -1,0 +1,29 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+test_X.npz: 10000 shots, p=0.005, arms ['head', 'fresh'], decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}; head priors {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
+  model fitted in 84.8 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 1000 of 10000 shots, 145 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 2000 of 10000 shots, 198 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 3000 of 10000 shots, 251 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 4000 of 10000 shots, 304 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 5000 of 10000 shots, 356 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 6000 of 10000 shots, 406 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 7000 of 10000 shots, 457 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 8000 of 10000 shots, 508 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 9000 of 10000 shots, 559 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 10000 of 10000 shots, 611 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: failures 72 of 10000, 0.0072 [0.0057, 0.0091]; not reproduced 0; flagged not converged 7793; build 42.6 ms + decode 3.8 ms mean, p99 69 ms
+  fresh: 1000 of 10000 shots, 683 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 2000 of 10000 shots, 746 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 3000 of 10000 shots, 804 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 4000 of 10000 shots, 863 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 5000 of 10000 shots, 921 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 6000 of 10000 shots, 979 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 7000 of 10000 shots, 1038 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 8000 of 10000 shots, 1098 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 9000 of 10000 shots, 1157 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 10000 of 10000 shots, 1214 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: failures 186 of 10000, 0.0186 [0.0161, 0.0214]; not reproduced 0; flagged not converged 9735; build 43.0 ms + decode 11.2 ms mean, p99 99 ms
+WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 while decoding 4096 syndromes. Set bp_batch_size > 1 at construction to decode syndromes in parallel.
+  batch check (kit's priors, built once, decode_batch, this run's model): failures 186; its 12 bits differ from the fresh arm's on 0 shots, its number of faults on 0
+saved /home/blakew3/mlBranchMidwest/runs/predecoder-tcbp/test_X_p0.005/per_shot.npz; 1315 s

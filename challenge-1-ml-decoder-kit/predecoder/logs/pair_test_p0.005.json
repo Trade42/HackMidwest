@@ -1,0 +1,93 @@
+{
+ "p": 0.005,
+ "pairs": 10000,
+ "checks": {
+  "X: ours' truth equals the file's": true,
+  "X: TCBP-JOBS data_sha256 equals the file's": true,
+  "X: TCBP-JOBS truth equals the file's": true,
+  "X: the evaluator's summary names this file": true,
+  "X: the evaluator's failed_X equals its predictions against the truth": true,
+  "Z: ours' truth equals the file's": true,
+  "Z: TCBP-JOBS data_sha256 equals the file's": true,
+  "Z: TCBP-JOBS truth equals the file's": true,
+  "Z: the evaluator's summary names this file": true,
+  "Z: the evaluator's failed_Z equals its predictions against the truth": true,
+  "the evaluator's failed_pair equals failed_X or failed_Z": true
+ },
+ "fallback_shots": {
+  "X": 90,
+  "Z": 73
+ },
+ "decoders": {
+  "H": {
+   "failures_X": 151,
+   "failures_Z": 132,
+   "failed_pairs": 281,
+   "wilson95": [
+    0.025037756650050903,
+    0.031524661017908885
+   ],
+   "per_cycle": 0.002372378158339794,
+   "per_cycle_sigma": 0.0001414712805580809
+  },
+  "rule": {
+   "failures_X": 107,
+   "failures_Z": 100,
+   "failed_pairs": 206,
+   "wilson95": [
+    0.017994590353649233,
+    0.02357358728996154
+   ],
+   "per_cycle": 0.0017330914357645,
+   "per_cycle_sigma": 0.00012072795457673813
+  },
+  "T": {
+   "failures_X": 186,
+   "failures_Z": 177,
+   "failed_pairs": 360,
+   "wilson95": [
+    0.032523311899880135,
+    0.039833038593727284
+   ],
+   "per_cycle": 0.003050669254042293,
+   "per_cycle_sigma": 0.00016069025493181677
+  },
+  "R": {
+   "failures_X": 432,
+   "failures_Z": 427,
+   "failed_pairs": 845,
+   "wilson95": [
+    0.07920689371204845,
+    0.09011220893901598
+   ],
+   "per_cycle": 0.007330079200565165,
+   "per_cycle_sigma": 0.00025166816664390357
+  }
+ },
+ "paired": {
+  "H against T": {
+   "both": 167,
+   "only_H": 114,
+   "only_T": 193,
+   "p": 7.641762764595874e-06
+  },
+  "H against R": {
+   "both": 242,
+   "only_H": 39,
+   "only_R": 603,
+   "p": 5.513016107490531e-131
+  },
+  "rule against T": {
+   "both": 167,
+   "only_rule": 39,
+   "only_T": 193,
+   "p": 1.0770426705754884e-25
+  },
+  "rule against R": {
+   "both": 179,
+   "only_rule": 27,
+   "only_R": 666,
+   "p": 1.3968435437311152e-160
+  }
+ }
+}

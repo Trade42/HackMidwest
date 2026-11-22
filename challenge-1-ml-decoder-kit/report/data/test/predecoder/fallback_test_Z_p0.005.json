@@ -1,0 +1,55 @@
+{
+ "data": {
+  "path": "/home/sal/hackMidwest/worktrees/predecoder/challenge-1-ml-decoder-kit/data/p0.005/test_Z.npz",
+  "sha256": "b86ae320d13fa555d8358fe399156d28d4e52b01fabf8eafa1b30e60bdcd0cef",
+  "basis": "Z",
+  "p": 0.005,
+  "seed": 302,
+  "shots": 10000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "checks": {
+  "ours: truth equals the file's": true,
+  "TCBP-JOBS: data_sha256 equals the file's": true,
+  "TCBP-JOBS: truth equals the file's": true
+ },
+ "fallback_shots": 73,
+ "failures": {
+  "H": {
+   "failures": 132,
+   "wilson95": [
+    0.011142645741172092,
+    0.01563121507841431
+   ]
+  },
+  "T": {
+   "failures": 177,
+   "wilson95": [
+    0.015294687342443603,
+    0.020475717491752213
+   ]
+  },
+  "rule": {
+   "failures": 100,
+   "wilson95": [
+    0.008229336135528106,
+    0.012146982273669383
+   ]
+  }
+ },
+ "pairs": {
+  "rule against T": {
+   "both": 76,
+   "only_rule": 24,
+   "only_T": 101,
+   "p": 1.9702912858306405e-12
+  },
+  "rule against H": {
+   "both": 100,
+   "only_rule": 0,
+   "only_H": 32,
+   "p": 4.656612873077393e-10
+  }
+ },
+ "rule": "H where relay-BP with the head's priors converged, else TCBP-JOBS"
+}

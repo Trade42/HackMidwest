@@ -53,7 +53,7 @@ Source: `report/tables/where_failures.md`. The design was chosen on practice sho
 - As a tie-break it clearly beats the plain lowest-weight rule (on <!--f:a80_shots-->80,000<!--/f--> fresh shots: <!--f:a80_a-->237<!--/f--> against <!--f:a80_aw-->298<!--/f--> failures,
   exact p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f-->). Against the best hand-written rule there is no significant difference: <!--f:a80_a-->237<!--/f--> against <!--f:a80_ac-->253<!--/f-->
   there (exact p = <!--f:a80_a_vs_ac_p-->0.12<!--/f-->), and <!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs on the test shots (exact p = <!--f:abl_pooled_p-->0.15<!--/f-->; one offline decode of all three
-  p, which is why it is not the sum of slide 4's timed counts). <!--f:abl_timed_slide-->In the timed rows at p = 0.003 and 0.004 the network is ahead (47 against 56 failed pairs, exact p = 0.11): not significant either way.<!--/f-->
+  p, which is why it is not the sum of slide 4's timed counts). <!--f:abl_timed_slide-->In the timed rows at p = 0.003, 0.004 and 0.005 the network is ahead (526 against 537 failed pairs, exact p = 0.42): not significant either way; the hand-written rule's row at p = 0.005 was run after the test results were seen (an ablation).<!--/f-->
 - <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
 
 Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
@@ -126,14 +126,14 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 
 ---
 
-## Backup slide. <!--f:net_timed_slide_title-->Timed against timed, the network is not significantly different from the best hand-written tie-break (47 against 56 failed pairs at p = 0.003, 0.004, exact p = 0.11)<!--/f-->
+## Backup slide. <!--f:net_timed_slide_title-->Timed against timed, the network is not significantly different from the best hand-written tie-break (526 against 537 failed pairs at p = 0.003, 0.004, 0.005, exact p = 0.42)<!--/f-->
 
 Shows: `report/tables/test_network_timed.md`. The rows marked as run after the test results were seen are an ablation the
 team asked for, not our decoder. The best hand-written rule's one-core rows at p = 0.003 and 0.004 ran in the test run
 itself, among its pre-registered arms.
 
 - The same decoder ran on the same test pairs, through the same evaluator, with the network swapped for a hand-written tie-break.
-- <!--f:net_timed_per_p-->With the network against without it, timed rows on one core: at p = 0.003, against the best hand-written rule 3 against 4 failed pairs (only with the network 0, only without 1, exact p = 1.00; 45.7 against 46.3 ms per pair) and against plain lowest weight [run after the test results were seen (an ablation)] 3 against 4 failed pairs (only with the network 0, only without 1, exact p = 1.00; 45.7 against 46.9 ms per pair); at p = 0.004, against the best hand-written rule 44 against 52 failed pairs (only with the network 8, only without 16, exact p = 0.15; 216 against 218 ms per pair) and against plain lowest weight [run after the test results were seen (an ablation)] 44 against 60 failed pairs (only with the network 5, only without 21, exact p = 0.002; 216 against 215 ms per pair).<!--/f-->
+- <!--f:net_timed_per_p-->With the network against without it, timed rows on one core: at p = 0.003, against the best hand-written rule 3 against 4 failed pairs (only with the network 0, only without 1, exact p = 1.00; 45.7 against 46.3 ms per pair) and against plain lowest weight [run after the test results were seen (an ablation)] 3 against 4 failed pairs (only with the network 0, only without 1, exact p = 1.00; 45.7 against 46.9 ms per pair); at p = 0.004, against the best hand-written rule 44 against 52 failed pairs (only with the network 8, only without 16, exact p = 0.15; 216 against 218 ms per pair) and against plain lowest weight [run after the test results were seen (an ablation)] 44 against 60 failed pairs (only with the network 5, only without 21, exact p = 0.002; 216 against 215 ms per pair); at p = 0.005, against the best hand-written rule [run after the test results were seen (an ablation)] 479 against 481 failed pairs (only with the network 65, only without 67, exact p = 0.93; 825 against 815 ms per pair) and against plain lowest weight [run after the test results were seen (an ablation)] 479 against 553 failed pairs (only with the network 45, only without 119, exact p = 7e-09; 825 against 817 ms per pair).<!--/f-->
 - The network changes the answer only on the few shots where the two fast decodes disagree. <!--f:net_timed_plain-->In plain words: on the timed rows the network does not do measurably more than a good hand-written rule, and on one core its time is within 4% of the rule's at every p, the size of the run-to-run spread of these rows, so it costs no time the timer can see. The gain over relay-BP is PriorTilt's and the hierarchy's, as in the offline ablation above.<!--/f-->
 
 ## Backup slide. Which method at which noise level (an operating rule chosen after the test results, not a frozen decoder)

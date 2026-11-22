@@ -172,7 +172,7 @@ PREDECODER_LABEL = ("secondary (chosen after the declared gate at p = 0.004 fail
 # result and frozen on the validation file before it was applied: (p, basis, what its number is). Shown apart from the held-out rows.
 PREDECODER_FALLBACK = [
     ("0.005", "X", "post hoc: the rule was prompted by these same test shots, so this number is not held out"),
-    ("0.005", "Z", "its clean test, " + EXTENSION + "; the rule was frozen before the Z test file was opened"),
+    ("0.005", "Z", "its clean test: designed after the first test result, frozen (14:32 UTC) before the Z test file was opened (15:44 UTC); " + EXTENSION),
     ("0.004", "X", "post hoc: the rule was designed after the first test result, and this test file was opened (for H) before the rule "
                    "was frozen; " + EXTENSION),
     ("0.003", "X", "the rule was designed after the first test result and frozen (14:32 UTC) before this test file was opened (14:56 UTC); "
@@ -184,3 +184,8 @@ PREDECODER_FALLBACK_LABEL = ("designed after the first test result; frozen on th
 # per-shot file (kept in the orchestration scratch, not in the repository): p = 0.004 both 7 / only the rule 3 / only the pipeline 11,
 # exact p = 0.057; p = 0.005 87 / 20 / 158, exact p = 8e-28. Only the verdict is quoted in the operating rule.
 OPERATING_PAIRED = {"0.004": "not a significant difference", "0.005": "a significant difference"}
+
+# TCBP-JOBS given the head's priors per shot (branch predecoder-tcbp): designed after the test results were seen, on a separate branch.
+# Its validation score (exploration shots) and the slots of its test rows, filled only from files when they land.
+PTCBP_LABEL = "designed after the test results were seen; formerly a separate branch (predecoder-tcbp)"
+PTCBP_TEST = [("0.005", "X"), ("0.004", "X"), ("0.003", "X"), ("0.005", "Z")]

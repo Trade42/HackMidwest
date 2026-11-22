@@ -1,0 +1,314 @@
+{
+ "data": [
+  {
+   "path": "/home/blakew3/mlBranchMidwest/runs/predecoder-tcbp/in/train_X_T_failed.npz",
+   "sha256": "de0257a822e6d92fca61b887d239e88ef68a5e7c2e9038d8fcfcff0384654888",
+   "basis": "X",
+   "p": 0.005,
+   "seed": 101,
+   "shots": 390,
+   "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+  },
+  {
+   "path": "/home/blakew3/mlBranchMidwest/runs/predecoder-tcbp/in/train_X_T_right.npz",
+   "sha256": "4fa6167071d99d3e710685504704d3b65642d516643e4859368827dfe1eb583b",
+   "basis": "X",
+   "p": 0.005,
+   "seed": 101,
+   "shots": 2000,
+   "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+  }
+ ],
+ "weights": [
+  1.0,
+  9.805
+ ],
+ "logits": [
+  {
+   "data": {
+    "path": "/home/sal/hackMidwest/orchestration/scratch/predecoder-tcbp/subsets/train_X_T_failed.npz",
+    "sha256": "de0257a822e6d92fca61b887d239e88ef68a5e7c2e9038d8fcfcff0384654888",
+    "basis": "X",
+    "p": 0.005,
+    "seed": 101,
+    "shots": 390,
+    "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+   },
+   "shots": 390,
+   "columns": 8784,
+   "model": {
+    "head": "/home/sal/hackMidwest/orchestration/scratch/predecoder/head/predecoder_X_s1/head.pt",
+    "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+    "head_step": 30000,
+    "trunk": "/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_X_s1_final_step120000.pt",
+    "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+    "trunk_step": 120000,
+    "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+    "device": "cpu",
+    "torch": "2.15.0+cpu",
+    "torch_threads": 4
+   },
+   "seconds_batched_total": 27.50971555709839,
+   "per_shot_seconds": {
+    "what": "network + head, one shot at a time, on the device named",
+    "shots": 0,
+    "mean": null,
+    "median": null,
+    "p99": null
+   },
+   "batch_one_against_batched_largest_logit_gap": null,
+   "mean_probability_sum_per_shot": 67.3579827724359,
+   "kit_prior_sum": 59.03634775352212
+  },
+  {
+   "data": {
+    "path": "/home/sal/hackMidwest/orchestration/scratch/predecoder-tcbp/subsets/train_X_T_right.npz",
+    "sha256": "4fa6167071d99d3e710685504704d3b65642d516643e4859368827dfe1eb583b",
+    "basis": "X",
+    "p": 0.005,
+    "seed": 101,
+    "shots": 2000,
+    "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+   },
+   "shots": 2000,
+   "columns": 8784,
+   "model": {
+    "head": "/home/sal/hackMidwest/orchestration/scratch/predecoder/head/predecoder_X_s1/head.pt",
+    "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+    "head_step": 30000,
+    "trunk": "/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_X_s1_final_step120000.pt",
+    "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+    "trunk_step": 120000,
+    "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+    "device": "cpu",
+    "torch": "2.15.0+cpu",
+    "torch_threads": 4
+   },
+   "seconds_batched_total": 144.7482349872589,
+   "per_shot_seconds": {
+    "what": "network + head, one shot at a time, on the device named",
+    "shots": 0,
+    "mean": null,
+    "median": null,
+    "p99": null
+   },
+   "batch_one_against_batched_largest_logit_gap": null,
+   "mean_probability_sum_per_shot": 58.66803515625,
+   "kit_prior_sum": 59.03634775352212
+  }
+ ],
+ "decoder": "tcbp-jobs",
+ "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
+ "preset": "tcbp-jobs",
+ "overrides": {},
+ "model_seconds": 54.2452405099757,
+ "machine": {
+  "node": "jupyter-blakew3",
+  "processor": "x86_64",
+  "cpus": 24,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "omp_threads": "1"
+ },
+ "rows": [
+  {
+   "mode": "linear",
+   "alpha": 0.0,
+   "eps": 1e-06,
+   "failures": [
+    341,
+    5
+   ],
+   "score": 390.025,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 19607.8,
+   "build_ms_mean": 41.161046020986674,
+   "decode_ms_mean": 10.084154638490993
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.1,
+   "eps": 0.0001,
+   "failures": [
+    175,
+    3
+   ],
+   "score": 204.415,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 18921.45,
+   "build_ms_mean": 41.14974705608577,
+   "decode_ms_mean": 6.349645204117295
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.2,
+   "eps": 0.0001,
+   "failures": [
+    134,
+    3
+   ],
+   "score": 163.415,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 17988.975,
+   "build_ms_mean": 41.01018823111414,
+   "decode_ms_mean": 4.961551589819225
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.3,
+   "eps": 0.0001,
+   "failures": [
+    119,
+    5
+   ],
+   "score": 168.025,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 16899.62,
+   "build_ms_mean": 42.51787820426654,
+   "decode_ms_mean": 4.402386986749894
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.4,
+   "eps": 0.0001,
+   "failures": [
+    107,
+    5
+   ],
+   "score": 156.025,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 15515.115,
+   "build_ms_mean": 42.463789807163,
+   "decode_ms_mean": 3.9057131164033105
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.5,
+   "eps": 0.0001,
+   "failures": [
+    104,
+    6
+   ],
+   "score": 162.82999999999998,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 13816.85,
+   "build_ms_mean": 42.63395304931912,
+   "decode_ms_mean": 3.6307023356427055
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.6,
+   "eps": 0.0001,
+   "failures": [
+    111,
+    7
+   ],
+   "score": 179.635,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 12388.125,
+   "build_ms_mean": 42.708019509708905,
+   "decode_ms_mean": 3.4319601045574633
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.7,
+   "eps": 0.0001,
+   "failures": [
+    112,
+    9
+   ],
+   "score": 200.245,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 12283.27,
+   "build_ms_mean": 42.657800925463036,
+   "decode_ms_mean": 3.4953281592682908
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.8,
+   "eps": 0.0001,
+   "failures": [
+    112,
+    10
+   ],
+   "score": 210.05,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 13958.925,
+   "build_ms_mean": 42.638239248462845,
+   "decode_ms_mean": 3.7691414993836947
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.9,
+   "eps": 0.0001,
+   "failures": [
+    108,
+    11
+   ],
+   "score": 215.855,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 16633.885000000002,
+   "build_ms_mean": 42.72123628849296,
+   "decode_ms_mean": 4.163950321480835
+  },
+  {
+   "mode": "logodds",
+   "alpha": 1.0,
+   "eps": 0.0001,
+   "failures": [
+    111,
+    10
+   ],
+   "score": 209.05,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 18665.52,
+   "build_ms_mean": 43.712898847309944,
+   "decode_ms_mean": 11.103692126487651
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.05,
+   "eps": 0.0001,
+   "failures": [
+    231,
+    1
+   ],
+   "score": 240.805,
+   "not_reproduced_weighted": 0.0,
+   "flag_weighted": 19264.625,
+   "build_ms_mean": 42.76195997747331,
+   "decode_ms_mean": 8.372395588952081
+  }
+ ],
+ "chosen": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "extended": false,
+ "rule": "lowest weighted failures (failed shots left wrong + right shots broken, scaled); then fewer weighted shots whose correction does not reproduce the syndrome; then fewer weighted shots the decoder flags as not converged; then the smaller alpha. Candidates: the declared grid; if its choice is at an edge, the extension rows on that side join",
+ "prior_cap": 0.5,
+ "capped_this_run": {
+  "shots": 15052,
+  "columns": 495062
+ },
+ "grid": [
+  0.1,
+  0.2,
+  0.3,
+  0.4,
+  0.5,
+  0.6,
+  0.7
+ ],
+ "extension": {
+  "low": [
+   0.05
+  ],
+  "high": [
+   0.8,
+   0.9,
+   1.0
+  ]
+ },
+ "seconds": 1200.7709665298462
+}

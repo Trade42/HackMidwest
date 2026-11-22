@@ -1,0 +1,24 @@
+train_Z.npz: 20000 shots, p=0.004, arms ['fresh']; head priors {'mode': 'linear', 'alpha': 1.0, 'eps': 1e-06}; 200 tasks to run in 4 processes (16 CPUs here, luminaty)
+  10 of 200 tasks done (fresh from shot 600), 147 s
+  20 of 200 tasks done (fresh from shot 1900), 306 s
+  30 of 200 tasks done (fresh from shot 2900), 457 s
+  40 of 200 tasks done (fresh from shot 3800), 585 s
+  50 of 200 tasks done (fresh from shot 5100), 687 s
+  60 of 200 tasks done (fresh from shot 5900), 802 s
+  70 of 200 tasks done (fresh from shot 7000), 916 s
+  80 of 200 tasks done (fresh from shot 7900), 1027 s
+  90 of 200 tasks done (fresh from shot 8900), 1152 s
+  100 of 200 tasks done (fresh from shot 9900), 1287 s
+  110 of 200 tasks done (fresh from shot 10800), 1479 s
+  120 of 200 tasks done (fresh from shot 11900), 1643 s
+  130 of 200 tasks done (fresh from shot 12900), 1752 s
+  140 of 200 tasks done (fresh from shot 13800), 1910 s
+  150 of 200 tasks done (fresh from shot 14900), 2005 s
+  160 of 200 tasks done (fresh from shot 16100), 2150 s
+  170 of 200 tasks done (fresh from shot 16800), 2283 s
+  180 of 200 tasks done (fresh from shot 17800), 2412 s
+  190 of 200 tasks done (fresh from shot 18900), 2520 s
+  200 of 200 tasks done (fresh from shot 19700), 2635 s
+relay-BP at the kit's settings; 2635 s. Time per shot: build + decode in these worker processes
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+fresh         95    0.0047 [0.0039, 0.0058]          38   2890       552     13.2     467.5    480.7   10195

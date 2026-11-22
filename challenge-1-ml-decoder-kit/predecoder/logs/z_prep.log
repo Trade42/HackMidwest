@@ -1,0 +1,13 @@
+/home/sal/hackMidwest/orchestration/scratch/predecoder/z/head/head.pt: OK
+/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_Z_s1_final_step100000.pt: OK
+train_Z.npz: of 20000 decoded shots the fresh arm fails 95; wrote them and a sample of 2000 of the 19905 right ones (seed 5) to /home/sal/hackMidwest/orchestration/scratch/predecoder/z/subsets
+weights for priors.py: failed file 1, right file 9.9525
+[prep] 15:06:57 UTC, commit 87b484a6, lanes D
+train_Z_fresh_failed.npz: 95 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/z/logits_failed/logits.npy (9 s in batches of 32 on cpu)
+the head's probabilities sum to 55.9 per shot (the kit's priors: 47.3)
+train_Z_fresh_right.npz: 2000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/z/logits_right/logits.npy (73 s in batches of 32 on cpu)
+the head's probabilities sum to 46.9 per shot (the kit's priors: 47.3)
+validation_Z.npz: 5000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/z/logits_validation_p0.005/logits.npy (178 s in batches of 32 on cpu)
+network + head, one shot at a time on cpu (4 threads), 200 shots: mean 22.2 ms, median 21.9 ms, p99 25.7 ms; batch one against batched: largest logit gap 0.00e+00
+the head's probabilities sum to 58.7 per shot (the kit's priors: 59.0)
+[prep] done 15:13:10 UTC

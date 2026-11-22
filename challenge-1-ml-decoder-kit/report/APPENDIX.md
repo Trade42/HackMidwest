@@ -5,6 +5,37 @@ as Markdown and as CSV.
 
 ## A. The test shots: every row, per noise level
 
+Every method in one table first (each row's label says what kind of number it is), then each noise level in full.
+
+<!-- BEGIN table:master_comparison -->
+**Every method we ran on the test shots, in one table.** Each cell is that method's own measured row: failed pairs of 10,000 (the kit's score, with its X failures beside it) and the mean time per pair, or, for a method run on one basis only, its failures of 10,000 shots of that basis. The **Label** says what kind of number it is; rows of different labels are not equals, so this table picks no best method. Times: one process on the team's server unless the cell says otherwise; TCBP-JOBS's is a GPU decode call; the predecoder's is a clean one-thread sample on 1,000 validation shots (exploration shots). The paired tests are in the tables each row comes from.
+
+| Method | Folder | Label | p = 0.003 | p = 0.004 | p = 0.005 |
+|---|---|---|---|---|---|
+| BP-OSD (kit baseline) | `decoders.py` (the kit) | pre-registered (the test run) | 60 pairs (X 26) · 131 ms per pair | 472 pairs (X 230) · 302 ms per pair | 2,433 pairs (X 1,307) · 581 ms per pair |
+| relay-BP (kit baseline) | `decoders.py` (the kit) | pre-registered (the test run) | 5 pairs (X 2) · 85.3 ms per pair | 83 pairs (X 36) · 319 ms per pair | 845 pairs (X 432) · 1,471 ms per pair |
+| relay-BP with a learned router | `evaluation/router.py` (teammates) | pre-registered (the test run) | 6 pairs (X 3) · 41.0 ms per pair | 87 pairs (X 42) · 315 ms per pair | 807 pairs (X 415) · 1,928 ms per pair |
+| PriorTilt, one run | `hierarchy/priortilt_plugin.py` (IonQ's decoder) | pre-registered (the test run) | 4 pairs (X 2) · 22.7 ms per pair | 74 pairs (X 35) · 87.3 ms per pair | 601 pairs (X 303) · 264 ms per pair |
+| our hierarchy, lowest-weight tie-break | `hierarchy/` | after-test ablation | 4 pairs (X 2) · 46.9 ms per pair | 60 pairs (X 27) · 215 ms per pair | 553 pairs (X 279) · 817 ms per pair |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | `hierarchy/` | pre-registered (the test run) | 4 pairs (X 2) · 46.3 ms per pair | 52 pairs (X 25) · 218 ms per pair |  |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | `hierarchy/` | after-test ablation |  |  | 481 pairs (X 239) · 815 ms per pair |
+| our hierarchy, neural tie-break | `hierarchy/`, `neural/` | pre-registered (the test run) | 3 pairs (X 1) · 45.7 ms per pair | 44 pairs (X 18) · 216 ms per pair | 479 pairs (X 245) · 825 ms per pair |
+| our hierarchy, neural tie-break, the two fast decodes side by side on two cores | `hierarchy/`, `neural/` | pre-registered (the test run) | 3 pairs (X 1) · 28.9 ms per pair | 44 pairs (X 18) · 150 ms per pair | 479 pairs (X 245) · 608 ms per pair |
+| our ensemble (combined offline) | `hierarchy/ensemble.py` | pre-registered (the test run), offline decode, no time | 2 pairs (X 1) · offline | 16 pairs (X 8) · offline | 360 pairs (X 186) · offline |
+| TCBP-JOBS (NVIDIA, GPU) | `hierarchy/tcbp_member.py` (NVIDIA's decoder) | pre-registered (the test run) | 3 pairs (X 1) · 3.9 ms per pair (GPU call) | 41 pairs (X 20) · 7.8 ms per pair (GPU call) | 360 pairs (X 186) · 16.9 ms per pair (GPU call) |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores | `hierarchy/` | after-test ablation | 4 pairs (X 2) · 29.0 ms per pair | 52 pairs (X 25) · 150 ms per pair | 481 pairs (X 239) · 604 ms per pair |
+| TCBP-JOBS in place of relay-BP in our hierarchy (the ensemble's rule d) | `hierarchy/ensemble.py` | after-test ablation, offline from saved answers, no time | 2 pairs (X 1) · offline | 39 pairs (X 19) · offline | 403 pairs (X 204) · offline |
+| the predecoder: relay-BP with the head's priors (X memory only) | `predecoder/` | secondary: chosen after the predecoder's p = 0.004 gate failed |  |  | X: 151 shots · 212 ms per X shot (validation sample) |
+| the predecoder: relay-BP with the head's priors (X memory only) | `predecoder/` | registered extension, run after the X p = 0.005 test result | X: 2 shots · 52.9 ms per X shot (validation sample) | X: 15 shots · 94.0 ms per X shot (validation sample) |  |
+| the predecoder: relay-BP with the head's priors (Z memory only) | `predecoder/` | registered extension, run after the X p = 0.005 test result |  |  | Z: 132 shots |
+| the predecoder in both bases, the kit's pair score | `predecoder/` | registered extension, run after the X p = 0.005 test result |  |  | 281 pairs |
+| the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | post hoc: designed after the first test result |  | X: 10 shots | X: 107 shots |
+| the predecoder with the fallback to TCBP-JOBS (Z memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened |  |  | Z: 100 shots |
+| the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened | X: 1 shot |  |  |
+| the predecoder with the fallback, the kit's pair score | `predecoder/fallback.py` | post hoc: designed after the first test result |  |  | 206 pairs |
+| TCBP-JOBS with the head's priors (X memory only) | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch | X: 0 shots | X: 4 shots | X: 72 shots (same-run control, the kit's priors: 186) |
+<!-- END table:master_comparison -->
+
 <!-- BEGIN table:test_p0.003 -->
 Test shots, p = 0.003: `data/p0.003/test_X.npz` and `test_Z.npz` (10,000 shots per basis, Stim seeds 301 and 302; sha256 `f7bc181399a0…` and `f5ac5b336f41…`). Every measured row decoded these two files.
 
@@ -50,13 +81,13 @@ Test shots, p = 0.005: `data/p0.005/test_X.npz` and `test_Z.npz` (10,000 shots p
 | relay-BP (kit baseline) | the kit | 432, 427 | 845 of 10,000 | 7.33e-03 ± 2.5e-04 | 6.9e-03 to 7.8e-03 | 1,471 / 424 / 8,270 | the reference | the reference | CPU, 1 process, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 7.7 CPUs busy on average (at most 12.0), up to 9 evaluator rows at once, other work of ours at most: candidates 2, tcbp member 1, evaluate stim 1, the CPU quota throttled the notebook for 267 s summed over its CPUs during the row's 14,715 s, at most 0.2% of one process's time; server jobs started in that time: cpu/030-candidates-explore, ctl/050-preflight-dry-run, ctl/060-loss-tracker-replication, ctl/070-predecoder-fresh-train, ctl/080-predecoder-fresh-validation, ctl/090-z-final-checkpoint-to-logs, ctl/100-test-logs-to-logs, gpu/045-test-run-dry, gpu/047-tcbp-train-p0.005, gpu/050-test-run |
 | relay-BP with a learned router | teammates | 415, 404 | 807 of 10,000 | 6.99e-03 ± 2.5e-04 | 6.5e-03 to 7.5e-03 | 1,928 / 303 / 12,708 | 1.31 | 604 / 203 / 241 (p = 0.079) | CPU, 1 process, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 7.6 CPUs busy on average (at most 12.0), up to 9 evaluator rows at once, other work of ours at most: joint 1, candidates 2, tcbp member 1, evaluate stim 1, the CPU quota throttled the notebook for 267 s summed over its CPUs during the row's 19,286 s, at most 0.1% of one process's time; server jobs started in that time: cpu/030-candidates-explore, cpu/040-retime-p0.003-baselines, ctl/050-preflight-dry-run, ctl/060-loss-tracker-replication, ctl/070-predecoder-fresh-train, ctl/080-predecoder-fresh-validation, ctl/090-z-final-checkpoint-to-logs, ctl/100-test-logs-to-logs, ctl/110-selector-test, gpu/045-test-run-dry, gpu/047-tcbp-train-p0.005, gpu/050-test-run |
 | PriorTilt, one run | IonQ (arXiv:2611.13373) | 303, 307 | 601 of 10,000 | 5.15e-03 ± 2.1e-04 | 4.8e-03 to 5.6e-03 | 264 / 120 / 2,167 | 0.18 | 431 / 170 / 414 (p = 2e-24) | CPU, 1 process, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 6.4 CPUs busy on average (at most 10.2), up to 6 evaluator rows at once, other work of ours at most: joint 1, candidates 1, the CPU quota throttled the notebook for 0 s summed over its CPUs during the row's 2,647 s, at most 0.0% of one process's time; server jobs started in that time: cpu/040-retime-p0.003-baselines, ctl/110-selector-test |
-| our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | ours | 269, 262 | 527 of 10,000 | 4.50e-03 ± 2.0e-04 | 4.1e-03 to 4.9e-03 | 805 / not timed per pair | not timed in one process | 432 / 95 / 413 (p = 3e-48) | combined offline from per-shot files (CPU decoders, ICRN server); its time is the sum of the decode calls the row makes, each timed alone |
-| our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | ours | 241, 231 | 469 of 10,000 | 3.99e-03 ± 1.8e-04 | 3.6e-03 to 4.4e-03 | 805 / not timed per pair | not timed in one process | 381 / 88 / 464 (p = 1e-62) | combined offline from per-shot files (CPU decoders, ICRN server); its time is the sum of the decode calls the row makes, each timed alone |
+| our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | ours | 279, 282 | 553 of 10,000 | 4.73e-03 ± 2.0e-04 | 4.4e-03 to 5.1e-03 | 817 / 244 / 9,776 | 0.56 | 436 / 117 / 409 (p = 6e-39) | CPU, 1 process, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 4.6 CPUs busy on average (at most 8.7), up to 7 evaluator rows at once, the CPU quota throttled the notebook for 0 s summed over its CPUs during the row's 8,181 s, at most 0.0% of one process's time; server jobs started in that time: cpu/050-predecoder-latency, cpu/060-predecoder-latency-p0.003-p0.004, cpu/070-predecoder-tcbp-4-gpu-network, cpu/080-predecoder-tcbp-6-test-X-p0.004-p0.003, cpu/090-tcbp-noise-infleqtion, ctl/130-predecoder-tcbp-3-validation, ctl/140-predecoder-tcbp-7-Z-p0.005, gpu/060-predecoder-tcbp-1, gpu/070-predecoder-tcbp-2-fit, gpu/075-predecoder-tcbp-2b-fit, gpu/080-predecoder-tcbp-5-test-X-p0.005 |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) (run after the test results were seen, at the team's request; an ablation, not our decoder) | ours | 239, 248 | 481 of 10,000 | 4.10e-03 ± 1.9e-04 | 3.7e-03 to 4.5e-03 | 815 / 244 / 9,755 | 0.55 | 382 / 99 / 463 (p = 3e-57) | CPU, 1 process, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 4.6 CPUs busy on average (at most 8.7), up to 7 evaluator rows at once, the CPU quota throttled the notebook for 0 s summed over its CPUs during the row's 8,159 s, at most 0.0% of one process's time; server jobs started in that time: cpu/050-predecoder-latency, cpu/060-predecoder-latency-p0.003-p0.004, cpu/070-predecoder-tcbp-4-gpu-network, cpu/080-predecoder-tcbp-6-test-X-p0.004-p0.003, cpu/090-tcbp-noise-infleqtion, ctl/130-predecoder-tcbp-3-validation, ctl/140-predecoder-tcbp-7-Z-p0.005, gpu/060-predecoder-tcbp-1, gpu/070-predecoder-tcbp-2-fit, gpu/075-predecoder-tcbp-2b-fit, gpu/080-predecoder-tcbp-5-test-X-p0.005 |
 | our hierarchy, neural tie-break | ours | 245, 238 | 479 of 10,000 | 4.08e-03 ± 1.9e-04 | 3.7e-03 to 4.5e-03 | 825 / 246 / 9,885 | 0.56 | 386 / 93 / 459 (p = 4e-59) | CPU, 1 process, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 8.4 CPUs busy on average (at most 10.7), up to 8 evaluator rows at once, other work of ours at most: joint 1, candidates 2, tcbp member 1, evaluate stim 1, the CPU quota throttled the notebook for 7 s summed over its CPUs during the row's 8,266 s, at most 0.0% of one process's time; server jobs started in that time: cpu/040-retime-p0.003-baselines, ctl/100-test-logs-to-logs, ctl/110-selector-test |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | ours | 245, 238 | 479 of 10,000 | 4.08e-03 ± 1.9e-04 | 3.7e-03 to 4.5e-03 | 608 / 138 / 7,794 | 0.41 | 386 / 93 / 459 (p = 4e-59) | CPU, 1 process on 2 cores, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 8.7 CPUs busy on average (at most 10.7), up to 8 evaluator rows at once, other work of ours at most: candidates 2, tcbp member 1, evaluate stim 1, the CPU quota throttled the notebook for 7 s summed over its CPUs during the row's 6,100 s, at most 0.0% of one process's time; server jobs started in that time: ctl/100-test-logs-to-logs |
 | our ensemble (combined offline) (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere joint decoding where it converged, else TCBP-JOBS; joint decoding ran on 0 of the 735 disputed shots; so it fails exactly the shots TCBP-JOBS fails) | ours | 186, 177 | 360 of 10,000 | 3.05e-03 ± 1.6e-04 | 2.8e-03 to 3.4e-03 | 551 / not timed per pair | not timed in one process | 306 / 54 / 539 (p = 1e-101) | combined offline from per-shot files (CPU and GPU decoders, ICRN server); its time is the sum of the decode calls the row makes, each timed alone |
 | TCBP-JOBS (NVIDIA, GPU) | NVIDIA; run by teammates | 186, 177 | 360 of 10,000 | 3.05e-03 ± 1.6e-04 | 2.8e-03 to 3.4e-03 | 16.9 / 13.3 / 56.4 | not comparable: another device and timer | 306 / 54 / 539 (p = 1e-101) | GPU, 1 process, ICRN server, A100 slice (20 GB); while it ran: 6.0 CPUs busy on average (at most 9.1), up to 7 evaluator rows at once, other work of ours at most: tcbp member 1, the CPU quota throttled the notebook for 0 s summed over its CPUs during the row's 300 s, at most 0.0% of one process's time; no other process on the GPU at its start; its time is the decode call alone (hierarchy.tcbp_member), not the evaluator's whole decode |
-| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores (run after the test results were seen, at the team's request; an ablation, not our decoder); its answers are not yet checked against a timed one-core row | ours | 239, 248 | 481 of 10,000 | 4.10e-03 ± 1.9e-04 | 3.7e-03 to 4.5e-03 | 604 / 138 / 7,747 | 0.41 | 382 / 99 / 463 (p = 3e-57) | CPU, 1 process on 2 cores, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 5.0 CPUs busy on average (at most 8.7), up to 7 evaluator rows at once, the CPU quota throttled the notebook for 0 s summed over its CPUs during the row's 6,061 s, at most 0.0% of one process's time; server jobs started in that time: cpu/050-predecoder-latency, cpu/060-predecoder-latency-p0.003-p0.004, cpu/070-predecoder-tcbp-4-gpu-network, ctl/130-predecoder-tcbp-3-validation, gpu/060-predecoder-tcbp-1, gpu/070-predecoder-tcbp-2-fit, gpu/075-predecoder-tcbp-2b-fit |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores (run after the test results were seen, at the team's request; an ablation, not our decoder) | ours | 239, 248 | 481 of 10,000 | 4.10e-03 ± 1.9e-04 | 3.7e-03 to 4.5e-03 | 604 / 138 / 7,747 | 0.41 | 382 / 99 / 463 (p = 3e-57) | CPU, 1 process on 2 cores, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 5.0 CPUs busy on average (at most 8.7), up to 7 evaluator rows at once, the CPU quota throttled the notebook for 0 s summed over its CPUs during the row's 6,061 s, at most 0.0% of one process's time; server jobs started in that time: cpu/050-predecoder-latency, cpu/060-predecoder-latency-p0.003-p0.004, cpu/070-predecoder-tcbp-4-gpu-network, ctl/130-predecoder-tcbp-3-validation, gpu/060-predecoder-tcbp-1, gpu/070-predecoder-tcbp-2-fit, gpu/075-predecoder-tcbp-2b-fit |
 <!-- END table:test_p0.005 -->
 
 <!-- BEGIN table:test_time -->
@@ -90,13 +121,13 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.005 | relay-BP (kit baseline) | 845 of 10,000 | 1,471 | the reference | 424 | 8,270 | CPU, 1 core |
 | 0.005 | relay-BP with a learned router | 807 of 10,000 | 1,928 | 1.31 | 303 | 12,708 | CPU, 1 core |
 | 0.005 | PriorTilt, one run | 601 of 10,000 | 264 | 0.18 | 120 | 2,167 | CPU, 1 core |
-| 0.005 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 527 of 10,000 | not timed in one process |  |  |  |  |
-| 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 469 of 10,000 | not timed in one process |  |  |  |  |
+| 0.005 | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | 553 of 10,000 | 817 | 0.56 | 244 | 9,776 | CPU, 1 core |
+| 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (run after the test results were seen, at the team's request; an ablation, not our decoder) | 481 of 10,000 | 815 | 0.55 | 244 | 9,755 | CPU, 1 core |
 | 0.005 | our hierarchy, neural tie-break | 479 of 10,000 | 825 | 0.56 | 246 | 9,885 | CPU, 1 core |
 | 0.005 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 479 of 10,000 | 608 | 0.41 | 138 | 7,794 | CPU, 2 cores |
 | 0.005 | our ensemble (combined offline) (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere joint decoding where it converged, else TCBP-JOBS; joint decoding ran on 0 of the 735 disputed shots; so it fails exactly the shots TCBP-JOBS fails) | 360 of 10,000 | not timed in one process |  |  |  |  |
 | 0.005 | TCBP-JOBS (NVIDIA, GPU) | 360 of 10,000 | 16.9 | not comparable: another device and timer | 13.3 | 56.4 | GPU |
-| 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores (run after the test results were seen, at the team's request; an ablation, not our decoder); its answers are not yet checked against a timed one-core row | 481 of 10,000 | 604 | 0.41 | 138 | 7,747 | CPU, 2 cores |
+| 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores (run after the test results were seen, at the team's request; an ablation, not our decoder) | 481 of 10,000 | 604 | 0.41 | 138 | 7,747 | CPU, 2 cores |
 <!-- END table:test_time -->
 
 The learned predecoder's time per X shot, measured cleanly on exploration shots: its own table, since test and
@@ -165,13 +196,13 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.004 | both timed | TCBP-JOBS (NVIDIA, GPU) | relay-BP (kit baseline) | 41 against 83 | 27 | 14 / 56 | 4e-07 |
 | 0.005 | both timed | relay-BP with a learned router | relay-BP (kit baseline) | 807 against 845 | 604 | 203 / 241 | 0.079 |
 | 0.005 | both timed | PriorTilt, one run | relay-BP (kit baseline) | 601 against 845 | 431 | 170 / 414 | 2e-24 |
-| 0.005 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | PriorTilt, one run | 527 against 601 | 406 | 121 / 195 | 4e-05 |
-| 0.005 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | relay-BP (kit baseline) | 527 against 845 | 432 | 95 / 413 | 3e-48 |
+| 0.005 | both timed | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | PriorTilt, one run | 553 against 601 | 477 | 76 / 124 | 8e-04 |
+| 0.005 | both timed | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | relay-BP (kit baseline) | 553 against 845 | 436 | 117 / 409 | 6e-39 |
 | 0.005 | both timed | our hierarchy, neural tie-break | PriorTilt, one run | 479 against 601 | 440 | 39 / 161 | 8e-19 |
-| 0.005 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 479 against 469 | 338 | 141 / 131 | 0.59 |
-| 0.005 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | PriorTilt, one run | 469 against 601 | 380 | 89 / 221 | 4e-14 |
-| 0.005 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | relay-BP (kit baseline) | 469 against 845 | 381 | 88 / 464 | 1e-62 |
-| 0.005 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 479 against 527 | 364 | 115 / 163 | 0.005 |
+| 0.005 | both timed | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) (run after the test results were seen, at the team's request; an ablation, not our decoder) | 479 against 481 | 414 | 65 / 67 | 0.93 |
+| 0.005 | both timed | our hierarchy, classical tie-break (lowest weight among the converged candidates) (run after the test results were seen, at the team's request; an ablation, not our decoder) | PriorTilt, one run | 481 against 601 | 437 | 44 / 164 | 2e-17 |
+| 0.005 | both timed | our hierarchy, classical tie-break (lowest weight among the converged candidates) (run after the test results were seen, at the team's request; an ablation, not our decoder) | relay-BP (kit baseline) | 481 against 845 | 382 | 99 / 463 | 3e-57 |
+| 0.005 | both timed | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | 479 against 553 | 434 | 45 / 119 | 7e-09 |
 | 0.005 | both timed | our hierarchy, neural tie-break | relay-BP (kit baseline) | 479 against 845 | 386 | 93 / 459 | 4e-59 |
 | 0.005 | both timed | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | 479 against 360 | 265 | 214 / 95 | 1e-11 |
 | 0.005 | **mixed**: a timed row against an offline combination, with other random draws | our ensemble (combined offline) (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere joint decoding where it converged, else TCBP-JOBS; joint decoding ran on 0 of the 735 disputed shots; so it fails exactly the shots TCBP-JOBS fails) | our hierarchy, neural tie-break | 360 against 479 | 265 | 95 / 214 | 1e-11 |
@@ -486,7 +517,7 @@ Measurements that decided the design, and what we tried that did not work. **All
 <!-- BEGIN table:checks -->
 Checks made by `python -m report.make_tables` on this run:
 
-- **Rows on the test shots:** of 33 registered rows, 28 are timed evaluator rows, 5 are combined offline from saved answers with no time in one process (ours, ensemble at p = 0.003; ours, ensemble at p = 0.004; ours, lowest weight at p = 0.005; ours, no network at p = 0.005; ours, ensemble at p = 0.005), and 0 print "not measured" (none).
+- **Rows on the test shots:** of 33 registered rows, 30 are timed evaluator rows, 3 are combined offline from saved answers with no time in one process (ours, ensemble at p = 0.003; ours, ensemble at p = 0.004; ours, ensemble at p = 0.005), and 0 print "not measured" (none).
 - **Same shots for every row:** each measured row names the sha256 of the test files it decoded, and the run stops unless they are the team's `data/p<p>/test_X.npz` and `test_Z.npz` (the values are in `report/rows.py`). A paired count is only made between such rows.
 - **The rate uses pairs and 12 cycles:** for each evaluator row the per-shot file is re-counted (X failures, Z failures, pair = X or Z) and the rate per cycle is recomputed as 1 - (1 - P)^(1/12); the run stops if this differs from the evaluator's `summary.json`.
 - **Times are per pair:** mean, median and p99 are recomputed from `seconds_total_pair` (the whole decode of one X shot plus one Z shot, every stage and rerun included) and must equal the evaluator's summary.
@@ -502,7 +533,7 @@ Checks made by `python -m report.make_tables` on this run:
 - **Timed row against the offline decode of the same shots.** p = 0.005: relay-BP, timed row (one decoder through all 10,000 shots) 845 failed pairs, offline decode (a fresh decoder every 500 shots) 794; only the timed one fails 244, only the offline one 193, exact p = 0.017 (below 0.05; we read it as the run-to-run spread of a randomized decoder: relay-BP draws random strengths from a generator seeded once, so the two modes give each shot other draws, and the offline mode replays the same seed in every 500-shot chunk, which the paired test does not account for; a comparison that mixes the two modes is marked "mixed").
 - **Timed row against the offline decode of the same shots.** p = 0.005: our decoder (neural tie-break), timed row (one decoder through all 10,000 shots) 479 failed pairs, offline decode (a fresh decoder every 500 shots) 490; only the timed one fails 106, only the offline one 117, exact p = 0.50.
 - **Timed row against the offline decode of the same shots.** p = 0.005: the two PriorTilt runs disagree on 609 of 20,000 shots in our timed row and on 589 in the offline decode; 368 of those shots are in both. Both use the same seeds and the same test of agreement (the 12 predicted bits); PriorTilt draws random numbers from shot to shot, so the two modes give other draws and other disputed shots.
-- **Rows run after the test results were seen** (their START in `test_rows.out` is after its TEST RUN END line; each is labelled "run after the test results were seen, at the team's request; an ablation, not our decoder" wherever it appears, and none is our decoder): ours, lowest weight at p = 0.003; ours, no network, 2 cores at p = 0.003; ours, lowest weight at p = 0.004; ours, no network, 2 cores at p = 0.004; ours, no network, 2 cores at p = 0.005.
+- **Rows run after the test results were seen** (their START in `test_rows.out` is after its TEST RUN END line; each is labelled "run after the test results were seen, at the team's request; an ablation, not our decoder" wherever it appears, and none is our decoder): ours, lowest weight at p = 0.003; ours, no network, 2 cores at p = 0.003; ours, lowest weight at p = 0.004; ours, no network, 2 cores at p = 0.004; ours, lowest weight at p = 0.005; ours, no network at p = 0.005; ours, no network, 2 cores at p = 0.005.
 <!-- END table:checks -->
 
 ## J. Run after the test results were seen, at the team's request: ablations, not our decoder
@@ -525,11 +556,11 @@ The rows themselves are in A (`test_p<p>.md`, `test_time.md`), each labelled; th
 | 0.004 | 1 core | the best hand-written rule (lowest weight among the converged candidates) | 44 against 52 | 36 | 8 / 16 | 0.15 | 216 against 218 |
 | 0.004 | 1 core | plain lowest weight [run after the test results were seen (an ablation)] | 44 against 60 | 39 | 5 / 21 | 0.002 | 216 against 215 |
 | 0.004 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] (each gives its one-core row's answers on every shot) | 44 against 52 | 36 | 8 / 16 | 0.15 | 150 against 150 |
-| 0.005 | 1 core | the best hand-written rule (lowest weight among the converged candidates) | not measured (only offline) |  |  |  |  |
-| 0.005 | 1 core | plain lowest weight | not measured (only offline) |  |  |  |  |
-| 0.005 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] | 479 against 481 | 414 | 65 / 67 | 0.93 | 608 against 604 |
-| 0.003, 0.004 together | 1 core | the best hand-written rule (lowest weight among the converged candidates) | 47 against 56 |  | 8 / 17 | 0.11 |  |
-| 0.003, 0.004 together | 1 core | plain lowest weight | 47 against 64 |  | 5 / 22 | 0.002 |  |
+| 0.005 | 1 core | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] | 479 against 481 | 414 | 65 / 67 | 0.93 | 825 against 815 |
+| 0.005 | 1 core | plain lowest weight [run after the test results were seen (an ablation)] | 479 against 553 | 434 | 45 / 119 | 7e-09 | 825 against 817 |
+| 0.005 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] (each gives its one-core row's answers on every shot) | 479 against 481 | 414 | 65 / 67 | 0.93 | 608 against 604 |
+| 0.003, 0.004, 0.005 together | 1 core | the best hand-written rule (lowest weight among the converged candidates) | 526 against 537 |  | 73 / 84 | 0.42 |  |
+| 0.003, 0.004, 0.005 together | 1 core | plain lowest weight | 526 against 617 |  | 50 / 141 | 3e-11 |  |
 <!-- END table:test_network_timed -->
 
 ### TCBP-JOBS in place of relay-BP in our hierarchy (from the ensemble's saved answers)
@@ -604,7 +635,10 @@ Source: `report/data/test/ensemble_p<p>/test_{X,Z}.npz` and `.json`.
 | 0.003 | X | relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit) | 7 of 10,000 | 0.07% (0.03% to 0.14%) | 1 / 1 / 6 (p = 0.12) | 144; 2 not converged |
 | 0.003 | X | TCBP-JOBS (NVIDIA, GPU; its row of this report) | 1 of 10,000 | 0.01% (0.00% to 0.06%) | 1 / 1 / 0 (p = 1.00) |  |
 | 0.003 | X | relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report) | 2 of 10,000 | 0.02% (0.01% to 0.07%) | 1 / 1 / 1 (p = 1.00) |  |
-| 0.005 | Z | relay-BP with the head's priors (H) [run after the p = 0.005 X test result (the registered extension)] | not measured | not measured | not measured | not measured |
+| 0.005 | Z | relay-BP with the head's priors, a decoder built per shot (H; ours) [run after the p = 0.005 X test result (the registered extension)] | 132 of 10,000 | 1.32% (1.11% to 1.56%) |  | 695; 73 not converged |
+| 0.005 | Z | relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit) | not measured yet | not measured yet | not measured yet | not measured yet |
+| 0.005 | Z | TCBP-JOBS (NVIDIA, GPU; its row of this report) | not measured yet | not measured yet | not measured yet | not measured yet |
+| 0.005 | Z | relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report) | not measured yet | not measured yet | not measured yet | not measured yet |
 
 Source: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.json` (copied from `predecoder/logs/`).
 
@@ -613,17 +647,56 @@ Source: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.j
 | p | Basis | What this number is | Shots that fall back to TCBP-JOBS | The rule fails (share, 95% interval) | H fails | TCBP-JOBS fails | Rule against TCBP-JOBS: both / only the rule / only TCBP-JOBS (exact p) | Rule against H: both / only the rule / only H (exact p) |
 |---|---|---|---|---|---|---|---|---|
 | 0.005 | X | post hoc: the rule was prompted by these same test shots, so this number is not held out | 90 of 10,000 | 107 (1.07%, 0.89% to 1.29%) | 151 | 186 | 91 / 16 / 95 (p = 8e-15) | 106 / 1 / 45 (p = 1e-12) |
-| 0.005 | Z | its clean test, run after the p = 0.005 X test result (the registered extension); the rule was frozen before the Z test file was opened | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
+| 0.005 | Z | its clean test: designed after the first test result, frozen (14:32 UTC) before the Z test file was opened (15:44 UTC); run after the p = 0.005 X test result (the registered extension) | 73 of 10,000 | 100 (1.00%, 0.82% to 1.21%) | 132 | 177 | 76 / 24 / 101 (p = 2e-12) | 100 / 0 / 32 (p = 5e-10) |
 | 0.004 | X | post hoc: the rule was designed after the first test result, and this test file was opened (for H) before the rule was frozen; run after the p = 0.005 X test result (the registered extension) | 12 of 10,000 | 10 (0.10%, 0.05% to 0.18%) | 15 | 20 | 8 / 2 / 12 (p = 0.013) | 10 / 0 / 5 (p = 0.062) |
 | 0.003 | X | the rule was designed after the first test result and frozen (14:32 UTC) before this test file was opened (14:56 UTC); run after the p = 0.005 X test result (the registered extension) | 1 of 10,000 | 1 (0.01%, 0.00% to 0.06%) | 2 | 1 | 1 / 0 / 0 (p = 1.00) | 1 / 0 / 1 (p = 1.00) |
 
 Source: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`).
 
-**The pair score at p = 0.005: run after the p = 0.005 X test result (the registered extension); the fallback rule's half on X is post hoc.** The kit's score: a pair of an X shot and a Z shot fails when either fails. Not a held-out result, and not in the pair-scored tables of our decoder. TCBP-JOBS's and relay-BP's counts are checked against their rows in this report.
+**The pair score at p = 0.005: run after the p = 0.005 X test result (the registered extension); the fallback rule's half on X is post hoc (designed after the first test result), its half on Z clean; accuracy only.** The kit's score: a pair of an X shot and a Z shot fails when either fails. Not a held-out result, and not in the pair-scored tables of our decoder. TCBP-JOBS's and relay-BP's counts are checked against their rows in this report.
 
 | Decoder | Failures X, Z | Failed pairs | Rate per cycle ± error | Against TCBP-JOBS: both / only this / only TCBP-JOBS (exact p) | Against relay-BP's timed row: both / only this / only relay-BP (exact p) |
 |---|---|---|---|---|---|
-| relay-BP with the head's priors in both bases, H: run after the p = 0.005 X test result (the registered extension) | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
+| relay-BP with the head's priors in both bases, H: run after the p = 0.005 X test result (the registered extension) | 151, 132 | 281 of 10,000 | 2.37e-03 ± 1.4e-04 | 167 / 114 / 193 (p = 8e-06) | 242 / 39 / 603 (p = 6e-131) |
+| the fallback rule in both bases (designed after the first test result: post hoc on its X half) | 107, 100 | 206 of 10,000 | 1.73e-03 ± 1.2e-04 | 167 / 39 / 193 (p = 1e-25) | 179 / 27 / 666 (p = 1e-160) |
+| TCBP-JOBS (its row of this report) | 186, 177 | 360 of 10,000 | 3.05e-03 ± 1.6e-04 |  |  |
+| relay-BP, the evaluator's timed row (its row of this report) | 432, 427 | 845 of 10,000 | 7.33e-03 ± 2.5e-04 |  |  |
 
 Source: `report/data/test/predecoder/pair_test_p0.005.{json,log}` (`predecoder.pair`).
 <!-- END table:test_predecoder -->
+
+## L. TCBP-JOBS with the head's priors (`predecoder/`, formerly the branch `predecoder-tcbp`): designed after the test results were seen
+
+<!-- BEGIN table:predecoder_tcbp -->
+**TCBP-JOBS with the head's priors: designed after the test results were seen; formerly a separate branch (predecoder-tcbp).** TCBP-JOBS (NVIDIA's GPU decoder) given, for each shot, the priors our network's head computes from that shot's detectors, in place of the kit's fixed priors.
+
+**Exploration shots, not test shots:** the 5,000 shots of `data/p0.005/validation_X.npz`. TH against each row: both fail / only TH / only that row (exact p), on the same shots.
+
+| Decoder | Failed shots | Share (95% interval) | TH against it: both / only TH / only it (exact p) |
+|---|---|---|---|
+| TCBP-JOBS with the head's priors, per shot (TH) | 33 of 5,000 | 0.66% (0.47% to 0.93%) |  |
+| TCBP-JOBS with the kit's priors, per shot, the same run (the like-for-like control) | 100 of 5,000 | 2.00% (1.65% to 2.43%) | 25 / 8 / 75 (p = 9e-15) |
+| TCBP-JOBS with the kit's priors, the stored file (another fit) | 91 of 5,000 | 1.82% (1.48% to 2.23%) | 25 / 8 / 66 (p = 2e-12) |
+| relay-BP with the head's priors (H, the predecoder) | 79 of 5,000 | 1.58% (1.27% to 1.96%) | 29 / 4 / 50 (p = 4e-11) |
+| the frozen fallback rule (post hoc on test X at p = 0.005) | 50 of 5,000 | 1.00% (0.76% to 1.32%) | 28 / 5 / 22 (p = 0.002) |
+| H where H converged, else TH (designed after the test results) | 44 of 5,000 | 0.88% (0.66% to 1.18%) | 29 / 4 / 15 (p = 0.019) |
+
+**Test shots: designed after the test results were seen; formerly a separate branch (predecoder-tcbp).** One basis at a time (X until the Z run lands), accuracy only. Its knobs were fitted at p = 0.005 and applied unchanged at p = 0.004 and 0.003, with no validation there. The declared pair is TH against TCBP-JOBS's stored test file; at p = 0.005 the same run's kit-priors arm is the like-for-like control.
+
+| p | Basis | TH fails | TCBP-JOBS, its stored test file (its row in this report), fails | TH against it, the declared pair: both / only TH / only TCBP-JOBS (exact p) | TCBP-JOBS with the kit's priors in the same run (the like-for-like control) fails | TH against that control (exact p) |
+|---|---|---|---|---|---|---|
+| 0.005 | X | 72 of 10,000 | 186 | 50 / 22 / 136 (p = 3e-21) | 186 | 50 / 22 / 136 (p = 3e-21) |
+| 0.004 | X | 4 of 10,000 | 20 | 2 / 2 / 18 (p = 4e-04) | not run (X at p = 0.005 only) |  |
+| 0.003 | X | 0 of 10,000 | 1 | 0 / 0 / 1 (p = 1.00) | not run (X at p = 0.005 only) |  |
+| 0.005 | Z | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
+
+**Its time per X shot: not a clean timing.** An A100 MIG slice, one process, one shot at a time, 1 CPU thread; server job 5 ran beside job 6, another TCBP-JOBS process on the same slice (`runner_gpu.out`, `runner_cpu.out`); the network's time is from validation shots. Per X shot, not per pair; ms: mean / median / 99th percentile. For scale: TCBP-JOBS alone takes 8.7 ms per X shot (a GPU decode call), relay-BP's timed row 760, and the relay-BP predecoder 212 (`predecoder_latency.md`).
+
+| Part | Mean | Median | 99th percentile | Shots |
+|---|---|---|---|---|
+| the network and the head on the A100, 32-bit floats | 9.4 | 8.5 | 19.8 | the first 1,000 validation X shots at p = 0.005 (exploration shots; server job 4) |
+| TCBP-JOBS built with the head's priors and run, per shot | 46.4 | 44.6 | 69.2 | the 10,000 test X shots at p = 0.005 (server job 5; build 42.6, decode 3.8 ms on average) |
+| the two together | 55.8 |  |  |  |
+
+Source: `report/data/exploration/predecoder_tcbp/` (branch `predecoder-tcbp` at `dad4fd50`; job 4 from `server-logs`) and `report/data/test/predecoder_tcbp/` (job 5 from `server-logs`).
+<!-- END table:predecoder_tcbp -->

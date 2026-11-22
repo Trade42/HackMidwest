@@ -1,0 +1,24 @@
+/home/sal/hackMidwest/orchestration/scratch/predecoder/z/head/head.pt: OK
+/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_Z_s1_final_step100000.pt: OK
+[validation] 15:25:54 UTC, commit 87b484a6, lanes ABCD
+validation_Z.npz: 5000 shots, p=0.005, arms ['fresh', 'head']; head priors {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}; 100 tasks to run in 16 processes (16 CPUs here, luminaty)
+  10 of 100 tasks done (fresh from shot 200), 274 s
+  20 of 100 tasks done (fresh from shot 1900), 458 s
+  30 of 100 tasks done (fresh from shot 3100), 606 s
+  40 of 100 tasks done (fresh from shot 4000), 745 s
+  50 of 100 tasks done (head from shot 200), 826 s
+  60 of 100 tasks done (head from shot 1800), 875 s
+  70 of 100 tasks done (head from shot 2400), 927 s
+  80 of 100 tasks done (head from shot 3100), 960 s
+  90 of 100 tasks done (head from shot 4600), 1012 s
+  100 of 100 tasks done (head from shot 4300), 1049 s
+relay-BP at the kit's settings; 1049 s. Time per shot: build + decode in these worker processes, plus the network and head (22.2 ms mean, cpu, from predecoder.evaluate)
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+fresh        206    0.0412 [0.0360, 0.0471]         119   1812      2338     15.9    2411.5   2427.4   19445
+head          74    0.0148 [0.0118, 0.0185]          50    626       708     14.8     672.3    709.3   17939
+paired head against fresh: both fail 59, only head 15, only fresh 147, exact two-sided p = 2.07e-28
+  iterations, shot by shot: head fewer on 4761, fresh fewer on 200, the same on 39; p99 18080 against 18080
+kill line (head against fresh: fewer failures, paired, p < 0.05): PASSED
+[validation] done 15:43:25 UTC
+/home/sal/hackMidwest/orchestration/scratch/predecoder/z_pipeline.sh: line 60: p0.005: command not found
+validation exit 127

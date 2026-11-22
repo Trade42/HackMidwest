@@ -20,7 +20,7 @@ import pytest
 import scipy.sparse as sp
 
 from evaluation.adapters import Problem, create_session, validate_shot_result
-from hierarchy import candidates, compare, rules, select, tcbp_member
+from hierarchy import candidates, compare, joint_member, rules, select, tcbp_member
 from hierarchy.plugin import HierarchySession, Network
 from hierarchy.rules import ORDER
 from hierarchy.stages import Candidate, kit_problem, load_shots, sha256_of
@@ -524,3 +524,34 @@ def test_tcbp_member_plumbing_with_relay_bp_in_place_of_the_gpu_decoder(tmp_path
     if importlib.util.find_spec("cudaq_qec") is None:                           # without the GPU package it says so at once
         with pytest.raises(SystemExit, match="cudaq-qec"):
             tcbp_member.main(["--data", str(shot_files["X"]), "--out", str(tmp_path / "x")])
+
+
+# ---------- joint_member.py ----------
+
+def test_joint_member_decodes_the_listed_shots_and_refuses_a_foreign_selection(tmp_path, shot_files, capsys):
+    """Two listed shots on the joint problem with a small budget, by selection file and resumed; the refusals."""
+    data = load_shots(shot_files["X"])
+    selection = tmp_path / "small_X.selection.npz"
+    np.savez(selection, shot=np.array([5, 2]), data_sha256=data.sha256)
+    command = ["--data", str(shot_files["X"]), "--out", str(tmp_path / "joint"), "--processes", "1", "--relay-sets", "1"]
+    joint_member.main([*command, "--shots", "2"])
+    joint_member.main([*command, "--selection", str(selection)])               # shot 2 is kept, shot 5 is decoded
+    assert "1 kept from an earlier run" in capsys.readouterr().out
+    rows = arrays_of(tmp_path / "joint" / "small_X.joint.npz")
+    assert rows["shot"].tolist() == [2, 5] and int(rows["shots_in_file"]) == SHOTS and str(rows["data_sha256"]) == data.sha256
+    assert np.array_equal(rows["truth"], data.observables[[2, 5]]) and rows["predicted_J"].shape == (2, 12)
+    assert np.array_equal(rows["failed_J"], (rows["predicted_J"] != rows["truth"]).any(axis=1))
+    assert (rows["iterations_J"] > 0).all() and (rows["seconds_J"] > 0).all() and (rows["weight_J"] > 0).all()
+    settings = json.loads(str(rows["settings_J"]))
+    assert settings["settings"]["num_sets"] == 1 and settings["settings"]["stop_nconv"] == 5       # the kit's settings but the test budget
+    assert joint_member.joint_problem("X", 0.004).H.shape[0] == 1728                               # every detector of the shot
+
+    np.savez(selection, shot=np.array([1]), data_sha256="0" * 64)
+    with pytest.raises(SystemExit, match="was made from a data file"):
+        joint_member.main([*command, "--selection", str(selection)])
+    with pytest.raises(SystemExit, match="held-out"):
+        joint_member.main(["--data", str(tmp_path / "go_X.npz"), "--shots", "0", "--out", str(tmp_path / "x")])
+    with pytest.raises(SystemExit, match="has shots 0 to"):
+        joint_member.main([*command, "--shots", str(SHOTS)])
+    with pytest.raises(SystemExit, match="--selection .* or --shots"):
+        joint_member.main(command)

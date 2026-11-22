@@ -1,0 +1,32 @@
+/home/sal/hackMidwest/orchestration/scratch/predecoder/z/head/head.pt: OK
+/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_Z_s1_final_step100000.pt: OK
+[fit] 15:13:25 UTC, commit 87b484a6, lanes ABCD
+  train_Z_fresh_failed.npz: 95 shots, {'mode': 'linear', 'alpha': 0.0, 'eps': 1e-06}, 93 s
+  train_Z_fresh_failed.npz: 95 shots, {'mode': 'logodds', 'alpha': 0.1, 'eps': 0.0001}, 148 s
+  train_Z_fresh_failed.npz: 95 shots, {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}, 196 s
+  train_Z_fresh_failed.npz: 95 shots, {'mode': 'logodds', 'alpha': 0.3, 'eps': 0.0001}, 243 s
+  train_Z_fresh_failed.npz: 95 shots, {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, 289 s
+  train_Z_fresh_failed.npz: 95 shots, {'mode': 'logodds', 'alpha': 0.5, 'eps': 0.0001}, 334 s
+  train_Z_fresh_failed.npz: 95 shots, {'mode': 'logodds', 'alpha': 0.6, 'eps': 0.0001}, 380 s
+  train_Z_fresh_failed.npz: 95 shots, {'mode': 'logodds', 'alpha': 0.7, 'eps': 0.0001}, 431 s
+  train_Z_fresh_right.npz: 2000 shots, {'mode': 'linear', 'alpha': 0.0, 'eps': 1e-06}, 524 s
+  train_Z_fresh_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.1, 'eps': 0.0001}, 562 s
+  train_Z_fresh_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}, 593 s
+  train_Z_fresh_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.3, 'eps': 0.0001}, 624 s
+  train_Z_fresh_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, 655 s
+  train_Z_fresh_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.5, 'eps': 0.0001}, 685 s
+  train_Z_fresh_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.6, 'eps': 0.0001}, 715 s
+  train_Z_fresh_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.7, 'eps': 0.0001}, 745 s
+fit on train_Z_fresh_failed.npz (weight 1), train_Z_fresh_right.npz (weight 9.9525), p=0.004; relay-BP at the kit's settings, a decoder built per shot; 16 processes, 745 s
+mode      alpha      eps  fail train_Z_fresh_fail  fail train_Z_fresh_righ    score  hard (weighted)  mean iter
+linear        0    1e-06                       95                        0     95.0           2965.3      593.4
+logodds     0.1   0.0001                       34                        1     44.0           1277.3      239.9
+logodds     0.2   0.0001                       29                        1     39.0            708.9      182.4
+logodds     0.3   0.0001                       31                        2     50.9            544.7      166.4
+logodds     0.4   0.0001                       33                        2     52.9            477.0      174.3
+logodds     0.5   0.0001                       32                        4     71.8            495.9      177.9
+logodds     0.6   0.0001                       34                        6     93.7            446.1      191.0
+logodds     0.7   0.0001                       37                        8    116.6            443.1      189.0
+chosen: mode logodds, alpha 0.2, eps 0.0001 (lowest weighted failures (failed shots left wrong + right shots broken, scaled); then weighted hard shots; then iterations); row 1 is the kit's priors
+[fit] done 15:25:51 UTC
+fit exit 0

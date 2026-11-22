@@ -1,0 +1,59 @@
+#!/bin/bash
+# The Z extension, stage by stage (logs/extension_registered_spec.md, logs/z_plan_declared.md).
+#   bash z_pipeline.sh <stage> <lanes>      lanes: D, ACD or ABCD (locks taken in the order A, B, C, D)
+# stages: prep (subsets, calibration, logits), fit, validation, test-head, test-fresh
+# Each stage runs from the checkout named in $W (detached, clean); test-* need GO as a third argument.
+set -euo pipefail
+export PYTHONDONTWRITEBYTECODE=1
+STAGE=$1; LANES=$2
+S=/home/sal/hackMidwest/orchestration/scratch/predecoder
+Z=$S/z
+V=$S/venv/bin/python
+W=${W:-/home/sal/hackMidwest/worktrees/predecoder-test-z}
+KIT=$W/challenge-1-ml-decoder-kit
+HEAD=$Z/head/head.pt
+TRUNK=$S/ckpt/cascade_Z_s1_final_step100000.pt
+FIT=$Z/fit_Z_p0.004.json
+case $LANES in
+  D)    LOCKS="flock /home/sal/hackMidwest/dq/run/sim-d.lock"; CPUS=0-3; N=4 ;;
+  ACD)  LOCKS="flock /home/sal/hackMidwest/dq/run/sim-a.lock flock /home/sal/hackMidwest/dq/run/sim.lock flock /home/sal/hackMidwest/dq/run/sim-d.lock"; CPUS=0-7,12-15; N=12 ;;
+  ABCD) LOCKS="flock /home/sal/hackMidwest/dq/run/sim-a.lock flock /home/sal/hackMidwest/dq/run/sim-b.lock flock /home/sal/hackMidwest/dq/run/sim.lock flock /home/sal/hackMidwest/dq/run/sim-d.lock"; CPUS=0-15; N=16 ;;
+  *) echo "lanes: D, ACD or ABCD" >&2; exit 2 ;;
+esac
+test -z "$(git -C $W status --short)" || { echo "the checkout is not clean" >&2; exit 1; }
+sha256sum -c - <<EOF
+083147d2ea941fbae1bc0c3096e06d3bb3a07ca46fd9360fd9304226e5825a61  $HEAD
+fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700  $TRUNK
+EOF
+cd $KIT
+run() { echo "[$STAGE] $(date -u '+%T') UTC, commit $(git -C $W rev-parse --short HEAD), lanes $LANES"; $LOCKS nice -n 15 taskset -c $CPUS "$@"; echo "[$STAGE] done $(date -u '+%T') UTC"; }
+case $STAGE in
+  prep)
+    $V -m predecoder.subset --data data/p0.004/train_Z.npz --per-shot $Z/fresh_train_Z_p0.004/per_shot.npz --arm fresh \
+        --right 2000 --seed 5 --out $Z/subsets
+    run bash -c "
+      $V -m predecoder.calibration --head $HEAD --trunk $TRUNK --p 0.004 --shots 1000 --seed 77 --device cpu --threads $N --out $Z/calibration_Z_p0.004_1000_s77.json > $Z/calibration_Z_p0.004_1000_s77.log 2>&1 &&
+      $V -m predecoder.evaluate --head $HEAD --trunk $TRUNK --data $Z/subsets/train_Z_fresh_failed.npz --out $Z/logits_failed --device cpu --threads $N --time-shots 0 &&
+      $V -m predecoder.evaluate --head $HEAD --trunk $TRUNK --data $Z/subsets/train_Z_fresh_right.npz --out $Z/logits_right --device cpu --threads $N --time-shots 0 &&
+      $V -m predecoder.evaluate --head $HEAD --trunk $TRUNK --data data/p0.005/validation_Z.npz --out $Z/logits_validation_p0.005 --device cpu --threads $N --time-shots 200" ;;
+  fit)
+    WEIGHT=$(python3 -c "import json; print(json.load(open('$Z/subsets/train_Z_fresh_subsets.json'))['right_weight'])")
+    run $V -m predecoder.priors --data $Z/subsets/train_Z_fresh_failed.npz $Z/subsets/train_Z_fresh_right.npz --weights 1 $WEIGHT \
+        --logits $Z/logits_failed $Z/logits_right --alphas 0.1 0.2 0.3 0.4 0.5 0.6 0.7 --workers $N --out $FIT ;;
+  validation)
+    run $V -m predecoder.compare --data data/p0.005/validation_Z.npz --logits $Z/logits_validation_p0.005 --settings $FIT \
+        --arms fresh head --workers $N --out $Z/compare_validation_Z_p0.005 ;;
+  test-head|test-fresh)
+    test "${3:-}" = GO || { echo "test stages need GO" >&2; exit 2; }
+    sha256sum -c - <<EOF
+b86ae320d13fa555d8358fe399156d28d4e52b01fabf8eafa1b30e60bdcd0cef  data/p0.005/test_Z.npz
+EOF
+    if [ $STAGE = test-head ]; then
+      run bash -c "
+        $V -m predecoder.evaluate --head $HEAD --trunk $TRUNK --data data/p0.005/test_Z.npz --out $Z/logits_test_p0.005 --device cpu --threads $N --time-shots 200 --final &&
+        $V -m predecoder.compare --data data/p0.005/test_Z.npz --logits $Z/logits_test_p0.005 --settings $FIT --arms head --workers $N --out $Z/compare_test_Z_p0.005 --final"
+    else
+      run $V -m predecoder.compare --data data/p0.005/test_Z.npz --logits $Z/logits_test_p0.005 --settings $FIT --arms fresh head --workers $N --out $Z/compare_test_Z_p0.005 --final
+    fi ;;
+  *) echo "unknown stage" >&2; exit 2 ;;
+esac

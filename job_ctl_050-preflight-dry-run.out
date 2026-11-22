@@ -939,3 +939,16 @@ preflight 2: exit 0
 
 ===== 3. the three timed rows through the evaluator, p = 0.003 validation files =====
 Sun Nov 22 07:35:29 UTC 2026
+rehearsal exit codes (hierarchy, hierarchy-parallel, priortilt): 0 0 0
+--- hierarchy
+decoder,p,cycles,shots_X,shots_Z,paired_shots,failures_X,failures_Z,failures_pair,per_cycle_rate,standard_error,mean_pair_ms,median_pair_ms,p99_pair_ms,mean_pair_kit_ms,setup_seconds,before_shot_seconds,mean_pair_total_ms,median_pair_total_ms,p99_pair_total_ms,decode_loop_seconds,evaluation_wall_seconds,batch_throughput_pairs_per_second,converged_fraction,first_leg_converged_fraction,fallback_fraction,mean_iterations,threshold,threshold_X,threshold_Z,artifacts
+hierarchy.plugin:make_decoder,0.003,12,5000,5000,5000,2,3,5,8.337155219761971e-05,3.729098696714228e-05,47.98391805633437,14.202790567651391,428.79582001012807,,6.621847555041313,0.0,47.98391805633437,14.202790567651391,428.79582001012807,240.35748892906122,250.1020136519801,19.991842236654517,0.9999,,0.0004,196.1327,,,,01_hierarchy_plugin_make_decoder_shots.npz
+--- hierarchy-parallel
+decoder,p,cycles,shots_X,shots_Z,paired_shots,failures_X,failures_Z,failures_pair,per_cycle_rate,standard_error,mean_pair_ms,median_pair_ms,p99_pair_ms,mean_pair_kit_ms,setup_seconds,before_shot_seconds,mean_pair_total_ms,median_pair_total_ms,p99_pair_total_ms,decode_loop_seconds,evaluation_wall_seconds,batch_throughput_pairs_per_second,converged_fraction,first_leg_converged_fraction,fallback_fraction,mean_iterations,threshold,threshold_X,threshold_Z,artifacts
+hierarchy.plugin:make_decoder,0.003,12,5000,5000,5000,2,3,5,8.337155219761971e-05,3.729098696714228e-05,30.416634459700436,7.519563019741327,255.20768511109125,,10.915922301937826,0.0,30.416634459700436,7.519563019741327,255.20768511109125,152.5906936969841,166.82164352200925,29.97213008119259,0.9999,,0.0004,196.1327,,,,01_hierarchy_plugin_make_decoder_shots.npz
+--- priortilt
+decoder,p,cycles,shots_X,shots_Z,paired_shots,failures_X,failures_Z,failures_pair,per_cycle_rate,standard_error,mean_pair_ms,median_pair_ms,p99_pair_ms,mean_pair_kit_ms,setup_seconds,before_shot_seconds,mean_pair_total_ms,median_pair_total_ms,p99_pair_total_ms,decode_loop_seconds,evaluation_wall_seconds,batch_throughput_pairs_per_second,converged_fraction,first_leg_converged_fraction,fallback_fraction,mean_iterations,threshold,threshold_X,threshold_Z,artifacts
+hierarchy.priortilt_plugin:make_decoder,0.003,12,5000,5000,5000,2,2,4,6.669112361223917e-05,3.3350567904766315e-05,22.901398763922042,6.935320037882775,215.11031987727728,,0.12437962694093585,0.0,22.901398763922042,6.935320037882775,215.11031987727728,114.88263983698562,116.94272967998404,42.75597135181121,0.9999,,,98.2093,,,,01_hierarchy_priortilt_plugin_make_decoder_shots.npz
+
+dry run: worst exit 0
+Sun Nov 22 07:39:44 UTC 2026

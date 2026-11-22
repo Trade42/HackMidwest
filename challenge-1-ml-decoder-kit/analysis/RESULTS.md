@@ -80,6 +80,7 @@ Relay-BP keeps its random state from one decode to the next: its memory strength
 - **G2:** every shot gets its own fresh decoder (one per seed for the 16 candidates). No G2 result depends on which other shots were decoded.
 - **Scoring is the kit's.** Every decode goes through `decoders.score`: a shot fails when any of the 12 predicted observables is wrong. An unconverged shot is scored on the correction relay-BP returned, which is the first leg's hard decision. The per-shot predictions are checked against `score`'s failure flags.
 - **The truth reaches no decoder.** The observables are used only for scoring and, in G2, to pick the failed and control sets (from G1's scores) and to score the candidates.
+- **Where the per-shot outputs are.** G1's per-shot outputs are committed (`results/pershot/`, 2.2 MB). G2's and G3's per-shot outputs, one file per task, are larger and stay in this machine's scratch cache, `/home/sal/hackMidwest/orchestration/scratch/gates/cache/` (manifest with sha256: `results/cache_manifest.sha256`). The server's runs keep theirs in `~/mlBranchMidwest/runs/gates_g2/cache` and `gates_g3/cache` on that machine. Any summary can be rebuilt from a cache with the `summarize` commands.
 
 ### The process-count check (done-when 4): passed
 
@@ -232,7 +233,7 @@ Its machine check was again identical to luminaty's. Its stdout is `logs/server_
 | stop after 20, 600 legs | Z | 123 | 64 / 23 of 45 / 41 of 78 | 123 | 1 | 59 / 64 / 1 / 122 | 3.6e-18 | 0.008 [0.000, 0.044] | 27,075 / 2,340 | 8,769 / 747 |
 
 - It fixes 129 of 245 failures (53%, 95% interval 46% to 59%), against the re-roll floor's 108 (44%, 38% to 51%) on the same shots.
-- On the controls it takes 1,654 and 2,340 mean iterations, against the kit settings' 373 and 752 in the re-roll. That is 3 to 4 times the work on a typical shot.
+- On the controls it takes 1,654 and 2,340 mean iterations, against the kit settings' 373 and 752 in the re-roll. That is 4.4 (X) and 3.1 (Z) times the work on a typical shot.
 - On the failures its median is 35,960 of the 36,080-iteration budget: most of them never reach 20 solutions.
 
 **Item 2, several candidates:** relay-BP at `stop_nconv=1` under seeds 1 to 16, each on a fresh decoder. A candidate is a converged correction; distinct candidates are told apart by their correction. The lowest-weight pick and the vote by class (each distinct candidate adds exp(-weight), with weight the sum of log((1 - prior) / prior)) use no truth. The truth only scores them.
@@ -257,10 +258,10 @@ Both bases, on the 145 converged-wrong failures:
 
 **What items 1 and 2 say at p = 0.004:**
 
-- More of the same budget fixes about 10 percentage points more than a free re-roll (53% against 44%), at 3 to 4 times the work on typical shots.
+- More of the same budget fixes about 10 percentage points more than a free re-roll (53% against 44%), at 3.1 to 4.4 times the work on typical shots.
 - I3 passes its kill line: the right class is among relay-BP's candidates in 79% of the converged-wrong failures, far above 30%.
 - But weight does not find it. The lowest-weight and vote picks get 48% to 49%, no better than one re-roll (47%).
-- So the information is in the candidate set and the weight is the wrong score. A learned score over a few candidates is an opening this measures directly; no such score was trained or tested here.
+- So the information is in the candidate set and the weight is the wrong score. The 79% is a ceiling that an oracle would reach. These shots were selected because a weight-based pick (the kit's) failed on them, so weight doing badly here is partly by construction. A learned score must be judged on all shots, including the controls, where the lowest weight was right on 244 of 245. A learned score over a few candidates is an opening this measures directly; no such score was trained or tested here.
 
 ### Items 1 to 3 at p = 0.005, and the re-roll floor
 
@@ -356,7 +357,7 @@ Both bases together:
 - **(a) fixed 89 of 100 failures** (exact 95% interval 81% to 94%) and broke 1 of 200 controls (at most 2.8%).
 - **(b) fixed 91 of 100** (84% to 96%) and broke none (at most 1.8%). The extra legs fixed 2 more failures and undid (a)'s one break.
 - Of the unconverged failures, (a) fixed 27 of 32 (84%, 67% to 95%).
-- (b) was decoded on 47 shots: 39 at or above (a)'s 17,760-iteration floor, and 8 check shots below it. All 8 check shots gave (a)'s correction and iteration count exactly.
+- (b) was decoded on 40 shots at p = 0.004: 36 at or above (a)'s 17,760-iteration floor, and 4 seeded check shots below it. All 4 check shots gave (a)'s correction and iteration count exactly. `joint600_check` in `results/g2_summary.json` pools p = 0.003 and 0.004: 47 shots decoded, 8 check shots, all 8 identical.
 
 In G1 at p = 0.004 the kit's separate relay-BP took a mean of 404 and 466 ms per shot here (8 processes). Joint decoding takes about 30 s on a control shot (70 times as long) and over 2 minutes on a failed one.
 
@@ -365,6 +366,7 @@ In G1 at p = 0.004 the kit's separate relay-BP took a mean of 404 and 466 ms per
 - Joint decoding still fixes nearly 9 in 10 of separate relay-BP's failures, but its own failures now show: 1 break in 200 controls.
 - The authors' rows put joint decoding's overall rate only about 1.3 times below separate decoding here. That fits a joint decoder failing about 0.6% of the shots separate relay-BP gets right, which a 200-shot control can neither show nor exclude.
 - As a fallback after separate decoding, it would fix most of the flagged failures: 84% of the unconverged ones.
+- Read against the re-roll floor on the same kind of shots: decoding relay-BP's failures again with other draws fixes 44% of them and 40 of the 100 unconverged ones; the larger budget fixes 53% and 50 of 100. Joint decoding fixes 89% and 27 of 32. So it roughly doubles the floor, rather than adding all of its 89%. At p = 0.003 the floor was not measured.
 
 ## G3: where relay-BP's time goes
 

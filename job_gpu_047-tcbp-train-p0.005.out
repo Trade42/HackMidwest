@@ -18,3 +18,5 @@ WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 whi
   saved /home/blakew3/mlBranchMidwest/runs/tcbp_p0.005/train_X.tcbp.npz
 train_Z.npz: Z memory, p = 0.005, 20000 shots, data sha256 d3ff1f8f69b3c36e0e56a517b4a2267367cef0fbcea55cfbda6aa430ac229c0e
   H is 936 x 8784; building the decoder ...
+  model fitted in 119.6 s, decoder built in 49 ms
+WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 while decoding 4096 syndromes. Set bp_batch_size > 1 at construction to decode syndromes in parallel.

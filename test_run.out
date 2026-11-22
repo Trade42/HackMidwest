@@ -48,3 +48,29 @@ RESULT: the side-by-side mode gives the sequential answers on every shot
 2026-11-22T10:23:37Z rehearsal on validation shots, p = 0.003, hierarchy-parallel: hierarchy.plugin:make_decoder,2,3,5,8.337155219761971e-05,3.729098696714228e-05,30.846292575728146
 2026-11-22T10:23:37Z rehearsal on validation shots, p = 0.003, priortilt: hierarchy.priortilt_plugin:make_decoder,2,2,4,6.669112361223917e-05,3.3350567904766315e-05,22.989065239275806
 2026-11-22T10:23:42Z 3. PREFLIGHT AND REHEARSAL PASSED. [CPUs in use 2.2, tokens 0, throttled so far 4837.8 s, load 5.33]
+2026-11-22T13:05:38Z TEST RUN END. Exit codes:
+  eval_p0.005_hierarchy: 0
+  eval_p0.005_hierarchy-parallel: 0
+  eval_p0.005_priortilt: 0
+  cand_p0.005: 0
+  tcbp_p0.005: 0
+  net_p0.005: 0
+  ensemble_p0.005: 0
+  eval_p0.004_hierarchy: 0
+  eval_p0.004_hierarchy-parallel: 0
+  eval_p0.004_priortilt: 0
+  cand_p0.004: 0
+  tcbp_p0.004: 0
+  net_p0.004: 0
+  ensemble_p0.004: 0
+  eval_p0.003_hierarchy: 0
+  eval_p0.003_hierarchy-parallel: 0
+  eval_p0.003_priortilt: 0
+  cand_p0.003: 0
+  tcbp_p0.003: 0
+  net_p0.003: 0
+  ensemble_p0.003: 0
+  eval_p0.004_hierarchy-converged: 0
+  eval_p0.003_hierarchy-converged: 0
+  joint_p0.003: 0
+  joint_p0.004: 0

@@ -119,3 +119,7 @@ fit on f0.8-seed5800-train (X_f0.8_seed5800_kitformat_p0.0326371.npz, 1500 train
     fit alpha1_eps1e-06: 600 of 1500 shots, build 41.3 ms, decode 9.3 ms mean (last 200: 41.2 + 9.3 ms), 34 s; priors capped at 0.5 so far on 13430 shots, 547282 columns
     fit alpha1_eps1e-06: 800 of 1500 shots, build 41.3 ms, decode 9.0 ms mean (last 200: 41.4 + 8.4 ms), 45 s; priors capped at 0.5 so far on 13630 shots, 562471 columns
     fit alpha1_eps1e-06: 1000 of 1500 shots, build 41.5 ms, decode 9.0 ms mean (last 200: 42.3 + 8.8 ms), 57 s; priors capped at 0.5 so far on 13830 shots, 577596 columns
+    fit alpha1_eps1e-06: 1200 of 1500 shots, build 41.7 ms, decode 8.8 ms mean (last 200: 42.4 + 8.0 ms), 68 s; priors capped at 0.5 so far on 14030 shots, 592783 columns
+    fit alpha1_eps1e-06: 1400 of 1500 shots, build 41.6 ms, decode 9.1 ms mean (last 200: 41.3 + 10.4 ms), 80 s; priors capped at 0.5 so far on 14230 shots, 607947 columns
+  alpha1_eps1e-06: failures 89 of 1500, not reproduced 0, flagged 1467, capped 113371, 51 ms; 1308 s
+chosen: {'mode': 'logodds', 'alpha': 0.1, 'eps': 1e-06}; saved /home/blakew3/mlBranchMidwest/runs/tcbp-retrain-refit/out-9a1aaa3/fit/fit.json; 1308 s

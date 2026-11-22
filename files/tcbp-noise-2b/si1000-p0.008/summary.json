@@ -124,59 +124,59 @@
  "capped_columns": {
   "m": 0,
   "g": 0,
-  "h": 164
+  "h": 186
  },
- "seconds": 909.0154123306274,
- "shots_scored": 1600,
+ "seconds": 1016.4303669929504,
+ "shots_scored": 1800,
  "arms": {
   "m": {
-   "shots": 1600,
-   "failures": 1180,
-   "share": 0.7375,
+   "shots": 1800,
+   "failures": 1315,
+   "share": 0.7305555555555555,
    "wilson95": [
-    0.7153902152545053,
-    0.7584720831612695
+    0.7095843269567847,
+    0.7505448024151213
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 1600,
-   "build_ms_mean": 42.9787166389724,
-   "decode_ms_mean": 50.32824934387463,
-   "build_decode_ms_mean": 93.30696598284703,
-   "build_decode_ms_median": 93.00183597952127,
-   "build_decode_ms_p99": 145.73100273730233
+   "flag_not_converged": 1800,
+   "build_ms_mean": 43.128857203151306,
+   "decode_ms_mean": 50.343422576940306,
+   "build_decode_ms_mean": 93.47227978009161,
+   "build_decode_ms_median": 93.31696247681975,
+   "build_decode_ms_p99": 145.8765192446299
   },
   "g": {
-   "shots": 1600,
-   "failures": 1359,
-   "share": 0.849375,
+   "shots": 1800,
+   "failures": 1529,
+   "share": 0.8494444444444444,
    "wilson95": [
-    0.8310130584684626,
-    0.8660633226221112
+    0.8321804257544763,
+    0.8652201100887262
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 1600,
-   "build_ms_mean": 43.00297861045692,
-   "decode_ms_mean": 63.22187846890301,
-   "build_decode_ms_mean": 106.22485707935994,
-   "build_decode_ms_median": 106.5424780244939,
-   "build_decode_ms_p99": 158.05314854136668
+   "flag_not_converged": 1800,
+   "build_ms_mean": 43.12216519533346,
+   "decode_ms_mean": 63.716845491758754,
+   "build_decode_ms_mean": 106.83901068709221,
+   "build_decode_ms_median": 106.8979604751803,
+   "build_decode_ms_p99": 161.47110819234513
   },
   "h": {
-   "shots": 1600,
-   "failures": 1087,
-   "share": 0.679375,
+   "shots": 1800,
+   "failures": 1221,
+   "share": 0.6783333333333333,
    "wilson95": [
-    0.6561000261316293,
-    0.7017907097771267
+    0.6563939442917073,
+    0.6995131654152371
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 1600,
-   "build_ms_mean": 42.67316975827271,
-   "decode_ms_mean": 47.064197391446214,
-   "build_decode_ms_mean": 89.73736714971892,
-   "build_decode_ms_median": 90.78775206580758,
-   "build_decode_ms_p99": 140.64247714122757
+   "flag_not_converged": 1800,
+   "build_ms_mean": 42.828342273973654,
+   "decode_ms_mean": 47.42765095388879,
+   "build_decode_ms_mean": 90.25599322786245,
+   "build_decode_ms_median": 90.96922149183229,
+   "build_decode_ms_p99": 144.38475344446488
   }
  },
- "saved_utc": "2026-11-22T17:09:38.988555+00:00"
+ "saved_utc": "2026-11-22T17:11:26.403579+00:00"
 }

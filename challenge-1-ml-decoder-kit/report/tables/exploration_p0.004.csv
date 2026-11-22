@@ -13,6 +13,7 @@ shots,row,built_by,failures,of,both_fail,only_this_row,only_relay_bp,exact_p,mea
 "X memory, 25,000 shots","hierarchy, network step 80000",ours,59,25000,,,,,118.1,,,
 "X memory, 25,000 shots","hierarchy, network step 90000",ours,62,25000,,,,,118.1,,,
 "X memory, 25,000 shots","hierarchy, network step 100000",ours,59,25000,,,,,118.1,,,
+"X memory, 25,000 shots","hierarchy, network step 110000",ours,60,25000,,,,,118.1,,,
 "Z memory, 25,000 shots",relay-BP (kit baseline),the kit,123,25000,,,,,170.85747731599957,,,
 "Z memory, 25,000 shots","PriorTilt, seed A",IonQ,106,25000,63,43,60,0.11446824201255819,55.6371070520021,,,
 "Z memory, 25,000 shots","PriorTilt, seed B",IonQ,107,25000,63,44,60,0.1409562882123081,57.12101209660526,,,

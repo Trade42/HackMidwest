@@ -935,6 +935,18 @@ def background_table():
             f"learns at very low noise only: at p = {last.group(2)} it has {last.group(3)}% of shots wrong after {int(last.group(1)):,} training shots "
             f"(answering \"nothing flipped\" gets {last.group(4)}%); that is 30 to 50 times below the challenge's noise levels",
             "background/train_X_p0.0001_seed1.log")
+    for file in sorted(folder.glob("results_hierarchy_heldout_step*.txt")):
+        text = file.read_text(encoding="utf-8-sig")
+        step = int(re.search(r"step(\d+)", file.name).group(1))
+        found = re.findall(r"threshold fitted on train_X only \((strict|loose)[^)]*\): c = (\S+)\n\s+validation_X \(held out\): (\d+) shots \| coverage (\S+)% "
+                           r"\((\d+) answered by the network\) \| failures hierarchy (\d+) \(\S+\) against base (\d+) \(\S+\) \| discordant: hierarchy-only wrong "
+                           r"(\d+), base-only wrong (\d+), exact two-sided p = (\S+) \| mean ms/shot (\S+) \(base alone (\S+);", text)
+        for kind, c, shots, coverage, _, ours, base, only_ours, only_base, p_value, time, base_time in found:
+            add(f"\"Network first\": the network answers where its confidence is at least c, else the hierarchy (X memory, p = 0.005, network at step {step:,}; "
+                f"c fitted on train_X with the {kind} rule, scored on validation_X, {int(shots):,} shots)",
+                f"the network answers {coverage}% of the shots; {ours} failures against the hierarchy's {base} (only network-first fails {only_ours}, only the "
+                f"hierarchy {only_base}, p = {p_value}); {time} against {base_time} ms per shot on the laptop beside a GPU training: no gain in accuracy",
+                f"background/{file.name}")
     file = folder / "plain_cnn_runs" / "README.md"
     if file.is_file():
         for line in file.read_text(encoding="utf-8").splitlines():

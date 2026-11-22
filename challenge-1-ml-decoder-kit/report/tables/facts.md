@@ -252,14 +252,14 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `loss_oracle_ratio` | 1.64 | `tables/loss.md` |
 | `loss_oracle_ratio_interval` | 1.42 to 1.94 | `tables/loss.md` |
 | `loss_oracle_share` | 2.7% | `tables/loss.md` |
-| `net_X_step` | 100,000 | `tables/networks.md` |
-| `net_X_wrong3` | 0.6% | `tables/networks.md` |
-| `net_X_wrong4` | 4.5% | `tables/networks.md` |
-| `net_X_wrong5` | 20.1% | `tables/networks.md` |
-| `net_Z_step` | 74,000 | `tables/networks.md` |
-| `net_Z_wrong3` | 0.6% | `tables/networks.md` |
-| `net_Z_wrong4` | 4.6% | `tables/networks.md` |
-| `net_Z_wrong5` | 19.6% | `tables/networks.md` |
+| `net_X_step` | 110,000 | `tables/networks.md` |
+| `net_X_wrong3` | 0.7% | `tables/networks.md` |
+| `net_X_wrong4` | 4.2% | `tables/networks.md` |
+| `net_X_wrong5` | 18.7% | `tables/networks.md` |
+| `net_Z_step` | 76,000 | `tables/networks.md` |
+| `net_Z_wrong3` | 0.5% | `tables/networks.md` |
+| `net_Z_wrong4` | 4.5% | `tables/networks.md` |
+| `net_Z_wrong5` | 19.7% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |

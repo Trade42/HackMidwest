@@ -227,6 +227,9 @@ record of them (`report/data/background/plain_cnn_runs/`).
   <!--f:trk_ms_p99-->13.9<!--/f--> ms), with about ten flagged atoms per shot (`report/data/loss/tracker/timing.json`).
 - **Training cost.** `APPENDIX.md` ("The networks") gives, per network, the steps, the shots seen and the GPU hours.
   Training shots are drawn from the kit's error model on the GPU, so there is no training set on disk.
+- **Hardware (a stretch goal).** An estimate of the tie-break network on an FPGA was explored in simulation on the
+  branch `fpga`. Nothing ran on a board, and that branch is not part of this submission (`integration` and `main`),
+  so no number from it is quoted here.
 - **TCBP-JOBS** needs an NVIDIA GPU. Before it decodes, it fits a model per memory basis, which took
   <!--f:tcbp_fit3_s-->54.5 and 54.8<!--/f--> s at p = 0.003 and <!--f:tcbp_fit4_s-->120.2 and 121.6<!--/f--> s at p = 0.004 in the teammates' runs
   (`report/data/tcbp_own_shots/`).

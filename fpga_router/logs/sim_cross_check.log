@@ -1,0 +1,23 @@
+# ./sim.sh trained_X_p0.004 standin: the trained weights against the stand-in vectors. It must print FAIL: it shows that each build uses the weights of the folder it names.
+$ verilator --binary --timing -Wno-fatal --top-module tb_router -Itrained_X_p0.004 (router_params.vh) -Istandin (tb_vectors.vh) tb_router.v router_top.v router_core.v router_frontend.v uart_rx.v uart_tx.v
+Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod)
+sha256 of the weights and the vectors:
+962430838632cef0335625ec4e4da37aa82c1655308f9bca3d8c20f39f47f935  trained_X_p0.004/router_params.vh
+5b51308764c3904a3346bb17523210870a035e1376c8336b0d1d81dfe62bf605  standin/vectors.mem
+$ (cd standin && Vtb_router)
+MISMATCH shot 0 byte 0: got 67, want db (6 reply bytes)
+MISMATCH shot 0 byte 1: got 8f, want 52 (6 reply bytes)
+MISMATCH shot 0 byte 2: got f6, want f3 (6 reply bytes)
+MISMATCH shot 1 byte 0: got 63, want 12 (6 reply bytes)
+MISMATCH shot 1 byte 1: got cc, want 74 (6 reply bytes)
+MISMATCH shot 1 byte 2: got f9, want f8 (6 reply bytes)
+MISMATCH shot 2 byte 0: got ce, want 36 (6 reply bytes)
+MISMATCH shot 2 byte 1: got 2b, want 4d (6 reply bytes)
+MISMATCH shot 2 byte 2: got f5, want f0 (6 reply bytes)
+MISMATCH shot 3 byte 0: got b8, want 0f (6 reply bytes)
+FAIL: 996 byte mismatches
+latency, clocks, counted on 300 verdicts: last byte handed over by uart_rx -> verdict valid = 5; -> start bit of the reply on txd = 8; shots on which a count differed = 0
+- tb_router.v:84: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.055 devel
+- Verilator: $finish at 31ms; walltime 4.608 s; speed 6.735 ms/s
+- Verilator: cpu 4.285 s on 1 threads; allocated 4 MB

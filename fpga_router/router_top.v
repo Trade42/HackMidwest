@@ -9,7 +9,9 @@ module router_top #(
     output wire        uart_txd,                     // FPGA to host
     output wire [15:0] led
 );
-    `include "router_params.vh"                      // W_FLAT, BIAS, THRESH, FRAC from router_fpga.py export
+    // W_FLAT, BIAS, THRESH, FRAC, EASY_ITER from router_fpga.py export. The file is not in this folder: every
+    // set of weights has its own folder (standin/, trained_X_p0.004/), named to the tool as an include directory.
+    `include "router_params.vh"
     localparam integer N = 16, XW = 16, WW = 16, AW = 40;
 
     wire clk = clk_100mhz;
@@ -33,10 +35,15 @@ module router_top #(
     router_frontend #(.XW(XW)) u_front (.clk(clk), .rst(rst | resync), .byte_valid(rx_valid), .byte_data(rx_data),
                                         .x_valid(x_valid), .x_flat(x_flat));
 
+    // An easy shot (relay-BP's first leg found the solution: 1 to EASY_ITER iterations) is accepted without asking
+    // the model, as the teammates' router does (evaluation/router.py, first_leg_converged). EASY_ITER = 0: no such rule.
+    wire [XW-1:0] x_iter = x_flat[13*XW +: XW];
+    wire          hard   = (x_iter == 0) || (x_iter > EASY_ITER);
+
     wire                 out_valid, escalate;
     wire signed [AW-1:0] score;
     router_core #(.N(N), .XW(XW), .WW(WW), .AW(AW), .W_FLAT(W_FLAT), .BIAS(BIAS)) u_core (
-        .clk(clk), .rst(rst), .in_valid(x_valid), .x_flat(x_flat), .thresh(THRESH),
+        .clk(clk), .rst(rst), .in_valid(x_valid), .in_gate(hard), .x_flat(x_flat), .thresh(THRESH),
         .out_valid(out_valid), .score(score), .escalate(escalate));
 
     reg  [47:0] reply;

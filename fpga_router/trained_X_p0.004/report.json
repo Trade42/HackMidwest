@@ -1,0 +1,191 @@
+{
+ "basis": "X",
+ "p": "0.004",
+ "easy_iter": 80,
+ "frac": 17,
+ "W": [
+  -7806,
+  -1126,
+  -3758,
+  -5815,
+  -814,
+  -1439,
+  -3287,
+  -5090,
+  783,
+  -7569,
+  -2161,
+  -819,
+  -9923,
+  32,
+  18962,
+  3046
+ ],
+ "BIAS": -1400052,
+ "THRESH": -635424,
+ "train": {
+  "seed": 101,
+  "sha256": "98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc",
+  "shots": 20000,
+  "hard": 2760
+ },
+ "validation": {
+  "seed": 201,
+  "sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d",
+  "shots": 5000,
+  "hard": 691
+ },
+ "thresholds": {
+  "A": 0.004251185963174929,
+  "B": -4.84547517430125,
+  "C": -4.856590255488398,
+  "D": -635424
+ },
+ "models": {
+  "A": {
+   "model": "A  the teammates' frozen model: 17 features, floats",
+   "auc_validation_hard": 0.79715860899067,
+   "validation_hard": {
+    "shots": 691,
+    "wrong": 36,
+    "escalated": 683,
+    "wrong_escalated": 36,
+    "wrong_accepted": 0,
+    "right_escalated": 647,
+    "right_accepted": 8
+   },
+   "validation_all": {
+    "shots": 5000,
+    "wrong": 39,
+    "escalated": 683,
+    "wrong_escalated": 36,
+    "wrong_accepted": 3,
+    "right_escalated": 647,
+    "right_accepted": 4314
+   },
+   "train_hard": {
+    "shots": 2760,
+    "wrong": 120,
+    "escalated": 2715,
+    "wrong_escalated": 120,
+    "wrong_accepted": 0,
+    "right_escalated": 2595,
+    "right_accepted": 45
+   }
+  },
+  "B": {
+   "model": "B  16 features (theirs without the converged flag), floats",
+   "auc_validation_hard": 0.820949957591179,
+   "validation_hard": {
+    "shots": 691,
+    "wrong": 36,
+    "escalated": 638,
+    "wrong_escalated": 36,
+    "wrong_accepted": 0,
+    "right_escalated": 602,
+    "right_accepted": 53
+   },
+   "validation_all": {
+    "shots": 5000,
+    "wrong": 39,
+    "escalated": 638,
+    "wrong_escalated": 36,
+    "wrong_accepted": 3,
+    "right_escalated": 602,
+    "right_accepted": 4359
+   },
+   "train_hard": {
+    "shots": 2760,
+    "wrong": 120,
+    "escalated": 2530,
+    "wrong_escalated": 119,
+    "wrong_accepted": 1,
+    "right_escalated": 2411,
+    "right_accepted": 229
+   }
+  },
+  "C": {
+   "model": "C  the board's 16 whole-number features, float weights",
+   "auc_validation_hard": 0.8217557251908397,
+   "validation_hard": {
+    "shots": 691,
+    "wrong": 36,
+    "escalated": 640,
+    "wrong_escalated": 36,
+    "wrong_accepted": 0,
+    "right_escalated": 604,
+    "right_accepted": 51
+   },
+   "validation_all": {
+    "shots": 5000,
+    "wrong": 39,
+    "escalated": 640,
+    "wrong_escalated": 36,
+    "wrong_accepted": 3,
+    "right_escalated": 604,
+    "right_accepted": 4357
+   },
+   "train_hard": {
+    "shots": 2760,
+    "wrong": 120,
+    "escalated": 2535,
+    "wrong_escalated": 119,
+    "wrong_accepted": 1,
+    "right_escalated": 2416,
+    "right_accepted": 224
+   }
+  },
+  "D": {
+   "model": "D  the board's model: 16 whole numbers, 16-bit weights, FRAC = 17",
+   "auc_validation_hard": 0.8222222222222222,
+   "validation_hard": {
+    "shots": 691,
+    "wrong": 36,
+    "escalated": 639,
+    "wrong_escalated": 36,
+    "wrong_accepted": 0,
+    "right_escalated": 603,
+    "right_accepted": 52
+   },
+   "validation_all": {
+    "shots": 5000,
+    "wrong": 39,
+    "escalated": 639,
+    "wrong_escalated": 36,
+    "wrong_accepted": 3,
+    "right_escalated": 603,
+    "right_accepted": 4358
+   },
+   "train_hard": {
+    "shots": 2760,
+    "wrong": 120,
+    "escalated": 2533,
+    "wrong_escalated": 119,
+    "wrong_accepted": 1,
+    "right_escalated": 2414,
+    "right_accepted": 226
+   }
+  }
+ },
+ "board_against_teammates": {
+  "validation_hard": {
+   "shots": 691,
+   "same": 647,
+   "both_escalate": 639,
+   "both_accept": 8,
+   "only_theirs_escalates": 44,
+   "only_board_escalates": 0
+  },
+  "validation_all": {
+   "shots": 5000,
+   "same": 4956,
+   "both_escalate": 639,
+   "both_accept": 4317,
+   "only_theirs_escalates": 44,
+   "only_board_escalates": 0
+  }
+ },
+ "largest_feature": 18080,
+ "largest_abs_score": 925516,
+ "posterior_codes_on_hard_train_shots": 22
+}

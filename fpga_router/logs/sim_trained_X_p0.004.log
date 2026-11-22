@@ -1,0 +1,17 @@
+# ./sim.sh trained_X_p0.004: the trained router on all 5,000 validation shots of data/p0.004/validation_X.npz (Stim seed 201), 2026-11-22, luminaty
+$ verilator --binary --timing -Wno-fatal --top-module tb_router -Itrained_X_p0.004 (router_params.vh) -Itrained_X_p0.004 (tb_vectors.vh) tb_router.v router_top.v router_core.v router_frontend.v uart_rx.v uart_tx.v
+Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod)
+sha256 of the weights and the vectors:
+962430838632cef0335625ec4e4da37aa82c1655308f9bca3d8c20f39f47f935  trained_X_p0.004/router_params.vh
+2e60f028c6ebb86c3731e130a58e3e7a112cbeea3faeb2f987449d18b2d39f32  trained_X_p0.004/vectors.mem
+$ (cd trained_X_p0.004 && Vtb_router)
+PASS: 5000 shots match the Python model bit for bit
+latency, clocks, counted on 5000 verdicts: last byte handed over by uart_rx -> verdict valid = 5; -> start bit of the reply on txd = 8; shots on which a count differed = 0
+- tb_router.v:84: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.055 devel
+- Verilator: $finish at 517ms; walltime 93.831 s; speed 5.507 ms/s
+- Verilator: cpu 72.840 s on 1 threads; allocated 5 MB
+
+real	2m14.741s
+user	1m46.158s
+sys	0m2.666s

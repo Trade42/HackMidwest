@@ -1,0 +1,174 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-noise/in/X_f0.8_seed4100_kitformat_p0.0326371.npz",
+  "sha256": "a251dfe065d8c4ab427671930e6e13f66182a1144acee6980f3b9d3329f11141",
+  "basis": "X",
+  "p": 0.0326371,
+  "seed": 4100,
+  "shots": 2000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "transfer": {
+  "shots_file": "/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise/runs/X_seed4100/shots/X_f0.8_seed4100.npz",
+  "shots_sha256": "4e6e2867557ced29a25b1c0380b1aa2b6f2d9922bdb4fe1300e2de0a409365e8",
+  "shots": 2000,
+  "seed": 4100,
+  "basis": "X",
+  "noise": {
+   "cx_depolarize2": 0.0,
+   "cx_phase": 0.005840000000000001,
+   "cx_scatter": 0.00012552,
+   "idle_depolarize": 0.0,
+   "idle_phase": 0.000856225145421341,
+   "measure_flip": 0.010000000000000002,
+   "reset_flip": 0.016800000000000016,
+   "loss": 0.002
+  },
+  "factor": 0.8,
+  "converted": "X_f0.8_seed4100_kitformat_p0.0326371.npz",
+  "converted_sha256": "a251dfe065d8c4ab427671930e6e13f66182a1144acee6980f3b9d3329f11141",
+  "p": 0.0326371,
+  "columns": 8784,
+  "rows": 936,
+  "h_l_sha256": "a4a80003a0b234e0e10b5d65d38ce5181c39670732e0f473df0aee1796c2c8b0",
+  "generic": {
+   "what": "kit uniform model at p = 0.0326371",
+   "max": 0.10998880032223951,
+   "min": 0.008780320698230367,
+   "sum": 367.00855938719116,
+   "capped_columns": 0,
+   "sha256": "b8d59cb850ee6842011283d559b33e560c07ceecd2edfed2f10617ce6557a9ea"
+  },
+  "matched": {
+   "what": "priors.matched_priors(basis, noise of the file's meta), floor 1e-9",
+   "max": 0.059138303421918385,
+   "min": 8.36799999999404e-05,
+   "sum": 87.40596151024322,
+   "columns_fired": 8784,
+   "capped_columns": 0,
+   "sha256": "45704fcb9f2bde6fdbc6a7f0fa975f7e343c5283179e65a4cf0af45a741fc3ac"
+  }
+ },
+ "decoder": "tcbp-jobs",
+ "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
+ "preset": "tcbp-jobs",
+ "head_knobs": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "prior_cap": 0.5,
+ "matched_floor": "1e-9",
+ "logits": {
+  "data": {
+   "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-noise/in/X_f0.8_seed4100_kitformat_p0.0326371.npz",
+   "sha256": "a251dfe065d8c4ab427671930e6e13f66182a1144acee6980f3b9d3329f11141",
+   "basis": "X",
+   "p": 0.0326371,
+   "seed": 4100,
+   "shots": 2000,
+   "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+  },
+  "shots": 2000,
+  "columns": 8784,
+  "model": {
+   "head": "/home/blakew3/mlBranchMidwest/runs/tcbp-noise/in/head_X.pt",
+   "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+   "head_step": 30000,
+   "trunk": "/home/blakew3/mlBranchMidwest/runs/tcbp-noise/in/trunk_X.pt",
+   "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+   "trunk_step": 120000,
+   "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+   "device": "cuda",
+   "torch": "2.15.0+cu132",
+   "torch_threads": 1,
+   "precision": "float32",
+   "gpu": "NVIDIA A100-SXM4-80GB MIG 2g.20gb"
+  },
+  "seconds_batched_total": 10.846538782119751,
+  "per_shot_seconds": {
+   "what": "network + head, one shot at a time, on the device named",
+   "shots": 100,
+   "mean": 0.02353829198051244,
+   "median": 0.023535269021522254,
+   "p99": 0.023841918734833607
+  },
+  "batch_one_against_batched_largest_logit_gap": 0.00390625,
+  "mean_probability_sum_per_shot": 107.935640625,
+  "kit_prior_sum": 367.00855938719116
+ },
+ "stop_at": "2026-11-22T17:12:00Z",
+ "block": 100,
+ "arm_order": [
+  "m",
+  "g",
+  "h"
+ ],
+ "model_seconds": 60.92989157093689,
+ "machine": {
+  "node": "jupyter-blakew3",
+  "processor": "x86_64",
+  "cpus": 24,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "omp_threads": "1"
+ },
+ "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process",
+ "capped_columns": {
+  "m": 0,
+  "g": 0,
+  "h": 9126
+ },
+ "seconds": 157.81834602355957,
+ "shots_scored": 400,
+ "arms": {
+  "m": {
+   "shots": 400,
+   "failures": 6,
+   "share": 0.015,
+   "wilson95": [
+    0.006892291879069094,
+    0.03233463376937552
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 333,
+   "build_ms_mean": 41.59709406783804,
+   "decode_ms_mean": 7.140477515931707,
+   "build_decode_ms_mean": 48.73757158376975,
+   "build_decode_ms_median": 46.12280649598688,
+   "build_decode_ms_p99": 81.9700826250482
+  },
+  "g": {
+   "shots": 400,
+   "failures": 191,
+   "share": 0.4775,
+   "wilson95": [
+    0.42899746035680575,
+    0.5264305928949263
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 400,
+   "build_ms_mean": 41.60077557200566,
+   "decode_ms_mean": 79.33719281776575,
+   "build_decode_ms_mean": 120.93796838977141,
+   "build_decode_ms_median": 122.77925352100283,
+   "build_decode_ms_p99": 172.49784785206427
+  },
+  "h": {
+   "shots": 400,
+   "failures": 42,
+   "share": 0.105,
+   "wilson95": [
+    0.0786237272569577,
+    0.13889098538455905
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 339,
+   "build_ms_mean": 42.78204577974975,
+   "decode_ms_mean": 13.583906862477306,
+   "build_decode_ms_mean": 56.36595264222706,
+   "build_decode_ms_median": 49.292362527921796,
+   "build_decode_ms_p99": 108.63265991560182
+  }
+ },
+ "saved_utc": "2026-11-22T16:16:52.121823+00:00"
+}

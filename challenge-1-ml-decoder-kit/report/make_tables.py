@@ -1628,6 +1628,26 @@ def slide_facts(measured):
 README_HEADING = "## Our part: a hierarchical decoder with a learned tie-breaker, and a study of atom loss"
 
 
+def refresh_top_readme(section):
+    """Once our section has been appended to the top-level README.md, keep it equal to the generated one.
+
+    Only the text from our heading to the end of the file is replaced; every line above it (the teammates') stays as
+    it is. Nothing is appended here: the first append is done by hand, once. Not run by the tests (REPORT_OUT).
+    """
+    if not DOCUMENTS:
+        return
+    readme = HERE.parent.parent / "README.md"
+    text = readme.read_text(encoding="utf-8") if readme.is_file() else ""
+    if text.count(README_HEADING) != 1:
+        return
+    head = text[:text.index(README_HEADING)]
+    if not head.endswith("\n\n"):
+        raise Mismatch("the top-level README.md: our heading does not follow a blank line")
+    section = section.rstrip("\n") + "\n"                 # as in tables/readme_section.md
+    if head + section != text:
+        readme.write_text(head + section, encoding="utf-8")
+
+
 def readme_section(measured):
     """The one section appended to the top-level README.md: at most 25 lines, every number from the tables above."""
     value = lambda name: FACTS[name][0]
@@ -1710,7 +1730,7 @@ def main(argv=None):
         ensemble_statement(measured, combined)
         findings(measured)
         slide_facts(measured)
-        readme_section(measured)
+        refresh_top_readme(readme_section(measured))
         write("facts", "Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there as `<!--f:name-->value<!--/f-->`), "
                        "each with the generated table it is taken from.\n\n"
               + markdown(["Name", "Value", "From"], [[f"`{name}`", value, f"`{source}`"] for name, (value, source) in sorted(FACTS.items())]))

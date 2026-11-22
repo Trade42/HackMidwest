@@ -2626,7 +2626,8 @@ def predecoder_tcbp_table(measured):
                 raise Mismatch("exploration/predecoder_tcbp/fastpath/result_holdout_p0.005.json: not C9's frozen rule on fresh shots, or its counts disagree")
             for name, value in (("TH", held["failures"]["TH"]), ("rule", held["failures"]["rule"]), ("F", held["failures"]["F"]),
                                 ("shots", f"{held['data']['shots']:,}"), ("seed", held["data"]["seed"]), ("share", f"{held['fast_fraction']:.1%}"),
-                                ("ms_rule", ms(today["rule_mean"])), ("ms_TH", ms(today["TH_alone_mean"]))):
+                                ("ms_rule", ms(today["rule_mean"])), ("ms_TH", ms(today["TH_alone_mean"])),
+                                ("p99_rule", ms(today["rule_p99"])), ("p99_TH", ms(today["TH_alone_p99"]))):
                 fact(f"ptheld_{name}", value, source)
             held_text = ("", f". On fresh shots made after the rule was frozen ({held['data']['shots']:,} X shots at p = 0.005, seed {held['data']['seed']}; "
                          f"its one held-out check, declared in `predecoder/fastpath/CRITERION_4.md`), the frozen C9 **{held['verdict']}**: "
@@ -2640,7 +2641,7 @@ def predecoder_tcbp_table(measured):
                          f"percentile {ms(today['rule_p99'])} against {ms(today['TH_alone_p99'])}, with today's component times (the network as a CUDA "
                          f"graph, {ms(today['network_ms'])} ms; TCBP-JOBS's decode times from per-shot builds on a shared GPU)")
         if not held_file.is_file():
-            for name in ("TH", "rule", "F", "shots", "seed", "share", "ms_rule", "ms_TH"):
+            for name in ("TH", "rule", "F", "shots", "seed", "share", "ms_rule", "ms_TH", "p99_rule", "p99_TH"):
                 fact(f"ptheld_{name}", None, source)
         fact("ptfast_statement",
              "A fast path for easy shots (`predecoder/fastpath/`, branch `tcbp-fastpath`; exploration after the test results, on the 5,000 validation X "
@@ -2655,7 +2656,7 @@ def predecoder_tcbp_table(measured):
              "same validation shots" + held_text[1] + held_text[0] + "." + low_text, source)
     else:
         fact("ptfast_statement", None, source)
-        for name in ("TH", "rule", "F", "shots", "seed", "share", "ms_rule", "ms_TH"):
+        for name in ("TH", "rule", "F", "shots", "seed", "share", "ms_rule", "ms_TH", "p99_rule", "p99_TH"):
             fact(f"ptheld_{name}", None, source)
 
     # The head retrained on the neutral-atom noise (task tcbp-retrain, neutral_atom_noise/): its own simulated Stim shots, exploration. Run 1 only;
@@ -2833,10 +2834,10 @@ def readme_section(measured):
         ("priortilt", "IonQ's decoder (pre-registered)"), ("tcbp", "NVIDIA's decoder (pre-registered)"),
         ("hierarchy", "**ours, frozen before the test run** (pre-registered)"))]
     pre = lambda p, n: f"X only: {value(f'pre{n}X_H')} of 10,000 X shots"
-    table.append(["the relay-BP predecoder: relay-BP with the network's per-shot priors", "ours; secondary at p = 0.005 (chosen after its own gate "
-                  "failed), the rest a registered extension run after it", pre("0.003", 3), pre("0.004", 4), f"{value('pair_H')} · {value('pair_H_rate')}"])
-    table.append(["the predecoder with a fallback to TCBP-JOBS where its relay-BP does not converge", "ours; post hoc (designed after the first "
-                  "test result)", f"X only: {value('fb3X_rule')} of 10,000 X shots", f"X only: {value('fb4X_rule')} of 10,000 X shots",
+    table.append(["the relay-BP predecoder: relay-BP with the network's per-shot priors", "ours; X at p = 0.005 secondary (chosen after its own gate "
+                  "failed); X at p = 0.004 and 0.003 and the pair score a registered extension, run after it", pre("0.003", 3), pre("0.004", 4), f"{value('pair_H')} · {value('pair_H_rate')}"])
+    table.append(["the predecoder with a fallback to TCBP-JOBS where its relay-BP does not converge", "ours; designed after the first test result: post hoc on "
+                  "X at p = 0.005 and 0.004; frozen before the file was opened for X at p = 0.003 and for Z at p = 0.005", f"X only: {value('fb3X_rule')} of 10,000 X shots", f"X only: {value('fb4X_rule')} of 10,000 X shots",
                   f"{value('pair_rule')} · {value('pair_rule_rate')}"])
     table.append(["**the TCBP version: TCBP-JOBS with the network's per-shot priors**", f"**ours; {PTCBP_LABEL}**; no validation at p = 0.004 or 0.003",
                   f"{value('ptpair3_TH')} · {value('ptpair3_TH_rate')} (no claim: exact p = {value('ptpair3_p')} against TCBP-JOBS)",
@@ -2858,10 +2859,10 @@ def readme_section(measured):
               f"the shots they agree on; where they disagree, relay-BP joins and a neural network ({value('net_parameters')} parameters) picks the most "
               f"likely of the answers. {value('findings5')} {value('net_timed_plain')} (The offline ablation: [report/REPORT.md](challenge-1-ml-decoder-kit/report/REPORT.md), section 4, \"The ablation: what the learned part adds\".)",
               f"2. **The relay-BP predecoder** (`predecoder/`). A second output of the same network gives every one of the {value('pre_columns')} "
-              f"fault columns a probability for this shot, and relay-BP decodes with those priors. {value('pre_pair')}",
-              f"3. **The TCBP version** (`predecoder/README_tcbp.md`). The same per-shot priors given to TCBP-JOBS instead of relay-BP. "
+              f"fault columns a probability for this shot, and relay-BP decodes with those priors (called H below). {value('pre_pair')}",
+              f"3. **The TCBP version** (`predecoder/README_tcbp.md`). The same per-shot priors given to TCBP-JOBS instead of relay-BP (called TH below). "
               f"{value('ptt_statement')}",
-              f"4. Also tried, none of them replacing the above: {value('ensemble_statement')} A learned selector among these decoders' answers "
+              f"4. **Also tried**, none of them replacing the above. {value('ensemble_statement')} A learned selector among these decoders' answers "
               f"(`selector/`) fails {value('sel_pairs')} pairs at p = 0.005 against TCBP-JOBS's {value('ptpair_T')} (exact p = {value('sel_p')}): "
               "its declared line was not met.", ""]
     # the time
@@ -2885,12 +2886,16 @@ def readme_section(measured):
               "Mean time per X shot in ms (one X-memory decode; a pair is an X shot and a Z shot). CPU and GPU times are on different machines "
               "and timers and do not compare as equals.", ""]
     lines += markdown(["Method", "Where and how timed", "p = 0.003", "p = 0.004", "p = 0.005"], time_rows).split("\n")
-    lines += ["", value("ptspeed_statement"), "",
+    lines += ["", f"**In plain words:** the TCBP version buys its accuracy with time. At p = 0.005 it takes about {value('ptspeed_new')} ms per X "
+                  f"shot on the GPU after the speed work ({value('pttime_total')} ms as registered), against {value('lat_tcbp_x')} ms for TCBP-JOBS "
+                  f"alone (one decode call, its decoder built once) and {value('lat_relay_x')} ms for relay-BP on one CPU core; most of it is building "
+                  "TCBP-JOBS anew for every shot.", "", value("ptspeed_statement"), "",
               f"**A fast path for easy shots** (exploration after the test results): when the network is confident, the shot goes to TCBP-JOBS "
               f"with fixed priors, built once; the rest to the TCBP version. On {value('ptheld_shots')} fresh X shots at p = 0.005 (seed "
               f"{value('ptheld_seed')}), simulated after the rule was frozen, it sends {value('ptheld_share')} of the shots down the fast path and "
               f"fails {value('ptheld_rule')} against the TCBP version's {value('ptheld_TH')}, in {value('ptheld_ms_rule')} ms mean per X shot "
-              f"against {value('ptheld_ms_TH')}. Details: `predecoder/fastpath/README.md`.", "",
+              f"against {value('ptheld_ms_TH')}; its 99th percentile does not improve ({value('ptheld_p99_rule')} ms against {value('ptheld_p99_TH')}). "
+              "Details: `predecoder/fastpath/README.md`.", "",
               "![X test failures against time per X shot at p = 0.005, the hardware in the legend](challenge-1-ml-decoder-kit/report/figures/front_x_vs_time.png)", ""]
     # robustness
     lines += ["## Robustness: other noise, and atom loss (exploration, on our own simulated shots)", "",
@@ -2910,11 +2915,13 @@ def readme_section(measured):
               "for Z memory ([report/tables/networks.md](challenge-1-ml-decoder-kit/report/tables/networks.md)).",
               "- The first pipeline runs on one CPU core; the TCBP version needs an NVIDIA GPU (cudaq-qec 0.9.0) and builds one decoder per shot, "
               "which is most of its time.",
+              "- The GPU memory of the TCBP version and of TCBP-JOBS: not measured.",
               "- Peak memory and start-up time of each row: [report/tables/resources.md](challenge-1-ml-decoder-kit/report/tables/resources.md).", "",
               "## Reproduce", "",
-              "From `challenge-1-ml-decoder-kit/`, with Python 3.12 and its `requirements.txt` (the full list and the order: "
+              "From `challenge-1-ml-decoder-kit/` in a fresh clone (every stage, its time and where it was run: "
               "[report/REPRODUCE.md](challenge-1-ml-decoder-kit/report/REPRODUCE.md)):", "", "```sh",
-              "python -m pytest -p no:cacheprovider report     # the report's tests",
+              "sh report/reproduce_ours.sh env                  # once: .venv-ours with Python 3.12, the kit's requirements, torch (CPU) and PriorTilt; needs python3.12 and a Rust toolchain",
+              ".venv-ours/bin/python -m pytest -p no:cacheprovider report     # the report's tests",
               "sh report/reproduce_ours.sh smoke                # our decoder and relay-BP on a few shots, through the team's evaluator",
               "sh report/reproduce_ours.sh report               # every table and figure, and this page, from report/data/",
               "```", "",
@@ -2935,7 +2942,9 @@ def readme_section(measured):
               "| [`selector/`](challenge-1-ml-decoder-kit/selector/), [`ml_decoder/`](challenge-1-ml-decoder-kit/ml_decoder/) | a learned selector; an ML-first decoder |",
               "| [`evaluation/`](challenge-1-ml-decoder-kit/evaluation/) | the team's evaluator and the teammates' learned router |",
               "| [information.md](information.md) | everything we built and why |",
-              "| [`challenge2/`](challenge2/) | the teammates' Challenge 2 work (Give Your LLM a Quantum Backend); see its README |", "",
+              "| [`challenge2/`](challenge2/) | the teammates' Challenge 2 work (Give Your LLM a Quantum Backend): "
+              "[context_selection/README.md](challenge2/context_selection/README.md), "
+              "[qfm_token_relations/README.md](challenge2/qfm_token_relations/README.md) |", "",
               "The section below is the teammates' earlier technical review; current results are above.", README_END]
     return write("readme_section", "\n".join(lines))
 

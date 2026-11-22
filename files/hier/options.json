@@ -1,0 +1,1 @@
+{"rule": "network", "seeds": [1, 1001], "checkpoints": {"X": "/home/blakew3/mlBranchMidwest/ckpt/x128_step30000.pt"}, "device": "cpu", "torch_threads": 1}

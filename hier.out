@@ -1,0 +1,3 @@
+10 job(s) to run on 2 process(es); 0 part(s) kept from an earlier run
+validation_X.npz chunk 0: shots 0 to 499, failures R 4, P1 1, P2 1, relay-BP ran on 500, 168 s
+validation_X.npz chunk 1: shots 500 to 999, failures R 5, P1 3, P2 4, relay-BP ran on 500, 184 s

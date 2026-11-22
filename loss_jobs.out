@@ -84,3 +84,52 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 
   500/500 shots, 148s, failures so far starter=18 exact=15 oracle-round=8 starter-oracle-round=8 starter@0.5/stop1=21
 wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/starter+exact+oracle-round+starter-oracle-round+startercap0.5_stop1/003000-003500.npz.tmp.npz in 148s
 decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 3500..4000 conditions ['starter', 'exact', 'oracle-round', 'starter-oracle-round', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 19s, failures so far starter=1 exact=1 oracle-round=1 starter-oracle-round=1 starter@0.5/stop1=1
+  100/500 shots, 34s, failures so far starter=3 exact=3 oracle-round=2 starter-oracle-round=2 starter@0.5/stop1=2
+  150/500 shots, 50s, failures so far starter=5 exact=5 oracle-round=3 starter-oracle-round=3 starter@0.5/stop1=4
+  200/500 shots, 62s, failures so far starter=6 exact=8 oracle-round=4 starter-oracle-round=4 starter@0.5/stop1=5
+  250/500 shots, 86s, failures so far starter=7 exact=11 oracle-round=6 starter-oracle-round=6 starter@0.5/stop1=6
+  300/500 shots, 95s, failures so far starter=13 exact=18 oracle-round=12 starter-oracle-round=10 starter@0.5/stop1=12
+  350/500 shots, 108s, failures so far starter=14 exact=19 oracle-round=13 starter-oracle-round=11 starter@0.5/stop1=14
+  400/500 shots, 133s, failures so far starter=17 exact=24 oracle-round=15 starter-oracle-round=13 starter@0.5/stop1=17
+  450/500 shots, 150s, failures so far starter=19 exact=28 oracle-round=15 starter-oracle-round=13 starter@0.5/stop1=19
+  500/500 shots, 183s, failures so far starter=23 exact=33 oracle-round=17 starter-oracle-round=18 starter@0.5/stop1=23
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/starter+exact+oracle-round+starter-oracle-round+startercap0.5_stop1/003500-004000.npz.tmp.npz in 183s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 0..500 conditions ['oracle-slot'] workers 10
+  50/500 shots, 7s, failures so far oracle-slot=0
+  100/500 shots, 9s, failures so far oracle-slot=0
+  150/500 shots, 13s, failures so far oracle-slot=1
+  200/500 shots, 16s, failures so far oracle-slot=1
+  250/500 shots, 18s, failures so far oracle-slot=2
+  300/500 shots, 21s, failures so far oracle-slot=3
+  350/500 shots, 26s, failures so far oracle-slot=7
+  400/500 shots, 28s, failures so far oracle-slot=9
+  450/500 shots, 30s, failures so far oracle-slot=10
+  500/500 shots, 36s, failures so far oracle-slot=13
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/oracle-slot/000000-000500.npz.tmp.npz in 36s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 500..1000 conditions ['oracle-slot'] workers 10
+  50/500 shots, 7s, failures so far oracle-slot=0
+  100/500 shots, 9s, failures so far oracle-slot=0
+  150/500 shots, 13s, failures so far oracle-slot=0
+  200/500 shots, 15s, failures so far oracle-slot=2
+  250/500 shots, 16s, failures so far oracle-slot=3
+  300/500 shots, 18s, failures so far oracle-slot=3
+  350/500 shots, 22s, failures so far oracle-slot=5
+  400/500 shots, 24s, failures so far oracle-slot=5
+  450/500 shots, 27s, failures so far oracle-slot=5
+  500/500 shots, 34s, failures so far oracle-slot=7
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/oracle-slot/000500-001000.npz.tmp.npz in 34s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 1000..1500 conditions ['oracle-slot'] workers 10
+  50/500 shots, 6s, failures so far oracle-slot=0
+  100/500 shots, 11s, failures so far oracle-slot=1
+  150/500 shots, 13s, failures so far oracle-slot=2
+  200/500 shots, 17s, failures so far oracle-slot=2
+  250/500 shots, 19s, failures so far oracle-slot=4
+  300/500 shots, 21s, failures so far oracle-slot=4
+  350/500 shots, 23s, failures so far oracle-slot=5
+  400/500 shots, 26s, failures so far oracle-slot=8
+  450/500 shots, 29s, failures so far oracle-slot=10
+  500/500 shots, 39s, failures so far oracle-slot=13
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/oracle-slot/001000-001500.npz.tmp.npz in 39s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 1500..2000 conditions ['oracle-slot'] workers 10
+  50/500 shots, 7s, failures so far oracle-slot=0

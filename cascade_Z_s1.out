@@ -51,3 +51,27 @@ step 10000 of 230000 | training noise p=0.0055 | mean training loss 0.4433 | lea
   p=0.004  shots wrong 0.2840 (always-0 1.0000)  bits right 0.9452 (always-0 0.4990)
   p=0.005  shots wrong 0.5688 (always-0 0.9998)  bits right 0.8533 (always-0 0.4998)
 speed: 896 shots/s in training, 0.143 s per step, report 8.9 s, peak GPU memory 3.91 GB in tensors and 4.17 GB held by PyTorch
+step 11976 of 230000 | training noise p=0.0055 | mean training loss 0.4306 | learning rate 9.94e-04
+  averaged weights on 5000 error-model shots per p (not Stim shots); 95% interval of a share: +-0.014 or less
+  p=0.001  shots wrong 0.0012 (always-0 0.9772)  bits right 0.9998 (always-0 0.6074)
+  p=0.002  shots wrong 0.0152 (always-0 0.9976)  bits right 0.9981 (always-0 0.5287)
+  p=0.003  shots wrong 0.0782 (always-0 0.9992)  bits right 0.9892 (always-0 0.5041)
+  p=0.004  shots wrong 0.2582 (always-0 1.0000)  bits right 0.9499 (always-0 0.4990)
+  p=0.005  shots wrong 0.5432 (always-0 0.9998)  bits right 0.8578 (always-0 0.4998)
+speed: 890 shots/s in training, 0.144 s per step, report 8.9 s, peak GPU memory 3.91 GB in tensors and 4.17 GB held by PyTorch
+speed: stopped by the file /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1/STOP at step 11976; continue with --resume /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1/checkpoint.pt
+checkpoint: /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1/checkpoint.pt at step 11976
+resumed at step 11976 | seed 1 | gross code, Z memory, 12 cycles, detectors=all (1728 detectors, 67752 error mechanisms) | logical operators: light
+model: width 128, depth 8, bottleneck 4, residual branch, 893697 parameters | batch 128
+curriculum: 1000 steps at p=0.001, 6000 steps climbing in 12 jumps, then p=0.0055 | peak learning rate 0.001
+initial weights: mirrored from X memory, step 30000, seed 1, commit 7ff6a68b95916773a67d209959c92b04c2254cd1
+commit db2de883f97771dab1140ac4956cad8c06f05aac | torch 2.15.0+cu132
+speed: device cuda, mixed precision fp16, start-up 24 s
+step 12000 of 100000 | training noise p=0.0055 | mean training loss 0.4188 | learning rate 9.68e-04
+  averaged weights on 5000 error-model shots per p (not Stim shots); 95% interval of a share: +-0.014 or less
+  p=0.001  shots wrong 0.0016 (always-0 0.9772)  bits right 0.9997 (always-0 0.6074)
+  p=0.002  shots wrong 0.0144 (always-0 0.9976)  bits right 0.9981 (always-0 0.5287)
+  p=0.003  shots wrong 0.0768 (always-0 0.9992)  bits right 0.9894 (always-0 0.5041)
+  p=0.004  shots wrong 0.2538 (always-0 1.0000)  bits right 0.9508 (always-0 0.4990)
+  p=0.005  shots wrong 0.5416 (always-0 0.9998)  bits right 0.8586 (always-0 0.4998)
+speed: 763 shots/s in training, 0.168 s per step, report 8.7 s, peak GPU memory 3.91 GB in tensors and 5.94 GB held by PyTorch

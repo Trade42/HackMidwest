@@ -216,7 +216,7 @@ def plot(rates, path, basis="X", loss=False, published_factor=1.0):
     decoders = [d for d in DECODER_NAMES if any(r["decoder"] == d for r in rates)]
     if not decoders:
         return False
-    figure, axes = plt.subplots(1, len(decoders), figsize=(5.6 * len(decoders), 4.6), sharey=True, squeeze=False)
+    figure, axes = plt.subplots(1, len(decoders), figsize=(max(5.6 * len(decoders), 10.5), 4.6), sharey=True, squeeze=False)
     figure.patch.set_facecolor(SURFACE)
     factors = sorted({r["factor"] for r in rates} | {published_factor})
     floor = min([r["wilson_high"] for r in rates] + [1e-3]) / 2

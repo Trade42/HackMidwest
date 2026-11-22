@@ -177,3 +177,8 @@ lane_b2() {
   FIRST=300 REPEAT=1 q2_blind
   OUT=$LOSS_OUT SEED=6100 REPEAT=1 stream q2_loss --loss --factors 0.6 --decoders relay --rows blind/matched --first 100
 }
+
+# Question 3 with atom loss (lane B, 11:41 UTC): flag-aware relay-BP with matched priors at more factors, to see
+# where the code works once loss is in.
+q3_loss()     { OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.3,0.5 --decoders relay --rows starter/matched --first 1000 &&
+                OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.8 --decoders relay --rows starter/matched --first 300; }

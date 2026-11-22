@@ -1,6 +1,7 @@
 # Neutral-atom-shaped noise: what a decoder gains from knowing the shape of the noise
 
-A demonstration beside the required sweep. The results are in [RESULTS.md](RESULTS.md).
+A demonstration beside the required sweep. The results are in [RESULTS.md](RESULTS.md); the plot of failures
+against the noise factor is `results/failure_vs_factor_X.png`.
 
 **This is not Infleqtion's noise model.** It is our own model, built from figures Infleqtion has published, with
 our own choices wherever nothing is published. Everything here is simulated; nothing was measured on hardware.
@@ -64,11 +65,16 @@ numbers are for X memory; every comparison is on the same shots.
    1). The wrong picture also makes relay-BP work about 4 times harder per shot. The generic picture's mistake is
    specific: it expects faults that spread from one check atom onto several data atoms ("hook" faults), and this
    hardware hardly makes them.
-2. **What loss flags add** (question 2): *(running; see RESULTS.md, question 2)*
+2. **What loss flags add** (question 2). With atoms being lost (about 10 data atoms per run at 0.4 of the
+   published rates), relay-BP that ignores the loss flags fails 18 of 300 runs at factor 0.4 and 62 of 100 at
+   0.6; told which atoms were found missing, it fails 0 and 9 of the same runs, and it never lost a run by using
+   the flags. Knowing the shape still helps on top of the flags: at 0.6, 47 failures with generic priors against 10
+   with matched ones, on the same 150 runs.
 3. **Where the code starts to work.** With matched priors relay-BP fails 0.1% of runs at factor 0.6, 2% at 0.8,
-   6% at 0.9 and 17% at factor 1. So the code works from about 0.9 of the published rates down. **The published
-   figures themselves sit just above that range, and today's machine further above it**, because this model leaves
-   out atom loss, leakage, atom moves and the mid-circuit readout their machine does not yet have.
+   6% at 0.9 and 17% at factor 1: without atom loss the code works from about 0.9 of the published rates down.
+   **With atom loss** (and its flags) it fails 0.8% at 0.5, 6% at 0.6 and 57% at 0.8: it works only up to about
+   0.65 of the published rates. **So today's published figures sit far above the range where this code works**, and
+   the model still leaves out leakage, atom moves and the mid-circuit readout their machine does not have yet.
 
 ## What the tables do not show
 

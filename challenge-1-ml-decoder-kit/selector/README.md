@@ -67,6 +67,27 @@ p = 0.004 model, applied unchanged to the p = 0.003 validation files (log `logs/
 selector [1 0], 1 failed pair of 5,000; T [0 1], 1; f [1 0], 1. Every decoder fails 0 to 5 times
 here, so this says nothing either way.
 
+### p = 0.005: the procedure, written down before the fit
+
+Written at 08:45 UTC, before any p = 0.005 model existed.
+
+1. **Fit** `models/p0.005.json` with the pool T, P1, P2, R (no joint decoding at p = 0.005), on every
+   training file that has all four members:
+   - p = 0.005 `train_X` (the laptop's R, P1, P2 and the server's T);
+   - p = 0.004 `train_X` and `train_Z` (J left out).
+
+   The features are those of p = 0.004, unchanged, and lambda comes from the cross-validation on these
+   training shots. p = 0.005 `train_Z` has no R, P1, P2 and cannot be used. If the laptop's `train_X`
+   is not there by 10:15 UTC, the fit uses the p = 0.004 files alone, and the README says so.
+2. **Score it once** on the p = 0.005 `validation_X` and `validation_Z`.
+3. **The kill line:** fewer failed pairs than TCBP-JOBS alone (187 of 5,000), paired on the same
+   pairs, with exact two-sided p < 0.05.
+   - If it passes, `models/p0.005.json` is frozen as it is.
+   - If it does not, that is the result. The row is not run on the test shots, and nothing is tuned
+     on the validation shots to make it pass.
+4. **The tripwire:** if the selector gained more than half the gap to the ORACLE (fewer than about 146
+   failed pairs), check for leakage before reporting it.
+
 ## Commands
 
 Run from `challenge-1-ml-decoder-kit/`, in a venv with the kit's `requirements.txt` (see

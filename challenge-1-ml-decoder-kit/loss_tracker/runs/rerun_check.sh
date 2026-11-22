@@ -1,9 +1,10 @@
 #!/bin/bash
 # Done-when 4: a second run gives the same per-shot results. Decodes the first 250 validation shots of the frozen
-# pair again with 2 worker processes instead of 4, in one part instead of the original's, and compares every field.
+# pair again with 2 worker processes instead of the original run's 4, and compares every field.
 source loss_tracker/runs/common.sh
 source loss_tracker/runs/frozen.sh
 OUT=$S/parts/rerun/val_frozen_000000-000250_workers2.npz
+mkdir -p "$(dirname "$OUT")"
 [ -f "$OUT" ] || lane "$PY" -m loss_tracker.decode --data "$VAL" --post "$S/post/val_$TRACK_NAME.npz" --conditions "$VARIANT" \
   --start 0 --stop 250 --workers 2 --out "$OUT"
 "$PY" - "$OUT" "$S/parts/val/frozen/000000-000250.npz" <<'PY'

@@ -1,0 +1,83 @@
+Dataset val_X_p0.004_s1e-3_seed7200.npz (seed 7200), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| learned | 40164 | 0.482 | 0.774 | 0.353 | -1.390 | +0.12 |
+| order1_explain1 | 40164 | 0.509 | 0.793 | 0.379 | -1.325 | +0.17 |
+| order1_coupled2 | 40164 | 0.494 | 0.779 | 0.367 | -1.368 | +0.16 |
+| order1_drop | 40164 | 0.461 | 0.747 | 0.334 | -1.468 | +0.12 |
+| order1_naive | 40164 | 0.454 | 0.739 | 0.349 | -1.536 | +0.01 |
+
+Kill line (version `learned`): losses of rounds 1 to 9 within one round of the truth: 0.764 of 30393 (rounds 2 to 10: 0.754 of 30173). The line is 0.5.
+
+By true loss round (version `learned`):
+
+| true round | atoms | most probable round is the true one | within one round (95% Wilson) | mean P(true round) | mean P(within one) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| 1 | 3472 | 0.634 | 0.824 (0.811–0.836) | 0.534 | 0.757 | +0.79 |
+| 2 | 3462 | 0.493 | 0.847 (0.835–0.859) | 0.382 | 0.792 | +0.54 |
+| 3 | 3382 | 0.479 | 0.790 (0.776–0.803) | 0.354 | 0.703 | +0.44 |
+| 4 | 3329 | 0.470 | 0.758 (0.743–0.772) | 0.333 | 0.662 | +0.38 |
+| 5 | 3418 | 0.453 | 0.749 (0.734–0.764) | 0.320 | 0.648 | +0.27 |
+| 6 | 3376 | 0.432 | 0.733 (0.718–0.748) | 0.305 | 0.628 | +0.21 |
+| 7 | 3255 | 0.420 | 0.712 (0.696–0.727) | 0.298 | 0.611 | +0.16 |
+| 8 | 3430 | 0.431 | 0.731 (0.716–0.746) | 0.302 | 0.626 | +0.05 |
+| 9 | 3269 | 0.420 | 0.726 (0.710–0.741) | 0.296 | 0.628 | -0.01 |
+| 10 | 3252 | 0.438 | 0.738 (0.722–0.753) | 0.309 | 0.656 | -0.23 |
+| 11 | 3231 | 0.437 | 0.846 (0.833–0.858) | 0.330 | 0.745 | -0.42 |
+| 12 | 3288 | 0.676 | 0.834 (0.821–0.846) | 0.463 | 0.697 | -0.78 |
+
+By what the atom shares (from the heralds alone):
+
+| group | share of the flagged atoms | atoms | true round | within one round | mean log P(true round) |
+|---|---|---|---|---|---|
+| shares no check with another flagged data atom | 0.220 | 8834 | 0.538 | 0.822 | -1.234 |
+| shares an X check only | 0.120 | 4802 | 0.506 | 0.792 | -1.318 |
+| shares a Z check only | 0.116 | 4662 | 0.511 | 0.799 | -1.316 |
+| shares X and Z checks | 0.544 | 21866 | 0.449 | 0.746 | -1.485 |
+| alone, and none of its 6 check atoms was ever flagged | 0.142 | 5701 | 0.544 | 0.824 | -1.215 |
+
+Reliability of the round posterior, every (atom, round) pair (expected calibration error 0.0018):
+
+| posterior between | pairs | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.00 and 0.02 | 269672 | 0.004 | 0.004 |
+| 0.02 and 0.05 | 54965 | 0.033 | 0.036 |
+| 0.05 and 0.10 | 43589 | 0.072 | 0.074 |
+| 0.10 and 0.20 | 43809 | 0.144 | 0.144 |
+| 0.20 and 0.30 | 25619 | 0.246 | 0.243 |
+| 0.30 and 0.40 | 16163 | 0.347 | 0.339 |
+| 0.40 and 0.50 | 11075 | 0.447 | 0.442 |
+| 0.50 and 0.60 | 7426 | 0.546 | 0.540 |
+| 0.60 and 0.70 | 4947 | 0.646 | 0.632 |
+| 0.70 and 0.80 | 2697 | 0.743 | 0.730 |
+| 0.80 and 0.90 | 1306 | 0.846 | 0.844 |
+| 0.90 and 1.00 | 700 | 0.948 | 0.949 |
+
+Reliability of the most probable round (expected calibration error 0.0091):
+
+| its posterior between | atoms | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.10 and 0.20 | 306 | 0.181 | 0.157 |
+| 0.20 and 0.30 | 3934 | 0.262 | 0.248 |
+| 0.30 and 0.40 | 8672 | 0.353 | 0.341 |
+| 0.40 and 0.50 | 10176 | 0.449 | 0.445 |
+| 0.50 and 0.60 | 7426 | 0.546 | 0.540 |
+| 0.60 and 0.70 | 4947 | 0.646 | 0.632 |
+| 0.70 and 0.80 | 2697 | 0.743 | 0.730 |
+| 0.80 and 0.90 | 1306 | 0.846 | 0.844 |
+| 0.90 and 1.00 | 700 | 0.948 | 0.949 |
+
+Temperature on the evidence (1 = as fitted; the tracker alone, before any decoding):
+
+| temperature | mean log P(true round) | calibration error of the most probable round |
+|---|---|---|
+| 0.7 | -1.4732 | 0.1179 |
+| 0.85 | -1.4089 | 0.0591 |
+| 1.0 | -1.3899 | 0.0091 |
+| 1.25 | -1.4048 | 0.0561 |
+| 1.5 | -1.4438 | 0.1057 |
+| 2.0 | -1.5386 | 0.1728 |
+| 3.0 | -1.7092 | 0.2454 |
+
+For scale, the uniform guess: mean P(true round) 0.083, mean log P -2.485.

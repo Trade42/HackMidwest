@@ -226,6 +226,51 @@ Pooled with the test (8,000 shots: the test's shots 0–3,999, the replication's
 
 ## Step 4
 
+{{include results/step4_plan.md}}
+
+### A learned tracker
+
+`learned.py`: a bidirectional GRU (64 units, 34,950 weights) over the 13 detector rounds of one flagged atom. Its
+inputs are the 3 X-check and 3 Z-check detector bits, which of them are reliable, the heralds of its 6 check atoms
+and of the other-type check atoms next to it, its side, and how many other flagged data atoms sit on each of its
+checks. Its output is a softmax over the 72 loss slots. Trained on the training split (seed 7100, 200,376 lost
+atoms) with the probes' slot as the label: 20 epochs, Adam with a one-cycle schedule (peak 3e-3), batches of 512,
+seed 0, CPU, 4 threads. Model file `tables/learned_X_p0.004_s1e-3.pt`. Command `loss_tracker/runs/learned.sh`;
+log `logs/learned.log`; table `results/accuracy_val_learned.md` (validation split, seed 7200).
+
+{{include results/accuracy_val_learned.md from 1 to 10}}
+
+{{include results/step4_learned.md}}
+
+### Other loss rates: s = 2e-3 (about today's hardware) and s = 5e-4
+
+`loss_tracker/runs/extra.sh`: a training split (20,000 shots) and a validation split (4,000 shots) at the new
+rate, the tables fitted on that training split, the frozen tracker version run on the validation split (`tracker`),
+and the same shots with the tables fitted at s = 1e-3 (`tables_of_1e-3`). Logs `logs/extra_X_s2e-3.log`,
+`logs/extra_X_s5e-4.log`.
+
+s = 2e-3 (training seed 7140, validation seed 7240):
+
+{{include results/accuracy_val_X_p0.004_s2e-3.md from 1 to 25}}
+
+s = 5e-4 (training seed 7160, validation seed 7260):
+
+{{include results/accuracy_val_X_p0.004_s5e-4.md from 1 to 25}}
+
+### Z memory (s = 1e-3)
+
+Training seed 7120, validation seed 7220, tables fitted on Z-memory shots (`tables/Z_p0.004_s1e-3.npz`). Log
+`logs/extra_Z_s1e-3.log`.
+
+{{include results/accuracy_val_Z_p0.004_s1e-3.md from 1 to 25}}
+
+### The tracker's cost per shot
+
+`loss_tracker/runs/timing.sh`: one process pinned to CPU 0 under the lane-D lock, numpy on one thread, the first
+300 validation shots. Log `logs/timing.log`.
+
+{{include results/timing.md}}
+
 {{include results/step4.md}}
 
 ## What this says

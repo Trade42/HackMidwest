@@ -206,7 +206,8 @@ and stops if the logits were made with another checkpoint than the one given.
 time: the second one lives in a helper process that is started with the session and sees
 every shot in order. The answers are those of the sequential mode (`parallel_check.py`
 compares them shot for shot). The session then uses two cores, and its time per shot is wall
-time, not CPU time. It is off by default, and the sequential row is the main one.
+time, not CPU time. It is off by default, and the sequential row is the main one. **Label that row as two
+cores wherever its time is quoted:** the evaluator's own record still says `workers: 1`.
 
 **Reference rows through the same evaluator:** `--decoder hierarchy.priortilt_plugin:make_decoder`
 is PriorTilt once (the same options file); `{"rule": "converged"}` and `{"rule": "weight"}`
@@ -480,7 +481,10 @@ learned: the network's weights, as in part 1. The rule is chosen on the `train_*
 reported on the `validation_*` files; the tool refuses to mark a rule chosen on the file it
 scores (`--chosen-on`). The three tools that fit or choose (`select.py --fit-candidates`,
 `ensemble.py --chosen-on`, `plugin_options.py`) also refuse a file made from `test_*` or
-`go_*` shots: on held-out shots `ensemble.py` takes `--rule f` only.
+`go_*` shots: on held-out shots `ensemble.py` takes `--rule f` only. The guard reads the name
+the file records, so it cannot see a file that records none: the laptop's selector files,
+logits without the `.json` beside them, and ensemble `.json` files saved before 921f2e8.
+Every file the frozen commit makes records its name.
 
 How the list grew, for the record: a to e were written before any member file existed.
 f, g and gw were added after the first tables without J had shown that no rule beat
@@ -685,7 +689,8 @@ python -m hierarchy.plugin_options --out runs/hierarchy_options.json --x-checkpo
 python -m hierarchy.preflight --options runs/hierarchy_options.json --x data/p0.004/validation_X.npz --z data/p0.004/validation_Z.npz \
     --rule f --tcbp-python <TCBP python> --out runs/preflight_<time>            # must end with PREFLIGHT PASSED
 python -m hierarchy.parallel_check --options runs/hierarchy_options.json --x data/p0.004/validation_X.npz \
-    --z data/p0.004/validation_Z.npz --shots 100                                # before the side-by-side row: must exit 0
+    --z data/p0.004/validation_Z.npz --shots 300                                # before the side-by-side row: must exit 0
+#    300 shots reach relay-BP and the rule on one X shot (18) and one Z shot (268); fewer shots miss the Z one
 
 # 1. part 1's row and the baselines, through the team's evaluator (one process; the main row is the sequential one)
 python -m evaluation.evaluate --test-x $D/test_X.npz --test-z $D/test_Z.npz --decoder hierarchy.plugin:make_decoder \

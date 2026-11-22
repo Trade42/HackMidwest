@@ -2,8 +2,9 @@ Only what the numbers support:
 
 1. **The syndrome history tells when a lost atom was lost.** The neighbouring checks start to flicker within a
    round of the loss, and a change-point model over the 6 checks puts 80% of the losses within one round,
-   calibrated. The accuracy does not fall for late losses (the herald helps there). The main limit is the
-   signal: a check type shows nothing in a given round half of the time.
+   calibrated. The accuracy does not fall for late losses (the herald helps there). A single round says little
+   (a lost atom's triple still shows "nothing fires" in 20 to 34% of rounds; noise fires a present atom's triple
+   in 35%), so the timing comes from several rounds, and losses in the middle rounds are the hardest.
 2. **Most lost atoms are not alone** (78% share a check with another lost atom), and coupling the atoms matters
    more than any other piece of the model (mean log P −1.536 → −1.368). Explaining a shared bit from the other
    atom's own detectors, instead of discarding it, helps the tracking further (−1.368 → −1.325).

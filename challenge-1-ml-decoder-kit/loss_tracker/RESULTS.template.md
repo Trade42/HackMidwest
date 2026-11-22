@@ -49,6 +49,18 @@ uniform guess. Nothing else in the decoder changes.
 All are X memory, p = 0.004, s = 1e-3, sampled on this PC (`runs/sample.sh`, log `logs/sample.log`). The files
 are in `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/` and are not committed.
 
+The splits of step 4 (tracking only; `runs/extra.sh`, logs `logs/extra_*.log`), 20,000 training and 4,000
+validation shots each:
+
+| Point | Training seed, sha256 | Validation seed, sha256 | Lost data atoms per shot |
+|---|---|---|---|
+| X, s = 5e-4 | 7160, `7a9bba703cd1ff7a1f397fc0164e13fad61d590a0ebd38499ebedf9ebc57b921` | 7260, `63d06b61cdc3ec9bd37dab3e4d6b405dd3fe9a5f446cc345c8fefa8674ae35e7` | 5.1 |
+| X, s = 2e-3 | 7140, `33cf6440bd56f238158aa079f9e970a18c7c29679f4431da75c09d86b02d1f50` | 7240, `f8ed976b101da032fc5059430cb16eebb0425ce115de794f3bcad968a0cc03b4` | 19.3 |
+| Z, s = 1e-3 | 7120, `47acaded1a668a36c667874b280bad5c31c7bffb22c3a76cbbb953c837cb397e` | 7220, `ff75557b4d3dda94e3cbf541f3e1215f5a67b2484bed7163eba824dd41cca61d` | 10.0 |
+
+The replication's split (seed 7310, 4,000 shots) was sampled on the team's server: sha256
+`07c2f43737bdd07f612669432094b7bd2614fc13614ccabff640c28f4dd29c2e`.
+
 The truth (the status probes) is read in five places only: `fit.py` and `learned.py train` (training shots),
 `signal.py` (training shots), `accuracy.py` (scoring), and the ORACLE rows and the scoring in `decode.py`.
 
@@ -59,7 +71,9 @@ Command: `loss_tracker/runs/step1_step2.sh` (`python -m loss_tracker.signal` on 
 
 {{include results/signal_train.md}}
 
-What this says:
+What this says (`loss/flicker.py`, the isolated-atom flicker table L5 that `loss-gates` handed on, was not run:
+`signal.py` measures the same rates by round relative to the loss, on clean triples instead of fully isolated
+atoms, which keeps several times more data; step 2's table by sharing gives the isolated-atom view of the tracker):
 
 - **Most lost atoms are not alone.** 78% share a check with another lost atom, and 35% have a flagged check atom
   next to them; 14% are alone in every sense. (The brief said each atom shares its checks with 30 others. The
@@ -114,9 +128,11 @@ What this says:
   simplest version (`order0_naive`) shows the same shape (59% and 54% at the ends, 35 to 43% in between), so
   this is not a property of one model. What does change with the round is the direction of the error: early
   losses are placed too late (+0.8 round in round 1), late ones too early (−0.6 in round 12).
-- **The limit is the signal, not the model.** After a loss, each check type shows nothing in a given round with
-  probability about 1/2, so a loss stays invisible for a round with probability about 1/4. Atoms that share no
-  check with another flagged atom reach 53% exact and 81% within one round; no version can do much better.
+- **A single round says little; the timing comes from several.** An atom lost earlier still shows a present
+  atom's most common pattern (no detector of the triple fires) in 34% of rounds on its in-a-row triple and 20%
+  on its split triple, while noise makes a present atom's triple fire in 35% of rounds (step 1). Atoms that share
+  no check with another flagged atom reach 53% exact and 81% within one round. The learned tracker of step 4 does
+  slightly better on exactly those atoms (−1.234 against −1.271), so the model leaves a little on the table there.
 - **Each piece of the model is worth something** (mean log P of the true round; uniform guess −2.485):
   independent rounds, ignoring the other atoms −1.676; conditioning on the round before −1.536; coupling the
   atoms −1.368; explaining shared bits −1.325. For atoms that share X and Z checks with other flagged atoms

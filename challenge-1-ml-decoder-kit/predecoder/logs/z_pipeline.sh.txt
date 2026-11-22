@@ -47,6 +47,7 @@ case $STAGE in
     test "${3:-}" = GO || { echo "test stages need GO" >&2; exit 2; }
     sha256sum -c - <<EOF
 b86ae320d13fa555d8358fe399156d28d4e52b01fabf8eafa1b30e60bdcd0cef  data/p0.005/test_Z.npz
+35bc0be9556671c09832914e4e8332608c8d52ff8bce411b127997d2989f3b0a  $FIT
 EOF
     if [ $STAGE = test-head ]; then
       run bash -c "

@@ -13,8 +13,17 @@ A shot fails when any of the 12 logical bits is predicted wrong. The numbers are
 memory basis, the one the checkpoint was trained for. The kit's headline rate is per pair of
 an X shot and a Z shot and needs both bases.
 
+Confidence. The network is meant as the first stage of a hierarchy: it keeps the shots it
+is sure of, and a classical decoder takes the rest. The confidence of a shot is the smallest
+|logit| among its 12 outputs. The script prints, for the most confident 10% to 100% of the
+shots, how many of the kept shots fail and how many of the rest. A threshold read from such
+a table is fitted to that file: freeze it, and report it on another file.
+
 Files named test_* or go_* are the team's held-out shots. The script refuses them unless
 --final is given: score them once, after every choice is frozen on validation shots.
+
+--save writes <prefix>.json (the numbers) and <prefix>.npz (per shot, in file order: logits,
+predictions, observables, failed, confidence), for a router to use later.
 """
 import argparse
 import json
@@ -28,7 +37,9 @@ import torch
 
 from circuit import detector_ids, sample
 from make_circuit import memory_experiment
-from neural.train import load_decoder, predict
+from neural.train import load_decoder
+
+KEPT_FRACTIONS = (0.10, 0.25, 0.50, 0.75, 0.90, 0.95, 0.99, 1.00)
 
 
 def wilson_interval(failures, shots, z=1.959964):
@@ -66,9 +77,10 @@ def sample_shots(config, p, shots, seed):
 
 
 def decode(model, detectors, device, batch=250):
-    """Predictions [shots, observables] as a uint8 array."""
-    parts = [predict(model, torch.from_numpy(detectors[start:start + batch]).to(device)).cpu()
-             for start in range(0, len(detectors), batch)]
+    """Logits [shots, observables] as a float32 array, in the order of the shots. A positive logit predicts a flip."""
+    with torch.no_grad():
+        parts = [model(torch.from_numpy(detectors[start:start + batch]).to(device)).float().cpu()
+                 for start in range(0, len(detectors), batch)]
     return torch.cat(parts).numpy()
 
 
@@ -76,17 +88,34 @@ def batch_one_latency(model, detectors, device, shots=200, warm_up=10):
     """Seconds per shot at batch size 1. The timer wraps: copy the shot to the device, run the network, copy the answer back."""
     seconds = []
     for index in range(min(len(detectors), shots + warm_up)):
-        shot = torch.from_numpy(detectors[index:index + 1])
         start = time.perf_counter()
-        predict(model, shot.to(device)).cpu()
+        decode(model, detectors[index:index + 1], device)
         if device.type == "cuda":
             torch.cuda.synchronize()
         seconds.append(time.perf_counter() - start)
     return np.array(seconds[warm_up:])
 
 
+def confidence_sweep(confidence, failed, fractions=KEPT_FRACTIONS):
+    """Keep the most confident shots first. One dict per kept fraction.
+
+    The threshold is the smallest confidence among the kept shots. Shots of equal confidence
+    are kept in file order.
+    """
+    order = np.argsort(-confidence, kind="stable")
+    rows = []
+    for fraction in fractions:
+        kept = max(1, int(round(fraction * len(failed))))
+        failures_kept, failures_rest = int(failed[order[:kept]].sum()), int(failed[order[kept:]].sum())
+        rows.append({"kept_fraction": fraction, "threshold": float(confidence[order[kept - 1]]), "shots_kept": kept,
+                     "failures_kept": failures_kept, "failure_fraction_kept": failures_kept / kept,
+                     "failure_interval_kept": list(wilson_interval(failures_kept, kept)),
+                     "shots_rest": len(failed) - kept, "failures_rest": failures_rest})
+    return rows
+
+
 def evaluate(checkpoint, detectors, observables, device="cpu", latency_shots=200):
-    """Score the checkpoint's decoder. Returns a dict of numbers and the predictions."""
+    """Score the checkpoint's decoder. Returns a dict of numbers and a dict of per-shot arrays in file order."""
     device = torch.device(device)
     model, saved = load_decoder(checkpoint, device)
     config = saved["config"]
@@ -94,8 +123,10 @@ def evaluate(checkpoint, detectors, observables, device="cpu", latency_shots=200
         circuit = memory_experiment(config["code"], config["basis"], config["rounds"])
         detectors = detectors[:, detector_ids(circuit, config["basis"])]
     detectors, observables = np.ascontiguousarray(detectors, dtype=np.uint8), np.asarray(observables, dtype=np.uint8)
-    predictions = decode(model, detectors, device)
+    logits = decode(model, detectors, device)
+    predictions = (logits > 0).astype(np.uint8)
     failed = (predictions != observables).any(axis=1)
+    confidence = np.abs(logits).min(axis=1)
     shots, failures, cycles = len(failed), int(failed.sum()), config["rounds"]
     low, high = wilson_interval(failures, shots)
     latency = batch_one_latency(model, detectors, device, latency_shots)
@@ -105,12 +136,15 @@ def evaluate(checkpoint, detectors, observables, device="cpu", latency_shots=200
         "per_cycle": per_cycle(failures / shots, cycles), "per_cycle_interval": [per_cycle(low, cycles), per_cycle(high, cycles)],
         "always_zero_failures": int(observables.any(axis=1).sum()),
         "bits_right": float((predictions == observables).mean()), "always_zero_bits_right": float((observables == 0).mean()),
+        "confidence_sweep": confidence_sweep(confidence, failed),
         "latency_ms_mean": float(latency.mean() * 1e3), "latency_ms_median": float(np.median(latency) * 1e3),
         "latency_ms_p99": float(np.percentile(latency, 99) * 1e3), "latency_shots": len(latency),
         "device": device_name(device), "checkpoint_step": saved["step"], "checkpoint_commit": saved["commit"],
         "detectors_read": config["detectors"], "training_seed": config["seed"],
     }
-    return numbers, predictions, failed
+    per_shot = {"logits": logits, "predictions": predictions, "observables": observables, "failed": failed,
+                "confidence": confidence}
+    return numbers, per_shot
 
 
 def device_name(device):
@@ -130,7 +164,8 @@ def main(argv=None):
     parser.add_argument("--device", default="auto", help="auto, cpu or cuda")
     parser.add_argument("--threads", type=int, help="CPU threads for torch")
     parser.add_argument("--latency-shots", type=int, default=200)
-    parser.add_argument("--save", help="write the numbers (.json) and the predictions (.npz) with this path prefix")
+    parser.add_argument("--save", help="path prefix: writes <prefix>.json (the numbers) and <prefix>.npz (per shot: "
+                                       "logits, predictions, observables, failed, confidence)")
     args = parser.parse_args(argv)
     if args.threads:
         torch.set_num_threads(args.threads)
@@ -145,7 +180,7 @@ def main(argv=None):
     else:
         raise SystemExit("give --data, or --p and --seed")
 
-    numbers, predictions, failed = evaluate(args.checkpoint, detectors, observables, device, args.latency_shots)
+    numbers, per_shot = evaluate(args.checkpoint, detectors, observables, device, args.latency_shots)
     numbers["data"] = description
     low, high = numbers["failure_interval"]
     cycle_low, cycle_high = numbers["per_cycle_interval"]
@@ -160,10 +195,18 @@ def main(argv=None):
     print(f"batch-one inference on {numbers['device']}: mean {numbers['latency_ms_mean']:.2f} ms, "
           f"median {numbers['latency_ms_median']:.2f} ms, p99 {numbers['latency_ms_p99']:.2f} ms over "
           f"{numbers['latency_shots']} shots (the timer wraps the copy to the device, the network and the copy back)")
+    print("confidence of a shot = the smallest |logit| of its 12 outputs; the most confident shots are kept first:")
+    print("   kept  threshold  shots kept  failures kept  share of kept, 95% Wilson interval      failures in the rest")
+    for row in numbers["confidence_sweep"]:
+        kept_low, kept_high = row["failure_interval_kept"]
+        print(f"  {row['kept_fraction']:5.0%}  {row['threshold']:9.3f}  {row['shots_kept']:10d}  {row['failures_kept']:13d}  "
+              f"{row['failure_fraction_kept']:.3e} [{kept_low:.3e}, {kept_high:.3e}]  "
+              f"{row['failures_rest']:8d} of {row['shots_rest']}")
+    print("  A threshold read from this table is fitted to these shots: freeze it and report it on another file.")
     if args.save:
         Path(args.save).parent.mkdir(parents=True, exist_ok=True)
         Path(args.save + ".json").write_text(json.dumps(numbers, indent=2) + "\n", encoding="utf-8")
-        np.savez_compressed(args.save + ".npz", predictions=predictions, failed=failed)
+        np.savez_compressed(args.save + ".npz", **per_shot)
     return numbers
 
 

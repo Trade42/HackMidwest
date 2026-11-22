@@ -359,6 +359,15 @@ def test_command_runs_twice_the_same_and_resumes(tmp_path):
 
 # ---------- the evaluation on Stim shots ----------
 
+def test_confidence_sweep_keeps_the_most_confident_shots_first():
+    confidence = np.array([5.0, 1.0, 4.0, 3.0, 2.0, 0.5, 6.0, 7.0, 8.0, 9.0])
+    failed = np.array([0, 1, 0, 1, 1, 1, 0, 0, 0, 0], dtype=bool)
+    half, everything = evaluate_stim.confidence_sweep(confidence, failed, fractions=(0.5, 1.0))
+    assert (half["shots_kept"], half["threshold"], half["failures_kept"], half["failures_rest"]) == (5, 5.0, 0, 4)
+    assert (everything["shots_kept"], everything["threshold"], everything["failures_kept"]) == (10, 0.5, 4)
+    assert half["failure_interval_kept"] == pytest.approx(list(evaluate_stim.wilson_interval(0, 5)))
+
+
 def test_wilson_interval_and_rate_per_cycle():
     assert evaluate_stim.wilson_interval(5, 100) == pytest.approx((0.0215, 0.1118), abs=5e-4)
     assert evaluate_stim.wilson_interval(0, 100) == pytest.approx((0.0, 0.0370), abs=5e-4)
@@ -388,7 +397,17 @@ def test_evaluation_on_a_saved_file_of_stim_shots(tmp_path, detectors):
     assert (numbers["failures"], numbers["shots"]) == (int(wrong.sum()), 300)
     assert numbers["always_zero_failures"] == int(labels.any(axis=1).sum()) and numbers["latency_shots"] == 5
     assert numbers["failure_interval"][0] <= numbers["failure_fraction"] <= numbers["failure_interval"][1]
-    assert np.array_equal(np.load(tmp_path / "result.npz")["failed"], wrong)
+    per_shot = np.load(tmp_path / "result.npz")
+    assert np.array_equal(per_shot["failed"], wrong) and np.array_equal(per_shot["observables"], labels)
+    assert per_shot["logits"].shape == (300, 12) and np.array_equal(per_shot["predictions"], per_shot["logits"] > 0)
+    assert np.allclose(per_shot["confidence"], np.abs(per_shot["logits"]).min(axis=1))
+    sweep = numbers["confidence_sweep"]
+    assert [row["shots_kept"] for row in sweep] == [30, 75, 150, 225, 270, 285, 297, 300]
+    assert all(row["failures_kept"] + row["failures_rest"] == numbers["failures"] for row in sweep)
+    assert sweep[-1]["threshold"] == pytest.approx(per_shot["confidence"].min()) and sweep[-1]["failures_rest"] == 0
+    most_confident = np.argsort(-per_shot["confidence"], kind="stable")[:30]
+    assert sweep[0]["failures_kept"] == int(wrong[most_confident].sum())
+    assert sweep[0]["threshold"] >= sweep[3]["threshold"] >= sweep[-1]["threshold"]
 
     with pytest.raises(SystemExit):                                              # held-out shots need --final
         evaluate_stim.main(["--checkpoint", checkpoint, "--data", str(tmp_path / "test_X.npz")])

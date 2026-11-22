@@ -167,7 +167,16 @@ def load_test_rows(data=DATA):
                 row = loaders.tcbp_member(folder, p)
             elif spec.kind == "ensemble" and combined[p] and combined[p]["rule"] in combined[p]["rows"]:
                 row = dict(combined[p]["rows"][combined[p]["rule"]])
-                row["stand_in_note"] = f" (rule {row['description']}; frozen on the training shots)"
+                found = [tuple(map(int, hit)) for hit in re.findall(r"J exists on (\d+) of the (\d+)", row.get("note", ""))]
+                ran, disputed = sum(hit[0] for hit in found), sum(hit[1] for hit in found)
+                tcbp = combined[p]["rows"].get("T")
+                same = tcbp is not None and all(np.array_equal(row["failed"][basis], tcbp["failed"][basis]) for basis in "XZ")
+                row["stand_in_note"] = (" (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere "
+                                        "joint decoding where it converged, else TCBP-JOBS"
+                                        + (f"; joint decoding ran on {ran} of the {disputed} disputed shots" if found else "")
+                                        + ("; so it fails exactly the shots TCBP-JOBS fails" if same else "") + ")")
+                fact(f"ens_is_tcbp{p[-1]}", "yes" if tcbp and all(np.array_equal(row["failed"][b], tcbp["failed"][b]) for b in "XZ") else "no",
+                     f"tables/test_p{p}.md")
             if row is None and spec.member and combined[p] and spec.member in combined[p]["rows"]:
                 row = dict(combined[p]["rows"][spec.member])           # no evaluator row: the offline combination stands in
                 row["stand_in_note"] = " (from per-shot files, not a timed evaluator row)"

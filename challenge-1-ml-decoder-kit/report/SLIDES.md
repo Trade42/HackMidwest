@@ -59,7 +59,7 @@ Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 <!-- BEGIN table:test_sweep -->
 <!-- END table:test_sweep -->
 
-- <!--f:framing_slide-->The hierarchy is the result (5 failed pairs for relay-BP, 3 for the hierarchy, over p = 0.003); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 3 pairs and the network 4; only the network rule fails 1 pair, only the classical rule 0, exact p = 1.00.<!--/f-->
+- <!--f:framing_slide-->The hierarchy is the result (799 failed pairs for relay-BP, 472 for the hierarchy, over p = 0.003, 0.005); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 472 pairs and the network 494; only the network rule fails 79 pairs, only the classical rule 57, exact p = 0.071.<!--/f-->
 - *Pending.* Our decoder against relay-BP at each p, as a paired count on the same 10,000 pairs.
 - *Pending.* Where TCBP-JOBS stands on the test shots. On the practice shots it is ahead of us (see the questions below).
 
@@ -108,7 +108,7 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 ## Questions a judge will ask, with honest answers
 
 **Whose gain is whose?**
-On the test shots: <!--f:framing_slide-->The hierarchy is the result (5 failed pairs for relay-BP, 3 for the hierarchy, over p = 0.003); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 3 pairs and the network 4; only the network rule fails 1 pair, only the classical rule 0, exact p = 1.00.<!--/f--> The table `report/tables/test_ladder.md` has every rung. On the practice shots:
+On the test shots: <!--f:framing_slide-->The hierarchy is the result (799 failed pairs for relay-BP, 472 for the hierarchy, over p = 0.003, 0.005); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 472 pairs and the network 494; only the network rule fails 79 pairs, only the classical rule 57, exact p = 0.071.<!--/f--> The table `report/tables/test_ladder.md` has every rung. On the practice shots:
 PriorTilt alone already beats relay-BP on the practice shots, and that part is IonQ's. Our hierarchy adds to it: on
 <!--f:expl_pairs-->25,000<!--/f--> practice pairs at p = 0.004, relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its seed, and
 the hierarchy with its best classical tie-break <!--f:expl_pairs_C-->140<!--/f--> (only relay-BP fails <!--f:expl_pairs_C_only_relay-->128<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_C_only_ours-->23<!--/f-->). The neural tie-break's step on top is smaller, and on these shots not significant, measured on X memory

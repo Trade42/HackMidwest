@@ -10,7 +10,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 3 of 10,000 | not timed in one process |  |  |  |  |
 | 0.003 | our hierarchy, neural tie-break | 3 of 10,000 | 45.7 | 0.52 | 14.2 | 395 | CPU, 1 core |
 | 0.003 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 3 of 10,000 | 28.9 | 0.33 | 7.8 | 245 | CPU, 2 cores |
-| 0.003 | our ensemble (combined offline) (rule f: P1 where P1 = P2 = T; else J where it converged, else T; frozen on the training shots) | 2 of 10,000 | not timed in one process |  |  |  |  |
+| 0.003 | our ensemble (combined offline) (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere joint decoding where it converged, else TCBP-JOBS; joint decoding ran on 5 of the 5 disputed shots) | 2 of 10,000 | not timed in one process |  |  |  |  |
 | 0.003 | TCBP-JOBS (NVIDIA, GPU) | 3 of 10,000 | 3.9 | not comparable: another device and timer | 3.8 | 15.0 | GPU |
 | 0.004 | BP-OSD (kit baseline) | 472 of 10,000 | 302 | 0.94 | 350 | 863 | CPU, 1 core |
 | 0.004 | relay-BP (kit baseline) | 83 of 10,000 | 319 | the reference | 106 | 5,514 | CPU, 1 core |
@@ -25,10 +25,10 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.005 | BP-OSD (kit baseline) | 2433 of 10,000 | 581 | 0.40 | 546 | 1,093 | CPU, 1 core |
 | 0.005 | relay-BP (kit baseline) | 845 of 10,000 | 1,471 | the reference | 424 | 8,270 | CPU, 1 core |
 | 0.005 | relay-BP with a learned router | not measured | not measured | not measured | not measured | not measured | not measured |
-| 0.005 | PriorTilt, one run | not measured | not measured | not measured | not measured | not measured | not measured |
-| 0.005 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
-| 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.005 | PriorTilt, one run (from per-shot files, not a timed evaluator row) | 595 of 10,000 | not timed in one process |  |  |  |  |
+| 0.005 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 527 of 10,000 | not timed in one process |  |  |  |  |
+| 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 469 of 10,000 | not timed in one process |  |  |  |  |
 | 0.005 | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 479 of 10,000 | 608 | 0.41 | 138 | 7,794 | CPU, 2 cores |
-| 0.005 | our ensemble (combined offline) | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.005 | our ensemble (combined offline) (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere joint decoding where it converged, else TCBP-JOBS; joint decoding ran on 0 of the 735 disputed shots; so it fails exactly the shots TCBP-JOBS fails) | 360 of 10,000 | not timed in one process |  |  |  |  |
 | 0.005 | TCBP-JOBS (NVIDIA, GPU) | 360 of 10,000 | 16.9 | not comparable: another device and timer | 13.3 | 56.4 | GPU |

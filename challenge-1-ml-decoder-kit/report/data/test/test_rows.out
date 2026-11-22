@@ -46,3 +46,9 @@
 2026-11-22T12:08:44Z END joint_p0.003 exit 0: wall time of this run: 22 s [CPUs in use 6.2, tokens 9, throttled so far 4844.9 s, load 10.44]
 2026-11-22T12:08:50Z START eval_p0.005_priortilt: weight 1, pid 303815; before it: tokens 9, CPUs in use 6.4, throttled so far 4844.9 s
 2026-11-22T12:09:10Z END ensemble_p0.003 exit 0: ensemble of p = 0.003: exit 0 [CPUs in use 7.1, tokens 6, throttled so far 4844.9 s, load 9.75]
+2026-11-22T12:24:02Z START joint_p0.004: weight 4, pid 316703; before it: tokens 6, CPUs in use 6.1, throttled so far 4844.9 s
+2026-11-22T12:27:17Z END cand_p0.005 exit 0: wall time of this run: 5143 s [CPUs in use 7.1, tokens 10, throttled so far 4844.9 s, load 11.89]
+2026-11-22T12:27:42Z START eval_p0.004_priortilt: weight 1, pid 319947; before it: tokens 6, CPUs in use 7.4, throttled so far 4844.9 s
+2026-11-22T12:27:42Z END ensemble_p0.005 exit 0: ensemble of p = 0.005: exit 0 [CPUs in use 7.2, tokens 7, throttled so far 4844.9 s, load 10.91]
+2026-11-22T12:28:22Z START eval_p0.003_priortilt: weight 1, pid 320650; before it: tokens 7, CPUs in use 8.1, throttled so far 4844.9 s
+2026-11-22T12:29:02Z START eval_p0.004_hierarchy-converged: weight 1, pid 321226; before it: tokens 8, CPUs in use 9.2, throttled so far 4844.9 s

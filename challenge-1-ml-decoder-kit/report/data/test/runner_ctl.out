@@ -18,3 +18,5 @@
 2026-11-22T10:10:34Z END ctl/090-z-final-checkpoint-to-logs exit 0
 2026-11-22T10:36:34Z START ctl/100-test-logs-to-logs at dbaec47
 2026-11-22T10:36:39Z END ctl/100-test-logs-to-logs exit 0
+2026-11-22T12:14:42Z START ctl/110-selector-test at 8552db3
+2026-11-22T12:15:44Z END ctl/110-selector-test exit 0

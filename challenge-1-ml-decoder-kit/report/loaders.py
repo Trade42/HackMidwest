@@ -289,6 +289,7 @@ def ensemble(folder, p, split="test"):
                      "device": "CPU and GPU" if key in ("T", "b", "bw", "c", "d", "e", "f", "g", "gw") else "CPU", "rule": None, "wall_seconds": None,
                      "timer": "the sum of the decode calls the row makes, each timed alone", "peak_rss_mb": None, "setup_seconds": None,
                      "description": listed["X"].get("row", key), "offline": True,
+                     "note": "; ".join(dict.fromkeys(note for note in (listed[basis].get("note", "") for basis in "XZ") if note)),
                      "source": str(folder.relative_to(DATA)) + f"/{split}_" + "{X,Z}.npz", "per_shot_file": str(files["X"].relative_to(DATA))}
     marked = {basis: tables[basis].get("marked_rule") or (str(arrays[basis]["rule"]) if "rule" in arrays[basis] and str(arrays[basis]["rule"]) else None) for basis in "XZ"}
     if marked["X"] != marked["Z"]:

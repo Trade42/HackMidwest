@@ -18,3 +18,5 @@
 2026-11-22T10:23:59Z START eval_p0.005_hierarchy: weight 1, pid 213306; before it: tokens 1, CPUs in use 2.6, throttled so far 4837.8 s
 2026-11-22T10:24:39Z START eval_p0.004_hierarchy: weight 1, pid 213718; before it: tokens 2, CPUs in use 4.1, throttled so far 4837.8 s
 2026-11-22T10:25:19Z START eval_p0.003_hierarchy: weight 1, pid 214383; before it: tokens 3, CPUs in use 5.1, throttled so far 4837.8 s
+2026-11-22T10:25:59Z START eval_p0.005_hierarchy-parallel: weight 2, pid 215142; before it: tokens 4, CPUs in use 6.3, throttled so far 4837.8 s
+2026-11-22T10:26:39Z START eval_p0.004_hierarchy-parallel: weight 2, pid 215572; before it: tokens 6, CPUs in use 7.4, throttled so far 4837.8 s

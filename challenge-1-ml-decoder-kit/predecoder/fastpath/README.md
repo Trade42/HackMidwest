@@ -183,3 +183,55 @@ here is weaker evidence than a pass in round 1. Command: round 2's, with `--roun
 - C8 (upward moves only) also passes, at 42.8 ms. C9 sends more shots to the fast path for the same cost per shot.
 - The 95% bound for 0 added failures among the fast shots (3 / fast shots, for C9 3 / 1,771 = 0.0017) is below TH's
   own failure rate (0.0066), but not far below it.
+
+## p = 0.004 validation (`CRITERION_2.md` Part B, `CRITERION_3.md` §2)
+
+Exploration, after the test results; a separate branch. `data/p0.004/validation_X.npz` (5,000 Stim shots, seed 201,
+sha256 `b00ee09c...`). Server job ctl/180 (`orchestration/scratch/tcbp-fastpath/job1_validation_X_p0.004.sh.txt`, main
+`e6c2a5a0`, the p = 0.005 knobs unchanged, A100, 1 process; 18:35:58 to 18:46:59 UTC; `server-logs` `c12d0cc8`).
+Logits: dq-predecoder's CPU float32 bytes (`783faa41...`), every row's hash equal to the head arm's. F built once
+(batch check) equals F built per shot on all 5,000 shots.
+
+    PYTHONPATH=. python predecoder/fastpath/fastpath2.py --data data/p0.004/validation_X.npz \
+        --arms <server-logs: files/tcbp-fastpath/validation_X_p0.004_per_shot.npz> \
+        --logits <orchestration/scratch/predecoder/runs/head_final/logits_validation> --settings predecoder/logs/fit_tcbp_X_p0.005.json \
+        --speed <files/tcbp-speed/check_per_shot.npz> --time-model decode_plus_csr_means --round3 \
+        --carry predecoder/fastpath/result3_p0.005.json --out predecoder/fastpath/result3_p0.004.json
+
+TH fails 4 and F 16: 12 shots where only F fails, 0 where only TH fails. Times: network 9.4 ms; TH = this job's
+decode per shot + CSR priors, build and free at their means (TH alone 53.8 ms mean); F = this job's decode (8.6 ms).
+
+| check, at its t* at p = 0.004 | fast path | failures | mean ms | p99 ms | half split (added on the other half) |
+|---|---|---|---|---|---|
+| TH alone | 0% | 4 | 53.8 | 68.1 | |
+| **C2 syndrome weight <= 127 (chosen)** | **64.2%** | **4 (0 added)** | **24.2** | **67.6** | 2 one way, 0 the other |
+| C6 F's decode time <= 3.45 ms | 48.5% | 4 | 36.0 | 101.8 | 0 / 2 |
+| C7 F's correction weight <= 47 | 61.3% | 4 | 29.5 | 98.5 | 0 / 1 |
+| C8 upward prior move <= 215.7 | 58.9% | 4 | 31.8 | 68.7 | 0 / 1 |
+| C9 the head's entropy <= 49.8 bits | 56.7% | 4 | 32.6 | 68.7 | 0 / 1 |
+| C3, C4, C5 | 0.1% to 3.6% | 4 | 52.5 to 53.7 | 68 | |
+
+**Little power, as declared.** With only 12 F-only shots, every check finds a large "safe" share. C2's 95% bound
+on added failures per fast shot is 3 / 3,210 = 0.0009, against TH's own failure rate of 0.0008. A pass here cannot by
+itself show that accuracy is kept.
+
+**Thresholds carried from one p to the other** (`result3_p0.004.json` "carried"; `result3_p0.005_carried_from_p0.004.json`):
+
+| check | p = 0.005 t* on p = 0.004 shots: fast, added | p = 0.004 t* on p = 0.005 shots: fast, added |
+|---|---|---|
+| C2 syndrome weight | 115: 37.5%, 0 | 127: 14.1%, **3** |
+| C4 largest move | 4.54: 0%, 0 | 4.83: 21.8%, **14** |
+| C6 F's decode time | 5.51 ms: 61.0%, **1** | 3.45 ms: 22.0%, 0 |
+| C7 F's correction weight | 48: 67.0%, **1** | 47: 9.9%, 0 |
+| C8 upward move | 225.3: 68.0%, **1** | 215.7: 17.2%, 0 |
+| **C9 the head's entropy** | **69.1 bits: 87.5%, 2** | 49.8 bits: 9.7%, 0 |
+
+What it says:
+- **No threshold carries from p = 0.005 down to p = 0.004 without adding failures**, except C2's (which is safe but
+  sends fewer shots). C9's frozen 69.1 bits, applied at p = 0.004, sends 87.5% of the shots to F and adds 2 failures
+  (TH 4, the rule 6). The head is surer at lower p, so the same entropy means a harder shot there. **C9 frozen at
+  69.1 bits is a rule for p = 0.005 only.** A deployment would need a threshold per p, or one scaled with p.
+- Carried upward, from p = 0.004 to p = 0.005, the network checks (C8, C9) and C6, C7 are conservative: 0 added, but
+  a small fast share. C2 and the absolute moves (C3-C5) add failures.
+- At p = 0.004 the criterion chooses C2 (64% fast, 24.2 ms mean, against TH's 53.8). It was chosen on 12 F-only
+  shots and is not frozen: its half split adds 2 one way.

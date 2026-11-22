@@ -1,3 +1,28 @@
+validation_X.npz p=0.005: TH 33, F 100 (F only 75, TH only 8); time model csr_total
+TH alone (the TCBP version)                    fast 0.000  fail  33 (both 33, only rule 0, only TH 0)  mean  51.1 ms  p99   63.1 ms  PASS
+F alone (TCBP-JOBS, kit priors, built once)    fast 1.000  fail 100 (both 25, only rule 75, only TH 8)  mean  12.8 ms  p99   45.3 ms  fail
+C2 syndrome weight <= 115                      fast 0.039  fail  33 (both 33, only rule 0, only TH 0)  mean  49.3 ms  p99   63.1 ms  PASS
+C3 total prior move: no safe t                 fast 0.000  fail  33 (both 33, only rule 0, only TH 0)  mean  51.1 ms  p99   63.1 ms  PASS
+C4 largest prior move <= 4.5392                fast 0.002  fail  33 (both 33, only rule 0, only TH 0)  mean  51.0 ms  p99   63.1 ms  PASS
+C5 columns moved > 1: no safe t                fast 0.000  fail  33 (both 33, only rule 0, only TH 0)  mean  51.1 ms  p99   63.1 ms  PASS
+C6 F decode time (ms) <= 5.51439               fast 0.401  fail  33 (both 33, only rule 0, only TH 0)  mean  43.4 ms  p99  102.9 ms  PASS
+C7 F correction weight <= 48                   fast 0.129  fail  33 (both 33, only rule 0, only TH 0)  mean  57.3 ms  p99  102.9 ms  PASS
+C8 upward prior move <= 225.298                fast 0.235  fail  33 (both 33, only rule 0, only TH 0)  mean  42.8 ms  p99   63.1 ms  PASS
+C9 head entropy (bits) <= 69.1465              fast 0.354  fail  33 (both 33, only rule 0, only TH 0)  mean  38.8 ms  p99   63.1 ms  PASS
+half split (t picked on one half, added failures on the other):
+  C2 syndrome weight         picked_on_even: t 115.0, fast 0.036, added 0; picked_on_odd: t 127.0, fast 0.155, added 3
+  C3 total prior move        picked_on_even: t None, fast 0.000, added 0; picked_on_odd: t None, fast 0.000, added 0
+  C4 largest prior move      picked_on_even: t 4.560219221798031, fast 0.004, added 2; picked_on_odd: t 4.539199331320326, fast 0.003, added 0
+  C5 columns moved > 1       picked_on_even: t None, fast 0.000, added 0; picked_on_odd: t None, fast 0.000, added 0
+  C6 F decode time (ms)      picked_on_even: t 5.511965951882303, fast 0.399, added 0; picked_on_odd: t 5.8772440534085035, fast 0.423, added 1
+  C7 F correction weight     picked_on_even: t 48.0, fast 0.121, added 0; picked_on_odd: t 49.0, fast 0.166, added 1
+  C8 upward prior move       picked_on_even: t 227.99269637426903, fast 0.248, added 1; picked_on_odd: t 225.18679500371485, fast 0.244, added 0
+  C9 head entropy (bits)     picked_on_even: t 70.60531286254886, fast 0.369, added 1; picked_on_odd: t 69.1408951319227, fast 0.361, added 0
+chosen: C9 head entropy (bits) <= 69.1465 38.77 ms mean, 63.1 ms p99
+not declared, a diagnostic: C6 with F stopped at t*: {'t_ms': 5.51439099945128, 'mean_ms': 35.23, 'p99_ms': 68.3}
+  95% upper bound on the added-failure rate among fast shots, C2 syndrome weight <= 115: 0.01523 (TH's failure rate 0.0066)
+  95% upper bound on the added-failure rate among fast shots, C4 largest prior move <= 4.5392: 0.3 (TH's failure rate 0.0066)
+  95% upper bound on the added-failure rate among fast shots, C6 F decode time (ms) <= 5.51439: 0.0015 (TH's failure rate 0.0066)
   95% upper bound on the added-failure rate among fast shots, C7 F correction weight <= 48: 0.00464 (TH's failure rate 0.0066)
   95% upper bound on the added-failure rate among fast shots, C8 upward prior move <= 225.298: 0.00255 (TH's failure rate 0.0066)
   95% upper bound on the added-failure rate among fast shots, C9 head entropy (bits) <= 69.1465: 0.00169 (TH's failure rate 0.0066)

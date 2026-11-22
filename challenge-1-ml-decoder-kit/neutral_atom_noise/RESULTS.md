@@ -658,3 +658,83 @@ Files (all in [`tcbp_loss_results/`](tcbp_loss_results/)):
 The inputs were made with `python -m neutral_atom_noise.tcbp_loss convert --shots <both files> --prefix 1000 --out
 <folder>` and went to the server through `laptop-artifacts` at `0b5d6d83` (`tcbp-loss/`). The server's files are on
 the branch `server-logs` at `891f3854`, under `files/tcbp-loss/`.
+
+## Exploration: the TCBP pipeline with the head retrained on this noise (task tcbp-retrain)
+
+**Exploration, after the main test results; a separate branch (`tcbp-retrain`).** Declared before any number in
+[`tcbp_retrain_declared.md`](tcbp_retrain_declared.md) (commit `7d8c80e7`, 18:10 UTC). Its three amendments were
+also committed before any number:
+- amendment 1 (`163ff2ba`): the run cut to a deadline;
+- amendment 2 (`bf5cf0a4`): the full run restored;
+- amendment 3 (`cb739fbe`): the two crossed, so there are two runs, run 1 under amendment 1 and run 2 the full run.
+
+**The head.** Only the head was retrained. The trunk is unchanged and frozen (`d8d1c70f...`).
+- **Training:** fresh error-model shots of `model_circuit("X", neutral_atom(0.8))` (`predecoder.train --noise-factor 0.8`,
+  commit `f4948928`; `predecoder/noise.py`). Its 35,064 mechanisms are mapped onto the kit's 8,784 columns.
+- **Base prior:** the matched vector, so the untrained head is the matched arm.
+- **Run:** the X head's recipe, 20,000 steps of 64 shots on the laptop's RTX 4060, 0.074 s per step, 25 minutes
+  (`predecoder/logs/train_gpu_predecoder_X_na0.8_s1.log`).
+- **The head file:** `head.pt` on laptop-artifacts `07930fcc`, sha256 `b42d71d5...`, the final step as declared.
+- **Held-out error-model shots** (500, not Stim shots; a diagnostic, not a result): log-loss 0.01003 against the matched
+  vector's 0.04333, 76.9% lower. Calibration error is 8.0e-5. Of 87.4 fired columns per shot, 66.4 are above 0.5, with
+  8.9 columns per shot above 0.5 that did not fire. The log-loss was flat from about step 12,000.
+
+**The shots.** A fresh Stim file at factor 0.8, `X_f0.8_seed4800.npz` (4,000 shots, seed 4800, sha256 `b2c023bb...`;
+converted `32fc7703...`). Nothing was tuned on it, and no decoder had read it before run 1.
+
+**The arms.** TCBP-JOBS (cudaq-qec 0.9.0, preset `tcbp-jobs`, one decoder built per shot, one CPU thread, the server's
+A100 MIG slice):
+- **m:** matched priors;
+- **h:** the kit-trained head (`38ab667e...`) on the generic base at p = 0.0326371, phase 1's head arm;
+- **r:** the retrained head on the matched base it was trained with.
+
+The head arms use the frozen knobs (log-odds, alpha 0.4, eps 1e-4, cap 0.5; no refit). The network ran in float32 on
+the GPU: 23.6 ms per shot, one shot at a time.
+
+### Run 1 (server job `cpu/120`; amendment 1: shots 0 to 999, arms m, h, r)
+
+All 10 blocks finished by 18:41 UTC, 233 s after the model fit, so all 1,000 shots are scored.
+
+| Arm (same 1,000 shots) | Failures | 95% Wilson | Build + decode, mean ms (A100 slice, one thread) |
+|---|---|---|---|
+| TCBP-JOBS, matched priors (m) | **8** | 0.41% to 1.57% | 49 |
+| TCBP-JOBS, retrained head on matched (r) | **27** | 1.86% to 3.90% | 49 |
+| TCBP-JOBS, kit head on generic (h) | **119** | 10.0% to 14.1% | 57 |
+
+| Pair | Failures | Only the first fails | Only the second fails | Sign test p |
+|---|---|---|---|---|
+| r vs m (primary) | 27, 8 | 20 | 1 | 2.1e-05 |
+| r vs h (primary) | 27, 119 | 1 | 93 | 9.6e-27 |
+| h vs m | 119, 8 | 112 | 1 | 2.2e-32 |
+
+What this shows:
+
+- **Retraining the head on this noise helps a lot against the kit-trained head.** It cuts TCBP-JOBS's failures 4.4
+  times: 27 against 119, with only one shot that r fails and h gets right.
+- **But the retrained head does not beat the true error model: it is worse.** r fails 27 shots, m fails 8, and 20 of
+  the 21 discordant shots go against r (p = 2e-5). By the declared claim rule, the retrained head does not add to the
+  matched priors here. Per-shot priors from this head mislead TCBP-JOBS on some shots that the fixed true priors
+  decode correctly.
+- **Why, not tested here.** Three candidates, none measured:
+  - the knobs (alpha 0.4 was fitted for the kit head on the kit's noise);
+  - the head's confident false columns (about 9 per shot above 0.5);
+  - a trunk that never saw noise this strong.
+  - The cap at 0.5 changed about 17 columns per shot for r (16,864 in all) and 22 for h.
+- **Checks:**
+  - Every correction of every arm reproduces its syndrome.
+  - The plan the server used is the shipped one (`6a20a1ab...`).
+  - The logits carry the declared heads and base vectors: r's base is the training vector, `181d3c74...`.
+  - TCBP-JOBS's own convergence flag is false on 846 (m), 871 (h) and 715 (r) shots.
+
+Files (in [`tcbp_retrain_results/run1/`](tcbp_retrain_results/run1/)):
+- `decode.log` and `evaluate_*.log`: the server's logs;
+- `per_shot.npz` and `summary.json`: every arm's outcome per shot, and the server's summary;
+- `logits_meta_*.json`, `plan.json`, and `job_cpu_120.sh.txt`, the job;
+- `score.json`: the tables above, rebuilt here with `python -m neutral_atom_noise.tcbp_retrain score --plan <plan.json>
+  --root <inputs folder> --decoded <server files> --out <json>`.
+
+The server's files are on the branch `server-logs` at `7ebc7c29`, under `files/tcbp-retrain/`.
+
+### Run 2 (server job `cpu/130`; the full declared run)
+
+Started 18:41:35 UTC. Its results are pending.

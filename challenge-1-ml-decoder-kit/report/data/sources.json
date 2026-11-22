@@ -596,13 +596,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "5438550955533dbc869c5658e528dc4e5fa9f3f4",
-  "copied_utc": "2026-11-22 09:03",
+  "commit": "e57f4fbb4bfd002465cbcc4a0fcfc6203306aa3c",
+  "copied_utc": "2026-11-22 09:04",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `543855095553`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `e57f4fbb4bfd`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "c868c40aedaaab0eca53bbae1fd9de962b7edc9f4e16075b7da2947aaa998a82"
+  "sha256": "43a6ffe20087c86a3d5420b5bf766186c8a755d2066d03919623a618f914c996"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -793,25 +793,25 @@
  },
  "test/clean_rows.out": {
   "branch": "origin/server-logs",
-  "bytes": 2530,
-  "commit": "565c14cd1b41a1fdafd9e31b1b0a9da9b940c6e2",
-  "copied_utc": "2026-11-22 08:39",
+  "bytes": 2747,
+  "commit": "e57f4fbb4bfd002465cbcc4a0fcfc6203306aa3c",
+  "copied_utc": "2026-11-22 09:04",
   "file": "test/clean_rows.out",
-  "from": "branch `server-logs` at commit `565c14cd1b41`, `clean_rows.out`",
+  "from": "branch `server-logs` at commit `e57f4fbb4bfd`, `clean_rows.out`",
   "grows": true,
   "path": "clean_rows.out",
-  "sha256": "6e85fe19426fdb1286672e6277974ffd17611866fd6a276c6cd6a1ffa3778e55"
+  "sha256": "8b3e4a4bd1f830cd9820ee0afdffde4248845a24b69d3201a1ee41280a90e41d"
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 7923,
-  "commit": "5438550955533dbc869c5658e528dc4e5fa9f3f4",
-  "copied_utc": "2026-11-22 09:03",
+  "bytes": 7977,
+  "commit": "e57f4fbb4bfd002465cbcc4a0fcfc6203306aa3c",
+  "copied_utc": "2026-11-22 09:04",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `543855095553`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `e57f4fbb4bfd`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "8f33f0d9554a7a3fcc6ec584f0fb6a3b6bf3fdaab14d0892130b3934a609838c"
+  "sha256": "0cd18c992644ccced62ff8489985f1b25cbb7532cfce2fc115e8177363d95b67"
  },
  "test/eval_p0.003_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",

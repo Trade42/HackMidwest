@@ -128,8 +128,10 @@ def new_run(config, device):
     config = dict(config, rounds=model.config["rounds"])
     matrices = [p for p in model.parameters() if p.ndim > 1]
     others = [p for p in model.parameters() if p.ndim <= 1]
+    # On a GPU the fused AdamW updates a tensor in one kernel instead of about ten.
     optimizer = torch.optim.AdamW([{"params": matrices, "weight_decay": config["weight_decay"]},
-                                   {"params": others, "weight_decay": 0.0}], lr=config["lr"])
+                                   {"params": others, "weight_decay": 0.0}], lr=config["lr"],
+                                  fused=device.type == "cuda")
     levels = sorted(set(noise_levels(config)) | set(config["report_p"]))
     sampler = DemSampler(config["code"], config["basis"], config["rounds"], config["detectors"], levels, device)
     run = Run(config, device, model, deepcopy(model), optimizer, None, sampler, torch.Generator(device=device))
@@ -157,6 +159,8 @@ def load_checkpoint(path, device, changes=None):
     run = new_run(DEFAULTS | state["config"] | (changes or {}), device)   # DEFAULTS fills settings newer than the file
     run.model.load_state_dict(state["model"])
     run.ema_model.load_state_dict(state["ema_model"])
+    for group in state["optimizer"]["param_groups"]:      # the file may come from a CPU, or from code before "fused"
+        group["fused"] = run.optimizer.defaults["fused"]
     run.optimizer.load_state_dict(state["optimizer"])
     run.scaler.load_state_dict(state["scaler"])
     run.step, run.history = state["step"], state["history"]

@@ -98,6 +98,10 @@ def summarize_block(d, seconds_label):
         leg1_conv_kit_same_class=int(same_class.sum()), leg1_conv_kit_same_correction=int(same_corr.sum()),
         leg1_conv_kit_failed=int((leg1_conv & failed).sum()),
         leg1_unconv_kit_failed=int((~leg1_conv & failed).sum()),
+        leg1_conv_leg1_wrong=int((leg1_conv & d["leg1_failed"]).sum()),
+        # failures if a decoder stopped at the first leg's answer whenever that leg converged, else ran the kit's
+        stop_at_leg1_else_kit_failures=int(((leg1_conv & d["leg1_failed"]) | (~leg1_conv & failed)).sum()),
+        failed_converged_at_full_budget=int((failed & conv & (d["iterations"] >= 296 * 60)).sum()),
         weight_count_median_right=float(np.median(d["wcount"][~failed])),
         weight_llr_median_right=float(np.median(d["wllr"][~failed])),
         weight_count_median_failed_conv=float(np.median(d["wcount"][failed & conv])) if (failed & conv).any() else None,

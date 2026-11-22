@@ -22,3 +22,4 @@ Sun Nov 22 16:41:07 UTC 2026
 name, memory.used [MiB], utilization.gpu [%]
 NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
 evaluate f0.4 fp32 exit 0
+evaluate f0.6 fp32 exit 0

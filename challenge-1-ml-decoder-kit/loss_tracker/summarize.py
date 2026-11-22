@@ -9,6 +9,10 @@ the share of the oracle's gain that a condition recovers,
     (failures of `exact` - failures of the condition) / (failures of `exact` - failures of `oracle-round`),
 with a 95% bootstrap interval over shots (2,000 resamples, seed 0), and the same against `starter`.
 All comparisons are on the common prefix of shots that every listed condition has decoded.
+
+--cascade 'A>B' adds a row computed from the per-shot results, with no new decoding: condition A, and where A did
+not converge, condition B (B's output is taken whether or not B converged; its iterations are added to A's).
+The rule reads only the decoders' convergence flags.
 """
 import argparse
 import json
@@ -31,7 +35,7 @@ def gain_share(f_ref, f_cond, f_oracle, reps=2000, seed=0):
     with np.errstate(divide="ignore", invalid="ignore"):
         boot = (a - b) / (a - c)
     boot = boot[np.isfinite(boot)]
-    lo, hi = np.percentile(boot, [2.5, 97.5])
+    lo, hi = np.percentile(boot, [2.5, 97.5]) if len(boot) else (float("nan"), float("nan"))
     return share(float(f_ref.sum()), float(f_cond.sum()), float(f_oracle.sum())), float(lo), float(hi)
 
 
@@ -41,12 +45,21 @@ def main():
     ap.add_argument("--order", help="comma-separated conditions (default: all found)")
     ap.add_argument("--references", default="exact,starter", help="references of the paired tables and of the gain share")
     ap.add_argument("--title", default="")
+    ap.add_argument("--cascade", action="append", default=[], help="'A>B': A, and B where A did not converge")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     per = load_parts(a.parts)
     order = a.order.split(",") if a.order else list(per)
     n = min(len(per[c]["failed"]) for c in order)
     per = {c: {k: v[:n] for k, v in per[c].items()} for c in order}          # the common prefix of shots
+    for rule in a.cascade:
+        first, second = rule.split(">")
+        use = ~per[first]["converged"].astype(bool)                           # shots where the first did not converge
+        per[rule] = {k: np.where(use, per[second][k], per[first][k]) for k in per[first]}
+        per[rule]["iterations"] = per[first]["iterations"] + np.where(use, per[second]["iterations"], 0)
+        for k in ("decode_ms", "build_ms", "prior_ms"):
+            per[rule][k] = per[first][k] + np.where(use, per[second][k], 0)
+        order.append(rule)
     out = {"shots": n, "conditions": order, "tables": {}, "gain_share": []}
     md = [f"## {a.title}" if a.title else "", f"Every condition on the same {n} shots.", ""]
     for ref in a.references.split(","):

@@ -1,10 +1,12 @@
 # selector: a learned choice among our decoders' answers
 
-**Status (2026-11-22, 09:20 UTC): frozen for the run on the test shots.** The frozen p = 0.005 model is
-`models/p0.005.json`, sha256 `696bf5449a5468177dc2c00664e8557e7d019419c858a44052eea05521698ce6`. The
-commit, and the exact command, are in "The run on the test shots" below. This is the branch
-`learned-selector`, merged nowhere. Every number in this file is from training or validation shots.
-Nothing here was run on a `test_*` or `go_*` file.
+**Result (2026-11-22, 12:30 UTC): on the test shots the selector does not beat TCBP-JOBS alone.** The
+frozen p = 0.005 model (`models/p0.005.json`, sha256 `696bf544...698ce6`, commit b8608de) was run once
+on the test shots by the orchestrator. It failed 353 of 10,000 pairs, against TCBP-JOBS's 360: paired,
+23 against 30, p = 0.41. It is level with the plain vote gw (354). On the validation shots it had
+passed the kill line (172 against 187, p = 0.004), so that gain did not hold up on new shots. See "The
+test shots" below. This is the branch `learned-selector`, merged nowhere. Nothing in this folder fitted
+or chose anything on a `test_*` or `go_*` file.
 
 ## The idea in plain words
 
@@ -117,6 +119,69 @@ How to read it:
 shots: the truth, every `failed_*`, and J's rows by their `shot`. The truth moved on about 4,999 of
 5,000 shots, in both p = 0.005 validation files and in p = 0.004 `validation_X`. No feature, choice or
 answer of the selector changed.
+
+### The test shots, p = 0.005: no gain over TCBP-JOBS
+
+The orchestrator ran the frozen command once: server job ctl/110, from a checkout of b8608de, with the
+model's sha256 checked, 12:27 UTC, on the server (AMD EPYC-Milan). It used `test_X` (data sha256
+`1b13521c...`) and `test_Z` (`b86ae320...`), 10,000 shots each, with chunk-mode candidates and no joint
+file. The printout is `logs/test_p0.005.out`, a copy of `selector_test.out` on `origin/server-logs`; the
+per-shot files are `files/selector_test/` there. The numbers below are that printout's, as printed.
+
+| row (test, p = 0.005) | failures [X Z] | failed pairs of 10,000 | rate per cycle (the kit's) |
+|---|---|---|---|
+| the selector | [183 174] | 353 | 2.99e-3 +- 0.16e-3 |
+| T: TCBP-JOBS alone (= rule f here) | [186 177] | 360 | 3.05e-3 +- 0.16e-3 |
+| gw: the vote of T, P1, P2, R (ties to T) | [181 176] | 354 | 3.00e-3 +- 0.16e-3 |
+| ac: part 1's best rule without learning | [241 231] | 469 | 3.99e-3 |
+| bw: the lowest weight of P1, P2, T, R | [217 203] | 417 | 3.54e-3 |
+| R: relay-BP alone | [419 385] | 794 | 6.87e-3 |
+| P1 / P2: PriorTilt, one seed | [303 296] / [298 307] | 595 / 598 | |
+| ORACLE: a perfect choice among P1, P2, T, R (a ceiling; needs the truth) | [115 113] | 227 | 1.91e-3 |
+
+Paired with TCBP-JOBS alone on the same test shots (both fail, only the selector fails, only T fails,
+exact two-sided p):
+
+| comparison | both | only the selector | only T | p |
+|---|---|---|---|---|
+| **pairs (the kill line)** | 330 | 23 | 30 | **0.41** |
+| shots, X and Z together (20,000) | 333 | 24 | 30 | 0.50 |
+| X shots alone | 170 | 13 | 16 | 0.71 |
+| Z shots alone | 163 | 11 | 14 | 0.69 |
+
+- Against the vote gw, on pairs: 331 both, 22 only the selector, 23 only gw (p = 1). gw against T:
+  44 against 50, p = 0.61.
+- Pairs where both shots fail: the selector 4, TCBP-JOBS 3.
+- Choice shots (P1, P2, T not unanimous): 372 on X (3.72%) and 363 on Z (3.63%), as on validation.
+
+**What it means.**
+
+- **The kill line is not met on the test shots:** 353 against 360, paired 23 against 30, p = 0.41.
+  The printout says it plainly: "fewer failed pairs than TCBP-JOBS alone, paired p < 0.05: NO".
+- **The validation win was mostly luck.** On validation the selector gained 12 shots of 10,000 (8
+  against 20). On the test shots, twice as many (735 choice shots against 364), it gained 6 (24
+  against 30). The cross-validation on the train files had predicted +31 per 814 answerable choice
+  shots. Validation matched that rate and the test shots did not. The per-shot test on validation
+  (p = 0.036) was already marginal.
+- **What is left is a tie with the vote.** On the test shots the selector, TCBP-JOBS and the vote are
+  within 7 pairs of each other (353, 360, 354), and none of them is separated from the others. The
+  ORACLE (227) shows there is room. The facts this model reads (who agrees, convergence, weights,
+  iterations) do not tell the right answer from the wrong one well enough to take it.
+- **Nothing was tuned after the test run**, and the frozen model stays as it is.
+
+**The time of the row on the test shots** (combined offline, every member on the server, AMD
+EPYC-Milan):
+
+| member | X | Z |
+|---|---|---|
+| P1 (4 processes) | 134.6 ms per shot | 131.5 ms |
+| P2 (4 processes) | 136.7 ms | 131.1 ms |
+| T, serial | 8.7 ms | 8.2 ms |
+| R, on the choice shots only | 171.8 ms per shot of the file | 158.8 ms |
+| **the row** | **451.9 ms per shot** | **429.6 ms** |
+
+R's share is a counterfactual, as on validation: it is chunk-mode relay-BP's time on the choice shots.
+The selector's own work was 15.9 ms for 372 choice shots (X) and 14.8 ms for 363 (Z).
 
 ### p = 0.004, with joint relay-BP (J) in the pool: equal to rule f
 
@@ -284,5 +349,7 @@ python -m pytest -p no:cacheprovider test_kit.py hierarchy selector     # 71 pas
   any training file before the freeze, so a network feature fitted now would not match them.
 - **Few training shots.** 814 disagreeing training shots had a right answer. p = 0.005 `train_Z` has
   no PriorTilt or relay-BP answers, so the Z side learned from p = 0.004 alone.
-- **Not shown to beat the vote gw.** More training shots, above all Z at p = 0.005, would settle it.
-- **The test numbers** go here once the orchestrator has run the command above.
+- **No gain on the test shots.** The selector is level with TCBP-JOBS and with the vote gw there.
+  More training shots (above all Z at p = 0.005) or facts that see more of the shot (the network's
+  logits, which the frozen model could not use) are what could change that. Either would be a new
+  model, to be validated and frozen again before any new test shots.

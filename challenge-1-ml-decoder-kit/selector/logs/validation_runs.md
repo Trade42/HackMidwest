@@ -25,3 +25,9 @@ this says where it was committed. The numbers do not depend on it: the review re
 | `shuffle_check.log` | cdeef70 | cdeef70, with `shuffle_check.py` as committed in 0d8f38e |
 | `validation_p0.005.log` | cdeef70 | cdeef70, with `evaluate.py` as committed in 0d8f38e (the first run, 09:09:23, was cdeef70 itself) |
 | `cv_p0.004_without_J.log`, `pair_wilson_p0.005.log` | b8608de | b8608de, the frozen code (the fit's model went to scratch, not to `models/`) |
+
+## The run on the test shots
+
+| UTC | model file | model sha256 | shots | log | note |
+|---|---|---|---|---|---|
+| 2026-11-22 12:27 | `models/p0.005.json` | `696bf544...698ce6` | p = 0.005 test_X, test_Z (10,000 each) | `test_p0.005.out` | run once by the orchestrator (server job ctl/110, from b8608de): 353 against 360 failed pairs, 23 / 30, p = 0.41: the kill line is not met |

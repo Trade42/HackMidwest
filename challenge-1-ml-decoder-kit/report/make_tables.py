@@ -414,22 +414,22 @@ def ladder_tables(combined):
         discordant = pooled["only_network"] + pooled["only_weight"]
         p_value = float(binomtest(pooled["only_network"], discordant).pvalue) if discordant else 1.0
         levels = ", ".join(pooled["levels"])
-        counts = (f"{pooled['aw']} failed pairs with the classical tie-break ({pooled['rule']}), {pooled['a']} with the network; only the network rule fails "
-                  f"{pooled['only_network']} pairs, only the classical rule {pooled['only_weight']}, exact p = {stats.p_text(p_value)}")
+        counts = (f"The classical tie-break ({pooled['rule']}) fails {pooled['aw']} pairs and the network {pooled['a']}; only the network rule fails "
+                  f"{pooled['only_network']} pairs, only the classical rule {pooled['only_weight']}, exact p = {stats.p_text(p_value)}.")
         ablation.append([levels + " together", "pairs (the kit's score)", "", pooled["aw"], pooled["a"],
                          f"{pooled['only_network']} / {pooled['only_weight']}", stats.p_text(p_value)])
         further = 1 - pooled["a"] / pooled["aw"] if pooled["aw"] else 0.0
         gap = (pooled["aw"] - pooled["a"]) / (pooled["aw"] - pooled["floor"]) if pooled["aw"] > pooled["floor"] else 0.0
         if pooled["a"] < pooled["aw"] and p_value < 0.05:
             framing = (f"A classical hierarchy gets most of the improvement over relay-BP ({pooled['R']} to {pooled['aw']} failed pairs over p = {levels}); "
-                       f"the structure-aware network adds a further {further:.1%} ({counts}), closing {gap:.0%} of the gap to a perfect tie-breaker "
-                       f"({pooled['floor']} failed pairs).")
+                       f"the structure-aware network adds a further {further:.1%}, closing {gap:.0%} of the gap to a perfect tie-breaker "
+                       f"({pooled['floor']} failed pairs). " + counts)
         elif pooled["a"] < pooled["aw"]:
             framing = (f"The hierarchy is the result ({pooled['R']} failed pairs for relay-BP, {pooled['aw']} for the hierarchy, over p = {levels}); "
-                       f"the network is a promising tie-breaker whose gain is not yet significant ({counts}).")
+                       f"the network is a promising tie-breaker whose gain is not yet significant. " + counts)
         else:
             framing = (f"The hierarchy is the result ({pooled['R']} failed pairs for relay-BP, {pooled['aw']} for the hierarchy, over p = {levels}); "
-                       f"the neural tie-break did not lower its failures on the test shots ({counts}).")
+                       f"the neural tie-break did not lower its failures on the test shots. " + counts)
         for name, value in (("levels", levels), ("R", pooled["R"]), ("aw", pooled["aw"]), ("a", pooled["a"]), ("floor", pooled["floor"]),
                             ("only_network", pooled["only_network"]), ("only_weight", pooled["only_weight"]), ("p", stats.p_text(p_value)),
                             ("further", f"{further:.1%}"), ("gap_closed", f"{gap:.0%}")):
@@ -1097,6 +1097,42 @@ def tcbp_statement(measured):
     fact("tcbp_statement", text, "tables/test_all.md, tables/exploration_p0.004.md")
 
 
+def time_words(row):
+    """A row's mean time per pair in words, with its state: measured and clean, not clean, or not timed in one process."""
+    if row is None or row["mean_ms"] is None or row.get("offline"):
+        return None
+    words = f"{ms(row['mean_ms'])} ms per pair"
+    return words if row.get("time_clean", True) else words + " (a time not clean: the server throttled the row)"
+
+
+def findings(measured):
+    """The paragraph "what the numbers say" of REPORT.md: the framing, our decoder against relay-BP at each p, and TCBP-JOBS."""
+    parts = [] if FACTS.get("framing", (NOT_MEASURED,))[0] == NOT_MEASURED else [FACTS["framing"][0]]
+    sentences = []
+    for p in P_VALUES:
+        ours, relay = measured[p].get("hierarchy"), measured[p].get(REFERENCE)
+        if ours is None:
+            continue
+        text = f"at p = {p} our decoder fails {ours['failures_pair']} of {ours['shots']:,} pairs"
+        if relay is not None and ours.get("paired"):
+            paired = ours["paired"]
+            text += (f", relay-BP {relay['failures_pair']} (only ours fails {paired['row_only']}, only relay-BP {paired['reference_only']}, "
+                     f"exact p = {stats.p_text(paired['p'])})")
+        mine, theirs = time_words(ours), time_words(relay)
+        if mine:
+            text += f", in {mine}" + (f" against relay-BP's {theirs}" if theirs else "")
+        parallel = measured[p].get("hierarchy-parallel")
+        if time_words(parallel):
+            text += f"; with its two fast decodes side by side on two cores, {time_words(parallel)}"
+        sentences.append(text)
+    if sentences:
+        parts.append("On the test shots, " + "; ".join(sentences) + ".")
+    else:
+        parts.append("Our decoder's rows on the test shots are not measured yet.")
+    parts.append(FACTS["tcbp_statement"][0])
+    fact("findings", " ".join(parts), "tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md")
+
+
 # ---------- the section for the top-level README ----------
 
 README_HEADING = "## Our part: a hierarchical decoder with a learned tie-breaker, and a study of atom loss"
@@ -1170,6 +1206,7 @@ def main(argv=None):
             "resources": resources_table(measured)}
         tables["checks"] = checks_text(measured, extra, cross_checks)
         tcbp_statement(measured)
+        findings(measured)
         readme_section(measured)
         write("facts", "Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there as `<!--f:name-->value<!--/f-->`), "
                        "each with the generated table it is taken from.\n\n"

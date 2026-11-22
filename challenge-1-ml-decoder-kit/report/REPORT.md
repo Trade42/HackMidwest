@@ -100,14 +100,8 @@ per-shot files" is combined offline from saved answers and has no time measured 
 
 ![Mean decoding time per pair against p](figures/time_vs_p.png)
 
-**What the numbers say.** <!--f:framing-->not measured<!--/f--> <!--f:tcbp_statement-->TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000).<!--/f--> Our timed decoder against relay-BP on the same pairs:
-at p = 0.003, <!--f:t3_hierarchy_pairs-->not measured<!--/f--> failed pairs against <!--f:t3_relay_bp_pairs-->5<!--/f--> (only ours fails <!--f:t3_hierarchy_only_this-->not measured<!--/f-->, only
-relay-BP <!--f:t3_hierarchy_only_relay-->not measured<!--/f-->), <!--f:t3_hierarchy_mean_ms-->not measured<!--/f--> ms against <!--f:t3_relay_bp_mean_ms-->88.0 (not clean)<!--/f--> ms per pair; at p = 0.004,
-<!--f:t4_hierarchy_pairs-->not measured<!--/f--> against <!--f:t4_relay_bp_pairs-->83<!--/f--> (only ours <!--f:t4_hierarchy_only_this-->not measured<!--/f-->, only relay-BP <!--f:t4_hierarchy_only_relay-->not measured<!--/f-->),
-<!--f:t4_hierarchy_mean_ms-->not measured<!--/f--> ms against <!--f:t4_relay_bp_mean_ms-->319<!--/f--> ms; at p = 0.005, <!--f:t5_hierarchy_pairs-->not measured<!--/f--> against <!--f:t5_relay_bp_pairs-->not measured<!--/f-->
-(only ours <!--f:t5_hierarchy_only_this-->not measured<!--/f-->, only relay-BP <!--f:t5_hierarchy_only_relay-->not measured<!--/f-->), <!--f:t5_hierarchy_mean_ms-->not measured<!--/f--> ms against
-<!--f:t5_relay_bp_mean_ms-->not measured<!--/f--> ms. The exact tests, the intervals, the median and 99th-percentile times and what ran beside each
-row are in `APPENDIX.md`.
+**What the numbers say.** <!--f:findings-->Our decoder's rows on the test shots are not measured yet. TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000).<!--/f--> The exact tests, the intervals, the median and 99th-percentile
+times and what ran beside each row are in `APPENDIX.md`.
 
 ### Whose gain is whose
 

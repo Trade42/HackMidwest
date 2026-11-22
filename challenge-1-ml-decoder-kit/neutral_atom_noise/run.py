@@ -108,6 +108,35 @@ def result_name(shots_path, decoder, priors_spec, flags, start, stop):
     return "__".join(parts) + f"__{start:06d}-{stop:06d}.npz"
 
 
+def run_part(shots_path, decoder, priors_spec, flags, start, stop, workers, out, command=None):
+    """Decode one part of a shot file and save it in `out`. A part that is already there is kept.
+
+    Returns the file's path and a one-line summary (None for a kept part).
+    """
+    out = Path(out)
+    path = out / result_name(shots_path, decoder, priors_spec, flags, start, stop)
+    if path.exists():
+        print(f"keep {path.name}", flush=True)
+        return path, None
+    print(f"{path.name}: {decoder}, priors {priors_spec}, flags {flags}, {workers} workers", flush=True)
+    began = time.perf_counter()
+    result = decode_shots(shots_path, decoder, priors_spec, start, stop, workers, flags, progress=250)
+    seconds = time.perf_counter() - began
+    run = {"shots_file": Path(shots_path).name, "shots_sha256": sha256(shots_path), "shots_meta": load_shots(shots_path)["meta"],
+           "decoder": decoder, "priors": priors_spec, "flags": flags, "start": start, "stop": stop, "workers": workers,
+           "machine": platform.node(), "seconds": round(seconds, 1),
+           "command": command or "python -m neutral_atom_noise.run " + " ".join(sys.argv[1:])}
+    out.mkdir(parents=True, exist_ok=True)
+    partial = path.with_suffix(".partial.npz")
+    np.savez_compressed(partial, meta=np.array(json.dumps(run)), **result)
+    partial.replace(path)
+    summary = {"result": path.name, "failures": int(result["failed"].sum()), "shots": stop - start,
+               "unconverged": int((~result["converged"]).sum()), "mean_iterations": round(float(result["iterations"].mean()), 1),
+               "mean_ms": round(float(result["ms"].mean()), 1), "seconds": round(seconds, 1)}
+    print(json.dumps(summary), flush=True)
+    return path, summary
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--shots", required=True, help="a file written by make_shots")
@@ -119,24 +148,8 @@ def main():
     parser.add_argument("--workers", type=int, default=4, help="worker processes")
     parser.add_argument("--out", required=True, help="output folder")
     args = parser.parse_args()
-    meta = load_shots(args.shots)["meta"]
-    stop = meta["shots"] if args.stop is None else args.stop
-    name = result_name(args.shots, args.decoder, args.priors, args.flags, args.start, stop)
-    print(f"{name}: {args.decoder}, priors {args.priors}, flags {args.flags}, {args.workers} workers", flush=True)
-    began = time.perf_counter()
-    result = decode_shots(args.shots, args.decoder, args.priors, args.start, stop, args.workers, args.flags, progress=250)
-    seconds = time.perf_counter() - began
-    run = {"shots_file": Path(args.shots).name, "shots_sha256": sha256(args.shots), "shots_meta": meta,
-           "decoder": args.decoder, "priors": args.priors, "flags": args.flags, "start": args.start, "stop": stop,
-           "workers": args.workers, "machine": platform.node(), "seconds": round(seconds, 1),
-           "command": "python -m neutral_atom_noise.run " + " ".join(sys.argv[1:])}
-    out = Path(args.out)
-    out.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(out / name, meta=np.array(json.dumps(run)), **result)
-    failures, n = int(result["failed"].sum()), stop - args.start
-    print(json.dumps({"result": name, "failures": failures, "shots": n, "unconverged": int((~result["converged"]).sum()),
-                      "mean_iterations": round(float(result["iterations"].mean()), 1),
-                      "mean_ms": round(float(result["ms"].mean()), 1), "seconds": round(seconds, 1)}), flush=True)
+    stop = load_shots(args.shots)["meta"]["shots"] if args.stop is None else args.stop
+    run_part(args.shots, args.decoder, args.priors, args.flags, args.start, stop, args.workers, args.out)
 
 
 if __name__ == "__main__":

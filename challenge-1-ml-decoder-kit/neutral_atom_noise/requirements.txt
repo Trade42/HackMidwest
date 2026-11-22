@@ -1,0 +1,10 @@
+# neutral_atom_noise: the kit's requirements, plus Clifft for the runs with atom loss and matplotlib for the plot.
+# Tested with Python 3.12.15, stim 1.16.0, ldpc 2.4.1, numpy 2.5.5, scipy 1.18.1, relay-bp 0.2.2, clifft 0.13.0.
+stim>=1.15
+ldpc>=2.4
+numpy
+scipy
+relay-bp==0.2.2   # source build on most platforms: needs a Rust toolchain
+clifft==0.13.0    # only for make_shots --loss and run --flags (question 2)
+matplotlib        # only for the plot; without it the job writes its tables and skips the plot
+pytest

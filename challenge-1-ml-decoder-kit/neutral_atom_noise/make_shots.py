@@ -71,6 +71,42 @@ def shot_name(basis, factor, uniform_p, loss, seed):
     return f"{basis}_{noise}{'_loss' if loss else ''}_seed{seed}"
 
 
+def make(basis, factor, uniform_p, loss, shots, seed, out):
+    """Sample and save one shot file in the folder `out`, unless it is already there. Returns its path."""
+    out = Path(out)
+    path = out / (shot_name(basis, factor, uniform_p, loss, seed) + ".npz")
+    if path.exists():
+        kept = load_shots(path)["meta"]
+        if kept["shots"] != shots:
+            raise SystemExit(f"{path} holds {kept['shots']} shots, not {shots}: use another seed or folder")
+        print(json.dumps({"file": path.name, "sha256": sha256(path), "kept": True}), flush=True)
+        return path
+    noise = kit_uniform(uniform_p) if uniform_p is not None else neutral_atom(factor)
+    circuit = model_circuit(basis, noise)
+    meta = {"basis": basis, "factor": factor, "uniform_p": uniform_p, "noise": noise.as_dict(), "loss": bool(loss),
+            "shots": shots, "seed": seed, "num_detectors": circuit.num_detectors,
+            "num_records": circuit.num_measurements, "machine": platform.node(), "stim": stim.__version__}
+    heralds = None
+    if loss:
+        import clifft
+        meta["sampler"], meta["clifft"] = "clifft noncomp, chunks of 2000 shots, chunk k uses seed + k", clifft.__version__
+        detectors, observables, heralds = sample_loss(circuit, noise.loss, shots, seed)
+    else:
+        meta["sampler"] = "stim detector sampler"
+        detectors, observables = sample(circuit, shots, seed)
+    out.mkdir(parents=True, exist_ok=True)
+    partial = path.with_suffix(".partial.npz")
+    save_shots(partial, detectors, observables, meta, heralds)
+    partial.replace(path)
+    report = {"file": path.name, "sha256": sha256(path),
+              **{k: meta[k] for k in ("basis", "factor", "uniform_p", "loss", "shots", "seed", "machine")},
+              "detection_events_per_shot": round(float(detectors.sum(axis=1).mean()), 2)}
+    if heralds is not None:
+        report["heralds_per_shot"] = round(float(heralds.sum(axis=1).mean()), 2)
+    print(json.dumps(report), flush=True)
+    return path
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--basis", choices=["X", "Z"], default="X", help="memory basis")
@@ -83,30 +119,9 @@ def main():
     args = parser.parse_args()
     if (args.factor is None) == (args.uniform_p is None):
         parser.error("give exactly one of --factor and --uniform-p")
-    noise = kit_uniform(args.uniform_p) if args.uniform_p is not None else neutral_atom(args.factor)
-    if args.loss and noise.loss == 0:
+    if args.loss and args.factor is None:
         parser.error("--loss needs the model (--factor): the kit's uniform model has no loss")
-    circuit = model_circuit(args.basis, noise)
-    meta = {"basis": args.basis, "factor": args.factor, "uniform_p": args.uniform_p, "noise": noise.as_dict(),
-            "loss": bool(args.loss), "shots": args.shots, "seed": args.seed, "num_detectors": circuit.num_detectors,
-            "num_records": circuit.num_measurements, "machine": platform.node(), "stim": stim.__version__}
-    heralds = None
-    if args.loss:
-        import clifft
-        meta["sampler"], meta["clifft"] = "clifft noncomp, chunks of 2000 shots, chunk k uses seed + k", clifft.__version__
-        detectors, observables, heralds = sample_loss(circuit, noise.loss, args.shots, args.seed)
-    else:
-        meta["sampler"] = "stim detector sampler"
-        detectors, observables = sample(circuit, args.shots, args.seed)
-    out = Path(args.out)
-    out.mkdir(parents=True, exist_ok=True)
-    path = out / (shot_name(args.basis, args.factor, args.uniform_p, args.loss, args.seed) + ".npz")
-    digest = save_shots(path, detectors, observables, meta, heralds)
-    report = {"file": path.name, "sha256": digest, **{k: meta[k] for k in ("basis", "factor", "uniform_p", "loss", "shots", "seed", "machine")},
-              "detection_events_per_shot": round(float(detectors.sum(axis=1).mean()), 2)}
-    if heralds is not None:
-        report["heralds_per_shot"] = round(float(heralds.sum(axis=1).mean()), 2)
-    print(json.dumps(report), flush=True)
+    make(args.basis, args.factor, args.uniform_p, args.loss, args.shots, args.seed, args.out)
 
 
 if __name__ == "__main__":

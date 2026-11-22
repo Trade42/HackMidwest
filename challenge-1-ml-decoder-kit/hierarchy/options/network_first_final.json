@@ -1,0 +1,20 @@
+{
+  "rule": {
+    "X": "network",
+    "Z": "network"
+  },
+  "seeds": [
+    1,
+    1001
+  ],
+  "checkpoints": {
+    "X": "runs/ckpt/x_final_step120000.pt",
+    "Z": "runs/ckpt/z_final_step100000.pt"
+  },
+  "device": "cpu",
+  "torch_threads": 1,
+  "network_first": {
+    "X": 2.8090898990631104,
+    "Z": null
+  }
+}

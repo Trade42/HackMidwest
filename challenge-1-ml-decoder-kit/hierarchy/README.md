@@ -501,7 +501,27 @@ shots the network leaves to the hierarchy, the frozen run's PriorTilt draws are 
 | c from the procedure on train + validation: 2.809 | 76.6% | 229 against 237 | 17 / 25, p = 0.28 | 255 ms against 352 ms |
 
 So on ten times the shots the stage is level in accuracy within noise, and it takes about
-70% of the frozen rule's mean time here. The median shot is slower (49 ms, the network's call
+70% of the frozen rule's mean time here.
+
+**The options file for a network-first row with the final checkpoints:**
+`hierarchy/options/network_first_final.json`. Its rules and seeds are those of the frozen
+test run (`PLUGIN_RULE X network` and `PLUGIN_RULE Z network` in the test job's printout
+`test_run.out` on `server-logs`); `network_first` holds X: c = 2.8090898990631104, the value
+`plugin_options.py --network-first` gives with the final X network on the p = 0.004 train and
+validation files (the laptop's step-8b candidates; the laptop's logits of
+`checkpoint_final_step120000.pt`, sha256 `d8d1c70f...`), and Z: null, because the final Z
+network has no held-out evidence for the stage. The two checkpoint paths are relative
+placeholders: point them at the final X checkpoint (sha256
+`d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933`) and the final Z
+checkpoint (sha256 `fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700`).
+
+**At p = 0.003 the stage costs time.** Offline, on the p = 0.003 validation files (the
+server's chunk-mode candidates; the final X network's laptop logits; the network's one-thread
+call, 24.9 ms on the server's CPU, counted on every shot): with that c the network answers
+93.3% of the X shots alone, failures 2 against 2, but the mean time per X shot rises from 22.1
+to 29.4 ms, because PriorTilt is fast at that noise (about 11 ms per decode). The median rises
+from 5.7 to 24.9 ms and the p99 falls from 257 to 136 ms. Z is unchanged (no Z threshold).
+The stage pays only where PriorTilt is slow, as at p = 0.004 and above. The median shot is slower (49 ms, the network's call
 on 2 CPU threads, against 40 ms), and the slowest shots are faster. The commands:
 `scratch/hierarchy/ablation/network_first.py` (an analysis script, not part of the
 repository), with the train_X candidates, the network's train_X logits, the rule and the

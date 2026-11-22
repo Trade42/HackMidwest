@@ -8,17 +8,28 @@ decoded here: the tool reads saved per-shot files.
 51 ms per X shot on the A100. TCBP-JOBS with the kit's priors, built once (F), costs about 13 ms. Can a cheap check
 send the easy shots to F, keep TH's accuracy, and lower the mean time?
 
-**The answer, in short: barely.** With the gate fixed in advance (the rule may add no failure TH does not have), the
-best rule found sends 3.9% of the shots to F and lowers the mean from 51.1 ms to 49.3 ms. Its failures are TH's own 33,
-shot for shot. Every check that sends more shots to F adds failures: F is wrong on 75 shots where TH is right, and
-those shots are not easy to spot cheaply.
+**The answer, in short: no useful fast path from these two checks (a negative result).** With the gate fixed in
+advance (the rule may add no failure TH does not have), the best rule found sends 3.9% of the shots to F and lowers
+the mean from 51.1 ms to 49.3 ms (1.8 ms, 3.5%, inside the timers' noise), with its threshold on the edge of these
+shots. Its failures are TH's own 33, shot for shot. C1 (agreement with PriorTilt) adds 19 failures. Every check that
+sends more shots to F adds failures: F is wrong on 75 shots where TH is right, and those shots are not easy to spot
+cheaply. This is not worth a pipeline change.
 
 ## What was fixed first
 
-`CRITERION.md`, committed (`b0a410e6`, 18:26 UTC) before any rule's number: the two checks, the gate (no added
-failure: "only rule" = 0, since TH's own run-to-run spread is 0 changed outcomes on the 1,000 shots decoded again),
-the choice (lowest mean time among the rules that pass), and the time model. One clarification applied after: a
-fast path must also be faster than TH alone (`fastpath.py`, "candidates"); it changes nothing here.
+`CRITERION.md`, committed (`b0a410e6`, 18:25:59 UTC by the commit) before any rule's number: the two checks, the gate
+(no added failure: "only rule" = 0, since TH's own run-to-run spread is 0 changed outcomes on the 1,000 shots decoded
+again), the choice (lowest mean time among the rules that pass), and the time model.
+
+**Deviations after the first number** (both in `fastpath.py`, commit `a759d231`; `CRITERION.md` is unchanged):
+- **The time model for C2.** `CRITERION.md` says every shot runs the cheap answer and the slow path "adds" to it. The
+  first run used that model for C2 too: C2 (w = 115) came out at **61.9 ms mean, 102.9 ms p99**, slower than TH alone
+  (51.1 / 63.1), so under the committed model no rule both passes the gate and is faster than TH. That model is wrong
+  for C2: the syndrome weight is known before any decode, so F need not run on the shots that go to TH. With F run
+  only on the easy shots, C2 is **49.3 ms mean, 63.1 ms p99**. C1 keeps the committed model (its check needs F's
+  answer on every shot). The first run's log was overwritten; its numbers are the ones above.
+- **A fast path must also be faster than TH alone** (`fastpath.py`, "candidates"). Under the corrected time model it
+  changes nothing.
 
 ## Inputs (all X, validation, p = 0.005)
 
@@ -73,15 +84,24 @@ How to read it:
 - The syndrome weight runs from 84 to 220 (median 147). F's extra failures start at weight 116, so only the
   lightest 3.9% of shots are safe for F. w = 115 is tuned to the edge of these shots; on new shots it would add a
   failure now and then (`FROZEN_RULE.md`).
+- **Does "0 added failures at w = 115" survive another model fit of F?** F's answers vary from run to run (91 / 96 /
+  100 failures with the kit's priors). A diagnostic with the two other kit-priors runs on the same shots, w not
+  re-picked: job 1's fresh arm (96 failures) and the stored TCBP-JOBS file (91) each add **0** failures at w <= 115
+  (and 0 at w <= 110); their lowest-weight extra failures are at weights 116 and 119. That is the only
+  out-of-sample-like evidence here; new shots may still put one at or below 115.
 - C1 fails for two reasons: F and P2 agree on a wrong answer on 19 shots where TH is right, and P2 is slow on its
   hard shots (189.5 ms mean on the laptop CPU), so the check costs more than TH.
 - The bulk of TH's time is building TCBP-JOBS with the shot's priors (34 ms of 51). A cheaper path for most shots
   needs either a decoder whose priors can change after it is built, or a check that finds F's 75 extra failures;
   neither syndrome weight nor agreement with PriorTilt does.
 
-## Not done
+## Not done, and what is left
 
-- No test file opened; no new decode. The checks "head's priors against the kit's" and TCBP-JOBS's own flags were not
-  tried (deadline; the flag `converged` is False on most shots, `README_tcbp.md`).
+- No test file opened; no new decode.
+- Truth-free signals not tried (deadline): F's own decode time (`seconds_decode_fresh`, a stand-in for its iteration
+  count) and its correction's weight (`n_faults_fresh`) against the syndrome weight, both already in job 3's file;
+  and the distance between the head's priors and the kit's. That last one costs the 9.4 ms network, but skipping the
+  34 ms build is where any real saving would come from. TCBP-JOBS's `converged` flag is False on most shots
+  (`README_tcbp.md`), so it was not used.
 - The p99 of the whole pipeline was not measured as one timer; the network's p99 (19.8 ms) is not inside it.
 - Z memory and other p: not looked at.

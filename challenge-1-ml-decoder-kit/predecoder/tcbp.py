@@ -91,13 +91,35 @@ class RelayStandIn:
         return SimpleNamespace(result=np.asarray(result.decoding, np.float64), converged=bool(result.success))
 
 
+H_FORMATS = ("dense", "csr", "csc")     # how H is handed to get_decoder; dense is the registered path (tcbp_speed.py)
+
+
+def h_matrix(dense, form, dtype=np.uint8):
+    """H as get_decoder is given it: the dense uint8 array itself, or a scipy CSR or CSC matrix made from it once.
+
+    cudaq-qec's get_decoder docstring: a dense array is copied into a dense tensor and converted to sparse storage on
+    every call; a scipy sparse matrix is "the preferred input — no dense allocation occurs". The sparse form must hold
+    exactly the dense array's ones, in canonical form (sorted indices, no duplicates), or this refuses it."""
+    if form == "dense":
+        return dense
+    if form not in H_FORMATS:
+        raise SystemExit(f"--h-format is one of {H_FORMATS}")
+    from scipy import sparse
+
+    matrix = (sparse.csr_matrix if form == "csr" else sparse.csc_matrix)(dense, dtype=dtype)
+    if not (matrix.has_canonical_format and (matrix.data == 1).all() and np.array_equal(matrix.toarray(), dense)):
+        raise SystemExit(f"the {form} form of H does not reproduce the dense array")
+    return matrix
+
+
 class Builder:
     """Builds one decoder per shot from that shot's priors. TCBP-JOBS: the model is fitted once, here."""
 
-    def __init__(self, problem, decoder="tcbp-jobs", preset="tcbp-jobs", overrides=None):
+    def __init__(self, problem, decoder="tcbp-jobs", preset="tcbp-jobs", overrides=None, h_format="dense"):
         self.decoder, self.preset, self.overrides = decoder, preset, dict(overrides or {})
         self.H, self.L = problem.H.tocsr(), problem.L
         self.columns = problem.H.shape[1]
+        self.h_format, self.matrix = h_format, None
         start = time.perf_counter()
         if decoder == "relay":
             self.model_seconds = 0.0
@@ -110,11 +132,23 @@ class Builder:
         self.model = nv_qldpc.init_tcbp_model(self.dense)                          # once: it does not depend on the priors
         self.options = nv_qldpc.preset(preset, tcbp_model=self.model, **self.overrides)
         self.model_seconds = time.perf_counter() - start
+        self.matrix = h_matrix(self.dense, h_format)                               # once per run, outside every shot
+
+    def with_h_format(self, h_format, dtype=np.uint8):
+        """A builder that shares this one's model and options (nothing is refitted) and hands get_decoder H in another
+        form. The relay stand-in ignores the form."""
+        import copy
+
+        other = copy.copy(self)
+        other.h_format = h_format
+        if self.decoder != "relay":
+            other.matrix = h_matrix(self.dense, h_format, dtype)
+        return other
 
     def build(self, priors):
         if self.decoder == "relay":
             return RelayStandIn(self.H, priors)
-        return self.qec.get_decoder("nv-qldpc-decoder", self.dense, error_rate_vec=np.asarray(priors, float), **self.options)
+        return self.qec.get_decoder("nv-qldpc-decoder", self.matrix, error_rate_vec=np.asarray(priors, float), **self.options)
 
 
 def decode_one(builder, priors, syndrome):
@@ -243,7 +277,7 @@ def summarise(rows):
 def probe(args):
     data = load(args.data, args.final)
     problem = problem_of(data)
-    builder = Builder(problem, args.decoder, args.preset, args.opt)
+    builder = Builder(problem, args.decoder, args.preset, args.opt, args.h_format)
     print(f"model fitted in {builder.model_seconds:.1f} s")
     if args.decoder != "relay":
         print("preset options:", {key: type(value).__name__ for key, value in builder.options.items()})
@@ -282,14 +316,16 @@ def decode_command(args):
     (out / "parts").mkdir(parents=True, exist_ok=True)
     syndromes, truth = np.ascontiguousarray(data.basis_input[:shots], dtype=np.uint8), data.observables[:shots]
     print(f"{data.path.name}: {shots} shots, p={data.p:g}, arms {args.arms}, decoder {args.decoder} ({version}), preset "
-          f"{args.preset}, overrides {args.opt}; head priors {setting}; {where(args.decoder)}", flush=True)
+          f"{args.preset}, overrides {args.opt}, H {args.h_format}; head priors {setting}; {where(args.decoder)}", flush=True)
     start = time.time()
-    builder = Builder(problem, args.decoder, args.preset, args.opt)
+    builder = Builder(problem, args.decoder, args.preset, args.opt, args.h_format)
     print(f"  model fitted in {builder.model_seconds:.1f} s; GPU memory {gpu_memory()}", flush=True)
     warm = True
     per_shot, results = {"truth": truth}, {}
     for arm in args.arms:
         what = {"data": data.sha256, "arm": arm, "decoder": args.decoder, "preset": args.preset, "opt": args.opt}
+        if args.h_format != "dense":                # the registered runs' part files keep their names
+            what["h_format"] = args.h_format
         if arm == "head":
             what |= {"head": meta["model"]["head_sha256"], "trunk": meta["model"]["trunk_sha256"], "priors": setting,
                      "logits_device": meta["model"]["device"]}
@@ -349,7 +385,7 @@ def decode_command(args):
     np.savez_compressed(out / "per_shot.npz", **per_shot)
     with open(out / "summary.json", "w") as file:
         json.dump({"data": data.identity(), "shots": shots, "decoder": args.decoder, "version": version, "preset": args.preset,
-                   "overrides": args.opt, "head_priors": setting, "prior_cap": PRIOR_CAP, "capped_this_run": dict(CAPPED),
+                   "overrides": args.opt, "h_format": args.h_format, "head_priors": setting, "prior_cap": PRIOR_CAP, "capped_this_run": dict(CAPPED),
                    "logits": meta, "arms": results,
                    "model_seconds": builder.model_seconds, "machine": where(args.decoder),
                    "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process, "
@@ -403,8 +439,8 @@ def fit_command(args):
     start = time.time()
     print(f"fit of the knobs for {args.decoder} ({version}) on {', '.join(f'{d.path.name} (weight {w:g})' for (d, _, _), w in zip(files, weights))}, "
           f"p={problem.p:g}; {len(grid)} rows; {where(args.decoder)}", flush=True)
-    builder = Builder(problem, args.decoder, args.preset, args.opt)
-    print(f"  model fitted in {builder.model_seconds:.1f} s; GPU memory {gpu_memory()}", flush=True)
+    builder = Builder(problem, args.decoder, args.preset, args.opt, args.h_format)
+    print(f"  model fitted in {builder.model_seconds:.1f} s; H {args.h_format}; GPU memory {gpu_memory()}", flush=True)
     warm = True
     results = {}
     for setting in grid:
@@ -413,6 +449,8 @@ def fit_command(args):
             head = None if setting["alpha"] == 0 else meta["model"]["head_sha256"]
             what = {"data": data.sha256, "head": head, "shots": shots, "setting": setting, "decoder": args.decoder,
                     "preset": args.preset, "opt": args.opt}
+            if args.h_format != "dense":
+                what["h_format"] = args.h_format
             path = cache / f"{tag(what)}.npz"
             if not path.exists():
                 rows, hashes = decode_shots(builder, problem, np.ascontiguousarray(data.basis_input[:shots], dtype=np.uint8),
@@ -456,7 +494,7 @@ def fit_command(args):
     with open(args.out, "w") as file:
         json.dump({"data": [data.identity() for data, _, _ in files], "weights": weights, "logits": [m for _, m, _ in files],
                    "decoder": args.decoder, "version": version, "preset": args.preset, "overrides": args.opt,
-                   "model_seconds": builder.model_seconds, "machine": where(args.decoder), "rows": rows,
+                   "h_format": args.h_format, "model_seconds": builder.model_seconds, "machine": where(args.decoder), "rows": rows,
                    "chosen": None if chosen is None else {key: chosen[key] for key in ("mode", "alpha", "eps")},
                    "extended": extended, "rule": RULE, "prior_cap": PRIOR_CAP, "capped_this_run": dict(CAPPED), "grid": GRID, "extension": {"low": EXTEND_LOW, "high": EXTEND_HIGH},
                    "seconds": time.time() - start}, file, indent=1)
@@ -611,6 +649,9 @@ def main(argv=None):
         sub.add_argument("--decoder", choices=("tcbp-jobs", "relay"), default="tcbp-jobs")
         sub.add_argument("--preset", default="tcbp-jobs")
         sub.add_argument("--opt", type=json.loads, default={}, help="decoder option overrides, as a JSON object")
+        sub.add_argument("--h-format", choices=H_FORMATS, default="dense",
+                         help="how H is handed to get_decoder: dense (the registered runs) or a scipy matrix made once "
+                              "(csr, csc; tcbp_speed.py checks they give the same answers and times them)")
         if name == "fit":
             sub.add_argument("--data", nargs="+", required=True)
             sub.add_argument("--weights", type=float, nargs="+")

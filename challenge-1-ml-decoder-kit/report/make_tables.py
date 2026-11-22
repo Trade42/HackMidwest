@@ -27,7 +27,7 @@ import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, EXTENSION, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, OPERATING_PAIRED, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
+from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, EXTENSION, PTCBP_LABEL, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, OPERATING_PAIRED, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
                          REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256)
 
 HERE = Path(__file__).resolve().parent
@@ -2432,6 +2432,15 @@ def readme_section(measured):
              f"Under atom loss (our own simplified model), relay-BP with the loss flags fails {value('loss_aware_share')} of shots where a loss-blind one",
              f"fails {value('loss_blind_share')}; our loss-time tracker, which estimates from the syndrome when each atom was lost, recovers "
              f"{value('trk_gain')} of what knowing the true loss time would add (`loss/`, `loss_tracker/`).",
+             "",
+             "Every version we built is in one table, each number with its label ([report/tables/master_comparison.md]"
+             "(challenge-1-ml-decoder-kit/report/tables/master_comparison.md)): the frozen hierarchy above (pre-registered); the same hierarchy with "
+             "a hand-written tie-break in place of the network (`hierarchy/`; pre-registered at p = 0.003 and 0.004, after-test ablations otherwise); "
+             "TCBP-JOBS in place of relay-BP in it (an after-test ablation); a learned predecoder that gives relay-BP per-shot priors from the network "
+             "(`predecoder/`; X memory at p = 0.005 a secondary result, chosen after its own gate failed, and the other rows a registered extension run "
+             "after it) and its fallback to TCBP-JOBS where relay-BP does not converge (`predecoder/fallback.py`; designed after the first test result)"
+             + ("; and TCBP-JOBS given the same per-shot priors (" + PTCBP_LABEL + ")" if FACTS.get("ptv_TH", (NOT_MEASURED,))[0] != NOT_MEASURED else "")
+             + ". None of these after-test rows replaces the frozen decoder.",
              ""]
     header = ["Decoder"] + [f"p = {p}" for p in P_VALUES]
     table = []

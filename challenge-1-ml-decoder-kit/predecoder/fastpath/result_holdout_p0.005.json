@@ -40,7 +40,7 @@
  "fast_shots": 1763,
  "F_only_shots_total": 79,
  "F_only_on_fast_path": 1,
- "added_rate_upper_95_on_fast_shots": null,
+ "added_rate_upper_95_on_fast_shots": 0.00269,
  "entropy_bits": {
   "min": 21.40609295566482,
   "median": 77.96829061605975,

@@ -85,3 +85,20 @@ As a check of the inputs, the pair command must print X counts of 4 (p = 0.004) 
 - **The knobs were fitted on X at p = 0.005.** They are applied here unchanged, to Z, at lower p, with no validation.
 - Each test file is decoded once. If the job fails partway, that is reported, and no test file is decoded a second
   time without the orchestrator's word.
+
+## Addendum: the logits (second commit, before the files leave this PC; no decode has run)
+
+Made by `orchestration/scratch/tcbp-zlowp/logits_run.sh` from the clean checkout at `a8e24119` (the commit above),
+venv packages identical to dq-predecoder's (torch 2.15.0+cpu, numpy 2.5.5, stim 1.16.0), locks A B C D, `taskset -c 0-15`,
+`nice -n 15`, 16 threads. Log: `logs/tcbp_zlowp_logits.log`; `meta.json` of each: `logs/tcbp_zlowp_logits_meta_test_Z_p0.00{4,3}.json`.
+
+| p | `logits.npy` sha256 | `meta.json` sha256 | batched | one shot at a time, 200 shots, mean |
+|---|---|---|---|---|
+| 0.004 | `edc9342122391f2333c99116eaf73b9476f4f041de891e28879d22220a9293c9` | `c525e4328c5155a1d8ba60913d0b5cdcde62ced2ac2dbe050e718a33332e8dfe` | 335 s | 25.0 ms |
+| 0.003 | `ca029bc23b9ad376a3898949da27196655544f65ae358c1b416aeed9ffe90c7d` | `1cab65d1aaa0bf92da264f9f6cbecea2d3055debf726556da01f729623d10301` | 326 s | 31.4 ms |
+
+10,000 rows of 8,784 columns each (float16 on disk). Batch-one against batched, largest logit gap 0. The head's
+probabilities sum to 46.9 per shot at p = 0.004 (the kit's priors: 47.3) and 35.1 at p = 0.003 (35.5). They go to the
+server as tar.gz parts under 95 MB, listed with every sha256 in `logs/tcbp_zlowp_transfer_SHA256SUMS`. The tarballs
+hold `logits.npy` and `meta.json`, and `INNER_SHA256SUMS_test_Z_p*` checks both after unpacking. The per-shot timings
+were taken with all 16 hardware threads busy, on a shared machine; they are not latency claims.

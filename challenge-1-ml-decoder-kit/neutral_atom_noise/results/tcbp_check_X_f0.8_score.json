@@ -1,0 +1,216 @@
+{
+ "shots_file": "/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise/runs/X_seed4100/shots/X_f0.8_seed4100.npz",
+ "shots_sha256": "4e6e2867557ced29a25b1c0380b1aa2b6f2d9922bdb4fe1300e2de0a409365e8",
+ "tcbp_shots_scored": 2000,
+ "label": "exploration, after the main test results; a separate branch",
+ "rows": {
+  "m": {
+   "shots": 2000,
+   "failures": 25,
+   "wilson95": [
+    0.008481081388571086,
+    0.018388039710650523
+   ]
+  },
+  "g": {
+   "shots": 2000,
+   "failures": 957,
+   "wilson95": [
+    0.4566693769960879,
+    0.5004130560370058
+   ]
+  },
+  "h": {
+   "shots": 2000,
+   "failures": 209,
+   "wilson95": [
+    0.09184284051856186,
+    0.11867354388090919
+   ]
+  },
+  "BP-OSD matched": {
+   "shots": 2000,
+   "failures": 91,
+   "wilson95": [
+    0.03720527135020145,
+    0.05553732462845745
+   ]
+  },
+  "BP-OSD generic (fitted p)": {
+   "shots": 2000,
+   "failures": 442,
+   "wilson95": [
+    0.2033600655726267,
+    0.23970964681031237
+   ]
+  },
+  "relay-BP matched": {
+   "shots": 2000,
+   "failures": 39,
+   "wilson95": [
+    0.014297256348690845,
+    0.026545026088593226
+   ]
+  },
+  "relay-BP generic (fitted p)": {
+   "shots": 500,
+   "failures": 65,
+   "wilson95": [
+    0.10332065036463456,
+    0.16232136157691412
+   ]
+  }
+ },
+ "pairs": [
+  {
+   "a": "h",
+   "b": "g",
+   "shots": 2000,
+   "failures_a": 209,
+   "failures_b": 957,
+   "only_a": 23,
+   "only_b": 771,
+   "sign_test_p": 2.7542179380517096e-195
+  },
+  {
+   "a": "h",
+   "b": "m",
+   "shots": 2000,
+   "failures_a": 209,
+   "failures_b": 25,
+   "only_a": 187,
+   "only_b": 3,
+   "sign_test_p": 1.4571387219099377e-51
+  },
+  {
+   "a": "m",
+   "b": "g",
+   "shots": 2000,
+   "failures_a": 25,
+   "failures_b": 957,
+   "only_a": 1,
+   "only_b": 933,
+   "sign_test_p": 1.2877324992627073e-278
+  },
+  {
+   "a": "m",
+   "b": "BP-OSD matched",
+   "shots": 2000,
+   "failures_a": 25,
+   "failures_b": 91,
+   "only_a": 8,
+   "only_b": 74,
+   "sign_test_p": 1.647020623262653e-14
+  },
+  {
+   "a": "m",
+   "b": "BP-OSD generic (fitted p)",
+   "shots": 2000,
+   "failures_a": 25,
+   "failures_b": 442,
+   "only_a": 2,
+   "only_b": 419,
+   "sign_test_p": 3.28073582630057e-122
+  },
+  {
+   "a": "m",
+   "b": "relay-BP matched",
+   "shots": 2000,
+   "failures_a": 25,
+   "failures_b": 39,
+   "only_a": 6,
+   "only_b": 20,
+   "sign_test_p": 0.009355306625366211
+  },
+  {
+   "a": "m",
+   "b": "relay-BP generic (fitted p)",
+   "shots": 500,
+   "failures_a": 6,
+   "failures_b": 65,
+   "only_a": 0,
+   "only_b": 59,
+   "sign_test_p": 3.469446951953614e-18
+  },
+  {
+   "a": "g",
+   "b": "BP-OSD matched",
+   "shots": 2000,
+   "failures_a": 957,
+   "failures_b": 91,
+   "only_a": 878,
+   "only_b": 12,
+   "sign_test_p": 1.1756932382754718e-241
+  },
+  {
+   "a": "g",
+   "b": "BP-OSD generic (fitted p)",
+   "shots": 2000,
+   "failures_a": 957,
+   "failures_b": 442,
+   "only_a": 587,
+   "only_b": 72,
+   "sign_test_p": 2.5275556947648846e-101
+  },
+  {
+   "a": "g",
+   "b": "relay-BP matched",
+   "shots": 2000,
+   "failures_a": 957,
+   "failures_b": 39,
+   "only_a": 920,
+   "only_b": 2,
+   "sign_test_p": 2.400366961587464e-272
+  },
+  {
+   "a": "g",
+   "b": "relay-BP generic (fitted p)",
+   "shots": 500,
+   "failures_a": 238,
+   "failures_b": 65,
+   "only_a": 179,
+   "only_b": 6,
+   "sign_test_p": 2.1639504831780844e-45
+  },
+  {
+   "a": "h",
+   "b": "BP-OSD matched",
+   "shots": 2000,
+   "failures_a": 209,
+   "failures_b": 91,
+   "only_a": 154,
+   "only_b": 36,
+   "sign_test_p": 1.39390600800956e-18
+  },
+  {
+   "a": "h",
+   "b": "BP-OSD generic (fitted p)",
+   "shots": 2000,
+   "failures_a": 209,
+   "failures_b": 442,
+   "only_a": 57,
+   "only_b": 290,
+   "sign_test_p": 1.0306049190928897e-38
+  },
+  {
+   "a": "h",
+   "b": "relay-BP matched",
+   "shots": 2000,
+   "failures_a": 209,
+   "failures_b": 39,
+   "only_a": 177,
+   "only_b": 7,
+   "sign_test_p": 1.0714267651676255e-43
+  },
+  {
+   "a": "h",
+   "b": "relay-BP generic (fitted p)",
+   "shots": 500,
+   "failures_a": 54,
+   "failures_b": 65,
+   "only_a": 18,
+   "only_b": 29,
+   "sign_test_p": 0.14386508844054902
+  }
+ ]
+}

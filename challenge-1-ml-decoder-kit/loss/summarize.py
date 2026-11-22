@@ -43,11 +43,9 @@ def sign_test(b, c):
 def bootstrap_ratio(f_ref, f_cond, reps=2000, seed=0):
     rng = np.random.default_rng(seed)
     n = len(f_ref)
-    r = []
-    for _ in range(reps):
-        idx = rng.integers(0, n, n)
-        a, b = f_ref[idx].sum(), f_cond[idx].sum()
-        r.append(a / b if b else np.inf)
+    idx = rng.integers(0, n, (reps, n))
+    a, b = f_ref[idx].sum(axis=1).astype(float), f_cond[idx].sum(axis=1).astype(float)
+    r = np.divide(a, b, out=np.full(reps, np.inf), where=b > 0)
     lo, hi = np.percentile(r, [2.5, 97.5], method="nearest")     # nearest: the ratios may include inf
     return float(lo), float(hi)
 
@@ -62,7 +60,8 @@ def load_parts(patterns):
     fields = ("failed", "converged", "iterations", "wrong_mask", "prior_ms", "build_ms", "decode_ms")
     per = {}
     for f in files:
-        d = np.load(f)
+        with np.load(f) as z:
+            d = {k: z[k] for k in z.files}          # decompress each array once
         for i, c in enumerate(str(x) for x in d["conditions"]):
             for k, shot in enumerate(d["shots"]):
                 assert int(shot) not in per.setdefault(c, {}), f"shot {shot} of {c} decoded twice"
@@ -122,13 +121,21 @@ def markdown(rows, reference, title):
 
 
 def dataset_facts(path):
+    """Meta, sha256 and loss counts of a dataset; cached beside it (the dataset never changes once written)."""
     import hashlib
+    import os
     from loss.lossmodel import load_dataset
+    cache = path + ".facts.json"
+    if os.path.exists(cache) and os.path.getmtime(cache) > os.path.getmtime(path):
+        return json.load(open(cache))
     data = load_dataset(path)
     lost = (data["data_slot"] > 0).sum(axis=1)
-    return {"file": path, "sha256": hashlib.sha256(open(path, "rb").read()).hexdigest(), **data["meta"],
-            "lost_data_atoms_per_shot": float(lost.mean()),
-            "check_heralds_per_shot": float(data["heralds"][:, :12 * 144].sum(axis=1).mean())}
+    facts = {"file": path, "sha256": hashlib.sha256(open(path, "rb").read()).hexdigest(), **data["meta"],
+             "lost_data_atoms_per_shot": float(lost.mean()),
+             "check_heralds_per_shot": float(data["heralds"][:, :12 * 144].sum(axis=1).mean())}
+    with open(cache, "w") as f:
+        json.dump(facts, f)
+    return facts
 
 
 def main():

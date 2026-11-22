@@ -24,8 +24,11 @@ if [ -d $P/X_p0.004_s1e-3/aware ]; then
   pick() { local want=$1; echo $want | tr , '\n' | grep -Fx -f <(echo $avail | tr , '\n') | paste -sd,; }
   avail=$("$PY" -c "import glob,numpy as np; print(','.join(sorted({str(c) for f in glob.glob('$P/X_p0.004_s1e-3/*/*.npz') for c in np.load(f)['conditions']})))")
   sum --parts "$P/X_p0.004_s1e-3/*/*.npz" --data $D/X_p0.004_s1e-3_seed2300.npz --reference exact \
-      --order $(pick exact,oracle-round,oracle-slot,starter) \
-      --title "L3: the oracle on the loss time, s = 1e-3 (ORACLE rows use the true loss times)" --out $R/L3_X_p0.004_s1e-3
+      --order $(pick exact,oracle-round,oracle-slot) \
+      --title "L3: the oracle on the loss time, same map as exact, s = 1e-3 (ORACLE rows use the true loss times)" --out $R/L3_X_p0.004_s1e-3
+  sum --parts "$P/X_p0.004_s1e-3/*/*.npz" --data $D/X_p0.004_s1e-3_seed2300.npz --reference starter \
+      --order $(pick starter,starter-oracle-round,oracle-round,oracle-slot,exact,starter@0.5/stop1) \
+      --title "L3: the oracle against the starter's flag-aware decoder, s = 1e-3 (ORACLE rows use the true loss times)" --out $R/L3_starter_X_p0.004_s1e-3
   sum --parts "$P/X_p0.004_s1e-3/*/*.npz" --data $D/X_p0.004_s1e-3_seed2300.npz --reference starter \
       --order $(pick starter,starter-nofinal,starter-nohook,starter-ratebase,starter-noown,exact) \
       --title "L2: leave-one-out from the starter's map, and the location weights (exact), s = 1e-3" --out $R/L2_X_p0.004_s1e-3
@@ -37,3 +40,4 @@ if [ -d $P/X_p0.004_s1e-3/aware ]; then
     fi
   done
 fi
+"$PY" -m loss.tables --out $R/L1_combined.md > /dev/null

@@ -31,9 +31,9 @@ There are two levels of reproduction:
 
 | Command | What it does | Status |
 |---|---|---|
-| `python -m pytest -p no:cacheprovider report` | the report's arithmetic (rate per cycle, Wilson interval, paired counts against the team's `compare_gain`), and both scripts on a stand-in data folder | **run here**: 10 passed |
-| `report/reproduce_ours.sh test` | the same plus the tests of `hierarchy/` (the decoder: rules, plugin, the chain through the evaluator on 24 shots) | **run here** in the clean export's fresh environment: 43 passed, 1 skipped (the check of the top README section, before it exists), 72 s |
-| `report/reproduce_ours.sh smoke` | cuts the first 24 shots of the committed **training** files at p = 0.004, and decodes them with our decoder and with relay-BP through the team's evaluator (`evaluation.evaluate`) | **run here** in the clean export's fresh environment, with the tie-break without a network (no checkpoints fetched): 15 s, both decoders 0 failures of 24 pairs. It checks the plumbing only; 24 pairs say nothing about accuracy |
+| `python -m pytest -p no:cacheprovider report` | the report's arithmetic (rate per cycle, Wilson interval, paired counts against the team's `compare_gain`), and both scripts on a stand-in data folder | **run here** in a clean export of commit `15221dd` (the environment of step 1, built at `88d39f2`; the env stage and the requirements have not changed since): 13 passed, 12 s |
+| `report/reproduce_ours.sh test` | the same plus the tests of `hierarchy/` (the decoder: rules, plugin, the chain through the evaluator on 24 shots) | **run here** in the clean export of commit `88d39f2`, in its fresh environment: 43 passed, 1 skipped (the check of the top README section, before it existed), 72 s |
+| `report/reproduce_ours.sh smoke` | cuts the first 24 shots of the committed **training** files at p = 0.004, and decodes them with our decoder and with relay-BP through the team's evaluator (`evaluation.evaluate`) | **run here** in the clean export of commit `88d39f2`, with the tie-break without a network (no checkpoints fetched): 15 s, both decoders 0 failures of 24 pairs; again in the clean export of `15221dd`: 8 s, the same. It checks the plumbing only; 24 pairs say nothing about accuracy |
 
 ## 3. The shot files
 
@@ -127,8 +127,8 @@ per-shot files (`hierarchy/README.md` has the commands), and `report/data/test/e
 | Command | What it does | Status |
 |---|---|---|
 | `report/reproduce_ours.sh collect` | only if you made rows yourself: copies `runs/clean/eval_p*/` into `report/data/test/`, replacing the committed copies | **not run here** |
-| `python -m report.make_tables` | every table: `report/tables/*.md` and `*.csv`, and the tables and numbers inside `REPORT.md`, `APPENDIX.md`, `SLIDES.md` and this file | **run here** on `report/data/`, and in the clean export (`report/reproduce_ours.sh report`, 6 s with the figures) |
-| `python -m report.make_plots` | every figure: `report/figures/*.png` and `*.svg` | **run here** on `report/data/`; a second run gives the same files byte for byte, and the clean export's 45 tables and figures were byte-identical to the committed ones |
+| `python -m report.make_tables` | every table: `report/tables/*.md` and `*.csv`, and the tables and numbers inside `REPORT.md`, `APPENDIX.md`, `SLIDES.md` and this file | **run here** on `report/data/`, and in a clean export of commit `15221dd` (`report/reproduce_ours.sh report`, 4 s with the figures) |
+| `python -m report.make_plots` | every figure: `report/figures/*.png` and `*.svg` | **run here** on `report/data/`; a second run gives the same files byte for byte. In the clean export of commit `15221dd`, every file under `report/` that the two commands write (the tables, the figures, and `REPORT.md`, `APPENDIX.md`, `SLIDES.md` and this page with their tables and numbers) and our section of the top-level `README.md` came out byte-identical to the commit |
 | `python -m report.sync_data --check` | verifies every file under `report/data/` against the sha256 recorded in `report/data/SOURCES.md` | **run here** |
 
 `python -m report.sync_data` (without `--check`) is how the team copied the result files from the data branches

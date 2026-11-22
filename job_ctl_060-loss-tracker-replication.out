@@ -301,3 +301,14 @@ decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/dat
 wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/003000-003500.npz.tmp.npz in 86s
 decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 3500..4000 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
   100/500 shots, 28s, failures so far tracker=4
+  200/500 shots, 44s, failures so far tracker=8
+  300/500 shots, 57s, failures so far tracker=9
+  400/500 shots, 77s, failures so far tracker=11
+  500/500 shots, 98s, failures so far tracker=12
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/003500-004000.npz.tmp.npz in 98s
+## X memory, p = 0.004, s = 0.001, seed 7310
+Every condition on the same 4000 shots.
+
+job done in 764s
+job 2 (the earlier tracker version, the same shots): exit 0
+Sun Nov 22 08:40:01 UTC 2026

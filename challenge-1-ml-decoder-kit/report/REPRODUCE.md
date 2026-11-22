@@ -17,7 +17,7 @@ There are two levels of reproduction:
 
 | Command | What it does | Status |
 |---|---|---|
-| `report/reproduce_ours.sh env` | Python 3.12 venv in `.venv-ours`; the kit's `requirements.txt` (stim, ldpc, numpy, scipy, relay-bp), pytest, matplotlib, torch (CPU build); clones PriorTilt at commit `8eefd37d694b5942fe60ec6d5c82ce97f3d2a450` beside this repository and builds its Rust core | **not run here** as one script. The same commands were run here one by one: the report's venv (the kit's requirements, pytest, matplotlib) and, by the `hierarchy/` task, a venv with torch and PriorTilt built from a clone at that commit |
+| `report/reproduce_ours.sh env` | Python 3.12 venv in `.venv-ours`; the kit's `requirements.txt` (stim, ldpc, numpy, scipy, relay-bp), pytest, matplotlib, torch (CPU build); clones PriorTilt at commit `8eefd37d694b5942fe60ec6d5c82ce97f3d2a450` beside this repository and builds its Rust core | **run here** on a clean export of the repository (commit `88d39f2`, without `.venv312`), with `PY312=$(uv python find 3.12)`, 4 cores: 184 s, exit 0 |
 
 - `relay-bp` and PriorTilt build from source: a Rust toolchain is needed (https://rustup.rs).
 - The script looks for `python3.12`. If your Python 3.12 has another name, give it: `PY312=/path/to/python3.12`, or
@@ -32,8 +32,8 @@ There are two levels of reproduction:
 | Command | What it does | Status |
 |---|---|---|
 | `python -m pytest -p no:cacheprovider report` | the report's arithmetic (rate per cycle, Wilson interval, paired counts against the team's `compare_gain`), and both scripts on a stand-in data folder | **run here**: 10 passed |
-| `report/reproduce_ours.sh test` | the same plus the tests of `hierarchy/` (the decoder: rules, plugin, the chain through the evaluator on 24 shots) | **run here** for `report`; the `hierarchy` tests were run here by the `hierarchy/` task (its README), not again by this one |
-| `report/reproduce_ours.sh smoke` | cuts the first 24 shots of the committed **training** files at p = 0.004, and decodes them with our decoder and with relay-BP through the team's evaluator (`evaluation.evaluate`) | **run here** on those 24 pairs, with the tie-break without a network: 14 s, both decoders 0 failures of 24 pairs. It checks the plumbing only; 24 pairs say nothing about accuracy |
+| `report/reproduce_ours.sh test` | the same plus the tests of `hierarchy/` (the decoder: rules, plugin, the chain through the evaluator on 24 shots) | **run here** in the clean export's fresh environment: 43 passed, 1 skipped (the check of the top README section, before it exists), 72 s |
+| `report/reproduce_ours.sh smoke` | cuts the first 24 shots of the committed **training** files at p = 0.004, and decodes them with our decoder and with relay-BP through the team's evaluator (`evaluation.evaluate`) | **run here** in the clean export's fresh environment, with the tie-break without a network (no checkpoints fetched): 15 s, both decoders 0 failures of 24 pairs. It checks the plumbing only; 24 pairs say nothing about accuracy |
 
 ## 3. The shot files
 
@@ -61,12 +61,14 @@ sha256 of the test files (every row of the table must name these, or `make_table
 The tie-break uses one trained network per memory basis. The checkpoints are not in the source tree; they are on
 data-only branches of this repository.
 
-*Pending: the two frozen checkpoints, their branch and path, and their sha256, are filled in here and in
-`report/reproduce_ours.sh` when the run on the test shots has fixed them.*
+| Network | Branch | Commit | Path | Bytes | sha256 |
+|---|---|---|---|---|---|
+| X memory, step 120,000 (the end of its run) | `laptop-artifacts` | `2f752e9367f80e1180711ded6b6ca854a5c0c147` | `cascade_X_s1/checkpoint_final_step120000.pt` | 14,701,836 | `d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933` |
+| Z memory | *pending: filled in when its training ends and the run on the test shots names it* | | | | |
 
 | Command | What it does | Status |
 |---|---|---|
-| `report/reproduce_ours.sh checkpoints` | fetches both files into `runs/checkpoints/` and checks their sha256 | pending |
+| `report/reproduce_ours.sh checkpoints` | fetches both files into `runs/checkpoints/` and checks their sha256 | the X file's sha256 was checked here from its commit; the stage itself waits for the Z line |
 | `python -m neural.train --out runs/cascade_X_s1 --seed 1 --steps 120000 --lr-decay-steps 120000` | trains the X network from nothing (an 8 GB GPU, several hours) | **not run here** (no GPU): it ran on the laptop; its log is `report/data/networks/cascade_X_s1.train.log` |
 | `python -m neural.train --basis Z --logicals light --init-from <X checkpoint> --out runs/cascade_Z_s1 --seed 1 --steps-start 1000 --steps-anneal 6000 --steps 100000 --lr-decay-steps 100000` | trains the Z network, starting from the X network's weights mirrored | **not run here**: it ran on the server; its log is `report/data/networks/cascade_Z_s1.train.log` |
 
@@ -110,8 +112,8 @@ with `hierarchy_options.json` holding `{"rule": "network", "checkpoints": {"X": 
 | Command | What it does | Status |
 |---|---|---|
 | `report/reproduce_ours.sh collect` | only if you made rows yourself: copies `runs/clean/eval_p*/` into `report/data/test/`, replacing the committed copies | **not run here** |
-| `python -m report.make_tables` | every table: `report/tables/*.md` and `*.csv`, and the tables inside `REPORT.md` and `SLIDES.md` | **run here** on `report/data/` |
-| `python -m report.make_plots` | every figure: `report/figures/*.png` and `*.svg` | **run here** on `report/data/`; a second run gives the same files byte for byte |
+| `python -m report.make_tables` | every table: `report/tables/*.md` and `*.csv`, and the tables and numbers inside `REPORT.md`, `APPENDIX.md`, `SLIDES.md` and this file | **run here** on `report/data/`, and in the clean export (`report/reproduce_ours.sh report`, 6 s with the figures) |
+| `python -m report.make_plots` | every figure: `report/figures/*.png` and `*.svg` | **run here** on `report/data/`; a second run gives the same files byte for byte, and the clean export's 45 tables and figures were byte-identical to the committed ones |
 | `python -m report.sync_data --check` | verifies every file under `report/data/` against the sha256 recorded in `report/data/SOURCES.md` | **run here** |
 
 `python -m report.sync_data` (without `--check`) is how the team copied the result files from the data branches

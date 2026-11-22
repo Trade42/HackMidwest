@@ -23,10 +23,14 @@ PRIORTILT_COMMIT=8eefd37d694b5942fe60ec6d5c82ce97f3d2a450
 OUT=${OUT:-runs/clean}
 CHECKPOINTS=${CHECKPOINTS:-runs/checkpoints}
 DEVICE=${DEVICE:-cpu}
-# The frozen networks: file on the branch laptop-artifacts or server-logs, and its sha256.
-CKPT_X_SOURCE=${CKPT_X_SOURCE:-PENDING}
-CKPT_X_SHA256=${CKPT_X_SHA256:-PENDING}
-CKPT_Z_SOURCE=${CKPT_Z_SOURCE:-PENDING}
+# The frozen networks, each pinned to one commit of a data-only branch of this repository: branch, commit, path, sha256.
+CKPT_X_BRANCH=laptop-artifacts
+CKPT_X_COMMIT=2f752e9367f80e1180711ded6b6ca854a5c0c147
+CKPT_X_PATH=cascade_X_s1/checkpoint_final_step120000.pt
+CKPT_X_SHA256=d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933
+CKPT_Z_BRANCH=${CKPT_Z_BRANCH:-PENDING}
+CKPT_Z_COMMIT=${CKPT_Z_COMMIT:-PENDING}
+CKPT_Z_PATH=${CKPT_Z_PATH:-PENDING}
 CKPT_Z_SHA256=${CKPT_Z_SHA256:-PENDING}
 export PRIORTILT_REPO PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 stage=${1:-}
@@ -92,13 +96,13 @@ EOF
     ;;
   checkpoints)
     # The two frozen networks are kept on data-only branches of this repository, not in the source tree.
-    if [ "$CKPT_X_SOURCE" = PENDING ] || [ "$CKPT_Z_SOURCE" = PENDING ]; then
-      echo "the checkpoints' locations are not filled in yet (see REPRODUCE.md)" >&2; exit 1
+    if [ "$CKPT_Z_COMMIT" = PENDING ]; then
+      echo "the Z checkpoint's location is not filled in yet (see REPRODUCE.md)" >&2; exit 1
     fi
     mkdir -p "$CHECKPOINTS"
-    git fetch origin "${CKPT_X_SOURCE%%:*}" "${CKPT_Z_SOURCE%%:*}"
-    git show "origin/$CKPT_X_SOURCE" > "$CHECKPOINTS/cascade_X.pt"
-    git show "origin/$CKPT_Z_SOURCE" > "$CHECKPOINTS/cascade_Z.pt"
+    git fetch origin "$CKPT_X_BRANCH" "$CKPT_Z_BRANCH"
+    git show "$CKPT_X_COMMIT:$CKPT_X_PATH" > "$CHECKPOINTS/cascade_X.pt"
+    git show "$CKPT_Z_COMMIT:$CKPT_Z_PATH" > "$CHECKPOINTS/cascade_Z.pt"
     printf '%s  %s\n%s  %s\n' "$CKPT_X_SHA256" "$CHECKPOINTS/cascade_X.pt" "$CKPT_Z_SHA256" "$CHECKPOINTS/cascade_Z.pt" | sha256sum -c -
     ;;
   row)

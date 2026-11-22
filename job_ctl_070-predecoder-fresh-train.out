@@ -20,3 +20,15 @@ train_X.npz: 20000 shots, p=0.004, arms ['fresh']; head priors {'mode': 'linear'
   170 of 200 tasks done (fresh from shot 17000), 567 s
   180 of 200 tasks done (fresh from shot 18000), 597 s
   190 of 200 tasks done (fresh from shot 18800), 633 s
+  200 of 200 tasks done (fresh from shot 19900), 666 s
+relay-BP at the kit's settings; 666 s. Time per shot: build + decode in these worker processes
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+fresh         89    0.0044 [0.0036, 0.0055]          40   2759       534      4.1     164.3    168.4    3408
+predecoder.compare exit 0 (124 = stopped at 10:10 UTC; it resumes from parts/ if started again)
+total 254
+drwxrwxr-x+ 2 nobody nogroup   4096 Nov 22 09:32 .
+drwxrwxr-x+ 2 nobody nogroup   4096 Nov 22 09:21 ..
+drwxrwxr-x+ 2 nobody nogroup   4096 Nov 22 09:32 parts
+-rw-rw-r--+ 1 nobody nogroup 259579 Nov 22 09:32 per_shot.npz
+-rw-rw-r--+ 1 nobody nogroup   1208 Nov 22 09:32 summary.json
+Sun Nov 22 09:32:55 UTC 2026

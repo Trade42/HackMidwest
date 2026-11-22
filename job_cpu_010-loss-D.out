@@ -12,3 +12,8 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 
   300/500 shots, 102s, failures so far starter-nofinal=17 starter-nohook=9 starter-ratebase=13
   350/500 shots, 125s, failures so far starter-nofinal=23 starter-nohook=10 starter-ratebase=16
   400/500 shots, 147s, failures so far starter-nofinal=25 starter-nohook=13 starter-ratebase=20
+  450/500 shots, 164s, failures so far starter-nofinal=31 starter-nohook=17 starter-ratebase=24
+  500/500 shots, 187s, failures so far starter-nofinal=37 starter-nohook=20 starter-ratebase=27
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/starter-nofinal+starter-nohook+starter-ratebase/000000-000500.npz.tmp.npz in 187s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 500..1000 conditions ['starter-nofinal', 'starter-nohook', 'starter-ratebase'] workers 10
+  50/500 shots, 20s, failures so far starter-nofinal=1 starter-nohook=0 starter-ratebase=1

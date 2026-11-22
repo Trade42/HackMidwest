@@ -48,7 +48,9 @@ Details, commands and logs for every number are under "Numbers".
   15:36 UTC: "we just use tcbp for everything that relay bp was used for"). Knobs were refitted on train shots
   (log-odds alpha 0.4, eps 1e-4). On validation X p = 0.005: **33** of 5,000 against TCBP-JOBS's 91
   (p = 1.8e-12). On the registered test run (designed after the test results were seen): **72** of 10,000 against
-  186 (p = 2.9e-21), and 4 against 20 at p = 0.004. About 56 ms per shot on the A100 with the network on the GPU.
+  186 (p = 2.9e-21), and 4 against 20 at p = 0.004. Z at p = 0.005, with X's knobs: 61 against 177. The kit's pair
+  score at p = 0.005: 132 failed pairs of 10,000 against TCBP-JOBS's 360 (p = 3.0e-42), 1.11e-3 per cycle against
+  3.05e-3. About 56 ms per shot on the A100 with the network on the GPU. Merged into main by PR #9.
 
 | file | what it does |
 |------|--------------|

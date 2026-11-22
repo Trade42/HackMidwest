@@ -31,7 +31,10 @@ team's best single decoder. The head was not retrained. The knobs were refitted 
 
 **Erratum.** `logs/tcbp_test_registered_spec.md` says "Written 2026-11-22 15:52 UTC" and cites dq-orch-6's decision as
 "15:49 UTC". Both true times are 15:42 UTC. The spec's commit, `dad4fd50`, is dated 15:42:59 UTC, before any test number
-of this branch. Only the typed times were wrong; the spec itself is unchanged.
+of this branch. Only the typed times were wrong; the spec itself is unchanged. More generally, every time typed in this
+README and in the logs is an estimate made while writing, and the commit times decide. Two others are also a few
+minutes late: the knobs file "frozen at 15:28", committed in `86259291` at 15:26:36 UTC; and declarations §2, "15:06",
+committed in `26dcea76` at 15:04:38 UTC. Each was committed before the numbers it governs.
 
 | file | what it does |
 |------|--------------|
@@ -42,9 +45,9 @@ of this branch. Only the typed times were wrong; the spec itself is unchanged.
 ## How it works
 
 - **One model, one decoder per shot.** `nv_qldpc.init_tcbp_model(H)` does not take the priors. It is fitted once per run
-  (about 2 minutes on the A100), and every shot's decoder shares it. A decoder takes its priors only when it is built
+  (54 to 88 s on the A100, measured in each run), and every shot's decoder shares it. A decoder takes its priors only when it is built
   (`error_rate_vec`), so each shot gets its own: `get_decoder(..., error_rate_vec=<shot priors>, **preset)`, then
-  `decode(syndrome)`. Building takes about 51 ms on the A100. That time is counted in each shot's latency.
+  `decode(syndrome)`. Building takes 41 to 43 ms on the A100, mean per run. That time is counted in each shot's latency.
 - **Two environments, split through a file.** The network and head run in an environment with torch
   (`predecoder.evaluate`, here on luminaty's CPU in float32) and write `logits.npy`. TCBP-JOBS runs in the teammates'
   environment on the server, which has no torch, and reads those exact bytes, checked by sha256. The GPU path of
@@ -121,9 +124,9 @@ commit `abb05607`, 14:54 to 14:59 UTC. Logs: `logs/tcbp_job1_probe.log`, `logs/t
   whether the answer reproduces the syndrome, which it does on all 5,000 (checked here as H e = s).
 - **Failures:** 96 of 5,000, 0.0192 [0.0157, 0.0234]. The stored TCBP-JOBS file (`files/tcbp_p0.005/validation_X.tcbp.npz`:
   one decoder built once, `decode_batch`, its own model fit) fails 91. Shot by shot the two agree on the 12 bits except
-  on 44 shots: both fail 79, only per-shot 17, only stored 12, exact two-sided p = 0.46. **TCBP-JOBS does not repeat
-  itself across runs on hard shots**, the way relay-BP does not across seeds. Which of three causes does this (another
-  model fit, batch against single decoding, random draws inside JOBS) is measured in job 3.
+  on 44 shots: both fail 79, only per-shot 17, only stored 12, exact two-sided p = 0.46. **TCBP-JOBS's answers on hard
+  shots vary from run to run**, the way relay-BP's do across seeds. Job 3 separates one of the three candidate causes
+  (another model fit, batch against single decoding, random draws inside JOBS).
 
 ### Job 2: the knob fit (train shots only)
 
@@ -152,8 +155,10 @@ of the 20,000 train shots; at p = 0.005 it fails 390. Declared in `logs/tcbp_dec
 | 0.7 | 112 | 9 | 200.2 |
 
 **Chosen: log-odds, alpha 0.4, eps 1e-4.** It is the unique minimum, inside the declared grid, so the extension rows
-do not join. Frozen at 15:28 UTC in `logs/fit_tcbp_X_p0.005.json` (commit `86259291`), from the fit's log
-(`logs/tcbp_fit_log_at_freeze.log`), before any validation decode with it.
+do not join. Frozen in `logs/fit_tcbp_X_p0.005.json` (commit `86259291`, 15:26:36 UTC), from the fit's log
+(`logs/tcbp_fit_log_at_freeze.log`), before any validation decode with it. The fit tool's own JSON, which arrived later
+(`logs/fit_tcbp_X_p0.005_full.json`), chose the same knobs. The extension rows, decoded for the record, scored
+0.8: 210.1, 0.9: 215.9, 1.0: 209.1 and 0.05: 240.8.
 
 The control row is the "fresh" check on train. The 390 shots were chosen as the stored run's failures, yet TCBP-JOBS
 with the same kit priors, built per shot, gets 49 of them right and breaks 5 others. As with relay-BP, the train
@@ -194,10 +199,12 @@ How to read it:
 - **TCBP-JOBS fails 2.8 to 3 times less with the head's priors.** That holds against the stored file (91) and
   against the same run's kit-priors arm (100). It beats every decoder the team had on these shots, including the
   fallback rule (50). The fit's train rows had pointed this way: 107 of 390 left wrong against 341.
-- **The model fit changes TCBP-JOBS's answers.** The batch check equals the fresh arm on all 5,000 shots, both bits and
-  number of faults, so batch against single decoding changes nothing. Three fits of `init_tcbp_model` with the kit's
-  priors gave 91, 96 and 100 failures (job 1 against job 3: bits differ on 42 shots). Every comparison with a stored
-  file therefore also mixes two model fits; the like-for-like pair is TH against this run's fresh arm.
+- **TCBP-JOBS's answers vary from run to run.** The cause is not isolated; the model fit (`init_tcbp_model`, once per
+  run) is the leading candidate. The batch check equals the fresh arm on all 5,000 shots, both bits and number of
+  faults, so batch against single decoding changes nothing within a run. Yet three runs with the kit's priors gave 91,
+  96 and 100 failures (job 1 against job 3: bits differ on 42 shots). Against a fit that always differs: on the test
+  shots, job 5's kit-priors arm equals the stored file on every shot. Every comparison with a stored file may
+  therefore mix two runs' variation; the like-for-like pair is TH against the same run's fresh arm.
 - The decoder's own `converged` flag is False on 3,863 shots with the head's priors and 4,858 with the kit's. It is
   not used.
 - The choice of (a) over (b2) was made on Sal's word before (b2) was computed (§2b). By the declared rule of §2
@@ -296,10 +303,20 @@ Z knobs were not fitted for Z.
 - **The head was not retrained for TCBP-JOBS.** It is relay-BP's head (trained only on error-model shots with the
   fired columns as labels, so it does not depend on the decoder). Only the two knobs were refitted.
 - **One knob fit, X at p = 0.005.** It is applied unchanged at p = 0.004 and 0.003, and to Z, where there is no fit.
-- **TCBP-JOBS's model fit is not repeatable.** Every run fits its own model. With the kit's priors, three fits gave
-  91, 96 and 100 failures on the same 5,000 shots. So each number here belongs to its run's model, and comparisons
-  with stored files mix two fits. With the head's priors the outcome looked much steadier: two fits agreed on all of
-  the first 1,000 validation shots (job 3 against job 4).
+- **TCBP-JOBS's answers vary from run to run** (cause not isolated; the model fit is the leading candidate). With the
+  kit's priors, three runs gave 91, 96 and 100 failures on the same 5,000 validation shots, while on the test shots
+  this branch's run equals the stored file on every shot. Each number here belongs to its run. With the head's priors
+  the outcome looked much steadier: two runs agreed on all of the first 1,000 validation shots (job 3 against job 4).
+- **Checks against leakage and tuning on test:**
+  - the decoder never sees the truth: `decode_one` receives the priors and the syndrome only, and the truth is used
+    after decoding, for scoring;
+  - the knobs come from train shots only;
+  - the head's logits are the registered bytes, every decoded row checked by hash;
+  - the test files were decoded once each, after the spec's commit;
+  - on test, the same run's kit-priors arm reproduces the stored TCBP-JOBS file shot for shot.
+  Not done: a truth-shuffle test of `tcbp.py` itself (`plugin.py` has one for the relay path).
+- **`evaluate.py`'s change** (`--precision`) was tested here on the CPU by the existing tests: `test_predecoder.py -k
+  "evaluate_then_compare or plugin or held_out"`, 6 pass (lane B, 52 s). Its fp32 GPU branch ran in job 4.
 - **Priors capped at 0.5** (JOBS refuses more). With the chosen knobs (alpha 0.4), the cap changed 1,836 columns on
   1,528 of the 5,000 validation shots, about one column per capped shot. Over the whole fit grid it changed 495,062
   columns in 15,052 of 28,680 decodes, most of them at the high alphas, where the head's confident columns pass 0.5

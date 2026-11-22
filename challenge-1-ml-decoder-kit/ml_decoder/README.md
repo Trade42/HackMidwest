@@ -294,7 +294,8 @@ That is why this decoder predicts logical bits and does not commit individual fa
   --shots 10000 --seed 301` on luminaty differs from the committed `data/p0.004/test_X.npz` in 23.2% of the detector
   bits, as much as two independent samples would. Paired comparisons across machines must use saved shot files, not
   seeds. Also, a 400-shot sample of a seed is not the first 400 shots of its 2,000-, 5,000- or 10,000-shot sample.
-  (`python ml_decoder/stim_seed_check.py data/p0.004/test_X.npz`, `logs/stim_seed_check.log`.)
+  (`python ml_decoder/stim_seed_check.py data/p0.004/test_X.npz`, `logs/stim_seed_check.log`. The file is on `main`,
+  not on this branch: run the check once the branch is merged.)
 - TCBP-JOBS and CNN training need the same GPU. Run row 12 first.
 
 ## Next steps

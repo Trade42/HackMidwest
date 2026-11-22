@@ -419,8 +419,8 @@ Each with its count and its file in `APPENDIX.md`, "What we measured before buil
 - **Longer training of the network** improved it a lot as a decoder and only a little as a tie-breaker: the hard
   shots are hard for the network too.
 - **A learned predecoder** that hands relay-BP per-shot priors did not pass the accuracy test declared before it
-  was run, on validation shots at p = 0.004; a secondary run at p = 0.005 is under an independent review. Its code
-  is on the branch `predecoder`, which is not part of this submission, so no number from it is quoted here.
+  was run, on validation shots at p = 0.004. Its later runs, labelled as secondary or as run after the test results,
+  are in section 4 (`predecoder/`).
 - **Letting the network answer first** where it is confident, and the hierarchy elsewhere, gave no gain in accuracy
   at p = 0.005 on the exploration shots, with its threshold fitted on other shots; at the looser threshold it saved
   time at equal failures. It has no row on the test shots.
@@ -442,13 +442,18 @@ record of them (`report/data/background/plain_cnn_runs/`).
   apart there.
 - **The network** is small and was trained for hours, not days; the Z network started later than the X network.
 - **Loss** is measured for X memory at p = 0.004 only, under our own loss model.
+- **Our pipeline under atom loss is not tested.** The loss results (`loss/`, `loss_tracker/`) were decoded with the
+  kit's relay-BP and BP-OSD, and so were the neutral-atom noise results on the branch `infleqtion-noise`. The TCBP
+  version is the natural place for loss: it already builds a decoder for each shot from per-shot priors, so
+  loss-aware priors (the flag conditioning of `loss/`, the loss tracker's posterior) could enter with no extra build.
+  Its network was trained without loss.
 - **A dependency with a licence.** PriorTilt is CC BY-NC-SA 4.0 (non-commercial); none of its code is in this
   repository.
-- **Work outside this submission.** Four further studies live on branches of this repository that are not merged
+- **Work outside this submission.** Three further studies live on branches of this repository that are not merged
   into `integration` or `main`, so no number from them is quoted anywhere in this report: `infleqtion-noise`
-  (decoding under a noise model built from Infleqtion's published figures, with and without loss), `predecoder`
-  (a learned predecoder that gives relay-BP per-shot priors), `learned-selector` (a learned choice among the
-  ensemble's members) and `fpga` (a hardware estimate of the tie-break network, in simulation).
+  (decoding under a noise model built from Infleqtion's published figures, with and without loss), `learned-selector`
+  (a learned choice among the ensemble's members) and `fpga` (a hardware estimate of the tie-break network, in
+  simulation).
 
 ## 8. Resources
 

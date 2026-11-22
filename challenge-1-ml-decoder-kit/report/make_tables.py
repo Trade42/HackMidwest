@@ -32,7 +32,7 @@ from report.rows import COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDIT
 HERE = Path(__file__).resolve().parent
 # REPORT_OUT sends the tables elsewhere and leaves the documents alone: used by the tests only.
 TABLES = Path(os.environ.get("REPORT_OUT") or HERE) / "tables"
-DOCUMENTS = [] if os.environ.get("REPORT_OUT") else [HERE / "REPORT.md", HERE / "SLIDES.md"]
+DOCUMENTS = [] if os.environ.get("REPORT_OUT") else [HERE / "REPORT.md", HERE / "APPENDIX.md", HERE / "SLIDES.md"]
 NOT_MEASURED = "not measured"
 
 # Single numbers that the prose of REPORT.md and SLIDES.md quotes. A document writes
@@ -702,6 +702,7 @@ def loss_table():
         row = pc.get((0.001, key))
         fact(f"loss_{name}", row and f"{row['failures']} of {row['shots']:,}", "tables/loss.md")
         fact(f"loss_{name}_share", row and f"{row['failures'] / row['shots']:.1%}", "tables/loss.md")
+    fact("loss_lost_atoms", pc.get((0.001, "starter")) and f"{pc[(0.001, 'starter')]['lost_data_atoms']:.1f}", "data/loss/pc/L1_X_p0.004_s1e-3.json")
     versus = (pc.get((0.001, "oracle-round")) or {}).get("paired_by_reference", {}).get("starter")
     fact("loss_oracle_ratio", versus and f"{versus['ratio']:.2f}", "tables/loss.md")
     fact("loss_oracle_ratio_interval", versus and f"{versus['ratio95'][0]:.2f} to {versus['ratio95'][1]:.2f}", "tables/loss.md")
@@ -905,6 +906,32 @@ def checks_text(measured, extra, cross_checks):
     return write("checks", "\n".join(lines))
 
 
+def tcbp_statement(measured):
+    """Where TCBP-JOBS stands against our decoder, said the same way wherever the comparison appears."""
+    value = lambda name: FACTS[name][0]
+    both = [p for p in P_VALUES if measured[p]["tcbp"] and measured[p]["hierarchy"]]
+    ahead = [p for p in both if measured[p]["tcbp"]["failures_pair"] < measured[p]["hierarchy"]["failures_pair"]]
+    behind = [p for p in both if measured[p]["tcbp"]["failures_pair"] > measured[p]["hierarchy"]["failures_pair"]]
+    counts = lambda levels: ", ".join(f"{measured[p]['tcbp']['failures_pair']} against {measured[p]['hierarchy']['failures_pair']} at p = {p}" for p in levels)
+    if both:
+        parts = []
+        if ahead:
+            parts.append(f"TCBP-JOBS, NVIDIA's GPU decoder, fails fewer pairs than our decoder on the test shots ({counts(ahead)})")
+        if behind:
+            parts.append(("and more" if ahead else "TCBP-JOBS, NVIDIA's GPU decoder, fails more pairs than our decoder on the test shots") + f" ({counts(behind)})")
+        same = [p for p in both if p not in ahead and p not in behind]
+        if same:
+            parts.append(f"the two fail equally many pairs at p = {', '.join(same)}")
+        text = ("; ".join(parts) if not (ahead and behind) else " ".join(parts)) + "."
+        text = text[0].upper() + text[1:]
+    elif FACTS.get("expl_pairs_T", (NOT_MEASURED,))[0] != NOT_MEASURED:
+        text = (f"TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than "
+                f"our hierarchy ({value('expl_pairs_T')} against {value('expl_pairs_W')} of {value('expl_pairs')}).")
+    else:
+        text = "TCBP-JOBS, NVIDIA's GPU decoder, is not measured against our decoder on the same shots."
+    fact("tcbp_statement", text, "tables/test_all.md, tables/exploration_p0.004.md")
+
+
 # ---------- the section for the top-level README ----------
 
 README_HEADING = "## Our part: a hierarchical decoder with a learned tie-breaker, and a study of atom loss"
@@ -913,15 +940,7 @@ README_HEADING = "## Our part: a hierarchical decoder with a learned tie-breaker
 def readme_section(measured):
     """The one section appended to the top-level README.md: at most 25 lines, every number from the tables above."""
     value = lambda name: FACTS[name][0]
-    ahead = [p for p in P_VALUES if measured[p]["tcbp"] and measured[p]["hierarchy"] and measured[p]["tcbp"]["failures_pair"] < measured[p]["hierarchy"]["failures_pair"]]
-    both = [p for p in P_VALUES if measured[p]["tcbp"] and measured[p]["hierarchy"]]
-    if ahead:
-        tcbp = f"TCBP-JOBS, NVIDIA's GPU decoder, fails fewer pairs than our decoder at p = {', '.join(ahead)}."
-    elif both:
-        tcbp = f"TCBP-JOBS, NVIDIA's GPU decoder, does not fail fewer pairs than our decoder at p = {', '.join(both)}."
-    else:
-        tcbp = (f"On the exploration shots at p = 0.004, TCBP-JOBS (NVIDIA, GPU) fails fewer pairs than our hierarchy: {value('expl_pairs_T')} against "
-                f"{value('expl_pairs_W')} of {value('expl_pairs')}.")
+    tcbp = value("tcbp_statement")
     lines = [README_HEADING, "",
              "Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural",
              "network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). " + value("framing"),
@@ -984,6 +1003,7 @@ def main(argv=None):
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
             "resources": resources_table(measured)}
         tables["checks"] = checks_text(measured, extra, cross_checks)
+        tcbp_statement(measured)
         readme_section(measured)
         write("facts", "Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there as `<!--f:name-->value<!--/f-->`), "
                        "each with the generated table it is taken from.\n\n"

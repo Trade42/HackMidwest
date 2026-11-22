@@ -200,6 +200,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `loss_aware_share` | 4.4% | `tables/loss.md` |
 | `loss_blind` | 173 of 300 | `tables/loss.md` |
 | `loss_blind_share` | 57.7% | `tables/loss.md` |
+| `loss_lost_atoms` | 10.0 | `data/loss/pc/L1_X_p0.004_s1e-3.json` |
 | `loss_oracle` | 107 of 4,000 | `tables/loss.md` |
 | `loss_oracle_ratio` | 1.64 | `tables/loss.md` |
 | `loss_oracle_ratio_interval` | 1.42 to 1.94 | `tables/loss.md` |
@@ -510,3 +511,4 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `tcbp_own4_xz` | 18, 23 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_rate` | 3.20e-03 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_xz` | 192, 188 | `tables/tcbp_own_shots.md` |
+| `tcbp_statement` | TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 162 of 25,000). | `tables/test_all.md, tables/exploration_p0.004.md` |

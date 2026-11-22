@@ -3,15 +3,13 @@
 Infleqtion Challenge 1 (ML-assisted decoding of the Gross code `[[144, 12, 12]]`), our part of the team's work.
 The teammates' part, a learned router on relay-BP's first answer, is described in the top-level `README.md`.
 
-**How to read this page.** Every table below is written by `python -m report.make_tables` and every figure by
+**How to read this page.** Every table is written by `python -m report.make_tables` and every figure by
 `python -m report.make_plots`, from the result files copied into `report/data/` (`report/data/SOURCES.md` says where
-each came from). A row that was not measured says "not measured". Numbers on the **test shots** and numbers on
-**exploration shots** (the train and validation files, on which choices were made) are kept in separate tables and
-are labelled wherever they appear. Much of the code was written with AI coding assistants under the team's direction,
-as the challenge allows.
-
-> **Status of this page:** a skeleton, pushed before the measurements on the test shots exist. Sections 4 and 8 fill
-> in as the result files land; the text there says what is pending.
+each came from). Every single number in the text is written by the same script and listed in `report/tables/facts.md`.
+A row that was not measured says "not measured". Numbers on the **test shots** and numbers on **exploration shots**
+(the train and validation files, on which choices were made) are kept in separate tables and are labelled wherever
+they appear. The full tables are in `APPENDIX.md`. Much of the code was written with AI coding assistants under the
+team's direction, as the challenge allows.
 
 ## 1. The question
 
@@ -21,10 +19,10 @@ gives two decoders as baselines, BP-OSD and relay-BP, and asks whether machine l
 accuracy, in speed, or in the handling of atom loss.
 
 Our question: **can a hierarchy of fast decoders, with a neural network that settles the hard cases, fail less often
-than relay-BP without taking more time?** And, for atom loss: how much do the loss flags give back, and what is still
+than relay-BP without taking more time?** And for atom loss: how much do the loss flags give back, and what is still
 to gain?
 
-The experiment is the kit's and is unchanged: X memory and Z memory of the Gross code, 12 noisy cycles, physical error
+The experiment is the kit's, unchanged: X memory and Z memory of the Gross code, 12 noisy cycles, physical error
 rate p = 0.003, 0.004 and 0.005. Shot k of X memory is paired with shot k of Z memory; a pair fails when either
 fails; with failure fraction P over the pairs, the logical error rate per cycle is `1 - (1 - P)^(1/12)`. Every time
 is per pair: one X decode plus one Z decode.
@@ -56,9 +54,9 @@ flowchart TD
 4. **The ensemble** adds stronger members on the hard shots and lets the same network choose among all of them. It is
    combined offline from the members' saved answers; it is not one decoder timed in one process.
 
-Why this shape: on the exploration shots at p = 0.004 the two fast decodes disagree on <!--f:expl_disagree-->214<!--/f--> of <!--f:expl_shots-->50,000<!--/f--> shots (<!--f:expl_disagree_share-->0.4%<!--/f-->),
-and those few shots hold <!--f:expl_one_run_wrong_disagree-->145<!--/f--> of the <!--f:expl_one_run_wrong-->208<!--/f--> failures of a single fast decode (exploration shots; the figure below and
-`report/tables/exploration_p0.004.md`). The expensive stage runs only there.
+Why this shape: on the exploration shots at p = 0.004 the two fast decodes disagree on <!--f:expl_disagree-->214<!--/f--> of
+<!--f:expl_shots-->50,000<!--/f--> shots (<!--f:expl_disagree_share-->0.4%<!--/f-->), and those few shots hold <!--f:expl_one_run_wrong_disagree-->145<!--/f--> of the
+<!--f:expl_one_run_wrong-->208<!--/f--> failures of a single fast decode. The expensive stage runs only there.
 
 ![Where the failures are](figures/where_failures.png)
 
@@ -70,30 +68,30 @@ and those few shots hold <!--f:expl_one_run_wrong_disagree-->145<!--/f--> of the
 | "the two seeds disagree" as the test for a hard shot | no | ours |
 | relay-BP as the third candidate | no: the kit's settings | the kit |
 | the tie-break by lowest weight | no | ours |
-| **the tie-break by the neural network** | **yes**: its weights are trained on shots drawn fresh from the kit's error model | ours |
+| **the tie-break by the neural network** | **yes**: trained on shots drawn fresh from the kit's error model | ours |
 | the loss-aware priors and the loss-time tracker (section 5) | the tracker is the learned part | ours |
 | the router on relay-BP's first answer (a separate row of the table) | yes: a logistic model | teammates |
 
 **The network.** A convolutional network that follows the code's own connections (each check touches six data
 qubits, each data qubit six checks, the same weights at all 72 positions of the torus), after the published "Cascade"
-recipe (arXiv:2604.08358), written by us from the paper's description and scaled down to one laptop GPU. It reads all
-1,728 detector bits of a shot and gives 12 numbers, one per logical bit. One network per memory basis.
+recipe (arXiv:2604.08358), written by us from the paper's description and scaled down to one laptop GPU:
+<!--f:net_parameters-->893,697<!--/f--> parameters per memory basis. It reads all 1,728 detector bits of a shot and gives 12 numbers, one
+per logical bit.
 
-**Its role.** Alone, the network is a poor decoder: it gets many times more shots wrong than relay-BP (the learning
-curves and `report/tables/networks.md`). It is not asked to decode. It is asked which of two or three given answers
-is more likely, on the few shots where the fast decoders disagree. That is a much easier question, and one where the
-classical score (lowest weight) is known to be weak.
+**Its role.** Alone, the network is a poor decoder: at the last training report in our copy of its log it gets
+<!--f:net_X_wrong4-->9.7%<!--/f--> of X shots wrong at p = 0.004, where relay-BP gets <!--f:expl_X_R-->122<!--/f--> of 25,000 wrong on the exploration shots. It is not asked to decode.
+It is asked which of two or three given answers is more likely, on the few shots where the fast decoders disagree.
+That is an easier question, and one where the classical score is weak: among 16 relay-BP candidates the right answer
+is present on <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, and the lowest weight picks it on only <!--f:cand_lowest-->71<!--/f-->
+(exploration shots; `APPENDIX.md`, "What we measured before building").
 
 ![The two networks while they train](figures/learning_curves.png)
 
-<!-- BEGIN table:networks -->
-<!-- END table:networks -->
-
 ## 4. Results on the test shots
 
-The team's saved test files: 10,000 shots per basis and noise level (`data/p<p>/test_X.npz`, `test_Z.npz`), decoded
-once with every setting frozen. Each row ran through the team's evaluator (`evaluation.evaluate`) in one process on
-the team's server; "where it ran" names the device and what ran beside it.
+The team's saved test files: 10,000 shots per basis and noise level, decoded once with every setting frozen. A timed
+row ran through the team's evaluator (`evaluation.evaluate`) in one process on the team's server. A row marked "from
+per-shot files" is combined offline from saved answers and has no time measured in one process.
 
 <!-- BEGIN table:test_sweep -->
 <!-- END table:test_sweep -->
@@ -102,12 +100,14 @@ the team's server; "where it ran" names the device and what ran beside it.
 
 ![Mean decoding time per pair against p](figures/time_vs_p.png)
 
-![Accuracy against time](figures/ler_vs_time.png)
-
-**What the numbers say.** <!--f:framing-->not measured<!--/f-->
-
-*Pending: one paragraph per noise level when the timed rows have landed (our decoder against relay-BP, and where
-TCBP-JOBS stands against both).*
+**What the numbers say.** <!--f:framing-->not measured<!--/f--> <!--f:tcbp_statement-->TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 162 of 25,000).<!--/f--> Our timed decoder against relay-BP on the same pairs:
+at p = 0.003, <!--f:t3_hierarchy_pairs-->not measured<!--/f--> failed pairs against <!--f:t3_relay_bp_pairs-->not measured<!--/f--> (only ours fails <!--f:t3_hierarchy_only_this-->not measured<!--/f-->, only
+relay-BP <!--f:t3_hierarchy_only_relay-->not measured<!--/f-->), <!--f:t3_hierarchy_mean_ms-->not measured<!--/f--> ms against <!--f:t3_relay_bp_mean_ms-->not measured<!--/f--> ms per pair; at p = 0.004,
+<!--f:t4_hierarchy_pairs-->not measured<!--/f--> against <!--f:t4_relay_bp_pairs-->not measured<!--/f--> (only ours <!--f:t4_hierarchy_only_this-->not measured<!--/f-->, only relay-BP <!--f:t4_hierarchy_only_relay-->not measured<!--/f-->),
+<!--f:t4_hierarchy_mean_ms-->not measured<!--/f--> ms against <!--f:t4_relay_bp_mean_ms-->not measured<!--/f--> ms; at p = 0.005, <!--f:t5_hierarchy_pairs-->not measured<!--/f--> against <!--f:t5_relay_bp_pairs-->not measured<!--/f-->
+(only ours <!--f:t5_hierarchy_only_this-->not measured<!--/f-->, only relay-BP <!--f:t5_hierarchy_only_relay-->not measured<!--/f-->), <!--f:t5_hierarchy_mean_ms-->not measured<!--/f--> ms against
+<!--f:t5_relay_bp_mean_ms-->not measured<!--/f--> ms. The exact tests, the intervals, the median and 99th-percentile times and what ran beside each
+row are in `APPENDIX.md`.
 
 ### Whose gain is whose
 
@@ -123,57 +123,21 @@ The sentence under "What the numbers say" is chosen by this table: it credits th
 pooled exact test on the pairs that only one of the two rules fails is below 0.05. The network is never credited
 with the gain of the hierarchy itself, which needs no learning of ours.
 
-### The full rows, per noise level
+### On the exploration shots (not test shots)
 
-<!-- BEGIN table:test_p0.003 -->
-<!-- END table:test_p0.003 -->
-
-<!-- BEGIN table:test_p0.004 -->
-<!-- END table:test_p0.004 -->
-
-<!-- BEGIN table:test_p0.005 -->
-<!-- END table:test_p0.005 -->
-
-### Who adds what: paired comparisons on the test shots
-
-<!-- BEGIN table:test_comparisons -->
-<!-- END table:test_comparisons -->
-
-### TCBP-JOBS, the GPU reference
-
-TCBP-JOBS is NVIDIA's GPU decoder, which the teammates ran as an extra reference. **On its own sampled shots it is
-more accurate than relay-BP at p = 0.004 and 0.005**. We also ran it on the exploration shots at p = 0.004, the same
-shots as our decoder: it fails <!--f:expl_pairs_T-->113<!--/f--> of <!--f:expl_pairs-->25,000<!--/f--> pairs there, our hierarchy with the lowest-weight
-tie-break <!--f:expl_pairs_W-->162<!--/f-->, relay-BP <!--f:expl_pairs_R-->245<!--/f--> (the exploration table below has the paired counts). **TCBP-JOBS is
-ahead of our three-candidate hierarchy.** Its row on the saved test shots is in the tables above when measured.
-
-<!-- BEGIN table:tcbp_own_shots -->
-<!-- END table:tcbp_own_shots -->
-
-### Exploration shots: whose gain is whose
-
-<!-- BEGIN table:exploration_p0.004 -->
-<!-- END table:exploration_p0.004 -->
-
-<!-- BEGIN table:where_failures -->
-<!-- END table:where_failures -->
-
-<!-- BEGIN table:exploration_p0.005 -->
-<!-- END table:exploration_p0.005 -->
-
-Read from these tables, on exploration shots:
+At p = 0.004, on <!--f:expl_pairs-->25,000<!--/f--> pairs of the train and validation files: relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one
+PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its random seed, our hierarchy with the lowest-weight
+tie-break <!--f:expl_pairs_W-->162<!--/f--> (only relay-BP fails <!--f:expl_pairs_W_only_relay-->111<!--/f--> pairs, only the hierarchy
+<!--f:expl_pairs_W_only_ours-->28<!--/f-->), and TCBP-JOBS <!--f:expl_pairs_T-->113<!--/f-->. On X memory, the neural tie-break lowers the hierarchy's
+failures from <!--f:expl_X_W-->77<!--/f--> to <!--f:expl_X_N-->59<!--/f--> of 25,000 shots (only the network rule fails <!--f:expl_X_N_vs_W_only_network-->6<!--/f-->
+shots, only the weight rule <!--f:expl_X_N_vs_W_only_weight-->21<!--/f-->, exact p = <!--f:expl_X_N_vs_W_p-->0.006<!--/f-->). The rules were chosen on these
+shots, which flatters them; the test table is the number to quote. Three things to take from it:
 
 - **PriorTilt is IonQ's decoder, not ours.** One run of it already fails less often than relay-BP, and by how much
-  depends on its random seed (the two seeds in the table). That spread is itself a finding: a single run is not a
-  stable number.
+  depends on its random seed. A single run is not a stable number.
 - **The hierarchy is ours:** two seeds, the agreement test, and relay-BP as a third candidate where they disagree.
-- **The learned tie-break is ours:** it lowers the failures of the lowest-weight rule further, on X memory.
-- These rules were tried and chosen on these same shots. The test table above is the number to quote.
-
-### The teammates' earlier runs, as a cross-check
-
-<!-- BEGIN table:earlier_runs -->
-<!-- END table:earlier_runs -->
+- **TCBP-JOBS is ahead of our three-candidate hierarchy** on the same exploration shots. That is why the ensemble
+  takes it as a member.
 
 ## 5. Atom loss
 
@@ -182,14 +146,17 @@ gone. The challenge stresses this case.
 
 ![Atom loss](figures/loss.png)
 
-<!-- BEGIN table:loss -->
-<!-- END table:loss -->
+X memory, p = 0.004, relay-BP at the kit's settings, at a loss rate of s = 0.001 per atom per gate (on average
+<!--f:loss_lost_atoms-->10.0<!--/f--> lost data atoms per shot):
 
-- **A decoder that ignores loss is ruined by it; the flags give most of it back.** The table gives the paired counts
-  at each loss rate.
-- **Knowing when an atom was lost is worth more still.** The ORACLE rows are given the true loss round on purpose:
-  they measure the ceiling for any method that estimates the loss time, and are not decoder results.
-- **The loss-time tracker** is our attempt to reach that ceiling from the syndrome history alone. *Pending: its rows.*
+- **A decoder that ignores loss is ruined by it.** It fails <!--f:loss_blind_share-->57.7%<!--/f--> of shots (<!--f:loss_blind-->173 of 300<!--/f-->).
+- **The flags give most of it back.** With priors raised where a flag fired, the published method, it fails
+  <!--f:loss_aware_share-->4.4%<!--/f--> (<!--f:loss_aware-->176 of 4,000<!--/f-->): <!--f:loss_aware_ratio-->11.5<!--/f--> times fewer on the shots both decoded.
+- **Knowing when an atom was lost is worth more still.** An ORACLE that is told the true round of each loss fails
+  <!--f:loss_oracle_share-->2.7%<!--/f--> (<!--f:loss_oracle-->107 of 4,000<!--/f-->, the same shots): <!--f:loss_oracle_ratio-->1.64<!--/f--> times fewer than with the flags alone
+  (<!--f:loss_oracle_ratio_interval-->1.42 to 1.94<!--/f-->). It is given the truth on purpose: a ceiling, not a decoder.
+- **The loss-time tracker** is our attempt to reach that ceiling from the syndrome history alone: a lost data atom
+  makes its neighbouring checks fire at random from the moment it is lost. *Its rows are not measured yet.*
 - **What the model assumes.** After every CX gate each of its two atoms is lost with probability s. A lost check atom
   is flagged at its measurement and replaced; a lost data atom stays lost and is flagged only at the end. Flags are
   perfect, and losses are independent. This is our simplified model. It is not Infleqtion's hardware model. For
@@ -197,34 +164,51 @@ gone. The challenge stresses this case.
   evenly between the two atoms, which is our reading and not a figure of the paper, that is about s = 2e-3, the top
   of the range studied here.
 
-## 6. What we measured before building, and what did not work
+The table with every loss rate, both machines and the paired counts is in `APPENDIX.md`.
 
-<!-- BEGIN table:background -->
-<!-- END table:background -->
+## 6. What did not work
+
+Each with its count and its file in `APPENDIX.md`, "What we measured before building, and what did not work".
+
+- **A plain convolutional network** (no structure of the code in it) learned only at noise far below the
+  challenge's. The network that follows the code's connections learns at the challenge's noise, but only as a judge
+  of candidates, not as a decoder.
+- **Classic predecoders** (commit to the sure faults first, pass the rest to relay-BP) gave no gain in our tests.
+- **Faster relay-BP schedules** as a cheap fallback cost accuracy; only "stop after three solutions instead of five"
+  came free.
+- **Joint decoding of X and Z checks** fixes most of relay-BP's failures but is far too slow to run on every shot.
+- **Under loss,** exact weights for where a lost atom can have been gave no gain over the simple rule, and stopping
+  relay-BP at its first solution cost failures.
+- **Longer training of the network** improved it a lot as a decoder and only a little as a tie-breaker: the hard
+  shots are hard for the network too.
 
 Two more attempts have no log in the repository, so no number of theirs is used anywhere in this report: a plain
-convolutional network of the first default size did not learn in a short first run on the laptop, and a smaller one
-learned at low noise only (`information.md`, section 9). The plain network that does have a log is in the table.
+network of the first default size did not learn in a short first run on the laptop, and a smaller one learned at low
+noise only (`information.md`, section 9).
 
 ## 7. Where it falls short
 
-*Pending the test rows. The points already known from the exploration shots:*
-
-- **TCBP-JOBS is more accurate at p = 0.004 and 0.005** than relay-BP and than our three-candidate hierarchy, as
-  measured so far (section 4).
-- **Agreeing but wrong.** On the exploration shots, <!--f:expl_left_agree-->63<!--/f--> of the <!--f:expl_left-->162<!--/f--> shots the hierarchy still fails are shots where the
-  two fast decodes agree on a wrong answer. No tie-break can fix those.
-- **The slowest shots get slower.** A hard shot pays for three decoders one after the other.
+- **TCBP-JOBS.** <!--f:tcbp_statement-->TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 162 of 25,000).<!--/f--> It needs a GPU; our hierarchy runs on one CPU core.
+- **Agreeing but wrong.** On the exploration shots, <!--f:expl_left_agree-->63<!--/f--> of the <!--f:expl_left-->162<!--/f--> shots the hierarchy still fails
+  are shots where the two fast decodes agree on a wrong answer. No tie-break can fix those; only a better test for a
+  hard shot, or more members on every shot, can.
+- **The slowest shots get slower.** A hard shot pays for three decoders one after the other; the 99th-percentile time
+  in `APPENDIX.md` shows it.
+- **Low noise.** At p = 0.003 every good decoder fails only a handful of pairs in 10,000, so the rows cannot be told
+  apart there.
+- **The network** is small and was trained for hours, not days; the Z network started later than the X network.
 - **Loss** is measured for X memory at p = 0.004 only, under our own loss model.
+- **A dependency with a licence.** PriorTilt is CC BY-NC-SA 4.0 (non-commercial); none of its code is in this
+  repository.
 
 ## 8. Resources
 
 <!-- BEGIN table:resources -->
 <!-- END table:resources -->
 
-- **Our decoder needs no GPU.** PriorTilt and relay-BP run on one CPU core. The network has
-  <!--f:net_parameters-->893,697<!--/f--> parameters per memory basis and is called on the hard shots only.
-- **Training cost.** The table of section 3 gives, per network, the steps, the shots seen and the GPU hours so far.
+- **Our decoder needs no GPU.** PriorTilt and relay-BP run on one CPU core; the network is called on the hard shots
+  only.
+- **Training cost.** `APPENDIX.md` ("The networks") gives, per network, the steps, the shots seen and the GPU hours.
   Training shots are drawn from the kit's error model on the GPU, so there is no training set on disk.
 - **TCBP-JOBS** needs an NVIDIA GPU. Before it decodes, it fits a model per memory basis, which took
   <!--f:tcbp_fit3_s-->54.5 and 54.8<!--/f--> s at p = 0.003 and <!--f:tcbp_fit4_s-->120.2 and 121.6<!--/f--> s at p = 0.004 in the teammates' runs
@@ -232,15 +216,10 @@ learned at low noise only (`information.md`, section 9). The plain network that 
 
 ## 9. How to reproduce
 
-`REPRODUCE.md` in this folder has every command from a fresh clone. The tables and figures of this page alone:
+`REPRODUCE.md` has every command from a fresh clone, and says what was run where. The tables and figures alone:
 
 ```sh
 cd challenge-1-ml-decoder-kit
-python -m report.make_tables      # report/tables/*.md and *.csv, and the tables inside this page
-python -m report.make_plots       # report/figures/*.png and *.svg
+python -m report.make_tables      # report/tables/, and the tables and numbers inside REPORT.md, APPENDIX.md, SLIDES.md
+python -m report.make_plots       # report/figures/
 ```
-
-## 10. Checks made on every run
-
-<!-- BEGIN table:checks -->
-<!-- END table:checks -->

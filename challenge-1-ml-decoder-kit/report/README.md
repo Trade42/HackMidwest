@@ -5,6 +5,7 @@ Start with `REPORT.md`. Run every command from `challenge-1-ml-decoder-kit/`.
 | file | what it is |
 |------|------------|
 | `REPORT.md` | the write-up: the question, the approach, the results on the test shots, loss, what did not work, resources |
+| `APPENDIX.md` | the full tables behind the write-up |
 | `SLIDES.md` | the material for a five-minute talk, and the questions a judge will ask |
 | `REPRODUCE.md`, `reproduce_ours.sh` | every command from a fresh clone to our rows of the table, with what was run where |
 | `make_tables.py` | writes `tables/*.md` and `*.csv`, and the tables and numbers inside `REPORT.md` and `SLIDES.md` |

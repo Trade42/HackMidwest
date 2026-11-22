@@ -261,6 +261,16 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_Z_wrong4` | 4.1% | `tables/networks.md` |
 | `net_Z_wrong5` | 18.6% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
+| `rule_X` | network | `data/test/test_run.out` |
+| `rule_X_converged` | 67 | `data/test/test_run.out` |
+| `rule_X_network` | 60 | `data/test/test_run.out` |
+| `rule_X_shots` | 25,000 | `data/test/test_run.out` |
+| `rule_X_step` | 120,000 | `data/test/test_run.out` |
+| `rule_Z` | network | `data/test/test_run.out` |
+| `rule_Z_converged` | 73 | `data/test/test_run.out` |
+| `rule_Z_network` | 68 | `data/test/test_run.out` |
+| `rule_Z_shots` | 25,000 | `data/test/test_run.out` |
+| `rule_Z_step` | 100,000 | `data/test/test_run.out` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |
 | `t3_bposd_mean_ms` | 129 (not clean) | `tables/test_p0.003.md` |
@@ -622,6 +632,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `tcbp_own5_rate` | 3.20e-03 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_xz` | 192, 188 | `tables/tcbp_own_shots.md` |
 | `tcbp_statement` | TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000). | `tables/test_all.md, tables/exploration_p0.004.md` |
+| `test_frozen_commit` | fd3aed3c0d1f | `data/test/test_run.out` |
 | `trk_atoms` | 39,909 | `data/loss/tracker/accuracy_test.json` |
 | `trk_exact` | 196 of 4,000 | `data/loss/tracker/test.json` |
 | `trk_exact_share` | 4.90% | `data/loss/tracker/test.json` |

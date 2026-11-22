@@ -1063,6 +1063,22 @@ def tracker_facts(tracked, shares):
     fact("trk_sentence", sentence, source)
 
 
+def test_job_facts():
+    """What the test job printed before it decoded the test shots: the rule chosen per basis on exploration shots."""
+    file = DATA / "test" / "test_run.out"
+    text = file.read_text(encoding="utf-8", errors="replace") if file.is_file() else ""
+    source = "data/test/test_run.out"
+    for basis in "XZ":
+        found = re.search(rf"PLUGIN_RULE {basis} (\S+)\s+\(network (\d+) failures, converged (\d+), on (\d+) shots; logits of checkpoint step (\d+)\)", text)
+        fact(f"rule_{basis}", found and found.group(1), source)
+        fact(f"rule_{basis}_network", found and found.group(2), source)
+        fact(f"rule_{basis}_converged", found and found.group(3), source)
+        fact(f"rule_{basis}_shots", found and f"{int(found.group(4)):,}", source)
+        fact(f"rule_{basis}_step", found and f"{int(found.group(5)):,}", source)
+    frozen = re.search(r"TEST RUN DRIVER START: frozen (\w+)", text)
+    fact("test_frozen_commit", frozen and frozen.group(1)[:12], source)
+
+
 # ---------- the networks ----------
 
 def networks_table():
@@ -1295,6 +1311,7 @@ def main(argv=None):
             "exploration_ensemble": exploration_ensemble_table(),
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
             "resources": resources_table(measured)}
+        test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks)
         tcbp_statement(measured)
         findings(measured)

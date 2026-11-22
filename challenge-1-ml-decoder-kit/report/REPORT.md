@@ -89,7 +89,12 @@ is present on <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f-
 
 ## 4. Results on the test shots
 
-The team's saved test files: 10,000 shots per basis and noise level, decoded once with every setting frozen. A timed
+The team's saved test files: 10,000 shots per basis and noise level, decoded once with every setting frozen at
+commit `<!--f:test_frozen_commit-->fd3aed3c0d1f<!--/f-->`. Before the test files were opened, the tie-break of each basis was chosen on the
+exploration shots at p = 0.004 with the final networks: for X memory "<!--f:rule_X-->network<!--/f-->" (<!--f:rule_X_network-->60<!--/f--> failures with the network
+against <!--f:rule_X_converged-->67<!--/f--> for the best classical rule, on <!--f:rule_X_shots-->25,000<!--/f--> shots), for Z memory "<!--f:rule_Z-->network<!--/f-->"
+(<!--f:rule_Z_network-->68<!--/f--> against <!--f:rule_Z_converged-->73<!--/f-->). These choices are in the test job's printout,
+`report/data/test/test_run.out`. A timed
 row ran through the team's evaluator (`evaluation.evaluate`) in one process on the team's server. A row marked "from
 per-shot files" is combined offline from saved answers and has no time measured in one process.
 

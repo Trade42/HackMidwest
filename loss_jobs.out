@@ -782,3 +782,9 @@ wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/parts/starter+st
 job done in 1460s
 {"dataset": "/home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz", "sha256": "c68f6e67cd84784a16007ea4611af5b0d69d7b577de775310c18e2cf11b85336", "basis": "X", "p": 0.004, "s": 0.0005, "shots": 10000, "seed": 5200, "lost_data_atoms_per_shot": 5.108, "check_heralds_per_shot": 5.17, "sample_seconds": 11.5}
 decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 0..500 conditions ['blind'] workers 10
+  50/500 shots, 12s, failures so far blind=1
+  100/500 shots, 20s, failures so far blind=7
+  150/500 shots, 33s, failures so far blind=15
+  200/500 shots, 41s, failures so far blind=22
+  250/500 shots, 50s, failures so far blind=32
+  300/500 shots, 64s, failures so far blind=38

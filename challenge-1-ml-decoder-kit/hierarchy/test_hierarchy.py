@@ -20,10 +20,10 @@ import pytest
 import scipy.sparse as sp
 
 from evaluation.adapters import Problem, create_session, validate_shot_result
-from hierarchy import candidates, compare, rules, select
+from hierarchy import candidates, compare, rules, select, tcbp_member
 from hierarchy.plugin import HierarchySession, Network
 from hierarchy.rules import ORDER
-from hierarchy.stages import Candidate, kit_problem, load_shots
+from hierarchy.stages import Candidate, kit_problem, load_shots, sha256_of
 
 KIT = Path(__file__).resolve().parent.parent
 QUICK = ["--priortilt-max-rounds", "20", "--relay-sets", "3"]          # small budgets: many shots stay unconverged
@@ -470,3 +470,57 @@ def test_plugin_with_a_network_on_other_logical_operators_equals_select(tmp_path
     asked = [not result.metrics["agreed"] for result in results]
     assert asked == pool["ran"][ORDER.index("R")].tolist() and any(asked)
     assert not np.array_equal(network.candidates, pool["predicted"])       # the candidates were turned into the light operators
+
+
+# ---------- tcbp_member.py, without a GPU ----------
+
+def test_tcbp_member_turns_error_vectors_into_answers():
+    H = sp.csc_matrix(np.array([[1, 0, 1, 0], [0, 1, 1, 0], [0, 0, 0, 1]], np.uint8))
+    L = sp.csr_matrix(np.vstack([[1, 1, 0, 0], np.zeros((11, 4), int)]).astype(np.uint8))
+    problem = Problem("X", H, L, np.array([0.1, 0.2, 0.1, 0.5]), 0.004, None)
+    llr = np.log((1 - problem.priors) / problem.priors)
+    errors = np.array([[1, 0, 0, 0], [1, 1, 0, 0], [0, 0, 1, 1]], np.uint8)
+    seen = np.array([[1, 0, 0], [1, 1, 0], [1, 1, 0]], np.uint8)            # the last correction also flips detector 2
+    rows = tcbp_member.answers(errors, seen, problem, llr)
+    assert rows["predicted"][:, 0].tolist() == [1, 0, 0] and not rows["predicted"][:, 1:].any()
+    assert rows["converged"].tolist() == [True, True, False] and rows["n_faults"].tolist() == [1, 2, 2]
+    assert rows["weight"] == pytest.approx([math.log(9), math.log(9) + math.log(4), math.log(9)])
+
+    result = SimpleNamespace(result=[[0.9, 0.1, 0.0, 0.6]])
+    assert tcbp_member.error_vectors(result, (1, 4), "decode_batch").tolist() == [[1, 0, 0, 1]]
+    assert tcbp_member.error_vectors([result, result], (2, 1, 4), "decode_batch").shape == (2, 1, 4)   # a list of results
+    with pytest.raises(SystemExit, match="shape"):
+        tcbp_member.error_vectors(result, (1, 5), "decode_batch")
+    with pytest.raises(SystemExit, match="without a `result`"):
+        tcbp_member.error_vectors(object(), (1, 4), "decode")
+
+
+def test_tcbp_member_plumbing_with_relay_bp_in_place_of_the_gpu_decoder(tmp_path, shot_files, capsys):
+    """Everything of tcbp_member.py but the decoder itself, on a small file, serial and batched."""
+    command = ["--data", str(shot_files["X"]), "--decoder", "relay", "--opt", "num_sets=3"]
+    tcbp_member.main([*command, "--out", str(tmp_path / "serial")])
+    tcbp_member.main([*command, "--out", str(tmp_path / "batch"), "--batch"])
+    printed = capsys.readouterr().out
+    assert "plumbing stand-in, not TCBP-JOBS" in printed and "serial decode, the first decode of the basis untimed" in printed
+    serial = arrays_of(tmp_path / "serial" / "small_X.relay-plumbing.npz")
+    batch = arrays_of(tmp_path / "batch" / "small_X.relay-plumbing.npz")
+    for rows, mode in ((serial, "serial"), (batch, "batch")):
+        assert rows["predicted_T"].shape == (SHOTS, 12) and str(rows["mode"]) == mode and str(rows["decoder"]) == "relay"
+        assert np.array_equal(rows["failed_T"], (rows["predicted_T"] != rows["truth"]).any(axis=1))
+        assert str(rows["data_sha256"]) == sha256_of(shot_files["X"]) and json.loads(str(rows["overrides"])) == {"num_sets": 3}
+        assert rows["converged_T"].any() and (rows["n_faults_T"] > 0).all() and (rows["weight_T"] > 0).all()
+        assert 0 <= int(rows["repeat_differ"]) <= int(rows["repeat_shots"]) == SHOTS
+    assert (serial["seconds_T"] > 0).all() and np.isnan(batch["seconds_T"]).all()
+    assert np.array_equal(serial["truth"], load_shots(shot_files["X"]).observables)
+
+    tcbp_member.main([*command, "--out", str(tmp_path / "serial")])              # a second run keeps the finished file
+    assert "kept" in capsys.readouterr().out
+    with pytest.raises(SystemExit, match="other data or settings"):
+        tcbp_member.main([*command[:-1], "num_sets=4", "--out", str(tmp_path / "serial")])
+    with pytest.raises(SystemExit, match="held-out"):
+        tcbp_member.main(["--data", str(tmp_path / "test_X.npz"), "--decoder", "relay", "--out", str(tmp_path / "x")])
+    with pytest.raises(SystemExit, match="NAME=VALUE"):
+        tcbp_member.main([*command[:-1], "num_sets", "--out", str(tmp_path / "x")])
+    if importlib.util.find_spec("cudaq_qec") is None:                           # without the GPU package it says so at once
+        with pytest.raises(SystemExit, match="cudaq-qec"):
+            tcbp_member.main(["--data", str(shot_files["X"]), "--out", str(tmp_path / "x")])

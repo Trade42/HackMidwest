@@ -47,17 +47,23 @@ def logit(x):
 
 
 def prior_moves(logits, kit, setting, chunk=250):
-    """Per shot: C3 the total move, C4 the largest, C5 the columns moved by more than 1, in log-odds."""
+    """Per shot, in log-odds: C3 the total move, C4 the largest, C5 the columns moved by more than 1 (CRITERION_2.md);
+    C8 the total upward move; and C9 the head's own entropy in bits, from its raw probabilities (CRITERION_3.md)."""
     base = logit(kit)
-    total, largest, many = [], [], []
+    out = {k: [] for k in ("C3", "C4", "C5", "C8", "C9")}
     for first in range(0, len(logits), chunk):
         rows = np.asarray(logits[first:first + chunk])
         q = capped(shot_priors(rows, kit, setting["alpha"], setting["eps"], setting["mode"]))
-        m = np.abs(logit(q) - base)
-        total.append(m.sum(1))
-        largest.append(m.max(1))
-        many.append((m > 1).sum(1))
-    return np.concatenate(total), np.concatenate(largest), np.concatenate(many)
+        signed = logit(q) - base
+        m = np.abs(signed)
+        out["C3"].append(m.sum(1))
+        out["C4"].append(m.max(1))
+        out["C5"].append((m > 1).sum(1))
+        out["C8"].append(np.maximum(signed, 0.0).sum(1))
+        h = 1.0 / (1.0 + np.exp(-rows.astype(np.float16).astype(np.float64)))
+        h = np.clip(h, 1e-300, 1 - 1e-16)
+        out["C9"].append((-(h * np.log2(h)) - (1 - h) * np.log2(1 - h)).sum(1))
+    return {k: np.concatenate(v).astype(float) for k, v in out.items()}
 
 
 def largest_safe(s, bad):
@@ -75,6 +81,8 @@ def main():
     ap.add_argument("--speed", required=True, help="tcbp-speed's check_per_shot.npz (TH's CSR timers)")
     ap.add_argument("--time-model", choices=("csr_total", "decode_plus_csr_means"), required=True)
     ap.add_argument("--alt", nargs="*", default=[], help="name=<per_shot.npz>:<arm suffix>, another run of F")
+    ap.add_argument("--round3", action="store_true", help="add C8 and C9 (CRITERION_3.md)")
+    ap.add_argument("--carry", help="another p's result json: its t* applied unchanged to these shots")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     if Path(a.data).name.startswith(("test", "go_")):
@@ -102,7 +110,7 @@ def main():
     assert same.all(), f"logits rows differ from the head arm's on {int((~same).sum())} shots"
     setting = load_settings(a.settings)
     kit = kit_problem(basis, p).priors
-    c3, c4, c5 = prior_moves(logits, kit, setting)
+    moves = prior_moves(logits, kit, setting)
 
     f_ms = 1e3 * arms["seconds_decode_fresh"]
     sp = np.load(a.speed)
@@ -120,12 +128,15 @@ def main():
 
     checks = {
         "C2 syndrome weight": (weight, "pre"),
-        "C3 total prior move": (c3, "net"),
-        "C4 largest prior move": (c4, "net"),
-        "C5 columns moved > 1": (c5.astype(float), "net"),
+        "C3 total prior move": (moves["C3"], "net"),
+        "C4 largest prior move": (moves["C4"], "net"),
+        "C5 columns moved > 1": (moves["C5"], "net"),
         "C6 F decode time (ms)": (f_ms, "F"),
         "C7 F correction weight": (arms["n_faults_fresh"].astype(float), "F"),
     }
+    if a.round3:
+        checks["C8 upward prior move"] = (moves["C8"], "net")
+        checks["C9 head entropy (bits)"] = (moves["C9"], "net")
 
     # csr_total: the mean uses TH's mean on every shot, the p99 TH's per-shot times on shots 0-999 (CRITERION_2.md)
     th_for_mean = np.full(n, th_mean) if a.time_model == "csr_total" else th_ms
@@ -139,11 +150,13 @@ def main():
             return NET_MEAN_MS + np.where(easy, f_ms, th)
         return f_ms + np.where(easy, 0.0, NET_MEAN_MS + th)  # F first on every shot
 
-    def row(name, easy, kind, t):
+    def row(name, easy, kind, t, check=None):
         fail = np.where(easy, f_fail, th_fail)
         only_rule, only_th = int((fail & ~th_fail).sum()), int((th_fail & ~fail).sum())
         per_shot = cost(easy, kind, th_ms)
-        return {"rule": name, "t": t, "fast_fraction": round(float(easy.mean()), 4), "fast_shots": int(easy.sum()),
+        bound = round(3 / int(easy.sum()), 5) if only_rule == 0 and easy.sum() else None
+        return {"rule": name, "check": check, "t": t, "added_rate_upper_95_on_fast_shots": bound,
+                "TH_failure_rate": round(float(th_fail.mean()), 5), "fast_fraction": round(float(easy.mean()), 4), "fast_shots": int(easy.sum()),
                 "failures": int(fail.sum()), "share_95": [round(float(fail.mean()), 5), wilson(int(fail.sum()), n)],
                 "both_fail": int((fail & th_fail).sum()), "only_rule": only_rule, "only_TH": only_th,
                 "exact_p": exact_p(only_rule, only_th), "passes_gate": only_rule == 0,
@@ -168,7 +181,7 @@ def main():
     for name, (s, kind) in checks.items():
         t = largest_safe(s, bad)
         easy = s <= t if t is not None else np.zeros(n, bool)
-        rows.append(row(f"{name} <= {t:g}" if t is not None else f"{name}: no safe t", easy, kind, t))
+        rows.append(row(f"{name} <= {t:g}" if t is not None else f"{name}: no safe t", easy, kind, t, name))
         h = {}
         for pick, other in (("even", ~even), ("odd", even)):
             mask = even if pick == "even" else ~even
@@ -194,6 +207,18 @@ def main():
         timeout = {"t_ms": t6, "mean_ms": round(float((stop + np.where(easy6, 0.0, NET_MEAN_MS + th_for_mean)).mean()), 2),
                    "p99_ms": round(float(np.percentile((stop + np.where(easy6, 0.0, NET_MEAN_MS + th_ms))[timed], 99)), 1)}
 
+    carried = None
+    if a.carry:
+        other = json.load(open(a.carry))
+        carried = {"from": a.carry, "from_p": other["data"]["p"], "checks": {}}
+        for r in other["rows"]:
+            name = r.get("check")
+            if name in checks and r["t"] is not None:
+                s, _ = checks[name]
+                easy = s <= r["t"]
+                carried["checks"][name] = {"t": r["t"], "fast_fraction": round(float(easy.mean()), 4),
+                                           "added": int((easy & bad).sum()), "fixed": int((easy & th_fail & ~f_fail).sum())}
+
     cands = [r for r in rows if r["passes_gate"]]
     chosen = min(cands, key=lambda r: r["mean_ms"])
     out = {
@@ -214,6 +239,7 @@ def main():
         "other_F_runs": {k: {"failures": v["failures"], "added_at_t_star": v.get("added_at_t_star")} for k, v in alts.items()},
         "chosen": chosen,
         "diagnostic_not_declared_C6_with_F_stopped_at_t": timeout,
+        "carried": carried,
     }
     json.dump(out, open(a.out, "w"), indent=1)
     print(f"{Path(a.data).name} p={p:g}: TH {out['counts']['TH']}, F {out['counts']['F']} (F only {out['counts']['F_only']}, "
@@ -230,6 +256,14 @@ def main():
         print(f"other F run {k} ({v['failures']} failures), added at t*: {v['added_at_t_star']}")
     print("chosen:", chosen["rule"], chosen["mean_ms"], "ms mean,", chosen["p99_ms"], "ms p99")
     print("not declared, a diagnostic: C6 with F stopped at t*:", timeout)
+    for r in rows:
+        if r["added_rate_upper_95_on_fast_shots"] is not None and r["fast_shots"]:
+            print(f"  95% upper bound on the added-failure rate among fast shots, {r['rule']}: "
+                  f"{r['added_rate_upper_95_on_fast_shots']} (TH's failure rate {r['TH_failure_rate']})")
+    if carried:
+        print(f"t* carried from p = {carried['from_p']:g}, unchanged, on these shots:")
+        for k, v in carried["checks"].items():
+            print(f"  {k:<26} t {v['t']:g}: fast {v['fast_fraction']:.3f}, added {v['added']}, fixed {v['fixed']}")
 
 
 if __name__ == "__main__":

@@ -4,3 +4,4 @@ test_X.npz: 10000 shots, p=0.003, arms ['head'], decoder tcbp-jobs (cudaq-qec CU
   model fitted in 64.0 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: 1000 of 10000 shots, 114 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: 2000 of 10000 shots, 164 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 3000 of 10000 shots, 215 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]

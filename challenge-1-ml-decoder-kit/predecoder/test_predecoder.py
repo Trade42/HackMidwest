@@ -391,3 +391,42 @@ def test_a_head_trains_on_a_z_trunk_with_light_logicals(tmp_path):
     _, head, saved = load_head(tmp_path / "run" / "head.pt", "cpu", str(trunk))
     assert head.config["basis"] == "Z" and head.num_columns == kit_problem("Z", 0.004).H.shape[1]
     assert saved["history"][0]["rows"][0]["log_loss_head"] == pytest.approx(saved["history"][0]["rows"][0]["log_loss_kit"])
+
+
+def test_pair_score_counts(tmp_path):
+    """A pair fails when its X or its Z shot fails; the rule takes T where H did not converge. A hand-made case."""
+    from predecoder import pair
+
+    paths = {}
+    for basis in "XZ":
+        with np.load(KIT / "data" / "p0.004" / f"validation_{basis}.npz") as file:
+            paths[basis] = tmp_path / f"v_{basis}.npz"
+            np.savez_compressed(paths[basis], p=file["p"], seed=file["seed"], basis=file["basis"],
+                                detectors=file["detectors"][:4], observables=file["observables"][:4],
+                                basis_detectors=file["basis_detectors"])
+    data = {b: load_dataset(paths[b]) for b in "XZ"}
+    flip = lambda bits, rows: np.where(np.isin(np.arange(4), rows)[:, None], bits ^ 1, bits).astype(np.uint8)
+    # X: H wrong on 0 (unconverged) and 1 (converged); T wrong on 1 and 2. Z: H wrong on 3 (converged); T wrong on 3.
+    plan = {"X": {"H": [0, 1], "conv": [False, True, True, True], "T": [1, 2], "R": [0, 1, 2]},
+            "Z": {"H": [3], "conv": [True, True, True, True], "T": [3], "R": [3]}}
+    evaluator, summary = {}, {"datasets": {"test": {}}}
+    for b in "XZ":
+        truth = data[b].observables
+        np.savez(tmp_path / f"ours_{b}.npz", truth=truth, predicted_head=flip(truth, plan[b]["H"]),
+                 converged_head=np.array(plan[b]["conv"], float))
+        np.savez(tmp_path / f"tcbp_{b}.npz", truth=truth, predicted_T=flip(truth, plan[b]["T"]), data_sha256=data[b].sha256)
+        evaluator[f"predictions_{b}"] = flip(truth, plan[b]["R"])
+        evaluator[f"failed_{b}"] = np.isin(np.arange(4), plan[b]["R"])
+        summary["datasets"]["test"][b] = {"sha256": data[b].sha256}
+    evaluator["failed_pair"] = evaluator["failed_X"] | evaluator["failed_Z"]
+    np.savez(tmp_path / "ev.npz", **evaluator)
+    (tmp_path / "ev.json").write_text(json.dumps(summary))
+    pair.main(["--data-x", str(paths["X"]), "--data-z", str(paths["Z"]), "--ours-x", str(tmp_path / "ours_X.npz"),
+               "--ours-z", str(tmp_path / "ours_Z.npz"), "--tcbp-x", str(tmp_path / "tcbp_X.npz"), "--tcbp-z", str(tmp_path / "tcbp_Z.npz"),
+               "--evaluator-shots", str(tmp_path / "ev.npz"), "--evaluator-summary", str(tmp_path / "ev.json"),
+               "--out", str(tmp_path / "pair.json")])
+    result = json.loads((tmp_path / "pair.json").read_text())["decoders"]
+    assert result["H"]["failed_pairs"] == 3          # pairs 0, 1, 3
+    assert result["rule"]["failed_pairs"] == 2       # X: shot 0 falls back to T (right), shot 1 stays H (wrong); Z: 3
+    assert result["T"]["failed_pairs"] == 3          # pairs 1, 2, 3
+    assert result["R"]["failed_pairs"] == 4

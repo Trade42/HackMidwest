@@ -34,7 +34,7 @@ should find the answer sooner and fail less.
   priors fails **151** of 10,000 shots against **433** with the kit's priors, 2.9 times fewer
   (only the head's 26 against only the kit's priors' 308, p = 2e-62), with 3.4 times fewer
   iterations. On the same shots TCBP-JOBS fails 186 (61 against 96, p = 0.0065; chosen after
-  the p = 0.004 gate failed, X only, accuracy only).
+  the p = 0.004 gate failed, X only, accuracy only, not a pair score).
 
 Details, commands and logs for every number are under "Numbers".
 
@@ -54,6 +54,8 @@ Details, commands and logs for every number are under "Numbers".
 | `plugin_check.py` | checks that the plugin, through the evaluator's loop, gives `compare.py`'s answers |
 | `files.py` | small file helpers without torch, so the decoding worker processes stay small |
 | `secondary.py` | the test run's secondary rows: the head's answers against two other decoders' files, same shots |
+| `fallback.py` | the fallback rule: the head's relay-BP where it converges, TCBP-JOBS's answer where it does not |
+| `pair.py` | the kit's pair score (an X shot and a Z shot) for the head, the rule, TCBP-JOBS and relay-BP |
 | `oracle.py` | the ceiling: relay-BP told the true faults (a diagnostic, never a result) |
 | `test_predecoder.py` | tests |
 
@@ -549,10 +551,37 @@ stored failures. Nothing else of those folders was read.
 These rows are X memory alone: the kit's score is per pair of an X and a Z shot, and Z has no
 head here.
 
+## The extension, after the p = 0.005 test result (Sal, 14:19 to 14:27 UTC: the bar is TCBP-JOBS)
+
+Everything in this section was run after the p = 0.005 X test result and is labelled so. Its
+plan was registered before any of its numbers existed (`logs/extension_registered_spec.md`,
+copied from the orchestrator's log; `logs/z_plan_declared.md`; `logs/fallback_rule_frozen.md`).
+Every test file is decoded once.
+
+### The fallback to TCBP-JOBS (Sal's idea, designed after the first test result)
+
+**The rule:** relay-BP with the head's priors (H) where that relay-BP converges; on the shots
+where it does not, TCBP-JOBS's answer (T). It has no knob. Unconverged shots announce
+themselves (relay-BP found no correction that explains the syndrome), and they held 88 of H's
+151 test failures at p = 0.005 (`python -m predecoder.fallback`).
+
+| shots (p = 0.005, X memory) | H | T, TCBP-JOBS | **the rule** | falls back on | the rule against T: both, only the rule, only T, p |
+|---|---|---|---|---|---|
+| validation_X, 5,000 (scored first; `logs/fallback_validation_X_p0.005.log`) | 79 | 91 | **50** | 44 | 38, 12, 53, p = 2.8e-7 |
+| test_X, 10,000 (post hoc; `logs/fallback_test_X_p0.005.log`) | 151 | 186 | **107** | 90 | 91, 16, 95, p = 7.5e-15 |
+
+The rule's text was frozen after its validation number and before any other test file of the
+extension was opened. On the test shots it cuts TCBP-JOBS's failures by 42%, and H's by 29%
+(1 shot only the rule gets wrong, 45 only H). The TCBP-JOBS files are the team's (validation:
+`files/tcbp_p0.005/validation_X.tcbp.npz` on `origin/server-logs`, sha256 `876c47c6...`; test:
+the file named above). Costs: the rule runs TCBP-JOBS on the 0.9% of shots that fall back, on a
+GPU in the team's runs; it was not timed here.
+
 ## What is tested, what is not, and what is left
 
-`test_predecoder.py`, 19 tests (`python -m pytest -p no:cacheprovider test_kit.py neural predecoder`:
-93 pass, `logs/pytest_kit_neural_predecoder.log`):
+`test_predecoder.py`, 21 tests (`python -m pytest -p no:cacheprovider test_kit.py neural predecoder`;
+the full run of `logs/pytest_kit_neural_predecoder.log` had 93 passing, before the Z-trunk and pair-score
+tests were added, each of which passes on its own):
 
 - the mapping: on 200 sampled shots H x fired columns = the basis detectors and L x them = the
   observables, the merged priors equal the kit's, a flipped column breaks the check, and the
@@ -574,9 +603,10 @@ Not tested, or not done:
 - **The held-out test files were used once**, at p = 0.005 for X memory, on Sal's yes, after the
   declared gate at p = 0.004 failed (above). No other test file was decoded, and nothing was
   changed after the result.
-- **Z memory has no head.** The plugin decodes Z with the kit's relay-BP, so a pair score from
-  the evaluator would mix the two. A Z head needs a Z network (`--logicals light` changes the
-  observables, which `mapping.py` does not handle yet).
+- **Z memory: a head is being trained** (from `ee359d7f`, which lets a head train on a Z network
+  with light logical operators: the head never reads the network's logical readout, and its
+  labels come from the kit's own observables). Until its results are in this file, the plugin
+  decodes Z with the kit's relay-BP unless it is given a Z head.
 - The GPU path of `train.py` has no test here (this PC has no GPU); it ran on the laptop.
 - BP-OSD with the head's priors (the brief's optional variant) was not tried.
 - The head as a member of `hierarchy/`'s ensemble is only a diagnostic table above; no rule

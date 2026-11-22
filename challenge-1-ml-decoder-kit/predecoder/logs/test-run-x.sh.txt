@@ -1,0 +1,62 @@
+#!/bin/bash
+# The predecoder's X test runs at p = 0.004 and 0.003, "run after the p = 0.005 test result": the same frozen
+# head, trunk and knobs as test-run.sh, on the orchestrator's GO of 14:2x UTC (Sal: the bar is TCBP-JOBS).
+# Run as:  bash test-run-x.sh GO 0.004   (and then 0.003). Each file is decoded once.
+# From 14:55 UTC: lanes A and C only (taskset 4-7,12-15, 8 threads and 8 workers), the orchestrator's change to free lane B.
+# p = 0.004 ran with lanes A, B and C (test-run-x.3lanes.sh).
+#
+# What it runs, from the detached checkout of 1bf0e7b (the commit every validation number came from):
+#   1. predecoder.evaluate --final --device cpu: the network and head on all 10,000 shots of data/p0.005/test_X.npz,
+#      on this PC's CPU in 32-bit floats (the reproducible setting of the validation headline, 79 against 206);
+#   2. predecoder.compare --final --arms fresh head: relay-BP at the kit's settings, built per shot, with the kit's
+#      priors and with the head's priors (logs/fit_X_p0.004.json: log-odds, alpha 0.2, eps 1e-4), 12 processes.
+# It holds lanes A, B and C (locks in that order), taskset 4-15, nice -n 15, 12 processes: the orchestrator's
+# change of 13:3x UTC, which leaves lane D to dq-report. (The staged version with four lanes: test-run.staged-4lanes.sh.)
+# compare.py saves every chunk of 100 shots in <out>/parts/: if it is stopped, the same command resumes it.
+set -euo pipefail
+
+P="${2:-}"
+if [ "$P" != 0.004 ] && [ "$P" != 0.003 ]; then echo "give p: 0.004 or 0.003" >&2; exit 2; fi
+if [ "${1:-}" != "GO" ]; then
+    echo "test-run.sh is staged, not approved: it runs only as 'bash test-run.sh GO', on Sal's word." >&2
+    exit 2
+fi
+
+export PYTHONDONTWRITEBYTECODE=1
+W=/home/sal/hackMidwest/worktrees/predecoder-test
+KIT=$W/challenge-1-ml-decoder-kit
+S=/home/sal/hackMidwest/orchestration/scratch/predecoder
+T=$S/test-run
+V=$S/venv/bin/python
+HEAD=$T/head.pt
+TRUNK=$T/checkpoint_final_step120000.pt
+SETTINGS=predecoder/logs/fit_X_p0.004.json
+DATA=data/p$P/test_X.npz
+LOG=$T/test_run_p$P.log
+LOCKS="flock /home/sal/hackMidwest/dq/run/sim-a.lock flock /home/sal/hackMidwest/dq/run/sim.lock"
+
+# The frozen inputs, checked before anything runs.
+test "$(git -C $W rev-parse HEAD)" = 1bf0e7b3725fbfb2897bfd18862a8236618d6fd9 || { echo "the checkout is not 1bf0e7b" >&2; exit 1; }
+test -z "$(git -C $W status --short)" || { echo "the checkout is not clean" >&2; exit 1; }
+cd $KIT
+sha256sum -c - <<EOF
+38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d  $HEAD
+d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933  $TRUNK
+b45a0d75c72fdf43bbc38bf1c139dca12b2e92636e3e3035ba497e032e9f8c1f  $SETTINGS
+EOF
+
+{
+    echo "test run started $(date -u '+%F %T') UTC, $(hostname), commit $(git -C $W rev-parse HEAD)"
+    $LOCKS nice -n 15 taskset -c 4-7,12-15 bash -c "
+        set -e
+        echo \"locks A C held from \$(date -u '+%T') UTC\"
+        $V -m predecoder.evaluate --head $HEAD --trunk $TRUNK --data $DATA --out $T/logits_test_p$P \
+            --device cpu --threads 8 --time-shots 200 --final
+        echo \"logits done \$(date -u '+%T') UTC\"
+        $V -m predecoder.compare --data $DATA --logits $T/logits_test_p$P --settings $SETTINGS \
+            --arms fresh head --workers 8 --out $T/compare_test_p$P --final
+        echo \"compare done \$(date -u '+%T') UTC\"
+    "
+    echo "test run ended $(date -u '+%F %T') UTC"
+} 2>&1 | tee -a $LOG
+

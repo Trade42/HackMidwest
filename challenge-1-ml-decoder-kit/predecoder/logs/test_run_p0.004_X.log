@@ -1,0 +1,36 @@
+/home/sal/hackMidwest/orchestration/scratch/predecoder/test-run-x.sh: line 47: hostname: command not found
+test run started 2026-11-22 14:24:26 UTC, , commit 1bf0e7b3725fbfb2897bfd18862a8236618d6fd9
+locks A B C held from 14:31:33 UTC
+test_X.npz: 10000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/test-run/logits_test_p0.004/logits.npy (624 s in batches of 32 on cpu)
+network + head, one shot at a time on cpu (12 threads), 200 shots: mean 42.4 ms, median 30.7 ms, p99 268.8 ms; batch one against batched: largest logit gap 0.00e+00
+the head's probabilities sum to 47.1 per shot (the kit's priors: 47.3)
+logits done 14:42:14 UTC
+test_X.npz: 10000 shots, p=0.004, arms ['fresh', 'head']; head priors {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}; 200 tasks to run in 12 processes (16 CPUs here, luminaty)
+  10 of 200 tasks done (fresh from shot 500), 75 s
+  20 of 200 tasks done (fresh from shot 1900), 147 s
+  30 of 200 tasks done (fresh from shot 3000), 195 s
+  40 of 200 tasks done (fresh from shot 4200), 260 s
+  50 of 200 tasks done (fresh from shot 4800), 308 s
+  60 of 200 tasks done (fresh from shot 6000), 367 s
+  70 of 200 tasks done (fresh from shot 6400), 426 s
+  80 of 200 tasks done (fresh from shot 8100), 485 s
+  90 of 200 tasks done (fresh from shot 8900), 529 s
+  100 of 200 tasks done (fresh from shot 8000), 557 s
+  110 of 200 tasks done (head from shot 200), 578 s
+  120 of 200 tasks done (head from shot 2000), 598 s
+  130 of 200 tasks done (head from shot 3000), 614 s
+  140 of 200 tasks done (head from shot 3500), 637 s
+  150 of 200 tasks done (head from shot 5200), 653 s
+  160 of 200 tasks done (head from shot 6200), 670 s
+  170 of 200 tasks done (head from shot 7600), 694 s
+  180 of 200 tasks done (head from shot 8400), 717 s
+  190 of 200 tasks done (head from shot 8500), 734 s
+  200 of 200 tasks done (head from shot 9900), 759 s
+relay-BP at the kit's settings; 759 s. Time per shot: build + decode in these worker processes, plus the network and head (42.4 ms mean, cpu, from predecoder.evaluate)
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+fresh         39    0.0039 [0.0029, 0.0053]          13   1312       514     17.0     574.8    591.8   11586
+head          15    0.0015 [0.0009, 0.0025]          12    297       167     16.4     176.2    235.0    1772
+paired head against fresh: both fail 12, only head 3, only fresh 27, exact two-sided p = 8.43e-06
+kill line (head against fresh: fewer failures, paired, p < 0.05): PASSED
+compare done 14:54:54 UTC
+test run ended 2026-11-22 14:54:54 UTC

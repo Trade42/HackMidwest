@@ -5,3 +5,6 @@ train_X.npz: 20000 shots, p=0.004, arms ['fresh']; head priors {'mode': 'linear'
   20 of 200 tasks done (fresh from shot 1900), 116 s
   30 of 200 tasks done (fresh from shot 3100), 145 s
   40 of 200 tasks done (fresh from shot 4100), 175 s
+  50 of 200 tasks done (fresh from shot 4800), 198 s
+  60 of 200 tasks done (fresh from shot 5900), 225 s
+  70 of 200 tasks done (fresh from shot 6900), 254 s

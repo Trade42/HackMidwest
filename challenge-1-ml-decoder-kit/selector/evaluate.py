@@ -162,6 +162,18 @@ def pairs(x, z, out=print):
             both, only_sel, only_other, p_value = paired_test(table["selector"]["pair_failed"], table[key]["pair_failed"])
             paired[key] = {"both": both, "only_selector": only_sel, "only_other": only_other, "p": p_value}
             out(f"    against {key:3s}: {both:4d} {only_sel:4d} {only_other:4d}   p = {p_value:.3g}")
+    if "T" in table:
+        out("  the other rows against TCBP-JOBS alone, on pairs: both fail, only the row fails, only T fails, exact two-sided p")
+        for key in ("f", "gw"):
+            if key in table:
+                both, only_row, only_t, p_value = paired_test(table[key]["pair_failed"], table["T"]["pair_failed"])
+                paired[f"{key}_against_T"] = {"both": both, "only_row": only_row, "only_T": only_t, "p": p_value}
+                out(f"    {key:3s} against T: {both:4d} {only_row:4d} {only_t:4d}   p = {p_value:.3g}")
+        both, only_sel, only_t, p_value = paired_test(np.concatenate([x["failed"], z["failed"]]), np.concatenate([x["failed_T"], z["failed_T"]]))
+        paired["per_shot_X_and_Z_against_T"] = {"both": both, "only_selector": only_sel, "only_T": only_t, "p": p_value}
+        out(f"  per shot, X and Z shots together ({2 * len(x['failed'])} shots), the selector against T: {both} {only_sel} {only_t}   p = {p_value:.3g}")
+        doubles = {key: int((x[f"failed_{key}"] & z[f"failed_{key}"]).sum()) for key in ("selector", "T")}
+        out(f"  pairs where both shots fail: the selector {doubles['selector']}, T {doubles['T']}")
     if "T" in paired:
         win = table["selector"]["failed_pairs"] < table["T"]["failed_pairs"] and paired["T"]["p"] < 0.05
         out(f"  fewer failed pairs than TCBP-JOBS alone, paired p < 0.05: {'YES' if win else 'NO'}"

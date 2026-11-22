@@ -1,0 +1,84 @@
+Sun Nov 22 07:40:18 UTC 2026
+checkout: 650f7ae server-jobs: ctl 060, the loss tracker's replication on a second seed
+{"dataset": "/home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz", "sha256": "07c2f43737bdd07f612669432094b7bd2614fc13614ccabff640c28f4dd29c2e", "basis": "X", "p": 0.004, "s": 0.001, "shots": 4000, "seed": 7310, "lost_data_atoms_per_shot": 10.076, "check_heralds_per_shot": 10.337, "sample_seconds": 6.5}
+{"data": "data.npz", "data_sha256": "07c2f43737bdd07f612669432094b7bd2614fc13614ccabff640c28f4dd29c2e", "data_seed": 7310, "basis": "X", "p": 0.004, "s": 0.001, "shots": 4000, "tables": "loss_tracker/tables/X_p0.004_s1e-3.npz", "tables_sha256": "d915ce275e58caa08d4b8e569502c894fb18a2b0223b534344a8be1154c30597", "mode": "coupled", "sweeps": 1, "order": 1, "explain": true, "flagged_data_atoms": 40303, "out": "/home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz.tmp.npz", "seconds": 10.4, "ms_per_shot_one_process": 2.61}
+Dataset data.npz (seed 7310), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| tracker | 40303 | 0.508 | 0.793 | 0.380 | -1.316 | +0.15 |
+
+Kill line (version `tracker`): losses of rounds 1 to 9 within one round of the truth: 0.779 of 30611 (rounds 2 to 10: 0.772 of 30346). The line is 0.5.
+
+By true loss round (version `tracker`):
+
+| true round | atoms | most probable round is the true one | within one round (95% Wilson) | mean P(true round) | mean P(within one) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| 1 | 3474 | 0.632 | 0.831 (0.819–0.843) | 0.553 | 0.779 | +0.75 |
+| 2 | 3454 | 0.510 | 0.844 (0.831–0.856) | 0.405 | 0.807 | +0.56 |
+| 3 | 3480 | 0.488 | 0.784 (0.771–0.798) | 0.364 | 0.714 | +0.45 |
+| 4 | 3481 | 0.465 | 0.772 (0.758–0.786) | 0.347 | 0.682 | +0.36 |
+| 5 | 3419 | 0.474 | 0.764 (0.750–0.778) | 0.344 | 0.673 | +0.27 |
+| 6 | 3384 | 0.477 | 0.762 (0.747–0.776) | 0.337 | 0.658 | +0.20 |
+| 7 | 3365 | 0.464 | 0.748 (0.733–0.762) | 0.333 | 0.654 | +0.15 |
+| 8 | 3217 | 0.457 | 0.755 (0.740–0.770) | 0.329 | 0.657 | +0.07 |
+| 9 | 3337 | 0.457 | 0.742 (0.727–0.757) | 0.327 | 0.658 | -0.02 |
+| 10 | 3209 | 0.470 | 0.777 (0.762–0.791) | 0.346 | 0.694 | -0.13 |
+| 11 | 3190 | 0.479 | 0.871 (0.859–0.882) | 0.366 | 0.777 | -0.33 |
+| 12 | 3293 | 0.723 | 0.870 (0.858–0.881) | 0.508 | 0.740 | -0.62 |
+
+By what the atom shares (from the heralds alone):
+
+| group | share of the flagged atoms | atoms | true round | within one round | mean log P(true round) |
+|---|---|---|---|---|---|
+| shares no check with another flagged data atom | 0.218 | 8767 | 0.531 | 0.813 | -1.242 |
+| shares an X check only | 0.120 | 4841 | 0.506 | 0.793 | -1.329 |
+| shares a Z check only | 0.123 | 4938 | 0.526 | 0.799 | -1.290 |
+| shares X and Z checks | 0.540 | 21757 | 0.496 | 0.784 | -1.348 |
+| alone, and none of its 6 check atoms was ever flagged | 0.143 | 5757 | 0.546 | 0.825 | -1.204 |
+
+Reliability of the round posterior, every (atom, round) pair (expected calibration error 0.0024):
+
+| posterior between | pairs | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.00 and 0.02 | 286756 | 0.003 | 0.004 |
+| 0.02 and 0.05 | 48259 | 0.033 | 0.036 |
+| 0.05 and 0.10 | 38895 | 0.072 | 0.075 |
+| 0.10 and 0.20 | 38870 | 0.144 | 0.142 |
+| 0.20 and 0.30 | 24544 | 0.246 | 0.248 |
+| 0.30 and 0.40 | 15539 | 0.348 | 0.345 |
+| 0.40 and 0.50 | 11043 | 0.447 | 0.437 |
+| 0.50 and 0.60 | 8072 | 0.547 | 0.537 |
+| 0.60 and 0.70 | 5455 | 0.646 | 0.630 |
+| 0.70 and 0.80 | 2999 | 0.744 | 0.725 |
+| 0.80 and 0.90 | 1871 | 0.850 | 0.800 |
+| 0.90 and 1.00 | 1333 | 0.945 | 0.917 |
+
+Reliability of the most probable round (expected calibration error 0.0131):
+
+| its posterior between | atoms | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.10 and 0.20 | 134 | 0.184 | 0.134 |
+| 0.20 and 0.30 | 2731 | 0.265 | 0.267 |
+| 0.30 and 0.40 | 7739 | 0.355 | 0.350 |
+| 0.40 and 0.50 | 9969 | 0.449 | 0.438 |
+| 0.50 and 0.60 | 8072 | 0.547 | 0.537 |
+| 0.60 and 0.70 | 5455 | 0.646 | 0.630 |
+| 0.70 and 0.80 | 2999 | 0.744 | 0.725 |
+| 0.80 and 0.90 | 1871 | 0.850 | 0.800 |
+| 0.90 and 1.00 | 1333 | 0.945 | 0.917 |
+
+Temperature on the evidence (1 = as fitted; the tracker alone, before any decoding):
+
+| temperature | mean log P(true round) | calibration error of the most probable round |
+|---|---|---|
+| 0.7 | -1.4119 | 0.1219 |
+| 0.85 | -1.3394 | 0.0624 |
+| 1.0 | -1.3155 | 0.0131 |
+| 1.25 | -1.3262 | 0.0528 |
+| 1.5 | -1.3632 | 0.1030 |
+| 2.0 | -1.4554 | 0.1707 |
+| 3.0 | -1.6221 | 0.2446 |
+
+For scale, the uniform guess: mean P(true round) 0.083, mean log P -2.485.
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 0..500 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz

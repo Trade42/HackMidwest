@@ -251,11 +251,13 @@ believes, instead of choosing among finished answers. The head is ours; relay-BP
   priors (only the head's <!--f:pregate_only_H-->6<!--/f--> against <!--f:pregate_only_fresh-->12<!--/f-->, exact p = <!--f:pregate_p-->0.24<!--/f-->): not a significant gain.
 - **One run on the test shots at p = 0.005, X memory, on Sal's yes.** It was registered before any p = 0.005 row of
   ours existed, run once, and confirmed by the test audit. It is a **secondary result**: chosen after the gate failed,
-  X memory only, accuracy only, and not a pair score, because Z memory has no head yet. On the 10,000 test X shots,
+  X memory only, accuracy only, and not a pair score, because <!--f:pre_z_reason-->Z memory has no result yet<!--/f-->. On the 10,000 test X shots,
   relay-BP with the head's priors fails <!--f:pre5X_H-->151<!--/f--> against <!--f:pre5X_fresh-->433<!--/f--> with the kit's priors, built the same way
   (only the head's <!--f:pre5X_vs_fresh_only_H-->26<!--/f--> against <!--f:pre5X_vs_fresh_only_other-->308<!--/f-->, exact p = <!--f:pre5X_vs_fresh_p-->2e-62<!--/f-->). That is <!--f:pre5X_ratio-->2.9<!--/f--> times fewer
   failures, with <!--f:pre5X_it_ratio-->3.4<!--/f--> times fewer BP iterations. On the same X shots, TCBP-JOBS fails <!--f:pre5X_T-->186<!--/f--> (only the
   head's <!--f:pre5X_vs_T_only_H-->61<!--/f--> against <!--f:pre5X_vs_T_only_other-->96<!--/f-->, exact p = <!--f:pre5X_vs_T_p-->0.006<!--/f-->), and relay-BP's timed row fails <!--f:pre5X_R-->432<!--/f-->.
+- **The registered extension, run after the p = 0.005 X test result** (`predecoder/logs/extension_registered_spec.md`,
+  written before any of its numbers existed). <!--f:pre_extension-->The registered extension (X at p = 0.004 and 0.003, Z at p = 0.005) has not landed yet.<!--/f-->
 - **Not held out: a fallback rule designed after that result.** The rule is simple: take relay-BP with the head's
   priors where that relay-BP converged (its own success flag, no truth), else take TCBP-JOBS. It was Sal's idea,
   prompted by these same test shots, so **its X number is post hoc, not held out**. It was frozen on the validation

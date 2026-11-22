@@ -1951,6 +1951,16 @@ def predecoder_table(measured):
         fact(f"{n}_it_fresh", f"{arms['fresh']['mean_iterations']:,.0f}", source)
         fact(f"{n}_ratio", f"{arms['fresh']['failures'] / arms['head']['failures']:.1f}" if arms["head"]["failures"] else None, source)
         fact(f"{n}_it_ratio", f"{arms['fresh']['mean_iterations'] / arms['head']['mean_iterations']:.1f}", source)
+    landed = [(p, basis) for p, basis, mark in PREDECODER_TEST if mark and FACTS[f"pre{p[-1]}{basis}_H"][0] != NOT_MEASURED]
+    fact("pre_extension", " ".join(
+        f"On the {basis} test shots at p = {p}, relay-BP with the head's "
+        f"priors fails {FACTS[f'pre{p[-1]}{basis}_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_fresh'][0]} with the kit's priors (only the head's "
+        f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_fresh_only_other'][0]}, exact p = "
+        f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_p'][0]}), and TCBP-JOBS fails {FACTS[f'pre{p[-1]}{basis}_T'][0]} (only the head's "
+        f"{FACTS[f'pre{p[-1]}{basis}_vs_T_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_T_only_other'][0]}, exact p = {FACTS[f'pre{p[-1]}{basis}_vs_T_p'][0]})."
+        for p, basis in landed) or "The registered extension (X at p = 0.004 and 0.003, Z at p = 0.005) has not landed yet.", source)
+    fact("pre_z_reason", "the Z run of the registered extension is a later run, shown below" if ("0.005", "Z") in landed
+         else "Z memory has no result yet", source)
     fallback_lines = []
     for p, basis, what in PREDECODER_FALLBACK:
         n = f"fb{p[-1]}{basis}"

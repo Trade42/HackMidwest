@@ -564,6 +564,8 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pre5Z_vs_fresh_only_other` | not measured | `tables/test_predecoder.md` |
 | `pre5Z_vs_fresh_p` | not measured | `tables/test_predecoder.md` |
 | `pre_columns` | 8,784 | `tables/test_predecoder.md` |
+| `pre_extension` | The registered extension (X at p = 0.004 and 0.003, Z at p = 0.005) has not landed yet. | `tables/test_predecoder.md` |
+| `pre_z_reason` | Z memory has no result yet | `tables/test_predecoder.md` |
 | `pregate_H` | 14 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_fresh` | 20 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_only_H` | 6 | `data/exploration/predecoder/compare_validation_X_summary.json` |

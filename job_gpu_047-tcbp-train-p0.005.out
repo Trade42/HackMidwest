@@ -5,3 +5,5 @@ Sun Nov 22 08:18:40 UTC 2026
 tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}, mode batch; 2 shot file(s)
 train_X.npz: X memory, p = 0.005, 20000 shots, data sha256 cfa08c9113b77521f7ba249ddffc0fb94cda783989066dbfa22b380d1747b26b
   H is 936 x 8784; building the decoder ...
+  model fitted in 117.5 s, decoder built in 58 ms
+WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 while decoding 4096 syndromes. Set bp_batch_size > 1 at construction to decode syndromes in parallel.

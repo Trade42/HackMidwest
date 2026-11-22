@@ -1,0 +1,2 @@
+si1000-p0.006_X_kitformat_p0.006.npz: 3000 shots, logits of 8784 columns in /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2b-0a780d7/logits/si1000-p0.006/logits.npy (9 s in batches of 32 on cuda)
+the head's probabilities sum to 82.9 per shot (the kit's priors: 70.7)

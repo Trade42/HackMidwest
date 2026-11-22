@@ -151,6 +151,14 @@ checking their validation reports. The model JSON records training/validation
 dataset hashes, matrix identity, feature schema, and threshold. It cannot load for
 another basis or p.
 
+Frozen router models also carry `matrix_semantic_sha256` for cross-platform
+evaluation. The original `matrix_sha256` remains an exact byte fingerprint.
+The portable fingerprint keeps the ordered binary H and L columns, canonicalizes
+sparse index widths, and records priors rounded to 14 decimal places. This
+accepts the observed Mac/Linux floating-point differences in the Gross DEM
+priors without accepting reordered mechanisms or materially different priors.
+The previously frozen router weights and validation thresholds are unchanged.
+
 A measured validation-only risk/latency curve can be produced later with, for
 example, `./reproduce_eval.sh router-sweep 0.004 0.1 0.2 0.3` followed by
 `.venv312/bin/python -m evaluation.plot_results results/router_p0.004/validation_sweep/summary.csv --out results/router_p0.004/plots`.

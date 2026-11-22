@@ -1,0 +1,60 @@
+new run | seed 1 | trunk C:\Users\salav\Salavat\hackMidwest\runs\cascade_X_s1\checkpoint.pt (sha256 d8d1c70f55223330..., step 120000, X memory, width 128, depth 8, reads all detectors)
+problem: 35064 mechanisms of the full model onto 8784 columns of the kit's basis problem (936 detectors); merged priors equal the kit's to 4.9e-17
+noise: the neutral-atom-shaped model at factors [0.8] (the levels below are factors, not p); the head's base prior is the model's matched vector, sums 87.41, sha256 {'0.8': '181d3c74ffe422d23864d5c7b45a2b68ec209adebe494c21259554e6178d4b7e'}; merged mechanism priors equal it to 4.9e-17
+head: 17617 parameters, 122 column shapes | batch 64, training p [0.8], pos-weight 1, peak lr 0.001, trunk frozen
+commit f4948928e232b742bd6a3a8096f42d2aa7b956f7 | torch 2.14.1+cu130 | device cuda, trunk mixed precision fp16 | start-up 8 s
+step 0 of 20000 | no training yet | head learning rate 2.00e-06
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.043334  kit priors 0.043334  (+0.0% of the kit's)  | fired per shot 87.4, of them above 0.5 0.0; not fired but above 0.5 0.00 | calibration error 1.97e-05
+    calibration: [0,0.001) n=2628000 q=0.0001 fired=0.0001 | [0.001,0.003) n=396000 q=0.0018 fired=0.0018 | [0.003,0.01) n=36000 q=0.0078 fired=0.0079 | [0.01,0.03) n=900000 q=0.0188 fired=0.0188 | [0.03,0.1) n=432000 q=0.0591 fired=0.0590
+step 2000 of 20000 | mean training loss 0.013566 | head learning rate 9.78e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010713  kit priors 0.043334  (+75.3% of the kit's)  | fired per shot 87.4, of them above 0.5 63.9; not fired but above 0.5 8.09 | calibration error 2.68e-04
+    calibration: [0,0.001) n=3981716 q=0.0001 fired=0.0001 | [0.001,0.003) n=145528 q=0.0018 fired=0.0018 | [0.003,0.01) n=102974 q=0.0055 fired=0.0066 | [0.01,0.03) n=58445 q=0.0175 fired=0.0193 | [0.03,0.1) n=38600 q=0.0548 fired=0.0589 | [0.1,0.3) n=20759 q=0.1760 fired=0.1886 | [0.3,0.5) n=8000 q=0.3896 fired=0.4114 | [0.5,0.7) n=5680 q=0.6002 fired=0.6335 | [0.7,0.9) n=7406 q=0.8141 fired=0.8280 | [0.9,0.97) n=7598 q=0.9416 fired=0.9370 | [0.97,1) n=15294 q=0.9882 fired=0.9864
+speed: 871 shots/s, 0.073 s per step, report 0.5 s, peak GPU memory 1.18 GB
+step 4000 of 20000 | mean training loss 0.010389 | head learning rate 9.14e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010399  kit priors 0.043334  (+76.0% of the kit's)  | fired per shot 87.4, of them above 0.5 65.2; not fired but above 0.5 8.50 | calibration error 1.51e-04
+    calibration: [0,0.001) n=3955595 q=0.0001 fired=0.0000 | [0.001,0.003) n=156359 q=0.0018 fired=0.0016 | [0.003,0.01) n=112457 q=0.0055 fired=0.0053 | [0.01,0.03) n=62647 q=0.0173 fired=0.0170 | [0.03,0.1) n=39299 q=0.0549 fired=0.0536 | [0.1,0.3) n=20655 q=0.1754 fired=0.1768 | [0.3,0.5) n=8157 q=0.3921 fired=0.4016 | [0.5,0.7) n=6134 q=0.5976 fired=0.6278 | [0.7,0.9) n=8035 q=0.8140 fired=0.8326 | [0.9,0.97) n=7735 q=0.9408 fired=0.9432 | [0.97,1) n=14927 q=0.9884 fired=0.9876
+speed: 871 shots/s, 0.074 s per step, report 0.5 s, peak GPU memory 1.18 GB
+step 6000 of 20000 | mean training loss 0.010153 | head learning rate 8.15e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010244  kit priors 0.043334  (+76.4% of the kit's)  | fired per shot 87.4, of them above 0.5 65.7; not fired but above 0.5 8.64 | calibration error 1.02e-04
+    calibration: [0,0.001) n=3971749 q=0.0001 fired=0.0000 | [0.001,0.003) n=147614 q=0.0018 fired=0.0017 | [0.003,0.01) n=107051 q=0.0056 fired=0.0051 | [0.01,0.03) n=60695 q=0.0174 fired=0.0168 | [0.03,0.1) n=39528 q=0.0550 fired=0.0531 | [0.1,0.3) n=20093 q=0.1753 fired=0.1760 | [0.3,0.5) n=8089 q=0.3936 fired=0.3951 | [0.5,0.7) n=5794 q=0.5972 fired=0.6146 | [0.7,0.9) n=7762 q=0.8139 fired=0.8208 | [0.9,0.97) n=7455 q=0.9404 fired=0.9328 | [0.97,1) n=16170 q=0.9887 fired=0.9880
+speed: 871 shots/s, 0.073 s per step, report 0.5 s, peak GPU memory 1.18 GB
+step 8000 of 20000 | mean training loss 0.010063 | head learning rate 6.89e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010186  kit priors 0.043334  (+76.5% of the kit's)  | fired per shot 87.4, of them above 0.5 66.5; not fired but above 0.5 9.20 | calibration error 9.51e-05
+    calibration: [0,0.001) n=3979799 q=0.0001 fired=0.0000 | [0.001,0.003) n=147770 q=0.0018 fired=0.0018 | [0.003,0.01) n=105763 q=0.0055 fired=0.0056 | [0.01,0.03) n=56950 q=0.0174 fired=0.0172 | [0.03,0.1) n=36962 q=0.0550 fired=0.0571 | [0.1,0.3) n=19122 q=0.1762 fired=0.1755 | [0.3,0.5) n=7803 q=0.3916 fired=0.3800 | [0.5,0.7) n=5825 q=0.5993 fired=0.5936 | [0.7,0.9) n=7834 q=0.8124 fired=0.8104 | [0.9,0.97) n=7655 q=0.9416 fired=0.9306 | [0.97,1) n=16517 q=0.9891 fired=0.9869
+speed: 875 shots/s, 0.073 s per step, report 0.5 s, peak GPU memory 1.18 GB
+step 10000 of 20000 | mean training loss 0.010000 | head learning rate 5.50e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010132  kit priors 0.043334  (+76.6% of the kit's)  | fired per shot 87.4, of them above 0.5 66.1; not fired but above 0.5 8.72 | calibration error 1.26e-04
+    calibration: [0,0.001) n=3966526 q=0.0001 fired=0.0000 | [0.001,0.003) n=151072 q=0.0018 fired=0.0017 | [0.003,0.01) n=109946 q=0.0055 fired=0.0050 | [0.01,0.03) n=59562 q=0.0174 fired=0.0165 | [0.03,0.1) n=39235 q=0.0551 fired=0.0529 | [0.1,0.3) n=20201 q=0.1759 fired=0.1732 | [0.3,0.5) n=8060 q=0.3921 fired=0.3895 | [0.5,0.7) n=5880 q=0.5992 fired=0.6094 | [0.7,0.9) n=8085 q=0.8130 fired=0.8256 | [0.9,0.97) n=7886 q=0.9416 fired=0.9389 | [0.97,1) n=15547 q=0.9883 fired=0.9891
+speed: 873 shots/s, 0.073 s per step, report 0.5 s, peak GPU memory 1.18 GB
+step 12000 of 20000 | mean training loss 0.009962 | head learning rate 4.11e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010098  kit priors 0.043334  (+76.7% of the kit's)  | fired per shot 87.4, of them above 0.5 66.1; not fired but above 0.5 8.64 | calibration error 9.37e-05
+    calibration: [0,0.001) n=3991354 q=0.0001 fired=0.0000 | [0.001,0.003) n=141006 q=0.0018 fired=0.0020 | [0.003,0.01) n=102194 q=0.0056 fired=0.0056 | [0.01,0.03) n=55813 q=0.0174 fired=0.0174 | [0.03,0.1) n=37114 q=0.0551 fired=0.0567 | [0.1,0.3) n=19303 q=0.1754 fired=0.1773 | [0.3,0.5) n=7857 q=0.3903 fired=0.3977 | [0.5,0.7) n=5682 q=0.5992 fired=0.6119 | [0.7,0.9) n=7615 q=0.8138 fired=0.8151 | [0.9,0.97) n=7191 q=0.9403 fired=0.9305 | [0.97,1) n=16871 q=0.9901 fired=0.9877
+speed: 872 shots/s, 0.073 s per step, report 0.5 s, peak GPU memory 1.18 GB
+step 14000 of 20000 | mean training loss 0.009938 | head learning rate 2.86e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010072  kit priors 0.043334  (+76.8% of the kit's)  | fired per shot 87.4, of them above 0.5 66.1; not fired but above 0.5 8.60 | calibration error 9.05e-05
+    calibration: [0,0.001) n=3985621 q=0.0001 fired=0.0000 | [0.001,0.003) n=143956 q=0.0018 fired=0.0019 | [0.003,0.01) n=103629 q=0.0056 fired=0.0053 | [0.01,0.03) n=56571 q=0.0173 fired=0.0170 | [0.03,0.1) n=37412 q=0.0552 fired=0.0564 | [0.1,0.3) n=19344 q=0.1758 fired=0.1745 | [0.3,0.5) n=8134 q=0.3918 fired=0.3943 | [0.5,0.7) n=5930 q=0.5991 fired=0.6145 | [0.7,0.9) n=8147 q=0.8137 fired=0.8290 | [0.9,0.97) n=7582 q=0.9412 fired=0.9408 | [0.97,1) n=15674 q=0.9887 fired=0.9889
+speed: 871 shots/s, 0.074 s per step, report 0.5 s, peak GPU memory 1.18 GB
+step 16000 of 20000 | mean training loss 0.009923 | head learning rate 1.86e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010044  kit priors 0.043334  (+76.8% of the kit's)  | fired per shot 87.4, of them above 0.5 66.4; not fired but above 0.5 8.91 | calibration error 6.84e-05
+    calibration: [0,0.001) n=3996407 q=0.0001 fired=0.0000 | [0.001,0.003) n=136932 q=0.0018 fired=0.0020 | [0.003,0.01) n=101035 q=0.0056 fired=0.0056 | [0.01,0.03) n=55413 q=0.0174 fired=0.0170 | [0.03,0.1) n=37116 q=0.0552 fired=0.0559 | [0.1,0.3) n=19281 q=0.1753 fired=0.1707 | [0.3,0.5) n=8149 q=0.3911 fired=0.3866 | [0.5,0.7) n=5894 q=0.5989 fired=0.5996 | [0.7,0.9) n=8093 q=0.8138 fired=0.8211 | [0.9,0.97) n=7757 q=0.9410 fired=0.9392 | [0.97,1) n=15923 q=0.9888 fired=0.9891
+speed: 871 shots/s, 0.074 s per step, report 0.5 s, peak GPU memory 1.18 GB
+step 18000 of 20000 | mean training loss 0.009890 | head learning rate 1.22e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010035  kit priors 0.043334  (+76.8% of the kit's)  | fired per shot 87.4, of them above 0.5 66.5; not fired but above 0.5 9.01 | calibration error 8.33e-05
+    calibration: [0,0.001) n=4007707 q=0.0001 fired=0.0001 | [0.001,0.003) n=133159 q=0.0018 fired=0.0021 | [0.003,0.01) n=96972 q=0.0056 fired=0.0059 | [0.01,0.03) n=53383 q=0.0174 fired=0.0179 | [0.03,0.1) n=36042 q=0.0553 fired=0.0570 | [0.1,0.3) n=19044 q=0.1757 fired=0.1727 | [0.3,0.5) n=7934 q=0.3908 fired=0.3896 | [0.5,0.7) n=5787 q=0.5982 fired=0.5913 | [0.7,0.9) n=7743 q=0.8130 fired=0.8131 | [0.9,0.97) n=7214 q=0.9405 fired=0.9332 | [0.97,1) n=17015 q=0.9898 fired=0.9877
+speed: 870 shots/s, 0.074 s per step, report 0.5 s, peak GPU memory 1.18 GB
+step 20000 of 20000 | mean training loss 0.009869 | head learning rate 1.00e-04
+  held-out error-model shots (not Stim shots), 500 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.010027  kit priors 0.043334  (+76.9% of the kit's)  | fired per shot 87.4, of them above 0.5 66.4; not fired but above 0.5 8.86 | calibration error 7.96e-05
+    calibration: [0,0.001) n=4000515 q=0.0001 fired=0.0000 | [0.001,0.003) n=137015 q=0.0018 fired=0.0021 | [0.003,0.01) n=99357 q=0.0056 fired=0.0057 | [0.01,0.03) n=54175 q=0.0174 fired=0.0177 | [0.03,0.1) n=36299 q=0.0552 fired=0.0577 | [0.1,0.3) n=18957 q=0.1754 fired=0.1713 | [0.3,0.5) n=8052 q=0.3918 fired=0.3916 | [0.5,0.7) n=5896 q=0.5989 fired=0.5996 | [0.7,0.9) n=8015 q=0.8134 fired=0.8218 | [0.9,0.97) n=7566 q=0.9408 fired=0.9391 | [0.97,1) n=16153 q=0.9890 fired=0.9890
+speed: 870 shots/s, 0.074 s per step, report 0.5 s, peak GPU memory 1.18 GB
+checkpoint: C:\Users\salav\Salavat\hackMidwest\runs\predecoder_X_na0.8_s1\head.pt at step 20000 (sha256 b42d71d584c95da84aa4f086c8c23fa49d846f559407ae11fd7a4d89abf091fa)

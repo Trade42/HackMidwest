@@ -189,4 +189,7 @@ OPERATING_PAIRED = {"0.004": "not a significant difference", "0.005": "a signifi
 # TCBP-JOBS given the head's priors per shot (branch predecoder-tcbp): designed after the test results were seen, on a separate branch.
 # Its validation score (exploration shots) and the slots of its test rows, filled only from files when they land.
 PTCBP_LABEL = "designed after the test results were seen; formerly a separate branch (predecoder-tcbp)"
-PTCBP_TEST = [("0.005", "X"), ("0.004", "X"), ("0.003", "X"), ("0.005", "Z")]
+PTCBP_TEST = [("0.005", "X"), ("0.004", "X"), ("0.003", "X"), ("0.005", "Z"), ("0.004", "Z"), ("0.003", "Z")]
+# Its knobs were fitted on X at p = 0.005 only; at p = 0.004 and 0.003 (X in run 2, Z in run 4, branch tcbp-zlowp) they were applied
+# unchanged, with no validation there. Every number of those p carries this note beside PTCBP_LABEL.
+PTCBP_LOWP = "no validation at these p"

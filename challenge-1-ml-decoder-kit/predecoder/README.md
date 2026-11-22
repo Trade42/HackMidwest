@@ -71,7 +71,9 @@ Details, commands and logs for every number are under "Numbers".
 | `fallback.py` | the fallback rule: the head's relay-BP where it converges, TCBP-JOBS's answer where it does not |
 | `pair.py` | the kit's pair score (an X shot and a Z shot) for the head, the rule, TCBP-JOBS and relay-BP |
 | `oracle.py` | the ceiling: relay-BP told the true faults (a diagnostic, never a result) |
+| `noise.py` | the head's training problem on the neutral-atom-shaped noise of `neutral_atom_noise/` (`train.py --noise-factor`): that model's shots, mapped onto the same kit columns, with its matched priors as the head's base |
 | `test_predecoder.py` | tests |
+| `test_noise.py` | tests of `noise.py`, `train.py --noise-factor` and `evaluate.py --base-priors` |
 
 Run every command from `challenge-1-ml-decoder-kit/`.
 

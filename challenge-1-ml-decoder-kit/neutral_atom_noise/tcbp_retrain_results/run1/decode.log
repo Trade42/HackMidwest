@@ -1,0 +1,16 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+plan /home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/plan.json: tasks [('f0.8-seed4800', ['m', 'h', 'r'])]; decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs; head knobs {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, cap 0.5; stop at 2026-11-22T18:48:00Z; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
+  model fitted in 61.5 s (one model, shared by every task); GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  f0.8-seed4800 block 0-99 done, 79 s; failures so far m 1, h 18, r 3 of 100
+  f0.8-seed4800 block 100-199 done, 96 s; failures so far m 1, h 31, r 6 of 200
+  f0.8-seed4800 block 200-299 done, 113 s; failures so far m 3, h 40, r 10 of 300
+  f0.8-seed4800 block 300-399 done, 130 s; failures so far m 3, h 51, r 13 of 400
+  f0.8-seed4800 block 400-499 done, 148 s; failures so far m 4, h 64, r 14 of 500
+  f0.8-seed4800 block 500-599 done, 166 s; failures so far m 5, h 75, r 18 of 600
+  f0.8-seed4800 block 600-699 done, 183 s; failures so far m 5, h 87, r 19 of 700
+  f0.8-seed4800 block 700-799 done, 200 s; failures so far m 6, h 99, r 23 of 800
+  f0.8-seed4800 block 800-899 done, 217 s; failures so far m 7, h 108, r 25 of 900
+  f0.8-seed4800 block 900-999 done, 233 s; failures so far m 8, h 119, r 27 of 1000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-retrain/out-163ff2b/decode/f0.8-seed4800/per_shot.npz: 1000 shots scored
+done; 233 s

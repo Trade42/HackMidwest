@@ -31,5 +31,6 @@ Rules the scripts enforce:
   per pair), and the run stops if that disagrees with the evaluator's own summary.
 - Test shots and exploration shots never share a table, with three exceptions, each of which names the shots of every number:
   `tables/operating_rule.md` and `tables/master_comparison.md` put test-shot failures beside the predecoder's time on a
-  validation sample, and `tables/predecoder_tcbp.md` holds the TCBP version's validation score and its network's time on
-  validation shots beside its test rows.
+  validation sample (and, in the operating rule, the TCBP version's time after its speed work, on validation shots), and
+  `tables/predecoder_tcbp.md` holds the TCBP version's validation score, its network's time, its time after the speed work
+  and its fast path (all on validation shots), and its retrained head (on its own simulated shots) beside its test rows.

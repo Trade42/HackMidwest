@@ -1,0 +1,81 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/tcbp-speed-fba1ca0/challenge-1-ml-decoder-kit/data/p0.005/validation_X.npz",
+  "sha256": "25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312",
+  "basis": "X",
+  "p": 0.005,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 1000,
+ "torch": "2.15.0+cu132",
+ "device": "cuda",
+ "gpu": "NVIDIA A100-SXM4-80GB MIG 2g.20gb",
+ "arms": {
+  "eager": {
+   "ms": {
+    "mean": 8.293542387662455,
+    "median": 8.259702997747809,
+    "p99": 8.77106141182594
+   },
+   "notes": {
+    "product": "sparse"
+   },
+   "against_eager": {
+    "largest_gap_float32": 0.0,
+    "rows_differ_float32": 0,
+    "rows_differ_float16": 0,
+    "entries_differ_float16": 0
+   }
+  },
+  "cached": {
+   "ms": {
+    "mean": 8.21804397215601,
+    "median": 8.151354501023889,
+    "p99": 9.088279020506889
+   },
+   "notes": {
+    "product": "sparse"
+   },
+   "against_eager": {
+    "largest_gap_float32": 0.0,
+    "rows_differ_float32": 0,
+    "rows_differ_float16": 0,
+    "entries_differ_float16": 0
+   }
+  },
+  "dense": {
+   "ms": {
+    "mean": 8.365676221321337,
+    "median": 8.287740987725556,
+    "p99": 9.343839513603598
+   },
+   "notes": {
+    "product": "dense"
+   },
+   "against_eager": {
+    "largest_gap_float32": 5.7220458984375e-06,
+    "rows_differ_float32": 1000,
+    "rows_differ_float16": 145,
+    "entries_differ_float16": 155
+   }
+  },
+  "graph": {
+   "ms": {
+    "mean": 1.7299356530420482,
+    "median": 1.7255429993383586,
+    "p99": 1.7866740934550762
+   },
+   "notes": {
+    "product": "sparse"
+   },
+   "against_eager": {
+    "largest_gap_float32": 0.0,
+    "rows_differ_float32": 0,
+    "rows_differ_float16": 0,
+    "entries_differ_float16": 0
+   }
+  }
+ }
+}

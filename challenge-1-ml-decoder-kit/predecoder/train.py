@@ -29,6 +29,12 @@ report; not Stim shots), per noise strength:
   fired columns  how many really fired per shot, and how many of them the head puts above 0.5;
                  how many that did NOT fire it puts above 0.5
 
+`--noise-factor F` trains on the neutral-atom-shaped noise model of neutral_atom_noise/ at factor F instead
+(predecoder/noise.py): fresh shots from that model's full error model, its mechanisms mapped onto the same kit
+columns, and as the head's base prior the model's own merged prior on those columns (the "matched" vector), in
+place of the kit's priors at p. The levels are then the factors. The checkpoint records the factors and the
+sha256 of each base vector; predecoder.evaluate then needs that vector (--base-priors).
+
 The checkpoint holds the head, its settings, the trunk's file name and sha256 (and the trunk's
 weights only when they were fine-tuned), every report, and the git commit. To stop a run,
 create an empty file named STOP in --out.
@@ -196,7 +202,9 @@ def save(state, path):
 
 
 def load_head(path, device="cpu", trunk_path=None):
-    """(trunk, head, checkpoint) ready to predict. The trunk file must have the sha256 the head was trained on."""
+    """(trunk, head, checkpoint) ready to predict. The trunk file must have the sha256 the head was trained on.
+
+    A head trained with --noise-factor has factors as its levels; its H is the kit's at any p (built at 0.004)."""
     saved = torch.load(path, map_location="cpu", weights_only=True)
     trunk_path = trunk_path or saved["trunk_file"]
     if sha256_of(trunk_path) != saved["trunk_sha256"]:
@@ -204,7 +212,8 @@ def load_head(path, device="cpu", trunk_path=None):
     trunk, trunk_saved = load_decoder(trunk_path, device)
     if saved.get("trunk_state") is not None:
         trunk.load_state_dict(saved["trunk_state"])
-    problem_H, basis_rows = basis_problem(trunk_saved["config"], saved["config"]["p_train"][0])
+    p = 0.004 if saved["config"].get("noise_factors") else saved["config"]["p_train"][0]
+    problem_H, basis_rows = basis_problem(trunk_saved["config"], p)
     head = build_head(problem_H, basis_rows, trunk_saved["config"],
                       **{key: saved["head_config"][key] for key in HEAD_SIZES})
     head.load_state_dict(saved["head"])
@@ -235,6 +244,9 @@ def parse_args(argv=None):
     add("--p-train", type=float, nargs="+", default=[0.004],
         help="training noise strengths, taken in turn, one per step (default 0.004)")
     add("--report-p", type=float, nargs="+", default=None, help="default: the training strengths")
+    add("--noise-factor", type=float, nargs="+", default=None,
+        help="train on the neutral-atom-shaped model at these factors instead of the kit's noise (predecoder/noise.py); "
+             "the levels are then the factors, and --p-train and --report-p are not used")
     add("--report-every", type=int, default=2000)
     add("--report-shots", type=int, default=500)
     add("--snapshot-every", type=int, default=10000)
@@ -277,6 +289,9 @@ def main(argv=None):
         "report_shots": args.report_shots, "snapshot_every": args.snapshot_every, "pos_weight": args.pos_weight,
         "project": args.project, "hidden": args.hidden, "shape_width": args.shape_width,
         "finetune_from_step": args.finetune_from_step, "trunk_lr": args.trunk_lr, "amp": args.amp}
+    if not previous and args.noise_factor:
+        config |= {"noise_factors": list(args.noise_factor), "p_train": list(args.noise_factor),
+                   "report_p": list(args.noise_factor), "noise_model": "neutral_atom_noise.model.neutral_atom(factor)"}
     if previous:
         config["steps"] = args.steps                 # the one setting a resumed run may change: the total length
     trunk_sha = sha256_of(args.trunk)
@@ -288,7 +303,14 @@ def main(argv=None):
         trunk.load_state_dict(previous["trunk_state"])
     for parameter in trunk.parameters():
         parameter.requires_grad_(False)
-    problem = Problem(trunk_saved["config"], config["p_train"] + config["report_p"], device)
+    if config.get("noise_factors"):
+        from predecoder.noise import ModelProblem
+        problem = ModelProblem(trunk_saved["config"], config["noise_factors"], device)
+        bases = {f"{f:g}": problem.base_sha256[f] for f in problem.levels}
+        if config.setdefault("base_sha256", bases) != bases:
+            raise SystemExit("the model's base priors differ from those of the run being resumed")
+    else:
+        problem = Problem(trunk_saved["config"], config["p_train"] + config["report_p"], device)
     torch.manual_seed(config["seed"])
     head = build_head(problem.map.basis_H, problem.map.basis_rows, trunk_saved["config"],
                       **{key: config[key] for key in HEAD_SIZES}).to(device)
@@ -318,6 +340,11 @@ def main(argv=None):
     say(f"problem: {problem.sampler.num_mechanisms} mechanisms of the full model onto {problem.map.num_columns} columns of the "
         f"kit's basis problem ({problem.map.basis_H.shape[0]} detectors); merged priors equal the kit's to "
         f"{problem.map.prior_error:.1e}")
+    if config.get("noise_factors"):
+        say(f"noise: the neutral-atom-shaped model at factors {config['noise_factors']} (the levels below are factors, not p); "
+            f"the head's base prior is the model's matched vector, sums "
+            + ", ".join(f"{problem.base[f].sum():.2f}" for f in problem.levels) + f", sha256 {config['base_sha256']}; "
+            f"merged mechanism priors equal it to {problem.map.prior_error:.1e}")
     say(f"head: {sum(q.numel() for q in head.parameters())} parameters, {head.config['shapes']} column shapes | "
         f"batch {config['batch']}, training p {config['p_train']}, pos-weight {config['pos_weight']:g}, peak lr {config['lr']:g}"
         + (f", trunk trains from step {config['finetune_from_step']} at lr {config['trunk_lr']:g}"

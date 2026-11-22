@@ -1,0 +1,144 @@
+{
+ "summary.json": {
+  "eager": {
+   "ms": {
+    "mean": 8.293542387662455,
+    "median": 8.259702997747809,
+    "p99": 8.77106141182594
+   },
+   "notes": {
+    "product": "sparse"
+   },
+   "against_eager": {
+    "largest_gap_float32": 0.0,
+    "rows_differ_float32": 0,
+    "rows_differ_float16": 0,
+    "entries_differ_float16": 0
+   }
+  },
+  "cached": {
+   "ms": {
+    "mean": 8.21804397215601,
+    "median": 8.151354501023889,
+    "p99": 9.088279020506889
+   },
+   "notes": {
+    "product": "sparse"
+   },
+   "against_eager": {
+    "largest_gap_float32": 0.0,
+    "rows_differ_float32": 0,
+    "rows_differ_float16": 0,
+    "entries_differ_float16": 0
+   }
+  },
+  "dense": {
+   "ms": {
+    "mean": 8.365676221321337,
+    "median": 8.287740987725556,
+    "p99": 9.343839513603598
+   },
+   "notes": {
+    "product": "dense"
+   },
+   "against_eager": {
+    "largest_gap_float32": 5.7220458984375e-06,
+    "rows_differ_float32": 1000,
+    "rows_differ_float16": 145,
+    "entries_differ_float16": 155
+   }
+  },
+  "graph": {
+   "ms": {
+    "mean": 1.7299356530420482,
+    "median": 1.7255429993383586,
+    "p99": 1.7866740934550762
+   },
+   "notes": {
+    "product": "sparse"
+   },
+   "against_eager": {
+    "largest_gap_float32": 0.0,
+    "rows_differ_float32": 0,
+    "rows_differ_float16": 0,
+    "entries_differ_float16": 0
+   }
+  }
+ },
+ "summary_compile.json": {
+  "compile": {
+   "ms": {
+    "mean": 1.7400459195487201,
+    "median": 1.7319495091214776,
+    "p99": 1.9110159168485552
+   },
+   "notes": {
+    "product": "dense",
+    "compile_and_warm_seconds": 25.081153313978575
+   },
+   "against_eager": {
+    "largest_gap_float32": 0.007818222045898438,
+    "rows_differ_float32": 1000,
+    "rows_differ_float16": 831,
+    "entries_differ_float16": 1816
+   }
+  }
+ },
+ "probe": {
+  "candidates": [],
+  "plugin": {
+   "path": "/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/lib/decoder-plugins/libcudaq-qec-nv-qldpc-decoder.so",
+   "exported": {
+    "set_priors": false,
+    "nvqldpc_set_priors": false,
+    "nvqldpc_update_priors": false,
+    "nvqldpc_set_error_rates": false,
+    "nvqldpc_update_error_rates": false,
+    "update_error_rates": false,
+    "set_error_rates": false
+   },
+   "strings": {
+    "set_priors": true,
+    "the JOBS column costs are fixed at construction": true
+   }
+  }
+ },
+ "bp-only (tcbp preset)": {
+  "shots": 2000,
+  "failures": 1163,
+  "wilson95": [
+   0.5597439289065468,
+   0.6029435923816889
+  ],
+  "job3_head_failures": 9,
+  "both": 9,
+  "only_this": 1154,
+  "only_job3_head": 0,
+  "p": 0.0,
+  "bits_differ": 1163,
+  "faults_differ": 1492,
+  "not_reproduced": 1644,
+  "build_ms": 3.4034877492231317,
+  "decode_ms": 0.46470272180158645,
+  "p99_ms": 4.505642824806273
+ },
+ "graph logits": {
+  "shots": 1000,
+  "failures": 3,
+  "wilson95": [
+   0.0010207838732076793,
+   0.008783014121212225
+  ],
+  "job3_head_failures": 3,
+  "both": 3,
+  "only_this": 0,
+  "only_job3_head": 0,
+  "p": 1.0,
+  "bits_differ": 0,
+  "faults_differ": 0,
+  "not_reproduced": 0,
+  "build_ms": 34.17002006585244,
+  "decode_ms": 2.698958676424809,
+  "p99_ms": 48.67717722197994
+ }
+}

@@ -1,0 +1,5 @@
+TCBP-JOBS, head priors per shot                                              1 of 10000  0.0001 [0.0000, 0.0006]
+TCBP-JOBS alone (stored)                                                     2 of 10000  0.0002 [0.0001, 0.0007]
+  TCBP-JOBS, head priors per shot
+    against TCBP-JOBS alone (stored): both 1, only the first 0, only the second 1, exact p = 1
+the head arm's logits rows equal those of /home/sal/hackMidwest/orchestration/scratch/tcbp-zlowp/logits_test_Z_p0.003 on 10000 of 10000 shots

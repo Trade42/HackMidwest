@@ -20,7 +20,7 @@ import pytest
 import scipy.sparse as sp
 
 from evaluation.adapters import Problem, create_session, validate_shot_result
-from hierarchy import candidates, compare, joint_member, rules, select, tcbp_member
+from hierarchy import candidates, compare, ensemble, joint_member, rules, select, tcbp_member
 from hierarchy.plugin import HierarchySession, Network
 from hierarchy.rules import ORDER
 from hierarchy.stages import Candidate, kit_problem, load_shots, sha256_of
@@ -555,3 +555,98 @@ def test_joint_member_decodes_the_listed_shots_and_refuses_a_foreign_selection(t
         joint_member.main([*command, "--shots", str(SHOTS)])
     with pytest.raises(SystemExit, match="--selection .* or --shots"):
         joint_member.main(command)
+
+
+# ---------- ensemble.py ----------
+
+WRONG_C = np.eye(12, dtype=np.uint8)[2]
+# Six shots; the truth is "no bit flipped". Per shot: P1, P2, T, R, and J where joint decoding ran (None: it did not).
+ENSEMBLE_SHOTS = [
+    (RIGHT, RIGHT, RIGHT, WRONG_A, None),           # 0: the always-on members agree; relay-BP is never asked
+    (WRONG_A, WRONG_A, RIGHT, RIGHT, RIGHT),        # 1: both PriorTilt runs agree on a wrong answer; T differs
+    (RIGHT, WRONG_A, WRONG_B, WRONG_B, None),       # 2: all three differ, and the network will prefer answer B
+    (WRONG_A, RIGHT, RIGHT, WRONG_A, WRONG_B),      # 3: a two-to-one split with the right majority
+    (WRONG_A, WRONG_B, WRONG_C, WRONG_A, RIGHT),    # 4: all three differ and are wrong; only J is right
+    (RIGHT, RIGHT, RIGHT, RIGHT, None),             # 5: all right
+]
+ENSEMBLE_LOGITS = [-8 * np.ones(12)] * 2 + [16 * WRONG_B - 8.0] + [-8 * np.ones(12)] * 3
+
+
+def write_ensemble(folder, data_sha256="c" * 64, tcbp_seconds=0.02):
+    """The member files of the six shots above, in the formats of candidates, tcbp_member, joint_member and evaluate_stim."""
+    folder.mkdir(exist_ok=True)
+    count, truth = len(ENSEMBLE_SHOTS), np.zeros((len(ENSEMBLE_SHOTS), 12), np.uint8)
+    column = lambda index: np.array([shot[index] for shot in ENSEMBLE_SHOTS], np.uint8)
+    np.savez(folder / "cand.npz", truth=truth, data_sha256=data_sha256, basis="X", p=0.004,
+             predicted_P1=column(0), predicted_P2=column(1), predicted_R=column(3),
+             weight_P1=np.full(count, 10.0), weight_P2=np.full(count, 20.0), weight_R=np.full(count, 30.0),
+             seconds_P1=np.full(count, 0.1), seconds_P2=np.full(count, 0.1), seconds_R=np.full(count, 0.3))
+    np.savez(folder / "tcbp.npz", truth=truth, data_sha256=data_sha256, basis="X", p=0.004, predicted_T=column(2),
+             weight_T=np.full(count, 5.0), seconds_T=np.full(count, tcbp_seconds))
+    listed = [index for index, shot in enumerate(ENSEMBLE_SHOTS) if shot[4] is not None]
+    np.savez(folder / "joint.npz", truth=truth[listed], data_sha256=data_sha256, shot=np.array(listed), shots_in_file=count,
+             predicted_J=np.array([ENSEMBLE_SHOTS[index][4] for index in listed], np.uint8), seconds_J=np.full(len(listed), 10.0))
+    write_logits(folder / "logits.npz", ENSEMBLE_LOGITS)
+    return [str(folder / name) for name in ("cand.npz", "tcbp.npz", "joint.npz")], str(folder / "logits.npz")
+
+
+def test_ensemble_rules_on_hand_made_members(tmp_path):
+    files, logits = write_ensemble(tmp_path / "set")
+    members, shots = ensemble.load_members(files)
+    network = ensemble.load_network(logits, shots, network_ms=10.0)
+    rows = {row["key"]: row for row in ensemble.score(members, shots, network)}
+    failed = {key: np.flatnonzero(row["failed"]).tolist() for key, row in rows.items()}
+    assert failed["P1"] == [1, 3, 4] and failed["P2"] == [1, 2, 4] and failed["T"] == [2, 4] and failed["R"] == [0, 2, 3, 4]
+    assert failed["J"] == [3] and rows["J"]["shots"] == 3 and not rows["J"]["whole"]       # J is scored on the shots it decoded
+    assert failed["a"] == [1, 2, 4]            # part 1: two agreeing wrong answers are accepted
+    assert failed["aw"] == [1, 3, 4]
+    assert failed["b"] == [2, 4]               # a split goes to the scorer, which follows the network
+    assert failed["bw"] == [2, 4]
+    assert failed["c"] == [2]                  # J is a candidate where it exists (shot 4) and is left out where it does not (shot 2)
+    assert failed["d"] == [1, 2, 4]            # the majority accepts the two agreeing wrong answers of shot 1
+    assert failed["e"] == [1, 2]
+    later = {key: np.flatnonzero(rows[key]["later"]).tolist() for key in "abcde"}
+    assert later == {"a": [2, 3, 4], "b": [1, 2, 3, 4], "c": [1, 2, 3, 4], "d": [2, 4], "e": [2, 4]}
+    assert rows["c"]["note"] == "J exists on 3 of the 4 later-stage shots"
+    assert failed["oracle_R_P1_P2"] == [4] and failed["oracle_P1_P2_T_R"] == [4] and failed["oracle_P1_P2_T_R_J"] == []
+    # Time: P1, P2 and T on every shot; relay-BP, the network and J (where it ran) on the later-stage shots.
+    assert rows["b"]["ms"] == pytest.approx((0.22 + 4 / 6 * 0.31) * 1e3)
+    assert rows["c"]["ms"] == pytest.approx((0.22 + (4 * 0.31 + 3 * 10) / 6) * 1e3)
+    assert rows["a"]["ms"] == pytest.approx((0.2 + 3 / 6 * 0.31) * 1e3)
+    assert ensemble.unanimous(members).tolist() == [True, False, False, False, False, True]
+
+    # Without times for T (batch mode) the rules that use T have no time, and the others keep theirs.
+    files, logits = write_ensemble(tmp_path / "batch", tcbp_seconds=np.nan)
+    members, shots = ensemble.load_members(files)
+    rows = {row["key"]: row for row in ensemble.score(members, shots, ensemble.load_network(logits, shots, 10.0))}
+    assert rows["b"]["ms"] is None and rows["T"]["ms"] is None and rows["a"]["ms"] is not None
+    # Without a network or without T a rule is marked, not guessed.
+    rows = {row["key"]: row for row in ensemble.score({name: members[name] for name in ("P1", "P2", "R")}, shots, None)}
+    assert "no logits" in rows["a"]["note"] and "no file for T" in rows["bw"]["note"] and "failed" in rows["aw"]
+
+
+def test_ensemble_command_selection_and_rule_choice(tmp_path, capsys):
+    files, logits = write_ensemble(tmp_path / "train", data_sha256="c" * 64)
+    ensemble.main(["--members", *files, "--logits", logits, "--save", str(tmp_path / "train.json"),
+                   "--write-selection", str(tmp_path / "train.selection.npz")])
+    printed = capsys.readouterr().out
+    assert "not unanimous on 4 shots" in printed and "against TCBP-JOBS alone" in printed and "ORACLE" in printed
+    selection = arrays_of(tmp_path / "train.selection.npz")
+    assert selection["shot"].tolist() == [1, 2, 3, 4] and str(selection["data_sha256"]) == "c" * 64
+    assert selection["members"].tolist() == ["P1", "P2", "T"]
+    saved = json.loads((tmp_path / "train.json").read_text())
+    assert {row["key"]: row.get("failures") for row in saved["rows"] if row["kind"] == "rule"} == {
+        "a": 3, "aw": 3, "b": 2, "bw": 2, "c": 1, "d": 3, "e": 2}
+    assert saved["rows"][4]["key"] == "J" and next(row for row in saved["rows"] if row["key"] == "c")["against_T"] == {
+        "both": 1, "row_only": 0, "reference_only": 1, "p": 1.0}
+
+    other, other_logits = write_ensemble(tmp_path / "validation", data_sha256="d" * 64)
+    ensemble.main(["--members", *other, "--logits", other_logits, "--chosen-on", str(tmp_path / "train.json")])
+    printed = capsys.readouterr().out
+    assert "chosen: c" in printed and "<- chosen on the training shots" in printed
+    with pytest.raises(SystemExit, match="choose the rule on other shots"):
+        ensemble.main(["--members", *files, "--logits", logits, "--chosen-on", str(tmp_path / "train.json")])
+    with pytest.raises(SystemExit, match="different data files"):
+        ensemble.main(["--members", files[0], other[1]])
+    with pytest.raises(SystemExit, match="needs P1 and P2"):
+        ensemble.main(["--members", files[1]])

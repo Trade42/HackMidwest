@@ -1,0 +1,22 @@
+# from challenge-1-ml-decoder-kit/: python ml_decoder/diagnostics/predecoder_real2.py . 0.004 300 300 300 20
+p=0.004: rows 2,635,200, faults 13,842. Same syndrome twice gives the same features: True
+model fitted on 144,605 rows, 141 rounds (15 s)
+reliability (share of true faults among columns the model scores in each band)
+  P in [0.1, 0.5): train 0.225 of 8,569 | validation 0.211 of 9,168
+  P in [0.5, 0.9): train 0.769 of 5,688 | validation 0.774 of 5,918
+  P in [0.9, 0.99): train 0.960 of 6,070 | validation 0.959 of 6,069
+  P in [0.99, 0.999): train nan of 0 | validation nan of 0
+  P in [0.999, 1): train nan of 0 | validation nan of 0
+  validation: precision 99.9% is reached down to P = 0.9653: 3.0 commits per shot, 0.0% of BP-missed faults found, 6.3% of all faults
+  validation: precision 99.5% is reached down to P = 0.9653: 3.0 commits per shot, 0.0% of BP-missed faults found, 6.3% of all faults
+  validation: precision 99.0% is reached down to P = 0.9620: 4.9 commits per shot, 0.0% of BP-missed faults found, 10.2% of all faults
+  for reference, BP picks (LLR >= 12): precision 95.0%, 22.2 commits per shot
+300 test shots, relay-BP capped at 20 legs (385 s)
+  no predecoder                    commits/shot   0.0 | precision   0.0% | BP-missed found   0.0% | hard shots  13.3% | mean iterations    79 | failures 7/300
+  bp picks, LLR >= 12              commits/shot  21.9 | precision  94.0% | BP-missed found   0.0% | hard shots  12.3% | mean iterations    97 | failures 7/300
+  model, 99.9% precise             commits/shot   2.8 | precision  99.4% | BP-missed found   0.0% | hard shots  13.0% | mean iterations    96 | failures 5/300
+  model, 99.9%, BP-missed only     commits/shot   0.0 | precision   0.0% | BP-missed found   0.0% | hard shots  13.3% | mean iterations   105 | failures 5/300
+  model, 99.5% precise             commits/shot   2.8 | precision  99.4% | BP-missed found   0.0% | hard shots  13.0% | mean iterations   103 | failures 7/300
+  model, 99.5%, BP-missed only     commits/shot   0.0 | precision   0.0% | BP-missed found   0.0% | hard shots  13.3% | mean iterations   104 | failures 7/300
+  model, 99.0% precise             commits/shot   4.8 | precision  98.8% | BP-missed found   0.1% | hard shots  14.0% | mean iterations   101 | failures 5/300
+  model, 99.0%, BP-missed only     commits/shot   0.0 | precision 100.0% | BP-missed found   0.1% | hard shots  13.3% | mean iterations    93 | failures 5/300

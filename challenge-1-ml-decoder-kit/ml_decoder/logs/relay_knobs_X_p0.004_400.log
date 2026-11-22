@@ -1,0 +1,10 @@
+# from challenge-1-ml-decoder-kit/: python ml_decoder/relay_knobs.py . 0.004 400
+p=0.004, 400 Stim shots, X memory. Columns: first leg / later legs / stopping rule
+  kit baseline: 80 / 60 / stop at 5  mean    580 | median   136 | p99  10743 iterations | failures 4/400 | 390.9 ms per shot here
+  80 / 60 / stop at 1                mean    210 | median    21 | p99   3435 iterations | failures 3/400 | 141.1 ms per shot here
+  80 / 60 / stop at 2                mean    314 | median    47 | p99   5499 iterations | failures 4/400 | 171.9 ms per shot here
+  40 / 60 / stop at 1                mean    202 | median    21 | p99   3218 iterations | failures 2/400 | 146.9 ms per shot here
+  20 / 60 / stop at 1                mean    227 | median    33 | p99   2508 iterations | failures 4/400 | 238.6 ms per shot here
+  40 / 30 / stop at 1                mean    150 | median    21 | p99   2566 iterations | failures 3/400 | 146.7 ms per shot here
+  20 / 30 / stop at 1                mean    222 | median    32 | p99   9020 iterations | failures 7/400 | 152.3 ms per shot here
+  20 / 30 / stop at 2                mean    343 | median    62 | p99   9020 iterations | failures 6/400 | 203.7 ms per shot here

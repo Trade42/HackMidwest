@@ -1,0 +1,3 @@
+# from challenge-1-ml-decoder-kit/ at this branch's head: python -m pytest -p no:cacheprovider test_kit.py evaluation ml_decoder
+ml_decoder/test_ml_decoder.py ......                                     [100%]
+============================= 52 passed in 57.40s ==============================

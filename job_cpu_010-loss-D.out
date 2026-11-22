@@ -31,3 +31,7 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 
   50/500 shots, 21s, failures so far exact@0.4=0 oracle-round@0.4=0 exact@0.25=0 oracle-round@0.25=0
   100/500 shots, 34s, failures so far exact@0.4=2 oracle-round@0.4=2 exact@0.25=5 oracle-round@0.25=4
   150/500 shots, 50s, failures so far exact@0.4=3 oracle-round@0.4=3 exact@0.25=6 oracle-round@0.25=5
+  200/500 shots, 65s, failures so far exact@0.4=5 oracle-round@0.4=4 exact@0.25=9 oracle-round@0.25=7
+  250/500 shots, 80s, failures so far exact@0.4=5 oracle-round@0.4=4 exact@0.25=10 oracle-round@0.25=7
+  300/500 shots, 92s, failures so far exact@0.4=7 oracle-round@0.4=6 exact@0.25=13 oracle-round@0.25=10
+  350/500 shots, 113s, failures so far exact@0.4=9 oracle-round@0.4=7 exact@0.25=17 oracle-round@0.25=13

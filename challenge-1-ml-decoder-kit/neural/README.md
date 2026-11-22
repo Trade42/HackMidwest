@@ -80,10 +80,12 @@ to the loss only; the network's one input is the detector bits (tested).
 each. Its 12 Z observables sit on 12, 12, 12, 12, 12, 12, 12, 24, 28, 34, 36 and 38 qubits.
 A label flips when an odd number of errors falls on its operator, so a heavy operator's
 label is closer to a fair coin, and the readout (an average over the operator's support,
-then one head shared by all 12) is built for supports of one size. Measured with the tiny
-model on Z memory with the kit's operators (seed 1, 250 steps at p = 0.0005, 750
-error-model shots): the seven light operators' bits are right 89 to 96% of the time, the
-five heavy ones' 63 to 74%.
+then one head shared by all 12) is built for supports of one size. With the kit's operators
+the tiny model has 67.2% of Z shots wrong at step 250 of the smoke run, where X has 41.4%
+(the table is under "Numbers"). A scratch diagnostic on that run's step-250 weights, which
+this folder has no command for, split the 12 bits (750 error-model shots at p = 0.0005):
+the seven light operators' bits were right 89 to 96% of the time, the five heavy ones' 63
+to 74%.
 
 **The fix: `--logicals light`.** The Gross code looks the same with X and Z checks
 exchanged, the two data blocks exchanged and every torus position negated. That carries the
@@ -104,11 +106,19 @@ memory the kit's operators are already the light set, and the option changes not
 of an X decoder into weights of a Z decoder, exactly: the mirrored network computes on a Z
 syndrome what the X network computes on the mirrored syndrome (tested to 1e-10). The two
 memory circuits are not mirror images of each other, though: the checks meet their
-neighbours in different orders. At p = 0.004 the mirrored X error model and the Z error
-model share 11,952 of about 67,800 detector sets, which carry 61% of the fault probability;
-the priors on those agree (95% within 1%). So a mirrored X decoder is a starting point for
-Z, not a Z decoder: the tiny X smoke model gets 15.2% of X shots wrong and 32.5% of
-mirrored Z shots (600 error-model shots at p = 0.0005, always-0: 86%).
+neighbours in different orders. So a mirrored X decoder is a starting point for Z, not a Z
+decoder. Measured: a Z run started from the tiny X smoke checkpoint reports 37.0% of shots
+wrong before its first training step (400 error-model shots at p = 0.0005, always-0 85.3%),
+where that checkpoint has 16.2% of X shots wrong:
+
+```sh
+python -m neural.train --basis Z --logicals light --init-from <the X smoke folder>/checkpoint.pt --out <folder> \
+    --tiny --seed 1 --p-start 0.0005 --p-train 0.0005 --steps 0 --report-shots 400 --report-p 0.0005 --threads 1
+```
+
+A scratch comparison of the two error models at p = 0.004, which this folder has no command
+for, found that the mirrored X model and the Z model share 11,952 of about 67,800 detector
+sets, carrying 61% of the fault probability, with equal priors on 95% of those.
 
 ```sh
 # Z memory from scratch
@@ -159,8 +169,9 @@ numpy, scipy and stim.
 # tests (about a minute on a CPU)
 python -m pytest -p no:cacheprovider neural
 
-# the sampler against Stim's circuit sampler, and the sampler's speed
-python -m neural.sampler --p 0.001 --shots 200000
+# the sampler against Stim's circuit sampler, and the sampler's speed (one detector set per call)
+python -m neural.sampler --p 0.001 --shots 200000 --detectors all --threads 4
+python -m neural.sampler --p 0.001 --shots 200000 --detectors basis --threads 4
 
 # train (the defaults are sized for an 8 GB GPU); stop after 2 hours with a checkpoint
 python -m neural.train --out runs/cascade_X_s1 --seed 1 --max-hours 2
@@ -223,6 +234,9 @@ classical decoder takes the rest.
   another file.
 - `--save <prefix>` writes `<prefix>.json` (every number) and `<prefix>.npz` (per shot, in
   file order: `logits`, `predictions`, `observables`, `failed`, `confidence`).
+  `predictions` and `observables` are always the kit's 12 bits. The `logits` belong to the
+  model's own operators: for a `--logicals light` model, `logits > 0` is not the prediction,
+  and the file's `logits_are_for` entry says so.
 - Files named `test_*` or `go_*` are refused without `--final`.
 
 ### Seeds, checkpoints, stopping and resuming
@@ -250,7 +264,7 @@ Two machines. They never share a line.
 
 ### This PC (CPU only: Ryzen 7 7730U, 4 threads of lane A, niced, torch 2.15.0+cpu)
 
-**The sampler against Stim's circuit sampler** (`python -m neural.sampler --p 0.001 --shots 200000`,
+**The sampler against Stim's circuit sampler** (the two `neural.sampler` commands above,
 seed 7, X memory, 200,000 shots from each sampler). A z score compares one rate between the
 two samplers; 1,740 of them should stay under about 4.
 
@@ -493,7 +507,10 @@ Not tested:
 Once trained models exist for X and Z, a plugin is a small file. The evaluator calls
 `make_decoder(problem, options)` once per basis and `decode_shot(full, basis)` per shot,
 where `full` holds the 1,728 detector bits. The plugin would load the checkpoint of
-`problem.basis` with `neural.train.load_decoder`, run `neural.train.predict` on `full` (or
-on `basis` for a `--detectors basis` model) and return
+`problem.basis` with `neural.train.load_decoder`, run the model on `full` (or on `basis` for
+a `--detectors basis` model) and turn its logits into the kit's 12 bits with
+`model.kit_bits(detectors, logits > 0)`, as `evaluate_stim.decode` does. That last step
+matters: a `--logicals light` model's own bits are not the kit's. It returns
 `ShotResult(predictions, {"confidence": ...})`. The smallest |logit| of the 12 is a natural
-confidence for a router: the paper reports that such outputs are well calibrated.
+confidence for a router: the paper reports that such outputs are well calibrated, and the
+confidence sweep above shows it on the smoke model.

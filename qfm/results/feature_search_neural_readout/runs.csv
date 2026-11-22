@@ -1,7 +1,0 @@
-name,family,seed,classifier,n_train,validation_accuracy,train_accuracy,fit_and_tune_seconds,parameters,convergence_warnings,features_kept
-quantum_r2_s0.55,quantum,101,mlp_lbfgs,128,0.6875,1.0,1.393683283997234,"{""hidden_layer_sizes"": [32, 16], ""alpha"": 0.01}",0,44
-quantum_r2_s0.55,quantum,102,mlp_lbfgs,128,0.8671875,1.0,1.45028310500129,"{""hidden_layer_sizes"": [32, 16], ""alpha"": 0.01}",0,44
-quantum_r2_s0.55,quantum,103,mlp_lbfgs,128,0.8125,1.0,1.2408390999989933,"{""hidden_layer_sizes"": [32, 16], ""alpha"": 0.1}",0,44
-classical_product_s0.55,product,101,mlp_lbfgs,128,0.671875,1.0,1.2394551369980036,"{""hidden_layer_sizes"": [32], ""alpha"": 0.01}",0,44
-classical_product_s0.55,product,102,mlp_lbfgs,128,0.859375,1.0,1.608925938999164,"{""hidden_layer_sizes"": [32, 16], ""alpha"": 0.001}",0,44
-classical_product_s0.55,product,103,mlp_lbfgs,128,0.765625,1.0,1.1763528149967897,"{""hidden_layer_sizes"": [32], ""alpha"": 0.1}",0,44

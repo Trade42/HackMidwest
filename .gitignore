@@ -1,4 +1,5 @@
+.venv/
+.qfm-venv/
 __pycache__/
 *.pyc
-.translation-venv/
-translation/output/
+output/

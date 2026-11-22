@@ -1,3 +1,0 @@
-name,family,classifier,validation_mean,validation_std,feature_seconds,cache_hit,n_features,n_rows
-classical_pauli_s0.7,product_pauli,rbf,0.7578125,0.06394806853025352,0.0068786449992330745,False,284,896
-quantum_pauli_r2_s0.7,quantum_pauli,rbf,0.7526041666666666,0.0369204345800985,1.2869519980013138,False,284,896

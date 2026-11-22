@@ -1,7 +1,0 @@
-name,family,seed,classifier,n_train,validation_accuracy,train_accuracy,fit_and_tune_seconds,parameters,convergence_warnings,features_kept
-classical_pauli_s0.7,product_pauli,101,rbf,128,0.6875,0.984375,0.06441392699707649,"{""C"": 10, ""gamma"": ""scale""}",0,284
-classical_pauli_s0.7,product_pauli,102,rbf,128,0.8125,0.9921875,0.061044366000714945,"{""C"": 100, ""gamma"": ""scale""}",0,284
-classical_pauli_s0.7,product_pauli,103,rbf,128,0.7734375,0.984375,0.0622529520005628,"{""C"": 10, ""gamma"": ""scale""}",0,284
-quantum_pauli_r2_s0.7,quantum_pauli,101,rbf,128,0.7109375,1.0,0.08789203099877341,"{""C"": 10, ""gamma"": ""scale""}",0,284
-quantum_pauli_r2_s0.7,quantum_pauli,102,rbf,128,0.78125,0.984375,0.09580041600202094,"{""C"": 10, ""gamma"": ""scale""}",0,284
-quantum_pauli_r2_s0.7,quantum_pauli,103,rbf,128,0.765625,0.984375,0.07030929599932279,"{""C"": 10, ""gamma"": ""scale""}",0,284

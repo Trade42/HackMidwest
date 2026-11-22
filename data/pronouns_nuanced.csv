@@ -1,0 +1,1025 @@
+group_id,sentence,candidate_0,candidate_1,label,split
+0-1-1-1-0-3-1,Bea was lent the book by Zoe; she asked for it back the next day.,Zoe,Bea,0,validation
+1-1-1-1-2-2-0,Lana's charger was borrowed by Kira; she asked for it back that evening.,Lana,Kira,0,train
+0-0-0-0-2-3-1,Kira lent Lana the charger; she returned it the next day.,Lana,Kira,0,train
+1-1-0-0-2-0-0,Nora borrowed Iris's charger; she reclaimed it after class.,Nora,Iris,1,train
+0-1-0-1-0-1-1,Bea was lent the book by Zoe; she reclaimed it before lunch.,Zoe,Bea,0,train
+0-0-0-0-5-3-0,Ava lent Mia the tablet; she returned it the next day.,Ava,Mia,1,train
+0-1-0-1-2-2-1,Lana was lent the charger by Kira; she reclaimed it that evening.,Kira,Lana,0,train
+0-0-1-1-7-1-0,Iris was lent the folder by Nora; she kept it before lunch.,Iris,Nora,0,train
+1-1-1-0-2-2-1,Zoe borrowed Bea's charger; she asked for it back that evening.,Bea,Zoe,0,fresh_test
+0-1-0-0-2-0-0,Nora lent Iris the charger; she reclaimed it after class.,Nora,Iris,0,validation
+1-0-0-1-5-1-1,Iris's tablet was borrowed by Nora; she returned it before lunch.,Nora,Iris,0,fresh_test
+1-1-0-0-3-0-0,Zoe borrowed Bea's camera; she reclaimed it after class.,Zoe,Bea,1,train
+1-1-0-1-2-1-0,Iris's charger was borrowed by Nora; she reclaimed it before lunch.,Iris,Nora,0,fresh_test
+0-1-1-0-3-0-0,Ava lent Mia the camera; she asked for it back after class.,Ava,Mia,0,train
+0-0-1-1-5-2-1,Iris was lent the tablet by Nora; she kept it that evening.,Nora,Iris,1,validation
+0-1-1-0-5-0-0,Zoe lent Bea the tablet; she asked for it back after class.,Zoe,Bea,0,fresh_test
+0-0-1-1-3-1-1,Iris was lent the camera by Nora; she kept it before lunch.,Nora,Iris,1,fresh_test
+0-1-1-0-2-3-0,Ava lent Mia the charger; she asked for it back the next day.,Ava,Mia,0,fresh_test
+1-1-0-0-4-2-0,Ava borrowed Mia's scarf; she reclaimed it that evening.,Ava,Mia,1,validation
+0-1-0-1-5-2-0,Bea was lent the tablet by Zoe; she reclaimed it that evening.,Bea,Zoe,1,train
+0-0-0-1-3-1-0,Mia was lent the camera by Ava; she returned it before lunch.,Mia,Ava,0,train
+1-1-1-1-2-1-1,Bea's charger was borrowed by Zoe; she asked for it back before lunch.,Zoe,Bea,1,train
+0-1-0-0-5-3-0,Nora lent Iris the tablet; she reclaimed it the next day.,Nora,Iris,0,train
+1-0-0-0-4-0-1,Ava borrowed Mia's scarf; she returned it after class.,Mia,Ava,1,train
+0-1-0-0-6-0-1,Zoe lent Bea the umbrella; she reclaimed it after class.,Bea,Zoe,1,train
+1-1-1-1-5-3-0,Iris's tablet was borrowed by Nora; she asked for it back the next day.,Iris,Nora,0,fresh_test
+1-1-1-1-0-0-0,Iris's book was borrowed by Nora; she asked for it back after class.,Iris,Nora,0,fresh_test
+1-0-1-0-7-1-1,Zoe borrowed Bea's folder; she kept it before lunch.,Bea,Zoe,1,train
+0-0-0-0-6-3-1,Nora lent Iris the umbrella; she returned it the next day.,Iris,Nora,0,fresh_test
+1-1-0-0-2-0-1,Nora borrowed Iris's charger; she reclaimed it after class.,Iris,Nora,0,train
+1-0-1-1-5-2-0,Mia's tablet was borrowed by Ava; she kept it that evening.,Mia,Ava,1,fresh_test
+1-1-1-0-2-0-0,Kira borrowed Lana's charger; she asked for it back after class.,Kira,Lana,1,train
+0-0-1-1-4-2-1,Lana was lent the scarf by Kira; she kept it that evening.,Kira,Lana,1,train
+1-0-0-1-3-3-1,Bea's camera was borrowed by Zoe; she returned it the next day.,Zoe,Bea,0,fresh_test
+0-0-1-1-3-2-1,Lana was lent the camera by Kira; she kept it that evening.,Kira,Lana,1,train
+0-1-0-1-7-0-0,Iris was lent the folder by Nora; she reclaimed it after class.,Iris,Nora,1,train
+0-1-1-0-1-2-1,Ava lent Mia the coat; she asked for it back that evening.,Mia,Ava,1,train
+0-1-0-0-2-1-0,Zoe lent Bea the charger; she reclaimed it before lunch.,Zoe,Bea,0,train
+0-0-1-1-4-3-0,Bea was lent the scarf by Zoe; she kept it the next day.,Bea,Zoe,0,train
+1-0-1-0-4-1-0,Kira borrowed Lana's scarf; she kept it before lunch.,Kira,Lana,0,train
+0-0-0-0-0-2-0,Zoe lent Bea the book; she returned it that evening.,Zoe,Bea,1,train
+1-1-0-1-6-1-0,Mia's umbrella was borrowed by Ava; she reclaimed it before lunch.,Mia,Ava,0,train
+0-0-1-1-0-0-0,Mia was lent the book by Ava; she kept it after class.,Mia,Ava,0,train
+0-1-0-0-6-3-1,Kira lent Lana the umbrella; she reclaimed it the next day.,Lana,Kira,1,train
+1-0-1-1-2-1-1,Iris's charger was borrowed by Nora; she kept it before lunch.,Nora,Iris,0,train
+1-0-1-0-2-2-0,Zoe borrowed Bea's charger; she kept it that evening.,Zoe,Bea,0,validation
+1-0-0-0-4-1-0,Nora borrowed Iris's scarf; she returned it before lunch.,Nora,Iris,0,validation
+0-0-1-1-4-1-1,Mia was lent the scarf by Ava; she kept it before lunch.,Ava,Mia,1,train
+1-0-0-0-4-0-0,Ava borrowed Mia's scarf; she returned it after class.,Ava,Mia,0,train
+1-1-0-0-7-1-1,Zoe borrowed Bea's folder; she reclaimed it before lunch.,Bea,Zoe,0,train
+0-1-1-1-0-3-0,Bea was lent the book by Zoe; she asked for it back the next day.,Bea,Zoe,1,validation
+0-1-1-1-4-3-0,Mia was lent the scarf by Ava; she asked for it back the next day.,Mia,Ava,1,train
+0-1-0-0-5-0-1,Ava lent Mia the tablet; she reclaimed it after class.,Mia,Ava,1,fresh_test
+0-1-1-0-3-1-0,Ava lent Mia the camera; she asked for it back before lunch.,Ava,Mia,0,train
+0-1-1-0-2-2-1,Nora lent Iris the charger; she asked for it back that evening.,Iris,Nora,1,train
+0-1-1-1-5-2-1,Bea was lent the tablet by Zoe; she asked for it back that evening.,Zoe,Bea,0,train
+1-1-0-1-0-1-0,Bea's book was borrowed by Zoe; she reclaimed it before lunch.,Bea,Zoe,0,train
+1-1-1-1-2-0-0,Lana's charger was borrowed by Kira; she asked for it back after class.,Lana,Kira,0,train
+1-1-1-0-6-3-0,Zoe borrowed Bea's umbrella; she asked for it back the next day.,Zoe,Bea,1,fresh_test
+1-1-1-1-6-1-0,Iris's umbrella was borrowed by Nora; she asked for it back before lunch.,Iris,Nora,0,train
+0-1-1-1-6-0-0,Bea was lent the umbrella by Zoe; she asked for it back after class.,Bea,Zoe,1,fresh_test
+0-0-0-1-4-0-0,Lana was lent the scarf by Kira; she returned it after class.,Lana,Kira,0,train
+1-0-0-1-3-0-1,Mia's camera was borrowed by Ava; she returned it after class.,Ava,Mia,0,train
+0-0-1-1-6-1-0,Mia was lent the umbrella by Ava; she kept it before lunch.,Mia,Ava,0,train
+1-1-0-0-0-3-0,Kira borrowed Lana's book; she reclaimed it the next day.,Kira,Lana,1,fresh_test
+1-1-0-1-4-1-1,Lana's scarf was borrowed by Kira; she reclaimed it before lunch.,Kira,Lana,1,train
+0-0-0-1-2-1-1,Iris was lent the charger by Nora; she returned it before lunch.,Nora,Iris,1,fresh_test
+0-0-0-0-7-1-1,Nora lent Iris the folder; she returned it before lunch.,Iris,Nora,0,validation
+0-0-1-1-6-3-0,Bea was lent the umbrella by Zoe; she kept it the next day.,Bea,Zoe,0,fresh_test
+0-0-1-1-6-2-1,Bea was lent the umbrella by Zoe; she kept it that evening.,Zoe,Bea,1,train
+0-0-0-1-4-1-1,Bea was lent the scarf by Zoe; she returned it before lunch.,Zoe,Bea,1,train
+0-0-1-1-5-1-1,Bea was lent the tablet by Zoe; she kept it before lunch.,Zoe,Bea,1,train
+1-0-1-1-6-1-0,Mia's umbrella was borrowed by Ava; she kept it before lunch.,Mia,Ava,1,train
+1-0-0-0-0-0-0,Ava borrowed Mia's book; she returned it after class.,Ava,Mia,0,train
+1-0-0-0-2-3-0,Kira borrowed Lana's charger; she returned it the next day.,Kira,Lana,0,train
+1-0-1-0-1-3-0,Zoe borrowed Bea's coat; she kept it the next day.,Zoe,Bea,0,fresh_test
+1-1-1-0-6-3-1,Zoe borrowed Bea's umbrella; she asked for it back the next day.,Bea,Zoe,0,fresh_test
+0-0-0-0-3-2-0,Ava lent Mia the camera; she returned it that evening.,Ava,Mia,1,train
+0-1-0-0-5-1-0,Kira lent Lana the tablet; she reclaimed it before lunch.,Kira,Lana,0,fresh_test
+1-0-1-0-7-3-0,Zoe borrowed Bea's folder; she kept it the next day.,Zoe,Bea,0,fresh_test
+1-0-0-0-0-3-0,Kira borrowed Lana's book; she returned it the next day.,Kira,Lana,0,train
+1-1-0-1-3-2-0,Lana's camera was borrowed by Kira; she reclaimed it that evening.,Lana,Kira,0,train
+1-0-1-0-5-0-0,Nora borrowed Iris's tablet; she kept it after class.,Nora,Iris,0,fresh_test
+0-0-0-0-7-2-1,Kira lent Lana the folder; she returned it that evening.,Lana,Kira,0,train
+1-0-0-1-3-3-0,Bea's camera was borrowed by Zoe; she returned it the next day.,Bea,Zoe,1,fresh_test
+0-1-0-1-4-0-0,Mia was lent the scarf by Ava; she reclaimed it after class.,Mia,Ava,1,train
+1-0-1-1-3-1-1,Mia's camera was borrowed by Ava; she kept it before lunch.,Ava,Mia,0,train
+0-1-1-0-5-1-1,Ava lent Mia the tablet; she asked for it back before lunch.,Mia,Ava,1,fresh_test
+0-0-1-0-4-1-1,Kira lent Lana the scarf; she kept it before lunch.,Lana,Kira,0,fresh_test
+0-1-0-0-4-2-0,Kira lent Lana the scarf; she reclaimed it that evening.,Kira,Lana,0,train
+1-1-1-0-6-2-1,Kira borrowed Lana's umbrella; she asked for it back that evening.,Lana,Kira,0,train
+1-0-0-1-7-3-0,Iris's folder was borrowed by Nora; she returned it the next day.,Iris,Nora,1,train
+0-1-1-1-5-1-0,Mia was lent the tablet by Ava; she asked for it back before lunch.,Mia,Ava,1,fresh_test
+0-1-0-1-2-0-1,Mia was lent the charger by Ava; she reclaimed it after class.,Ava,Mia,0,train
+0-0-1-0-0-2-0,Zoe lent Bea the book; she kept it that evening.,Zoe,Bea,1,validation
+0-0-0-1-5-1-0,Bea was lent the tablet by Zoe; she returned it before lunch.,Bea,Zoe,0,train
+0-0-1-0-4-0-1,Kira lent Lana the scarf; she kept it after class.,Lana,Kira,0,train
+0-0-0-0-3-0-1,Ava lent Mia the camera; she returned it after class.,Mia,Ava,0,train
+0-1-0-1-1-1-0,Mia was lent the coat by Ava; she reclaimed it before lunch.,Mia,Ava,1,train
+1-1-0-1-6-3-1,Lana's umbrella was borrowed by Kira; she reclaimed it the next day.,Kira,Lana,1,fresh_test
+0-1-1-0-6-3-0,Zoe lent Bea the umbrella; she asked for it back the next day.,Zoe,Bea,0,train
+1-1-1-0-2-1-0,Kira borrowed Lana's charger; she asked for it back before lunch.,Kira,Lana,1,train
+0-1-1-1-2-0-0,Lana was lent the charger by Kira; she asked for it back after class.,Lana,Kira,1,train
+1-0-0-1-3-1-1,Iris's camera was borrowed by Nora; she returned it before lunch.,Nora,Iris,0,fresh_test
+1-0-0-1-7-3-1,Iris's folder was borrowed by Nora; she returned it the next day.,Nora,Iris,0,train
+0-1-1-0-5-0-1,Zoe lent Bea the tablet; she asked for it back after class.,Bea,Zoe,1,fresh_test
+0-1-1-0-3-3-0,Kira lent Lana the camera; she asked for it back the next day.,Kira,Lana,0,train
+0-1-0-1-2-3-1,Mia was lent the charger by Ava; she reclaimed it the next day.,Ava,Mia,0,fresh_test
+1-0-0-1-7-2-1,Iris's folder was borrowed by Nora; she returned it that evening.,Nora,Iris,0,train
+0-1-0-0-4-0-0,Zoe lent Bea the scarf; she reclaimed it after class.,Zoe,Bea,0,validation
+1-1-1-0-7-1-1,Kira borrowed Lana's folder; she asked for it back before lunch.,Lana,Kira,0,train
+1-0-0-0-2-1-0,Nora borrowed Iris's charger; she returned it before lunch.,Nora,Iris,0,train
+0-0-1-1-7-3-1,Lana was lent the folder by Kira; she kept it the next day.,Kira,Lana,1,train
+1-1-0-0-2-2-0,Kira borrowed Lana's charger; she reclaimed it that evening.,Kira,Lana,1,fresh_test
+1-1-0-1-5-0-1,Bea's tablet was borrowed by Zoe; she reclaimed it after class.,Zoe,Bea,1,fresh_test
+1-0-0-0-5-1-1,Zoe borrowed Bea's tablet; she returned it before lunch.,Bea,Zoe,1,fresh_test
+1-0-0-0-3-2-1,Kira borrowed Lana's camera; she returned it that evening.,Lana,Kira,1,validation
+0-1-0-0-6-2-1,Nora lent Iris the umbrella; she reclaimed it that evening.,Iris,Nora,1,fresh_test
+0-0-0-0-3-2-1,Ava lent Mia the camera; she returned it that evening.,Mia,Ava,0,train
+0-1-0-1-3-1-0,Iris was lent the camera by Nora; she reclaimed it before lunch.,Iris,Nora,1,validation
+1-0-1-0-4-3-1,Nora borrowed Iris's scarf; she kept it the next day.,Iris,Nora,1,validation
+0-0-0-0-5-3-1,Ava lent Mia the tablet; she returned it the next day.,Mia,Ava,0,train
+0-1-1-1-5-3-1,Mia was lent the tablet by Ava; she asked for it back the next day.,Ava,Mia,0,validation
+1-0-1-1-6-2-1,Iris's umbrella was borrowed by Nora; she kept it that evening.,Nora,Iris,0,train
+1-1-0-0-1-0-1,Zoe borrowed Bea's coat; she reclaimed it after class.,Bea,Zoe,0,train
+0-0-1-1-1-2-0,Iris was lent the coat by Nora; she kept it that evening.,Iris,Nora,0,fresh_test
+1-1-0-0-3-2-1,Nora borrowed Iris's camera; she reclaimed it that evening.,Iris,Nora,0,train
+1-1-0-1-2-1-1,Iris's charger was borrowed by Nora; she reclaimed it before lunch.,Nora,Iris,1,fresh_test
+0-1-1-1-3-3-1,Lana was lent the camera by Kira; she asked for it back the next day.,Kira,Lana,0,fresh_test
+0-0-1-0-2-2-0,Ava lent Mia the charger; she kept it that evening.,Ava,Mia,1,validation
+1-0-1-0-2-0-1,Zoe borrowed Bea's charger; she kept it after class.,Bea,Zoe,1,train
+0-1-0-1-2-1-1,Bea was lent the charger by Zoe; she reclaimed it before lunch.,Zoe,Bea,0,train
+0-1-0-1-3-3-1,Bea was lent the camera by Zoe; she reclaimed it the next day.,Zoe,Bea,0,fresh_test
+1-1-1-1-6-2-0,Lana's umbrella was borrowed by Kira; she asked for it back that evening.,Lana,Kira,0,train
+1-0-1-0-4-0-1,Kira borrowed Lana's scarf; she kept it after class.,Lana,Kira,1,train
+1-0-1-0-4-2-0,Ava borrowed Mia's scarf; she kept it that evening.,Ava,Mia,0,fresh_test
+0-1-1-0-4-0-0,Kira lent Lana the scarf; she asked for it back after class.,Kira,Lana,0,train
+1-0-1-1-2-1-0,Iris's charger was borrowed by Nora; she kept it before lunch.,Iris,Nora,1,train
+1-1-1-1-6-0-1,Mia's umbrella was borrowed by Ava; she asked for it back after class.,Ava,Mia,1,validation
+1-1-0-0-0-2-0,Ava borrowed Mia's book; she reclaimed it that evening.,Ava,Mia,1,fresh_test
+0-1-0-1-1-1-1,Mia was lent the coat by Ava; she reclaimed it before lunch.,Ava,Mia,0,train
+1-0-1-0-0-0-1,Ava borrowed Mia's book; she kept it after class.,Mia,Ava,1,train
+0-0-0-0-7-3-0,Nora lent Iris the folder; she returned it the next day.,Nora,Iris,1,train
+1-0-0-0-4-2-1,Nora borrowed Iris's scarf; she returned it that evening.,Iris,Nora,1,train
+0-0-0-0-1-1-0,Kira lent Lana the coat; she returned it before lunch.,Kira,Lana,1,train
+0-0-0-1-2-1-0,Iris was lent the charger by Nora; she returned it before lunch.,Iris,Nora,0,fresh_test
+1-1-1-0-3-3-1,Kira borrowed Lana's camera; she asked for it back the next day.,Lana,Kira,0,train
+0-0-1-0-2-3-1,Nora lent Iris the charger; she kept it the next day.,Iris,Nora,0,fresh_test
+0-1-0-0-1-3-1,Zoe lent Bea the coat; she reclaimed it the next day.,Bea,Zoe,1,train
+1-0-0-1-1-2-1,Iris's coat was borrowed by Nora; she returned it that evening.,Nora,Iris,0,fresh_test
+0-0-1-0-0-3-1,Ava lent Mia the book; she kept it the next day.,Mia,Ava,0,train
+1-0-0-0-5-2-1,Zoe borrowed Bea's tablet; she returned it that evening.,Bea,Zoe,1,train
+0-1-1-0-1-2-0,Ava lent Mia the coat; she asked for it back that evening.,Ava,Mia,0,train
+0-0-0-0-3-1-1,Kira lent Lana the camera; she returned it before lunch.,Lana,Kira,0,train
+0-0-1-1-3-1-0,Iris was lent the camera by Nora; she kept it before lunch.,Iris,Nora,0,fresh_test
+0-0-1-0-6-2-1,Nora lent Iris the umbrella; she kept it that evening.,Iris,Nora,0,train
+0-1-0-0-2-2-0,Zoe lent Bea the charger; she reclaimed it that evening.,Zoe,Bea,0,train
+0-1-0-0-4-3-1,Nora lent Iris the scarf; she reclaimed it the next day.,Iris,Nora,1,train
+0-1-0-0-3-1-1,Nora lent Iris the camera; she reclaimed it before lunch.,Iris,Nora,1,fresh_test
+0-1-1-0-0-1-1,Kira lent Lana the book; she asked for it back before lunch.,Lana,Kira,1,train
+0-0-1-0-7-1-1,Kira lent Lana the folder; she kept it before lunch.,Lana,Kira,0,train
+1-0-1-1-1-2-0,Iris's coat was borrowed by Nora; she kept it that evening.,Iris,Nora,1,train
+0-0-1-0-1-0-1,Ava lent Mia the coat; she kept it after class.,Mia,Ava,0,fresh_test
+1-1-1-0-3-0-1,Nora borrowed Iris's camera; she asked for it back after class.,Iris,Nora,0,train
+0-1-1-0-0-0-0,Ava lent Mia the book; she asked for it back after class.,Ava,Mia,0,validation
+1-1-0-0-4-1-0,Nora borrowed Iris's scarf; she reclaimed it before lunch.,Nora,Iris,1,train
+1-1-1-0-1-1-0,Ava borrowed Mia's coat; she asked for it back before lunch.,Ava,Mia,1,fresh_test
+0-0-1-1-2-3-0,Lana was lent the charger by Kira; she kept it the next day.,Lana,Kira,0,fresh_test
+1-1-0-1-0-2-1,Iris's book was borrowed by Nora; she reclaimed it that evening.,Nora,Iris,1,validation
+1-1-1-1-6-2-1,Lana's umbrella was borrowed by Kira; she asked for it back that evening.,Kira,Lana,1,train
+0-0-1-1-3-3-1,Mia was lent the camera by Ava; she kept it the next day.,Ava,Mia,1,train
+1-0-1-1-6-1-1,Mia's umbrella was borrowed by Ava; she kept it before lunch.,Ava,Mia,0,train
+0-0-1-0-6-3-1,Kira lent Lana the umbrella; she kept it the next day.,Lana,Kira,0,train
+1-1-1-0-7-2-0,Nora borrowed Iris's folder; she asked for it back that evening.,Nora,Iris,1,validation
+1-0-0-1-7-1-0,Mia's folder was borrowed by Ava; she returned it before lunch.,Mia,Ava,1,train
+0-1-1-1-7-2-0,Iris was lent the folder by Nora; she asked for it back that evening.,Iris,Nora,1,fresh_test
+1-0-1-1-1-2-1,Iris's coat was borrowed by Nora; she kept it that evening.,Nora,Iris,0,train
+1-0-1-1-7-0-0,Iris's folder was borrowed by Nora; she kept it after class.,Iris,Nora,1,train
+1-1-0-0-4-1-1,Nora borrowed Iris's scarf; she reclaimed it before lunch.,Iris,Nora,0,train
+0-0-1-1-0-3-1,Mia was lent the book by Ava; she kept it the next day.,Ava,Mia,1,fresh_test
+0-1-1-0-2-0-0,Kira lent Lana the charger; she asked for it back after class.,Kira,Lana,0,train
+0-1-0-0-6-2-0,Nora lent Iris the umbrella; she reclaimed it that evening.,Nora,Iris,0,fresh_test
+1-1-1-0-7-0-0,Kira borrowed Lana's folder; she asked for it back after class.,Kira,Lana,1,validation
+1-1-0-1-7-0-1,Mia's folder was borrowed by Ava; she reclaimed it after class.,Ava,Mia,1,validation
+0-1-1-0-3-3-1,Kira lent Lana the camera; she asked for it back the next day.,Lana,Kira,1,train
+0-0-1-0-2-2-1,Ava lent Mia the charger; she kept it that evening.,Mia,Ava,0,validation
+1-0-1-1-7-1-0,Lana's folder was borrowed by Kira; she kept it before lunch.,Lana,Kira,1,train
+1-0-0-0-7-0-1,Ava borrowed Mia's folder; she returned it after class.,Mia,Ava,1,validation
+1-0-0-0-4-2-0,Nora borrowed Iris's scarf; she returned it that evening.,Nora,Iris,0,train
+1-0-0-0-6-2-0,Nora borrowed Iris's umbrella; she returned it that evening.,Nora,Iris,0,train
+1-0-0-0-5-3-0,Ava borrowed Mia's tablet; she returned it the next day.,Ava,Mia,0,train
+0-1-0-1-4-1-0,Bea was lent the scarf by Zoe; she reclaimed it before lunch.,Bea,Zoe,1,fresh_test
+0-0-0-0-1-0-0,Zoe lent Bea the coat; she returned it after class.,Zoe,Bea,1,train
+0-0-1-0-7-1-0,Kira lent Lana the folder; she kept it before lunch.,Kira,Lana,1,train
+1-0-0-0-5-0-0,Ava borrowed Mia's tablet; she returned it after class.,Ava,Mia,0,train
+1-0-1-0-0-3-1,Kira borrowed Lana's book; she kept it the next day.,Lana,Kira,1,train
+0-1-1-0-7-3-0,Nora lent Iris the folder; she asked for it back the next day.,Nora,Iris,0,fresh_test
+1-1-0-0-0-1-1,Kira borrowed Lana's book; she reclaimed it before lunch.,Lana,Kira,0,train
+0-0-1-1-1-1-1,Bea was lent the coat by Zoe; she kept it before lunch.,Zoe,Bea,1,train
+1-0-1-0-3-3-0,Kira borrowed Lana's camera; she kept it the next day.,Kira,Lana,0,train
+1-1-1-0-5-3-1,Ava borrowed Mia's tablet; she asked for it back the next day.,Mia,Ava,0,fresh_test
+1-0-0-1-6-2-1,Mia's umbrella was borrowed by Ava; she returned it that evening.,Ava,Mia,0,train
+1-1-1-0-4-2-1,Nora borrowed Iris's scarf; she asked for it back that evening.,Iris,Nora,0,train
+1-0-0-1-0-0-1,Lana's book was borrowed by Kira; she returned it after class.,Kira,Lana,0,train
+0-1-0-1-5-1-1,Iris was lent the tablet by Nora; she reclaimed it before lunch.,Nora,Iris,0,train
+1-1-0-1-7-0-0,Mia's folder was borrowed by Ava; she reclaimed it after class.,Mia,Ava,0,validation
+0-1-1-1-1-2-1,Lana was lent the coat by Kira; she asked for it back that evening.,Kira,Lana,0,train
+1-0-0-0-0-2-0,Kira borrowed Lana's book; she returned it that evening.,Kira,Lana,0,train
+1-1-0-1-4-0-1,Bea's scarf was borrowed by Zoe; she reclaimed it after class.,Zoe,Bea,1,train
+1-1-0-0-1-1-1,Kira borrowed Lana's coat; she reclaimed it before lunch.,Lana,Kira,0,train
+0-1-0-1-3-2-1,Iris was lent the camera by Nora; she reclaimed it that evening.,Nora,Iris,0,train
+1-1-0-1-4-1-0,Lana's scarf was borrowed by Kira; she reclaimed it before lunch.,Lana,Kira,0,train
+0-0-0-1-0-0-1,Lana was lent the book by Kira; she returned it after class.,Kira,Lana,1,fresh_test
+1-0-0-1-4-3-1,Lana's scarf was borrowed by Kira; she returned it the next day.,Kira,Lana,0,train
+0-1-1-0-6-1-1,Nora lent Iris the umbrella; she asked for it back before lunch.,Iris,Nora,1,train
+0-0-1-1-7-0-0,Bea was lent the folder by Zoe; she kept it after class.,Bea,Zoe,0,train
+0-0-1-0-7-2-1,Ava lent Mia the folder; she kept it that evening.,Mia,Ava,0,train
+1-0-1-1-4-1-1,Lana's scarf was borrowed by Kira; she kept it before lunch.,Kira,Lana,0,train
+0-0-0-0-5-1-0,Zoe lent Bea the tablet; she returned it before lunch.,Zoe,Bea,1,train
+1-0-0-1-4-0-1,Mia's scarf was borrowed by Ava; she returned it after class.,Ava,Mia,0,train
+0-1-0-0-5-2-1,Ava lent Mia the tablet; she reclaimed it that evening.,Mia,Ava,1,train
+1-0-0-0-5-0-1,Ava borrowed Mia's tablet; she returned it after class.,Mia,Ava,1,train
+0-1-1-1-6-3-0,Lana was lent the umbrella by Kira; she asked for it back the next day.,Lana,Kira,1,train
+0-1-0-1-6-0-1,Bea was lent the umbrella by Zoe; she reclaimed it after class.,Zoe,Bea,0,train
+1-1-1-0-5-3-0,Ava borrowed Mia's tablet; she asked for it back the next day.,Ava,Mia,1,fresh_test
+0-1-1-1-2-2-1,Bea was lent the charger by Zoe; she asked for it back that evening.,Zoe,Bea,0,train
+1-1-0-0-3-1-0,Zoe borrowed Bea's camera; she reclaimed it before lunch.,Zoe,Bea,1,train
+1-1-0-0-3-1-1,Zoe borrowed Bea's camera; she reclaimed it before lunch.,Bea,Zoe,0,train
+0-1-0-0-7-0-1,Kira lent Lana the folder; she reclaimed it after class.,Lana,Kira,1,train
+1-1-0-1-6-1-1,Mia's umbrella was borrowed by Ava; she reclaimed it before lunch.,Ava,Mia,1,train
+1-0-0-0-2-1-1,Nora borrowed Iris's charger; she returned it before lunch.,Iris,Nora,1,train
+1-1-1-0-0-2-0,Nora borrowed Iris's book; she asked for it back that evening.,Nora,Iris,1,fresh_test
+0-1-1-0-0-2-0,Zoe lent Bea the book; she asked for it back that evening.,Zoe,Bea,0,fresh_test
+0-1-1-0-3-1-1,Ava lent Mia the camera; she asked for it back before lunch.,Mia,Ava,1,train
+0-0-0-0-7-0-1,Zoe lent Bea the folder; she returned it after class.,Bea,Zoe,0,train
+1-1-1-0-6-1-1,Kira borrowed Lana's umbrella; she asked for it back before lunch.,Lana,Kira,0,train
+0-1-1-1-6-3-1,Lana was lent the umbrella by Kira; she asked for it back the next day.,Kira,Lana,0,train
+0-1-0-0-0-3-1,Kira lent Lana the book; she reclaimed it the next day.,Lana,Kira,1,train
+0-1-0-0-7-1-0,Nora lent Iris the folder; she reclaimed it before lunch.,Nora,Iris,0,train
+0-0-1-0-3-1-0,Kira lent Lana the camera; she kept it before lunch.,Kira,Lana,1,train
+0-0-1-1-4-0-1,Bea was lent the scarf by Zoe; she kept it after class.,Zoe,Bea,1,train
+1-1-0-0-5-1-1,Nora borrowed Iris's tablet; she reclaimed it before lunch.,Iris,Nora,0,train
+1-1-1-1-1-2-0,Iris's coat was borrowed by Nora; she asked for it back that evening.,Iris,Nora,0,train
+0-0-1-0-1-1-1,Nora lent Iris the coat; she kept it before lunch.,Iris,Nora,0,train
+1-0-0-1-0-2-0,Lana's book was borrowed by Kira; she returned it that evening.,Lana,Kira,1,fresh_test
+0-1-0-0-3-0-0,Zoe lent Bea the camera; she reclaimed it after class.,Zoe,Bea,0,train
+0-1-0-1-1-0-0,Bea was lent the coat by Zoe; she reclaimed it after class.,Bea,Zoe,1,train
+1-0-1-0-0-0-0,Ava borrowed Mia's book; she kept it after class.,Ava,Mia,0,train
+0-1-1-1-5-1-1,Mia was lent the tablet by Ava; she asked for it back before lunch.,Ava,Mia,0,fresh_test
+0-0-1-0-4-2-1,Ava lent Mia the scarf; she kept it that evening.,Mia,Ava,0,train
+0-0-0-1-7-2-1,Mia was lent the folder by Ava; she returned it that evening.,Ava,Mia,1,train
+0-0-0-0-0-1-0,Zoe lent Bea the book; she returned it before lunch.,Zoe,Bea,1,fresh_test
+0-1-1-0-4-2-0,Kira lent Lana the scarf; she asked for it back that evening.,Kira,Lana,0,validation
+1-0-0-1-6-3-0,Lana's umbrella was borrowed by Kira; she returned it the next day.,Lana,Kira,1,train
+0-1-1-0-3-2-1,Kira lent Lana the camera; she asked for it back that evening.,Lana,Kira,1,validation
+0-1-1-1-0-2-0,Iris was lent the book by Nora; she asked for it back that evening.,Iris,Nora,1,train
+0-1-0-1-7-1-0,Mia was lent the folder by Ava; she reclaimed it before lunch.,Mia,Ava,1,train
+1-0-1-0-4-1-1,Kira borrowed Lana's scarf; she kept it before lunch.,Lana,Kira,1,train
+1-0-1-1-3-3-1,Mia's camera was borrowed by Ava; she kept it the next day.,Ava,Mia,0,validation
+0-0-0-1-7-1-0,Mia was lent the folder by Ava; she returned it before lunch.,Mia,Ava,0,fresh_test
+1-1-1-1-7-0-0,Bea's folder was borrowed by Zoe; she asked for it back after class.,Bea,Zoe,0,validation
+1-0-0-0-6-0-0,Kira borrowed Lana's umbrella; she returned it after class.,Kira,Lana,0,train
+0-0-1-0-5-0-0,Zoe lent Bea the tablet; she kept it after class.,Zoe,Bea,1,fresh_test
+0-1-1-0-4-3-0,Zoe lent Bea the scarf; she asked for it back the next day.,Zoe,Bea,0,train
+1-1-0-1-3-1-0,Mia's camera was borrowed by Ava; she reclaimed it before lunch.,Mia,Ava,0,validation
+1-0-1-0-6-0-0,Nora borrowed Iris's umbrella; she kept it after class.,Nora,Iris,0,fresh_test
+0-0-0-1-3-0-0,Iris was lent the camera by Nora; she returned it after class.,Iris,Nora,0,train
+1-0-0-1-0-3-0,Iris's book was borrowed by Nora; she returned it the next day.,Iris,Nora,1,fresh_test
+1-0-1-0-0-2-1,Nora borrowed Iris's book; she kept it that evening.,Iris,Nora,1,train
+1-0-0-0-0-0-1,Ava borrowed Mia's book; she returned it after class.,Mia,Ava,1,train
+0-0-0-1-1-1-1,Mia was lent the coat by Ava; she returned it before lunch.,Ava,Mia,1,train
+1-1-1-0-7-3-0,Ava borrowed Mia's folder; she asked for it back the next day.,Ava,Mia,1,train
+1-1-1-1-1-3-0,Bea's coat was borrowed by Zoe; she asked for it back the next day.,Bea,Zoe,0,fresh_test
+0-1-1-0-5-2-0,Ava lent Mia the tablet; she asked for it back that evening.,Ava,Mia,0,fresh_test
+1-1-1-1-3-3-0,Lana's camera was borrowed by Kira; she asked for it back the next day.,Lana,Kira,0,train
+0-1-0-0-6-3-0,Kira lent Lana the umbrella; she reclaimed it the next day.,Kira,Lana,0,train
+0-0-1-0-5-3-1,Zoe lent Bea the tablet; she kept it the next day.,Bea,Zoe,0,train
+1-1-0-0-1-2-1,Kira borrowed Lana's coat; she reclaimed it that evening.,Lana,Kira,0,train
+1-1-1-0-2-0-1,Kira borrowed Lana's charger; she asked for it back after class.,Lana,Kira,0,train
+1-0-0-1-6-0-0,Iris's umbrella was borrowed by Nora; she returned it after class.,Iris,Nora,1,fresh_test
+0-0-1-1-5-3-0,Iris was lent the tablet by Nora; she kept it the next day.,Iris,Nora,0,validation
+1-0-0-1-0-0-0,Lana's book was borrowed by Kira; she returned it after class.,Lana,Kira,1,train
+0-1-0-1-5-0-1,Mia was lent the tablet by Ava; she reclaimed it after class.,Ava,Mia,0,train
+0-0-0-0-7-0-0,Zoe lent Bea the folder; she returned it after class.,Zoe,Bea,1,train
+1-1-1-1-0-2-0,Iris's book was borrowed by Nora; she asked for it back that evening.,Iris,Nora,0,train
+0-0-1-0-5-1-0,Nora lent Iris the tablet; she kept it before lunch.,Nora,Iris,1,fresh_test
+1-1-0-1-2-0-0,Lana's charger was borrowed by Kira; she reclaimed it after class.,Lana,Kira,0,fresh_test
+1-1-1-1-7-1-0,Bea's folder was borrowed by Zoe; she asked for it back before lunch.,Bea,Zoe,0,fresh_test
+1-1-1-1-4-2-0,Iris's scarf was borrowed by Nora; she asked for it back that evening.,Iris,Nora,0,train
+0-0-0-1-4-3-0,Iris was lent the scarf by Nora; she returned it the next day.,Iris,Nora,0,train
+1-0-1-0-3-3-1,Kira borrowed Lana's camera; she kept it the next day.,Lana,Kira,1,train
+1-1-1-0-5-2-0,Nora borrowed Iris's tablet; she asked for it back that evening.,Nora,Iris,1,train
+1-1-1-0-0-3-0,Kira borrowed Lana's book; she asked for it back the next day.,Kira,Lana,1,fresh_test
+1-1-0-1-6-2-1,Bea's umbrella was borrowed by Zoe; she reclaimed it that evening.,Zoe,Bea,1,fresh_test
+0-0-0-1-1-2-1,Bea was lent the coat by Zoe; she returned it that evening.,Zoe,Bea,1,train
+0-1-1-1-5-0-0,Lana was lent the tablet by Kira; she asked for it back after class.,Lana,Kira,1,fresh_test
+0-0-0-0-4-1-1,Zoe lent Bea the scarf; she returned it before lunch.,Bea,Zoe,0,train
+1-0-0-0-3-2-0,Kira borrowed Lana's camera; she returned it that evening.,Kira,Lana,0,validation
+0-0-0-0-4-2-0,Kira lent Lana the scarf; she returned it that evening.,Kira,Lana,1,train
+1-0-0-0-7-3-0,Ava borrowed Mia's folder; she returned it the next day.,Ava,Mia,0,train
+1-0-0-0-6-3-1,Kira borrowed Lana's umbrella; she returned it the next day.,Lana,Kira,1,fresh_test
+0-1-0-1-5-3-0,Mia was lent the tablet by Ava; she reclaimed it the next day.,Mia,Ava,1,validation
+0-1-1-1-3-0-1,Iris was lent the camera by Nora; she asked for it back after class.,Nora,Iris,0,train
+1-0-0-0-7-1-1,Zoe borrowed Bea's folder; she returned it before lunch.,Bea,Zoe,1,fresh_test
+1-0-1-1-4-2-1,Mia's scarf was borrowed by Ava; she kept it that evening.,Ava,Mia,0,train
+1-0-0-1-3-1-0,Iris's camera was borrowed by Nora; she returned it before lunch.,Iris,Nora,1,fresh_test
+1-1-1-0-0-0-0,Zoe borrowed Bea's book; she asked for it back after class.,Zoe,Bea,1,train
+0-1-1-1-7-3-1,Bea was lent the folder by Zoe; she asked for it back the next day.,Zoe,Bea,0,fresh_test
+0-1-0-1-6-2-1,Iris was lent the umbrella by Nora; she reclaimed it that evening.,Nora,Iris,0,train
+1-0-0-1-2-2-1,Mia's charger was borrowed by Ava; she returned it that evening.,Ava,Mia,0,train
+0-0-1-0-7-0-0,Kira lent Lana the folder; she kept it after class.,Kira,Lana,1,fresh_test
+1-1-1-1-1-3-1,Bea's coat was borrowed by Zoe; she asked for it back the next day.,Zoe,Bea,1,fresh_test
+1-1-0-0-6-3-0,Nora borrowed Iris's umbrella; she reclaimed it the next day.,Nora,Iris,1,fresh_test
+0-0-0-0-2-0-1,Ava lent Mia the charger; she returned it after class.,Mia,Ava,0,train
+1-0-0-0-5-1-0,Zoe borrowed Bea's tablet; she returned it before lunch.,Zoe,Bea,0,fresh_test
+0-1-0-1-4-2-1,Iris was lent the scarf by Nora; she reclaimed it that evening.,Nora,Iris,0,fresh_test
+1-0-1-0-0-3-0,Kira borrowed Lana's book; she kept it the next day.,Kira,Lana,0,train
+1-0-1-0-1-0-1,Nora borrowed Iris's coat; she kept it after class.,Iris,Nora,1,train
+1-0-1-0-7-0-0,Ava borrowed Mia's folder; she kept it after class.,Ava,Mia,0,fresh_test
+0-1-0-1-3-0-1,Mia was lent the camera by Ava; she reclaimed it after class.,Ava,Mia,0,train
+0-1-1-1-5-3-0,Mia was lent the tablet by Ava; she asked for it back the next day.,Mia,Ava,1,validation
+1-1-1-1-2-3-0,Lana's charger was borrowed by Kira; she asked for it back the next day.,Lana,Kira,0,validation
+0-0-0-1-0-3-0,Bea was lent the book by Zoe; she returned it the next day.,Bea,Zoe,0,train
+1-0-0-0-7-0-0,Ava borrowed Mia's folder; she returned it after class.,Ava,Mia,0,validation
+0-1-1-1-3-2-0,Lana was lent the camera by Kira; she asked for it back that evening.,Lana,Kira,1,train
+1-0-0-0-3-3-0,Kira borrowed Lana's camera; she returned it the next day.,Kira,Lana,0,fresh_test
+0-0-1-1-7-2-0,Bea was lent the folder by Zoe; she kept it that evening.,Bea,Zoe,0,fresh_test
+0-0-1-0-7-3-1,Nora lent Iris the folder; she kept it the next day.,Iris,Nora,0,train
+1-1-0-1-0-3-0,Bea's book was borrowed by Zoe; she reclaimed it the next day.,Bea,Zoe,0,validation
+1-1-0-0-5-2-0,Kira borrowed Lana's tablet; she reclaimed it that evening.,Kira,Lana,1,fresh_test
+0-0-1-0-1-1-0,Nora lent Iris the coat; she kept it before lunch.,Nora,Iris,1,train
+0-0-1-1-3-0-1,Bea was lent the camera by Zoe; she kept it after class.,Zoe,Bea,1,train
+0-1-0-1-5-3-1,Mia was lent the tablet by Ava; she reclaimed it the next day.,Ava,Mia,0,validation
+0-0-1-0-6-0-0,Nora lent Iris the umbrella; she kept it after class.,Nora,Iris,1,train
+0-0-1-1-7-3-0,Lana was lent the folder by Kira; she kept it the next day.,Lana,Kira,0,train
+1-0-0-0-7-3-1,Ava borrowed Mia's folder; she returned it the next day.,Mia,Ava,1,train
+1-1-1-0-4-3-0,Ava borrowed Mia's scarf; she asked for it back the next day.,Ava,Mia,1,validation
+1-0-1-0-5-3-1,Ava borrowed Mia's tablet; she kept it the next day.,Mia,Ava,1,train
+1-1-0-1-7-1-0,Mia's folder was borrowed by Ava; she reclaimed it before lunch.,Mia,Ava,0,train
+1-1-1-1-3-0-0,Lana's camera was borrowed by Kira; she asked for it back after class.,Lana,Kira,0,train
+0-0-1-0-2-0-0,Kira lent Lana the charger; she kept it after class.,Kira,Lana,1,train
+0-1-1-1-3-0-0,Iris was lent the camera by Nora; she asked for it back after class.,Iris,Nora,1,train
+0-1-1-1-4-0-1,Lana was lent the scarf by Kira; she asked for it back after class.,Kira,Lana,0,train
+0-1-1-1-2-1-1,Lana was lent the charger by Kira; she asked for it back before lunch.,Kira,Lana,0,fresh_test
+0-1-1-1-1-1-0,Bea was lent the coat by Zoe; she asked for it back before lunch.,Bea,Zoe,1,fresh_test
+1-0-0-0-6-0-1,Kira borrowed Lana's umbrella; she returned it after class.,Lana,Kira,1,train
+0-1-0-0-5-3-1,Nora lent Iris the tablet; she reclaimed it the next day.,Iris,Nora,1,train
+1-0-1-0-1-1-1,Kira borrowed Lana's coat; she kept it before lunch.,Lana,Kira,1,train
+1-1-0-1-0-0-1,Mia's book was borrowed by Ava; she reclaimed it after class.,Ava,Mia,1,train
+1-0-1-1-7-2-0,Iris's folder was borrowed by Nora; she kept it that evening.,Iris,Nora,1,train
+1-1-0-0-2-1-1,Nora borrowed Iris's charger; she reclaimed it before lunch.,Iris,Nora,0,train
+0-0-0-1-7-3-0,Mia was lent the folder by Ava; she returned it the next day.,Mia,Ava,0,train
+1-0-0-1-6-1-1,Bea's umbrella was borrowed by Zoe; she returned it before lunch.,Zoe,Bea,0,train
+1-0-1-0-1-2-0,Zoe borrowed Bea's coat; she kept it that evening.,Zoe,Bea,0,train
+0-1-0-0-3-3-1,Zoe lent Bea the camera; she reclaimed it the next day.,Bea,Zoe,1,train
+0-0-1-1-5-2-0,Iris was lent the tablet by Nora; she kept it that evening.,Iris,Nora,0,validation
+0-0-0-0-6-0-1,Nora lent Iris the umbrella; she returned it after class.,Iris,Nora,0,validation
+1-0-1-1-0-2-0,Bea's book was borrowed by Zoe; she kept it that evening.,Bea,Zoe,1,fresh_test
+1-0-1-0-3-2-0,Zoe borrowed Bea's camera; she kept it that evening.,Zoe,Bea,0,validation
+1-0-1-0-2-3-1,Nora borrowed Iris's charger; she kept it the next day.,Iris,Nora,1,train
+1-0-0-1-0-1-0,Lana's book was borrowed by Kira; she returned it before lunch.,Lana,Kira,1,train
+0-1-1-1-7-0-1,Iris was lent the folder by Nora; she asked for it back after class.,Nora,Iris,0,validation
+1-1-1-1-4-3-1,Lana's scarf was borrowed by Kira; she asked for it back the next day.,Kira,Lana,1,fresh_test
+0-0-1-1-1-2-1,Iris was lent the coat by Nora; she kept it that evening.,Nora,Iris,1,fresh_test
+0-0-1-0-6-1-1,Kira lent Lana the umbrella; she kept it before lunch.,Lana,Kira,0,train
+0-1-0-0-2-2-1,Zoe lent Bea the charger; she reclaimed it that evening.,Bea,Zoe,1,train
+0-0-0-1-5-2-1,Mia was lent the tablet by Ava; she returned it that evening.,Ava,Mia,1,validation
+1-1-1-1-3-2-0,Iris's camera was borrowed by Nora; she asked for it back that evening.,Iris,Nora,0,train
+1-1-1-1-3-1-1,Iris's camera was borrowed by Nora; she asked for it back before lunch.,Nora,Iris,1,train
+0-1-0-1-2-2-0,Lana was lent the charger by Kira; she reclaimed it that evening.,Lana,Kira,1,train
+0-1-0-1-0-2-1,Mia was lent the book by Ava; she reclaimed it that evening.,Ava,Mia,0,train
+1-1-0-1-1-0-0,Iris's coat was borrowed by Nora; she reclaimed it after class.,Iris,Nora,0,train
+0-0-0-0-5-2-1,Ava lent Mia the tablet; she returned it that evening.,Mia,Ava,0,train
+0-1-0-1-7-3-1,Bea was lent the folder by Zoe; she reclaimed it the next day.,Zoe,Bea,0,train
+1-0-0-0-0-1-1,Kira borrowed Lana's book; she returned it before lunch.,Lana,Kira,1,train
+0-0-0-1-1-2-0,Bea was lent the coat by Zoe; she returned it that evening.,Bea,Zoe,0,train
+0-0-0-1-6-0-0,Lana was lent the umbrella by Kira; she returned it after class.,Lana,Kira,0,train
+0-0-0-1-0-3-1,Bea was lent the book by Zoe; she returned it the next day.,Zoe,Bea,1,train
+0-0-0-1-6-1-1,Bea was lent the umbrella by Zoe; she returned it before lunch.,Zoe,Bea,1,train
+1-1-1-0-6-0-0,Ava borrowed Mia's umbrella; she asked for it back after class.,Ava,Mia,1,fresh_test
+1-0-1-0-6-1-0,Nora borrowed Iris's umbrella; she kept it before lunch.,Nora,Iris,0,train
+1-0-0-1-0-1-1,Lana's book was borrowed by Kira; she returned it before lunch.,Kira,Lana,0,train
+1-1-1-0-7-0-1,Kira borrowed Lana's folder; she asked for it back after class.,Lana,Kira,0,validation
+0-1-1-0-0-3-1,Zoe lent Bea the book; she asked for it back the next day.,Bea,Zoe,1,fresh_test
+1-0-1-1-3-2-1,Lana's camera was borrowed by Kira; she kept it that evening.,Kira,Lana,0,train
+0-0-1-0-0-1-0,Ava lent Mia the book; she kept it before lunch.,Ava,Mia,1,fresh_test
+1-0-0-1-2-0-1,Bea's charger was borrowed by Zoe; she returned it after class.,Zoe,Bea,0,validation
+0-1-1-1-2-1-0,Lana was lent the charger by Kira; she asked for it back before lunch.,Lana,Kira,1,fresh_test
+0-1-1-0-6-3-1,Zoe lent Bea the umbrella; she asked for it back the next day.,Bea,Zoe,1,train
+0-0-1-0-5-3-0,Zoe lent Bea the tablet; she kept it the next day.,Zoe,Bea,1,train
+0-0-0-1-0-1-0,Bea was lent the book by Zoe; she returned it before lunch.,Bea,Zoe,0,fresh_test
+0-0-1-0-6-0-1,Nora lent Iris the umbrella; she kept it after class.,Iris,Nora,0,train
+1-0-0-1-3-0-0,Mia's camera was borrowed by Ava; she returned it after class.,Mia,Ava,1,train
+0-0-0-0-6-3-0,Nora lent Iris the umbrella; she returned it the next day.,Nora,Iris,1,fresh_test
+0-0-1-0-7-0-1,Kira lent Lana the folder; she kept it after class.,Lana,Kira,0,fresh_test
+1-1-1-0-5-1-1,Zoe borrowed Bea's tablet; she asked for it back before lunch.,Bea,Zoe,0,train
+1-0-1-0-0-2-0,Nora borrowed Iris's book; she kept it that evening.,Nora,Iris,0,train
+1-0-0-1-3-2-1,Bea's camera was borrowed by Zoe; she returned it that evening.,Zoe,Bea,0,fresh_test
+1-0-0-0-7-2-0,Ava borrowed Mia's folder; she returned it that evening.,Ava,Mia,0,train
+0-1-1-0-4-1-0,Zoe lent Bea the scarf; she asked for it back before lunch.,Zoe,Bea,0,fresh_test
+1-1-0-1-4-3-1,Iris's scarf was borrowed by Nora; she reclaimed it the next day.,Nora,Iris,1,train
+0-1-1-1-1-3-0,Iris was lent the coat by Nora; she asked for it back the next day.,Iris,Nora,1,train
+0-0-1-0-1-3-1,Ava lent Mia the coat; she kept it the next day.,Mia,Ava,0,fresh_test
+1-1-0-0-0-2-1,Ava borrowed Mia's book; she reclaimed it that evening.,Mia,Ava,0,fresh_test
+0-1-0-1-4-3-0,Bea was lent the scarf by Zoe; she reclaimed it the next day.,Bea,Zoe,1,train
+0-1-1-1-4-2-1,Iris was lent the scarf by Nora; she asked for it back that evening.,Nora,Iris,0,fresh_test
+1-1-0-1-0-0-0,Mia's book was borrowed by Ava; she reclaimed it after class.,Mia,Ava,0,train
+1-0-1-1-1-1-1,Lana's coat was borrowed by Kira; she kept it before lunch.,Kira,Lana,0,train
+1-0-1-1-6-0-1,Lana's umbrella was borrowed by Kira; she kept it after class.,Kira,Lana,0,validation
+0-0-1-0-3-0-1,Ava lent Mia the camera; she kept it after class.,Mia,Ava,0,fresh_test
+1-0-1-1-6-3-0,Mia's umbrella was borrowed by Ava; she kept it the next day.,Mia,Ava,1,validation
+0-1-0-0-4-1-0,Kira lent Lana the scarf; she reclaimed it before lunch.,Kira,Lana,0,train
+0-0-0-1-2-3-1,Iris was lent the charger by Nora; she returned it the next day.,Nora,Iris,1,fresh_test
+1-1-1-1-2-1-0,Bea's charger was borrowed by Zoe; she asked for it back before lunch.,Bea,Zoe,0,train
+1-1-1-1-4-0-0,Bea's scarf was borrowed by Zoe; she asked for it back after class.,Bea,Zoe,0,train
+0-1-1-0-3-2-0,Kira lent Lana the camera; she asked for it back that evening.,Kira,Lana,0,validation
+0-0-1-1-4-1-0,Mia was lent the scarf by Ava; she kept it before lunch.,Mia,Ava,0,train
+1-1-1-0-1-3-1,Kira borrowed Lana's coat; she asked for it back the next day.,Lana,Kira,0,train
+0-1-0-0-0-3-0,Kira lent Lana the book; she reclaimed it the next day.,Kira,Lana,0,train
+0-1-1-1-5-2-0,Bea was lent the tablet by Zoe; she asked for it back that evening.,Bea,Zoe,1,train
+0-0-1-1-6-0-0,Iris was lent the umbrella by Nora; she kept it after class.,Iris,Nora,0,train
+0-1-1-0-7-0-0,Nora lent Iris the folder; she asked for it back after class.,Nora,Iris,0,train
+0-0-1-0-7-2-0,Ava lent Mia the folder; she kept it that evening.,Ava,Mia,1,train
+1-1-0-0-6-0-1,Kira borrowed Lana's umbrella; she reclaimed it after class.,Lana,Kira,0,fresh_test
+0-0-0-1-1-1-0,Mia was lent the coat by Ava; she returned it before lunch.,Mia,Ava,0,train
+0-1-1-0-5-1-0,Ava lent Mia the tablet; she asked for it back before lunch.,Ava,Mia,0,fresh_test
+1-1-0-0-1-3-0,Kira borrowed Lana's coat; she reclaimed it the next day.,Kira,Lana,1,train
+1-0-1-0-5-2-1,Zoe borrowed Bea's tablet; she kept it that evening.,Bea,Zoe,1,fresh_test
+0-1-0-0-1-3-0,Zoe lent Bea the coat; she reclaimed it the next day.,Zoe,Bea,0,train
+0-0-1-0-0-0-1,Zoe lent Bea the book; she kept it after class.,Bea,Zoe,0,validation
+1-0-1-1-7-2-1,Iris's folder was borrowed by Nora; she kept it that evening.,Nora,Iris,0,train
+1-0-1-1-0-1-1,Iris's book was borrowed by Nora; she kept it before lunch.,Nora,Iris,0,train
+0-1-0-1-2-0-0,Mia was lent the charger by Ava; she reclaimed it after class.,Mia,Ava,1,train
+1-0-1-1-4-0-1,Mia's scarf was borrowed by Ava; she kept it after class.,Ava,Mia,0,fresh_test
+0-0-0-0-6-1-1,Kira lent Lana the umbrella; she returned it before lunch.,Lana,Kira,0,train
+0-0-0-1-4-2-0,Mia was lent the scarf by Ava; she returned it that evening.,Mia,Ava,0,validation
+1-1-0-0-6-3-1,Nora borrowed Iris's umbrella; she reclaimed it the next day.,Iris,Nora,0,fresh_test
+1-1-1-0-3-1-1,Kira borrowed Lana's camera; she asked for it back before lunch.,Lana,Kira,0,validation
+0-0-0-1-3-3-0,Iris was lent the camera by Nora; she returned it the next day.,Iris,Nora,0,fresh_test
+0-1-1-0-4-1-1,Zoe lent Bea the scarf; she asked for it back before lunch.,Bea,Zoe,1,fresh_test
+0-0-0-1-0-2-0,Bea was lent the book by Zoe; she returned it that evening.,Bea,Zoe,0,train
+1-1-0-1-5-3-1,Bea's tablet was borrowed by Zoe; she reclaimed it the next day.,Zoe,Bea,1,fresh_test
+1-0-0-1-3-2-0,Bea's camera was borrowed by Zoe; she returned it that evening.,Bea,Zoe,1,fresh_test
+0-0-1-0-3-3-0,Kira lent Lana the camera; she kept it the next day.,Kira,Lana,1,validation
+1-0-0-1-1-2-0,Iris's coat was borrowed by Nora; she returned it that evening.,Iris,Nora,1,fresh_test
+1-0-0-0-3-3-1,Kira borrowed Lana's camera; she returned it the next day.,Lana,Kira,1,fresh_test
+1-1-0-0-4-3-1,Ava borrowed Mia's scarf; she reclaimed it the next day.,Mia,Ava,0,train
+1-1-0-1-1-3-0,Bea's coat was borrowed by Zoe; she reclaimed it the next day.,Bea,Zoe,0,train
+0-1-0-1-3-3-0,Bea was lent the camera by Zoe; she reclaimed it the next day.,Bea,Zoe,1,fresh_test
+1-1-1-0-5-1-0,Zoe borrowed Bea's tablet; she asked for it back before lunch.,Zoe,Bea,1,train
+0-0-0-1-1-3-1,Mia was lent the coat by Ava; she returned it the next day.,Ava,Mia,1,validation
+1-0-0-1-7-2-0,Iris's folder was borrowed by Nora; she returned it that evening.,Iris,Nora,1,train
+1-1-0-0-1-2-0,Kira borrowed Lana's coat; she reclaimed it that evening.,Kira,Lana,1,train
+1-1-1-1-2-3-1,Lana's charger was borrowed by Kira; she asked for it back the next day.,Kira,Lana,1,validation
+1-1-1-1-3-0-1,Lana's camera was borrowed by Kira; she asked for it back after class.,Kira,Lana,1,train
+0-0-1-0-4-2-0,Ava lent Mia the scarf; she kept it that evening.,Ava,Mia,1,train
+0-1-0-1-0-0-0,Bea was lent the book by Zoe; she reclaimed it after class.,Bea,Zoe,1,train
+1-0-0-0-2-2-0,Ava borrowed Mia's charger; she returned it that evening.,Ava,Mia,0,train
+1-1-0-0-1-0-0,Zoe borrowed Bea's coat; she reclaimed it after class.,Zoe,Bea,1,train
+0-1-1-1-0-2-1,Iris was lent the book by Nora; she asked for it back that evening.,Nora,Iris,0,train
+0-0-0-0-0-0-0,Kira lent Lana the book; she returned it after class.,Kira,Lana,1,train
+0-0-0-0-0-3-0,Kira lent Lana the book; she returned it the next day.,Kira,Lana,1,fresh_test
+1-1-0-1-6-0-0,Bea's umbrella was borrowed by Zoe; she reclaimed it after class.,Bea,Zoe,0,validation
+0-1-1-1-1-2-0,Lana was lent the coat by Kira; she asked for it back that evening.,Lana,Kira,1,train
+1-0-1-0-6-1-1,Nora borrowed Iris's umbrella; she kept it before lunch.,Iris,Nora,1,train
+0-0-1-1-6-2-0,Bea was lent the umbrella by Zoe; she kept it that evening.,Bea,Zoe,0,train
+0-1-0-0-1-2-1,Ava lent Mia the coat; she reclaimed it that evening.,Mia,Ava,1,fresh_test
+1-0-0-0-7-2-1,Ava borrowed Mia's folder; she returned it that evening.,Mia,Ava,1,train
+0-0-1-0-5-1-1,Nora lent Iris the tablet; she kept it before lunch.,Iris,Nora,0,fresh_test
+0-1-0-1-5-0-0,Mia was lent the tablet by Ava; she reclaimed it after class.,Mia,Ava,1,train
+0-0-1-0-4-3-1,Kira lent Lana the scarf; she kept it the next day.,Lana,Kira,0,train
+0-0-0-0-4-3-0,Zoe lent Bea the scarf; she returned it the next day.,Zoe,Bea,1,train
+0-1-0-1-6-0-0,Bea was lent the umbrella by Zoe; she reclaimed it after class.,Bea,Zoe,1,train
+0-1-1-0-7-3-1,Nora lent Iris the folder; she asked for it back the next day.,Iris,Nora,1,fresh_test
+1-1-0-1-5-3-0,Bea's tablet was borrowed by Zoe; she reclaimed it the next day.,Bea,Zoe,0,fresh_test
+0-0-0-0-6-0-0,Nora lent Iris the umbrella; she returned it after class.,Nora,Iris,1,validation
+0-1-0-0-0-2-1,Ava lent Mia the book; she reclaimed it that evening.,Mia,Ava,1,validation
+0-1-1-0-0-3-0,Zoe lent Bea the book; she asked for it back the next day.,Zoe,Bea,0,fresh_test
+0-0-0-1-7-0-0,Mia was lent the folder by Ava; she returned it after class.,Mia,Ava,0,fresh_test
+1-1-0-0-4-0-0,Zoe borrowed Bea's scarf; she reclaimed it after class.,Zoe,Bea,1,train
+1-1-1-1-6-3-1,Iris's umbrella was borrowed by Nora; she asked for it back the next day.,Nora,Iris,1,train
+0-1-0-0-0-2-0,Ava lent Mia the book; she reclaimed it that evening.,Ava,Mia,0,validation
+0-0-0-1-4-0-1,Lana was lent the scarf by Kira; she returned it after class.,Kira,Lana,1,train
+1-0-0-1-2-1-1,Bea's charger was borrowed by Zoe; she returned it before lunch.,Zoe,Bea,0,train
+0-1-0-1-6-1-1,Mia was lent the umbrella by Ava; she reclaimed it before lunch.,Ava,Mia,0,train
+1-1-0-0-0-3-1,Kira borrowed Lana's book; she reclaimed it the next day.,Lana,Kira,0,fresh_test
+1-0-1-0-6-0-1,Nora borrowed Iris's umbrella; she kept it after class.,Iris,Nora,1,fresh_test
+0-1-0-1-0-1-0,Bea was lent the book by Zoe; she reclaimed it before lunch.,Bea,Zoe,1,train
+0-1-0-0-6-0-0,Zoe lent Bea the umbrella; she reclaimed it after class.,Zoe,Bea,0,train
+0-0-0-0-0-1-1,Zoe lent Bea the book; she returned it before lunch.,Bea,Zoe,0,fresh_test
+0-1-0-1-6-3-1,Lana was lent the umbrella by Kira; she reclaimed it the next day.,Kira,Lana,0,validation
+1-0-1-1-2-3-1,Mia's charger was borrowed by Ava; she kept it the next day.,Ava,Mia,0,fresh_test
+1-1-0-0-0-1-0,Kira borrowed Lana's book; she reclaimed it before lunch.,Kira,Lana,1,train
+1-0-1-1-4-0-0,Mia's scarf was borrowed by Ava; she kept it after class.,Mia,Ava,1,fresh_test
+1-1-0-0-6-1-1,Ava borrowed Mia's umbrella; she reclaimed it before lunch.,Mia,Ava,0,fresh_test
+0-1-0-0-5-0-0,Ava lent Mia the tablet; she reclaimed it after class.,Ava,Mia,0,fresh_test
+0-0-1-0-1-2-1,Nora lent Iris the coat; she kept it that evening.,Iris,Nora,0,train
+1-1-0-0-6-1-0,Ava borrowed Mia's umbrella; she reclaimed it before lunch.,Ava,Mia,1,fresh_test
+0-0-0-1-7-2-0,Mia was lent the folder by Ava; she returned it that evening.,Mia,Ava,0,train
+1-1-0-1-2-2-1,Iris's charger was borrowed by Nora; she reclaimed it that evening.,Nora,Iris,1,fresh_test
+1-0-0-1-5-1-0,Iris's tablet was borrowed by Nora; she returned it before lunch.,Iris,Nora,1,fresh_test
+1-0-0-0-0-2-1,Kira borrowed Lana's book; she returned it that evening.,Lana,Kira,1,train
+1-1-1-0-6-2-0,Kira borrowed Lana's umbrella; she asked for it back that evening.,Kira,Lana,1,train
+0-1-1-0-0-1-0,Kira lent Lana the book; she asked for it back before lunch.,Kira,Lana,0,train
+1-0-1-1-2-2-1,Mia's charger was borrowed by Ava; she kept it that evening.,Ava,Mia,0,train
+0-1-0-0-2-3-1,Kira lent Lana the charger; she reclaimed it the next day.,Lana,Kira,1,train
+0-0-1-1-2-0-0,Iris was lent the charger by Nora; she kept it after class.,Iris,Nora,0,fresh_test
+1-1-0-0-5-1-0,Nora borrowed Iris's tablet; she reclaimed it before lunch.,Nora,Iris,1,train
+1-0-1-0-4-0-0,Kira borrowed Lana's scarf; she kept it after class.,Kira,Lana,0,train
+0-1-0-0-6-1-0,Ava lent Mia the umbrella; she reclaimed it before lunch.,Ava,Mia,0,train
+0-0-1-0-2-1-0,Ava lent Mia the charger; she kept it before lunch.,Ava,Mia,1,train
+0-0-1-1-5-3-1,Iris was lent the tablet by Nora; she kept it the next day.,Nora,Iris,1,validation
+0-0-0-1-4-1-0,Bea was lent the scarf by Zoe; she returned it before lunch.,Bea,Zoe,0,train
+1-1-0-0-7-0-1,Ava borrowed Mia's folder; she reclaimed it after class.,Mia,Ava,0,train
+1-1-1-1-4-1-0,Lana's scarf was borrowed by Kira; she asked for it back before lunch.,Lana,Kira,0,train
+1-0-0-0-1-3-0,Kira borrowed Lana's coat; she returned it the next day.,Kira,Lana,0,fresh_test
+1-1-1-0-3-2-1,Ava borrowed Mia's camera; she asked for it back that evening.,Mia,Ava,0,train
+0-1-0-1-4-1-1,Bea was lent the scarf by Zoe; she reclaimed it before lunch.,Zoe,Bea,0,fresh_test
+0-0-1-0-0-3-0,Ava lent Mia the book; she kept it the next day.,Ava,Mia,1,train
+0-0-0-0-7-2-0,Kira lent Lana the folder; she returned it that evening.,Kira,Lana,1,train
+1-1-1-1-6-0-0,Mia's umbrella was borrowed by Ava; she asked for it back after class.,Mia,Ava,0,validation
+0-0-1-0-6-3-0,Kira lent Lana the umbrella; she kept it the next day.,Kira,Lana,1,train
+1-1-1-1-7-3-1,Mia's folder was borrowed by Ava; she asked for it back the next day.,Ava,Mia,1,train
+0-0-1-1-1-0-0,Mia was lent the coat by Ava; she kept it after class.,Mia,Ava,0,validation
+1-0-0-1-5-0-1,Lana's tablet was borrowed by Kira; she returned it after class.,Kira,Lana,0,validation
+0-1-1-1-4-0-0,Lana was lent the scarf by Kira; she asked for it back after class.,Lana,Kira,1,train
+1-1-1-1-2-2-1,Lana's charger was borrowed by Kira; she asked for it back that evening.,Kira,Lana,1,train
+0-0-1-1-7-0-1,Bea was lent the folder by Zoe; she kept it after class.,Zoe,Bea,1,train
+1-1-1-0-2-3-0,Ava borrowed Mia's charger; she asked for it back the next day.,Ava,Mia,1,fresh_test
+0-1-1-1-0-0-1,Iris was lent the book by Nora; she asked for it back after class.,Nora,Iris,0,train
+1-1-1-1-7-0-1,Bea's folder was borrowed by Zoe; she asked for it back after class.,Zoe,Bea,1,validation
+1-1-1-0-0-3-1,Kira borrowed Lana's book; she asked for it back the next day.,Lana,Kira,0,fresh_test
+0-0-0-1-5-3-0,Mia was lent the tablet by Ava; she returned it the next day.,Mia,Ava,0,train
+1-1-1-0-0-2-1,Nora borrowed Iris's book; she asked for it back that evening.,Iris,Nora,0,fresh_test
+1-1-1-1-1-0-0,Bea's coat was borrowed by Zoe; she asked for it back after class.,Bea,Zoe,0,train
+1-1-1-0-0-1-1,Nora borrowed Iris's book; she asked for it back before lunch.,Iris,Nora,0,train
+0-0-1-1-2-3-1,Lana was lent the charger by Kira; she kept it the next day.,Kira,Lana,1,fresh_test
+0-1-0-0-6-1-1,Ava lent Mia the umbrella; she reclaimed it before lunch.,Mia,Ava,1,train
+0-1-1-0-2-1-1,Kira lent Lana the charger; she asked for it back before lunch.,Lana,Kira,1,train
+1-0-0-1-7-1-1,Mia's folder was borrowed by Ava; she returned it before lunch.,Ava,Mia,0,train
+1-1-1-1-0-3-1,Iris's book was borrowed by Nora; she asked for it back the next day.,Nora,Iris,1,fresh_test
+0-0-1-1-4-2-0,Lana was lent the scarf by Kira; she kept it that evening.,Lana,Kira,0,train
+0-0-0-0-1-2-0,Zoe lent Bea the coat; she returned it that evening.,Zoe,Bea,1,fresh_test
+1-1-0-1-7-3-0,Iris's folder was borrowed by Nora; she reclaimed it the next day.,Iris,Nora,0,fresh_test
+0-0-1-1-6-0-1,Iris was lent the umbrella by Nora; she kept it after class.,Nora,Iris,1,train
+0-0-1-0-2-3-0,Nora lent Iris the charger; she kept it the next day.,Nora,Iris,1,fresh_test
+0-0-1-0-0-0-0,Zoe lent Bea the book; she kept it after class.,Zoe,Bea,1,validation
+1-1-0-0-0-0-0,Zoe borrowed Bea's book; she reclaimed it after class.,Zoe,Bea,1,fresh_test
+0-1-1-1-5-0-1,Lana was lent the tablet by Kira; she asked for it back after class.,Kira,Lana,0,fresh_test
+0-0-1-1-2-2-1,Lana was lent the charger by Kira; she kept it that evening.,Kira,Lana,1,train
+0-1-0-0-3-2-1,Kira lent Lana the camera; she reclaimed it that evening.,Lana,Kira,1,train
+0-1-0-1-7-1-1,Mia was lent the folder by Ava; she reclaimed it before lunch.,Ava,Mia,0,train
+0-0-1-1-1-3-0,Mia was lent the coat by Ava; she kept it the next day.,Mia,Ava,0,fresh_test
+0-1-1-1-4-2-0,Iris was lent the scarf by Nora; she asked for it back that evening.,Iris,Nora,1,fresh_test
+1-1-1-1-3-3-1,Lana's camera was borrowed by Kira; she asked for it back the next day.,Kira,Lana,1,train
+0-1-0-0-5-1-1,Kira lent Lana the tablet; she reclaimed it before lunch.,Lana,Kira,1,fresh_test
+1-0-1-0-4-3-0,Nora borrowed Iris's scarf; she kept it the next day.,Nora,Iris,0,validation
+1-1-0-0-3-0-1,Zoe borrowed Bea's camera; she reclaimed it after class.,Bea,Zoe,0,train
+1-1-1-1-1-1-1,Iris's coat was borrowed by Nora; she asked for it back before lunch.,Nora,Iris,1,train
+1-1-1-0-0-1-0,Nora borrowed Iris's book; she asked for it back before lunch.,Nora,Iris,1,train
+0-0-0-0-0-3-1,Kira lent Lana the book; she returned it the next day.,Lana,Kira,0,fresh_test
+1-1-0-1-3-0-0,Lana's camera was borrowed by Kira; she reclaimed it after class.,Lana,Kira,0,train
+1-0-0-1-6-1-0,Bea's umbrella was borrowed by Zoe; she returned it before lunch.,Bea,Zoe,1,train
+0-0-1-1-0-1-0,Lana was lent the book by Kira; she kept it before lunch.,Lana,Kira,0,train
+0-1-1-1-3-3-0,Lana was lent the camera by Kira; she asked for it back the next day.,Lana,Kira,1,fresh_test
+0-0-0-0-5-2-0,Ava lent Mia the tablet; she returned it that evening.,Ava,Mia,1,train
+1-1-1-1-0-3-0,Iris's book was borrowed by Nora; she asked for it back the next day.,Iris,Nora,0,fresh_test
+0-0-1-1-0-3-0,Mia was lent the book by Ava; she kept it the next day.,Mia,Ava,0,fresh_test
+1-0-1-0-0-1-1,Kira borrowed Lana's book; she kept it before lunch.,Lana,Kira,1,train
+1-1-1-1-6-3-0,Iris's umbrella was borrowed by Nora; she asked for it back the next day.,Iris,Nora,0,train
+1-0-0-1-2-0-0,Bea's charger was borrowed by Zoe; she returned it after class.,Bea,Zoe,1,validation
+0-1-0-0-4-2-1,Kira lent Lana the scarf; she reclaimed it that evening.,Lana,Kira,1,train
+0-1-0-1-4-3-1,Bea was lent the scarf by Zoe; she reclaimed it the next day.,Zoe,Bea,0,train
+0-0-1-0-0-2-1,Zoe lent Bea the book; she kept it that evening.,Bea,Zoe,0,validation
+1-1-1-1-5-1-1,Iris's tablet was borrowed by Nora; she asked for it back before lunch.,Nora,Iris,1,train
+0-0-1-0-7-3-0,Nora lent Iris the folder; she kept it the next day.,Nora,Iris,1,train
+1-0-1-0-1-2-1,Zoe borrowed Bea's coat; she kept it that evening.,Bea,Zoe,1,train
+1-0-0-1-2-1-0,Bea's charger was borrowed by Zoe; she returned it before lunch.,Bea,Zoe,1,train
+1-1-0-0-6-0-0,Kira borrowed Lana's umbrella; she reclaimed it after class.,Kira,Lana,1,fresh_test
+1-1-1-1-6-1-1,Iris's umbrella was borrowed by Nora; she asked for it back before lunch.,Nora,Iris,1,train
+0-0-1-1-1-0-1,Mia was lent the coat by Ava; she kept it after class.,Ava,Mia,1,validation
+1-1-1-1-7-1-1,Bea's folder was borrowed by Zoe; she asked for it back before lunch.,Zoe,Bea,1,fresh_test
+1-0-1-0-6-2-0,Ava borrowed Mia's umbrella; she kept it that evening.,Ava,Mia,0,train
+0-0-0-1-6-1-0,Bea was lent the umbrella by Zoe; she returned it before lunch.,Bea,Zoe,0,train
+1-1-1-0-1-1-1,Ava borrowed Mia's coat; she asked for it back before lunch.,Mia,Ava,0,fresh_test
+1-0-1-0-6-3-1,Nora borrowed Iris's umbrella; she kept it the next day.,Iris,Nora,1,train
+1-0-1-0-6-3-0,Nora borrowed Iris's umbrella; she kept it the next day.,Nora,Iris,0,train
+0-1-1-0-2-2-0,Nora lent Iris the charger; she asked for it back that evening.,Nora,Iris,0,train
+1-0-0-1-4-0-0,Mia's scarf was borrowed by Ava; she returned it after class.,Mia,Ava,1,train
+1-0-0-0-6-3-0,Kira borrowed Lana's umbrella; she returned it the next day.,Kira,Lana,0,fresh_test
+1-1-0-0-7-2-0,Kira borrowed Lana's folder; she reclaimed it that evening.,Kira,Lana,1,train
+0-0-0-1-3-1-1,Mia was lent the camera by Ava; she returned it before lunch.,Ava,Mia,1,train
+1-0-0-1-2-2-0,Mia's charger was borrowed by Ava; she returned it that evening.,Mia,Ava,1,train
+0-0-0-1-5-0-1,Mia was lent the tablet by Ava; she returned it after class.,Ava,Mia,1,train
+1-1-1-1-5-2-0,Lana's tablet was borrowed by Kira; she asked for it back that evening.,Lana,Kira,0,train
+1-1-1-1-1-2-1,Iris's coat was borrowed by Nora; she asked for it back that evening.,Nora,Iris,1,train
+1-0-0-1-1-0-0,Lana's coat was borrowed by Kira; she returned it after class.,Lana,Kira,1,train
+1-1-0-1-4-0-0,Bea's scarf was borrowed by Zoe; she reclaimed it after class.,Bea,Zoe,0,train
+0-1-0-0-7-2-0,Nora lent Iris the folder; she reclaimed it that evening.,Nora,Iris,0,train
+1-1-0-1-7-3-1,Iris's folder was borrowed by Nora; she reclaimed it the next day.,Nora,Iris,1,fresh_test
+1-1-0-0-5-0-1,Ava borrowed Mia's tablet; she reclaimed it after class.,Mia,Ava,0,train
+1-0-1-0-7-2-0,Ava borrowed Mia's folder; she kept it that evening.,Ava,Mia,0,train
+1-0-0-0-7-1-0,Zoe borrowed Bea's folder; she returned it before lunch.,Zoe,Bea,0,fresh_test
+1-1-1-0-6-1-0,Kira borrowed Lana's umbrella; she asked for it back before lunch.,Kira,Lana,1,train
+1-1-1-0-5-2-1,Nora borrowed Iris's tablet; she asked for it back that evening.,Iris,Nora,0,train
+1-1-0-1-3-2-1,Lana's camera was borrowed by Kira; she reclaimed it that evening.,Kira,Lana,1,train
+0-1-1-1-4-1-1,Lana was lent the scarf by Kira; she asked for it back before lunch.,Kira,Lana,0,validation
+1-1-1-0-1-2-1,Nora borrowed Iris's coat; she asked for it back that evening.,Iris,Nora,0,train
+1-1-0-0-7-1-0,Zoe borrowed Bea's folder; she reclaimed it before lunch.,Zoe,Bea,1,train
+1-0-0-0-2-2-1,Ava borrowed Mia's charger; she returned it that evening.,Mia,Ava,1,train
+1-0-1-0-2-1-1,Zoe borrowed Bea's charger; she kept it before lunch.,Bea,Zoe,1,train
+0-1-1-0-7-2-1,Kira lent Lana the folder; she asked for it back that evening.,Lana,Kira,1,validation
+0-1-0-1-1-0-1,Bea was lent the coat by Zoe; she reclaimed it after class.,Zoe,Bea,0,train
+1-0-1-1-3-0-0,Mia's camera was borrowed by Ava; she kept it after class.,Mia,Ava,1,validation
+1-1-1-0-6-0-1,Ava borrowed Mia's umbrella; she asked for it back after class.,Mia,Ava,0,fresh_test
+0-1-1-0-6-1-0,Nora lent Iris the umbrella; she asked for it back before lunch.,Nora,Iris,0,train
+1-0-1-1-6-3-1,Mia's umbrella was borrowed by Ava; she kept it the next day.,Ava,Mia,0,validation
+0-1-0-0-1-1-0,Zoe lent Bea the coat; she reclaimed it before lunch.,Zoe,Bea,0,fresh_test
+0-0-0-0-2-3-0,Kira lent Lana the charger; she returned it the next day.,Kira,Lana,1,train
+1-0-0-0-5-3-1,Ava borrowed Mia's tablet; she returned it the next day.,Mia,Ava,1,train
+0-1-1-1-1-1-1,Bea was lent the coat by Zoe; she asked for it back before lunch.,Zoe,Bea,0,fresh_test
+1-0-1-0-0-1-0,Kira borrowed Lana's book; she kept it before lunch.,Kira,Lana,0,train
+1-0-0-1-5-2-1,Iris's tablet was borrowed by Nora; she returned it that evening.,Nora,Iris,0,train
+1-0-0-0-4-1-1,Nora borrowed Iris's scarf; she returned it before lunch.,Iris,Nora,1,validation
+1-1-0-1-2-0-1,Lana's charger was borrowed by Kira; she reclaimed it after class.,Kira,Lana,1,fresh_test
+1-0-0-1-4-3-0,Lana's scarf was borrowed by Kira; she returned it the next day.,Lana,Kira,1,train
+0-1-0-0-7-0-0,Kira lent Lana the folder; she reclaimed it after class.,Kira,Lana,0,train
+1-0-0-0-2-3-1,Kira borrowed Lana's charger; she returned it the next day.,Lana,Kira,1,train
+1-0-1-1-4-2-0,Mia's scarf was borrowed by Ava; she kept it that evening.,Mia,Ava,1,train
+0-0-0-0-7-3-1,Nora lent Iris the folder; she returned it the next day.,Iris,Nora,0,train
+1-0-1-1-6-2-0,Iris's umbrella was borrowed by Nora; she kept it that evening.,Iris,Nora,1,train
+1-1-0-0-3-3-0,Ava borrowed Mia's camera; she reclaimed it the next day.,Ava,Mia,1,validation
+0-0-1-1-5-0-1,Bea was lent the tablet by Zoe; she kept it after class.,Zoe,Bea,1,train
+1-0-0-0-2-0-0,Zoe borrowed Bea's charger; she returned it after class.,Zoe,Bea,0,validation
+1-1-1-1-4-0-1,Bea's scarf was borrowed by Zoe; she asked for it back after class.,Zoe,Bea,1,train
+0-1-0-0-1-0-0,Zoe lent Bea the coat; she reclaimed it after class.,Zoe,Bea,0,train
+1-1-0-0-7-3-0,Kira borrowed Lana's folder; she reclaimed it the next day.,Kira,Lana,1,train
+0-1-0-1-4-0-1,Mia was lent the scarf by Ava; she reclaimed it after class.,Ava,Mia,0,train
+0-0-0-1-5-2-0,Mia was lent the tablet by Ava; she returned it that evening.,Mia,Ava,0,validation
+1-0-1-1-5-1-0,Bea's tablet was borrowed by Zoe; she kept it before lunch.,Bea,Zoe,1,train
+1-1-1-0-1-3-0,Kira borrowed Lana's coat; she asked for it back the next day.,Kira,Lana,1,train
+1-0-0-1-4-2-1,Mia's scarf was borrowed by Ava; she returned it that evening.,Ava,Mia,0,train
+1-1-1-1-7-2-0,Mia's folder was borrowed by Ava; she asked for it back that evening.,Mia,Ava,0,train
+1-0-1-1-0-3-1,Mia's book was borrowed by Ava; she kept it the next day.,Ava,Mia,0,train
+0-1-0-1-0-0-1,Bea was lent the book by Zoe; she reclaimed it after class.,Zoe,Bea,0,train
+1-0-1-0-5-1-1,Ava borrowed Mia's tablet; she kept it before lunch.,Mia,Ava,1,fresh_test
+1-1-1-0-2-2-0,Zoe borrowed Bea's charger; she asked for it back that evening.,Zoe,Bea,1,fresh_test
+0-1-1-0-4-2-1,Kira lent Lana the scarf; she asked for it back that evening.,Lana,Kira,1,validation
+1-0-1-1-6-0-0,Lana's umbrella was borrowed by Kira; she kept it after class.,Lana,Kira,1,validation
+0-0-0-0-0-0-1,Kira lent Lana the book; she returned it after class.,Lana,Kira,0,train
+0-0-0-1-3-0-1,Iris was lent the camera by Nora; she returned it after class.,Nora,Iris,1,train
+1-1-1-0-7-1-0,Kira borrowed Lana's folder; she asked for it back before lunch.,Kira,Lana,1,train
+1-1-0-1-0-3-1,Bea's book was borrowed by Zoe; she reclaimed it the next day.,Zoe,Bea,1,validation
+1-1-1-1-0-1-1,Iris's book was borrowed by Nora; she asked for it back before lunch.,Nora,Iris,1,train
+0-0-0-1-3-3-1,Iris was lent the camera by Nora; she returned it the next day.,Nora,Iris,1,fresh_test
+1-1-1-0-4-1-0,Ava borrowed Mia's scarf; she asked for it back before lunch.,Ava,Mia,1,train
+0-1-1-1-2-2-0,Bea was lent the charger by Zoe; she asked for it back that evening.,Bea,Zoe,1,train
+1-1-0-0-4-2-1,Ava borrowed Mia's scarf; she reclaimed it that evening.,Mia,Ava,0,validation
+1-1-0-0-3-3-1,Ava borrowed Mia's camera; she reclaimed it the next day.,Mia,Ava,0,validation
+0-0-0-0-1-0-1,Zoe lent Bea the coat; she returned it after class.,Bea,Zoe,0,train
+0-1-1-1-7-1-1,Lana was lent the folder by Kira; she asked for it back before lunch.,Kira,Lana,0,train
+0-1-1-1-3-1-1,Mia was lent the camera by Ava; she asked for it back before lunch.,Ava,Mia,0,fresh_test
+0-0-0-1-7-0-1,Mia was lent the folder by Ava; she returned it after class.,Ava,Mia,1,fresh_test
+1-0-1-1-5-3-0,Iris's tablet was borrowed by Nora; she kept it the next day.,Iris,Nora,1,train
+1-0-1-1-0-2-1,Bea's book was borrowed by Zoe; she kept it that evening.,Zoe,Bea,0,fresh_test
+0-0-1-1-2-1-0,Iris was lent the charger by Nora; she kept it before lunch.,Iris,Nora,0,train
+1-1-0-1-1-1-0,Iris's coat was borrowed by Nora; she reclaimed it before lunch.,Iris,Nora,0,train
+0-1-0-1-6-2-0,Iris was lent the umbrella by Nora; she reclaimed it that evening.,Iris,Nora,1,train
+1-1-0-1-1-3-1,Bea's coat was borrowed by Zoe; she reclaimed it the next day.,Zoe,Bea,1,train
+1-0-1-1-5-2-1,Mia's tablet was borrowed by Ava; she kept it that evening.,Ava,Mia,0,fresh_test
+1-0-1-1-3-1-0,Mia's camera was borrowed by Ava; she kept it before lunch.,Mia,Ava,1,train
+0-1-1-0-3-0-1,Ava lent Mia the camera; she asked for it back after class.,Mia,Ava,1,train
+1-1-0-1-7-2-1,Lana's folder was borrowed by Kira; she reclaimed it that evening.,Kira,Lana,1,train
+1-0-1-1-2-0-1,Mia's charger was borrowed by Ava; she kept it after class.,Ava,Mia,0,fresh_test
+1-0-1-1-0-1-0,Iris's book was borrowed by Nora; she kept it before lunch.,Iris,Nora,1,train
+0-0-1-1-6-1-1,Mia was lent the umbrella by Ava; she kept it before lunch.,Ava,Mia,1,train
+0-0-0-0-6-1-0,Kira lent Lana the umbrella; she returned it before lunch.,Kira,Lana,1,train
+1-1-1-1-4-2-1,Iris's scarf was borrowed by Nora; she asked for it back that evening.,Nora,Iris,1,train
+1-0-0-0-6-1-0,Nora borrowed Iris's umbrella; she returned it before lunch.,Nora,Iris,0,fresh_test
+1-1-0-0-3-2-0,Nora borrowed Iris's camera; she reclaimed it that evening.,Nora,Iris,1,train
+1-0-0-0-3-0-0,Nora borrowed Iris's camera; she returned it after class.,Nora,Iris,0,fresh_test
+1-0-0-1-4-1-1,Mia's scarf was borrowed by Ava; she returned it before lunch.,Ava,Mia,0,fresh_test
+1-1-0-0-5-2-1,Kira borrowed Lana's tablet; she reclaimed it that evening.,Lana,Kira,0,fresh_test
+0-0-1-0-5-2-1,Kira lent Lana the tablet; she kept it that evening.,Lana,Kira,0,train
+1-1-0-0-7-2-1,Kira borrowed Lana's folder; she reclaimed it that evening.,Lana,Kira,0,train
+1-1-0-1-5-2-1,Bea's tablet was borrowed by Zoe; she reclaimed it that evening.,Zoe,Bea,1,train
+0-1-0-1-7-2-1,Lana was lent the folder by Kira; she reclaimed it that evening.,Kira,Lana,0,train
+1-1-0-1-6-3-0,Lana's umbrella was borrowed by Kira; she reclaimed it the next day.,Lana,Kira,0,fresh_test
+0-1-1-1-4-3-1,Mia was lent the scarf by Ava; she asked for it back the next day.,Ava,Mia,0,train
+0-0-0-0-0-2-1,Zoe lent Bea the book; she returned it that evening.,Bea,Zoe,0,train
+0-0-1-0-3-0-0,Ava lent Mia the camera; she kept it after class.,Ava,Mia,1,fresh_test
+1-1-1-1-5-1-0,Iris's tablet was borrowed by Nora; she asked for it back before lunch.,Iris,Nora,0,train
+0-1-0-1-0-3-1,Mia was lent the book by Ava; she reclaimed it the next day.,Ava,Mia,0,validation
+1-0-0-0-4-3-0,Zoe borrowed Bea's scarf; she returned it the next day.,Zoe,Bea,0,train
+1-1-1-0-1-0-0,Nora borrowed Iris's coat; she asked for it back after class.,Nora,Iris,1,train
+0-0-0-1-2-2-0,Mia was lent the charger by Ava; she returned it that evening.,Mia,Ava,0,validation
+0-0-1-0-3-2-1,Kira lent Lana the camera; she kept it that evening.,Lana,Kira,0,validation
+1-1-1-1-4-3-0,Lana's scarf was borrowed by Kira; she asked for it back the next day.,Lana,Kira,0,fresh_test
+0-1-1-0-5-3-1,Ava lent Mia the tablet; she asked for it back the next day.,Mia,Ava,1,train
+0-1-0-1-1-3-1,Mia was lent the coat by Ava; she reclaimed it the next day.,Ava,Mia,0,fresh_test
+1-0-1-1-1-1-0,Lana's coat was borrowed by Kira; she kept it before lunch.,Lana,Kira,1,train
+0-0-0-0-3-3-1,Kira lent Lana the camera; she returned it the next day.,Lana,Kira,0,validation
+1-1-1-0-2-1-1,Kira borrowed Lana's charger; she asked for it back before lunch.,Lana,Kira,0,train
+0-0-0-1-2-0-1,Lana was lent the charger by Kira; she returned it after class.,Kira,Lana,1,train
+1-1-0-0-0-0-1,Zoe borrowed Bea's book; she reclaimed it after class.,Bea,Zoe,0,fresh_test
+1-0-1-1-7-0-1,Iris's folder was borrowed by Nora; she kept it after class.,Nora,Iris,0,train
+0-0-0-1-1-0-0,Iris was lent the coat by Nora; she returned it after class.,Iris,Nora,0,fresh_test
+1-0-0-0-1-2-0,Ava borrowed Mia's coat; she returned it that evening.,Ava,Mia,0,validation
+1-1-1-1-5-0-0,Lana's tablet was borrowed by Kira; she asked for it back after class.,Lana,Kira,0,train
+1-1-0-0-2-1-0,Nora borrowed Iris's charger; she reclaimed it before lunch.,Nora,Iris,1,train
+0-0-1-1-5-0-0,Bea was lent the tablet by Zoe; she kept it after class.,Bea,Zoe,0,train
+0-1-0-0-7-3-0,Zoe lent Bea the folder; she reclaimed it the next day.,Zoe,Bea,0,train
+1-0-1-0-7-0-1,Ava borrowed Mia's folder; she kept it after class.,Mia,Ava,1,fresh_test
+0-1-0-0-0-0-0,Nora lent Iris the book; she reclaimed it after class.,Nora,Iris,0,train
+0-1-0-0-5-2-0,Ava lent Mia the tablet; she reclaimed it that evening.,Ava,Mia,0,train
+0-0-1-1-6-3-1,Bea was lent the umbrella by Zoe; she kept it the next day.,Zoe,Bea,1,fresh_test
+1-1-1-0-4-0-1,Zoe borrowed Bea's scarf; she asked for it back after class.,Bea,Zoe,0,validation
+0-0-0-0-4-0-0,Kira lent Lana the scarf; she returned it after class.,Kira,Lana,1,train
+1-0-0-1-6-0-1,Iris's umbrella was borrowed by Nora; she returned it after class.,Nora,Iris,0,fresh_test
+0-1-0-0-2-0-1,Nora lent Iris the charger; she reclaimed it after class.,Iris,Nora,1,validation
+1-0-1-0-3-1-1,Kira borrowed Lana's camera; she kept it before lunch.,Lana,Kira,1,train
+1-1-1-0-4-1-1,Ava borrowed Mia's scarf; she asked for it back before lunch.,Mia,Ava,0,train
+0-0-0-1-1-0-1,Iris was lent the coat by Nora; she returned it after class.,Nora,Iris,1,fresh_test
+0-0-1-0-3-1-1,Kira lent Lana the camera; she kept it before lunch.,Lana,Kira,0,train
+1-0-1-1-3-0-1,Mia's camera was borrowed by Ava; she kept it after class.,Ava,Mia,0,validation
+0-1-1-0-1-1-1,Zoe lent Bea the coat; she asked for it back before lunch.,Bea,Zoe,1,train
+1-1-0-1-1-1-1,Iris's coat was borrowed by Nora; she reclaimed it before lunch.,Nora,Iris,1,train
+1-0-1-0-3-0-1,Nora borrowed Iris's camera; she kept it after class.,Iris,Nora,1,train
+0-1-0-1-3-0-0,Mia was lent the camera by Ava; she reclaimed it after class.,Mia,Ava,1,train
+1-0-0-0-0-1-0,Kira borrowed Lana's book; she returned it before lunch.,Kira,Lana,0,train
+0-1-1-0-0-2-1,Zoe lent Bea the book; she asked for it back that evening.,Bea,Zoe,1,fresh_test
+1-0-0-1-1-3-0,Lana's coat was borrowed by Kira; she returned it the next day.,Lana,Kira,1,train
+0-1-1-1-2-3-0,Iris was lent the charger by Nora; she asked for it back the next day.,Iris,Nora,1,train
+1-1-0-1-3-3-0,Bea's camera was borrowed by Zoe; she reclaimed it the next day.,Bea,Zoe,0,fresh_test
+0-1-0-1-3-2-0,Iris was lent the camera by Nora; she reclaimed it that evening.,Iris,Nora,1,train
+1-1-1-0-0-0-1,Zoe borrowed Bea's book; she asked for it back after class.,Bea,Zoe,0,train
+1-0-1-0-4-2-1,Ava borrowed Mia's scarf; she kept it that evening.,Mia,Ava,1,fresh_test
+0-1-0-0-4-3-0,Nora lent Iris the scarf; she reclaimed it the next day.,Nora,Iris,0,train
+1-0-1-1-1-3-0,Lana's coat was borrowed by Kira; she kept it the next day.,Lana,Kira,1,train
+0-1-1-0-1-0-1,Kira lent Lana the coat; she asked for it back after class.,Lana,Kira,1,fresh_test
+1-0-1-1-1-0-1,Mia's coat was borrowed by Ava; she kept it after class.,Ava,Mia,0,train
+0-0-1-1-2-2-0,Lana was lent the charger by Kira; she kept it that evening.,Lana,Kira,0,train
+1-1-0-1-2-3-1,Lana's charger was borrowed by Kira; she reclaimed it the next day.,Kira,Lana,1,train
+0-0-1-1-5-1-0,Bea was lent the tablet by Zoe; she kept it before lunch.,Bea,Zoe,0,train
+0-1-1-1-6-1-1,Lana was lent the umbrella by Kira; she asked for it back before lunch.,Kira,Lana,0,train
+0-0-0-1-6-3-0,Bea was lent the umbrella by Zoe; she returned it the next day.,Bea,Zoe,0,train
+0-1-1-1-0-0-0,Iris was lent the book by Nora; she asked for it back after class.,Iris,Nora,1,train
+0-1-0-1-6-1-0,Mia was lent the umbrella by Ava; she reclaimed it before lunch.,Mia,Ava,1,train
+1-1-0-0-4-3-0,Ava borrowed Mia's scarf; she reclaimed it the next day.,Ava,Mia,1,train
+1-0-0-0-2-0-1,Zoe borrowed Bea's charger; she returned it after class.,Bea,Zoe,1,validation
+1-1-1-1-7-3-0,Mia's folder was borrowed by Ava; she asked for it back the next day.,Mia,Ava,0,train
+1-0-1-0-1-0-0,Nora borrowed Iris's coat; she kept it after class.,Nora,Iris,0,train
+0-0-1-1-4-0-0,Bea was lent the scarf by Zoe; she kept it after class.,Bea,Zoe,0,train
+1-1-0-1-1-2-0,Lana's coat was borrowed by Kira; she reclaimed it that evening.,Lana,Kira,0,train
+0-1-1-1-6-2-0,Bea was lent the umbrella by Zoe; she asked for it back that evening.,Bea,Zoe,1,fresh_test
+0-0-0-1-4-3-1,Iris was lent the scarf by Nora; she returned it the next day.,Nora,Iris,1,train
+0-0-1-1-1-3-1,Mia was lent the coat by Ava; she kept it the next day.,Ava,Mia,1,fresh_test
+0-1-0-0-3-1-0,Nora lent Iris the camera; she reclaimed it before lunch.,Nora,Iris,0,fresh_test
+1-0-1-0-2-3-0,Nora borrowed Iris's charger; she kept it the next day.,Nora,Iris,0,train
+0-1-0-0-3-0-1,Zoe lent Bea the camera; she reclaimed it after class.,Bea,Zoe,1,train
+1-0-1-0-5-1-0,Ava borrowed Mia's tablet; she kept it before lunch.,Ava,Mia,0,fresh_test
+1-1-0-0-6-2-0,Zoe borrowed Bea's umbrella; she reclaimed it that evening.,Zoe,Bea,1,train
+1-0-0-1-1-1-1,Iris's coat was borrowed by Nora; she returned it before lunch.,Nora,Iris,0,train
+0-0-0-1-6-2-0,Lana was lent the umbrella by Kira; she returned it that evening.,Lana,Kira,0,train
+1-0-0-1-4-1-0,Mia's scarf was borrowed by Ava; she returned it before lunch.,Mia,Ava,1,fresh_test
+1-0-1-0-5-3-0,Ava borrowed Mia's tablet; she kept it the next day.,Ava,Mia,0,train
+1-1-0-0-5-3-1,Ava borrowed Mia's tablet; she reclaimed it the next day.,Mia,Ava,0,train
+1-0-1-1-4-3-0,Iris's scarf was borrowed by Nora; she kept it the next day.,Iris,Nora,1,validation
+0-1-1-0-6-0-0,Nora lent Iris the umbrella; she asked for it back after class.,Nora,Iris,0,validation
+0-0-0-0-7-1-0,Nora lent Iris the folder; she returned it before lunch.,Nora,Iris,1,validation
+0-1-0-1-2-3-0,Mia was lent the charger by Ava; she reclaimed it the next day.,Mia,Ava,1,fresh_test
+1-0-0-1-0-2-1,Lana's book was borrowed by Kira; she returned it that evening.,Kira,Lana,0,fresh_test
+1-1-1-0-1-0-1,Nora borrowed Iris's coat; she asked for it back after class.,Iris,Nora,0,train
+0-0-0-0-1-2-1,Zoe lent Bea the coat; she returned it that evening.,Bea,Zoe,0,fresh_test
+1-0-0-0-1-3-1,Kira borrowed Lana's coat; she returned it the next day.,Lana,Kira,1,fresh_test
+1-1-1-1-1-1-0,Iris's coat was borrowed by Nora; she asked for it back before lunch.,Iris,Nora,0,train
+1-0-1-0-3-0-0,Nora borrowed Iris's camera; she kept it after class.,Nora,Iris,0,train
+1-0-1-1-0-0-0,Bea's book was borrowed by Zoe; she kept it after class.,Bea,Zoe,1,train
+0-0-1-0-6-2-0,Nora lent Iris the umbrella; she kept it that evening.,Nora,Iris,1,train
+1-1-0-1-5-1-0,Lana's tablet was borrowed by Kira; she reclaimed it before lunch.,Lana,Kira,0,fresh_test
+1-0-0-1-7-0-0,Iris's folder was borrowed by Nora; she returned it after class.,Iris,Nora,1,train
+1-1-0-1-7-1-1,Mia's folder was borrowed by Ava; she reclaimed it before lunch.,Ava,Mia,1,train
+1-1-0-1-5-1-1,Lana's tablet was borrowed by Kira; she reclaimed it before lunch.,Kira,Lana,1,fresh_test
+1-1-0-0-6-2-1,Zoe borrowed Bea's umbrella; she reclaimed it that evening.,Bea,Zoe,0,train
+0-1-0-0-7-3-1,Zoe lent Bea the folder; she reclaimed it the next day.,Bea,Zoe,1,train
+0-0-0-0-2-0-0,Ava lent Mia the charger; she returned it after class.,Ava,Mia,1,train
+0-0-1-0-1-2-0,Nora lent Iris the coat; she kept it that evening.,Nora,Iris,1,train
+0-1-1-1-1-3-1,Iris was lent the coat by Nora; she asked for it back the next day.,Nora,Iris,0,train
+1-1-1-1-3-2-1,Iris's camera was borrowed by Nora; she asked for it back that evening.,Nora,Iris,1,train
+1-0-0-0-1-1-0,Kira borrowed Lana's coat; she returned it before lunch.,Kira,Lana,0,train
+0-1-1-1-3-2-1,Lana was lent the camera by Kira; she asked for it back that evening.,Kira,Lana,0,train
+0-1-1-1-1-0-0,Bea was lent the coat by Zoe; she asked for it back after class.,Bea,Zoe,1,train
+0-0-0-1-2-3-0,Iris was lent the charger by Nora; she returned it the next day.,Iris,Nora,0,fresh_test
+0-1-0-1-7-0-1,Iris was lent the folder by Nora; she reclaimed it after class.,Nora,Iris,0,train
+1-0-0-1-7-0-1,Iris's folder was borrowed by Nora; she returned it after class.,Nora,Iris,0,train
+0-1-1-1-2-3-1,Iris was lent the charger by Nora; she asked for it back the next day.,Nora,Iris,0,train
+0-1-0-0-1-0-1,Zoe lent Bea the coat; she reclaimed it after class.,Bea,Zoe,1,train
+1-0-0-1-5-3-1,Mia's tablet was borrowed by Ava; she returned it the next day.,Ava,Mia,0,validation
+1-1-1-1-5-3-1,Iris's tablet was borrowed by Nora; she asked for it back the next day.,Nora,Iris,1,fresh_test
+1-1-1-1-5-2-1,Lana's tablet was borrowed by Kira; she asked for it back that evening.,Kira,Lana,1,train
+0-0-0-0-1-3-0,Ava lent Mia the coat; she returned it the next day.,Ava,Mia,1,train
+1-1-0-1-2-2-0,Iris's charger was borrowed by Nora; she reclaimed it that evening.,Iris,Nora,0,fresh_test
+1-1-0-0-4-0-1,Zoe borrowed Bea's scarf; she reclaimed it after class.,Bea,Zoe,0,train
+1-1-0-1-6-0-1,Bea's umbrella was borrowed by Zoe; she reclaimed it after class.,Zoe,Bea,1,validation
+0-1-0-0-1-2-0,Ava lent Mia the coat; she reclaimed it that evening.,Ava,Mia,0,fresh_test
+0-1-1-0-5-2-1,Ava lent Mia the tablet; she asked for it back that evening.,Mia,Ava,1,fresh_test
+0-1-0-1-5-2-1,Bea was lent the tablet by Zoe; she reclaimed it that evening.,Zoe,Bea,0,train
+1-0-1-1-0-0-1,Bea's book was borrowed by Zoe; she kept it after class.,Zoe,Bea,0,train
+0-1-1-0-1-3-1,Zoe lent Bea the coat; she asked for it back the next day.,Bea,Zoe,1,train
+0-1-1-0-5-3-0,Ava lent Mia the tablet; she asked for it back the next day.,Ava,Mia,0,train
+0-1-1-0-6-2-0,Nora lent Iris the umbrella; she asked for it back that evening.,Nora,Iris,0,train
+0-0-0-1-5-3-1,Mia was lent the tablet by Ava; she returned it the next day.,Ava,Mia,1,train
+0-1-1-1-2-0-1,Lana was lent the charger by Kira; she asked for it back after class.,Kira,Lana,0,train
+0-0-1-0-2-1-1,Ava lent Mia the charger; she kept it before lunch.,Mia,Ava,0,train
+1-0-1-1-7-1-1,Lana's folder was borrowed by Kira; she kept it before lunch.,Kira,Lana,0,train
+1-0-1-0-2-2-1,Zoe borrowed Bea's charger; she kept it that evening.,Bea,Zoe,1,validation
+1-0-1-1-4-1-0,Lana's scarf was borrowed by Kira; she kept it before lunch.,Lana,Kira,1,train
+0-1-1-1-3-1-0,Mia was lent the camera by Ava; she asked for it back before lunch.,Mia,Ava,1,fresh_test
+0-1-0-1-2-1-0,Bea was lent the charger by Zoe; she reclaimed it before lunch.,Bea,Zoe,1,train
+0-1-0-1-1-2-1,Mia was lent the coat by Ava; she reclaimed it that evening.,Ava,Mia,0,train
+0-0-1-1-3-3-0,Mia was lent the camera by Ava; she kept it the next day.,Mia,Ava,0,train
+0-0-0-1-6-0-1,Lana was lent the umbrella by Kira; she returned it after class.,Kira,Lana,1,train
+1-1-0-0-1-3-1,Kira borrowed Lana's coat; she reclaimed it the next day.,Lana,Kira,0,train
+1-1-0-1-1-2-1,Lana's coat was borrowed by Kira; she reclaimed it that evening.,Kira,Lana,1,train
+0-1-1-1-7-3-0,Bea was lent the folder by Zoe; she asked for it back the next day.,Bea,Zoe,1,fresh_test
+0-1-1-1-6-2-1,Bea was lent the umbrella by Zoe; she asked for it back that evening.,Zoe,Bea,0,fresh_test
+0-1-1-0-6-2-1,Nora lent Iris the umbrella; she asked for it back that evening.,Iris,Nora,1,train
+1-1-0-0-5-3-0,Ava borrowed Mia's tablet; she reclaimed it the next day.,Ava,Mia,1,train
+1-0-0-0-1-2-1,Ava borrowed Mia's coat; she returned it that evening.,Mia,Ava,1,validation
+0-1-1-0-1-1-0,Zoe lent Bea the coat; she asked for it back before lunch.,Zoe,Bea,0,train
+1-0-0-1-6-3-1,Lana's umbrella was borrowed by Kira; she returned it the next day.,Kira,Lana,0,train
+0-0-0-1-1-3-0,Mia was lent the coat by Ava; she returned it the next day.,Mia,Ava,0,validation
+1-0-1-0-7-3-1,Zoe borrowed Bea's folder; she kept it the next day.,Bea,Zoe,1,fresh_test
+0-1-1-0-0-0-1,Ava lent Mia the book; she asked for it back after class.,Mia,Ava,1,validation
+0-0-1-1-2-0-1,Iris was lent the charger by Nora; she kept it after class.,Nora,Iris,1,fresh_test
+1-0-0-1-4-2-0,Mia's scarf was borrowed by Ava; she returned it that evening.,Mia,Ava,1,train
+0-0-1-1-3-2-0,Lana was lent the camera by Kira; she kept it that evening.,Lana,Kira,0,train
+0-0-1-1-0-0-1,Mia was lent the book by Ava; she kept it after class.,Ava,Mia,1,train
+0-0-0-1-7-3-1,Mia was lent the folder by Ava; she returned it the next day.,Ava,Mia,1,train
+1-0-1-0-3-1-0,Kira borrowed Lana's camera; she kept it before lunch.,Kira,Lana,0,train
+1-0-1-1-4-3-1,Iris's scarf was borrowed by Nora; she kept it the next day.,Nora,Iris,0,validation
+1-1-0-1-1-0-1,Iris's coat was borrowed by Nora; she reclaimed it after class.,Nora,Iris,1,train
+1-0-1-0-2-0-0,Zoe borrowed Bea's charger; she kept it after class.,Zoe,Bea,0,train
+1-1-1-0-4-3-1,Ava borrowed Mia's scarf; she asked for it back the next day.,Mia,Ava,0,validation
+1-0-0-1-1-3-1,Lana's coat was borrowed by Kira; she returned it the next day.,Kira,Lana,0,train
+1-1-0-1-3-3-1,Bea's camera was borrowed by Zoe; she reclaimed it the next day.,Zoe,Bea,1,fresh_test
+0-0-0-0-5-1-1,Zoe lent Bea the tablet; she returned it before lunch.,Bea,Zoe,0,train
+0-1-0-1-0-2-0,Mia was lent the book by Ava; she reclaimed it that evening.,Mia,Ava,1,train
+0-1-0-1-0-3-0,Mia was lent the book by Ava; she reclaimed it the next day.,Mia,Ava,1,validation
+1-0-0-1-1-0-1,Lana's coat was borrowed by Kira; she returned it after class.,Kira,Lana,0,train
+1-1-1-1-0-0-1,Iris's book was borrowed by Nora; she asked for it back after class.,Nora,Iris,1,fresh_test
+1-0-1-1-2-2-0,Mia's charger was borrowed by Ava; she kept it that evening.,Mia,Ava,1,train
+1-1-0-1-5-2-0,Bea's tablet was borrowed by Zoe; she reclaimed it that evening.,Bea,Zoe,0,train
+1-0-0-0-3-1-0,Kira borrowed Lana's camera; she returned it before lunch.,Kira,Lana,0,fresh_test
+1-1-1-0-3-2-0,Ava borrowed Mia's camera; she asked for it back that evening.,Ava,Mia,1,train
+0-0-1-1-7-2-1,Bea was lent the folder by Zoe; she kept it that evening.,Zoe,Bea,1,fresh_test
+1-1-0-1-6-2-0,Bea's umbrella was borrowed by Zoe; she reclaimed it that evening.,Bea,Zoe,0,fresh_test
+0-0-1-0-1-3-0,Ava lent Mia the coat; she kept it the next day.,Ava,Mia,1,fresh_test
+0-0-1-1-3-0-0,Bea was lent the camera by Zoe; she kept it after class.,Bea,Zoe,0,train
+1-0-0-1-5-2-0,Iris's tablet was borrowed by Nora; she returned it that evening.,Iris,Nora,1,train
+0-0-0-1-4-2-1,Mia was lent the scarf by Ava; she returned it that evening.,Ava,Mia,1,validation
+1-0-1-0-2-1-0,Zoe borrowed Bea's charger; she kept it before lunch.,Zoe,Bea,0,train
+0-0-1-0-4-3-0,Kira lent Lana the scarf; she kept it the next day.,Kira,Lana,1,train
+0-1-1-1-6-0-1,Bea was lent the umbrella by Zoe; she asked for it back after class.,Zoe,Bea,0,fresh_test
+0-0-1-1-0-2-0,Lana was lent the book by Kira; she kept it that evening.,Lana,Kira,0,validation
+0-1-1-0-7-1-0,Zoe lent Bea the folder; she asked for it back before lunch.,Zoe,Bea,0,fresh_test
+1-0-0-1-2-3-0,Mia's charger was borrowed by Ava; she returned it the next day.,Mia,Ava,1,train
+1-1-0-0-7-3-1,Kira borrowed Lana's folder; she reclaimed it the next day.,Lana,Kira,0,train
+0-0-1-1-1-1-0,Bea was lent the coat by Zoe; she kept it before lunch.,Bea,Zoe,0,train
+0-1-0-0-4-1-1,Kira lent Lana the scarf; she reclaimed it before lunch.,Lana,Kira,1,train
+0-1-1-1-7-1-0,Lana was lent the folder by Kira; she asked for it back before lunch.,Lana,Kira,1,train
+0-0-0-0-3-3-0,Kira lent Lana the camera; she returned it the next day.,Kira,Lana,1,validation
+0-0-0-0-6-2-0,Zoe lent Bea the umbrella; she returned it that evening.,Zoe,Bea,1,fresh_test
+0-0-0-0-2-1-0,Zoe lent Bea the charger; she returned it before lunch.,Zoe,Bea,1,fresh_test
+0-1-1-1-0-1-0,Lana was lent the book by Kira; she asked for it back before lunch.,Lana,Kira,1,train
+1-0-0-0-1-1-1,Kira borrowed Lana's coat; she returned it before lunch.,Lana,Kira,1,train
+1-1-1-1-4-1-1,Lana's scarf was borrowed by Kira; she asked for it back before lunch.,Kira,Lana,1,train
+0-0-1-1-4-3-1,Bea was lent the scarf by Zoe; she kept it the next day.,Zoe,Bea,1,train
+1-1-1-0-7-2-1,Nora borrowed Iris's folder; she asked for it back that evening.,Iris,Nora,0,validation
+1-0-1-1-5-0-0,Iris's tablet was borrowed by Nora; she kept it after class.,Iris,Nora,1,fresh_test
+0-0-0-1-5-1-1,Bea was lent the tablet by Zoe; she returned it before lunch.,Zoe,Bea,1,train
+1-0-1-1-3-3-0,Mia's camera was borrowed by Ava; she kept it the next day.,Mia,Ava,1,validation
+1-1-1-1-0-1-0,Iris's book was borrowed by Nora; she asked for it back before lunch.,Iris,Nora,0,train
+1-1-0-0-2-3-1,Kira borrowed Lana's charger; she reclaimed it the next day.,Lana,Kira,0,validation
+0-0-0-1-6-2-1,Lana was lent the umbrella by Kira; she returned it that evening.,Kira,Lana,1,train
+1-1-1-1-0-2-1,Iris's book was borrowed by Nora; she asked for it back that evening.,Nora,Iris,1,train
+1-0-1-0-7-1-0,Zoe borrowed Bea's folder; she kept it before lunch.,Zoe,Bea,0,train
+0-0-0-0-4-0-1,Kira lent Lana the scarf; she returned it after class.,Lana,Kira,0,train
+1-1-1-0-3-0-0,Nora borrowed Iris's camera; she asked for it back after class.,Nora,Iris,1,train
+0-1-0-1-7-3-0,Bea was lent the folder by Zoe; she reclaimed it the next day.,Bea,Zoe,1,train
+1-1-0-0-7-0-0,Ava borrowed Mia's folder; she reclaimed it after class.,Ava,Mia,1,train
+1-0-0-0-0-3-1,Kira borrowed Lana's book; she returned it the next day.,Lana,Kira,1,train
+0-1-0-0-7-2-1,Nora lent Iris the folder; she reclaimed it that evening.,Iris,Nora,1,train
+1-0-0-1-0-3-1,Iris's book was borrowed by Nora; she returned it the next day.,Nora,Iris,0,fresh_test
+1-0-0-1-1-1-0,Iris's coat was borrowed by Nora; she returned it before lunch.,Iris,Nora,1,train
+0-0-0-1-7-1-1,Mia was lent the folder by Ava; she returned it before lunch.,Ava,Mia,1,fresh_test
+1-1-0-1-0-1-1,Bea's book was borrowed by Zoe; she reclaimed it before lunch.,Zoe,Bea,1,train
+1-1-1-0-3-1-0,Kira borrowed Lana's camera; she asked for it back before lunch.,Kira,Lana,1,validation
+1-0-1-0-7-2-1,Ava borrowed Mia's folder; she kept it that evening.,Mia,Ava,1,train
+1-1-1-1-7-2-1,Mia's folder was borrowed by Ava; she asked for it back that evening.,Ava,Mia,1,train
+0-1-0-0-1-1-1,Zoe lent Bea the coat; she reclaimed it before lunch.,Bea,Zoe,1,fresh_test
+1-1-0-0-1-1-0,Kira borrowed Lana's coat; she reclaimed it before lunch.,Kira,Lana,1,train
+0-0-0-1-3-2-1,Iris was lent the camera by Nora; she returned it that evening.,Nora,Iris,1,train
+1-0-1-1-5-1-1,Bea's tablet was borrowed by Zoe; she kept it before lunch.,Zoe,Bea,0,train
+0-1-1-0-2-1-0,Kira lent Lana the charger; she asked for it back before lunch.,Kira,Lana,0,train
+0-1-1-0-4-0-1,Kira lent Lana the scarf; she asked for it back after class.,Lana,Kira,1,train
+0-0-0-1-6-3-1,Bea was lent the umbrella by Zoe; she returned it the next day.,Zoe,Bea,1,train
+0-1-1-0-6-0-1,Nora lent Iris the umbrella; she asked for it back after class.,Iris,Nora,1,validation
+0-1-0-0-3-3-0,Zoe lent Bea the camera; she reclaimed it the next day.,Zoe,Bea,0,train
+0-0-0-1-2-2-1,Mia was lent the charger by Ava; she returned it that evening.,Ava,Mia,1,validation
+1-0-1-1-2-0-0,Mia's charger was borrowed by Ava; she kept it after class.,Mia,Ava,1,fresh_test
+0-1-0-1-1-2-0,Mia was lent the coat by Ava; she reclaimed it that evening.,Mia,Ava,1,train
+0-1-0-1-1-3-0,Mia was lent the coat by Ava; she reclaimed it the next day.,Mia,Ava,1,fresh_test
+0-1-1-0-2-0-1,Kira lent Lana the charger; she asked for it back after class.,Lana,Kira,1,train
+1-0-0-1-6-2-0,Mia's umbrella was borrowed by Ava; she returned it that evening.,Mia,Ava,1,train
+1-1-0-1-4-2-0,Bea's scarf was borrowed by Zoe; she reclaimed it that evening.,Bea,Zoe,0,train
+1-1-0-1-3-1-1,Mia's camera was borrowed by Ava; she reclaimed it before lunch.,Ava,Mia,1,validation
+1-0-1-1-0-3-0,Mia's book was borrowed by Ava; she kept it the next day.,Mia,Ava,1,train
+0-0-0-0-4-1-0,Zoe lent Bea the scarf; she returned it before lunch.,Zoe,Bea,1,train
+0-0-1-0-5-0-1,Zoe lent Bea the tablet; she kept it after class.,Bea,Zoe,0,fresh_test
+0-1-1-1-1-0-1,Bea was lent the coat by Zoe; she asked for it back after class.,Zoe,Bea,0,train
+0-0-1-0-2-0-1,Kira lent Lana the charger; she kept it after class.,Lana,Kira,0,train
+1-0-1-1-7-3-0,Mia's folder was borrowed by Ava; she kept it the next day.,Mia,Ava,1,fresh_test
+0-0-0-0-1-3-1,Ava lent Mia the coat; she returned it the next day.,Mia,Ava,0,train
+0-0-0-0-2-2-1,Kira lent Lana the charger; she returned it that evening.,Lana,Kira,0,train
+0-1-0-1-3-1-1,Iris was lent the camera by Nora; she reclaimed it before lunch.,Nora,Iris,0,validation
+1-0-1-1-3-2-0,Lana's camera was borrowed by Kira; she kept it that evening.,Lana,Kira,1,train
+1-1-1-0-1-2-0,Nora borrowed Iris's coat; she asked for it back that evening.,Nora,Iris,1,train
+1-1-1-0-4-2-0,Nora borrowed Iris's scarf; she asked for it back that evening.,Nora,Iris,1,train
+0-1-1-1-0-1-1,Lana was lent the book by Kira; she asked for it back before lunch.,Kira,Lana,0,train
+1-0-1-1-2-3-0,Mia's charger was borrowed by Ava; she kept it the next day.,Mia,Ava,1,fresh_test
+1-1-0-1-4-3-0,Iris's scarf was borrowed by Nora; she reclaimed it the next day.,Iris,Nora,0,train
+0-0-1-1-7-1-1,Iris was lent the folder by Nora; she kept it before lunch.,Nora,Iris,1,train
+0-0-1-0-4-1-0,Kira lent Lana the scarf; she kept it before lunch.,Kira,Lana,1,fresh_test
+1-1-1-0-4-0-0,Zoe borrowed Bea's scarf; she asked for it back after class.,Zoe,Bea,1,validation
+0-0-0-1-0-2-1,Bea was lent the book by Zoe; she returned it that evening.,Zoe,Bea,1,train
+0-0-0-0-2-1-1,Zoe lent Bea the charger; she returned it before lunch.,Bea,Zoe,0,fresh_test
+0-1-1-1-4-1-0,Lana was lent the scarf by Kira; she asked for it back before lunch.,Lana,Kira,1,validation
+1-0-0-0-1-0-0,Nora borrowed Iris's coat; she returned it after class.,Nora,Iris,0,train
+0-0-0-0-2-2-0,Kira lent Lana the charger; she returned it that evening.,Kira,Lana,1,train
+1-1-0-0-5-0-0,Ava borrowed Mia's tablet; she reclaimed it after class.,Ava,Mia,1,train
+0-1-0-0-0-1-0,Zoe lent Bea the book; she reclaimed it before lunch.,Zoe,Bea,0,train
+0-1-0-1-6-3-0,Lana was lent the umbrella by Kira; she reclaimed it the next day.,Lana,Kira,1,validation
+0-0-1-0-5-2-0,Kira lent Lana the tablet; she kept it that evening.,Kira,Lana,1,train
+1-0-1-1-1-3-1,Lana's coat was borrowed by Kira; she kept it the next day.,Kira,Lana,0,train
+1-1-0-1-2-3-0,Lana's charger was borrowed by Kira; she reclaimed it the next day.,Lana,Kira,0,train
+0-1-1-0-1-0-0,Kira lent Lana the coat; she asked for it back after class.,Kira,Lana,0,fresh_test
+0-0-0-0-3-1-0,Kira lent Lana the camera; she returned it before lunch.,Kira,Lana,1,train
+0-1-1-1-7-2-1,Iris was lent the folder by Nora; she asked for it back that evening.,Nora,Iris,0,fresh_test
+0-1-1-0-7-2-0,Kira lent Lana the folder; she asked for it back that evening.,Kira,Lana,0,validation
+1-1-0-0-2-2-1,Kira borrowed Lana's charger; she reclaimed it that evening.,Lana,Kira,0,fresh_test
+1-1-1-1-2-0-1,Lana's charger was borrowed by Kira; she asked for it back after class.,Kira,Lana,1,train
+1-0-0-0-6-1-1,Nora borrowed Iris's umbrella; she returned it before lunch.,Iris,Nora,1,fresh_test
+0-0-0-0-5-0-0,Ava lent Mia the tablet; she returned it after class.,Ava,Mia,1,fresh_test
+0-1-0-1-4-2-0,Iris was lent the scarf by Nora; she reclaimed it that evening.,Iris,Nora,1,fresh_test
+0-1-1-0-2-3-1,Ava lent Mia the charger; she asked for it back the next day.,Mia,Ava,1,fresh_test
+1-1-0-1-4-2-1,Bea's scarf was borrowed by Zoe; she reclaimed it that evening.,Zoe,Bea,1,train
+0-0-0-0-1-1-1,Kira lent Lana the coat; she returned it before lunch.,Lana,Kira,0,train
+0-0-0-0-4-2-1,Kira lent Lana the scarf; she returned it that evening.,Lana,Kira,0,train
+1-1-1-0-7-3-1,Ava borrowed Mia's folder; she asked for it back the next day.,Mia,Ava,0,train
+1-0-1-0-1-1-0,Kira borrowed Lana's coat; she kept it before lunch.,Kira,Lana,0,train
+0-0-1-0-4-0-0,Kira lent Lana the scarf; she kept it after class.,Kira,Lana,1,train
+0-0-0-1-0-1-1,Bea was lent the book by Zoe; she returned it before lunch.,Zoe,Bea,1,fresh_test
+0-1-1-0-7-1-1,Zoe lent Bea the folder; she asked for it back before lunch.,Bea,Zoe,1,fresh_test
+0-0-0-0-4-3-1,Zoe lent Bea the scarf; she returned it the next day.,Bea,Zoe,0,train
+0-1-0-0-3-2-0,Kira lent Lana the camera; she reclaimed it that evening.,Kira,Lana,0,train
+0-1-0-0-0-0-1,Nora lent Iris the book; she reclaimed it after class.,Iris,Nora,1,train
+0-0-1-0-3-3-1,Kira lent Lana the camera; she kept it the next day.,Lana,Kira,0,validation
+1-0-1-1-7-3-1,Mia's folder was borrowed by Ava; she kept it the next day.,Ava,Mia,0,fresh_test
+1-0-1-0-1-3-1,Zoe borrowed Bea's coat; she kept it the next day.,Bea,Zoe,1,fresh_test
+0-0-0-1-3-2-0,Iris was lent the camera by Nora; she returned it that evening.,Iris,Nora,0,train
+1-0-1-0-6-2-1,Ava borrowed Mia's umbrella; she kept it that evening.,Mia,Ava,1,train
+1-1-1-1-5-0-1,Lana's tablet was borrowed by Kira; she asked for it back after class.,Kira,Lana,1,train
+0-1-0-0-0-1-1,Zoe lent Bea the book; she reclaimed it before lunch.,Bea,Zoe,1,train
+1-0-1-0-5-0-1,Nora borrowed Iris's tablet; she kept it after class.,Iris,Nora,1,fresh_test
+1-1-1-0-2-3-1,Ava borrowed Mia's charger; she asked for it back the next day.,Mia,Ava,0,fresh_test
+1-0-1-1-5-3-1,Iris's tablet was borrowed by Nora; she kept it the next day.,Nora,Iris,0,train
+0-1-1-0-4-3-1,Zoe lent Bea the scarf; she asked for it back the next day.,Bea,Zoe,1,train
+1-1-1-1-1-0-1,Bea's coat was borrowed by Zoe; she asked for it back after class.,Zoe,Bea,1,train
+1-1-0-1-3-0-1,Lana's camera was borrowed by Kira; she reclaimed it after class.,Kira,Lana,1,train
+0-0-1-0-3-2-0,Kira lent Lana the camera; she kept it that evening.,Kira,Lana,1,validation
+0-1-1-1-7-0-0,Iris was lent the folder by Nora; she asked for it back after class.,Iris,Nora,1,validation
+1-0-1-1-5-0-1,Iris's tablet was borrowed by Nora; she kept it after class.,Nora,Iris,0,fresh_test
+0-0-0-1-5-0-0,Mia was lent the tablet by Ava; she returned it after class.,Mia,Ava,0,train
+1-1-0-1-0-2-0,Iris's book was borrowed by Nora; she reclaimed it that evening.,Iris,Nora,0,validation
+0-0-0-0-6-2-1,Zoe lent Bea the umbrella; she returned it that evening.,Bea,Zoe,0,fresh_test
+0-1-0-0-7-1-1,Nora lent Iris the folder; she reclaimed it before lunch.,Iris,Nora,1,train
+0-1-1-1-6-1-0,Lana was lent the umbrella by Kira; she asked for it back before lunch.,Lana,Kira,1,train
+0-0-1-0-6-1-0,Kira lent Lana the umbrella; she kept it before lunch.,Kira,Lana,1,train
+1-1-1-0-5-0-1,Nora borrowed Iris's tablet; she asked for it back after class.,Iris,Nora,0,train
+0-0-0-1-0-0-0,Lana was lent the book by Kira; she returned it after class.,Lana,Kira,0,fresh_test
+1-0-0-0-3-1-1,Kira borrowed Lana's camera; she returned it before lunch.,Lana,Kira,1,fresh_test
+0-1-0-1-7-2-0,Lana was lent the folder by Kira; she reclaimed it that evening.,Lana,Kira,1,train
+1-0-0-0-3-0-1,Nora borrowed Iris's camera; she returned it after class.,Iris,Nora,1,fresh_test
+0-0-1-1-2-1-1,Iris was lent the charger by Nora; she kept it before lunch.,Nora,Iris,1,train
+1-1-1-1-3-1-0,Iris's camera was borrowed by Nora; she asked for it back before lunch.,Iris,Nora,0,train
+0-0-0-0-5-0-1,Ava lent Mia the tablet; she returned it after class.,Mia,Ava,0,fresh_test
+0-1-1-0-1-3-0,Zoe lent Bea the coat; she asked for it back the next day.,Zoe,Bea,0,train
+1-0-0-1-5-0-0,Lana's tablet was borrowed by Kira; she returned it after class.,Lana,Kira,1,validation
+0-0-1-1-0-2-1,Lana was lent the book by Kira; she kept it that evening.,Kira,Lana,1,validation
+1-0-1-0-3-2-1,Zoe borrowed Bea's camera; she kept it that evening.,Bea,Zoe,1,validation
+1-0-0-0-5-2-0,Zoe borrowed Bea's tablet; she returned it that evening.,Zoe,Bea,0,train
+0-0-0-0-3-0-0,Ava lent Mia the camera; she returned it after class.,Ava,Mia,1,train
+1-0-0-0-6-2-1,Nora borrowed Iris's umbrella; she returned it that evening.,Iris,Nora,1,train
+0-1-1-0-7-0-1,Nora lent Iris the folder; she asked for it back after class.,Iris,Nora,1,train
+0-1-0-0-4-0-1,Zoe lent Bea the scarf; she reclaimed it after class.,Bea,Zoe,1,validation
+0-1-0-0-2-3-0,Kira lent Lana the charger; she reclaimed it the next day.,Kira,Lana,0,train
+1-0-0-0-4-3-1,Zoe borrowed Bea's scarf; she returned it the next day.,Bea,Zoe,1,train
+0-0-1-0-1-0-0,Ava lent Mia the coat; she kept it after class.,Ava,Mia,1,fresh_test
+1-0-0-1-5-3-0,Mia's tablet was borrowed by Ava; she returned it the next day.,Mia,Ava,1,validation
+0-1-0-0-2-1-1,Zoe lent Bea the charger; she reclaimed it before lunch.,Bea,Zoe,1,train
+0-0-1-1-0-1-1,Lana was lent the book by Kira; she kept it before lunch.,Kira,Lana,1,train
+0-1-0-1-5-1-0,Iris was lent the tablet by Nora; she reclaimed it before lunch.,Iris,Nora,1,train
+1-0-0-1-2-3-1,Mia's charger was borrowed by Ava; she returned it the next day.,Ava,Mia,0,train
+1-1-1-0-3-3-0,Kira borrowed Lana's camera; she asked for it back the next day.,Kira,Lana,1,train
+1-0-1-1-1-0-0,Mia's coat was borrowed by Ava; she kept it after class.,Mia,Ava,1,train
+1-0-1-0-5-2-0,Zoe borrowed Bea's tablet; she kept it that evening.,Zoe,Bea,0,fresh_test
+1-1-0-1-5-0-0,Bea's tablet was borrowed by Zoe; she reclaimed it after class.,Bea,Zoe,0,fresh_test
+1-1-0-1-7-2-0,Lana's folder was borrowed by Kira; she reclaimed it that evening.,Lana,Kira,0,train
+0-0-0-1-2-0-0,Lana was lent the charger by Kira; she returned it after class.,Lana,Kira,0,train
+1-0-0-0-1-0-1,Nora borrowed Iris's coat; she returned it after class.,Iris,Nora,1,train
+1-1-1-0-5-0-0,Nora borrowed Iris's tablet; she asked for it back after class.,Nora,Iris,1,train
+0-0-1-0-0-1-1,Ava lent Mia the book; she kept it before lunch.,Mia,Ava,0,fresh_test
+1-1-0-0-2-3-0,Kira borrowed Lana's charger; she reclaimed it the next day.,Kira,Lana,1,validation

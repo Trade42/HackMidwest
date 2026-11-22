@@ -1,9 +1,0 @@
-sentence,delayed_query,candidate_0,candidate_1,answer,quantum_success_probability
-Ava is taller than Mia but older than Mia.,Choose her: taller.,Ava,Mia,0,0.8535533905932737
-Ava is taller than Mia but older than Mia.,Choose her: older.,Ava,Mia,0,0.8535533905932737
-Ava is taller than Mia but younger than Mia.,Choose her: taller.,Ava,Mia,0,0.8535533905932737
-Ava is taller than Mia but younger than Mia.,Choose her: older.,Ava,Mia,1,0.8535533905932737
-Ava is shorter than Mia but older than Mia.,Choose her: taller.,Ava,Mia,1,0.8535533905932737
-Ava is shorter than Mia but older than Mia.,Choose her: older.,Ava,Mia,0,0.8535533905932737
-Ava is shorter than Mia but younger than Mia.,Choose her: taller.,Ava,Mia,1,0.8535533905932737
-Ava is shorter than Mia but younger than Mia.,Choose her: older.,Ava,Mia,1,0.8535533905932737

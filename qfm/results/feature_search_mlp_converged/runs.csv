@@ -1,4 +1,0 @@
-name,family,seed,classifier,n_train,validation_accuracy,train_accuracy,fit_and_tune_seconds,parameters,convergence_warnings,features_kept
-raw_mlp_lbfgs,raw,101,mlp_lbfgs,128,0.7421875,1.0,0.9907047039996542,"{""hidden_layer_sizes"": [32, 16], ""alpha"": 0.01}",0,8
-raw_mlp_lbfgs,raw,102,mlp_lbfgs,128,0.859375,1.0,1.318701799998962,"{""hidden_layer_sizes"": [32], ""alpha"": 0.1}",0,8
-raw_mlp_lbfgs,raw,103,mlp_lbfgs,128,0.78125,1.0,1.3116327479983738,"{""hidden_layer_sizes"": [32, 16], ""alpha"": 0.1}",0,8

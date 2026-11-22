@@ -27,8 +27,8 @@ import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, REFERENCE, TCBP_OWN, TEST_ROWS,
-                         TEST_SHA256)
+from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, PREDECODER_LABEL, PREDECODER_TEST,
+                         REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256)
 
 HERE = Path(__file__).resolve().parent
 # REPORT_OUT sends the tables elsewhere and leaves the documents alone: used by the tests only.
@@ -220,7 +220,7 @@ def load_test_rows(data=DATA):
                                  and row["failed_pair"] is not None else None)
                 row["interval"] = stats.per_cycle_interval(row["failures_pair"], row["shots"])
     known = {spec.folder.format(p=p) + suffix for spec in TEST_ROWS for p in P_VALUES for suffix in ("", RETIME)}
-    known |= {f"ensemble_p{p}" for p in P_VALUES} | {f"net_p{p}" for p in P_VALUES}
+    known |= {f"ensemble_p{p}" for p in P_VALUES} | {f"net_p{p}" for p in P_VALUES} | {"predecoder"}
     extra = sorted(path.name for path in (data / "test").glob("*") if path.is_dir() and path.name not in known) if (data / "test").is_dir() else []
     return measured, extra, combined
 
@@ -1741,6 +1741,89 @@ def swap_statement():
     fact("swap_statement", text, "tables/test_after_swap.md")
 
 
+def predecoder_table(measured):
+    """The learned predecoder on the saved test shots: relay-BP with the head's per-shot priors (H) against relay-BP with the kit's
+    priors built the same way, per shot (fresh: the declared pair), TCBP-JOBS (T) and the evaluator's relay-BP row (R), one basis.
+
+    The counts are the run's own (predecoder.compare and predecoder.secondary); its per-shot file is not in git. T's and R's totals
+    are checked against the rows of this report on the same shots, and the run must name the team's test file.
+    """
+    source = "tables/test_predecoder.md"
+    lines, records = [], []
+    for p, basis in PREDECODER_TEST:
+        n = f"pre{p[-1]}{basis}"
+        files = [DATA / "test" / "predecoder" / f"test_run_p{p}_{basis}_{kind}.json" for kind in ("summary", "secondary")]
+        if not all(file.is_file() for file in files):
+            lines.append([p, basis, "relay-BP with the head's priors (H)"] + [NOT_MEASURED] * 4)
+            for name in ("H", "fresh", "T", "R", "vs_fresh_only_H", "vs_fresh_only_other", "vs_fresh_p", "vs_T_only_H", "vs_T_only_other", "vs_T_p",
+                         "vs_R_only_H", "vs_R_only_other", "vs_R_p", "it_H", "it_fresh", "ratio", "it_ratio"):
+                fact(f"{n}_{name}", None, source)
+            continue
+        summary, secondary = (json.loads(file.read_text(encoding="utf-8")) for file in files)
+        for record in (summary, secondary):
+            if record["data"]["sha256"] != TEST_SHA256[p][basis] or record["data"]["basis"] != basis or abs(record["data"]["p"] - float(p)) > 1e-12:
+                raise Mismatch(f"test/predecoder, p = {p}, {basis}: not the team's test file (sha256 {record['data']['sha256'][:12]})")
+        arms, failures, pairs = summary["arms"], secondary["failures"], secondary["pairs"]
+        key = lambda table, start: next(name for name in table if name.startswith(start))
+        declared, theirs = summary["pairs"]["head_vs_fresh"], pairs[key(pairs, "H against fresh")]
+        if (declared["both"], declared["only_head"], declared["only_fresh"]) != (theirs["both"], theirs["only_H"], theirs["only_other"]):
+            raise Mismatch(f"test/predecoder, p = {p}, {basis}: the summary and the secondary file give other counts for head against fresh")
+        if (arms["head"]["failures"], arms["fresh"]["failures"]) != (failures[key(failures, "H ")]["failures"], failures[key(failures, "fresh")]["failures"]):
+            raise Mismatch(f"test/predecoder, p = {p}, {basis}: the summary and the secondary file give other failures")
+        for start, report_key, words in (("T ", "tcbp", "TCBP-JOBS"), ("R ", REFERENCE, "relay-BP's timed row")):
+            row = measured[p].get(report_key)
+            if row is not None and row[f"failures_{basis}"] != failures[key(failures, start)]["failures"]:
+                raise Mismatch(f"test/predecoder, p = {p}, {basis}: {words} fails {failures[key(failures, start)]['failures']} shots there and "
+                               f"{row[f'failures_{basis}']} in this report's row on the same shots")
+        shots = summary["shots"]
+        rows = [("H", "relay-BP with the head's priors, a decoder built per shot (H; ours)", arms["head"]["failures"], None, arms["head"]),
+                ("fresh", "relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit)", arms["fresh"]["failures"],
+                 theirs, arms["fresh"]),
+                ("T", "TCBP-JOBS (NVIDIA, GPU; its row of this report)", failures[key(failures, "T ")]["failures"], pairs[key(pairs, "H against T")], None),
+                ("R", "relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report)", failures[key(failures, "R ")]["failures"],
+                 pairs[key(pairs, "H against R")], None)]
+        for short, label, count, paired, arm in rows:
+            low, high = stats.wilson(count, shots)
+            lines.append([p, basis, label, f"{count:,} of {shots:,}", f"{count / shots:.2%} ({low:.2%} to {high:.2%})",
+                          "" if paired is None else f"{paired['both']} / {paired['only_H']} / {paired['only_other']} (p = {stats.p_text(paired['p'])})",
+                          "" if arm is None else f"{arm['mean_iterations']:,.0f}; {arm['unconverged']} not converged"])
+            records.append({"p": p, "basis": basis, "row": short, "failures": count, "shots": shots, "wilson95_low": low, "wilson95_high": high,
+                            "both_fail": paired and paired["both"], "only_H_fails": paired and paired["only_H"], "only_this_row_fails": paired and paired["only_other"],
+                            "exact_p": paired and paired["p"], "mean_iterations": arm and arm["mean_iterations"], "unconverged": arm and arm["unconverged"]})
+            fact(f"{n}_{short}", count, source)
+            if paired is not None:
+                tag = {"fresh": "vs_fresh", "T": "vs_T", "R": "vs_R"}[short]
+                fact(f"{n}_{tag}_only_H", paired["only_H"], source)
+                fact(f"{n}_{tag}_only_other", paired["only_other"], source)
+                fact(f"{n}_{tag}_p", stats.p_text(paired["p"]), source)
+        fact("pre_columns", f"{summary['logits']['columns']:,}", source)
+        fact(f"{n}_it_H", f"{arms['head']['mean_iterations']:,.0f}", source)
+        fact(f"{n}_it_fresh", f"{arms['fresh']['mean_iterations']:,.0f}", source)
+        fact(f"{n}_ratio", f"{arms['fresh']['failures'] / arms['head']['failures']:.1f}" if arms["head"]["failures"] else None, source)
+        fact(f"{n}_it_ratio", f"{arms['fresh']['mean_iterations'] / arms['head']['mean_iterations']:.1f}", source)
+    gate = DATA / "exploration" / "predecoder" / "compare_validation_X_summary.json"
+    if gate.is_file():
+        record = json.loads(gate.read_text(encoding="utf-8"))
+        pair = record["pairs"]["head_vs_fresh"]
+        for name, value in (("H", record["arms"]["head"]["failures"]), ("fresh", record["arms"]["fresh"]["failures"]), ("shots", f"{record['shots']:,}"),
+                            ("only_H", pair["only_head"]), ("only_fresh", pair["only_fresh"]), ("p", stats.p_text(pair["p"]))):
+            fact(f"pregate_{name}", value, "data/exploration/predecoder/compare_validation_X_summary.json")
+    else:
+        for name in ("H", "fresh", "shots", "only_H", "only_fresh", "p"):
+            fact(f"pregate_{name}", None, "data/exploration/predecoder/compare_validation_X_summary.json")
+    return write("test_predecoder",
+                 f"**The learned predecoder on the test shots: {PREDECODER_LABEL}.** Relay-BP at the kit's settings, given for each shot the priors "
+                 "that a second output (a \"head\") of our trained network computes from that shot's detectors; truth enters only the scoring. "
+                 "Per noise level and basis: the saved test file of that basis alone, so a row counts shots, not pairs, and cannot sit in the "
+                 "pair-scored tables. H against the others: both fail / only H fails / only the other fails (exact p), on the same shots. "
+                 "Counts from the run's own files (`predecoder.compare`, `predecoder.secondary`); TCBP-JOBS's and relay-BP's totals are checked "
+                 "against their rows in this report.\n\n"
+                 + markdown(["p", "Basis", "Decoder", "Failed shots", "Share (95% interval)", "H against it: both / only H / only it (exact p)",
+                             "Mean BP iterations per shot; shots not converged"], lines)
+                 + "\n\nSource: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.json` (copied from `predecoder/logs/`).",
+                 records)
+
+
 def ours_at(measured, p):
     """Our timed decoder at p: the one-core row, or the two-core row (checked to give the same answers) if the first has not landed."""
     return measured[p].get("hierarchy") or measured[p].get("hierarchy-parallel")
@@ -1903,6 +1986,7 @@ def main(argv=None):
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
             "resources": resources_table(measured), "test_after_swap": swap_table(combined)}
         tables["test_after_swap_short"] = (TABLES / "test_after_swap_short.md").read_text(encoding="utf-8")
+        tables["test_predecoder"] = predecoder_table(measured)
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)

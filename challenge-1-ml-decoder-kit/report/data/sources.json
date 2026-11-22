@@ -274,6 +274,17 @@
   "path": "files/ens_p0.005/validation_Z.npz",
   "sha256": "a4ce6456914ad51f558df66f258d98c9e256b633d546af0e02840598da506cda"
  },
+ "exploration/predecoder/compare_validation_X_summary.json": {
+  "branch": "tree",
+  "bytes": 4372,
+  "commit": "f118d19b67e7f89c99bb145ad1d43e3210e5e717",
+  "copied_utc": "2026-11-22 14:30",
+  "file": "exploration/predecoder/compare_validation_X_summary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/compare_validation_X_summary.json` (last changed in commit `f118d19b67e7`)",
+  "grows": false,
+  "path": "predecoder/logs/compare_validation_X_summary.json",
+  "sha256": "fcd31bcb1e1807243f437d100e471a86b431fcbbf520891efa337dbabeea42b4"
+ },
  "exploration/priortilt/results_8b.txt": {
   "branch": "origin/laptop-artifacts",
   "bytes": 3885,
@@ -2234,6 +2245,28 @@
   "grows": false,
   "path": "files/test/net_p0.005/netZ_test_Z.json",
   "sha256": "dca5279a90471b3dd3d7242248059dfd8e7beea249bc4a1f25cf3accbfdbfe1a"
+ },
+ "test/predecoder/test_run_p0.005_X_secondary.json": {
+  "branch": "tree",
+  "bytes": 1810,
+  "commit": "21a9d5d37b7933eb3850649a3b21b74844a81e58",
+  "copied_utc": "2026-11-22 14:30",
+  "file": "test/predecoder/test_run_p0.005_X_secondary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.005_X_secondary.json` (last changed in commit `21a9d5d37b79`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.005_X_secondary.json",
+  "sha256": "9450580296781b7f8309af4573e848a06a289ed081ce3ab3774bcfefc78b6199"
+ },
+ "test/predecoder/test_run_p0.005_X_summary.json": {
+  "branch": "tree",
+  "bytes": 3209,
+  "commit": "21a9d5d37b7933eb3850649a3b21b74844a81e58",
+  "copied_utc": "2026-11-22 14:30",
+  "file": "test/predecoder/test_run_p0.005_X_summary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.005_X_summary.json` (last changed in commit `21a9d5d37b79`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.005_X_summary.json",
+  "sha256": "54021ec1131f62c469c816cbc89111d8a528ade0b8a896bb127dae80c705d0af"
  },
  "test/runner_cpu.out": {
   "branch": "origin/server-logs",

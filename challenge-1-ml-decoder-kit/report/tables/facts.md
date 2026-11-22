@@ -391,6 +391,64 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `netalone4_Z` | 4.3% | `data/test/net_p0.004/` |
 | `netalone5_X` | 18.9% | `data/test/net_p0.005/` |
 | `netalone5_Z` | 18.1% | `data/test/net_p0.005/` |
+| `pre3X_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_R` | not measured | `tables/test_predecoder.md` |
+| `pre3X_T` | not measured | `tables/test_predecoder.md` |
+| `pre3X_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre3X_it_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_it_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre3X_it_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre3X_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_R_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_R_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_R_p` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_T_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_T_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_T_p` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_fresh_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_fresh_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_fresh_p` | not measured | `tables/test_predecoder.md` |
+| `pre4X_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_R` | not measured | `tables/test_predecoder.md` |
+| `pre4X_T` | not measured | `tables/test_predecoder.md` |
+| `pre4X_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre4X_it_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_it_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre4X_it_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre4X_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_R_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_R_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_R_p` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_T_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_T_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_T_p` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_fresh_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_fresh_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_fresh_p` | not measured | `tables/test_predecoder.md` |
+| `pre5X_H` | 151 | `tables/test_predecoder.md` |
+| `pre5X_R` | 432 | `tables/test_predecoder.md` |
+| `pre5X_T` | 186 | `tables/test_predecoder.md` |
+| `pre5X_fresh` | 433 | `tables/test_predecoder.md` |
+| `pre5X_it_H` | 711 | `tables/test_predecoder.md` |
+| `pre5X_it_fresh` | 2,436 | `tables/test_predecoder.md` |
+| `pre5X_it_ratio` | 3.4 | `tables/test_predecoder.md` |
+| `pre5X_ratio` | 2.9 | `tables/test_predecoder.md` |
+| `pre5X_vs_R_only_H` | 27 | `tables/test_predecoder.md` |
+| `pre5X_vs_R_only_other` | 308 | `tables/test_predecoder.md` |
+| `pre5X_vs_R_p` | 1e-61 | `tables/test_predecoder.md` |
+| `pre5X_vs_T_only_H` | 61 | `tables/test_predecoder.md` |
+| `pre5X_vs_T_only_other` | 96 | `tables/test_predecoder.md` |
+| `pre5X_vs_T_p` | 0.006 | `tables/test_predecoder.md` |
+| `pre5X_vs_fresh_only_H` | 26 | `tables/test_predecoder.md` |
+| `pre5X_vs_fresh_only_other` | 308 | `tables/test_predecoder.md` |
+| `pre5X_vs_fresh_p` | 2e-62 | `tables/test_predecoder.md` |
+| `pre_columns` | 8,784 | `tables/test_predecoder.md` |
+| `pregate_H` | 14 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_fresh` | 20 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_only_H` | 6 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_only_fresh` | 12 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_p` | 0.24 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_shots` | 5,000 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `rule_X` | network | `data/test/test_run.out` |
 | `rule_X_converged` | 67 | `data/test/test_run.out` |
 | `rule_X_network` | 60 | `data/test/test_run.out` |

@@ -210,6 +210,28 @@ scored on the test shots among its pre-registered rules, and it is the closest o
 
 <!--f:swap_statement-->TCBP-JOBS in place of relay-BP in our hierarchy (run after the test results were seen, at the team's request; an ablation, not our decoder; the ensemble's rule d, scored offline on the test shots) is level with TCBP-JOBS alone at p = 0.004 (39 against 41 failed pairs; only the swap fails 10, only TCBP-JOBS 12, exact p = 0.83) and behind TCBP-JOBS alone at p = 0.005 (403 against 360 failed pairs; only the swap fails 112, only TCBP-JOBS 69, exact p = 0.002). Against our frozen decoder's offline decode of the same shots (rule a) it fails 39 against 50 pairs at p = 0.004 (exact p = 0.019) and 403 against 490 at p = 0.005 (exact p = 2e-14): TCBP-JOBS is the stronger third candidate, but where the two PriorTilt runs agree the swap keeps their answer. At p = 0.005 they agree on a wrong answer that TCBP-JOBS gets right on 36 X and 42 Z shots (and on a right answer where TCBP-JOBS is wrong on 31 and 26); where all three differ, the network's pick fails 19 X and 16 Z shots that TCBP-JOBS gets right (6 and 7 the other way). What beats TCBP-JOBS is the ensemble's rule f, which adds joint decoding: 16 against 41 failed pairs at p = 0.004.<!--/f-->
 
+### A learned predecoder for relay-BP (`predecoder/`): a secondary result, one basis only
+
+Our network can also help relay-BP directly. A second output of the trained network, a "head" of 17,617 numbers
+trained on top of the frozen network (`predecoder/README.md`), reads each shot and says, for each of the <!--f:pre_columns-->8,784<!--/f--> faults relay-BP considers, how
+likely that fault is in this shot. Those numbers replace the kit's fixed priors for that one shot, and relay-BP then
+decodes as usual (`predecoder/README.md` explains it). This is the one place where the network changes what a decoder
+believes, instead of choosing among finished answers. The head is ours; relay-BP is the kit's.
+
+- **The gate fixed in advance was not passed.** On exploration shots (the validation file at p = 0.004, not test
+  shots), relay-BP with the head's priors failed <!--f:pregate_H-->14<!--/f--> of <!--f:pregate_shots-->5,000<!--/f--> X shots against <!--f:pregate_fresh-->20<!--/f--> with the kit's
+  priors (only the head's <!--f:pregate_only_H-->6<!--/f--> against <!--f:pregate_only_fresh-->12<!--/f-->, exact p = <!--f:pregate_p-->0.24<!--/f-->): not a significant gain.
+- **One run on the test shots at p = 0.005, X memory, on Sal's yes.** It was registered before any p = 0.005 row of
+  ours existed, run once, and confirmed by the test audit. It is a **secondary result**: chosen after the gate failed,
+  X memory only, accuracy only, and not a pair score, because Z memory has no head yet. On the 10,000 test X shots,
+  relay-BP with the head's priors fails <!--f:pre5X_H-->151<!--/f--> against <!--f:pre5X_fresh-->433<!--/f--> with the kit's priors, built the same way
+  (only the head's <!--f:pre5X_vs_fresh_only_H-->26<!--/f--> against <!--f:pre5X_vs_fresh_only_other-->308<!--/f-->, exact p = <!--f:pre5X_vs_fresh_p-->2e-62<!--/f-->). That is <!--f:pre5X_ratio-->2.9<!--/f--> times fewer
+  failures, with <!--f:pre5X_it_ratio-->3.4<!--/f--> times fewer BP iterations. On the same X shots, TCBP-JOBS fails <!--f:pre5X_T-->186<!--/f--> (only the
+  head's <!--f:pre5X_vs_T_only_H-->61<!--/f--> against <!--f:pre5X_vs_T_only_other-->96<!--/f-->, exact p = <!--f:pre5X_vs_T_p-->0.006<!--/f-->), and relay-BP's timed row fails <!--f:pre5X_R-->432<!--/f-->.
+- **What it does not show.** It covers one noise level and one basis, so it is not the kit's score, which counts
+  pairs. Its times come from a shared 12-worker pool on the team's PC and are not clean, so the table gives
+  iterations instead. `APPENDIX.md` K has the table.
+
 ### On the exploration shots (not test shots)
 
 At p = 0.004, on <!--f:expl_pairs-->25,000<!--/f--> pairs of the train and validation files: relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one

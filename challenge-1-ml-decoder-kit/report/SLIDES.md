@@ -164,6 +164,13 @@ the same test pairs: <!--f:t3_hierarchy_time_ratio-->0.54<!--/f--> at p = 0.003,
 against relay-BP's <!--f:t3_relay_bp_pairs-->5<!--/f-->, <!--f:t4_relay_bp_pairs-->83<!--/f--> and <!--f:t5_relay_bp_pairs-->845<!--/f-->. The table `report/tables/test_time.md`
 puts every ratio beside its failures.
 
+**Does the network do more than break ties?**
+In one secondary result, yes. A second output of the network gives relay-BP its starting beliefs for each shot (`predecoder/`).
+The gate fixed in advance, on practice shots at p = 0.004, was not passed (<!--f:pregate_H-->14<!--/f--> against <!--f:pregate_fresh-->20<!--/f--> failures, exact
+p = <!--f:pregate_p-->0.24<!--/f-->). One run on the test shots at p = 0.005, chosen after that and on X memory only, gave <!--f:pre5X_H-->151<!--/f--> failures against
+<!--f:pre5X_fresh-->433<!--/f--> for relay-BP with the kit's beliefs (exact p = <!--f:pre5X_vs_fresh_p-->2e-62<!--/f-->) and against TCBP-JOBS's <!--f:pre5X_T-->186<!--/f--> (exact p = <!--f:pre5X_vs_T_p-->0.006<!--/f-->). It counts
+single shots, not the kit's pairs, and its times are not clean. Source: `report/tables/test_predecoder.md`.
+
 **Did anything tune on the test shots?**
 No. Rules, seeds and checkpoints were chosen on the train and validation files; our tools refuse files named `test_`
 unless told that the run is final. Every setting was frozen before the test files were opened; the frozen decoder and

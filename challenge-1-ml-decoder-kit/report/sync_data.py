@@ -130,6 +130,11 @@ SOURCES = [
     ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/x_4h.ckpt_0.83h.eval_lowp.log", False),
     ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/x_1h_w32.log", False),
     ("loss/server/", "origin/server-logs", "files/loss/*/*.json", False),
+    # the learned predecoder (predecoder/, merged into integration at 8ddf14e): its runs on the saved TEST shots (summary and the
+    # secondary rows beside TCBP-JOBS and the evaluator's relay-BP; the per-shot file stays out of git), and the declared gate on exploration shots
+    ("test/predecoder/", "tree", "predecoder/logs/test_run_p*_summary.json", False),
+    ("test/predecoder/", "tree", "predecoder/logs/test_run_p*_secondary.json", False),
+    ("exploration/predecoder/", "tree", "predecoder/logs/compare_validation_X_summary.json", False),
 ]
 
 
@@ -256,6 +261,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--check", action="store_true", help="copy nothing; verify every recorded file's sha256")
     parser.add_argument("--accept-change", nargs="*", default=[], help="files under report/data/ whose source may have changed")
+    parser.add_argument("--only", nargs="*", default=None, help="copy only the sources whose destination under report/data/ starts with one of these")
     args = parser.parse_args(argv)
     records = json.loads(RECORD.read_text()) if RECORD.exists() else {}
 
@@ -272,6 +278,8 @@ def main(argv=None):
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
     copied, changed, waiting, stopped = [], [], [], []
     for destination, where, pattern, grows in SOURCES:
+        if args.only is not None and not destination.startswith(tuple(args.only)):
+            continue
         matches = expand(where, pattern)
         if not matches:
             waiting.append(f"{where}: {pattern}")
@@ -296,7 +304,8 @@ def main(argv=None):
             records[name] = {"file": name, "from": describe(where, path, commit), "branch": where, "commit": commit,
                              "path": path, "sha256": digest, "bytes": len(data), "copied_utc": now, "grows": grows}
             (changed if old else copied).append(name)
-    copied += derive_plugin_metrics(records, now)
+    if args.only is None:
+        copied += derive_plugin_metrics(records, now)
     RECORD.parent.mkdir(parents=True, exist_ok=True)
     RECORD.write_text(json.dumps(records, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     write_sources_md(records)

@@ -235,3 +235,17 @@ def test_the_rows_run_after_the_test_results_are_labelled_and_recomputed():
     facts = (REPORT / "tables" / "facts.md").read_text(encoding="utf-8")
     statement = next(line for line in facts.splitlines() if line.startswith("| `swap_statement` |"))
     assert AFTER_TEST in statement and "our result" not in statement
+
+
+def test_the_predecoder_rows_are_labelled_and_match_their_files():
+    """The predecoder's test rows keep the audit's labels and the run's own counts; they never enter a pair-scored table."""
+    from report.rows import PREDECODER_LABEL
+    table = (REPORT / "tables" / "test_predecoder.md").read_text(encoding="utf-8")
+    assert table.startswith(f"**The learned predecoder on the test shots: {PREDECODER_LABEL}.**")
+    for file in sorted((REPORT / "data" / "test" / "predecoder").glob("test_run_p*_summary.json")):
+        summary = json.loads(file.read_text())
+        pair = summary["pairs"]["head_vs_fresh"]
+        assert f"| {summary['arms']['head']['failures']} of {summary['shots']:,} |" in table
+        assert f"| {pair['both']} / {pair['only_head']} / {pair['only_fresh']} (p = {stats.p_text(pair['p'])}) |" in table
+    for name in ("test_sweep", "test_p0.005", "test_comparisons", "readme_section"):
+        assert "head's priors" not in (REPORT / "tables" / f"{name}.md").read_text(encoding="utf-8")

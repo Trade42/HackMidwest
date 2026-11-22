@@ -1546,6 +1546,8 @@ def tcbp_fit_caveat():
         counts = [int(data[f"failed_{key}"].sum()) for key in ("stored", "job1", "job3")]
         batch = bool(data["job3_batch_equals_per_shot"])
     spread = (max(counts) - min(counts)) / (sum(counts) / len(counts)) / 2
+    fact("tcbp_fit_short", f"TCBP-JOBS fits its model when it starts, and three fits on the same validation shots fail {counts[0]}, {counts[1]} and "
+                           f"{counts[2]}, so its counts carry about ±{spread:.0%}.", "data/exploration/tcbp_fits/validation_X_p0.005_fits.npz")
     fact("tcbp_fit_caveat", f"A caveat on every comparison with TCBP-JOBS: it fits its model when it starts, and the fit varies from run to run. On the same "
                             f"5,000 validation X shots at p = 0.005 (exploration shots), three fits with the kit's priors fail {counts[0]}, {counts[1]} and "
                             f"{counts[2]} shots" + (" (batch and per-shot decoding give the same answers, so the spread is the fit's)" if batch else "")
@@ -2233,7 +2235,7 @@ def operating_rule_table(measured):
     """Sal's request (15:15 UTC): which method at which noise level, per X shot. X test failures from the test rows; times per X shot from the
     timed rows' own per-shot files (our pipeline) and from the predecoder's clean sample on exploration shots. Unpaired counts."""
     source = "tables/operating_rule.md"
-    lines, choice = [], []
+    lines, choice, reference = [], [], []
     for p in P_VALUES:
         n = p[-1]
         ours, two, tcbp = measured[p].get("hierarchy"), measured[p].get("hierarchy-parallel"), measured[p].get("tcbp")
@@ -2256,6 +2258,13 @@ def operating_rule_table(measured):
         if tcbp is not None:
             lines.append([p, "TCBP-JOBS alone (NVIDIA, GPU), for reference", f"{tcbp['failures_X']} of 10,000",
                           ms(lat("tcbp_x_s") * 1e3) if lat_ok and lat("tcbp_x_s") is not None else "", "test shots; a GPU decode call alone"])
+        th = FACTS.get(f"ptt{n}X_TH", (NOT_MEASURED,))[0]
+        if th != NOT_MEASURED:
+            timed = p == "0.005" and FACTS.get("pttime_total", (NOT_MEASURED,))[0] != NOT_MEASURED
+            lines.append([p, "TCBP-JOBS with the head's priors (the TCBP version; designed after the test results were seen), a reference row, not "
+                             "one of the rule's options", f"{th} of 10,000", FACTS["pttime_total"][0] if timed else "not timed",
+                          "an A100 slice, not a clean timing (network on validation shots, build and decode on the test shots)" if timed else ""])
+            reference.append((p, int(th), [option[1] for option in options]))
         one_core = [option for option in options if "two cores" not in option[0]]
         if one_core:
             fewest = min(option[1] for option in one_core)
@@ -2277,6 +2286,11 @@ def operating_rule_table(measured):
                  "count on that file), so a difference of a few shots is within the noise; the times "
                  "come from other runs on other shots and are a guide, not a paired measurement; the fallback needs a GPU for TCBP-JOBS; the fallback rule "
                  "was designed after the first test result, so its counts at p = 0.005 and 0.004 are post hoc, not held out.") if choice else None
+    if statement and reference:
+        fewer = all(th < min(others) for _, th, others in reference if others)
+        statement += (" The TCBP version (designed after the test results were seen; a reference row, not one of the rule's options) has "
+                      + ("fewer X failures than every option at every p (" if fewer else "X failures of (")
+                      + " / ".join(str(th) for _, th, _ in reference) + f" at p = {' / '.join(p for p, _, _ in reference)}); the pick above is unchanged.")
     fact("op_statement", statement, source)
     return write("operating_rule",
                  f"**Which method at which noise level: {OPERATING}.** X memory only: failures of the 10,000 X test shots at each p, and the mean time "
@@ -2657,7 +2671,8 @@ def readme_section(measured):
     lines += markdown(header, table).split("\n")
     lines += ["",
               "Test shots (10,000 pairs per p): logical error rate per cycle ± the kit's error, mean time per pair (CPU rows: the whole decode of "
-              "a pair in one process; TCBP-JOBS: a GPU decode call alone, not comparable with the CPU rows). " + tcbp,
+              "a pair in one process; TCBP-JOBS: a GPU decode call alone, not comparable with the CPU rows). " + tcbp
+              + (" " + FACTS["tcbp_fit_short"][0] if FACTS.get("tcbp_fit_short", (NOT_MEASURED,))[0] not in (NOT_MEASURED, "") else ""),
               "", "![Logical error rate per cycle against p](challenge-1-ml-decoder-kit/report/figures/ler_vs_p.png)", "",
               "Write-up, with every table made by a script from committed files: [report/REPORT.md](challenge-1-ml-decoder-kit/report/REPORT.md). "
               "Everything we built and why: [information.md](information.md)."]
@@ -2711,8 +2726,8 @@ def main(argv=None):
         tables["test_predecoder"] = predecoder_table(measured)
         tables["test_network_timed"] = network_timed_table(measured)
         tables["predecoder_latency"] = predecoder_latency_table(measured)
-        tables["operating_rule"] = operating_rule_table(measured)
         tables["predecoder_tcbp"] = predecoder_tcbp_table(measured)
+        tables["operating_rule"] = operating_rule_table(measured)
         tables["master_comparison"] = master_table(measured, combined)
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))

@@ -1,3 +1,22 @@
 /home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
   import cudaq
 fit of the knobs for tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)) on train_X_T_failed.npz (weight 1), train_X_T_right.npz (weight 9.805), p=0.005; 12 rows; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
+  model fitted in 54.2 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  capped at 0.5 so far: 0 shots, 0 columns
+  train_X_T_failed.npz: 390 shots, {'mode': 'linear', 'alpha': 0.0, 'eps': 1e-06}, failures 341, 54 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  capped at 0.5 so far: 0 shots, 0 columns
+  train_X_T_right.npz: 2000 shots, {'mode': 'linear', 'alpha': 0.0, 'eps': 1e-06}, failures 5, 54 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  capped at 0.5 so far: 0 shots, 0 columns
+  train_X_T_failed.npz: 390 shots, {'mode': 'logodds', 'alpha': 0.1, 'eps': 0.0001}, failures 175, 54 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  capped at 0.5 so far: 0 shots, 0 columns
+  train_X_T_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.1, 'eps': 0.0001}, failures 3, 54 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  capped at 0.5 so far: 0 shots, 0 columns
+  train_X_T_failed.npz: 390 shots, {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}, failures 134, 54 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  capped at 0.5 so far: 0 shots, 0 columns
+  train_X_T_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}, failures 3, 54 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+    train_X_T_failed alpha 0.3: 200 of 390 shots, build 42.1 ms, decode 11.3 ms mean (last 200: 42.1 + 11.3 ms), 12 s; priors capped at 0.5 so far on 1 shots, 1 columns
+  capped at 0.5 so far: 1 shots, 1 columns
+  train_X_T_failed.npz: 390 shots, {'mode': 'logodds', 'alpha': 0.3, 'eps': 0.0001}, failures 119, 77 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+    train_X_T_right alpha 0.3: 200 of 2000 shots, build 41.8 ms, decode 2.8 ms mean (last 200: 41.8 + 2.8 ms), 10 s; priors capped at 0.5 so far on 1 shots, 1 columns
+    train_X_T_right alpha 0.3: 400 of 2000 shots, build 42.4 ms, decode 3.1 ms mean (last 200: 43.0 + 3.4 ms), 20 s; priors capped at 0.5 so far on 1 shots, 1 columns
+    train_X_T_right alpha 0.3: 600 of 2000 shots, build 42.6 ms, decode 3.0 ms mean (last 200: 43.2 + 2.9 ms), 31 s; priors capped at 0.5 so far on 1 shots, 1 columns

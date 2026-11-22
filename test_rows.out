@@ -66,3 +66,5 @@
 2026-11-22T14:01:43Z START eval_p0.005_hierarchy-converged: weight 1, pid 400368; before it: tokens 0, CPUs in use 0.1, throttled so far 4845.0 s
 2026-11-22T14:02:23Z START eval_p0.005_hierarchy-converged-parallel: weight 2, pid 400863; before it: tokens 1, CPUs in use 1.3, throttled so far 4845.0 s
 2026-11-22T14:03:03Z START eval_p0.005_hierarchy-weight: weight 1, pid 401489; before it: tokens 3, CPUs in use 2.5, throttled so far 4845.0 s
+2026-11-22T14:03:43Z START eval_p0.004_hierarchy-converged-parallel: weight 2, pid 401946; before it: tokens 4, CPUs in use 3.6, throttled so far 4845.0 s
+2026-11-22T14:04:23Z START eval_p0.004_hierarchy-weight: weight 1, pid 402683; before it: tokens 6, CPUs in use 5.1, throttled so far 4845.0 s

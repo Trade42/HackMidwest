@@ -297,14 +297,33 @@ laptop while they ran, so no time from it is quoted for the decoders.
   120 validation shots, logits within 4.2e-5 of the laptop's GPU logits (the logits are of
   size about 4.5), with no sign change. Batch-one inference: 48 ms mean with 2 torch threads.
 
-### The other Linux machine (the full files)
+### The server (AMD EPYC-Milan, Linux), busy with other jobs
 
-Not measured at the time of writing. The commands are the ones above; the rows are:
+`candidates.py` and the plugin ran here on full files, from `integration` at 4e955b4, in a
+conda environment with PriorTilt built from the same commit. Ten other processes ran beside
+them, so its times are inflated and are not results.
 
-| Check | Expected | Measured |
-|---|---|---|
-| `candidates.py` on `validation_X.npz`, chunk mode | relay-BP 31 of 5,000 and PriorTilt (P1) 26, equal shot for shot to the laptop's file | not measured yet |
-| the plugin through `evaluation.evaluate` on `validation_X.npz` and `validation_Z.npz` (a plumbing check on validation shots, network rule for X, weight rule for Z) | its predictions equal `select.py` on the session-mode candidates of the same shots, on every shot | not measured yet |
+**`candidates.py` on `validation_X.npz`, chunk mode, 2 processes**
+(`python -m hierarchy.candidates --data data/p0.004/validation_X.npz --out runs/hier/cand_p0.004 --processes 2`;
+output `files/hier/cand_p0.004/validation_X.chunks.npz` on the branch `server-logs`, sha256
+`847871867ce9ee240d67760cefe17715b280e28a9eb29d504caa7d1cae4b22c7`; printout `hier.out`):
+
+| Decoder | Failures of 5,000 | Rate, 95% Wilson interval | Unconverged | Mean iterations | Mean time per shot, busy server |
+|---|---|---|---|---|---|
+| R: relay-BP | 31 | 0.620% [0.437%, 0.879%] | 17 | 565.0 | 186.9 ms |
+| P1: PriorTilt, seed 1 + chunk | 26 | 0.520% [0.355%, 0.761%] | 10 | 391.5 | 49.8 ms |
+| P2: PriorTilt, seed 1001 + chunk | 18 | 0.360% [0.228%, 0.568%] | 6 | 399.5 | 50.7 ms |
+
+`python -m hierarchy.compare` of that file against the laptop's `selector_validation_X.npz`:
+the same data file, and on all 5,000 shots R, P1 and P2 have the same predicted bits,
+convergence, iteration counts, fault counts and weights (0 shots differ; largest weight gap 0).
+So three builds, the Windows laptop, this PC and the server, decode alike, and
+relay-BP's 31 failures on this file are now measured on three machines.
+
+**The plugin through `evaluation.evaluate` on `validation_X.npz` and `validation_Z.npz`**
+(a plumbing check on validation shots, network rule for X, weight rule for Z; the plugin's
+predictions must equal `select.py` on the session-mode candidates of the same shots, on every
+shot): not measured at the time of writing.
 
 ## Physics checks
 

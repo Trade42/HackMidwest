@@ -651,6 +651,28 @@ def test_ensemble_command_selection_and_rule_choice(tmp_path, capsys):
     assert "chosen: c" in printed and "<- chosen on the training shots" in printed
     with pytest.raises(SystemExit, match="choose the rule on other shots"):
         ensemble.main(["--members", *files, "--logits", logits, "--chosen-on", str(tmp_path / "train.json")])
+
+    # The per-shot results beside the numbers, and the kit's score per pair from an X file and a Z file.
+    per_shot = arrays_of(tmp_path / "train.npz")
+    assert np.flatnonzero(per_shot["failed_c"]).tolist() == [2] and np.flatnonzero(per_shot["later_c"]).tolist() == [1, 2, 3, 4, 6]
+    assert per_shot["predicted_c"].shape == (7, 12) and str(per_shot["rule"]) == "" and "failed" not in per_shot
+    z_files, z_logits = write_ensemble(tmp_path / "z", data_sha256="e" * 64)
+    for path in z_files:                               # the same seven shots as a Z file
+        arrays = arrays_of(path)
+        np.savez(path, **(arrays | ({"basis": "Z"} if "basis" in arrays else {})))
+    ensemble.main(["--members", *files, "--logits", logits, "--rule", "f", "--save", str(tmp_path / "x_f.json")])
+    ensemble.main(["--members", *z_files, "--logits", z_logits, "--rule", "f", "--save", str(tmp_path / "z_f.json")])
+    marked = arrays_of(tmp_path / "x_f.npz")
+    assert str(marked["rule"]) == "f" and np.flatnonzero(marked["failed"]).tolist() == [2, 3, 6] and marked["predicted"].shape == (7, 12)
+    capsys.readouterr()
+    table = ensemble.main(["--pair", str(tmp_path / "x_f.npz"), str(tmp_path / "z_f.npz")])
+    assert table["f"] == {"failures_X": 3, "failures_Z": 3, "failed_pairs": 3, "per_cycle": pytest.approx(1 - (4 / 7) ** (1 / 12)),
+                          "standard_error": pytest.approx(table["f"]["standard_error"])}
+    assert "<- the marked rule" in capsys.readouterr().out and table["T"]["failed_pairs"] == 2
+    with pytest.raises(SystemExit, match="an X file and of a Z file"):
+        ensemble.main(["--pair", str(tmp_path / "z_f.npz"), str(tmp_path / "x_f.npz")])
+    with pytest.raises(SystemExit, match="Give one of them"):
+        ensemble.main(["--members", *other, "--rule", "f", "--chosen-on", str(tmp_path / "train.json")])
     with pytest.raises(SystemExit, match="different data files"):
         ensemble.main(["--members", files[0], other[1]])
     with pytest.raises(SystemExit, match="needs P1 and P2"):

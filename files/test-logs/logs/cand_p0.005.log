@@ -15,3 +15,7 @@ test_X.npz chunk 13: shots 6500 to 6999, failures R 19, P1 12, P2 15, relay-BP r
 test_X.npz chunk 12: shots 6000 to 6499, failures R 23, P1 18, P2 17, relay-BP ran on 500, 539 s
 test_X.npz chunk 14: shots 7000 to 7499, failures R 18, P1 17, P2 14, relay-BP ran on 500, 507 s
 test_X.npz chunk 15: shots 7500 to 7999, failures R 20, P1 13, P2 14, relay-BP ran on 500, 485 s
+test_X.npz chunk 16: shots 8000 to 8499, failures R 24, P1 13, P2 18, relay-BP ran on 500, 512 s
+test_X.npz chunk 18: shots 9000 to 9499, failures R 23, P1 13, P2 15, relay-BP ran on 500, 496 s
+test_X.npz chunk 17: shots 8500 to 8999, failures R 18, P1 17, P2 16, relay-BP ran on 500, 532 s
+test_X.npz chunk 19: shots 9500 to 9999, failures R 16, P1 10, P2 8, relay-BP ran on 500, 519 s

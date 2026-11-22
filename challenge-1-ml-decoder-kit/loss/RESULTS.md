@@ -136,3 +136,60 @@ python -m loss.l0_check --data $S/data/X_p0.004_s0_seed1000.npz --parts "$S/part
 
 `S=/home/sal/hackMidwest/orchestration/scratch/loss-gates`. Results: `results/L0_X_p0.004.json`,
 `results/L0_X_p0.004_s0_table.{json,md}`. Logs: `logs/L0_L1_s1e-3.log`, `logs/L0_check.log`.
+
+## The decoders compared
+
+All use relay-BP at the kit's settings (`decoders.RELAY_SETTINGS`: a first leg of 80 iterations, up to 300
+legs of 60, **stop after 5 solutions**), H and L of the lossless circuit, and a fresh decoder with seed 1 for
+every shot and condition (`decode.py`). Only the priors differ. "Raise column c by v" means c's prior becomes
+p + v − 2pv (independent flips combined), and every prior is capped at 0.5 at the end.
+
+| Condition | Priors |
+|---|---|
+| `blind` | the lossless priors of the kit (`dem_matrices`). It sees no flag. |
+| `starter` (**flag-aware**, the brief's L1 decoder) | exactly the starter's `aware_priors` (checked: identical priors, to 6e-17, on 50 shots). A flagged X-check atom: its measurement flip to 0.5. A flagged Z-check atom: its 5 hook columns raised by 0.5/6. A flagged data atom: one column per cycle (the run start of cycle c) raised by 0.5 (c + 0.5)/12 (the uniform guess on the loss time), and its final readout flip by 0.5. |
+| `starter@0.5/stop1` | `starter` with relay-BP stopping at its first solution (the starter's setting) |
+| `exact` | the location weights done exactly: the geometric weights (1 − s)^(k−1) over the loss slot, P(lost before the column) for every run start, (1/2) P(lost right before it) for every column inside a run, geometric hook weights |
+| ORACLE `oracle-round` | `exact`, with the uniform guess replaced by the TRUE loss round of each lost data atom (uniform over the 6 CX of that round). Uses the probes. |
+| ORACLE `oracle-slot` | `exact`, with the TRUE loss CX of each lost data atom |
+| ORACLE `starter-oracle-round` | `starter`'s map (one column per cycle, uniform hooks), with the TRUE loss round in place of the uniform guess |
+| `starter-nofinal`, `starter-nohook` | `starter` without the final-readout flip, without the hook columns (L2) |
+| `starter-ratebase` | `starter`, but every unflagged atom also gets the loss priors it would have if flags were not trusted (the rate-averaged loss); this removes "lossless priors where no flag fired" (L2) |
+| `X@cap` | condition X with the cap at `cap` instead of 0.5 |
+
+The decoders see the 936 X-check detectors and the heralds. The true loss times reach only the ORACLE rows (the
+decode passes them to the prior builder for those rows only; for every other row it passes nothing, so any use
+would fail). A shot fails when any of the 12 observables is wrong; an unconverged shot is scored on the
+decoder's output like any other, and the tables count how many unconverged shots were still right.
+
+## L3: the oracle on the loss time (s = 1e-3)
+
+Dataset: X memory, p = 0.004, s = 1e-3, 20,000 shots sampled, seed 2300 (chunks 2300 to 2309), sha256
+`378ee22c9cdf1f25ac44a72f68931f925c67e529ecb65485326afe44b4c3d532`; 9.99 lost data atoms and 10.36 check
+heralds per shot. The first 4,000 shots, every condition on the same shots.
+
+| Condition | Failures / 4,000 | Fail fraction (95% Wilson) | Per cycle | Unconverged (of them right) | Mean iterations |
+|---|---|---|---|---|---|
+| `starter` (flag-aware, uniform guess) | 176 | 4.40% (3.81–5.08) | 3.74e-3 | 108 (3) | 2,339 |
+| `exact` (uniform guess, exact weights) | 189 | 4.73% (4.11–5.43) | 4.03e-3 | 140 (4) | 2,609 |
+| **ORACLE `oracle-round`** | **107** | **2.67% (2.22–3.22)** | 2.26e-3 | 63 (1) | 1,655 |
+| `starter@0.5/stop1` | 200 | 5.00% (4.37–5.72) | 4.27e-3 | 108 (3) | 1,026 |
+
+Paired, on the same 4,000 shots:
+
+| Comparison | Failures | Shots only A fails / only B fails | Sign test | A ÷ B (95% bootstrap) |
+|---|---|---|---|---|
+| A = `starter`, B = ORACLE `oracle-round` | 176, 107 | 94 / 25 | p = 1.3e-10 | **1.64 (1.42–1.94)** |
+| A = `exact`, B = ORACLE `oracle-round` (same map, only the loss time differs) | 189, 107 | 105 / 23 | p = 1e-13 | **1.77 (1.52–2.07)** |
+| A = `exact`, B = `starter` | 189, 176 | 59 / 46 | p = 0.24 | 1.07 (0.96–1.20) |
+| A = `starter@0.5/stop1`, B = `starter` | 200, 176 | 34 / 10 | p = 0.0004 | 1.14 (1.05–1.22) |
+
+**The gate.** The brief's pass mark is a cut by 1.5 or more; below 1.2, the tracker idea stops. The round-level
+ORACLE cuts the failures by 1.64 against the starter's flag-aware decoder and by 1.77 against the decoder with
+the same map. Both point estimates pass 1.5. The interval against the starter reaches down to 1.42, so 1.5 is
+likely but not certain; 1.2 is excluded by a wide margin. These are oracle numbers: a ceiling for any tracker
+of the loss round, not a decoder result.
+
+Commands: `loss/runs/L0_L1_s1e-3.sh` (decodes), `loss/runs/summarize.sh` (tables). Results:
+`results/L3_X_p0.004_s1e-3.{json,md}` (reference `exact`), `results/L3_starter_X_p0.004_s1e-3.{json,md}`
+(reference `starter`). Log: `logs/L0_L1_s1e-3.log`.

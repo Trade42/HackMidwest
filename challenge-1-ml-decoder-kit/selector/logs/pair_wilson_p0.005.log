@@ -1,0 +1,5 @@
+# 2026-11-22T09:42:34Z on luminaty, from challenge-1-ml-decoder-kit/ at commit b8608de; M = the folder of selector/get_members.sh, A = $M/laptop-artifacts/priortilt, F = $M/server-logs/files, O = an output folder
+$ python -c "import numpy as np; from hierarchy.rules import wilson_interval; x = np.load(\"$O/validation_p0.005_X.npz\"); z = np.load(\"$O/validation_p0.005_Z.npz\"); [print(k, int((x[\"failed_\" + k] | z[\"failed_\" + k]).sum()), \"failed pairs of\", len(x[\"failed\"]), \"95%% Wilson interval [%.3f%%, %.3f%%]\" % tuple(100 * v for v in wilson_interval(int((x[\"failed_\" + k] | z[\"failed_\" + k]).sum()), len(x[\"failed\"])))) for k in (\"selector\", \"T\", \"gw\")]"
+selector 172 failed pairs of 5000 95% Wilson interval [2.970%, 3.982%]
+T 187 failed pairs of 5000 95% Wilson interval [3.249%, 4.302%]
+gw 179 failed pairs of 5000 95% Wilson interval [3.100%, 4.132%]

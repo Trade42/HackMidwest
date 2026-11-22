@@ -1,0 +1,4 @@
+# The selector needs only what the kit already installs (numpy, scipy), plus pytest for its tests.
+# It uses no scikit-learn: the model is a conditional logit fitted with scipy (selector/model.py).
+-r ../requirements.txt
+pytest

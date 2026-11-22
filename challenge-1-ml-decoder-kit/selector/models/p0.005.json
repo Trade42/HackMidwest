@@ -1,0 +1,140 @@
+{
+ "kind": "conditional logit over the distinct answers of a choice shot (selector/model.py)",
+ "features": [
+  "has_T",
+  "n_priortilt",
+  "has_R",
+  "J_converged",
+  "J_unconverged",
+  "pt_converged",
+  "R_converged",
+  "pt_weight_minus_T",
+  "R_weight_minus_T",
+  "pt_log_iterations",
+  "R_log_iterations"
+ ],
+ "pool": [
+  "T",
+  "P1",
+  "P2",
+  "R"
+ ],
+ "mean": [
+  0.3732980332829047,
+  0.7465960665658093,
+  0.3732980332829047,
+  0.0,
+  0.0,
+  0.5109682299546142,
+  0.245839636913767,
+  0.5460793948522341,
+  0.09696705589544674,
+  2.6054590461957474,
+  1.507581758293359
+ ],
+ "scale": [
+  0.48368027831410715,
+  0.5690648978963831,
+  0.4836802783141071,
+  1.0,
+  1.0,
+  0.499879683455588,
+  0.4305839172982092,
+  1.0047170749139995,
+  0.4009075787430117,
+  1.825747821941883,
+  1.9696716034372987
+ ],
+ "weights": [
+  0.47206345607644196,
+  0.176272064499101,
+  -0.5032151283486964,
+  0.0,
+  0.0,
+  1.334504105856652,
+  1.039195087251668,
+  -0.3587629216130329,
+  -0.18916700879342407,
+  -0.9587010487129946,
+  -0.3753312638654171
+ ],
+ "lambda": 0.01,
+ "cross_validation": {
+  "0.001": {
+   "lambda": 0.001,
+   "shots": 814,
+   "right": 657,
+   "only_selector_wrong": 31,
+   "only_baseline_wrong": 51,
+   "both_wrong": 126
+  },
+  "0.01": {
+   "lambda": 0.01,
+   "shots": 814,
+   "right": 668,
+   "only_selector_wrong": 19,
+   "only_baseline_wrong": 50,
+   "both_wrong": 127
+  },
+  "0.1": {
+   "lambda": 0.1,
+   "shots": 814,
+   "right": 654,
+   "only_selector_wrong": 16,
+   "only_baseline_wrong": 33,
+   "both_wrong": 144
+  },
+  "1.0": {
+   "lambda": 1.0,
+   "shots": 814,
+   "right": 644,
+   "only_selector_wrong": 7,
+   "only_baseline_wrong": 14,
+   "both_wrong": 163
+  }
+ },
+ "folds": 5,
+ "fold_seed": 20261122,
+ "trained_on": [
+  {
+   "data_name": "train_X.npz",
+   "data_sha256": "cfa08c9113b77521f7ba249ddffc0fb94cda783989066dbfa22b380d1747b26b",
+   "basis": "X",
+   "p": 0.005,
+   "shots": 20000,
+   "choice_shots": 785,
+   "choice_shots_with_a_right_answer": 634,
+   "member_files": {
+    "/home/sal/hackMidwest/orchestration/scratch/learned-selector/m/laptop-artifacts/priortilt/results_p005main/selector_train_X.npz": "a8ec29c98905aefd8e28a3eb93e9a1a9b98fa543f06a55e26a0b103c9eda6b14",
+    "/home/sal/hackMidwest/orchestration/scratch/learned-selector/m/server-logs/files/tcbp_p0.005/train_X.tcbp.npz": "0894bb8a97b595f18fc35f9c3ff43d9d0d22331acc8227170e49eef27e4b3c0b"
+   }
+  },
+  {
+   "data_name": "train_X.npz",
+   "data_sha256": "98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc",
+   "basis": "X",
+   "p": 0.004,
+   "shots": 20000,
+   "choice_shots": 90,
+   "choice_shots_with_a_right_answer": 81,
+   "member_files": {
+    "/home/sal/hackMidwest/orchestration/scratch/learned-selector/m/laptop-artifacts/priortilt/results_8b/selector_train_X.npz": "d23883caac76135e848dc1280fb7c669602d666d05d58c979d642f783fa350bf",
+    "/home/sal/hackMidwest/orchestration/scratch/learned-selector/m/server-logs/files/tcbp_p0.004/train_X.tcbp.npz": "a31a7910266bc65ff4fda840aea00a79e9ab16f8ba201443b8ec511c3a1d747e"
+   }
+  },
+  {
+   "data_name": "train_Z.npz",
+   "data_sha256": "14dce11586fa51256f476224d0fe3965e0562f2d8f68cba6192883a65fb6b24a",
+   "basis": "Z",
+   "p": 0.004,
+   "shots": 20000,
+   "choice_shots": 112,
+   "choice_shots_with_a_right_answer": 99,
+   "member_files": {
+    "/home/sal/hackMidwest/orchestration/scratch/learned-selector/m/laptop-artifacts/priortilt/results_8b/selector_train_Z.npz": "f2059d31463260a4a1d2036e41d4aca00b5c23f0461c3477558ffe4caad69024",
+    "/home/sal/hackMidwest/orchestration/scratch/learned-selector/m/server-logs/files/tcbp_p0.004/train_Z.tcbp.npz": "8b9b42235806d9d4d11d8c4580e99eba7ef8562a06241e75c825f44496565d23"
+   }
+  }
+ ],
+ "training_choice_shots_used": 814
+}

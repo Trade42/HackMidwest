@@ -1,0 +1,29 @@
+# 2026-11-22T09:42:29Z on luminaty, from challenge-1-ml-decoder-kit/ at commit b8608de; M = the folder of selector/get_members.sh, A = $M/laptop-artifacts/priortilt, F = $M/server-logs/files, O = an output folder
+$ python -m selector.fit --pool T P1 P2 R --train $A/results_8b/selector_train_X.npz $F/tcbp_p0.004/train_X.tcbp.npz --train $A/results_8b/selector_train_Z.npz $F/tcbp_p0.004/train_Z.tcbp.npz --out $O/cv_p0.004_without_J.json
+fitting the selector on 2 training file(s); pool T, P1, P2, R
+  train_X.npz        X p = 0.004  shots  20000  choice shots    90  with a right answer    81   data sha256 98c0afeb2a0b6b27...
+  train_Z.npz        Z p = 0.004  shots  20000  choice shots   112  with a right answer    99   data sha256 14dce11586fa5125...
+
+5-fold cross-validation over the training choice shots that have a right answer (folds by shot, seed 20261122):
+    lambda   right    of   held out: both wrong, only the selector wrong, only TCBP-JOBS wrong
+     0.001     146   180      28     6     6
+      0.01     145   180      30     5     4
+       0.1     146   180      30     4     4
+         1     147   180      30     3     4
+chosen lambda 1; final fit on all 180 training choice shots with a right answer
+on the training choice shots themselves (in-sample, not a result): the selector right on 150, TCBP-JOBS on 146
+
+weights (on standardized features; a positive weight favours an answer with more of the feature):
+  has_T                  +0.305   (mean   0.411, spread   0.492)
+  n_priortilt            +0.039   (mean   0.821, spread   0.541)
+  has_R                  +0.043   (mean   0.411, spread   0.492)
+  J_converged            +0.000   (mean   0.000, spread   1.000)
+  J_unconverged          +0.000   (mean   0.000, spread   1.000)
+  pt_converged           +0.136   (mean   0.579, spread   0.494)
+  R_converged            +0.129   (mean   0.333, spread   0.471)
+  pt_weight_minus_T      -0.117   (mean   0.634, spread   1.104)
+  R_weight_minus_T       -0.054   (mean   0.080, spread   0.311)
+  pt_log_iterations      -0.015   (mean   2.806, spread   1.678)
+  R_log_iterations       +0.040   (mean   1.598, spread   1.939)
+
+wrote $O/cv_p0.004_without_J.json  sha256 2f30a7b83f5426e3a85370d3f95d83c3ade06b9ef1cf03272adc2276af86f025

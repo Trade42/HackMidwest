@@ -1,0 +1,12 @@
+# 2026-11-22T09:10:15Z on luminaty, from challenge-1-ml-decoder-kit/ at commit cdeef70; M = the folder of selector/get_members.sh, A = $M/laptop-artifacts/priortilt, F = $M/server-logs/files, O = an output folder
+$ python -m selector.shuffle_check --model selector/models/p0.005.json --members $A/results_p005main/selector_validation_X.npz $F/tcbp_p0.005/validation_X.tcbp.npz --work $O/shuffled/validation_X
+validation_X.npz: the truth moved on 4999 of 5000 shots (seed 20261122); failures of the selector against the true truth 83, against the moved truth 4999
+unchanged under the shuffle: features yes, choices yes, answers yes, choice shots yes
+# 2026-11-22T09:10:18Z on luminaty, from challenge-1-ml-decoder-kit/ at commit cdeef70; M = the folder of selector/get_members.sh, A = $M/laptop-artifacts/priortilt, F = $M/server-logs/files, O = an output folder
+$ python -m selector.shuffle_check --model selector/models/p0.005.json --members $F/hier/cand_p0.005/validation_Z.chunks.npz $F/tcbp_p0.005/validation_Z.tcbp.npz --work $O/shuffled/validation_Z
+validation_Z.npz: the truth moved on 4998 of 5000 shots (seed 20261122); failures of the selector against the true truth 93, against the moved truth 4998
+unchanged under the shuffle: features yes, choices yes, answers yes, choice shots yes
+# 2026-11-22T09:10:22Z on luminaty, from challenge-1-ml-decoder-kit/ at commit cdeef70; M = the folder of selector/get_members.sh, A = $M/laptop-artifacts/priortilt, F = $M/server-logs/files, O = an output folder
+$ python -m selector.shuffle_check --model selector/models/p0.004.json --members $A/results_8b/selector_validation_X.npz $F/tcbp_p0.004/validation_X.tcbp.npz $F/joint_p0.004/validation_X.joint.npz --work $O/shuffled/validation_X_p0.004
+validation_X.npz: the truth moved on 4998 of 5000 shots (seed 20261122); failures of the selector against the true truth 8, against the moved truth 4998
+unchanged under the shuffle: features yes, choices yes, answers yes, choice shots yes

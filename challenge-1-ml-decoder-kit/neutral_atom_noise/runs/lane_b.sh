@@ -3,11 +3,13 @@
 #     bash -c 'source neutral_atom_noise/runs/lane_b.sh; reference'
 # The tools themselves need none of these paths: see README.md, "Run it".
 #
-# Compute (brief): lane B (CPUs 8-11, sim-b.lock) or, from about 10:15 UTC, lane C (LANE=C: CPUs 12-15,
-# sim.lock); 4 processes, niced. The lanes are shared, so no hold lasts over 20 minutes: `hold` stops before a new
-# part once 12 minutes are spent, and a part (50 relay-BP shots, 125 BP-OSD shots) takes at most about 4 minutes.
-# `stream` repeats holds, releasing the lock in between, until its rows are done. job.py keeps finished parts, so
-# a stopped stream resumes where it was. Every stream appends to neutral_atom_noise/logs/<name>.log.
+# Compute (brief): lane B (CPUs 8-11, sim-b.lock) or lane C (LANE=C: CPUs 12-15, sim.lock); 4 processes, niced.
+# The lanes are shared in turns that the orchestrator sets (from 2026-11-22 08:50 UTC lane B rotates between
+# workers, one hold each of at most 19 minutes). So a call is ONE hold: `hold` stops before a new part once
+# BUDGET minutes (default 12) are spent, and a part (50 relay-BP shots, 125 BP-OSD shots) takes at most about
+# 4 minutes. Set BUDGET to end the hold in time. REPEAT=1 repeats holds instead, for a lane that is ours alone.
+# job.py keeps finished parts, so the next call resumes where the last one stopped.
+# Every call appends to neutral_atom_noise/logs/<name>.log.
 set -uo pipefail
 export PYTHONDONTWRITEBYTECODE=1
 S=/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise
@@ -23,20 +25,28 @@ TRAIN_SEED=5100                      # train shots of the fitted generic p: neve
 LOGS=neutral_atom_noise/logs
 
 hold() {
+  local budget=${BUDGET:-12}
+  if [ -n "${UNTIL:-}" ]; then          # UNTIL=HH:MM (UTC): end the hold by then (parts start up to 3 minutes before)
+    local left=$(( ($(date -u -d "$UNTIL" +%s) - $(date -u +%s)) / 60 - 3 ))
+    [ $left -lt $budget ] && budget=$left
+    [ $budget -lt 1 ] && { echo "=== $(date -u +%FT%TZ) no time left before $UNTIL"; return 4; }
+  fi
   echo "=== $(date -u +%FT%TZ) hold: lane ${LANE:-B}, lock $LOCK, CPUs $CPUS, head $(git rev-parse --short HEAD): job $*"
   flock "$LOCK" nice -n 15 taskset -c "$CPUS" "$PY" -m neutral_atom_noise.job --basis X --shots 2000 --seed $SEED \
-    --train-seed $TRAIN_SEED --train-shots 250 --workers 4 --part 125 --relay-part 50 --budget-minutes 12 --out "$OUT" "$@"
+    --train-seed $TRAIN_SEED --train-shots 250 --workers 4 --part 125 --relay-part 50 --budget-minutes "$budget" --out "$OUT" "$@"
 }
 
-# stream NAME JOB-ARGUMENTS...   holds until the rows are done; output appended to logs/NAME.log
+# stream NAME JOB-ARGUMENTS...   one hold (REPEAT=1: holds until the rows are done); output appended to logs/NAME.log
 stream() {
   local name=$1; shift
   mkdir -p "$LOGS"
   {
     while true; do
       hold "$@"; code=$?
+      [ $code -eq 4 ] && break
       [ $code -eq 0 ] && { echo "=== $(date -u +%FT%TZ) $name done"; break; }
       [ $code -eq 3 ] || { echo "=== $(date -u +%FT%TZ) $name: job failed with exit code $code"; break; }
+      [ "${REPEAT:-0}" = 1 ] || { echo "=== $(date -u +%FT%TZ) $name: hold over, more to do"; break; }
       sleep 20      # let the other workers of the lane in
     done
   } 2>&1 | tee -a "$LOGS/$name.log"

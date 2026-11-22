@@ -1,0 +1,3 @@
+basis,factor,loss,decoder,priors,flags,picture,shots,failures,fraction,wilson_low,wilson_high,per_cycle,unconverged,mean_iterations,mean_ms,seed,shots_sha256
+X,,False,relay,uniform:0.004,,"generic, uniform p = 0.0040",2000,3,0.0015,0.0005102635796742398,0.004401032589829253,0.00012508601994698498,1,524.478,413.89022414549254,4100,9b7cdf7c5bcf7304c664400da5d08b5ba6ef1de4e950a29e955ed08fd0a93eab
+X,,False,bposd,uniform:0.004,,"generic, uniform p = 0.0040",2000,42,0.021,0.015573520789279063,0.028263010535078358,0.0017670732553261015,733,51.93,382.7954196545761,4100,9b7cdf7c5bcf7304c664400da5d08b5ba6ef1de4e950a29e955ed08fd0a93eab

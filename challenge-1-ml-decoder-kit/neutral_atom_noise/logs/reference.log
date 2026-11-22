@@ -1,0 +1,38 @@
+=== 2026-11-22T08:50:28Z reference: lane B, head 29518b2
+{"file": "X_p0.004_seed4100.npz", "sha256": "9b7cdf7c5bcf7304c664400da5d08b5ba6ef1de4e950a29e955ed08fd0a93eab", "kept": true}
+08:50:31 UTC X_p0.004_seed4100__bposd__uniform0.004__000000-002000.npz: bposd, priors uniform:0.004, flags None, 4 workers
+  250/2000 shots, 29 s, 6 failures
+  500/2000 shots, 53 s, 12 failures
+  750/2000 shots, 81 s, 16 failures
+  1000/2000 shots, 103 s, 20 failures
+  1250/2000 shots, 129 s, 24 failures
+  1500/2000 shots, 149 s, 31 failures
+  1750/2000 shots, 173 s, 37 failures
+  2000/2000 shots, 197 s, 42 failures
+{"result": "X_p0.004_seed4100__bposd__uniform0.004__000000-002000.npz", "failures": 42, "shots": 2000, "unconverged": 733, "mean_iterations": 51.9, "mean_ms": 382.8, "seconds": 196.7}
+08:54:10 UTC X_p0.004_seed4100__relay__uniform0.004__000000-002000.npz: relay, priors uniform:0.004, flags None, 4 workers
+  250/2000 shots, 25 s, 0 failures
+  500/2000 shots, 49 s, 0 failures
+  750/2000 shots, 80 s, 1 failures
+  1000/2000 shots, 97 s, 1 failures
+  1250/2000 shots, 127 s, 2 failures
+  1500/2000 shots, 149 s, 2 failures
+  1750/2000 shots, 180 s, 3 failures
+  2000/2000 shots, 217 s, 3 failures
+{"result": "X_p0.004_seed4100__relay__uniform0.004__000000-002000.npz", "failures": 3, "shots": 2000, "unconverged": 1, "mean_iterations": 524.5, "mean_ms": 413.9, "seconds": 216.9}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/sal/hackMidwest/worktrees/infleqtion-noise/challenge-1-ml-decoder-kit/neutral_atom_noise/summarize.py", line 322, in <module>
+    main()
+  File "/home/sal/hackMidwest/worktrees/infleqtion-noise/challenge-1-ml-decoder-kit/neutral_atom_noise/summarize.py", line 318, in main
+    print(write_all(args.results, args.fit, args.out))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sal/hackMidwest/worktrees/infleqtion-noise/challenge-1-ml-decoder-kit/neutral_atom_noise/summarize.py", line 291, in write_all
+    text = markdown(rates, pairs, flags)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sal/hackMidwest/worktrees/infleqtion-noise/challenge-1-ml-decoder-kit/neutral_atom_noise/summarize.py", line 165, in markdown
+    lines.append(f"| {r['basis']}{' + loss' if r['loss'] else ''} | {r['factor']:g} | {DECODER_NAMES[r['decoder']]} | {r['picture']} | "
+                                                                    ^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
+=== 2026-11-22T08:58:09Z reference done

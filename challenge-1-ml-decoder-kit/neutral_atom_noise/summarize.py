@@ -97,7 +97,8 @@ def _two_qubit_error(noise):
 def rate_record(row, fit):
     n, failures = len(row["failed"]), int(row["failed"].sum())
     low, high = wilson(failures, n)
-    return {"basis": row["basis"], "factor": row["factor"], "loss": row["loss"], "decoder": row["decoder"], "priors": row["priors"],
+    return {"basis": row["basis"], "factor": row["factor"], "uniform_p": row["uniform_p"], "loss": row["loss"],
+            "decoder": row["decoder"], "priors": row["priors"],
             "flags": row["flags"], "picture": describe(row, fit), "shots": n, "failures": failures,
             "fraction": failures / n, "wilson_low": low, "wilson_high": high, "per_cycle": per_cycle(failures / n),
             "unconverged": int((~row["converged"]).sum()), "mean_iterations": float(row["iterations"].mean()),
@@ -108,7 +109,7 @@ def rate_record(row, fit):
 
 def _order(row):
     rank = {"matched": 0, "generic-2q": 1}.get(row["priors"], 2)
-    return (row["basis"], row["loss"], row["factor"] or 0, row["decoder"] != "relay", row["flags"] or "", rank, row["priors"])
+    return (row["basis"], row["loss"], row["factor"] or 0, row["uniform_p"] or 0, row["decoder"] != "relay", row["flags"] or "", rank, row["priors"])
 
 
 def flag_pairs(rows, fit):
@@ -120,7 +121,8 @@ def flag_pairs(rows, fit):
             continue
         test = paired(blind["failed"], row["failed"])
         n = test["shots"]
-        pairs.append({"basis": row["basis"], "factor": row["factor"], "decoder": row["decoder"], "flags": row["flags"],
+        pairs.append({"basis": row["basis"], "factor": row["factor"], "uniform_p": row["uniform_p"], "decoder": row["decoder"],
+                      "flags": row["flags"],
                       "picture": describe(row, fit).split(" + ", 1)[1], **test,
                       "iterations_blind": float(blind["iterations"][:n].mean()),
                       "iterations_flags": float(row["iterations"][:n].mean())})
@@ -140,8 +142,8 @@ def summarize(rows, fit):
             raise SystemExit(f"{row['shots_file']}: two rows of one point decoded different shot files")
         test = paired(row["failed"], reference["failed"])
         n = test["shots"]
-        pairs.append({"basis": row["basis"], "factor": row["factor"], "loss": row["loss"], "decoder": row["decoder"],
-                      "flags": row["flags"], "generic": describe(row, fit), "generic_priors": row["priors"], **test,
+        pairs.append({"basis": row["basis"], "factor": row["factor"], "uniform_p": row["uniform_p"], "loss": row["loss"],
+                      "decoder": row["decoder"], "flags": row["flags"], "generic": describe(row, fit), "generic_priors": row["priors"], **test,
                       "iterations_generic": float(row["iterations"][:n].mean()),
                       "iterations_matched": float(reference["iterations"][:n].mean()),
                       "unconverged_generic": int((~row["converged"][:n]).sum()),
@@ -154,6 +156,11 @@ def summarize(rows, fit):
     return rates, pairs
 
 
+def _point(record):
+    """The noise of a row: the model's factor, or the kit's uniform p for reference rows."""
+    return f"{record['factor']:g}" if record["factor"] is not None else f"kit p = {record['uniform_p']:g}"
+
+
 def _percent(x):
     return f"{100 * x:.2f}%" if x >= 0.001 or x == 0 else f"{100 * x:.3f}%"
 
@@ -162,7 +169,7 @@ def markdown(rates, pairs, flags=()):
     lines = ["| Basis | Factor | Decoder | Picture of the noise | Failures / shots | Failure fraction (95% Wilson) | Per cycle | "
              "Unconverged | Mean iterations | Mean ms per shot |", "|---|---|---|---|---|---|---|---|---|---|"]
     for r in rates:
-        lines.append(f"| {r['basis']}{' + loss' if r['loss'] else ''} | {r['factor']:g} | {DECODER_NAMES[r['decoder']]} | {r['picture']} | "
+        lines.append(f"| {r['basis']}{' + loss' if r['loss'] else ''} | {_point(r)} | {DECODER_NAMES[r['decoder']]} | {r['picture']} | "
                      f"{r['failures']} / {r['shots']} | {_percent(r['fraction'])} ({_percent(r['wilson_low'])}–{_percent(r['wilson_high'])}) | "
                      f"{r['per_cycle']:.2e} | {r['unconverged']} | {r['mean_iterations']:.0f} | {r['mean_ms']:.0f} |")
     lines += ["", "Paired, on the same shots (the generic row against the matched row of its point; **bold** marks the better "
@@ -173,7 +180,7 @@ def markdown(rates, pairs, flags=()):
     for p in pairs:
         name = f"**{p['generic']}**" if p["better_generic"] else p["generic"]
         ratio = p["iterations_generic"] / p["iterations_matched"]
-        lines.append(f"| {p['basis']}{' + loss' if p['loss'] else ''} | {p['factor']:g} | {DECODER_NAMES[p['decoder']]} | {name} | {p['shots']} | "
+        lines.append(f"| {p['basis']}{' + loss' if p['loss'] else ''} | {_point(p)} | {DECODER_NAMES[p['decoder']]} | {name} | {p['shots']} | "
                      f"{p['a_failures']}, {p['b_failures']} | {p['only_a']} | {p['only_b']} | {p['p']:.2g} | "
                      f"{p['iterations_generic']:.0f} ÷ {p['iterations_matched']:.0f} = {ratio:.1f} | "
                      f"{p['unconverged_generic']}, {p['unconverged_matched']} |")
@@ -186,7 +193,7 @@ def markdown(rates, pairs, flags=()):
                   "| Factor | Decoder | Pauli priors | Shots | Failures: no flags, with flags | Only no-flags wrong | "
                   "Only with-flags wrong | Exact sign test p | Mean iterations: no flags, with flags |", "|---|---|---|---|---|---|---|---|---|"]
         for p in flags:
-            lines.append(f"| {p['factor']:g} | {DECODER_NAMES[p['decoder']]} | {p['picture']} | {p['shots']} | {p['a_failures']}, {p['b_failures']} | "
+            lines.append(f"| {_point(p)} | {DECODER_NAMES[p['decoder']]} | {p['picture']} | {p['shots']} | {p['a_failures']}, {p['b_failures']} | "
                          f"{p['only_a']} | {p['only_b']} | {p['p']:.2g} | {p['iterations_blind']:.0f}, {p['iterations_flags']:.0f} |")
     return "\n".join(lines) + "\n"
 
@@ -205,7 +212,7 @@ def plot(rates, path, basis="X", loss=False, published_factor=1.0):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     flags = "starter" if loss else None      # with loss, the plot shows the flag-aware rows
-    rates = [r for r in rates if r["basis"] == basis and r["loss"] == loss and r["flags"] == flags]
+    rates = [r for r in rates if r["basis"] == basis and r["loss"] == loss and r["flags"] == flags and r["factor"] is not None]
     decoders = [d for d in DECODER_NAMES if any(r["decoder"] == d for r in rates)]
     if not decoders:
         return False

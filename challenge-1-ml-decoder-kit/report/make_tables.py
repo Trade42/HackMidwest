@@ -1996,8 +1996,9 @@ def predecoder_table(measured):
               if float(FACTS[f"pre{p[-1]}{basis}_vs_fresh_p"][0]) >= 0.05 else ": a significant gain)")
            if FACTS[f"pre{p[-1]}{basis}_fresh"][0] != NOT_MEASURED
            else "(the kit's priors, the declared comparison, not measured yet)")
-        + f", and TCBP-JOBS fails {FACTS[f'pre{p[-1]}{basis}_T'][0]} (only the head's "
-        f"{FACTS[f'pre{p[-1]}{basis}_vs_T_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_T_only_other'][0]}, exact p = {FACTS[f'pre{p[-1]}{basis}_vs_T_p'][0]})."
+        + (f", and TCBP-JOBS fails {FACTS[f'pre{p[-1]}{basis}_T'][0]} (only the head's "
+           f"{FACTS[f'pre{p[-1]}{basis}_vs_T_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_T_only_other'][0]}, exact p = {FACTS[f'pre{p[-1]}{basis}_vs_T_p'][0]})."
+           if FACTS[f"pre{p[-1]}{basis}_T"][0] != NOT_MEASURED else "; its rows beside TCBP-JOBS and relay-BP are not measured yet.")
         for p, basis in landed) or "The registered extension (X at p = 0.004 and 0.003, Z at p = 0.005) has not landed yet.", source)
     fact("pre_z_reason", "the Z run of the registered extension is a later run, shown below" if ("0.005", "Z") in landed
          else "Z memory has no result yet", source)
@@ -2312,6 +2313,12 @@ def master_table(measured, combined):
             label = ("after-offline" if row.get("offline") else "after") if row.get("after_test") else ("pre-offline" if row.get("offline") else "pre")
             time = "offline" if row.get("offline") else (f"{ms(row['mean_ms'])} ms per pair" + (" (GPU call)" if row["device"] == "GPU" else ""))
             put(DECODERS[key].label, FOLDERS.get(key, ""), label, p, f"{row['failures_pair']:,} pairs (X {row['failures_X']:,}) · {time}")
+        if spec.member in ("aw", "ac"):         # the pre-registered offline decode of the hand-written rules, kept beside their timed rows
+            for p in P_VALUES:
+                member = (combined.get(p) or {}).get("rows", {}).get(spec.member)
+                if member is not None:
+                    put(DECODERS[key].label, FOLDERS.get(key, ""), "pre-offline", p,
+                        f"{member['failures_pair']:,} pairs (X {member['failures_X']:,}) · offline")
     for p in P_VALUES:
         rows = combined[p]["rows"] if combined.get(p) else {}
         if SWAP_RULE in rows:
@@ -2581,7 +2588,8 @@ def readme_section(measured):
              "",
              "Every version we built is in one table, each number with its label ([report/tables/master_comparison.md]"
              "(challenge-1-ml-decoder-kit/report/tables/master_comparison.md)): the frozen hierarchy above (pre-registered); the same hierarchy with "
-             "a hand-written tie-break in place of the network (`hierarchy/`; pre-registered at p = 0.003 and 0.004, after-test ablations otherwise); "
+             "a hand-written tie-break in place of the network (`hierarchy/`; the best hand-written rule pre-registered as timed rows at p = 0.003 "
+             "and 0.004 and offline at 0.005, plain lowest weight pre-registered offline at every p; their other timed rows after-test ablations); "
              "TCBP-JOBS in place of relay-BP in it (an after-test ablation); a learned predecoder that gives relay-BP per-shot priors from the network "
              "(`predecoder/`; X memory at p = 0.005 a secondary result, chosen after its own gate failed, and the other rows a registered extension run "
              "after it) and its fallback to TCBP-JOBS where relay-BP does not converge (`predecoder/fallback.py`; designed after the first test result)"

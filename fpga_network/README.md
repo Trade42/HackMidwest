@@ -76,6 +76,7 @@ engine itself.
 | the whole block 0, shot 0 | 654,336 | equal | 3,889,455 | `logs/engine_block_w16_shot0.log` |
 | block 7, shot 1 | 654,336 | equal | 3,889,455 | `logs/engine_block7_w16_shot1.log` |
 | **the whole network, 46 steps, shot 0** | 539,136, and the 12 logits | **equal** | **33,388,774** | `logs/engine_net_w16_shot0.log` |
+| the whole network at 8 bits (`w8p`), shot 0 | 539,136 and 12 logits | equal | 33,388,774 | `logs/engine_net_w8p_shot0.log` |
 | the whole network, shots 1, 2 and 3 | 539,136 and 12 logits, each | equal, each | 33,388,774 each | `logs/engine_net_w16_shots1-3.log` |
 
 **Synthesised** (Yosys, `synth_xilinx -family xc7`, not placed and routed; `logs/yosys_engine.log`), the engine without

@@ -423,7 +423,9 @@ Z-biased noise.
     vectors are close column by column. 95% of the matched priors lie between 0.80 and 1.49 times the generic ones, and
     the mean gap in log-odds is 0.13, against 3.9 in phase 1. So the kit's picture is nearly right for what X memory
     sees.
-  - The head, told a p above its training range on noise of another shape, moves the priors the wrong way.
+  - The head moves the priors the wrong way here. The arms do not say why. It was told a p above its training range,
+    but so it was at SI1000 p = 0.006 and 0.008 (phase 2b), where it helped, so an out-of-range p alone does not
+    explain it.
   - This task fails about 11% of shots, far above the 1% to 2% we aimed at when we chose its strength by reasoning.
 - **SI1000 at p = 0.004 fails rarely:** 7 (m), 13 (g) and 2 (h) of 4,000.
   - The head beats generic on the 15 shots where only one of them fails (2 against 13, p = 0.007). That is few shots.
@@ -477,9 +479,13 @@ What this shows:
   - At p = 0.006 the head fails 273, against 546 for g and 303 for m. Against g: 38 against 311 shots where only one
     fails, p = 2e-54. Against m the difference is not significant (116 against 146, p = 0.07).
   - At p = 0.008 most shots fail in every arm, and the head is better than both: 2,060 against 2,560 (g) and 2,172 (m).
-  - **At p = 0.008 the head even beats the matched priors** (231 against 343, p = 3e-6). The matched priors are the
-    true error model, but TCBP-JOBS is not a maximum-likelihood decoder, so the true priors need not be its best
-    priors. Per-shot priors can beat them.
+  - **At p = 0.008 the head even beats the matched priors** (231 against 343, p = 3e-6). The same happens on the
+    kit's own noise (wrong-p in phase 2: 24 against 68), so the true error model is not always TCBP-JOBS's best
+    prior. A possible reason, not tested here: per-shot priors carry information about this shot that no fixed
+    vector can.
+- **g is not fitted for TCBP-JOBS** here either: its p is the model's two-qubit error. So, as in phase 1, the head's
+  gain over g may overstate what it adds over a good generic picture. h vs m is the firmer yardstick, and it is
+  not significant at 0.006.
 - **Knowing the shape helps TCBP-JOBS here**, as in phase 1: m against g is 303 against 546 at 0.006 (p = 2e-47) and
   2,172 against 2,560 at 0.008.
 - **p = 0.008 is far past where the code works** (about 70% to 85% of shots fail). It is reported because it was
@@ -498,8 +504,8 @@ The server's files are on the branch `server-logs` at `acdd09a4`, under `files/t
 ## What was not done
 
 - **PriorTilt** with matched priors (the brief's optional decoder): not run. **The network** was not run in the
-  tables above. It ran only in the TCBP exploration (its section above: one file, X memory, factor 0.8), and
-  there it was not retrained on this noise.
+  main tables. It ran only in the TCBP exploration sections above: phase 1 (one file), phase 2 (three files) and
+  phase 2b (two files), all X memory. It was never retrained on any of these noises.
 - **The fitted generic p** was run for BP-OSD at factors 0.8 and 0.9 and for relay-BP at 0.8 only; not for relay-BP
   at 0.7 and 0.9, BP-OSD at 0.7, Z memory, or any row with loss. Those comparisons are against the generic baseline
   at the same two-qubit error, which overstates the noise, and the tables name it.

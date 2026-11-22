@@ -247,3 +247,50 @@ teammate's server, job ctl/070, 6 processes, 666 s; `logs/server_job_ctl_070_fre
 40 unconverged, 2,759 hard, mean 534 iterations, 168 ms per shot on that machine. `subset.py`
 (seed 5, `logs/subset_train_X.log`) wrote the 89 failed shots and 2,000 of the 19,911 right ones
 for the fit; the right file's weight is 9.9555.
+
+### The trained head (kill line 1: PASSED)
+
+**Training** on the laptop's GPU (RTX 4060 Laptop, torch 2.14.1+cu130; run by the orchestrator at
+commit `c694bcd`, 09:35 to 10:14 UTC; `logs/train_gpu_predecoder_X_s1.log`):
+
+    python -m predecoder.train --trunk <final X checkpoint> --out runs\predecoder_X_s1 --seed 1 --steps 30000 --batch 64 \
+        --p-train 0.003 0.004 0.005 --report-every 2000 --report-shots 500 --max-hours 1.25
+
+- Trunk: the final X network, step 120,000, `cascade_X_s1/checkpoint_final_step120000.pt` on
+  `origin/laptop-artifacts` (commit `2f752e9`), sha256 `d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933`. Frozen.
+- The head: `predecoder_X_s1/head.pt` on `origin/laptop-artifacts` (commit `ed20439`), 269,971 bytes,
+  sha256 `38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d`. Not in this branch (a checkpoint).
+- 30,000 steps of 64 fresh error-model shots (1.9 million shots), 0.072 s per step, 1.19 GB of GPU memory.
+
+Held-out error-model shots in the trainer's reports (500 per p, the same in every report; not Stim shots):
+
+| step | p = 0.003: head / kit log-loss | p = 0.004 | p = 0.005 | p = 0.004: fired per shot, of them above 0.5, false above 0.5 | calibration error at 0.004 |
+|---|---|---|---|---|---|
+| 0 | 0.02485 / 0.02485 | 0.03170 / 0.03170 | 0.03816 / 0.03816 | 47.5, 0.0, 0.00 | 7.9e-05 |
+| 4,000 | 0.00241 (-90.3%) | 0.00460 (-85.5%) | 0.00722 (-81.1%) | 47.5, 40.4, 4.82 | 1.3e-04 |
+| 16,000 | 0.00212 (-91.5%) | 0.00417 (-86.9%) | 0.00661 (-82.7%) | 47.5, 40.8, 4.18 | 7.6e-05 |
+| 30,000 | 0.00207 (-91.7%) | 0.00410 (-87.1%) | 0.00652 (-82.9%) | 47.5, 41.0, 4.15 | 6.6e-05 |
+
+The head learned almost everything in the first 4,000 steps and was flat from about 16,000.
+
+**The check here, on this PC's CPU in float32** (the laptop's trunk ran in float16;
+`logs/calibration_p0.004_1000_s77.log`): 1,000 fresh error-model shots at p = 0.004, seed 77,
+split by whether BP's own first 80 iterations converge:
+
+    python -m predecoder.calibration --head <head.pt> --trunk <final X checkpoint> --p 0.004 --shots 1000 --seed 77 --device cpu --threads 4
+
+| shots | probabilities | log-loss per column | fired faults per shot | of them above 0.5 | not fired but above 0.5 |
+|---|---|---|---|---|---|
+| all 1,000 | the kit's priors | 0.03161 | 47.3 | 0.0 | 0.00 |
+| | BP after 80 iterations | 0.03377 | | 40.4 | 6.55 |
+| | the head | **0.00381** | | **41.2** | **4.00** |
+| BP's first leg converges (889) | BP after 80 iterations | 0.03126 | 46.6 | 40.5 | 5.79 |
+| | the head | 0.00361 | | 41.0 | 3.86 |
+| BP's first leg does not converge (111) | BP after 80 iterations | 0.05391 | 52.6 | 39.9 | 12.64 |
+| | the head | **0.00547** | | **42.9** | **5.19** |
+
+The head is calibrated in every band (for example, columns it puts between 0.03 and 0.1 have
+mean 0.054 and fired 0.054; the full tables are in the log), it agrees with the laptop's
+reports (0.0038 here against 0.0041 there, on other shots), and on the shots where BP struggles
+it knows clearly more than BP does: more of the fired faults, and fewer than half the false ones.
+Kill line 1 (beat the kit's log-loss clearly, calibrated) is passed.

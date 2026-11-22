@@ -826,18 +826,22 @@ def exploration_p5_table():
 
 def loss_table():
     pc, server = loaders.loss_pc(DATA / "loss" / "pc"), loaders.loss_server(DATA / "loss" / "server")
+    tracked, shares = loaders.loss_tracker(DATA / "loss" / "tracker")
+    tracker_facts(tracked, shares)
+    server = server | tracked
     lines, records = [], []
     labels = {condition.key: condition.label for condition in LOSS_CONDITIONS}
     datasets = sorted({(row["s"], row["machine"], row["seed"]) for row in list(pc.values()) + list(server.values())})
     for s, machine, seed in datasets:
-        source = {key[-1]: row for key, row in (pc if machine == "this PC" else server).items() if row["s"] == s and row["seed"] == seed}
+        source = {key[-1]: row for key, row in (pc if (machine == "this PC" and seed < 7000) else server).items() if row["s"] == s and row["seed"] == seed}
         for condition in LOSS_CONDITIONS:
             row = source.get(condition.key)
             if row is None:
                 if condition.key in ("blind", "starter"):
                     lines.append([f"{s:g}", f"{machine}, seed {seed}", condition.label] + [NOT_MEASURED] * 3)
                 continue
-            versus = row.get("paired_by_reference", {}).get("blind" if condition.key == "starter" else "starter")
+            listed = row.get("paired_by_reference", {})
+            versus = listed.get("blind") if condition.key == "starter" else (listed.get("starter") or listed.get("exact"))
             paired = "" if not versus else (f"{versus['reference']} only {versus['reference_only']}, this row only {versus['row_only']} "
                                            f"(p = {stats.p_text(versus['p'])}); {versus['reference']} ÷ this = {versus['ratio']:.2f} "
                                            f"({versus['ratio95'][0]:.2f} to {versus['ratio95'][1]:.2f}), on {versus['shots']:,} shots")
@@ -972,6 +976,44 @@ def background_table():
             "the purpose: none of this is a result on the test shots.** Each line names the copied file under `report/data/` it is read from.\n\n"
             + markdown(["Question or attempt", "What was measured", "File"], lines))
     return write("background", text)
+
+
+def tracker_facts(tracked, shares):
+    """The loss-time tracker's numbers for the prose: its test split first, the replication and the pooled share beside it."""
+    source = "data/loss/tracker/test.json"
+    test = {key[-1]: row for key, row in tracked.items() if key[1] == 7300}
+    for name in ("starter", "exact", "tracker", "oracle-round"):
+        row = test.get(name)
+        fact(f"trk_{name.replace('-', '_')}", row and f"{row['failures']} of {row['shots']:,}", source)
+        fact(f"trk_{name.replace('-', '_')}_share", row and f"{row['failures'] / row['shots']:.2%}", source)
+    for reference in ("exact", "starter"):
+        versus = (test.get("tracker") or {}).get("paired_by_reference", {}).get(reference)
+        fact(f"trk_vs_{reference}", versus and (f"only {reference} fails {versus['reference_only']}, only the tracker {versus['row_only']}, "
+                                                f"exact p = {stats.p_text(versus['p'])}; {reference} ÷ tracker = {versus['ratio']:.2f} "
+                                                f"({versus['ratio95'][0]:.2f} to {versus['ratio95'][1]:.2f})"), source)
+    for name, label in (("test", "trk_gain"), ("replication_seed7310", "trk_gain_replication")):
+        entry = shares.get(name, {}).get(("tracker", "exact"))
+        fact(label, entry and f"{entry['share']:.0%} ({entry['share95'][0]:.0%} to {entry['share95'][1]:.0%})", f"data/loss/tracker/{name}.json")
+    pooled = DATA / "loss" / "tracker" / "pooled_7300_7310.json"
+    entry = None
+    if pooled.is_file():
+        table = json.loads(pooled.read_text(encoding="utf-8"))
+        entry = next((e for e in table.get("gain_share", []) if e["condition"] == "tracker" and e["reference"] == "exact"), None)
+    fact("trk_gain_pooled", entry and f"{entry['share']:.0%} ({entry['share95'][0]:.0%} to {entry['share95'][1]:.0%})", "data/loss/tracker/pooled_7300_7310.json")
+    accuracy = DATA / "loss" / "tracker" / "accuracy_test.md"
+    fact("trk_accuracy_file", "`report/data/loss/tracker/accuracy_test.md`" if accuracy.is_file() else None, "data/loss/tracker/accuracy_test.md")
+    value = lambda name: FACTS[name][0]
+    if test.get("tracker") and test.get("exact"):
+        sentence = (f"On the tracker's own test shots (a new set of {test['tracker']['shots']:,} shots at s = 0.001, the tracker frozen on validation shots "
+                    f"beforehand), relay-BP given the tracker's estimate fails {value('trk_tracker')}, against {value('trk_exact')} for the flag-aware "
+                    f"decoder that spreads the loss time evenly ({value('trk_vs_exact')}) and {value('trk_oracle_round')} for the ORACLE. "
+                    f"So the tracker recovers {value('trk_gain')} of the oracle's gain.")
+        if value("trk_gain_replication") != NOT_MEASURED:
+            sentence += f" A replication on the team's server, on other shots, gives {value('trk_gain_replication')}"
+            sentence += f"; both together, {value('trk_gain_pooled')}." if value("trk_gain_pooled") != NOT_MEASURED else "."
+    else:
+        sentence = "Its rows on its own test shots are not measured yet."
+    fact("trk_sentence", sentence, source)
 
 
 # ---------- the networks ----------

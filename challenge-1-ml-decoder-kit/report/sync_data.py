@@ -85,6 +85,11 @@ SOURCES = [
     ("loss/pc/", "tree", "loss/results/L1_X_p0.004_s*.json", False),
     ("loss/pc/", "tree", "loss/results/L3_*.json", False),
     ("loss/pc/", "tree", "loss/results/L4_timing.json", False),
+    # the loss-time tracker: its run on its test split (this PC, seed 7300), the replication (server, seed 7310), the pooled table
+    ("loss/tracker/", "tree", "loss_tracker/results/test.*", False),
+    ("loss/tracker/", "tree", "loss_tracker/results/replication_seed7310.*", False),
+    ("loss/tracker/", "tree", "loss_tracker/results/pooled_7300_7310.*", False),
+    ("loss/tracker/", "tree", "loss_tracker/results/accuracy_test.*", False),
     ("loss/server/L1_s2e-4_seed5100/tables.md", "origin/server-logs", "files/loss/L1_s2e-4_seed5100/tables.md", False),
     ("loss/server/L1_s5e-4_seed5200/tables.md", "origin/server-logs", "files/loss/L1_s5e-4_seed5200/tables.md", False),
     # two jobs wrote tables.md of the same folder: job A's tables (the oracles) are pinned at the commit that held them, job D's (the pieces of the map) are the file now

@@ -308,9 +308,12 @@ def ler_vs_time(measured):
 
 def loss():
     pc, server = loaders.loss_pc(DATA / "loss" / "pc"), loaders.loss_server(DATA / "loss" / "server")
+    tracked, _ = loaders.loss_tracker(DATA / "loss" / "tracker")
     points = {}
-    for row in list(pc.values()) + list(server.values()):
+    for row in list(pc.values()) + list(server.values()) + list(tracked.values()):
         points.setdefault(row["condition"], {}).setdefault(row["s"], []).append(row)
+    # at a loss rate where the tracker was measured, the main line uses the tracker's own test shots, so its point and the others are paired
+    preferred = {row["s"]: row["seed"] for row in tracked.values() if row["condition"] == "tracker" and row["seed"] == 7300}
     figure, axes = new_figure("Atom loss: what the loss flags give back",
                               "X memory, p = 0.004, relay-BP; our simplified loss model; bars: 95% interval; lower is better")
     labels, drawn = [], []
@@ -318,7 +321,7 @@ def loss():
         by_s = points.get(condition.key)
         if not by_s:
             continue
-        best = {s: max(rows, key=lambda row: row["shots"]) for s, rows in by_s.items()}
+        best = {s: next((row for row in rows if row["seed"] == preferred.get(s)), None) or max(rows, key=lambda row: row["shots"]) for s, rows in by_s.items()}
         xs = sorted(best)
         ys = [best[s]["failures"] / best[s]["shots"] for s in xs]
         bounds = [stats.wilson(best[s]["failures"], best[s]["shots"]) for s in xs]
@@ -352,7 +355,9 @@ def loss():
     axes.set_xlabel("loss probability s, per atom per CX gate")
     axes.set_ylabel("share of shots that fail")
     end_labels(axes, labels)
-    note = "Hollow points: a second dataset at the same loss rate (another machine and seed), not pooled."
+    note = "Hollow points: another dataset at the same loss rate (another machine or seed), not pooled."
+    if preferred:
+        note += " At s = 0.001 the filled points are the tracker's own test shots (seed 7300), every condition on the same shots."
     if "tracker" not in drawn:
         note += " The loss-time tracker is not measured yet."
     footnote(figure, note)

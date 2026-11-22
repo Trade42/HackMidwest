@@ -622,3 +622,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `tcbp_own5_rate` | 3.20e-03 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_xz` | 192, 188 | `tables/tcbp_own_shots.md` |
 | `tcbp_statement` | TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000). | `tables/test_all.md, tables/exploration_p0.004.md` |
+| `trk_accuracy_file` | not measured | `data/loss/tracker/accuracy_test.md` |
+| `trk_exact` | not measured | `data/loss/tracker/test.json` |
+| `trk_exact_share` | not measured | `data/loss/tracker/test.json` |
+| `trk_gain` | not measured | `data/loss/tracker/test.json` |
+| `trk_gain_pooled` | not measured | `data/loss/tracker/pooled_7300_7310.json` |
+| `trk_gain_replication` | not measured | `data/loss/tracker/replication_seed7310.json` |
+| `trk_oracle_round` | not measured | `data/loss/tracker/test.json` |
+| `trk_oracle_round_share` | not measured | `data/loss/tracker/test.json` |
+| `trk_sentence` | Its rows on its own test shots are not measured yet. | `data/loss/tracker/test.json` |
+| `trk_starter` | not measured | `data/loss/tracker/test.json` |
+| `trk_starter_share` | not measured | `data/loss/tracker/test.json` |
+| `trk_tracker` | not measured | `data/loss/tracker/test.json` |
+| `trk_tracker_share` | not measured | `data/loss/tracker/test.json` |
+| `trk_vs_exact` | not measured | `data/loss/tracker/test.json` |
+| `trk_vs_starter` | not measured | `data/loss/tracker/test.json` |

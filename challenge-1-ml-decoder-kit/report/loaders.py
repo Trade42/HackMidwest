@@ -343,6 +343,36 @@ def loss_server(folder):
     return rows
 
 
+def loss_tracker(folder):
+    """The loss-time tracker's tables (loss_tracker.summarize: NAME.json): {(s, seed, condition): row}, and the share of the oracle's gain.
+
+    Every condition of one file decoded the same shots. The files name their dataset in TRACKER_FILES.
+    """
+    rows, shares = {}, {}
+    for name, (s, seed, machine) in TRACKER_FILES.items():
+        file = Path(folder) / f"{name}.json"
+        if not file.is_file():
+            continue
+        table = json.loads(file.read_text(encoding="utf-8"))
+        for reference, listed in table["tables"].items():
+            for row in listed:
+                key = (s, seed, row["condition"])
+                kept = rows.setdefault(key, {"s": s, "seed": seed, "condition": row["condition"], "failures": row["failures"], "shots": row["shots"],
+                                             "machine": machine, "paired_by_reference": {}, "source": str(file.relative_to(DATA)), "file": name})
+                if kept["failures"] != row["failures"] or kept["shots"] != row["shots"]:
+                    raise Mismatch(f"{file}: {row['condition']} has two different counts in one file")
+                if row.get("ref_only") is not None and reference != row["condition"]:
+                    kept["paired_by_reference"][reference] = {"reference": reference, "shots": row["paired_shots"], "reference_only": row["ref_only"],
+                                                              "row_only": row["cond_only"], "p": row["sign_test_p"], "ratio": row["ratio_ref_over_cond"],
+                                                              "ratio95": row["ratio95"]}
+        shares[name] = {(entry["condition"], entry["reference"]): entry for entry in table.get("gain_share", [])}
+    return rows, shares
+
+
+# The tracker's result files, and the dataset each one decoded: (s per atom per CX, Clifft seed, machine).
+TRACKER_FILES = {"test": (0.001, 7300, "this PC"), "replication_seed7310": (0.001, 7310, "ICRN server")}
+
+
 # ---------- the networks ----------
 
 def train_log(path):

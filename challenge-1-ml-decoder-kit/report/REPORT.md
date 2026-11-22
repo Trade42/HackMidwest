@@ -151,7 +151,9 @@ X memory, p = 0.004, relay-BP at the kit's settings, at a loss rate of s = 0.001
   <!--f:loss_oracle_share-->2.7%<!--/f--> (<!--f:loss_oracle-->107 of 4,000<!--/f-->, the same shots): <!--f:loss_oracle_ratio-->1.64<!--/f--> times fewer than with the flags alone
   (<!--f:loss_oracle_ratio_interval-->1.42 to 1.94<!--/f-->). It is given the truth on purpose: a ceiling, not a decoder.
 - **The loss-time tracker** is our attempt to reach that ceiling from the syndrome history alone: a lost data atom
-  makes its neighbouring checks fire at random from the moment it is lost. *Its rows are not measured yet.*
+  makes its neighbouring checks fire at random from the moment it is lost, and a hidden Markov model over that
+  history estimates when (`loss_tracker/`). <!--f:trk_sentence-->Its rows on its own test shots are not measured yet.<!--/f--> It is measured at one noise point (p = 0.004,
+  s = 0.001), and its model is fitted at that point.
 - **What the model assumes.** After every CX gate each of its two atoms is lost with probability s. A lost check atom
   is flagged at its measurement and replaced; a lost data atom stays lost and is flagged only at the end. Flags are
   perfect, and losses are independent. This is our simplified model. It is not Infleqtion's hardware model. For

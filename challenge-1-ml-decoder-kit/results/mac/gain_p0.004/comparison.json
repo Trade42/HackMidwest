@@ -1,0 +1,186 @@
+{
+  "classification": "held_out_paired_saved_shots",
+  "note": "Percent reductions use the same saved test shots. Negative values mean the candidate is worse. Separate runs may still experience system-load drift.",
+  "p": 0.004,
+  "cycles": 12,
+  "paired_shots": 10000,
+  "test_datasets": {
+    "X": {
+      "path": "/Users/gjimb/Projects/HackMidwest/challenge-1-ml-decoder-kit/data/p0.004/test_X.npz",
+      "sha256": "53a7cee301600d36f3dad806a88f59ad6d84b681044b2548268c2ea9b5689e94",
+      "basis": "X",
+      "p": 0.004,
+      "seed": 301,
+      "shots": 10000,
+      "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+    },
+    "Z": {
+      "path": "/Users/gjimb/Projects/HackMidwest/challenge-1-ml-decoder-kit/data/p0.004/test_Z.npz",
+      "sha256": "b61c1325de8852385d19ee5ce4eb41ea939b668f83fb3e994ce0f590218b3d56",
+      "basis": "Z",
+      "p": 0.004,
+      "seed": 302,
+      "shots": 10000,
+      "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+    }
+  },
+  "machine": {
+    "system": "Darwin",
+    "release": "25.6.0",
+    "machine": "arm64",
+    "processor": "arm",
+    "python": "3.12.16",
+    "cpu_count": 10,
+    "workers": 1,
+    "thread_environment": {
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "MKL_NUM_THREADS": null,
+      "VECLIB_MAXIMUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": null,
+      "RAYON_NUM_THREADS": null
+    },
+    "native_decoder_threads": "not exposed by the installed decoder API",
+    "resource_note": "ru_maxrss is peak memory of this parent process only; it excludes other workers"
+  },
+  "package_versions": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "matplotlib": "3.11.2"
+  },
+  "reference": {
+    "decoder": "relay-bp",
+    "failures_pair": 84,
+    "per_cycle_rate": 0.0007027095523405302,
+    "standard_error": 7.66775312792678e-05,
+    "mean_total_pair_ms": 131.266140422842,
+    "p99_total_pair_ms": 2214.6934596740175,
+    "configuration": {
+      "X": {
+        "alpha": 1.0,
+        "gamma0": 0.15,
+        "pre_iter": 80,
+        "num_sets": 300,
+        "set_max_iter": 60,
+        "gamma_dist_interval": [
+          -0.22628432386414646,
+          0.6216020925981884
+        ],
+        "stop_nconv": 5
+      },
+      "Z": {
+        "alpha": 1.0,
+        "gamma0": 0.15,
+        "pre_iter": 80,
+        "num_sets": 300,
+        "set_max_iter": 60,
+        "gamma_dist_interval": [
+          -0.22628432386414646,
+          0.6216020925981884
+        ],
+        "stop_nconv": 5
+      }
+    },
+    "summary_path": "/Users/gjimb/Projects/HackMidwest/challenge-1-ml-decoder-kit/results/mac/eval_p0.004/summary.json",
+    "summary_sha256": "48ba6d948e78b8111c6a906cb1bb8b57dcb39df058ba94fb1e26f55e48c7dd8c",
+    "artifact_sha256": "05b947b77739d8cdb9ebea58e296fd4e65344fe3d6be2bbf89ab8a83b92f03a4"
+  },
+  "candidate": {
+    "decoder": "evaluation.router:make_tiered_decoder",
+    "failures_pair": 84,
+    "per_cycle_rate": 0.0007027095523405302,
+    "standard_error": 7.66775312792678e-05,
+    "mean_total_pair_ms": 124.0894819894922,
+    "p99_total_pair_ms": 2662.502277162858,
+    "configuration": {
+      "X": {
+        "first_solution": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 1
+        },
+        "fallback": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 5
+        },
+        "router_sha256": "cc23a0eab2b30ea8a4a7f677966a62dd072443fadcabd611e5ea151174d49203",
+        "risk_threshold": 0.004251185963174929,
+        "routing_rule": "risk > threshold"
+      },
+      "Z": {
+        "first_solution": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 1
+        },
+        "fallback": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 5
+        },
+        "router_sha256": "82d39da75d6e7ad8e339c2d9d1d87618524521a3b605bb5116efa419a3095de6",
+        "risk_threshold": 0.007012092071666503,
+        "routing_rule": "risk > threshold"
+      }
+    },
+    "summary_path": "/Users/gjimb/Projects/HackMidwest/challenge-1-ml-decoder-kit/results/mac/router_eval_p0.004/summary.json",
+    "summary_sha256": "fddefd21a061cfe5a84f971afcf4ddcbdbc1f3a3897f19c997883de504575559",
+    "artifact_sha256": "b73e302452eb9a0bd7095eaeef7d35757c203a3fa64a50f4128d7d5a54b9a900"
+  },
+  "per_cycle_rate_reduction_percent": 0.0,
+  "mean_total_latency_reduction_percent": 5.467257900805144,
+  "p99_total_latency_reduction_percent": -20.219900660868607,
+  "paired_failures": {
+    "both_fail": 48,
+    "reference_only_fail": 36,
+    "candidate_only_fail": 36,
+    "neither_fail": 9880,
+    "exact_discordant_sign_test_p": 1.0,
+    "per_cycle_rate_reduction_bootstrap_95pct": [
+      -22.33867558449936,
+      18.249791776526468
+    ],
+    "bootstrap_defined_fraction": 1.0
+  },
+  "mean_total_latency_reduction_bootstrap_95pct": [
+    2.022940429385203,
+    8.95837922390186
+  ],
+  "bootstrap": {
+    "repetitions": 2000,
+    "seed": 0,
+    "method": "resample paired shots; failure counts use equivalent multinomial outcomes"
+  }
+}

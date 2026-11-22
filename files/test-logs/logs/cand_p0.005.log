@@ -26,3 +26,4 @@ test_Z.npz chunk 3: shots 1500 to 1999, failures R 24, P1 21, P2 18, relay-BP ra
 test_Z.npz chunk 7: shots 3500 to 3999, failures R 13, P1 11, P2 11, relay-BP ran on 500, 466 s
 test_Z.npz chunk 6: shots 3000 to 3499, failures R 18, P1 13, P2 12, relay-BP ran on 500, 482 s
 test_Z.npz chunk 4: shots 2000 to 2499, failures R 34, P1 12, P2 15, relay-BP ran on 500, 570 s
+test_Z.npz chunk 5: shots 2500 to 2999, failures R 26, P1 16, P2 15, relay-BP ran on 500, 547 s

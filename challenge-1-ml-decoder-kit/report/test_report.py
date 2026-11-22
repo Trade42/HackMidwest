@@ -293,6 +293,11 @@ def test_the_tcbp_version_speed_table_is_recomputed_from_its_files():
     assert f"| `ptspeed_new` | {new:.0f} |" in facts and f"| `ptspeed_old` | {old:.0f} |" in facts
     statement = next(line for line in facts.splitlines() if line.startswith("| `ptfast_statement` |"))
     assert "a third look at the same validation shots; not confirmed on fresh shots" in statement
+    retrain = next(line for line in facts.splitlines() if line.startswith("| `ptretrain_statement` |"))
+    score = json.loads((REPORT / "data" / "exploration" / "predecoder_tcbp" / "retrain" / "run1_score.json").read_text())
+    rows = next(iter(score["tasks"].values()))["rows"]
+    assert f"makes TCBP-JOBS worse, {rows['r']['failures']} failures against {rows['m']['failures']}" in retrain
+    assert "not a gain from retraining" in retrain and "times" not in retrain.split("|")[2]
 
 
 def test_rows_run_after_the_test_results_are_labelled_where_they_appear():

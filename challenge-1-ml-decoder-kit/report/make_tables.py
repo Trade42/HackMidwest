@@ -2409,8 +2409,8 @@ def master_table(measured, combined):
                  "one-thread sample on 1,000 validation shots (exploration shots). The paired tests are in the tables each row comes from.\n\n"
                  + markdown(["Method", "Folder", "Label"] + [f"p = {p}" for p in P_VALUES], lines)
                  + "\n\nNot in this table, because it decodes its own simulated shots, not the saved test files: `neutral_atom_noise/` (exploration; "
-                   "a noise model built from Infleqtion's published figures, not Infleqtion's noise model, decoded with the kit's relay-BP and BP-OSD; "
-                   "`neutral_atom_noise/RESULTS.md`).")
+                   "a noise model built from Infleqtion's published figures, not Infleqtion's noise model, decoded with the kit's relay-BP and BP-OSD, "
+                   "and with the TCBP version under atom loss and with its head retrained on that noise; `neutral_atom_noise/RESULTS.md`).")
 
 
 def predecoder_tcbp_table(measured):
@@ -2546,9 +2546,9 @@ def predecoder_tcbp_table(measured):
     # 1,000 validation shots (job 1: the build with H dense and as a scipy CSR matrix, arms taking turns; job 3: the network eager and as a CUDA
     # graph). Shown only if the answers are the same; the registered time above (jobs 4 and 5) is another measurement, on other shots.
     speed_lines, speed = [], DATA / "exploration" / "predecoder_tcbp" / "speed"
-    names = ("tcbp_speed_job1_summary.json", "tcbp_speed_job3_network_summary.json", "tcbp_speed_job3_analysis.json")
+    names = ("tcbp_speed_job1_summary.json", "tcbp_speed_job3_network_summary.json", "tcbp_speed_job3_analysis.json", "tcbp_speed_job1_report_vs_job3.json")
     if all((speed / name).is_file() for name in names):
-        job1, job3, analysis = (json.loads((speed / name).read_text(encoding="utf-8")) for name in names)
+        job1, job3, analysis, versus = (json.loads((speed / name).read_text(encoding="utf-8")) for name in names)
         validation = json.loads(score.read_text(encoding="utf-8"))["data"]["sha256"] if score.is_file() else job1["data"]["sha256"]
         if any(record["data"]["sha256"] != validation or record["shots"] != 1000 for record in (job1, job3)):
             raise Mismatch("exploration/predecoder_tcbp/speed: not the first 1,000 validation X shots at p = 0.005")
@@ -2556,7 +2556,9 @@ def predecoder_tcbp_table(measured):
         graph, eager, decoded = job3["arms"]["graph"], job3["arms"]["eager"], analysis["graph logits"]
         if not (csr["same_as_dense"] and csr["bits_differ"] == csr["faults_differ"] == csr["corrections_differ"] == 0 and csr["failures"] == dense["failures"]
                 and graph["against_eager"]["rows_differ_float32"] == graph["against_eager"]["rows_differ_float16"] == 0
-                and decoded["shots"] == 1000 and decoded["bits_differ"] == decoded["faults_differ"] == 0):
+                and decoded["shots"] == 1000 and decoded["bits_differ"] == decoded["faults_differ"] == 0
+                and versus["reference"]["shots"] == versus["reference"]["logits_rows_equal"] == 1000
+                and all(versus["reference"][arm]["bits_differ"] == versus["reference"][arm]["faults_differ"] == 0 for arm in ("dense", "csr"))):
             raise Mismatch("exploration/predecoder_tcbp/speed: the faster path does not give the registered path's answers on every shot")
         part = lambda arm, name: arm["ms"][f"seconds_{name}"]
         old = eager["ms"]["mean"] + part(dense, "build")["mean"] + part(dense, "decode")["mean"]
@@ -2567,7 +2569,7 @@ def predecoder_tcbp_table(measured):
             ["TCBP-JOBS built with the shot's priors (job 1, the arms taking turns)", ms(part(dense, "build")["mean"]), ms(part(csr, "build")["mean"]),
              f"the 12 bits, the faults and the whole corrections equal on {job1['shots']:,} of {job1['shots']:,} shots"],
             ["its decode (job 1)", ms(part(dense, "decode")["mean"]), ms(part(csr, "decode")["mean"]), ""],
-            ["**the sum, network + build + decode**", f"**{ms(old)}**", f"**{ms(new)}**", "separate timers, not one end-to-end timer"],
+            ["**the sum, network + build + decode**", f"**{ms(old)}**", f"**{ms(new)}**", "separate timers, not one end-to-end timer; the sum of the unrounded means"],
             ["freeing the decoder, before the next shot (not in the sum; job 1)", ms(part(dense, "free")["mean"]), ms(part(csr, "free")["mean"]),
              f"medians {ms(part(dense, 'free')['median'])} and {ms(part(csr, 'free')['median'])} ms; the largest CSR free took {ms(part(csr, 'free')['max'])} ms"]]
         for name, value in (("old", f"{old:.0f}"), ("new", f"{new:.0f}"), ("net_old", ms(eager["ms"]["mean"])), ("net_new", ms(graph["ms"]["mean"])),
@@ -2590,6 +2592,7 @@ def predecoder_tcbp_table(measured):
     # A fast path for easy shots (branch tcbp-fastpath; validation shots only, rounds 1 to 3 on the same 5,000 shots). Its own time model is
     # stated with it: the TCBP version alone is job 1's one CSR timer (priors, build, decode, free) plus the eager network's 9.4 ms.
     fast_file = DATA / "exploration" / "predecoder_tcbp" / "fastpath" / "result3_p0.005.json"
+    low_file = DATA / "exploration" / "predecoder_tcbp" / "fastpath" / "result3_p0.004.json"
     if fast_file.is_file():
         fast = json.loads(fast_file.read_text(encoding="utf-8"))
         rows = {row["check"] or row["rule"]: row for row in fast["rows"]}
@@ -2599,18 +2602,58 @@ def predecoder_tcbp_table(measured):
             raise Mismatch("exploration/predecoder_tcbp/fastpath: not the validation shots, or not the TCBP version's 33 failures there, or C9 not chosen")
         if any(row["only_rule"] != 0 or row["failures"] != alone["failures"] for row in (c2, c6, c9)):
             raise Mismatch("exploration/predecoder_tcbp/fastpath: a rule quoted as adding no failure adds one")
+        low_text = ""
+        if low_file.is_file():
+            low = json.loads(low_file.read_text(encoding="utf-8"))
+            low_rows = {row["check"] or row["rule"]: row for row in low["rows"]}
+            low_alone, chosen, carried = low_rows["TH alone (the TCBP version)"], low["chosen"], low["carried"]["checks"][c9["check"]]
+            if low["data"]["p"] != 0.004 or low["data"]["basis"] != "X" or low["carried"]["from"] != "predecoder/fastpath/result3_p0.005.json" \
+                    or carried["t"] != c9["t"] or chosen["only_rule"] != 0:
+                raise Mismatch("exploration/predecoder_tcbp/fastpath/result3_p0.004.json: not p = 0.004's validation X shots, or not C9's frozen threshold carried")
+            half = [side["added_on_other_half"] for side in low["half_split"][chosen["check"]].values()]
+            low_text = (f" At p = 0.004 (its validation X shots; only {low['counts']['F_only']} shots where the cheap answer alone fails, so little power): "
+                        f"C9's frozen threshold adds {carried['added']} failures, so it is a rule for p = 0.005 only; the criterion picks the syndrome weight "
+                        f"there ({chosen['fast_fraction']:.1%} fast, {ms(chosen['mean_ms'])} ms mean against {ms(low_alone['mean_ms'])} for the TCBP version "
+                        f"alone, 0 added), not frozen (picked on one half of the shots, it adds {max(half)} on the other).")
         fact("ptfast_statement",
              "A fast path for easy shots (`predecoder/fastpath/`, branch `tcbp-fastpath`; exploration after the test results, on the 5,000 validation X "
              "shots at p = 0.005; no test file opened): a check sends a shot to TCBP-JOBS with the kit's priors, built once, and the rest to the TCBP "
              f"version, with the rule that it add no failure. On its own time model (the TCBP version alone {ms(alone['mean_ms'])} ms: one timer over the "
-             f"priors, the CSR build, the decode and the free, plus the eager network's {ms(fast['times_ms']['net_mean'])} ms), the syndrome weight (round 1) "
+             f"priors, the CSR build, the decode and the free, plus the eager network's {ms(fast['times_ms']['net_mean'])} ms; not comparable with the speed "
+             f"work's sums), the syndrome weight (round 1) "
              f"saves {ms(alone['mean_ms'] - c2['mean_ms'])} ms ({ms(c2['mean_ms'])}), and TCBP-JOBS's own decode time (round 2) saves more "
              f"({ms(c6['mean_ms'])} ms mean) but worsens the 99th percentile ({ms(c6['p99_ms'])} against {ms(alone['p99_ms'])} ms), with a threshold in ms that "
              f"does not carry from one run to another. The head's entropy (C9, round 3) sends {c9['fast_fraction']:.1%} of the shots to the fast path with "
              f"{c9['only_rule']} added failures, {ms(c9['mean_ms'])} ms mean and the same 99th percentile ({ms(c9['p99_ms'])} ms): a third look at the same "
-             "validation shots; not confirmed on fresh shots (its one held-out check is declared in `predecoder/fastpath/CRITERION_4.md`).", source)
+             "validation shots; not confirmed on fresh shots (its one held-out check, declared in `predecoder/fastpath/CRITERION_4.md`, is pending)." + low_text,
+             source)
     else:
         fact("ptfast_statement", None, source)
+
+    # The head retrained on the neutral-atom noise (task tcbp-retrain, neutral_atom_noise/): its own simulated Stim shots, exploration. Run 1 only;
+    # r and h differ in head and base both, so the head's own effect is r against m (the same matched base) until run 2 gives r against hm.
+    retrain_file = DATA / "exploration" / "predecoder_tcbp" / "retrain" / "run1_score.json"
+    if retrain_file.is_file():
+        retrain = json.loads(retrain_file.read_text(encoding="utf-8"))
+        (task,) = retrain["tasks"].values()
+        rows, pairs = task["rows"], {(pair["a"], pair["b"]): pair for pair in task["pairs"]}
+        rm, rh = pairs[("r", "m")], pairs[("r", "h")]
+        if any(rows[key]["shots"] != task["shots_scored"] or rows[key]["not_reproduced"] for key in "mhr") \
+                or (rm["failures_a"], rm["failures_b"], rh["failures_b"]) != (rows["r"]["failures"], rows["m"]["failures"], rows["h"]["failures"]):
+            raise Mismatch("exploration/predecoder_tcbp/retrain/run1_score.json: its pairs disagree with its rows")
+        for key in "mhr":
+            fact(f"ptretrain_{key}", rows[key]["failures"], source)
+        fact("ptretrain_statement",
+             "The TCBP pipeline with the head retrained on the neutral-atom noise (`neutral_atom_noise/`, task `tcbp-retrain`; exploration after the main "
+             f"test results, declared before any number; its own simulated Stim shots at factor 0.8, not the test files; run 1, the first "
+             f"{task['shots_scored']:,} of {task['of']:,} shots): on the matched base it was trained with, the retrained head makes TCBP-JOBS worse, "
+             f"{rows['r']['failures']} failures against {rows['m']['failures']} for the matched priors alone (only the retrained head {rm['only_a']}, only "
+             f"the matched priors {rm['only_b']}, sign test p = {stats.p_text(rm['sign_test_p'])}). Against the kit-trained head on the generic base "
+             f"({rows['h']['failures']}) it fails fewer, but those two differ in the head and the base both, so that is not a gain from retraining; the "
+             "head-alone comparison (the retrained head against the kit head on the same matched base) is in run 2, not landed yet.", source)
+    else:
+        for key in ("m", "h", "r", "statement"):
+            fact(f"ptretrain_{key}", None, source)
     return write("predecoder_tcbp",
                  f"**TCBP-JOBS with the head's priors: {PTCBP_LABEL}.** TCBP-JOBS (NVIDIA's GPU decoder) given, for each shot, the priors our "
                  "network's head computes from that shot's detectors, in place of the kit's fixed priors.\n\n"
@@ -2637,12 +2680,14 @@ def predecoder_tcbp_table(measured):
                     "timer.** The first 1,000 validation X shots at p = 0.005, the A100 MIG slice, one process, 1 CPU thread; ms, mean per X shot. Both "
                     "columns were measured the same way on the same shots, so they compare like for like; the registered time above is another "
                     "measurement, on other shots. The test numbers were made with the registered path and were not rerun. The decoded CUDA graph's logits "
-                    "give the same 12 bits and faults as the validation run's head arm (`ctl/130`) on every shot.\n\n"
+                    "give the same 12 bits and faults as the validation run's head arm (`ctl/130`) on every shot, and so do job 1's dense and CSR arms.\n\n"
                     + markdown(["Part", "The registered path: eager network, H dense", "With the speed work: CUDA graph, H as a scipy CSR matrix",
                                 "Same answers, and notes"], speed_lines) if speed_lines else "")
                  + (f"\n\n{FACTS['ptfast_statement'][0]}" if FACTS["ptfast_statement"][0] != NOT_MEASURED else "")
+                 + (f"\n\n{FACTS['ptretrain_statement'][0]}" if FACTS["ptretrain_statement"][0] != NOT_MEASURED else "")
                  + "\n\nSource: `report/data/exploration/predecoder_tcbp/` (branch `predecoder-tcbp` at `dad4fd50`; job 4 from `server-logs`; `speed/` "
-                   "from branch `tcbp-speed` and `fastpath/` from branch `tcbp-fastpath`, both merged into `predecoder/`) and `report/data/test/predecoder_tcbp/` "
+                   "from branch `tcbp-speed` and `fastpath/` from branch `tcbp-fastpath`, both merged into `predecoder/`; `retrain/` from "
+                   "branch `tcbp-retrain`, merged into `neutral_atom_noise/`) and `report/data/test/predecoder_tcbp/` "
                    "(job 5 from `server-logs`; Z and the pair score at p = 0.004 and 0.003 from branch `tcbp-zlowp`, merged into `predecoder/`).")
 
 def ours_at(measured, p):
@@ -2759,8 +2804,10 @@ def readme_section(measured):
                    if FACTS.get("ptspeed_new", (NOT_MEASURED,))[0] != NOT_MEASURED else "") + ")"
                 if FACTS.get("ptv_TH", (NOT_MEASURED,))[0] != NOT_MEASURED else "")
              + "; a learned selector among the ensemble's members (`selector/`; frozen on validation, its line not met on the test shots); and, on its "
-               "own simulated shots, noise shaped like neutral-atom hardware (`neutral_atom_noise/`; exploration, the kit's decoders). None of these "
-               "rows replaces the frozen decoder.",
+               "own simulated shots, noise shaped like neutral-atom hardware (`neutral_atom_noise/`; exploration, the kit's decoders"
+             + (f", and the TCBP version, whose head retrained on that noise makes it worse on its own base: {FACTS['ptretrain_r'][0]} failures against "
+                f"{FACTS['ptretrain_m'][0]} in run 1" if FACTS.get("ptretrain_r", (NOT_MEASURED,))[0] != NOT_MEASURED else "")
+             + "). None of these rows replaces the frozen decoder.",
              ""]
     header = ["Decoder"] + [f"p = {p}" for p in P_VALUES]
     table = []

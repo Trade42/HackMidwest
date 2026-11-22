@@ -127,6 +127,10 @@ per-shot files (`hierarchy/README.md` has the commands), and `report/data/test/e
   "The one run on the held-out test shots", has its two commands (`predecoder.evaluate`, then `predecoder.compare --arms fresh head`)
   and `predecoder.secondary` for the rows beside TCBP-JOBS and relay-BP. It needs the head file and the final X network (both pinned
   by sha256 there). **Not run here** by this task: it ran on the team's PC, and `report/data/test/predecoder/` holds its summaries.
+- **The TCBP version** (TCBP-JOBS with the head's priors; `report/tables/predecoder_tcbp.md`, designed after the test results were seen):
+  `predecoder/README_tcbp.md` has every command (`predecoder.tcbp decode`, `score` and `pair`; the speed work, `predecoder.tcbp_speed` and
+  `predecoder/fast_network.py`), and `predecoder/fastpath/README.md` the fast path's. It needs an NVIDIA GPU and `cudaq-qec`. **Not run
+  here**: it ran on the team's server, and `report/data/test/predecoder_tcbp/` and `report/data/exploration/predecoder_tcbp/` hold its files.
 
 ## 6. The tables and the figures
 

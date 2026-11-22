@@ -34,14 +34,14 @@
  },
  "background/neutral_atom_noise_RESULTS.md": {
   "branch": "tree",
-  "bytes": 30140,
-  "commit": "f51aabdf895b875dacca9bdc12008a8502d6bfaf",
-  "copied_utc": "2026-11-22 16:32",
+  "bytes": 57112,
+  "commit": "682987168941ebba50be3ad6cfa3dc5667daab93",
+  "copied_utc": "2026-11-22 18:56",
   "file": "background/neutral_atom_noise_RESULTS.md",
-  "from": "this branch, `challenge-1-ml-decoder-kit/neutral_atom_noise/RESULTS.md` (last changed in commit `f51aabdf895b`)",
+  "from": "this branch, `challenge-1-ml-decoder-kit/neutral_atom_noise/RESULTS.md` (last changed in commit `682987168941`)",
   "grows": false,
   "path": "neutral_atom_noise/RESULTS.md",
-  "sha256": "202a46b270fb030aebad8ed6616060ade75ebda50defa1d40e062db8d1da6151"
+  "sha256": "f7b93aaea6ce8cf84833e8f0e4a3655ef8bc162babdca0e8eed6ee202935660d"
  },
  "background/plain_cnn_runs/README.md": {
   "branch": "origin/laptop-artifacts",
@@ -505,6 +505,17 @@
   "path": "files/predecoder/latency_validation_X_p0.005/summary.json",
   "sha256": "9fabeae3fd49a7ec265e7be2919c1981ebfd2a88256213bb959340e5a7786d2a"
  },
+ "exploration/predecoder_tcbp/fastpath/result3_p0.004.json": {
+  "branch": "tree",
+  "bytes": 10503,
+  "commit": "7807e80c0f842fee1741a32cf1ba03cc6b9d869f",
+  "copied_utc": "2026-11-22 18:56",
+  "file": "exploration/predecoder_tcbp/fastpath/result3_p0.004.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/fastpath/result3_p0.004.json` (last changed in commit `7807e80c0f84`)",
+  "grows": false,
+  "path": "predecoder/fastpath/result3_p0.004.json",
+  "sha256": "4ee5b71e640fa4057ec40bfff7878d47d59ba79f977dc3d2cda0a55c691375e3"
+ },
  "exploration/predecoder_tcbp/fastpath/result3_p0.005.json": {
   "branch": "tree",
   "bytes": 10315,
@@ -526,6 +537,17 @@
   "grows": false,
   "path": "files/predecoder-tcbp/gpu_network/decode_val1000_fp32_summary.json",
   "sha256": "3fcfc4d18eeac824ea0a3772ece5dcd8647452e0d729c117a2ff488f5873f9df"
+ },
+ "exploration/predecoder_tcbp/retrain/run1_score.json": {
+  "branch": "tree",
+  "bytes": 1512,
+  "commit": "72e71f93cff31d7bf0cc1245cafcf7815e4fc249",
+  "copied_utc": "2026-11-22 18:56",
+  "file": "exploration/predecoder_tcbp/retrain/run1_score.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/neutral_atom_noise/tcbp_retrain_results/run1/score.json` (last changed in commit `72e71f93cff3`)",
+  "grows": false,
+  "path": "neutral_atom_noise/tcbp_retrain_results/run1/score.json",
+  "sha256": "ee6123833a1f46a0f466aba17de1efb3d412421074e7f4897117b091eda405f9"
  },
  "exploration/predecoder_tcbp/speed/tcbp_speed_job1_report_vs_job3.json": {
   "branch": "tree",

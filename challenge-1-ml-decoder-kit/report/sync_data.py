@@ -170,6 +170,9 @@ SOURCES = [
     ("exploration/predecoder_tcbp/speed/", "tree", "predecoder/logs/tcbp_speed_job3_analysis.json", False),
     # a fast path for easy shots (branch tcbp-fastpath, merged into predecoder/fastpath/; validation X at p = 0.005): rounds 1 to 3 in one file
     ("exploration/predecoder_tcbp/fastpath/", "tree", "predecoder/fastpath/result3_p0.005.json", False),
+    ("exploration/predecoder_tcbp/fastpath/", "tree", "predecoder/fastpath/result3_p0.004.json", False),
+    # the TCBP pipeline with the head retrained on the neutral-atom noise (task tcbp-retrain, neutral_atom_noise/; its own Stim shots): run 1's score
+    ("exploration/predecoder_tcbp/retrain/run1_score.json", "tree", "neutral_atom_noise/tcbp_retrain_results/run1/score.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.log", False),
 ]

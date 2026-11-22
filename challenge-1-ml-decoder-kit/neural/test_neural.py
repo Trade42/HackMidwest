@@ -13,6 +13,7 @@ from torch.nn import functional as F
 from circuit import dem_matrices, detector_ids, sample
 from make_circuit import code_layout, memory_experiment
 from neural import evaluate_stim, train
+from neural import model as model_module
 from neural.graph import build_graph
 from neural.model import EVENT_CODES, CascadeDecoder
 from neural.sampler import DemSampler, compare_with_stim
@@ -141,6 +142,21 @@ def test_shifting_the_syndrome_shifts_the_activations(gross):
             moved = torch.zeros_like(before)
             moved[:, :, nodes] = before
             assert torch.allclose(moved, after, atol=1e-10) and before.abs().mean() > 0.1
+
+
+def test_gather_has_the_gradient_of_index_select():
+    """The hand-written backward pass of the gather equals PyTorch's own, bit for bit on the CPU."""
+    torch.manual_seed(0)
+    graph = build_graph("gross", "X")
+    for table in (graph.data_neighbours, graph.check_neighbours):
+        hop = model_module.Hop(torch.from_numpy(table), 4, 4)
+        x = torch.randn(2, 3, 144, 4, dtype=torch.float64, requires_grad=True)
+        weight = torch.randn(2, 3, 72 * 6, 4, dtype=torch.float64)
+        for neighbours, places in zip(hop.neighbours, hop.places, strict=True):
+            ours, = torch.autograd.grad((model_module.Gather.apply(x, neighbours, places) * weight).sum(), x)
+            theirs, = torch.autograd.grad((x.index_select(-2, neighbours) * weight).sum(), x)
+            assert torch.equal(model_module.Gather.apply(x, neighbours, places), x.index_select(-2, neighbours))
+            assert torch.equal(ours, theirs) and ours.abs().sum() > 0
 
 
 def test_readout_equals_scatter_then_average():

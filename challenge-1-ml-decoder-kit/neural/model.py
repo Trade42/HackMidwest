@@ -32,6 +32,26 @@ class Norm(nn.BatchNorm1d):
         return super().forward(x.reshape(-1, x.shape[-1])).reshape(x.shape)
 
 
+class Gather(torch.autograd.Function):
+    """index_select along the node axis, with a backward pass that also only gathers.
+
+    PyTorch's own backward pass of index_select scatters with atomic additions, which are slow
+    on a GPU in half precision. Here every source is picked the same number of times, so its
+    gradient is the sum of that many known places of the incoming gradient: a gather and a sum.
+    """
+
+    @staticmethod
+    def forward(ctx, x, index, places):
+        ctx.places = places            # [sources, copies]: where each source went in the result
+        return x.index_select(-2, index)
+
+    @staticmethod
+    def backward(ctx, gradient):
+        places = ctx.places
+        picked = gradient.index_select(-2, places.reshape(-1))
+        return picked.reshape(*gradient.shape[:-2], *places.shape, gradient.shape[-1]).sum(dim=-2), None, None
+
+
 class Hop(nn.Module):
     """One step of message passing between checks and data qubits.
 
@@ -48,15 +68,22 @@ class Hop(nn.Module):
     def __init__(self, neighbours, width_in, width_out):
         super().__init__()
         targets, slots = neighbours.shape
-        self.register_buffer("neighbours", neighbours.reshape(2, targets // 2 * slots), persistent=False)
+        neighbours = neighbours.reshape(2, targets // 2 * slots)     # one row per block of targets
+        sources = int(neighbours.max()) + 1
+        if any(len(set(torch.bincount(row, minlength=sources).tolist())) != 1 for row in neighbours):
+            raise ValueError("within a block of targets, every source must be a neighbour equally often")
+        # places[block][source]: where that source appears in the block's row of neighbours.
+        places = torch.stack([torch.argsort(row, stable=True).reshape(sources, -1) for row in neighbours])
+        self.register_buffer("neighbours", neighbours, persistent=False)
+        self.register_buffer("places", places, persistent=False)
         self.targets_per_block = targets // 2
         self.linears = nn.ModuleList(nn.Linear(slots * width_in, 2 * width_out) for _ in range(2))
 
     def messages(self, x):
         """[..., sources, c] -> (same, after), each [..., targets, c']."""
         results = []
-        for neighbours, linear in zip(self.neighbours, self.linears, strict=True):
-            side_by_side = x.index_select(-2, neighbours).reshape(*x.shape[:-2], self.targets_per_block, -1)
+        for neighbours, places, linear in zip(self.neighbours, self.places, self.linears, strict=True):
+            side_by_side = Gather.apply(x, neighbours, places).reshape(*x.shape[:-2], self.targets_per_block, -1)
             results.append(linear(side_by_side))
         return torch.cat(results, dim=-2).chunk(2, dim=-1)
 

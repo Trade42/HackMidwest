@@ -20,3 +20,5 @@ test_X.npz: 10000 shots, p=0.005, arms ['head', 'fresh'], decoder tcbp-jobs (cud
   fresh: 5000 of 10000 shots, 921 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   fresh: 6000 of 10000 shots, 979 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   fresh: 7000 of 10000 shots, 1038 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 8000 of 10000 shots, 1098 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 9000 of 10000 shots, 1157 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]

@@ -218,3 +218,54 @@ In G1 at p = 0.004 the kit's separate relay-BP took a mean of 404 and 466 ms per
 - Joint decoding still fixes nearly 9 in 10 of separate relay-BP's failures, but its own failures now show: 1 break in 200 controls.
 - The authors' rows put joint decoding's overall rate only about 1.3 times below separate decoding here. That fits a joint decoder failing about 0.6% of the shots separate relay-BP gets right, which a 200-shot control can neither show nor exclude.
 - As a fallback after separate decoding, it would fix most of the flagged failures: 84% of the unconverged ones.
+
+## G3: where relay-BP's time goes
+
+### Item 2: the speed against accuracy frontier at p = 0.004 (run on another machine)
+
+**Where it ran.** This job ran on the team's ICRN server (host `jupyter-blakew3`, AMD EPYC-Milan, 10 processes), started by hand by Sal:
+
+- the commit: `ed3fd353fec15895958742f73e33d0f8f3db610d` of this branch;
+- the command, from `challenge-1-ml-decoder-kit/`: `PYTHONDONTWRITEBYTECODE=1 python -m analysis.remote g3 --data-dir <the p = 0.004 folder of main> --out ~/mlBranchMidwest/runs/gates_g3 --processes 10`;
+- its versions: Python 3.12.16, numpy 2.5.5, stim 1.16.0, ldpc 2.4.1, relay-bp 0.2.2.
+
+Its stdout is `logs/server_g3_frontier_p0.004.log`, copied from the repository's `server-logs` branch (`gates_g3_g2.out`, lines 1 to 343, commit `617e64502fe8`). Its summaries are `results/g3_frontier_p0.004.json` and `.csv`, from `files/gates_g3/` on that branch. The table below is `python -m analysis.g3_schedules table --json analysis/results/g3_frontier_p0.004.json` (log `logs/g3_frontier_table.log`). The same run can be made here with `analysis/steps.sh step8`, then `summarize-g3`.
+
+**The two machines agree shot for shot.**
+
+- The job's machine check decoded the first 10 validation_X shots with the kit's relay-BP on a fresh decoder, seed 0. Its iterations, corrections and predicted bits are identical to luminaty's.
+- Its 20 chunks of the kit's schedule have the same mean iterations and failures as G1's 20 chunks on luminaty (`logs/g1_run_p0.004.log`, and the first two chunks in `logs/g1_run_p0.004_first_chunks.log`, decoded by the first smoke run with 2 processes).
+- So its iterations and failures are luminaty's. Its milliseconds are the server's (10 processes), not luminaty's.
+
+**Shots:** the validation files, 5,000 shots per basis, each schedule in 500-shot chunks on fresh decoders with seed 0, every other setting the kit's (300 legs). Each schedule is paired with the kit's 80 / 60 / 5 on the same shots. A pair is shot k of X with shot k of Z.
+
+| schedule (first leg / later legs / stop after) | mean iterations X, Z | median X, Z | p99 X, Z | speed-up (mean iterations) | failures [X Z] | unconverged [X Z] | paired vs kit, X: only kit wrong / only this wrong (p) | Z | pairs failed of 5,000 [95% Wilson] | ms mean X, Z |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 80/60/1 | 167, 154 | 21, 21 | 2,681, 3,413 | 3.42 | [41 32] | [12 7] | 10 / 20 (0.099) | 6 / 18 (0.023) | 73 [58, 92] | 62, 55 |
+| 40/60/1 | 171, 161 | 21, 21 | 2,702, 2,894 | 3.32 | [42 38] | [12 9] | 10 / 21 (0.071) | 4 / 22 (0.00053) | 80 [64, 99] | 63, 58 |
+| 80/30/1 | 183, 172 | 21, 21 | 6,223, 4,782 | 3.10 | [56 45] | [38 31] | 5 / 30 (2.2e-05) | 5 / 30 (2.2e-05) | 101 [83, 122] | 68, 62 |
+| 40/30/1 | 194, 177 | 21, 21 | 6,881, 4,717 | 2.97 | [59 49] | [42 35] | 5 / 33 (4.3e-06) | 7 / 36 (9e-06) | 108 [90, 130] | 72, 60 |
+| 80/60/2 | 280, 262 | 45, 45 | 4,626, 4,707 | 2.03 | [33 30] | [15 11] | 11 / 13 (0.84) | 6 / 16 (0.052) | 63 [49, 80] | 87, 80 |
+| 80/30/2 | 288, 282 | 45, 46 | 9,075, 9,073 | 1.93 | [53 45] | [43 38] | 5 / 27 (0.00011) | 6 / 31 (4.1e-05) | 97 [80, 118] | 90, 88 |
+| 40/60/2 | 294, 278 | 45, 45 | 5,889, 5,773 | 1.92 | [43 26] | [18 9] | 8 / 20 (0.036) | 7 / 13 (0.26) | 69 [55, 87] | 95, 91 |
+| 40/30/2 | 293, 282 | 45, 46 | 9,032, 9,032 | 1.91 | [49 44] | [41 35] | 8 / 26 (0.0029) | 7 / 31 (0.00012) | 93 [76, 114] | 101, 98 |
+| 80/30/3 | 377, 363 | 73, 75 | 9,079, 9,078 | 1.49 | [53 52] | [46 41] | 6 / 28 (0.0002) | 4 / 36 (1.9e-07) | 105 [87, 127] | 119, 112 |
+| 40/60/3 | 376, 378 | 74, 74 | 7,475, 7,903 | 1.46 | [36 24] | [17 9] | 7 / 12 (0.36) | 8 / 12 (0.5) | 60 [47, 77] | 118, 116 |
+| 40/30/3 | 378, 379 | 74, 76 | 9,036, 9,038 | 1.45 | [50 45] | [41 40] | 5 / 24 (0.00055) | 5 / 30 (2.2e-05) | 95 [78, 116] | 119, 116 |
+| 80/60/3 | 386, 376 | 72, 74 | 7,875, 7,722 | 1.44 | [22 20] | [13 7] | 14 / 5 (0.064) | 11 / 11 (1) | 42 [31, 57] | 120, 115 |
+| 80/30/5 | 510, 516 | 129, 132 | 9,078, 9,073 | 1.07 | [53 45] | [45 39] | 9 / 31 (0.00068) | 7 / 32 (7e-05) | 97 [80, 118] | 158, 156 |
+| 40/30/5 | 526, 512 | 128, 129 | 9,039, 9,035 | 1.06 | [53 40] | [44 34] | 5 / 27 (0.00011) | 7 / 27 (0.00082) | 93 [76, 114] | 163, 155 |
+| 40/60/5 | 562, 532 | 134, 136 | 14,669, 10,643 | 1.00 | [28 21] | [10 9] | 11 / 8 (0.65) | 10 / 11 (1) | 49 [37, 65] | 174, 161 |
+| 80/60/5 (kit) | 565, 535 | 135, 136 | 13,982, 10,777 | 1.00 | [31 20] | [17 7] | 0 / 0 (1) | 0 / 0 (1) | 51 [39, 67] | 174, 161 |
+The ms column: ms per shot inside decode_detailed, 10 processes side by side on jupyter-blakew3 (10 processes).
+
+**How to read the paired counts.** Changing the schedule also changes which random memory strengths each shot gets: a stop rule that ends sooner draws fewer numbers, so later shots in a chunk see other draws. G2 showed that a fresh draw alone fixes about 44% of relay-BP's failures. So even two schedules of the same strength disagree on about 10 shots per basis here: 40 / 60 / 5 against the kit's 80 / 60 / 5 has 11 / 8 and 10 / 11. The p-values are not corrected for the 15 comparisons.
+
+**What this says at p = 0.004:**
+
+- **Later legs must stay at 60 iterations.** All 8 schedules with 30-iteration legs fail more than the kit's (93 to 108 failed pairs against 51; paired p at or below 0.003 in every basis). Their unconverged shots grow 2 to 6 times. Short legs are what made 40 / 30 / 1 lose in the review.
+- **The first leg can be 40 or 80.** 40 / 60 / k and 80 / 60 / k are within each other's noise at every k.
+- **Stopping after 3 solutions costs nothing measurable and saves 31% of the iterations.** 80 / 60 / 3 runs 1.44 times fewer mean iterations (386 and 376 against 565 and 535) with 42 failed pairs against the kit's 51 (X 14 / 5, p = 0.064; Z 11 / 11). 40 / 60 / 3 runs 1.46 times fewer with 60 pairs (X 7 / 12, Z 8 / 12, p at or above 0.36).
+- **Stopping after 2 saves half (2.0 times) for about 12 more failed pairs.** 80 / 60 / 2 has 63 against 51 (Z 6 / 16, p = 0.052).
+- **Stopping after the first solution saves 3.4 times, at a measurable cost.** 80 / 60 / 1 has 73 pairs against 51, about 40% more failures (Z 6 / 18, p = 0.023; X 10 / 20, p = 0.099).
+- On 5,000 pairs a difference of about 30% in failures is at the edge of what these counts can see. A schedule chosen from this table should be confirmed on train shots or a larger validation set, never on test shots.

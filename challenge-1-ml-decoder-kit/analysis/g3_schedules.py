@@ -185,9 +185,32 @@ def print_table(rows):
         print("| " + " | ".join(cells) + " |")
 
 
+def cmd_table(args):
+    """The RESULTS.md table of a summary json (for example the one the other machine wrote)."""
+    import json
+    d = json.load(open(args.json))
+    n = d["rows"][0].get("pair_shots", 0)
+    print("| schedule (first leg / later legs / stop after) | mean iterations X, Z | median X, Z | p99 X, Z |"
+          " speed-up (mean iterations) | failures [X Z] | unconverged [X Z] |"
+          " paired vs kit, X: only kit wrong / only this wrong (p) | Z |"
+          f" pairs failed of {n:,} [95% Wilson] | ms mean X, Z |")
+    print("|---|---|---|---|---|---|---|---|---|---|---|")
+    for r in sorted(d["rows"], key=lambda r: -r["speedup_vs_kit_mean_iterations"]):
+        lo, hi = r["pair_ci"]
+        print(f"| {r['schedule']}{' (kit)' if r['is_kit'] else ''} | {r['X_it_mean']:.0f}, {r['Z_it_mean']:.0f} | "
+              f"{r['X_it_median']:.0f}, {r['Z_it_median']:.0f} | {r['X_it_p99']:,.0f}, {r['Z_it_p99']:,.0f} | "
+              f"{r['speedup_vs_kit_mean_iterations']:.2f} | [{r['X_failures']} {r['Z_failures']}] | "
+              f"[{r['X_unconverged']} {r['Z_unconverged']}] | {r['X_only_kit_wrong']} / {r['X_only_this_wrong']} "
+              f"({r['X_paired_p']:.2g}) | {r['Z_only_kit_wrong']} / {r['Z_only_this_wrong']} ({r['Z_paired_p']:.2g}) | "
+              f"{r['pair_failures']} [{lo * n:.0f}, {hi * n:.0f}] | {r['X_ms_mean']:.0f}, {r['Z_ms_mean']:.0f} |")
+    print(f"ms: {d['ms_label']}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
+    tb = sub.add_parser("table")
+    tb.add_argument("--json", required=True)
     t = sub.add_parser("tail")
     t.add_argument("--pershot", default="analysis/results/pershot")
     t.add_argument("--out", default="analysis/results")
@@ -203,7 +226,7 @@ def main():
     sub.choices["summarize"].add_argument("--tag", required=True)
     sub.choices["summarize"].add_argument("--machine", default="luminaty (AMD Ryzen 7 7730U), nice 15, cores 8-15 (4 physical cores, 2 threads each)")
     args = ap.parse_args()
-    {"tail": cmd_tail, "run": cmd_run, "summarize": cmd_summarize}[args.cmd](args)
+    {"tail": cmd_tail, "run": cmd_run, "summarize": cmd_summarize, "table": cmd_table}[args.cmd](args)
 
 
 if __name__ == "__main__":

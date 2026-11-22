@@ -1,0 +1,65 @@
+TCBP-JOBS, head priors per shot                                             72 of 10000  0.0072 [0.0057, 0.0091]
+TCBP-JOBS, fresh priors per shot                                           186 of 10000  0.0186 [0.0161, 0.0214]
+TCBP-JOBS, the kit's priors, built once, decode_batch (same run)           186 of 10000  0.0186 [0.0161, 0.0214]
+TCBP-JOBS alone (stored)                                                   186 of 10000  0.0186 [0.0161, 0.0214]
+relay-BP, head priors per shot (H)                                         151 of 10000  0.0151 [0.0129, 0.0177]
+the frozen fallback rule: H where H converged, else T (stored)             107 of 10000  0.0107 [0.0089, 0.0129]
+fallback b2: H where H converged, else TCBP-JOBS with head priors           90 of 10000  0.0090 [0.0073, 0.0110]
+fallback b1: TCBP-JOBS with head priors where its flag says converged, else H   151 of 10000  0.0151 [0.0129, 0.0177]
+  TCBP-JOBS, head priors per shot
+    against TCBP-JOBS, fresh priors per shot: both 50, only the first 22, only the second 136, exact p = 2.93e-21
+  TCBP-JOBS, head priors per shot
+    against TCBP-JOBS, the kit's priors, built once, decode_batch (same run): both 50, only the first 22, only the second 136, exact p = 2.93e-21
+  TCBP-JOBS, head priors per shot
+    against TCBP-JOBS alone (stored): both 50, only the first 22, only the second 136, exact p = 2.93e-21
+  TCBP-JOBS, head priors per shot
+    against relay-BP, head priors per shot (H): both 65, only the first 7, only the second 86, exact p = 2.08e-18
+  TCBP-JOBS, head priors per shot
+    against the frozen fallback rule: H where H converged, else T (stored): both 57, only the first 15, only the second 50, exact p = 1.57e-05
+  TCBP-JOBS, head priors per shot
+    against fallback b2: H where H converged, else TCBP-JOBS with head priors: both 65, only the first 7, only the second 25, exact p = 0.0021
+  TCBP-JOBS, head priors per shot
+    against fallback b1: TCBP-JOBS with head priors where its flag says converged, else H: both 65, only the first 7, only the second 86, exact p = 2.08e-18
+  TCBP-JOBS, fresh priors per shot
+    against TCBP-JOBS, the kit's priors, built once, decode_batch (same run): both 186, only the first 0, only the second 0, exact p = 1
+  TCBP-JOBS, fresh priors per shot
+    against TCBP-JOBS alone (stored): both 186, only the first 0, only the second 0, exact p = 1
+  TCBP-JOBS, fresh priors per shot
+    against relay-BP, head priors per shot (H): both 90, only the first 96, only the second 61, exact p = 0.00647
+  TCBP-JOBS, fresh priors per shot
+    against the frozen fallback rule: H where H converged, else T (stored): both 91, only the first 95, only the second 16, exact p = 7.52e-15
+  TCBP-JOBS, fresh priors per shot
+    against fallback b2: H where H converged, else TCBP-JOBS with head priors: both 66, only the first 120, only the second 24, exact p = 1.49e-16
+  TCBP-JOBS, fresh priors per shot
+    against fallback b1: TCBP-JOBS with head priors where its flag says converged, else H: both 90, only the first 96, only the second 61, exact p = 0.00647
+  TCBP-JOBS, the kit's priors, built once, decode_batch (same run)
+    against TCBP-JOBS alone (stored): both 186, only the first 0, only the second 0, exact p = 1
+  TCBP-JOBS, the kit's priors, built once, decode_batch (same run)
+    against relay-BP, head priors per shot (H): both 90, only the first 96, only the second 61, exact p = 0.00647
+  TCBP-JOBS, the kit's priors, built once, decode_batch (same run)
+    against the frozen fallback rule: H where H converged, else T (stored): both 91, only the first 95, only the second 16, exact p = 7.52e-15
+  TCBP-JOBS, the kit's priors, built once, decode_batch (same run)
+    against fallback b2: H where H converged, else TCBP-JOBS with head priors: both 66, only the first 120, only the second 24, exact p = 1.49e-16
+  TCBP-JOBS, the kit's priors, built once, decode_batch (same run)
+    against fallback b1: TCBP-JOBS with head priors where its flag says converged, else H: both 90, only the first 96, only the second 61, exact p = 0.00647
+  TCBP-JOBS alone (stored)
+    against relay-BP, head priors per shot (H): both 90, only the first 96, only the second 61, exact p = 0.00647
+  TCBP-JOBS alone (stored)
+    against the frozen fallback rule: H where H converged, else T (stored): both 91, only the first 95, only the second 16, exact p = 7.52e-15
+  TCBP-JOBS alone (stored)
+    against fallback b2: H where H converged, else TCBP-JOBS with head priors: both 66, only the first 120, only the second 24, exact p = 1.49e-16
+  TCBP-JOBS alone (stored)
+    against fallback b1: TCBP-JOBS with head priors where its flag says converged, else H: both 90, only the first 96, only the second 61, exact p = 0.00647
+  relay-BP, head priors per shot (H)
+    against the frozen fallback rule: H where H converged, else T (stored): both 106, only the first 45, only the second 1, exact p = 1.34e-12
+  relay-BP, head priors per shot (H)
+    against fallback b2: H where H converged, else TCBP-JOBS with head priors: both 90, only the first 61, only the second 0, exact p = 8.67e-19
+  relay-BP, head priors per shot (H)
+    against fallback b1: TCBP-JOBS with head priors where its flag says converged, else H: both 151, only the first 0, only the second 0, exact p = 1
+  the frozen fallback rule: H where H converged, else T (stored)
+    against fallback b2: H where H converged, else TCBP-JOBS with head priors: both 82, only the first 25, only the second 8, exact p = 0.00455
+  the frozen fallback rule: H where H converged, else T (stored)
+    against fallback b1: TCBP-JOBS with head priors where its flag says converged, else H: both 106, only the first 1, only the second 45, exact p = 1.34e-12
+  fallback b2: H where H converged, else TCBP-JOBS with head priors
+    against fallback b1: TCBP-JOBS with head priors where its flag says converged, else H: both 90, only the first 0, only the second 61, exact p = 8.67e-19
+the head arm's logits rows equal those of /home/sal/hackMidwest/orchestration/scratch/predecoder/test-run/logits_test_p0.005 on 10000 of 10000 shots

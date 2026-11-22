@@ -1,0 +1,249 @@
+{
+ "data": {
+  "path": "/home/sal/hackMidwest/worktrees/predecoder-tcbp/challenge-1-ml-decoder-kit/data/p0.005/test_X.npz",
+  "sha256": "1b13521cddb2bf5e5d4c7f1e85a8ecaaa3c72a0b99754a3f76b4a5a4a912fc8b",
+  "basis": "X",
+  "p": 0.005,
+  "seed": 301,
+  "shots": 10000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 10000,
+ "arms": {
+  "TCBP-JOBS, head priors per shot": {
+   "failures": 72,
+   "share": 0.0072,
+   "wilson95": [
+    0.005721693847387727,
+    0.00905677495271946
+   ]
+  },
+  "TCBP-JOBS, fresh priors per shot": {
+   "failures": 186,
+   "share": 0.0186,
+   "wilson95": [
+    0.01613086100617122,
+    0.021438852630946477
+   ]
+  },
+  "TCBP-JOBS, the kit's priors, built once, decode_batch (same run)": {
+   "failures": 186,
+   "share": 0.0186,
+   "wilson95": [
+    0.01613086100617122,
+    0.021438852630946477
+   ]
+  },
+  "TCBP-JOBS alone (stored)": {
+   "failures": 186,
+   "share": 0.0186,
+   "wilson95": [
+    0.01613086100617122,
+    0.021438852630946477
+   ]
+  },
+  "relay-BP, head priors per shot (H)": {
+   "failures": 151,
+   "share": 0.0151,
+   "wilson95": [
+    0.012889225476856475,
+    0.017683176148898347
+   ]
+  },
+  "the frozen fallback rule: H where H converged, else T (stored)": {
+   "failures": 107,
+   "share": 0.0107,
+   "wilson95": [
+    0.008863014740058493,
+    0.01291276607141157
+   ]
+  },
+  "fallback b2: H where H converged, else TCBP-JOBS with head priors": {
+   "failures": 90,
+   "share": 0.009,
+   "wilson95": [
+    0.007328320081556402,
+    0.011048766324394547
+   ]
+  },
+  "fallback b1: TCBP-JOBS with head priors where its flag says converged, else H": {
+   "failures": 151,
+   "share": 0.0151,
+   "wilson95": [
+    0.012889225476856475,
+    0.017683176148898347
+   ]
+  }
+ },
+ "pairs": {
+  "TCBP-JOBS, head priors per shot | TCBP-JOBS, fresh priors per shot": {
+   "both": 50,
+   "only_first": 22,
+   "only_second": 136,
+   "p": 2.932971835403456e-21
+  },
+  "TCBP-JOBS, head priors per shot | TCBP-JOBS, the kit's priors, built once, decode_batch (same run)": {
+   "both": 50,
+   "only_first": 22,
+   "only_second": 136,
+   "p": 2.932971835403456e-21
+  },
+  "TCBP-JOBS, head priors per shot | TCBP-JOBS alone (stored)": {
+   "both": 50,
+   "only_first": 22,
+   "only_second": 136,
+   "p": 2.932971835403456e-21
+  },
+  "TCBP-JOBS, head priors per shot | relay-BP, head priors per shot (H)": {
+   "both": 65,
+   "only_first": 7,
+   "only_second": 86,
+   "p": 2.078229307846884e-18
+  },
+  "TCBP-JOBS, head priors per shot | the frozen fallback rule: H where H converged, else T (stored)": {
+   "both": 57,
+   "only_first": 15,
+   "only_second": 50,
+   "p": 1.5717029852739467e-05
+  },
+  "TCBP-JOBS, head priors per shot | fallback b2: H where H converged, else TCBP-JOBS with head priors": {
+   "both": 65,
+   "only_first": 7,
+   "only_second": 25,
+   "p": 0.0021024015732109547
+  },
+  "TCBP-JOBS, head priors per shot | fallback b1: TCBP-JOBS with head priors where its flag says converged, else H": {
+   "both": 65,
+   "only_first": 7,
+   "only_second": 86,
+   "p": 2.078229307846884e-18
+  },
+  "TCBP-JOBS, fresh priors per shot | TCBP-JOBS, the kit's priors, built once, decode_batch (same run)": {
+   "both": 186,
+   "only_first": 0,
+   "only_second": 0,
+   "p": 1.0
+  },
+  "TCBP-JOBS, fresh priors per shot | TCBP-JOBS alone (stored)": {
+   "both": 186,
+   "only_first": 0,
+   "only_second": 0,
+   "p": 1.0
+  },
+  "TCBP-JOBS, fresh priors per shot | relay-BP, head priors per shot (H)": {
+   "both": 90,
+   "only_first": 96,
+   "only_second": 61,
+   "p": 0.006472872563071097
+  },
+  "TCBP-JOBS, fresh priors per shot | the frozen fallback rule: H where H converged, else T (stored)": {
+   "both": 91,
+   "only_first": 95,
+   "only_second": 16,
+   "p": 7.519631891796862e-15
+  },
+  "TCBP-JOBS, fresh priors per shot | fallback b2: H where H converged, else TCBP-JOBS with head priors": {
+   "both": 66,
+   "only_first": 120,
+   "only_second": 24,
+   "p": 1.4916559831780758e-16
+  },
+  "TCBP-JOBS, fresh priors per shot | fallback b1: TCBP-JOBS with head priors where its flag says converged, else H": {
+   "both": 90,
+   "only_first": 96,
+   "only_second": 61,
+   "p": 0.006472872563071097
+  },
+  "TCBP-JOBS, the kit's priors, built once, decode_batch (same run) | TCBP-JOBS alone (stored)": {
+   "both": 186,
+   "only_first": 0,
+   "only_second": 0,
+   "p": 1.0
+  },
+  "TCBP-JOBS, the kit's priors, built once, decode_batch (same run) | relay-BP, head priors per shot (H)": {
+   "both": 90,
+   "only_first": 96,
+   "only_second": 61,
+   "p": 0.006472872563071097
+  },
+  "TCBP-JOBS, the kit's priors, built once, decode_batch (same run) | the frozen fallback rule: H where H converged, else T (stored)": {
+   "both": 91,
+   "only_first": 95,
+   "only_second": 16,
+   "p": 7.519631891796862e-15
+  },
+  "TCBP-JOBS, the kit's priors, built once, decode_batch (same run) | fallback b2: H where H converged, else TCBP-JOBS with head priors": {
+   "both": 66,
+   "only_first": 120,
+   "only_second": 24,
+   "p": 1.4916559831780758e-16
+  },
+  "TCBP-JOBS, the kit's priors, built once, decode_batch (same run) | fallback b1: TCBP-JOBS with head priors where its flag says converged, else H": {
+   "both": 90,
+   "only_first": 96,
+   "only_second": 61,
+   "p": 0.006472872563071097
+  },
+  "TCBP-JOBS alone (stored) | relay-BP, head priors per shot (H)": {
+   "both": 90,
+   "only_first": 96,
+   "only_second": 61,
+   "p": 0.006472872563071097
+  },
+  "TCBP-JOBS alone (stored) | the frozen fallback rule: H where H converged, else T (stored)": {
+   "both": 91,
+   "only_first": 95,
+   "only_second": 16,
+   "p": 7.519631891796862e-15
+  },
+  "TCBP-JOBS alone (stored) | fallback b2: H where H converged, else TCBP-JOBS with head priors": {
+   "both": 66,
+   "only_first": 120,
+   "only_second": 24,
+   "p": 1.4916559831780758e-16
+  },
+  "TCBP-JOBS alone (stored) | fallback b1: TCBP-JOBS with head priors where its flag says converged, else H": {
+   "both": 90,
+   "only_first": 96,
+   "only_second": 61,
+   "p": 0.006472872563071097
+  },
+  "relay-BP, head priors per shot (H) | the frozen fallback rule: H where H converged, else T (stored)": {
+   "both": 106,
+   "only_first": 45,
+   "only_second": 1,
+   "p": 1.3358203432289883e-12
+  },
+  "relay-BP, head priors per shot (H) | fallback b2: H where H converged, else TCBP-JOBS with head priors": {
+   "both": 90,
+   "only_first": 61,
+   "only_second": 0,
+   "p": 8.673617379884035e-19
+  },
+  "relay-BP, head priors per shot (H) | fallback b1: TCBP-JOBS with head priors where its flag says converged, else H": {
+   "both": 151,
+   "only_first": 0,
+   "only_second": 0,
+   "p": 1.0
+  },
+  "the frozen fallback rule: H where H converged, else T (stored) | fallback b2: H where H converged, else TCBP-JOBS with head priors": {
+   "both": 82,
+   "only_first": 25,
+   "only_second": 8,
+   "p": 0.004551384132355452
+  },
+  "the frozen fallback rule: H where H converged, else T (stored) | fallback b1: TCBP-JOBS with head priors where its flag says converged, else H": {
+   "both": 106,
+   "only_first": 1,
+   "only_second": 45,
+   "p": 1.3358203432289883e-12
+  },
+  "fallback b2: H where H converged, else TCBP-JOBS with head priors | fallback b1: TCBP-JOBS with head priors where its flag says converged, else H": {
+   "both": 90,
+   "only_first": 0,
+   "only_second": 61,
+   "p": 8.673617379884035e-19
+  }
+ },
+ "logits_rows_equal_to_local": 10000
+}

@@ -44,6 +44,12 @@ should find the answer sooner and fail less.
 
 Details, commands and logs for every number are under "Numbers".
 
+- **The same head's priors fed to TCBP-JOBS instead of relay-BP** (branch `predecoder-tcbp`, `README_tcbp.md`; Sal,
+  15:36 UTC: "we just use tcbp for everything that relay bp was used for"). Knobs were refitted on train shots
+  (log-odds alpha 0.4, eps 1e-4). On validation X p = 0.005: **33** of 5,000 against TCBP-JOBS's 91
+  (p = 1.8e-12). On the registered test run (designed after the test results were seen): **72** of 10,000 against
+  186 (p = 2.9e-21), and 4 against 20 at p = 0.004. About 56 ms per shot on the A100 with the network on the GPU.
+
 | file | what it does |
 |------|--------------|
 | `mapping.py` | links the network's fault list (67,824 mechanisms of the full error model) to the decoder's 8,784 columns, and checks the link |

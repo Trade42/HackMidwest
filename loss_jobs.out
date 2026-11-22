@@ -979,3 +979,25 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 
   350/500 shots, 22s, failures so far starter=0 starter@0.5/stop1=3
   400/500 shots, 24s, failures so far starter=1 starter@0.5/stop1=3
   450/500 shots, 26s, failures so far starter=4 starter@0.5/stop1=6
+  500/500 shots, 33s, failures so far starter=8 starter@0.5/stop1=11
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/parts/starter+startercap0.5_stop1/007000-007500.npz.tmp.npz in 34s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 7500..8000 conditions ['starter', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 7s, failures so far starter=0 starter@0.5/stop1=0
+  100/500 shots, 11s, failures so far starter=0 starter@0.5/stop1=1
+  150/500 shots, 15s, failures so far starter=0 starter@0.5/stop1=2
+  200/500 shots, 18s, failures so far starter=3 starter@0.5/stop1=6
+  250/500 shots, 19s, failures so far starter=4 starter@0.5/stop1=7
+  300/500 shots, 22s, failures so far starter=4 starter@0.5/stop1=7
+  350/500 shots, 23s, failures so far starter=5 starter@0.5/stop1=8
+  400/500 shots, 24s, failures so far starter=6 starter@0.5/stop1=9
+  450/500 shots, 26s, failures so far starter=6 starter@0.5/stop1=10
+  500/500 shots, 34s, failures so far starter=8 starter@0.5/stop1=12
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/parts/starter+startercap0.5_stop1/007500-008000.npz.tmp.npz in 34s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 8000..8500 conditions ['starter', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 6s, failures so far starter=1 starter@0.5/stop1=0
+  100/500 shots, 8s, failures so far starter=1 starter@0.5/stop1=0
+  150/500 shots, 9s, failures so far starter=1 starter@0.5/stop1=0
+  200/500 shots, 10s, failures so far starter=1 starter@0.5/stop1=0
+  250/500 shots, 12s, failures so far starter=1 starter@0.5/stop1=0
+  300/500 shots, 14s, failures so far starter=2 starter@0.5/stop1=1
+  350/500 shots, 16s, failures so far starter=2 starter@0.5/stop1=1

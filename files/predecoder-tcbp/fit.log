@@ -35,3 +35,17 @@ fit of the knobs for tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/N
     train_X_T_right alpha 0.4: 200 of 2000 shots, build 43.6 ms, decode 2.5 ms mean (last 200: 43.6 + 2.5 ms), 10 s; priors capped at 0.5 so far on 142 shots, 179 columns
     train_X_T_right alpha 0.4: 400 of 2000 shots, build 43.1 ms, decode 2.8 ms mean (last 200: 42.7 + 3.1 ms), 21 s; priors capped at 0.5 so far on 207 shots, 266 columns
     train_X_T_right alpha 0.4: 600 of 2000 shots, build 43.1 ms, decode 2.7 ms mean (last 200: 43.0 + 2.6 ms), 31 s; priors capped at 0.5 so far on 268 shots, 347 columns
+    train_X_T_right alpha 0.4: 800 of 2000 shots, build 43.1 ms, decode 2.7 ms mean (last 200: 42.9 + 2.7 ms), 41 s; priors capped at 0.5 so far on 327 shots, 419 columns
+    train_X_T_right alpha 0.4: 1000 of 2000 shots, build 43.1 ms, decode 2.7 ms mean (last 200: 43.3 + 2.7 ms), 51 s; priors capped at 0.5 so far on 396 shots, 506 columns
+    train_X_T_right alpha 0.4: 1200 of 2000 shots, build 43.1 ms, decode 2.8 ms mean (last 200: 43.0 + 3.0 ms), 61 s; priors capped at 0.5 so far on 451 shots, 571 columns
+    train_X_T_right alpha 0.4: 1400 of 2000 shots, build 43.1 ms, decode 2.8 ms mean (last 200: 42.8 + 2.8 ms), 72 s; priors capped at 0.5 so far on 513 shots, 646 columns
+    train_X_T_right alpha 0.4: 1600 of 2000 shots, build 42.8 ms, decode 2.8 ms mean (last 200: 41.3 + 2.6 ms), 82 s; priors capped at 0.5 so far on 574 shots, 720 columns
+    train_X_T_right alpha 0.4: 1800 of 2000 shots, build 42.7 ms, decode 2.8 ms mean (last 200: 41.2 + 3.0 ms), 92 s; priors capped at 0.5 so far on 640 shots, 801 columns
+    train_X_T_right alpha 0.4: 2000 of 2000 shots, build 42.5 ms, decode 2.8 ms mean (last 200: 40.8 + 2.5 ms), 101 s; priors capped at 0.5 so far on 717 shots, 895 columns
+  capped at 0.5 so far: 717 shots, 895 columns
+  train_X_T_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, failures 5, 303 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+    train_X_T_failed alpha 0.5: 200 of 390 shots, build 42.7 ms, decode 9.7 ms mean (last 200: 42.7 + 9.7 ms), 12 s; priors capped at 0.5 so far on 917 shots, 2019 columns
+  capped at 0.5 so far: 1107 shots, 3100 columns
+  train_X_T_failed.npz: 390 shots, {'mode': 'logodds', 'alpha': 0.5, 'eps': 0.0001}, failures 104, 326 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+    train_X_T_right alpha 0.5: 200 of 2000 shots, build 42.9 ms, decode 2.3 ms mean (last 200: 42.9 + 2.3 ms), 10 s; priors capped at 0.5 so far on 1307 shots, 4556 columns
+    train_X_T_right alpha 0.5: 400 of 2000 shots, build 42.8 ms, decode 2.6 ms mean (last 200: 42.7 + 2.9 ms), 20 s; priors capped at 0.5 so far on 1505 shots, 6072 columns

@@ -1,0 +1,20 @@
+# Extra packages for ml_decoder/, starter_scripts/ and fpga_router/, on top of the kit's requirements.txt.
+# Install with the kit's Python 3.12 environment:
+#   pip install -r requirements.txt -r ml_decoder/requirements.txt        (from challenge-1-ml-decoder-kit/)
+# torch: pick the build for the machine. CPU only:
+#   pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+# With an NVIDIA GPU, the CUDA build from https://pytorch.org of the same version.
+# These versions worked on 2026-11-22 with Python 3.12.15, stim 1.16.0, ldpc 2.4.1, relay-bp 0.2.2, numpy 2.5.5 and
+# scipy 1.18.1 (torch as the CPU build, 2.15.0+cpu).
+
+# train_logical_cnn.py, ml_first.py, plugin.py
+torch==2.15.0
+# diagnostics/predecoder_real2.py (HistGradientBoostingClassifier)
+scikit-learn==1.9.1
+# starter_scripts/loss_starter.py (loss sampling with noncomp)
+clifft==0.13.0
+# fpga_router/router_fpga.py "send" only, the serial link to the board. Imported here, never run against a board.
+pyserial==3.5
+
+# Not installed by this file: cudaq-qec 0.9.0 or later, for row 12 (tcbp_jobs_baseline.py in the kit folder).
+# It needs Linux and an NVIDIA GPU.

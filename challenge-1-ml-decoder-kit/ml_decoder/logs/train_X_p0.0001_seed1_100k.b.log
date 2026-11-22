@@ -1,0 +1,6 @@
+# from challenge-1-ml-decoder-kit/: python ml_decoder/train_logical_cnn.py --p-train 0.0001 --p-report 0.0001 --width 32 --depth 2 --batch 256 --seed 1 --threads 4 --train-shots 100000 --report-shots 50000 --basis X --out model_X_short.pt
+X memory on cpu, seed 1, 4 torch threads, train p [0.0001], report p [0.0001]
+8784 faults, 0.7 M parameters
+    50176 shots, loss 0.2555 | p=0.0001, 20224 DEM shots: 33.22% of shots wrong (always-0 guess 33.22%), 92.84% of bits right (always-0 guess 92.84%)
+done: 100096 shots, loss 0.2073 | p=0.0001, 20224 DEM shots: 33.23% of shots wrong (always-0 guess 33.22%), 92.84% of bits right (always-0 guess 92.84%)
+saved model_X_short.pt

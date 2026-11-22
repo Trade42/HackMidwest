@@ -1,0 +1,14 @@
+# from challenge-1-ml-decoder-kit/: python ml_decoder/relay_schedule_paired.py --p 0.004 --shots 5000 --seed 1
+# (run with --out to a scratch file as well; --out only saves each shot's outcome and changes no line below)
+X memory, p=0.004, 5000 Stim shots: sample(circuit, 5000, 1). Each schedule: one fresh decoder, seed 1, shots in order.
+kit 80 / 60 / stop at 5: settings {'alpha': 1.0, 'gamma0': 0.15, 'pre_iter': 80, 'num_sets': 300, 'set_max_iter': 60, 'gamma_dist_interval': (-0.22628432386414646, 0.6216020925981884), 'stop_nconv': 5}
+  kit    scoring:   20 of 5000 failures, 95% Wilson [2.59e-03, 6.17e-03]
+  strict scoring:   20 of 5000 failures, 95% Wilson [2.59e-03, 6.17e-03]
+  unconverged 7 of 5000 | iterations mean 505, median 134, p99 11306 | 313.0 ms per shot here
+40 / 30 / stop at 1: settings {'alpha': 1.0, 'gamma0': 0.15, 'pre_iter': 40, 'num_sets': 300, 'set_max_iter': 30, 'gamma_dist_interval': (-0.22628432386414646, 0.6216020925981884), 'stop_nconv': 1}
+  kit    scoring:   49 of 5000 failures, 95% Wilson [7.42e-03, 1.29e-02]
+  strict scoring:   51 of 5000 failures, 95% Wilson [7.77e-03, 1.34e-02]
+  unconverged 40 of 5000 | iterations mean 179, median 20, p99 4895 | 104.0 ms per shot here
+Paired, the same 5000 shots: A = kit 80 / 60 / stop at 5, B = 40 / 30 / stop at 1
+  kit    scoring: both fail 18, only A 2, only B 31, neither 4949. Exact McNemar p = 1.3e-07
+  strict scoring: both fail 18, only A 2, only B 33, neither 4947. Exact McNemar p = 3.7e-08

@@ -1,0 +1,12 @@
+# from challenge-1-ml-decoder-kit/: python ml_decoder/ml_first.py --basis X --model model_X_p0.0001.pt --p 0.0001 --shots 2000 --seed 1 --threads 2
+X memory, p=0.0001, 2000 Stim shots, seed 1. CNN on cpu, 2 torch threads. Checkpoint: basis X, train p [0.0001], seed 1, 500224 training shots.
+Fallback relay-BP settings: {'alpha': 1.0, 'gamma0': 0.15, 'pre_iter': 80, 'num_sets': 300, 'set_max_iter': 60, 'gamma_dist_interval': (-0.22628432386414646, 0.6216020925981884), 'stop_nconv': 5, 'seed': 1} (changes to the kit's: {'seed': 1})
+CNN alone: 188 of 2000 shots wrong, 2.91 ms per shot. Relay-BP alone: 0 of 2000 failures, 6.8 ms per shot.
+  CNN keeps | threshold | CNN failures among kept, 95% Wilson | total failures, 95% Wilson    | mean ms per shot
+      0.0% |       inf |     0 of     0 [nan, nan] |    0 of 2000 [0.0e+00, 1.9e-03] |     6.81
+     30.4% |     15.71 |     0 of   609 [0.0e+00, 6.3e-03] |    0 of 2000 [0.0e+00, 1.9e-03] |     8.47
+     30.4% |     15.71 |     0 of   609 [0.0e+00, 6.3e-03] |    0 of 2000 [0.0e+00, 1.9e-03] |     8.47
+     50.0% |      6.92 |     0 of  1000 [0.0e+00, 3.8e-03] |    0 of 2000 [0.0e+00, 1.9e-03] |     7.47
+     75.0% |      2.62 |     2 of  1500 [3.7e-04, 4.8e-03] |    2 of 2000 [2.7e-04, 3.6e-03] |     5.58
+     90.0% |      0.62 |    52 of  1800 [2.2e-02, 3.8e-02] |   52 of 2000 [2.0e-02, 3.4e-02] |     4.15
+    100.0% |      -inf |   188 of  2000 [8.2e-02, 1.1e-01] |  188 of 2000 [8.2e-02, 1.1e-01] |     2.91

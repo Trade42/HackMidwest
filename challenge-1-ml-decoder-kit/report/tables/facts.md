@@ -592,7 +592,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `op3_choice` | our pipeline | `tables/operating_rule.md` |
 | `op4_choice` | the predecoder with the fallback | `tables/operating_rule.md` |
 | `op5_choice` | the predecoder with the fallback | `tables/operating_rule.md` |
-| `op_statement` | Which method at which noise level (an operating rule chosen after the test results were seen, from the measured rows; not a frozen decoder): at p = 0.003, our pipeline (1 X failure, 23.7 ms per X shot; level on failures with the predecoder with the fallback, and faster); at p = 0.004, the predecoder with the fallback (10 X failures against our pipeline's 18, not a significant difference, at 94.0 against 104 ms per X shot); at p = 0.005, the predecoder with the fallback (107 X failures against our pipeline's 245, a significant difference, at 212 against 420 ms per X shot). The counts are of 10,000 X test shots and are not paired here (the predecoder's per-shot answers are not in the repository; the two verdicts against our pipeline are the review's paired count on that file), so a difference of a few shots is within the noise; the times come from other runs on other shots and are a guide, not a paired measurement; the fallback needs a GPU for TCBP-JOBS; the fallback rule was designed after the first test result, so its counts at p = 0.005 and 0.004 are post hoc, not held out. The TCBP version (designed after the test results were seen; a reference row, not one of the rule's options) has fewer X failures than every option at every p (0 / 4 / 72 at p = 0.003 / 0.004 / 0.005); the pick above is unchanged. | `tables/operating_rule.md` |
+| `op_statement` | Which method at which noise level (an operating rule chosen after the test results were seen, from the measured rows; not a frozen decoder): at p = 0.003, our pipeline (1 X failure, 23.7 ms per X shot; level on failures with the predecoder with the fallback, and faster); at p = 0.004, the predecoder with the fallback (10 X failures against our pipeline's 18, not a significant difference, at 94.0 against 104 ms per X shot); at p = 0.005, the predecoder with the fallback (107 X failures against our pipeline's 245, a significant difference, at 212 against 420 ms per X shot). The counts are of 10,000 X test shots and are not paired here (the predecoder's per-shot answers are not in the repository; the two verdicts against our pipeline are the review's paired count on that file), so a difference of a few shots is within the noise; the times come from other runs on other shots and are a guide, not a paired measurement; the fallback needs a GPU for TCBP-JOBS; the fallback rule was designed after the first test result, so its counts at p = 0.005 and 0.004 are post hoc, not held out. The TCBP version (designed after the test results were seen, with no validation at p = 0.004 and 0.003; a reference row, not one of the rule's options) has fewer X failures than every option at every p (0 / 4 / 72 at p = 0.003 / 0.004 / 0.005); the pick above is unchanged. | `tables/operating_rule.md` |
 | `pair_H` | 281 | `tables/test_predecoder.md` |
 | `pair_H_rate` | 2.37e-03 ± 1.4e-04 | `tables/test_predecoder.md` |
 | `pair_H_vs_R_only_mine` | 39 | `tables/test_predecoder.md` |
@@ -691,13 +691,48 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pregate_only_fresh` | 12 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_p` | 0.24 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_shots` | 5,000 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `ptfast_statement` | A fast path for easy shots (`predecoder/fastpath/`, branch `tcbp-fastpath`; exploration after the test results, on the 5,000 validation X shots at p = 0.005; no test file opened): a check sends a shot to TCBP-JOBS with the kit's priors, built once, and the rest to the TCBP version, with the rule that it add no failure. On its own time model (the TCBP version alone 51.1 ms: one timer over the priors, the CSR build, the decode and the free, plus the eager network's 9.4 ms; not comparable with the speed work's sums), the syndrome weight (round 1) saves 1.8 ms (49.3), and TCBP-JOBS's own decode time (round 2) saves more (43.4 ms mean) but worsens the 99th percentile (103 against 63.1 ms), with a threshold in ms that does not carry from one run to another. The head's entropy (C9, round 3) sends 35.4% of the shots to the fast path with 0 added failures, 38.8 ms mean and the same 99th percentile (63.1 ms) on validation: a third look at the same validation shots. On fresh shots made after the rule was frozen (5,000 X shots at p = 0.005, seed 2026112251; its one held-out check, declared in `predecoder/fastpath/CRITERION_4.md`), the frozen C9 **holds with a cost**: 48 failures against the TCBP version's 48 (both 47, 1 added, 1 removed, exact p = 1.00), TCBP-JOBS alone 112; 35.3% of the shots on the fast path (the 95% upper bound on added failures per fast-path shot is 0.0027: no loss is detectable at this resolution); 33.5 ms mean against 46.2 for the TCBP version alone (28% lower), 99th percentile 68.2 against 67.6, with today's component times (the network as a CUDA graph, 1.7 ms; TCBP-JOBS's decode times from per-shot builds on a shared GPU). At p = 0.004 (its validation X shots; only 12 shots where the cheap answer alone fails, so little power): C9's frozen threshold adds 2 failures, so it is a rule for p = 0.005 only; the criterion picks the syndrome weight there (64.2% fast, 24.2 ms mean against 53.8 for the TCBP version alone, 0 added), not frozen (picked on one half of the shots, it adds 2 on the other). | `tables/predecoder_tcbp.md` |
+| `ptpair3_R` | 5 | `tables/predecoder_tcbp.md` |
+| `ptpair3_R_rate` | 4.17e-05 ± 1.9e-05 | `tables/predecoder_tcbp.md` |
+| `ptpair3_T` | 3 | `tables/predecoder_tcbp.md` |
+| `ptpair3_TH` | 1 | `tables/predecoder_tcbp.md` |
+| `ptpair3_TH_rate` | 8.33e-06 ± 8.3e-06 | `tables/predecoder_tcbp.md` |
+| `ptpair3_T_rate` | 2.50e-05 ± 1.4e-05 | `tables/predecoder_tcbp.md` |
+| `ptpair3_only_T` | 2 | `tables/predecoder_tcbp.md` |
+| `ptpair3_only_TH` | 0 | `tables/predecoder_tcbp.md` |
+| `ptpair3_p` | 0.50 | `tables/predecoder_tcbp.md` |
+| `ptpair4_R` | 83 | `tables/predecoder_tcbp.md` |
+| `ptpair4_R_rate` | 6.94e-04 ± 7.6e-05 | `tables/predecoder_tcbp.md` |
+| `ptpair4_T` | 41 | `tables/predecoder_tcbp.md` |
+| `ptpair4_TH` | 10 | `tables/predecoder_tcbp.md` |
+| `ptpair4_TH_rate` | 8.34e-05 ± 2.6e-05 | `tables/predecoder_tcbp.md` |
+| `ptpair4_T_rate` | 3.42e-04 ± 5.3e-05 | `tables/predecoder_tcbp.md` |
+| `ptpair4_only_T` | 35 | `tables/predecoder_tcbp.md` |
+| `ptpair4_only_TH` | 4 | `tables/predecoder_tcbp.md` |
+| `ptpair4_p` | 3e-07 | `tables/predecoder_tcbp.md` |
 | `ptpair_R` | 845 | `tables/predecoder_tcbp.md` |
 | `ptpair_R_rate` | 7.33e-03 ± 2.5e-04 | `tables/predecoder_tcbp.md` |
 | `ptpair_T` | 360 | `tables/predecoder_tcbp.md` |
 | `ptpair_TH` | 132 | `tables/predecoder_tcbp.md` |
 | `ptpair_TH_rate` | 1.11e-03 ± 9.6e-05 | `tables/predecoder_tcbp.md` |
 | `ptpair_T_rate` | 3.05e-03 ± 1.6e-04 | `tables/predecoder_tcbp.md` |
+| `ptpair_only_T` | 269 | `tables/predecoder_tcbp.md` |
+| `ptpair_only_TH` | 41 | `tables/predecoder_tcbp.md` |
 | `ptpair_p` | 3e-42 | `tables/predecoder_tcbp.md` |
+| `ptretrain_h` | 119 | `tables/predecoder_tcbp.md` |
+| `ptretrain_m` | 8 | `tables/predecoder_tcbp.md` |
+| `ptretrain_r` | 27 | `tables/predecoder_tcbp.md` |
+| `ptretrain_statement` | The TCBP pipeline with the head retrained on the neutral-atom noise (`neutral_atom_noise/`, task `tcbp-retrain`; exploration after the main test results, declared before any number; its own simulated Stim shots at factor 0.8, not the test files; run 1, the first 1,000 of 4,000 shots): on the matched base it was trained with, the retrained head makes TCBP-JOBS worse, 27 failures against 8 for the matched priors alone (only the retrained head 20, only the matched priors 1, sign test p = 2e-05). Against the kit-trained head on the generic base (119) it fails fewer, but those two differ in the head and the base both, so that is not a gain from retraining; the head-alone comparison (the retrained head against the kit head on the same matched base) is in run 2, not landed yet. | `tables/predecoder_tcbp.md` |
+| `ptspeed_build_new` | 34.0 | `tables/predecoder_tcbp.md` |
+| `ptspeed_build_old` | 41.2 | `tables/predecoder_tcbp.md` |
+| `ptspeed_decode` | 2.7 | `tables/predecoder_tcbp.md` |
+| `ptspeed_free_new` | 4.8 | `tables/predecoder_tcbp.md` |
+| `ptspeed_free_old` | 4.6 | `tables/predecoder_tcbp.md` |
+| `ptspeed_net_new` | 1.7 | `tables/predecoder_tcbp.md` |
+| `ptspeed_net_old` | 8.3 | `tables/predecoder_tcbp.md` |
+| `ptspeed_new` | 38 | `tables/predecoder_tcbp.md` |
+| `ptspeed_old` | 52 | `tables/predecoder_tcbp.md` |
+| `ptspeed_statement` | After the speed work (branch `tcbp-speed`; exploration shots: the first 1,000 validation X shots at p = 0.005 on the A100, each part timed alone, not one end-to-end timer), the same decoder takes about 38 ms per X shot instead of about 52 measured the same way on the same shots: the network as a CUDA graph 1.7 ms instead of 8.3, TCBP-JOBS built with H as a scipy CSR matrix 34.0 instead of 41.2, its decode 2.7; freeing the decoder adds 4.6 to 4.8 ms before the next shot. The answers were the same on all 1,000 shots checked. The registered time (55.8 ms, jobs 4 and 5) is another measurement, on other shots; the test numbers were made with the registered path and were not rerun. | `tables/predecoder_tcbp.md` |
 | `ptt3X_T` | 1 | `tables/predecoder_tcbp.md` |
 | `ptt3X_TH` | 0 | `tables/predecoder_tcbp.md` |
 | `ptt3X_fresh` | not measured | `tables/predecoder_tcbp.md` |
@@ -705,6 +740,13 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `ptt3X_vs_T_only_TH` | 0 | `tables/predecoder_tcbp.md` |
 | `ptt3X_vs_T_p` | 1.00 | `tables/predecoder_tcbp.md` |
 | `ptt3X_vs_fresh_p` | not measured | `tables/predecoder_tcbp.md` |
+| `ptt3Z_T` | 2 | `tables/predecoder_tcbp.md` |
+| `ptt3Z_TH` | 1 | `tables/predecoder_tcbp.md` |
+| `ptt3Z_fresh` | not measured | `tables/predecoder_tcbp.md` |
+| `ptt3Z_vs_T_only_T` | 1 | `tables/predecoder_tcbp.md` |
+| `ptt3Z_vs_T_only_TH` | 0 | `tables/predecoder_tcbp.md` |
+| `ptt3Z_vs_T_p` | 1.00 | `tables/predecoder_tcbp.md` |
+| `ptt3Z_vs_fresh_p` | not measured | `tables/predecoder_tcbp.md` |
 | `ptt4X_T` | 20 | `tables/predecoder_tcbp.md` |
 | `ptt4X_TH` | 4 | `tables/predecoder_tcbp.md` |
 | `ptt4X_fresh` | not measured | `tables/predecoder_tcbp.md` |
@@ -712,6 +754,13 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `ptt4X_vs_T_only_TH` | 2 | `tables/predecoder_tcbp.md` |
 | `ptt4X_vs_T_p` | 4e-04 | `tables/predecoder_tcbp.md` |
 | `ptt4X_vs_fresh_p` | not measured | `tables/predecoder_tcbp.md` |
+| `ptt4Z_T` | 21 | `tables/predecoder_tcbp.md` |
+| `ptt4Z_TH` | 6 | `tables/predecoder_tcbp.md` |
+| `ptt4Z_fresh` | not measured | `tables/predecoder_tcbp.md` |
+| `ptt4Z_vs_T_only_T` | 17 | `tables/predecoder_tcbp.md` |
+| `ptt4Z_vs_T_only_TH` | 2 | `tables/predecoder_tcbp.md` |
+| `ptt4Z_vs_T_p` | 7e-04 | `tables/predecoder_tcbp.md` |
+| `ptt4Z_vs_fresh_p` | not measured | `tables/predecoder_tcbp.md` |
 | `ptt5X_T` | 186 | `tables/predecoder_tcbp.md` |
 | `ptt5X_TH` | 72 | `tables/predecoder_tcbp.md` |
 | `ptt5X_fresh` | 186 | `tables/predecoder_tcbp.md` |
@@ -726,7 +775,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `ptt5Z_vs_T_only_TH` | 20 | `tables/predecoder_tcbp.md` |
 | `ptt5Z_vs_T_p` | 2e-22 | `tables/predecoder_tcbp.md` |
 | `ptt5Z_vs_fresh_p` | not measured | `tables/predecoder_tcbp.md` |
-| `ptt_statement` | On the test shots (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); one basis at a time, accuracy only; its knobs were fitted at p = 0.005 and applied unchanged at the lower p, with no validation there): X at p = 0.005, TH fails 72 against TCBP-JOBS's 186 (only TH 22, only TCBP-JOBS 136, exact p = 3e-21; the same run's kit-priors arm fails 186); X at p = 0.004, TH fails 4 against TCBP-JOBS's 20 (only TH 2, only TCBP-JOBS 18, exact p = 4e-04); X at p = 0.003, TH fails 0 against TCBP-JOBS's 1 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim); Z at p = 0.005, TH fails 61 against TCBP-JOBS's 177 (only TH 20, only TCBP-JOBS 136, exact p = 2e-22). Scored as the kit scores (a pair fails when its X or its Z shot fails), at p = 0.005 TH fails 132 pairs, a logical error rate of 1.11e-03 ± 9.6e-05 per cycle, against TCBP-JOBS's 360 (3.05e-03 ± 1.6e-04) and relay-BP's 845 (7.33e-03 ± 2.5e-04), exact p = 3e-42 against TCBP-JOBS; at p = 0.004 and 0.003 it is X only, with no pair rate. TCBP-JOBS's stored counts carry its fit's spread (above). | `tables/predecoder_tcbp.md` |
+| `ptt_statement` | On the test shots (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); decoded one basis at a time; its knobs were fitted on X at p = 0.005 and applied unchanged to Z and at p = 0.004 and 0.003, no validation at these p): X at p = 0.005, TH fails 72 against TCBP-JOBS's 186 (only TH 22, only TCBP-JOBS 136, exact p = 3e-21; the same run's kit-priors arm fails 186); X at p = 0.004, TH fails 4 against TCBP-JOBS's 20 (only TH 2, only TCBP-JOBS 18, exact p = 4e-04); X at p = 0.003, TH fails 0 against TCBP-JOBS's 1 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim); Z at p = 0.005, TH fails 61 against TCBP-JOBS's 177 (only TH 20, only TCBP-JOBS 136, exact p = 2e-22); Z at p = 0.004, TH fails 6 against TCBP-JOBS's 21 (only TH 2, only TCBP-JOBS 17, exact p = 7e-04); Z at p = 0.003, TH fails 1 against TCBP-JOBS's 2 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim). Scored as the kit scores (a pair fails when its X or its Z shot fails), TH's failed pairs of 10,000 against TCBP-JOBS's: at p = 0.005, 132 against TCBP-JOBS's 360 (1.11e-03 ± 9.6e-05 against 3.05e-03 ± 1.6e-04 per cycle; only TH 41, only TCBP-JOBS 269, exact p = 3e-42; relay-BP 845, 7.33e-03 ± 2.5e-04); at p = 0.004 (no validation at these p), 10 against TCBP-JOBS's 41 (8.34e-05 ± 2.6e-05 against 3.42e-04 ± 5.3e-05 per cycle; only TH 4, only TCBP-JOBS 35, exact p = 3e-07); at p = 0.003 (no validation at these p), 1 against TCBP-JOBS's 3 (8.33e-06 ± 8.3e-06 against 2.50e-05 ± 1.4e-05 per cycle; only TH 0, only TCBP-JOBS 2, exact p = 0.50: no claim). TCBP-JOBS's stored counts carry its fit's spread (above). | `tables/predecoder_tcbp.md` |
 | `pttime_bd` | 46.4 | `tables/predecoder_tcbp.md` |
 | `pttime_build` | 42.6 | `tables/predecoder_tcbp.md` |
 | `pttime_decode` | 3.8 | `tables/predecoder_tcbp.md` |

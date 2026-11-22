@@ -1,0 +1,23 @@
+logits_validation_X_p0.005.tar.gz: OK
+logits.npy: OK
+data/p0.005/validation_X.npz: OK
+predecoder/logs/fit_tcbp_X_p0.005.json: OK
+Sun Nov 22 18:00:52 UTC 2026
+GPU 0: NVIDIA A100-SXM4-80GB (UUID: GPU-438f01eb-c6d1-c950-6a50-daa2f9c0bdc2)
+  MIG 2g.20gb     Device  0: (UUID: MIG-b8335f1f-c00b-5a22-8a6e-e63d2468741e)
+tcbp_speed exit 0
+  shots 300-399 done by dense_again, dense, csr, csc; 73 s; dense 49.1 ms; csr 42.3 ms; csc 41.7 ms; dense_again 48.9 ms
+  shots 400-499 done by dense, csr, csc, dense_again; 91 s; dense 49.0 ms; csr 42.1 ms; csc 41.6 ms; dense_again 48.9 ms
+  shots 500-599 done by csr, csc, dense_again, dense; 109 s; dense 48.8 ms; csr 42.0 ms; csc 41.9 ms; dense_again 48.8 ms
+  shots 600-699 done by csc, dense_again, dense, csr; 128 s; dense 48.8 ms; csr 41.9 ms; csc 41.8 ms; dense_again 48.8 ms
+  shots 700-799 done by dense_again, dense, csr, csc; 146 s; dense 48.8 ms; csr 41.8 ms; csc 41.7 ms; dense_again 48.7 ms
+  shots 800-899 done by dense, csr, csc, dense_again; 163 s; dense 48.7 ms; csr 41.7 ms; csc 41.7 ms; dense_again 48.6 ms
+  shots 900-999 done by csr, csc, dense_again, dense; 182 s; dense 48.7 ms; csr 41.7 ms; csc 41.8 ms; dense_again 48.6 ms
+
+RESULT (1000 shots of validation_X.npz, head priors, one model; reference: dense):
+  dense        failures 3, not reproduced 0; total 48.7 ms mean (median 48.2, p99 60.6) = priors 0.16 + build 41.2 + decode 2.7 + free 4.6
+  csr          failures 3, not reproduced 0; total 41.7 ms mean (median 41.0, p99 53.7) = priors 0.16 + build 34.0 + decode 2.7 + free 4.8; differs from dense on bits 0, faults 0, corrections 0 -> SAME
+  csc          failures 3, not reproduced 0; total 41.8 ms mean (median 41.0, p99 54.3) = priors 0.16 + build 34.4 + decode 2.7 + free 4.6; differs from dense on bits 0, faults 0, corrections 0 -> SAME
+  dense_again  failures 3, not reproduced 0; total 48.6 ms mean (median 48.1, p99 59.9) = priors 0.16 + build 41.2 + decode 2.7 + free 4.6; differs from dense on bits 0, faults 0, corrections 0 -> SAME
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job1; 262 s
+Sun Nov 22 18:05:24 UTC 2026

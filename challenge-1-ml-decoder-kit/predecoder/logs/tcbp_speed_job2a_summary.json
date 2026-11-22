@@ -1,0 +1,413 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/tcbp-speed-958ffe9/challenge-1-ml-decoder-kit/data/p0.005/validation_X.npz",
+  "sha256": "25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312",
+  "basis": "X",
+  "p": 0.005,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 1000,
+ "decoder": "tcbp-jobs",
+ "preset": "tcbp-jobs",
+ "overrides": {},
+ "head_priors": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "prior_cap": 0.5,
+ "block": 100,
+ "arms": [
+  "dense",
+  "csr",
+  "csr_after"
+ ],
+ "logits": {
+  "folder": "/home/blakew3/mlBranchMidwest/runs/tcbp-speed/in/validation_X_p0.005",
+  "model": {
+   "head": "/home/sal/hackMidwest/orchestration/scratch/predecoder/test-run/head.pt",
+   "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+   "head_step": 30000,
+   "trunk": "/home/sal/hackMidwest/orchestration/scratch/predecoder/test-run/checkpoint_final_step120000.pt",
+   "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+   "trunk_step": 120000,
+   "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+   "device": "cpu",
+   "torch": "2.15.0+cpu",
+   "torch_threads": 12
+  }
+ },
+ "threads": {},
+ "model_seconds": 58.0723734049825,
+ "facts": {
+  "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
+  "machine": {
+   "node": "jupyter-blakew3",
+   "processor": "x86_64",
+   "cpus": 24,
+   "gpu": "NVIDIA A100-SXM4-80GB",
+   "omp_threads": "1"
+  },
+  "h_shape": [
+   936,
+   8784
+  ],
+  "h_ones": 30672,
+  "model_bytes": 2538,
+  "model_option": "ndarray of 2538 bytes",
+  "options": {
+   "use_sparsity": true,
+   "clip_value": 15.0,
+   "bp_method": 0,
+   "proc_float": "fp32",
+   "repeatable": true,
+   "max_iterations": 10,
+   "osd_init_method": "tcbp",
+   "use_osd": true,
+   "osd_method": 4,
+   "tcbp_model": "<model>"
+  },
+  "dense_bytes": 8221824,
+  "model_inspect": {
+   "training_rate_mean": 0.002165577411449435,
+   "training_rate_max": 0.00998146552592516,
+   "structure_fingerprint": "c1898eb62beb1469869d59cb36c259bf13da700c7defb1b8a3f4b18e5647f22d",
+   "chunk_used": 0,
+   "prob_regression_flag": false,
+   "ece_baseline": 0.00046251760352445563,
+   "device_free_at_entry_mib": 0,
+   "version": 5,
+   "bce_model": 0.0009189324730692636,
+   "shots_used": 262848,
+   "k": 0,
+   "n": 8784,
+   "bce_baseline": 0.003829240346012811,
+   "holdout_shots": 39427,
+   "training_rate_min": 0.00010001361079048365,
+   "ece_model": 7.915039360638233e-06,
+   "m": 936,
+   "brier_baseline": 0.0004767523941567712,
+   "steps_run": 25000,
+   "wall_s": 0,
+   "training_rate_sum": 19.022431982171838,
+   "training_rate_fingerprint": "6082973ce59a496bc5ff02096ba8ce108dbf373db437ace7c91328eca3032cee",
+   "brier_model": 0.00020569946796936828,
+   "converged": true,
+   "device_highwater_mib": 0,
+   "budget_bytes": 0,
+   "seed": 1,
+   "obs_fingerprint": "0000000000000000000000000000000000000000000000000000000000000000",
+   "bce_prior": 0.015175215085299825
+  },
+  "profilers_on_path": {
+   "nsys": null,
+   "ncu": null,
+   "perf": null,
+   "py-spy": null
+  }
+ },
+ "seconds": 207.40888929367065,
+ "profile": {
+  "cprofile": {
+   "shots": 50,
+   "file": "profile_dense.txt",
+   "build_ms_mean_under_profiler": 41.56266289995983,
+   "decode_ms_mean_under_profiler": 4.412351136561483
+  },
+  "variants": {
+   "tcbp-jobs, H CSR (the probes' reference)": {
+    "builds": 50,
+    "build_ms": {
+     "n": 50,
+     "mean": 34.81575112324208,
+     "median": 33.890269056428224,
+     "p90": 37.17895963927731,
+     "p99": 38.55991483083926,
+     "max": 38.63553609699011
+    },
+    "free_ms": {
+     "n": 50,
+     "mean": 4.63042973773554,
+     "median": 4.54818649450317,
+     "p90": 4.832872981205583,
+     "p99": 5.362356904661283,
+     "max": 5.404714960604906
+    }
+   },
+   "tcbp-jobs, H CSR, osd_batch_size=1 (another decoder: timing only)": {
+    "error": "ValueError('ERROR: osd_batch_size has no effect with osd_method=4; JOBS processes the whole bp_batch_size chunk.')",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/blakew3/mlBranchMidwest/tcbp-speed-958ffe9/challenge-1-ml-decoder-kit/predecoder/tcbp_speed.py\", line 169, in profile\n    result[\"variants\"][name] = time_builds(builder, matrix, options, priors, builds)\n                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/blakew3/mlBranchMidwest/tcbp-speed-958ffe9/challenge-1-ml-decoder-kit/predecoder/tcbp_speed.py\", line 214, in time_builds\n    decoder = builder.qec.get_decoder(\"nv-qldpc-decoder\", matrix, error_rate_vec=rates, **options)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: ERROR: osd_batch_size has no effect with osd_method=4; JOBS processes the whole bp_batch_size chunk.\n"
+   },
+   "tcbp-jobs, H CSR, bp_batch_size=1 (another decoder: timing only)": {
+    "builds": 50,
+    "build_ms": {
+     "n": 50,
+     "mean": 35.169190941378474,
+     "median": 33.93051552120596,
+     "p90": 37.21908810548484,
+     "p99": 47.21480774926018,
+     "max": 55.7027239119634
+    },
+    "free_ms": {
+     "n": 50,
+     "mean": 4.644093583337963,
+     "median": 4.545100033283234,
+     "p90": 4.842096229549497,
+     "p99": 5.561434898991137,
+     "max": 5.765222944319248
+    }
+   },
+   "tcbp-jobs, H CSR, n_threads=1 (another decoder: timing only)": {
+    "builds": 50,
+    "build_ms": {
+     "n": 50,
+     "mean": 34.43977029528469,
+     "median": 33.75344251981005,
+     "p90": 36.79274528985843,
+     "p99": 37.77890951721929,
+     "max": 37.8797750454396
+    },
+    "free_ms": {
+     "n": 50,
+     "mean": 4.620625078678131,
+     "median": 4.540798021480441,
+     "p90": 4.748589033260942,
+     "p99": 5.286571511533111,
+     "max": 5.305045051500201
+    }
+   },
+   "tcbp-jobs, H CSR, repeatable=False (another decoder: timing only)": {
+    "builds": 50,
+    "build_ms": {
+     "n": 50,
+     "mean": 34.47893062373623,
+     "median": 33.96931802853942,
+     "p90": 36.423805996309966,
+     "p99": 37.06069649779238,
+     "max": 37.10579709149897
+    },
+    "free_ms": {
+     "n": 50,
+     "mean": 4.644363115075976,
+     "median": 4.540677007753402,
+     "p90": 5.284610285889357,
+     "p99": 5.305885850684717,
+     "max": 5.306027946062386
+    }
+   }
+  }
+ },
+ "arms_run": [
+  "dense",
+  "csr",
+  "csr_after"
+ ],
+ "sparse_dtypes": {
+  "csr": "uint8",
+  "csr_after": "uint8"
+ },
+ "free_modes": {
+  "dense": "inline",
+  "csr": "inline",
+  "csr_after": "after"
+ },
+ "check": {
+  "dense": {
+   "failures": 3,
+   "not_reproduced": 0,
+   "flag_not_converged": 787,
+   "ms": {
+    "seconds_priors": {
+     "n": 1000,
+     "mean": 0.19323163572698832,
+     "median": 0.1862004864960909,
+     "p90": 0.22817006101831794,
+     "p99": 0.3176019818056375,
+     "max": 0.4822890041396022
+    },
+    "seconds_build": {
+     "n": 1000,
+     "mean": 42.68788843485527,
+     "median": 42.248695506714284,
+     "p90": 43.9078850322403,
+     "p99": 48.27604743069969,
+     "max": 264.7060990566388
+    },
+    "seconds_decode": {
+     "n": 1000,
+     "mean": 2.8701976778684184,
+     "median": 2.4135439889505506,
+     "p90": 4.464187764097006,
+     "p99": 15.255455372389404,
+     "max": 40.51126807462424
+    },
+    "seconds_free": {
+     "n": 1000,
+     "mean": 4.6276148174656555,
+     "median": 4.594269033987075,
+     "p90": 4.676128958817571,
+     "p99": 5.493588674580678,
+     "max": 8.82518501020968
+    },
+    "seconds_total": {
+     "n": 1000,
+     "mean": 50.37893256591633,
+     "median": 49.48987701209262,
+     "p90": 53.21562435710803,
+     "p99": 64.1810258931946,
+     "max": 272.3516409751028
+    },
+    "seconds_answer": {
+     "n": 1000,
+     "mean": 50.37893256591633,
+     "median": 49.48987701209262,
+     "p90": 53.21562435710803,
+     "p99": 64.1810258931946,
+     "max": 272.3516409751028
+    }
+   },
+   "wall_ms_per_shot": 50.58229896076955
+  },
+  "csr": {
+   "failures": 3,
+   "not_reproduced": 0,
+   "flag_not_converged": 787,
+   "ms": {
+    "seconds_priors": {
+     "n": 1000,
+     "mean": 0.17434873734600842,
+     "median": 0.16685453010722995,
+     "p90": 0.20758317550644279,
+     "p99": 0.28759658685885364,
+     "max": 0.40549400728195906
+    },
+    "seconds_build": {
+     "n": 1000,
+     "mean": 35.381432815105654,
+     "median": 34.92375649511814,
+     "p90": 37.628747907001525,
+     "p99": 40.531522465171285,
+     "max": 44.262851937673986
+    },
+    "seconds_decode": {
+     "n": 1000,
+     "mean": 3.092613645712845,
+     "median": 2.5274479994550347,
+     "p90": 4.934876144398004,
+     "p99": 15.946394173661242,
+     "max": 40.002471068874
+    },
+    "seconds_free": {
+     "n": 1000,
+     "mean": 4.644399076816626,
+     "median": 4.589849966578186,
+     "p90": 4.6943608787842095,
+     "p99": 5.545358250383288,
+     "max": 9.052449953742325
+    },
+    "seconds_total": {
+     "n": 1000,
+     "mean": 43.292794274981134,
+     "median": 42.632172524463385,
+     "p90": 46.36551475850865,
+     "p99": 57.88079748977906,
+     "max": 79.00215301197022
+    },
+    "seconds_answer": {
+     "n": 1000,
+     "mean": 43.292794274981134,
+     "median": 42.632172524463385,
+     "p90": 46.36551475850865,
+     "p99": 57.88079748977906,
+     "max": 79.00215301197022
+    }
+   },
+   "bits_differ": 0,
+   "faults_differ": 0,
+   "corrections_differ": 0,
+   "same_as_dense": true,
+   "wall_ms_per_shot": 43.462386335013434
+  },
+  "csr_after": {
+   "failures": 3,
+   "not_reproduced": 0,
+   "flag_not_converged": 787,
+   "ms": {
+    "seconds_priors": {
+     "n": 1000,
+     "mean": 0.17604685213882476,
+     "median": 0.16717996913939714,
+     "p90": 0.2138660755008459,
+     "p99": 0.3091791353654116,
+     "max": 0.41586393490433693
+    },
+    "seconds_build": {
+     "n": 1000,
+     "mean": 35.84515773598105,
+     "median": 35.15697951661423,
+     "p90": 37.8421641071327,
+     "p99": 41.55316771240904,
+     "max": 238.95669204648584
+    },
+    "seconds_decode": {
+     "n": 1000,
+     "mean": 3.1265489199431613,
+     "median": 2.5497899623587728,
+     "p90": 4.981789260637015,
+     "p99": 15.577390908729285,
+     "max": 39.544338011182845
+    },
+    "seconds_free": {
+     "n": 1000,
+     "mean": 4.638351418310776,
+     "median": 4.585225542541593,
+     "p90": 4.709710308816284,
+     "p99": 5.531095773912966,
+     "max": 8.824571035802364
+    },
+    "seconds_total": {
+     "n": 1000,
+     "mean": 43.79516868607607,
+     "median": 42.92204702505842,
+     "p90": 46.92674654070288,
+     "p99": 58.21270476211794,
+     "max": 246.69780395925045
+    },
+    "seconds_answer": {
+     "n": 1000,
+     "mean": 39.15681726776529,
+     "median": 38.24828448705375,
+     "p90": 42.25609285058454,
+     "p99": 53.49647801485844,
+     "max": 242.09051101934165
+    }
+   },
+   "bits_differ": 0,
+   "faults_differ": 0,
+   "corrections_differ": 0,
+   "same_as_dense": true,
+   "wall_ms_per_shot": 43.968900877051055,
+   "against_csr": {
+    "wall_ms_per_shot_difference": 0.5065145420376211,
+    "answer_ms_difference": -4.135977007215843,
+    "parts_ms_difference": {
+     "priors": 0.001698114792816341,
+     "build": 0.46372492087539285,
+     "decode": 0.03393527423031628
+    },
+    "verdict": "NO GAIN"
+   }
+  }
+ },
+ "rule": "fixed before job 2 ran: an arm that moves the free is a gain over csr only if its wall time per shot (its blocks' wall time over its shots, a thread arm's block ending when its thread has freed every decoder) is below csr's in the same process; its time to answer is reported beside it",
+ "capped_in_check": {
+  "what": "counted over every arm's decodes",
+  "shots": 864,
+  "columns": 1041
+ },
+ "model_option_unchanged": true,
+ "repeatable": null,
+ "timer": "seconds_total: one perf_counter timer around the shot's priors (shot_priors and the 0.5 cap), tcbp.decode_one (get_decoder with the shot's priors, decode(), the cut to 0/1) and freeing the decoder; one process, shots one at a time, the GPU shared with whatever else runs on it. seconds_answer: the same timer stopped when the answer is in the caller's hands (inline arms: after the free; csr_after and csr_thread: before it). wall_ms_per_shot: the arm's blocks' wall time over its shots, scoring included (the same for every arm), a thread arm's drain included"
+}

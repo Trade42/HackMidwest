@@ -1,0 +1,493 @@
+{
+ "label": "exploration, after the test results; a separate branch (tcbp-fastpath); validation only; CRITERION_2.md",
+ "data": {
+  "path": "data/p0.004/validation_X.npz",
+  "sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d",
+  "shots": 5000,
+  "p": 0.004,
+  "basis": "X",
+  "seed": 201
+ },
+ "inputs_sha256": {
+  "arms": "180f572a04663599652d08ea93db39320cb7fb3b47c251ea168e4843e328f4b0",
+  "logits.npy": "783faa416f1c476cd1b608c863d5df65849cf15247d84b9f1300f0a09f003519",
+  "settings": "7697010678a369c77949a6a4233a3087824fa4d2753bcadc4869f2eaee91b0d8",
+  "speed": "88262919fb35aac3e345b63178b0610114858c1a76a7ac36f840010e034976d2"
+ },
+ "counts": {
+  "TH": 4,
+  "F": 16,
+  "F_only": 12,
+  "TH_only": 0
+ },
+ "times_ms": {
+  "time_model": "decode_plus_csr_means",
+  "net_mean": 9.4,
+  "F_decode_mean": 8.61,
+  "TH_mean": 44.36,
+  "TH_alone_mean": 53.76,
+  "p99_over_shots": 5000
+ },
+ "check_ranges": {
+  "C2 syndrome weight": {
+   "min": 63.0,
+   "median": 121.0,
+   "max": 188.0,
+   "smallest_on_an_F_only_failure": 128.0
+  },
+  "C3 total prior move": {
+   "min": 19142.79520241711,
+   "median": 23752.895847183456,
+   "max": 27628.625593259807,
+   "smallest_on_an_F_only_failure": 19692.75037905901
+  },
+  "C4 largest prior move": {
+   "min": 4.566651974892711,
+   "median": 4.972823675006613,
+   "max": 6.147933965154289,
+   "smallest_on_an_F_only_failure": 4.830033323212306
+  },
+  "C5 columns moved > 1": {
+   "min": 7443.0,
+   "median": 8243.0,
+   "max": 8598.0,
+   "smallest_on_an_F_only_failure": 7496.0
+  },
+  "C6 F decode time (ms)": {
+   "min": 0.33790606539696455,
+   "median": 3.6373824696056545,
+   "max": 88.32961693406105,
+   "smallest_on_an_F_only_failure": 3.458480932749808
+  },
+  "C7 F correction weight": {
+   "min": 24.0,
+   "median": 46.0,
+   "max": 72.0,
+   "smallest_on_an_F_only_failure": 48.0
+  },
+  "C8 upward prior move": {
+   "min": 102.05378202078212,
+   "median": 207.4630654058313,
+   "max": 442.62031545950174,
+   "smallest_on_an_F_only_failure": 215.6694578150144
+  },
+  "C9 head entropy (bits)": {
+   "min": 12.594036768691952,
+   "median": 46.983431462511625,
+   "max": 154.70352184734026,
+   "smallest_on_an_F_only_failure": 49.77530419020308
+  }
+ },
+ "rows": [
+  {
+   "rule": "TH alone (the TCBP version)",
+   "check": null,
+   "t": null,
+   "added_rate_upper_95_on_fast_shots": null,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 0.0,
+   "fast_shots": 0,
+   "failures": 4,
+   "share_95": [
+    0.0008,
+    [
+     0.00031,
+     0.00206
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 0,
+   "only_TH": 0,
+   "exact_p": 1.0,
+   "passes_gate": true,
+   "mean_ms": 53.76,
+   "p99_ms": 68.1
+  },
+  {
+   "rule": "F alone (TCBP-JOBS, kit priors, built once)",
+   "check": null,
+   "t": null,
+   "added_rate_upper_95_on_fast_shots": null,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 1.0,
+   "fast_shots": 5000,
+   "failures": 16,
+   "share_95": [
+    0.0032,
+    [
+     0.00197,
+     0.00519
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 12,
+   "only_TH": 0,
+   "exact_p": 0.00048828125,
+   "passes_gate": false,
+   "mean_ms": 8.61,
+   "p99_ms": 43.9
+  },
+  {
+   "rule": "C2 syndrome weight <= 127",
+   "check": "C2 syndrome weight",
+   "t": 127.0,
+   "added_rate_upper_95_on_fast_shots": 0.00093,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 0.6418,
+   "fast_shots": 3209,
+   "failures": 4,
+   "share_95": [
+    0.0008,
+    [
+     0.00031,
+     0.00206
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 0,
+   "only_TH": 0,
+   "exact_p": 1.0,
+   "passes_gate": true,
+   "mean_ms": 24.23,
+   "p99_ms": 67.6
+  },
+  {
+   "rule": "C3 total prior move <= 19671.5",
+   "check": "C3 total prior move",
+   "t": 19671.450171831097,
+   "added_rate_upper_95_on_fast_shots": 0.42857,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 0.0014,
+   "fast_shots": 7,
+   "failures": 4,
+   "share_95": [
+    0.0008,
+    [
+     0.00031,
+     0.00206
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 0,
+   "only_TH": 0,
+   "exact_p": 1.0,
+   "passes_gate": true,
+   "mean_ms": 53.73,
+   "p99_ms": 67.7
+  },
+  {
+   "rule": "C4 largest prior move <= 4.82549",
+   "check": "C4 largest prior move",
+   "t": 4.825487721554134,
+   "added_rate_upper_95_on_fast_shots": 0.01657,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 0.0362,
+   "fast_shots": 181,
+   "failures": 4,
+   "share_95": [
+    0.0008,
+    [
+     0.00031,
+     0.00206
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 0,
+   "only_TH": 0,
+   "exact_p": 1.0,
+   "passes_gate": true,
+   "mean_ms": 52.49,
+   "p99_ms": 68.1
+  },
+  {
+   "rule": "C5 columns moved > 1 <= 7455",
+   "check": "C5 columns moved > 1",
+   "t": 7455.0,
+   "added_rate_upper_95_on_fast_shots": 1.0,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 0.0006,
+   "fast_shots": 3,
+   "failures": 4,
+   "share_95": [
+    0.0008,
+    [
+     0.00031,
+     0.00206
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 0,
+   "only_TH": 0,
+   "exact_p": 1.0,
+   "passes_gate": true,
+   "mean_ms": 53.74,
+   "p99_ms": 67.7
+  },
+  {
+   "rule": "C6 F decode time (ms) <= 3.44795",
+   "check": "C6 F decode time (ms)",
+   "t": 3.447950934059918,
+   "added_rate_upper_95_on_fast_shots": 0.00124,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 0.4852,
+   "fast_shots": 2426,
+   "failures": 4,
+   "share_95": [
+    0.0008,
+    [
+     0.00031,
+     0.00206
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 0,
+   "only_TH": 0,
+   "exact_p": 1.0,
+   "passes_gate": true,
+   "mean_ms": 35.99,
+   "p99_ms": 101.8
+  },
+  {
+   "rule": "C7 F correction weight <= 47",
+   "check": "C7 F correction weight",
+   "t": 47.0,
+   "added_rate_upper_95_on_fast_shots": 0.00098,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 0.6132,
+   "fast_shots": 3066,
+   "failures": 4,
+   "share_95": [
+    0.0008,
+    [
+     0.00031,
+     0.00206
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 0,
+   "only_TH": 0,
+   "exact_p": 1.0,
+   "passes_gate": true,
+   "mean_ms": 29.54,
+   "p99_ms": 98.5
+  },
+  {
+   "rule": "C8 upward prior move <= 215.663",
+   "check": "C8 upward prior move",
+   "t": 215.66274204229205,
+   "added_rate_upper_95_on_fast_shots": 0.00102,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 0.589,
+   "fast_shots": 2945,
+   "failures": 4,
+   "share_95": [
+    0.0008,
+    [
+     0.00031,
+     0.00206
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 0,
+   "only_TH": 0,
+   "exact_p": 1.0,
+   "passes_gate": true,
+   "mean_ms": 31.84,
+   "p99_ms": 68.7
+  },
+  {
+   "rule": "C9 head entropy (bits) <= 49.7746",
+   "check": "C9 head entropy (bits)",
+   "t": 49.774563614136454,
+   "added_rate_upper_95_on_fast_shots": 0.00106,
+   "TH_failure_rate": 0.0008,
+   "fast_fraction": 0.567,
+   "fast_shots": 2835,
+   "failures": 4,
+   "share_95": [
+    0.0008,
+    [
+     0.00031,
+     0.00206
+    ]
+   ],
+   "both_fail": 4,
+   "only_rule": 0,
+   "only_TH": 0,
+   "exact_p": 1.0,
+   "passes_gate": true,
+   "mean_ms": 32.56,
+   "p99_ms": 68.7
+  }
+ ],
+ "half_split": {
+  "C2 syndrome weight": {
+   "picked_on_even": {
+    "t": 133.0,
+    "fast_fraction_other_half": 0.7668,
+    "added_on_other_half": 2
+   },
+   "picked_on_odd": {
+    "t": 127.0,
+    "fast_fraction_other_half": 0.6516,
+    "added_on_other_half": 0
+   }
+  },
+  "C3 total prior move": {
+   "picked_on_even": {
+    "t": 20434.328885159823,
+    "fast_fraction_other_half": 0.006,
+    "added_on_other_half": 1
+   },
+   "picked_on_odd": {
+    "t": 19629.98215481548,
+    "fast_fraction_other_half": 0.0008,
+    "added_on_other_half": 0
+   }
+  },
+  "C4 largest prior move": {
+   "picked_on_even": {
+    "t": 4.892533323212306,
+    "fast_fraction_other_half": 0.0784,
+    "added_on_other_half": 1
+   },
+   "picked_on_odd": {
+    "t": 4.823783323212306,
+    "fast_fraction_other_half": 0.0332,
+    "added_on_other_half": 0
+   }
+  },
+  "C5 columns moved > 1": {
+   "picked_on_even": {
+    "t": 7455.0,
+    "fast_fraction_other_half": 0.0,
+    "added_on_other_half": 0
+   },
+   "picked_on_odd": {
+    "t": null,
+    "fast_fraction_other_half": 0.0,
+    "added_on_other_half": 0
+   }
+  },
+  "C6 F decode time (ms)": {
+   "picked_on_even": {
+    "t": 3.447950934059918,
+    "fast_fraction_other_half": 0.4832,
+    "added_on_other_half": 0
+   },
+   "picked_on_odd": {
+    "t": 6.381361978128552,
+    "fast_fraction_other_half": 0.6364,
+    "added_on_other_half": 2
+   }
+  },
+  "C7 F correction weight": {
+   "picked_on_even": {
+    "t": 47.0,
+    "fast_fraction_other_half": 0.6172,
+    "added_on_other_half": 0
+   },
+   "picked_on_odd": {
+    "t": 52.0,
+    "fast_fraction_other_half": 0.8516,
+    "added_on_other_half": 1
+   }
+  },
+  "C8 upward prior move": {
+   "picked_on_even": {
+    "t": 215.66274204229205,
+    "fast_fraction_other_half": 0.586,
+    "added_on_other_half": 0
+   },
+   "picked_on_odd": {
+    "t": 244.4361683175619,
+    "fast_fraction_other_half": 0.8184,
+    "added_on_other_half": 1
+   }
+  },
+  "C9 head entropy (bits)": {
+   "picked_on_even": {
+    "t": 49.77062226482023,
+    "fast_fraction_other_half": 0.5716,
+    "added_on_other_half": 0
+   },
+   "picked_on_odd": {
+    "t": 60.97318312452961,
+    "fast_fraction_other_half": 0.7804,
+    "added_on_other_half": 1
+   }
+  }
+ },
+ "other_F_runs": {},
+ "chosen": {
+  "rule": "C2 syndrome weight <= 127",
+  "check": "C2 syndrome weight",
+  "t": 127.0,
+  "added_rate_upper_95_on_fast_shots": 0.00093,
+  "TH_failure_rate": 0.0008,
+  "fast_fraction": 0.6418,
+  "fast_shots": 3209,
+  "failures": 4,
+  "share_95": [
+   0.0008,
+   [
+    0.00031,
+    0.00206
+   ]
+  ],
+  "both_fail": 4,
+  "only_rule": 0,
+  "only_TH": 0,
+  "exact_p": 1.0,
+  "passes_gate": true,
+  "mean_ms": 24.23,
+  "p99_ms": 67.6
+ },
+ "diagnostic_not_declared_C6_with_F_stopped_at_t": {
+  "t_ms": 3.447950934059918,
+  "mean_ms": 30.21,
+  "p99_ms": 71.1
+ },
+ "carried": {
+  "from": "predecoder/fastpath/result3_p0.005.json",
+  "from_p": 0.005,
+  "checks": {
+   "C2 syndrome weight": {
+    "t": 115.0,
+    "fast_fraction": 0.3748,
+    "added": 0,
+    "fixed": 0
+   },
+   "C4 largest prior move": {
+    "t": 4.539199331320326,
+    "fast_fraction": 0.0,
+    "added": 0,
+    "fixed": 0
+   },
+   "C6 F decode time (ms)": {
+    "t": 5.51439099945128,
+    "fast_fraction": 0.6102,
+    "added": 1,
+    "fixed": 0
+   },
+   "C7 F correction weight": {
+    "t": 48.0,
+    "fast_fraction": 0.67,
+    "added": 1,
+    "fixed": 0
+   },
+   "C8 upward prior move": {
+    "t": 225.29774673322606,
+    "fast_fraction": 0.6802,
+    "added": 1,
+    "fixed": 0
+   },
+   "C9 head entropy (bits)": {
+    "t": 69.14651567152464,
+    "fast_fraction": 0.8754,
+    "added": 2,
+    "fixed": 0
+   }
+  }
+ }
+}

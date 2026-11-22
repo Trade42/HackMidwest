@@ -253,6 +253,60 @@ def test_the_predecoder_rows_are_labelled_and_match_their_files():
         assert "head's priors" not in (REPORT / "tables" / f"{name}.md").read_text(encoding="utf-8")
 
 
+def test_the_tcbp_version_pair_scores_match_their_files_and_carry_their_labels():
+    """The TCBP version's kit pair score at every p is its pair file's count; p = 0.004 and 0.003 say 'no validation at these p', and
+    no table still calls its lower p 'X only'."""
+    from report.rows import PTCBP_LABEL, PTCBP_LOWP
+    table = (REPORT / "tables" / "predecoder_tcbp.md").read_text(encoding="utf-8")
+    master = (REPORT / "tables" / "master_comparison.md").read_text(encoding="utf-8")
+    assert table.startswith(f"**TCBP-JOBS with the head's priors: {PTCBP_LABEL}.**") and f"**{PTCBP_LOWP}**" in table
+    pair_row = next(line for line in master.splitlines() if line.startswith("| TCBP-JOBS with the head's priors, the kit's pair score |"))
+    files = sorted((REPORT / "data" / "test" / "predecoder_tcbp").glob("tcbp_pair_test_p*.json"))
+    assert len(files) == 3
+    for file in files:
+        p = file.stem.removeprefix("tcbp_pair_test_p")
+        record = json.loads(file.read_text())
+        th, t, pair = record["TH"], record["T"], record["pair"]
+        rate = lambda who: f"{stats.sci(stats.per_cycle_rate(who['failed_pairs'], who['pairs'])[0])} ± {stats.sci(stats.per_cycle_rate(who['failed_pairs'], who['pairs'])[1], 1)}"
+        assert (f"| {p} | pairs | {th['failed_pairs']} of {th['pairs']:,} pairs ({rate(th)} per cycle) | {t['failed_pairs']} ({rate(t)} per cycle) | "
+                f"{pair['both']} / {pair['only_TH']} / {pair['only_T']} (p = {stats.p_text(pair['p'])}") in table, p
+        cell = pair_row.split(" | ")[3 + ("0.003", "0.004", "0.005").index(p)]
+        assert cell.startswith(f"{th['failed_pairs']} pair") and (PTCBP_LOWP in cell) == (p != "0.005"), (p, cell)
+    for name in ("master_comparison", "predecoder_tcbp", "facts", "operating_rule", "readme_section"):
+        text = (REPORT / "tables" / f"{name}.md").read_text(encoding="utf-8")
+        assert "no pair rate" not in text and "it is X only" not in text, name
+
+
+def test_the_tcbp_version_speed_table_is_recomputed_from_its_files():
+    """The like-for-like time per X shot (job 3's network, job 1's build and decode, the same 1,000 validation shots) is the sum of the
+    files' means, and it is shown only with the answers the same."""
+    speed = REPORT / "data" / "exploration" / "predecoder_tcbp" / "speed"
+    job1 = json.loads((speed / "tcbp_speed_job1_summary.json").read_text())
+    job3 = json.loads((speed / "tcbp_speed_job3_network_summary.json").read_text())
+    mean = lambda arm, part: job1["check"][arm]["ms"][f"seconds_{part}"]["mean"]
+    old = job3["arms"]["eager"]["ms"]["mean"] + mean("dense", "build") + mean("dense", "decode")
+    new = job3["arms"]["graph"]["ms"]["mean"] + mean("csr", "build") + mean("csr", "decode")
+    assert job1["check"]["csr"]["same_as_dense"] and job3["arms"]["graph"]["against_eager"]["rows_differ_float32"] == 0
+    table = (REPORT / "tables" / "predecoder_tcbp.md").read_text(encoding="utf-8")
+    assert f"| **the sum, network + build + decode** | **{old:.1f}** | **{new:.1f}** |" in table
+    facts = (REPORT / "tables" / "facts.md").read_text(encoding="utf-8")
+    assert f"| `ptspeed_new` | {new:.0f} |" in facts and f"| `ptspeed_old` | {old:.0f} |" in facts
+    statement = next(line for line in facts.splitlines() if line.startswith("| `ptfast_statement` |"))
+    assert "a third look at the same validation shots" in statement
+    held = REPORT / "data" / "exploration" / "predecoder_tcbp" / "fastpath" / "result_holdout_p0.005.json"
+    if held.is_file():
+        verdict = json.loads(held.read_text())
+        assert f"the frozen C9 **{verdict['verdict']}**: {verdict['failures']['rule']} failures against the TCBP version's {verdict['failures']['TH']}" in statement
+        assert "not confirmed on fresh shots" not in statement and "is pending" not in statement
+    else:
+        assert "not confirmed on fresh shots" in statement
+    retrain = next(line for line in facts.splitlines() if line.startswith("| `ptretrain_statement` |"))
+    score = json.loads((REPORT / "data" / "exploration" / "predecoder_tcbp" / "retrain" / "run1_score.json").read_text())
+    rows = next(iter(score["tasks"].values()))["rows"]
+    assert f"makes TCBP-JOBS worse, {rows['r']['failures']} failures against {rows['m']['failures']}" in retrain
+    assert "not a gain from retraining" in retrain and "times" not in retrain.split("|")[2]
+
+
 def test_rows_run_after_the_test_results_are_labelled_where_they_appear():
     """A timed row is labelled an ablation run after the test results exactly when its START is after the TEST RUN END line."""
     from report import loaders

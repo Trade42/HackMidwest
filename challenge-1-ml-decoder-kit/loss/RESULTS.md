@@ -42,6 +42,9 @@ state or occupation", are noiseless by default, and append one ordinary record b
 the measurement record, so `lossmodel.clifft_text` remaps every `DETECTOR` and `OBSERVABLE_INCLUDE` lookback.
 Checked:
 
+The first three were run inline during development, not by a committed script (the commands are in this
+task's session log); the fourth is asserted by committed code on every dataset:
+
 - noiseless circuits give zero detectors and zero observables, X and Z memory, with and without probes;
 - at the same seed, the detectors, observables, heralds and measurement records are bit-identical with and
   without probes (300 shots, X and Z, p = 0.004, s = 1e-3). So the probes change neither the physics nor Clifft's
@@ -155,7 +158,7 @@ p + v − 2pv (independent flips combined), and every prior is capped at 0.5 at 
 | Condition | Priors |
 |---|---|
 | `blind` | the lossless priors of the kit (`dem_matrices`). It sees no flag. |
-| `starter` (**flag-aware**, the brief's L1 decoder) | exactly the starter's `aware_priors` (checked: identical priors, to 6e-17, on 50 shots). A flagged X-check atom: its measurement flip to 0.5. A flagged Z-check atom: its 5 hook columns raised by 0.5/6. A flagged data atom: one column per cycle (the run start of cycle c) raised by 0.5 (c + 0.5)/12 (the uniform guess on the loss time), and its final readout flip by 0.5. |
+| `starter` (**flag-aware**, the brief's L1 decoder) | exactly the starter's `aware_priors` (checked inline against a copy of the starter's code: identical columns and priors, to 6e-17, on 50 shots). A flagged X-check atom: its measurement flip to 0.5. A flagged Z-check atom: its 5 hook columns raised by 0.5/6. A flagged data atom: one column per cycle (the run start of cycle c) raised by 0.5 (c + 0.5)/12 (the uniform guess on the loss time), and its final readout flip by 0.5. |
 | `starter@0.5/stop1` | `starter` with relay-BP stopping at its first solution (the starter's setting) |
 | `exact` | the location weights done exactly: the geometric weights (1 − s)^(k−1) over the loss slot, P(lost before the column) for every run start, (1/2) P(lost right before it) for every column inside a run, geometric hook weights |
 | ORACLE `oracle-round` | `exact`, with the uniform guess replaced by the TRUE loss round of each lost data atom (uniform over the 6 CX of that round). Uses the probes. |
@@ -203,7 +206,14 @@ unconverged count, so the extra failures are converged shots that settle on the 
 Per-rate tables: `results/L1_X_p0.004_s{5e-4,1e-3,2e-3}.{json,md}`; the combined table:
 `results/L1_combined.md`. Commands: `loss/runs/L0_L1_s1e-3.sh` (1e-3), `loss/runs/L1_rates.sh` (the other
 rates; it ran as a lane-A stream (`LANE=A`), then on lane D), `loss/runs/summarize.sh`. Logs:
-`logs/L0_L1_s1e-3.log`, `logs/L1_rates_laneA.log`, `logs/L1_L4_L3b_L2_laneD.log`.
+`logs/L0_L1_s1e-3.log`, `logs/L1_rates_laneA.log`, `logs/L1_rates_laneD.log`.
+
+Server jobs B and C (to come; run from `challenge-1-ml-decoder-kit/` at `6ea830c`, 10 workers, on the team's server):
+
+```sh
+python -m loss.job --basis X --p 0.004 --s 2e-4 --shots 20000 --seed 5100 --workers 10 --out ~/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100 --group blind:3000 --group starter,starter@0.5/stop1:20000 --table blind:blind,starter,starter@0.5/stop1 --table starter:starter,starter@0.5/stop1
+python -m loss.job --basis X --p 0.004 --s 5e-4 --shots 10000 --seed 5200 --workers 10 --out ~/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200 --group blind:800 --group starter,starter@0.5/stop1:10000 --table blind:blind,starter,starter@0.5/stop1 --table starter:starter,starter@0.5/stop1
+```
 
 ## L3: the oracle on the loss time (s = 1e-3)
 
@@ -290,14 +300,19 @@ instead of the round adds a little more (87 against 96 failures), for 1.86× in 
 
 ## L2: the flag-to-prior map, piece by piece (s = 1e-3)
 
-How far it got: one of the five comparisons is measured on this PC; the rest is server job D (below).
+How far it got: one of the five comparisons is measured on this PC; the rest is server job D, on job A's
+dataset (seed 5300), 1,000 shots per condition, its table to come (HANDOFF.md says where):
+
+```sh
+python -m loss.job --basis X --p 0.004 --s 1e-3 --shots 4000 --seed 5300 --workers 10 --out ~/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300 --group starter-nofinal,starter-nohook,starter-ratebase:1000 --group exact@0.4,oracle-round@0.4,exact@0.25,oracle-round@0.25:1000 --table starter:starter,starter-nofinal,starter-nohook,starter-ratebase,exact --table exact@0.4:exact@0.4,oracle-round@0.4,exact --table exact@0.25:exact@0.25,oracle-round@0.25,exact --table oracle-round:oracle-round,oracle-round@0.4,oracle-round@0.25
+```
 
 | Piece | Status in the starter | Measured here (4,000 shots of the L3 dataset) | Keep (20% fewer failures)? |
 |---|---|---|---|
 | final-readout flip at 0.5 | in the starter | leave-one-out (`starter-nofinal`): server job D | to come |
 | hook columns of flagged check atoms of the other basis | in the starter (its docstring says otherwise) | leave-one-out (`starter-nohook`): server job D | to come |
 | lossless priors wherever no flag fired | in the starter | leave-one-out (`starter-ratebase`): server job D | to come |
-| location weights (geometric, exact P(lost before), the columns inside a run) | **missing from the starter** | `exact` 189 against `starter` 176 failures; 59 / 46 discordant, p = 0.24; ratio 0.93 (0.83–1.04). Server job A, 4,000 other shots: 181 against 162, 63 / 44, p = 0.08, ratio 0.90 (0.80–1.01) | **no**: it does not lower the failures |
+| location weights (geometric, exact P(lost before), the columns inside a run) | **missing from the starter** | `exact` 189 against `starter` 176 failures; 59 / 46 discordant, p = 0.24; ratio 0.93 (0.83–1.04). Server job A, 4,000 other shots: 181 against 162, 63 / 44, p = 0.08, ratio 0.90 (0.80–1.01) | **no**: it does not lower the failures. Pooled over both machines the discordant shots are 122 (only `exact` fails) against 90 (only `starter`): if anything it hurts slightly |
 | cap on a raised prior: 0.5, 0.4, 0.25 | 0.5 | `exact@0.4`, `oracle-round@0.4`, `exact@0.25`, `oracle-round@0.25`: server job D | to come |
 
 The local L2 runs (`loss/runs/L2_s1e-3.sh`, 500 shots) were not reached: the orchestrator moved L2 to server
@@ -323,7 +338,7 @@ the other lanes busy with other workers. Wall-clock `perf_counter`. Command: `lo
 - **Relay-BP takes its priors only at construction.** Its Python methods are `decode`, `decode_batch`,
   `decode_detailed` and `decode_detailed_batch`. So per-shot priors mean a new decoder per shot: about 8 ms,
   against a median decode of 76 ms (lossless) or 239 ms (flag-aware, s = 1e-3). That is 10% and 3% of the
-  median, and under 1% of the mean, which the shots that run all 300 legs dominate.
+  median, and 1.4% and 0.4% of the mean, which the shots that run all 300 legs dominate.
 - The reused and the rebuilt decoder are not the same experiment: a reused decoder carries its random state
   from shot to shot, so the two decode-time rows differ by more than the 8 ms of construction. Their medians
   differ by 20 ms; their means are dominated by a few long shots.
@@ -361,8 +376,8 @@ per CX. The per-shot decode results are in `scratch/loss-gates/parts/` (one file
 reads them).
 
 **Reproducibility.** Every shot and condition gets a fresh relay-BP decoder with seed 1, so a result depends only
-on the shot and the condition. Checked: 12 shots rerun with 1 worker give the same failures, convergence,
-iterations and wrong-observable masks as the run with 4 workers. Clifft's shots do not depend on its thread
+on the shot and the condition. Checked inline (not a committed script): 12 shots rerun with 1 worker give the same failures,
+convergence, iterations and wrong-observable masks as the run with 4 workers. Clifft's shots do not depend on its thread
 count, and the probes do not change them. The bootstrap uses seed 0. Rerunning a command gives the same table.
 
 ## What this says

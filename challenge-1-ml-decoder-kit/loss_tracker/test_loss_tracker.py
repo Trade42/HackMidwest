@@ -80,6 +80,28 @@ def test_empty_history_gives_the_prior(tracker, shots):
     assert np.allclose(np.exp(tracker.log_prior), w / w.sum())
 
 
+def test_explain_mode(tracker, shots):
+    """Explaining shared bits: still a distribution, the prior when nothing is usable, and unchanged for an atom
+    that shares no check with another flagged atom and has no flagged check atom nearby."""
+    geo = tracker.geo
+    feat = features(geo, shots["detectors"][:12], shots["heralds"][:12])
+    shot, atom, ll = tracker.loglik(feat, explain=True)
+    _, _, base = tracker.loglik(feat)
+    post = tracker.posterior(ll)
+    assert np.allclose(post.sum(axis=1), 1) and np.isfinite(ll).all()
+    flagged = feat["flagged"]
+    alone = np.ones(len(shot), bool)
+    for T in ("X", "Z"):
+        alone &= ~flagged[shot[:, None, None], geo.co_atom[T][atom]].any(axis=(1, 2))
+    assert alone.any() and not alone.all()
+    assert np.allclose(ll[alone], base[alone], atol=1e-8)                   # nothing to explain: the same answer
+    assert not np.allclose(ll[~alone], base[~alone], atol=1e-3)
+    for T in ("X", "Z"):
+        feat["herald_dirt"][T][:] = True
+    _, _, ll = tracker.loglik(feat, explain=True)
+    assert np.allclose(tracker.posterior(ll), np.exp(tracker.log_prior)[None, :])
+
+
 def test_a_shot_does_not_depend_on_its_batch(tracker, shots):
     feat = features(tracker.geo, shots["detectors"], shots["heralds"])
     shot, atom, ll = tracker.loglik(feat, chunk=7)

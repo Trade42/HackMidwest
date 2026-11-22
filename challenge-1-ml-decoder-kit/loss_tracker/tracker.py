@@ -34,6 +34,14 @@ And all 3 bits of a triple are unreliable when
 unknown: the tracker uses their current posteriors, and repeats (`sweeps`): every atom's posterior is recomputed
 from the others' posteriors of the sweep before, all at once (synchronous message passing; the result does not
 depend on any atom order). A dirty bit with probability rho is marginalised out of the pattern with weight rho.
+
+`explain=True` (the tracker of step 3) treats (b) better. On a shared check the bit is
+(this atom's part) XOR (the other lost atom's part) XOR noise, and the other atom's part can be read off that
+atom's own other detectors: a lost atom fires its checks together, or repeats them a round later. So instead of
+replacing the bit by a fair coin, the tracker flips it back with probability
+phi = P(the other atom has left the check) * P(it fired there | its own usable bits),
+where the second factor comes from the same fitted tables (Tables.fire_table). With phi = 1/2 this is the fair
+coin again. Bits made unreliable by a herald, (a) and (c), keep phi = 1/2.
 """
 import json
 
@@ -199,7 +207,7 @@ class Tables:
         before = pooled2.sum(axis=-1)
         self.p_before = (before + ALPHA) / (before.sum(axis=-1, keepdims=True) + 8 * ALPHA)
         self.cond = (pooled2 + KAPPA * self.p1[..., None, :]) / (before[..., None] + KAPPA)   # P(pattern | before)
-        joint = self.p_before[..., None] * self.cond
+        joint = self.joint = self.p_before[..., None] * self.cond
         y = np.arange(8)
         # sub1[..., S, y]: the single-round table with the bits of S (a 3-bit mask) replaced by fair coins
         self.sub1 = np.zeros(self.p1.shape[:-1] + (8, 8))
@@ -213,6 +221,31 @@ class Tables:
             for S in range(8):
                 num = sum(joint[..., y[:, None] ^ fb, y[None, :] ^ f] for fb in _subsets(Sb) for f in _subsets(S))
                 self.sub2[..., Sb, S, :, :] = num / len(_subsets(S)) / den[..., None]
+
+    def fire_table(self):
+        """fire[side, type, round, m, usable before, usable now, pattern before, pattern]: for an atom lost three
+        or more cycles ago, P(its detector bit m fires in this round | its usable bits of the round before and
+        its other usable bits of this round). The masks say which bits are usable; bit m of this round never is.
+        Used to explain a bit that such an atom has randomised on a shared check (Tracker, explain=True).
+        """
+        if hasattr(self, "_fire"):
+            return self._fire
+        J = self.joint[:, :, :, N_CLASS - 1]                                   # (side, type, round, before, now)
+        y = np.arange(8)
+        M = np.zeros(J.shape[:3] + (8, 8, 8, 8))                               # summed over the bits that are not usable
+        for ub in range(8):
+            for un in range(8):
+                M[:, :, :, ub, un] = sum(J[:, :, :, y[:, None] ^ fb, y[None, :] ^ f] for fb in _subsets(7 & ~ub) for f in _subsets(7 & ~un))
+        fire = np.zeros(J.shape[:3] + (3, 8, 8, 8, 8))
+        for m in range(3):
+            bit = 1 << m
+            for ub in range(8):
+                for un in range(8):
+                    num = M[:, :, :, ub, un | bit][:, :, :, :, y | bit]      # bit m known to be 1
+                    den = M[:, :, :, ub, un & ~bit]                           # bit m unknown
+                    fire[:, :, :, m, ub, un] = num / den
+        self._fire = fire
+        return fire
 
     def save(self, path):
         np.savez_compressed(path, counts1=self.counts1.astype(np.int64), counts2=self.counts2.astype(np.int64),
@@ -262,7 +295,7 @@ class Tracker:
         w = (1 - tables.s) ** np.arange(SLOTS)
         self.log_prior = np.log(w / w.sum())
 
-    def loglik(self, feat, mode="coupled", sweeps=2, order=1, chunk=100):
+    def loglik(self, feat, mode="coupled", sweeps=2, order=1, chunk=100, explain=False):
         """log P(detector history | loss slot j) for every flagged data atom of a batch of shots.
 
         feat is tracker.features(...): detector patterns and heralds, nothing else.
@@ -273,17 +306,22 @@ class Tracker:
               'coupled' the other atoms' posteriors say from which round a shared check is ignored; `sweeps`
                         synchronous updates after a first pass that uses their priors.
         order: 0 = independent rounds, 1 = every round conditioned on the round before.
+        explain: (coupled, order 1 only) a bit that another lost atom has randomised is not thrown away: that
+                 atom's other detector bits say whether it fired there, and the bit is flipped back with that
+                 probability (`_loglik_explain`).
         The result of a shot depends on that shot only (not on the batch or the chunk).
         """
-        assert mode in MODES and order in (0, 1)
+        assert mode in MODES and order in (0, 1) and (not explain or (mode == "coupled" and order == 1))
         shots = len(feat["flagged"])
         parts = [self._loglik_chunk({"flagged": feat["flagged"][a:a + chunk],
                                      "pattern": {T: feat["pattern"][T][a:a + chunk] for T in TYPES},
                                      "herald_dirt": {T: feat["herald_dirt"][T][a:a + chunk] for T in TYPES}},
-                                    mode, sweeps, order, a) for a in range(0, shots, chunk)]
+                                    mode, sweeps, order, a, explain) for a in range(0, shots, chunk)]
         return tuple(np.concatenate([p[i] for p in parts]) for i in range(3))
 
-    def _loglik_chunk(self, feat, mode, sweeps, order, offset):
+    def _loglik_chunk(self, feat, mode, sweeps, order, offset, explain=False):
+        if explain:
+            return self._loglik_explain(feat, sweeps, offset)
         geo, tab = self.geo, self.tables
         shots = len(feat["flagged"])
         shot_idx, atom_idx = np.nonzero(feat["flagged"])
@@ -319,6 +357,64 @@ class Tracker:
                     sel = tab.sub2[side[:, None], t, r2[None, :], :, :, :, y[:, :-1], y[:, 1:]]   # (n, R-1, class, Sb, S)
                     loge = np.log(np.einsum("nrcbs,nrbs->nrc", sel, w2))
                     ll += loge[:, np.arange(len(r2))[:, None], CLS[r2]].sum(axis=1)
+            post = softmax(self.log_prior + ll)
+        return shot_idx + offset, atom_idx, ll
+
+    def _loglik_explain(self, feat, sweeps, offset):
+        """The coupled, order-1 tracker with shared bits explained instead of thrown away.
+
+        On a shared check, the detector bit is (this atom's part) XOR (the other lost atom's part) XOR noise. The
+        other atom's part is estimated from that atom's own usable bits (Tables.fire_table); the bit of this atom
+        is then flipped with probability phi = P(the other atom has left the check) * P(it fired there), instead
+        of being replaced by a fair coin (phi = 1/2). A bit made unreliable by a herald keeps phi = 1/2.
+        """
+        geo, tab = self.geo, self.tables
+        fire = tab.fire_table()
+        shots = len(feat["flagged"])
+        shot_idx, atom_idx = np.nonzero(feat["flagged"])
+        n = len(shot_idx)
+        if n == 0:
+            return shot_idx + offset, atom_idx, np.zeros((0, SLOTS))
+        side = geo.side[atom_idx]
+        flips = np.arange(8)
+        post = np.tile(np.exp(self.log_prior), (n, 1))
+        ll = np.zeros((n, SLOTS))
+        for _ in range(sweeps + 1):
+            cdf = np.concatenate([np.zeros((n, 1)), np.cumsum(post, axis=1)], axis=1).clip(0, 1)
+            ll = np.zeros((n, SLOTS))
+            for t, T in enumerate(TYPES):
+                rr = geo.rounds[T]
+                R = len(rr)
+                h = feat["herald_dirt"][T][shot_idx, atom_idx][:, :, rr]                     # (n, 3, R) bool
+                o = others_dirt(geo, T, shot_idx, atom_idx, cdf, shots)[:, :, rr]            # (n, 3, R)
+                y = feat["pattern"][T][shot_idx, atom_idx][:, rr].astype(np.int64)           # (n, R)
+                usable = ~h & (o < 0.5)
+                um = usable[:, 0] * 1 + usable[:, 1] * 2 + usable[:, 2] * 4                   # (n, R) masks
+                um_before = np.concatenate([np.zeros((n, 1), np.int64), um[:, :-1]], axis=1)  # nothing before the first round
+                y_before = np.concatenate([np.zeros((n, 1), np.int64), y[:, :-1]], axis=1)
+                own = np.take_along_axis(cdf[:, None, :], geo.lim[T][atom_idx].reshape(n, 1, 3 * ROUNDS), axis=2)
+                own = own.reshape(n, 3, ROUNDS)[:, :, rr]                                    # P(it has left its m-th check)
+                keep = np.ones((shots, 2 * N, 3, R))
+                for m in range(3):
+                    g = fire[side[:, None], t, rr[None, :], m, um_before, um, y_before, y]   # (n, R): P(its bit m fired)
+                    keep[shot_idx, atom_idx, m] = 1 - 2 * own[:, m] * g
+                nb = keep[shot_idx[:, None, None], geo.co_atom[T][atom_idx], geo.co_slot[T][atom_idx]]   # (n, 3, 5, R)
+                phi = np.where(h, 0.5, (1 - nb.prod(axis=2)) / 2)                            # (n, 3, R)
+                w = subset_weights(np.moveaxis(phi, 1, 2))                                   # (n, R, 8): P(flip pattern f)
+                # first round: no round before
+                sel = tab.p1[side[:, None, None], t, rr[0], :, y[:, :1, None] ^ flips[None, None, :]]   # (n, 1, 8, class)
+                e0 = np.einsum("nrfc,nrf->nrc", sel, w[:, :1])
+                ll += np.log(e0)[:, 0][:, CLS[rr[0]]]
+                # later rounds: conditioned on the round before
+                r2 = rr[1:]
+                yb = y[:, :-1, None] ^ flips[None, None, :]                                  # (n, R-1, 8) flipped before
+                yn = y[:, 1:, None] ^ flips[None, None, :]
+                sel = tab.joint[side[:, None, None, None], t, r2[None, :, None, None], :, yb[:, :, :, None], yn[:, :, None, :]]
+                num = np.einsum("nrbc,nrb->nrc", np.einsum("nrbfc,nrf->nrbc", sel, w[:, 1:]), w[:, :-1])   # (n, R-1, class)
+                selb = tab.p_before[side[:, None, None], t, r2[None, :, None], :, yb]        # (n, R-1, 8, class)
+                den = np.einsum("nrbc,nrb->nrc", selb, w[:, :-1])
+                loge = np.log(num / den)
+                ll += loge[:, np.arange(len(r2))[:, None], CLS[r2]].sum(axis=1)
             post = softmax(self.log_prior + ll)
         return shot_idx + offset, atom_idx, ll
 

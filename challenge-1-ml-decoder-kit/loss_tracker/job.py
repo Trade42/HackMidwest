@@ -7,7 +7,7 @@ usage (from challenge-1-ml-decoder-kit/, any Python with loss/requirements.txt):
 - It needs no lane lock, no scratch folder and no particular venv: every step runs `sys.executable -m ...`.
 - OUTDIR/data.npz: the dataset (Clifft, chunks of 2,000 shots, chunk k uses seed + k). Its sha256 is printed.
 - OUTDIR/post.npz: the tracker's output (track.py: it reads detectors and heralds only), with the committed
-  tables and the default version (order 1, coupled, 2 sweeps) unless --mode/--sweeps/--order say otherwise.
+  tables and the version given by --mode/--sweeps/--order/--explain (default: order 1, coupled, 2 sweeps).
 - OUTDIR/accuracy.{md,json}: the tracker against the probes of this dataset (accuracy.py).
 - OUTDIR/parts/START-STOP.npz: per-shot results of every condition, in parts of --part shots. A finished part
   is kept, so a rerun of the same command resumes. Every condition is decoded on every shot of a part, so any
@@ -42,6 +42,7 @@ def main():
     ap.add_argument("--mode", default="coupled")
     ap.add_argument("--sweeps", type=int, default=2)
     ap.add_argument("--order", type=int, default=1)
+    ap.add_argument("--explain", action="store_true", help="the tracker version that explains shared bits")
     ap.add_argument("--conditions", required=True)
     ap.add_argument("--decode-shots", type=int, help="decode the first N shots only (default: all)")
     ap.add_argument("--out", required=True)
@@ -61,7 +62,7 @@ def main():
         del d
     if not os.path.exists(post):
         run("loss_tracker.track", "--data", data, "--tables", a.tables, "--mode", a.mode, "--sweeps", str(a.sweeps),
-            "--order", str(a.order), "--out", post + ".tmp.npz")
+            "--order", str(a.order), *(["--explain"] if a.explain else []), "--out", post + ".tmp.npz")
         os.replace(post + ".tmp.npz", post)
     run("loss_tracker.accuracy", "--data", data, "--post", f"tracker={post}", "--main", "tracker",
         "--out", os.path.join(a.out, "accuracy"))

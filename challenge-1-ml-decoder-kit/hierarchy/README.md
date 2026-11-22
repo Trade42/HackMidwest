@@ -656,6 +656,13 @@ equal the laptop GPU's to 0.007, with the same bits on all 20,000 shots).
 python -m hierarchy.select --candidates <the 16 .session.npz> --logits <their 16 logits .npz, same order>
 ```
 
+The run's output is in `hierarchy/results/ablation_p0.004_X/`: `summary.json` (every number
+below, with the commands, the checkpoint and the sha256 of the 16 shot files), `per_shot.npz`
+(per shot of the 80,000: `failed_P1`, `failed_P2`, `failed_aw`, `failed_ac`, `failed_a`,
+`failed_perfect_tie_break`, `p1_p2_differ`, the network's own failure and confidence, and the
+network-first columns; with the sha256 of every shot, candidate and logits file),
+`select_printout.txt` (`select.py`'s printout) and `data_sha256.txt`.
+
 | the rule where P1 and P2 differ (366 shots of 80,000) | failures of 80,000 | rate, 95% Wilson interval | right pick where some candidate is right (302 shots) |
 |---|---|---|---|
 | P1 alone / P2 alone | 357 / 348 | | |

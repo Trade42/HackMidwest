@@ -1,0 +1,12 @@
+/home/sal/hackMidwest/orchestration/scratch/gates/venv/bin/python make_dataset.py --basis X --p 0.003 --shots 100000 --seed 9103 --out /home/sal/hackMidwest/orchestration/scratch/gates/data/p0.003/explore_X.npz
+/home/sal/hackMidwest/orchestration/scratch/gates/data/p0.003/explore_X.npz detectors (100000, 1728), observables (100000, 12)
+/home/sal/hackMidwest/orchestration/scratch/gates/venv/bin/python make_dataset.py --basis Z --p 0.003 --shots 100000 --seed 9104 --out /home/sal/hackMidwest/orchestration/scratch/gates/data/p0.003/explore_Z.npz
+/home/sal/hackMidwest/orchestration/scratch/gates/data/p0.003/explore_Z.npz detectors (100000, 1728), observables (100000, 12)
+/home/sal/hackMidwest/orchestration/scratch/gates/venv/bin/python make_dataset.py --basis X --p 0.005 --shots 20000 --seed 9105 --out /home/sal/hackMidwest/orchestration/scratch/gates/data/p0.005/explore_X.npz
+/home/sal/hackMidwest/orchestration/scratch/gates/data/p0.005/explore_X.npz detectors (20000, 1728), observables (20000, 12)
+/home/sal/hackMidwest/orchestration/scratch/gates/venv/bin/python make_dataset.py --basis Z --p 0.005 --shots 20000 --seed 9106 --out /home/sal/hackMidwest/orchestration/scratch/gates/data/p0.005/explore_Z.npz
+/home/sal/hackMidwest/orchestration/scratch/gates/data/p0.005/explore_Z.npz detectors (20000, 1728), observables (20000, 12)
+explore_X.npz        p=0.003 X seed 9103 shots 100000 sha256 76efa8a04c9b857fff81e6f62869d6cfeb9caf30be5a816aa25e43878b2b01a1
+explore_Z.npz        p=0.003 Z seed 9104 shots 100000 sha256 9355d3f722c412abba43cdafa3947314d7da4a625108198f9412ed50e7e801b6
+explore_X.npz        p=0.005 X seed 9105 shots 20000 sha256 8fcd2650edbaec915e2d52ef73549d1aac69345ed7500738fb129a46a3f55ed4
+explore_Z.npz        p=0.005 Z seed 9106 shots 20000 sha256 43346c307e995fbb08e81f5cb807a438a668010e8afaf45d5c85ffadc065102a

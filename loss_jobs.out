@@ -1020,3 +1020,22 @@ wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/parts/starter+st
 decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 9000..9500 conditions ['starter', 'starter@0.5/stop1'] workers 10
   50/500 shots, 7s, failures so far starter=0 starter@0.5/stop1=0
   100/500 shots, 9s, failures so far starter=0 starter@0.5/stop1=0
+  150/500 shots, 11s, failures so far starter=1 starter@0.5/stop1=1
+  200/500 shots, 13s, failures so far starter=1 starter@0.5/stop1=1
+  250/500 shots, 17s, failures so far starter=1 starter@0.5/stop1=1
+  300/500 shots, 20s, failures so far starter=2 starter@0.5/stop1=2
+  350/500 shots, 23s, failures so far starter=4 starter@0.5/stop1=4
+  400/500 shots, 25s, failures so far starter=6 starter@0.5/stop1=5
+  450/500 shots, 28s, failures so far starter=6 starter@0.5/stop1=5
+  500/500 shots, 37s, failures so far starter=9 starter@0.5/stop1=8
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/parts/starter+startercap0.5_stop1/009000-009500.npz.tmp.npz in 37s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 9500..10000 conditions ['starter', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 6s, failures so far starter=0 starter@0.5/stop1=0
+  100/500 shots, 8s, failures so far starter=0 starter@0.5/stop1=0
+  150/500 shots, 11s, failures so far starter=0 starter@0.5/stop1=1
+  200/500 shots, 17s, failures so far starter=1 starter@0.5/stop1=4
+  250/500 shots, 19s, failures so far starter=4 starter@0.5/stop1=7
+  300/500 shots, 22s, failures so far starter=6 starter@0.5/stop1=9
+  350/500 shots, 25s, failures so far starter=7 starter@0.5/stop1=10
+  400/500 shots, 28s, failures so far starter=7 starter@0.5/stop1=10
+  450/500 shots, 31s, failures so far starter=7 starter@0.5/stop1=10

@@ -432,6 +432,22 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `lad5_aw_rate` | 4.50e-03 | `tables/test_ladder.md` |
 | `lad5_floor_pairs` | 386 | `tables/test_ladder.md` |
 | `lad5_floor_rate` | 3.28e-03 | `tables/test_ladder.md` |
+| `lat_bp_mean` | 185 | `tables/predecoder_latency.md` |
+| `lat_bp_median` | 30.1 | `tables/predecoder_latency.md` |
+| `lat_bp_p99` | 5,467 | `tables/predecoder_latency.md` |
+| `lat_conv` | 992 | `tables/predecoder_latency.md` |
+| `lat_conv_ms` | 142 | `tables/predecoder_latency.md` |
+| `lat_net_mean` | 26.8 | `tables/predecoder_latency.md` |
+| `lat_net_median` | 26.7 | `tables/predecoder_latency.md` |
+| `lat_net_p99` | 28.0 | `tables/predecoder_latency.md` |
+| `lat_relay_pair` | 1,471 | `tables/predecoder_latency.md` |
+| `lat_relay_x` | 760 | `tables/predecoder_latency.md` |
+| `lat_shots` | 1,000 | `tables/predecoder_latency.md` |
+| `lat_tcbp_x` | 8.7 | `tables/predecoder_latency.md` |
+| `lat_total` | 212 | `tables/predecoder_latency.md` |
+| `lat_unconv` | 8 | `tables/predecoder_latency.md` |
+| `lat_unconv_ms` | 5,544 | `tables/predecoder_latency.md` |
+| `lat_unconv_share` | 0.8% | `tables/predecoder_latency.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
 | `loss_aware_ratio` | 11.5 | `tables/loss.md` |
 | `loss_aware_share` | 4.4% | `tables/loss.md` |

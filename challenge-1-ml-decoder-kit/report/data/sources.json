@@ -296,6 +296,72 @@
   "path": "predecoder/logs/fallback_validation_X_p0.005.json",
   "sha256": "af678bc06fe073554fb932b038a7da5f18f2581c323d3b29ef9212e303507256"
  },
+ "exploration/predecoder/job_cpu_050-predecoder-latency.out": {
+  "branch": "origin/server-logs",
+  "bytes": 1039,
+  "commit": "e0e5521be09bce340e59c83aa2d4c329d59c8680",
+  "copied_utc": "2026-11-22 15:08",
+  "file": "exploration/predecoder/job_cpu_050-predecoder-latency.out",
+  "from": "branch `server-logs` at commit `e0e5521be09b`, `job_cpu_050-predecoder-latency.out`",
+  "grows": false,
+  "path": "job_cpu_050-predecoder-latency.out",
+  "sha256": "33ffeb32cab26b8ca94f2691f8630a5245ca12b2f6b67ee8c997dd1876bd3661"
+ },
+ "exploration/predecoder/latency_validation_X_p0.005/compare.log": {
+  "branch": "origin/server-logs",
+  "bytes": 566,
+  "commit": "e0e5521be09bce340e59c83aa2d4c329d59c8680",
+  "copied_utc": "2026-11-22 15:08",
+  "file": "exploration/predecoder/latency_validation_X_p0.005/compare.log",
+  "from": "branch `server-logs` at commit `e0e5521be09b`, `files/predecoder/latency_validation_X_p0.005/compare.log`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.005/compare.log",
+  "sha256": "22e53e9513d7de9dc4ff4f8e803f952429a695e88b62a3c9b57a9104c454bc62"
+ },
+ "exploration/predecoder/latency_validation_X_p0.005/evaluate.log": {
+  "branch": "origin/server-logs",
+  "bytes": 414,
+  "commit": "e0e5521be09bce340e59c83aa2d4c329d59c8680",
+  "copied_utc": "2026-11-22 15:08",
+  "file": "exploration/predecoder/latency_validation_X_p0.005/evaluate.log",
+  "from": "branch `server-logs` at commit `e0e5521be09b`, `files/predecoder/latency_validation_X_p0.005/evaluate.log`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.005/evaluate.log",
+  "sha256": "f3b8af406d4736f0bf17c3ae7e57750692e63fa4e5bddeeff27717010baea6a3"
+ },
+ "exploration/predecoder/latency_validation_X_p0.005/latency.txt": {
+  "branch": "origin/server-logs",
+  "bytes": 186,
+  "commit": "e0e5521be09bce340e59c83aa2d4c329d59c8680",
+  "copied_utc": "2026-11-22 15:08",
+  "file": "exploration/predecoder/latency_validation_X_p0.005/latency.txt",
+  "from": "branch `server-logs` at commit `e0e5521be09b`, `files/predecoder/latency_validation_X_p0.005/latency.txt`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.005/latency.txt",
+  "sha256": "64cfb106bcfde387bb8a4aaa131863b1219a69b8661127da436fd55619b77e9e"
+ },
+ "exploration/predecoder/latency_validation_X_p0.005/per_shot.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 19961,
+  "commit": "e0e5521be09bce340e59c83aa2d4c329d59c8680",
+  "copied_utc": "2026-11-22 15:08",
+  "file": "exploration/predecoder/latency_validation_X_p0.005/per_shot.npz",
+  "from": "branch `server-logs` at commit `e0e5521be09b`, `files/predecoder/latency_validation_X_p0.005/per_shot.npz`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.005/per_shot.npz",
+  "sha256": "703fa50e8558f1c7a473ba2c58d9578f754d80f3f62adb6bdc5fc32ea5413d5f"
+ },
+ "exploration/predecoder/latency_validation_X_p0.005/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 2630,
+  "commit": "e0e5521be09bce340e59c83aa2d4c329d59c8680",
+  "copied_utc": "2026-11-22 15:08",
+  "file": "exploration/predecoder/latency_validation_X_p0.005/summary.json",
+  "from": "branch `server-logs` at commit `e0e5521be09b`, `files/predecoder/latency_validation_X_p0.005/summary.json`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.005/summary.json",
+  "sha256": "9fabeae3fd49a7ec265e7be2919c1981ebfd2a88256213bb959340e5a7786d2a"
+ },
  "exploration/priortilt/results_8b.txt": {
   "branch": "origin/laptop-artifacts",
   "bytes": 3885,

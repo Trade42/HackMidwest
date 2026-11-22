@@ -266,9 +266,18 @@ believes, instead of choosing among finished answers. The head is ours; relay-BP
   <!--f:fb5X_rule-->107<!--/f--> against TCBP-JOBS's <!--f:fb5X_T-->186<!--/f--> (only the rule <!--f:fb5X_vs_T_only_rule-->16<!--/f-->, only TCBP-JOBS <!--f:fb5X_vs_T_only_T-->95<!--/f-->, exact p = <!--f:fb5X_vs_T_p-->8e-15<!--/f-->) and the head's priors alone <!--f:fb5X_H-->151<!--/f-->, and it
   falls back on <!--f:fb5X_back-->90<!--/f--> shots. Why it works: on the <!--f:fb5X_conv_shots-->9,910<!--/f--> shots where that relay-BP converged, relay-BP with the head's priors fails <!--f:fb5X_conv_H-->63<!--/f--> and
   TCBP-JOBS <!--f:fb5X_conv_T-->142<!--/f-->; on the <!--f:fb5X_back-->90<!--/f--> where it did not, it fails <!--f:fb5X_back_H-->88<!--/f--> and TCBP-JOBS <!--f:fb5X_back_T-->44<!--/f-->. <!--f:fb5Z_clause-->Its clean test will be the Z test file at p = 0.005, registered to be opened only after the rule was frozen (`predecoder/logs/fallback_rule_frozen.md`); that run has not landed yet.<!--/f-->
+- **Its time, measured cleanly on exploration shots** (the first <!--f:lat_shots-->1,000<!--/f--> X shots of the validation file at p = 0.005,
+  one process and one thread on the team's server; per X shot, not per pair). The network and head take <!--f:lat_net_mean-->26.8<!--/f--> ms (median
+  <!--f:lat_net_median-->26.7<!--/f-->, 99th percentile <!--f:lat_net_p99-->28.0<!--/f-->). Relay-BP with the head's priors, built and run per shot, takes <!--f:lat_bp_mean-->185<!--/f--> ms (median <!--f:lat_bp_median-->30.1<!--/f-->,
+  99th percentile <!--f:lat_bp_p99-->5,467<!--/f-->): <!--f:lat_conv_ms-->142<!--/f--> ms on the <!--f:lat_conv-->992<!--/f--> shots where it converged and <!--f:lat_unconv_ms-->5,544<!--/f--> ms on the <!--f:lat_unconv-->8<!--/f--> where it did not.
+  That is about <!--f:lat_total-->212<!--/f--> ms per X shot in all. For scale only (other shots, so not a paired comparison): on the test X shots at
+  p = 0.005, relay-BP's timed row takes <!--f:lat_relay_x-->760<!--/f--> ms per X shot (its <!--f:lat_relay_pair-->1,471<!--/f--> ms per pair is an X shot plus a Z shot),
+  and TCBP-JOBS takes <!--f:lat_tcbp_x-->8.7<!--/f--> ms per X shot as a GPU decode call. The fallback rule adds TCBP-JOBS's decode only on the
+  shots where relay-BP did not converge (<!--f:lat_unconv_share-->0.8%<!--/f--> of this sample), and those shots have already paid relay-BP's full capped
+  run. `APPENDIX.md` A has the table.
 - **What it does not show.** The held-out run covers one noise level and one basis, so it is not the kit's score, which counts
-  pairs. Its times come from a shared 12-worker pool on the team's PC and are not clean, so the table gives
-  iterations instead. `APPENDIX.md` K has the table.
+  pairs. The test run's own times come from a shared 12-worker pool on the team's PC and are not clean, so its table gives
+  iterations instead; the clean time is the one above, on exploration shots. `APPENDIX.md` K has the table.
 
 ### On the exploration shots (not test shots)
 

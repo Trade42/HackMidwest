@@ -61,9 +61,10 @@ and its reading; `WIDTHS_step70000.md` a first table on step 70,000):
 
 How the fixed-point network is made (`fixed_point.py`): every batch normalisation that follows a linear step is folded
 into it (the folded network gives the model's logits to within 4.5e-5); the two that act on the residual stream stay
-as a scale and a shift per channel. Weights get one power of two per output channel; values one per tensor, from the
-largest value on 200 train shots (never the scored shots). **One rounding rule everywhere**: add half, round down,
-saturate. SiLU is a table.
+as a scale and a shift per channel. Weights get one power of two per output channel; values one per tensor, from 200
+train shots (never the scored shots): either the largest value seen, or (the runs marked "percentile") the 99.99th
+percentile, so the rarest values saturate; the 16-bit tensors always take the largest. Both kinds of range are in
+`WIDTHS.md`, side by side. **One rounding rule everywhere**: add half, round down, saturate. SiLU is a table.
 
 Two choices were made on smoke tests of 10 to 20 **validation** shots (disclosed, because they were then scored on
 the same file), and then checked on 10 train shots that chose nothing (`logs/diagnostics_train_shots.log`):
@@ -75,7 +76,9 @@ the same file), and then checked on 10 train shots that chose nothing (`logs/dia
 ### 3. A reference in whole numbers (`reference.py`)
 
 The whole network in numpy int64: products, sums, shifts, saturation and table look-ups, no floating point. It equals
-the torch fixed-point version on every shot tested (logs below). The widest possible sum is 40 bits with the sign at 16
+the torch fixed-point version on every shot tested: 10 shots at 16 and at 8 bits with a smoke calibration, 20 at 16
+and at 8 bits with the real calibration of step 70,000, and 20 at 12 bits on the final checkpoint
+(`logs/reference_smoke.log`, `logs/reference_step70000.log`, `logs/reference_final.log`). The widest possible sum is 40 bits with the sign at 16
 bits (`reference.accumulator_bits`), so the torch version, which carries whole numbers in float64 (53 bits), is exact.
 This is the specification the hardware must meet.
 
@@ -98,11 +101,13 @@ engine itself.
 | block 7, shot 1 | 654,336 | equal | 2,619,666 | `logs/engine_block7_w16_shot1.log` |
 | **the whole network, 46 steps, shots 0, 1, 2, 3** (16 bits) | 539,136 and the 12 logits, each | **equal, each** | **22,702,433** | `logs/engine_net_w16_shot{0,1,2,3}.log` |
 | the whole network at 8 bits (`w8p`), shot 0 | 539,136 and the 12 logits | equal | 22,702,433 | `logs/engine_net_w8p_shot0.log` |
+| the whole network at 8 bits, step 70,000's real calibration, shot 4 | 539,136 and the 12 logits | equal | 22,702,433 | `logs/engine_net_w8p_shot4_realcal.log` |
+| **the final checkpoint**, its real calibration, 12 bits and 16 bits, shot 3714 (the shot most sensitive to rounding) | 539,136 and the 12 logits, each | **equal, each** | 22,702,433 | `logs/engine_net_w12p_final_shot3714.log`, `logs/engine_net_w16_final_shot3714.log` |
 
 The "values compared" of a whole shot are the residual stream after the last block and every tensor of the readout
 (the normalised values, the sums over time, the collecting step, the pooling, the head), and the 12 logits as 48-bit
-whole numbers. The ranges of these tests come from a 12-shot smoke calibration; the engine's equality with the
-reference does not depend on them.
+whole numbers. The first rows use ranges from a 12-shot smoke calibration; the engine's equality with the reference
+does not depend on them, and the last rows use the real calibrations.
 
 **Synthesised** (Yosys, `synth_xilinx -family xc7`, not placed and routed; `logs/yosys_engine.log`), the engine without
 its memories: **8,463 LUTs** (26% of the XC7S50's 32,600), **2,809 flip-flops** (4% of 65,200), **73 DSP48E1** (61% of
@@ -140,6 +145,11 @@ cd fpga_network/rtl && yosys -p "read_verilog nn_engine.v; chparam -set WA 15 -s
     synth_xilinx -family xc7 -top nn_engine -noiopad; stat"
 ```
 
-The checkpoints are on the branch `laptop-artifacts` (`cascade_X_s1/checkpoint_step70000.pt`, sha256
-`692a796f94401dbdd7d522967fb407e14f75a2d6537613263edfd0f4896b12f8`); the laptop's candidate files for the tie-break
-are `priortilt/results_8b/selector_{validation,train}_X.npz` there. No `test_*` or `go_*` file was opened.
+The checkpoints are on the branch `laptop-artifacts`: the final one at commit `2f752e9`,
+`cascade_X_s1/checkpoint_final_step120000.pt` (sha256 `d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933`),
+and `cascade_X_s1/checkpoint_step70000.pt` (sha256 `692a796f94401dbdd7d522967fb407e14f75a2d6537613263edfd0f4896b12f8`).
+The laptop's candidate files for the tie-break are `priortilt/results_8b/selector_{validation,train}_X.npz` there
+(sha256 `60db8f10...` and `d23883ca...`, as in `hierarchy/README.md`), and its own float runs of the same checkpoints on
+`validation_X.npz` are `cascade_X_s1/eval/step{70000,120000}_validation_X_p0.004.npz`. The calibrations used are
+`logs/calibration_step70000.json` and `logs/calibration_final.json`; the lane logs `logs/lane_B_hold1_step70000.log` and
+`logs/lane_BD_final.log`. No `test_*` or `go_*` file was opened.

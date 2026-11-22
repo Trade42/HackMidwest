@@ -90,3 +90,60 @@ The returned correction's weight: median 46 faults (sum of log-odds 225.5) on th
 - Where the first leg converges, its answer is as good as the kit's 5-solution pick. Keeping it would give 125 + 128 failures against the kit's 122 + 123 on the same shots.
 - Most failed shots use (nearly) the whole budget: the median failed shot ran 18,000 iterations.
 - Converged-wrong corrections are heavier than right ones (median 55 faults against 46). But weight alone does not say which shots are wrong: no threshold was tested here.
+
+## G2: how much accuracy sits above relay-BP
+
+**The sets.** Per p and basis:
+
+- **F** is every shot the kit's relay-BP failed in G1.
+- **C**, the control, is the same number of shots it got right, drawn without replacement with numpy `default_rng([20261122, round(p * 1e4), ord(basis)])`. The selections are `results/g2_selection_p*.npz`.
+
+Every G2 decode runs on a fresh decoder per shot, so no result depends on the other shots. Commands: `analysis/steps.sh step2`, `step2b`, `step4`, `step5` and `step7`, then `analysis/steps.sh summarize-g2`. Code: `analysis/g2_headroom.py`. Summary: `results/g2_summary.json` and `results/g2_tables.csv`. Log: `logs/g2_summary.log`.
+
+**How to read the tables.**
+
+- The 2 x 2 counts are relay-BP (G1) against the other decoder on F + C, and the exact paired test is the two-sided binomial test of the discordant shots.
+- Because C is a sample of about 0.5% of the shots relay-BP got right, the raw test compares the other decoder's fix rate on failures with its break rate on a small sample. It says nothing about which decoder fails less overall: BP-OSD, which fails about 5 times as often as relay-BP (the kit's README), "wins" it at p = 1e-10.
+- The column "other's failures on all G1 shots" therefore scales up both parts: relay-BP's failures times (1 - fix rate), plus all of relay-BP's right shots times the control's break rate. Its range uses the exact (Clopper-Pearson) 95% intervals of both rates. With 122 controls, a break rate can only be bounded at about 3%, so the range is wide. **Read the fix rate, the cost per shot and the range, never the raw p-value, as the answer.**
+- **The re-roll floor.** Relay-BP is randomized: legs 2 onwards draw their memory strengths at random. `kit_fresh` decodes each shot again with the kit's settings and seed 0 on a fresh decoder, so with other random draws than in G1. It fixes failures by luck alone, and every other row's fixes should be read against it.
+
+### Items 1, 3 and 4 at p = 0.004, and the re-roll floor
+
+| decoder | basis | F | fixed: all / of unconverged / of converged-wrong | C | broken | 2 x 2: both wrong / only relay-BP / only other / both right | exact paired p | break rate [95% CP] | other's failures on all 25,000 shots, estimate [range], against relay-BP's | iterations mean F / C | ms mean F / C |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| re-roll (kit settings, fresh decoder) | X | 122 | 56 / 24 of 55 / 32 of 67 | 122 | 0 | 66 / 56 / 0 / 122 | 2.8e-17 | 0.000 [0.000, 0.030] | 66 [55, 818] vs 122 | 13,205 / 373 | 9,953 / 292 |
+| re-roll | Z | 123 | 52 / 16 of 45 / 36 of 78 | 123 | 2 | 71 / 52 / 2 / 121 | 1.6e-13 | 0.016 [0.002, 0.058] | 476 [109, 1,512] vs 123 | 12,626 / 752 | 8,460 / 540 |
+| BP-OSD, OSD-CS order 10 (kit) | X | 122 | 43 / 21 of 55 / 22 of 67 | 122 | 2 | 79 / 43 / 2 / 120 | 5.9e-11 | 0.016 [0.002, 0.058] | 487 [117, 1,531] vs 122 | 79 / 53 | 1,148 / 464 |
+| BP-OSD, order 10 | Z | 123 | 36 / 11 of 45 / 25 of 78 | 123 | 4 | 87 / 36 / 4 / 119 | 1.9e-7 | 0.033 [0.009, 0.081] | 896 [298, 2,116] vs 123 | 79 / 52 | 1,214 / 419 |
+| BP-OSD, OSD-CS order 60 | X | 122 | 43 / 21 of 55 / 22 of 67 | 122 | 2 | 79 / 43 / 2 / 120 | 5.9e-11 | 0.016 [0.002, 0.058] | 487 [117, 1,531] vs 122 | 79 / 53 | 1,331 / 519 |
+| BP-OSD, order 60 | Z | 123 | 38 / 12 of 45 / 26 of 78 | 123 | 4 | 85 / 38 / 4 / 119 | 5.7e-8 | 0.033 [0.009, 0.081] | 894 [296, 2,114] vs 123 | 79 / 52 | 1,245 / 441 |
+| Tesseract, det_beam 5 | X | 122 | 43 / 21 of 55 / 22 of 67 | 122 | 2 | 79 / 43 / 2 / 120 | 5.9e-11 | 0.016 [0.002, 0.058] | 487 [117, 1,531] vs 122 | – | 3,743 / 571 |
+| Tesseract, det_beam 5 | Z | 123 | 37 / 11 of 45 / 26 of 78 | 123 | 4 | 86 / 37 / 4 / 119 | 1.0e-7 | 0.033 [0.009, 0.081] | 895 [297, 2,115] vs 123 | – | 3,676 / 577 |
+
+The ms are per shot inside the decode call, a fresh decoder per shot (its construction not timed), with 8 processes on this machine. BP-OSD's iterations are its BP stage's.
+
+Tesseract's X row equals BP-OSD's in every count, which was checked shot by shot because it looked like a bug. It is not one: the two agree on the failed flag on 204 of the 244 X shots and differ on the other 40 (`agreement` in `results/g2_summary.json`). Tesseract's correction is lighter than BP-OSD's on 193 of the 244 shots, yet it fixes no more of relay-BP's failures.
+
+**Item 4, the Tesseract probe** (`analysis/tesseract_probe.py`, `results/tesseract_probe.json`). `pip install tesseract-decoder` installed version 0.1.1.dev20261117025421 here. It took the kit's 936-detector problem as a DEM built from H, L and the priors, with one error per column; building the decoder took 0.3 s. It decoded the first 3 failed validation_X shots in 3.9 to 5.7 s each (under the 60 s limit) and got all 3 wrong. Its corrections there were heavier than relay-BP's (sum of log-odds 322 against 314, 280 against 251, 302 against 299). Its settings were the package defaults (`det_beam=5`, `pqlimit=200000`, `no_revisit_dets=True`); no larger beam was tried within the 30-minute box. The first probe run crashed: numpy 2 wrote `np.float64(...)` into the DEM text. It was fixed and run again alone, as the 8th process beside step 2's 7.
+
+### Item 5: joint decoding of both check types
+
+The kit's baselines decode X memory from its 936 X-check detectors. `circuit.dem_matrices(circuit)` with no basis gives the full problem: all 1,728 detectors and 67,824 mechanisms, with 391,464 nonzeros in H (13 times the basis problem's 30,672). It keeps the correlations between X and Z errors. Here relay-BP decodes the full 1,728-bit detector row of each shot with the same 12 observables, at two settings:
+
+- **(a) `joint`:** the kit's `RELAY_SETTINGS`, seed 0. The relay-BP authors' joint runs below use exactly these settings.
+- **(b) `joint600`:** the same with `num_sets=600`. On a fresh decoder with the same seed, (b)'s first 300 legs are (a)'s, draw for draw (`relay.rs`: one generator, seeded at construction). So (b) can differ from (a) only where (a) ran all 300 legs without finding 5 solutions, which takes at least 296 x 60 = 17,760 iterations. Elsewhere (b) equals (a) by construction. (b) is decoded only on the shots where (a) reached that floor, plus 2 seeded shots per p and basis below it, as a check that the two agree there.
+
+**The relay-BP authors' own runs** (theirs, not ours). These are from `examples/data/bicycle_bivariate_144_12_12_fine_ler_sweep.csv` at https://github.com/trmue/relay, fetched on 2026-11-22 (sha256 `cb7e2d8bb6a7fd3be6b2cfd86b7e18be91158166ce8c844d6bfbee1549cca271`), read with `python -m analysis.authors_joint bb144.csv` (log `logs/authors_joint.log`). In their notebook, `xyz=False` keeps only the detectors of the memory basis, which is what the kit decodes, and `xyz=True` decodes all detectors. Both use the kit's `RELAY_SETTINGS`. Their seconds are sinter's decoder time on their machine.
+
+| p | decoding | shots per basis | failures X, Z | rate per shot X [95% Wilson] | Z | seconds per shot X, Z |
+|---|---|---|---|---|---|---|
+| 0.003 | separate | 100,000 | 32, 40 | 3.20e-4 [2.3e-4, 4.5e-4] | 4.00e-4 [2.9e-4, 5.4e-4] | 0.096, 0.098 |
+| 0.003 | joint (xyz) | 100,000 | 15, 14 | 1.50e-4 [9.1e-5, 2.5e-4] | 1.40e-4 [8.3e-5, 2.4e-4] | 12.6, 12.5 |
+| 0.004 | separate | 10,000 | 53, 44 | 5.30e-3 [4.1e-3, 6.9e-3] | 4.40e-3 [3.3e-3, 5.9e-3] | 0.36, 0.36 |
+| 0.004 | joint (xyz) | 10,000 | 35, 39 | 3.50e-3 [2.5e-3, 4.9e-3] | 3.90e-3 [2.9e-3, 5.3e-3] | 35.5, 35.2 |
+| 0.005 | separate | 5,000 | 216, 205 | 4.32e-2 [3.8e-2, 4.9e-2] | 4.10e-2 [3.6e-2, 4.7e-2] | 1.5, 1.6 |
+| 0.005 | joint (xyz) | 5,000 | 376, 359 | 7.52e-2 [6.8e-2, 8.3e-2] | 7.18e-2 [6.5e-2, 7.9e-2] | 141, 137 |
+
+In their data, joint decoding fails about 2.5 times less at p = 0.003, about 1.3 times less at 0.004, and about 1.8 times more at 0.005, at about 100 times the time per shot.
+
+**Rates per shot pair.** The kit's rate is per shot pair: shot k of X memory is paired with shot k of Z memory, and the pair fails when either basis fails. Published numbers summed over X and Z (failures X + Z over shots) are close to the kit's pair rate when failures are rare. Per-basis numbers are about half of it. Compare like with like.

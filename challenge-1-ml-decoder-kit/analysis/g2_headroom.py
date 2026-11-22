@@ -366,6 +366,7 @@ def cmd_summarize(args):
                 out["tables"].setdefault(v, {})[tag] = tab
                 flat.append(dict(variant=v, p=float(p), basis=str(basis),
                                  **{k: val for k, val in tab.items() if not isinstance(val, tuple)}))
+    out["agreement"] = agreement(sel, paths, args.cache, caps)
     write_json(Path(args.out) / "g2_summary.json", out)
     if flat:
         keys = list(dict.fromkeys(k for f in flat for k in f))
@@ -375,6 +376,24 @@ def cmd_summarize(args):
             w.writerows(flat)
     print_tables(out)
     print_markdown(out)
+
+
+def agreement(sel, paths, cache, caps, pairs=(("tesseract", "bposd10"), ("bposd_hi", "bposd10"))):
+    """Shot-by-shot agreement of two decoders on the shots both decoded, per basis."""
+    out = {}
+    for a, b in pairs:
+        ra, rb = gather(sel, paths, a, cache, caps), gather(sel, paths, b, cache, caps)
+        for basis in ("X", "Z"):
+            keys = [k for k in ra if k in rb and k[1] == basis]
+            if not keys:
+                continue
+            out[f"{a}_vs_{b}_{basis}"] = dict(
+                shots=len(keys), same_failed=sum(bool(ra[k]["failed"]) == bool(rb[k]["failed"]) for k in keys),
+                same_class=sum(int(ra[k]["pred"]) == int(rb[k]["pred"]) for k in keys),
+                same_correction=sum(int(ra[k]["ehash"]) == int(rb[k]["ehash"]) for k in keys),
+                first_lighter=sum(float(ra[k]["wllr"]) < float(rb[k]["wllr"]) - 1e-9 for k in keys),
+                first_heavier=sum(float(ra[k]["wllr"]) > float(rb[k]["wllr"]) + 1e-9 for k in keys))
+    return out
 
 
 def candidate_summary(sub, results, g1p, basis, n_fail_total, n_right_total):

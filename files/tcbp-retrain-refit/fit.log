@@ -30,3 +30,10 @@ fit on f0.8-seed5800-train (X_f0.8_seed5800_kitformat_p0.0326371.npz, 1500 train
     fit alpha0.3_eps0.0001: 400 of 1500 shots, build 42.4 ms, decode 6.6 ms mean (last 200: 42.4 + 6.7 ms), 22 s; priors capped at 0.5 so far on 304 shots, 642 columns
     fit alpha0.3_eps0.0001: 600 of 1500 shots, build 42.4 ms, decode 6.5 ms mean (last 200: 42.4 + 6.4 ms), 33 s; priors capped at 0.5 so far on 462 shots, 999 columns
     fit alpha0.3_eps0.0001: 800 of 1500 shots, build 42.8 ms, decode 6.4 ms mean (last 200: 43.9 + 5.9 ms), 44 s; priors capped at 0.5 so far on 615 shots, 1323 columns
+    fit alpha0.3_eps0.0001: 1000 of 1500 shots, build 42.8 ms, decode 6.2 ms mean (last 200: 43.0 + 5.7 ms), 55 s; priors capped at 0.5 so far on 773 shots, 1664 columns
+    fit alpha0.3_eps0.0001: 1200 of 1500 shots, build 42.8 ms, decode 6.1 ms mean (last 200: 42.6 + 5.7 ms), 66 s; priors capped at 0.5 so far on 928 shots, 1993 columns
+    fit alpha0.3_eps0.0001: 1400 of 1500 shots, build 42.8 ms, decode 6.2 ms mean (last 200: 42.8 + 6.6 ms), 78 s; priors capped at 0.5 so far on 1085 shots, 2341 columns
+  alpha0.3_eps0.0001: failures 28 of 1500, not reproduced 0, flagged 1131, capped 2510, 49 ms; 402 s
+    fit alpha0.4_eps0.0001: 200 of 1500 shots, build 41.7 ms, decode 6.2 ms mean (last 200: 41.7 + 6.2 ms), 11 s; priors capped at 0.5 so far on 1366 shots, 5872 columns
+    fit alpha0.4_eps0.0001: 400 of 1500 shots, build 41.5 ms, decode 6.4 ms mean (last 200: 41.3 + 6.7 ms), 22 s; priors capped at 0.5 so far on 1565 shots, 9091 columns
+    fit alpha0.4_eps0.0001: 600 of 1500 shots, build 41.5 ms, decode 6.5 ms mean (last 200: 41.7 + 6.5 ms), 32 s; priors capped at 0.5 so far on 1765 shots, 12430 columns

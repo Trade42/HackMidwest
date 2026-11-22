@@ -1,8 +1,12 @@
 """Loss-blind vs flag-aware priors for relay-BP on Clifft loss shots (Gross code, X memory).
-usage: python -I loss_aware.py KIT P P_LOSS SHOTS NUM_SETS
-Flag-aware = per-shot priors: heralded X-check atom -> its measurement-flip column at 0.5;
-data atom heralded lost at the final readout -> its one flicker column per cycle, with a uniform prior on the loss time.
-Z-check atom heralds are not used here.
+usage: python -I starter_scripts/loss_starter.py KIT P P_LOSS SHOTS NUM_SETS     (from challenge-1-ml-decoder-kit/)
+Needs Clifft (ml_decoder/requirements.txt). Claims no number: it is a starting point for a loss-aware decoder.
+Blind = relay-BP with the kit's static priors. Flag-aware = per-shot priors, built from the shot's heralds:
+  heralded X-check atom -> its measurement-flip column at 0.5;
+  heralded Z-check atom -> the partial-check columns of that cycle (one per CX layer it may have been lost after),
+                           each raised by 0.5 / 6;
+  data atom heralded lost at the final readout -> its one flicker column per cycle, with a uniform prior on the loss
+                           time, and its final-readout column at 0.5.
 """
 import sys, re, time
 import numpy as np

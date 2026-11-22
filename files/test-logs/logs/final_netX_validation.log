@@ -1,0 +1,18 @@
+checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt: step 120000, commit 7ff6a68b95916773a67d209959c92b04c2254cd1, training seed 1, reads detectors=all, logical operators: kit
+data: data/p0.004/validation_X.npz (Stim circuit shots, p=0.004, seed 201, basis X)
+X memory: failures 237 of 5000 (always-0 would fail 5000)
+  logical error per shot 4.7400e-02, 95% Wilson interval [4.1850e-02, 5.3645e-02]
+  per cycle, this basis alone 4.0385e-03, interval [3.5562e-03, 4.5843e-03]
+  bits right 0.9889 (always-0 0.4974)
+batch-one inference on GPU NVIDIA A100-SXM4-80GB MIG 2g.20gb: mean 7.91 ms, median 7.84 ms, p99 8.86 ms over 200 shots (the timer wraps the copy to the device, the network and the copy back)
+confidence of a shot = the smallest |logit| of its 12 outputs; the most confident shots are kept first:
+   kept  threshold  shots kept  failures kept  share of kept, 95% Wilson interval      failures in the rest
+    10%      6.472         500              0  0.000e+00 [0.000e+00, 7.624e-03]       237 of 4500
+    25%      5.494        1250              0  0.000e+00 [0.000e+00, 3.064e-03]       237 of 3750
+    50%      4.690        2500              0  0.000e+00 [0.000e+00, 1.534e-03]       237 of 2500
+    75%      2.897        3750              3  8.000e-04 [2.721e-04, 2.350e-03]       234 of 1250
+    90%      1.584        4500             10  2.222e-03 [1.208e-03, 4.086e-03]       227 of 500
+    95%      0.544        4750             53  1.116e-02 [8.541e-03, 1.456e-02]       184 of 250
+    99%      0.040        4950            195  3.939e-02 [3.432e-02, 4.518e-02]        42 of 50
+   100%      0.001        5000            237  4.740e-02 [4.185e-02, 5.365e-02]         0 of 0
+  A threshold read from this table is fitted to these shots: freeze it and report it on another file.

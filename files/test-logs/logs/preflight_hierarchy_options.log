@@ -1,0 +1,463 @@
+
+--- 0. the first 16 shots of each file
+p = 0.004; from data/p0.004/validation_X.npz (sha256 b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d) and data/p0.004/validation_Z.npz (sha256 843c4daf24e2b56c5988670550bbcdbac8f50b18dbb9d24beb64969146cb8e20)
+
+--- 1. the plugin through the evaluator's create_session, with the given options
+X: rule network, 16 shots decoded, stages ['agree'], set-up 4.0 s; NETWORK ASKED: step 120000, sha256 d8d1c70f5522..., operators kit, on cpu
+Z: rule network, 16 shots decoded, stages ['agree'], set-up 0.5 s; NETWORK ASKED: step 100000, sha256 fad24e80ec4e..., operators light, on cpu
+
+--- 2. hierarchy.candidates
+2 job(s) to run on 2 process(es); 0 part(s) kept from an earlier run
+preflight_Z.npz chunk 0: shots 0 to 15, failures R 0, P1 0, P2 0, relay-BP ran on 16, 3 s
+preflight_X.npz chunk 0: shots 0 to 15, failures R 1, P1 0, P2 0, relay-BP ran on 16, 15 s
+
+saved /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_X.chunks.npz
+preflight_X.npz: X memory, p = 0.004, 16 shots, data sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1
+  chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2)
+  problem sha256 703be059a63a82b803011e0571a9637f9c6914072b68469770591cbc4054eaa1 (H, L and priors from the kit's circuit at this p)
+  decoder   ran on failures     rate  95% Wilson interval  unconverged iterations  ms/shot: mean   median      p99
+  R             16        1   6.250%  [1.112%, 28.329%]              1     2419.8          748.3     46.3     5581
+  P1            16        0   0.000%  [0.000%, 19.361%]              0      720.9           85.6      4.6      703
+  P2            16        0   0.000%  [0.000%, 19.361%]              0      944.8          112.8      4.6      743
+  times: the decode call alone, 2 process(es) side by side on AMD EPYC-Milan Processor
+
+candidates: 16 shots from 1 file(s)
+  /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_X.chunks.npz: 16 shots of the data file with sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1
+    X memory, p = 0.004, chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2); times: 2 process(es) side by side on AMD EPYC-Milan Processor
+P1 and P2 differ on 0 shots (0.000%): only there the hierarchy runs relay-BP and asks the rule
+relay-BP ran on 16 shots; the candidates that ran are not all equal on 1 shots (6.250%), and on 1 of those one of them is right
+unconverged: R 1, P1 0, P2 0; no candidate converged on 0 shots
+
+rule                                                     failures     rate  95% Wilson interval    right pick when one existed   ms/shot
+R: relay-BP, kit settings                                       1   6.250%  [1.112%, 28.329%]       0 of 1                          748.3
+P1: PriorTilt, first seed                                       0   0.000%  [0.000%, 19.361%]       1 of 1                           85.6
+P2: PriorTilt, second seed                                      0   0.000%  [0.000%, 19.361%]       1 of 1                          112.8
+P1; where P2 differs, the lowest weight of R, P1, P2            0   0.000%  [0.000%, 19.361%]       1 of 1                          198.4
+P1; where P2 differs, the lowest weight among the converged        0   0.000%  [0.000%, 19.361%]       1 of 1                          198.4
+the lowest weight among the converged of R, P1, P2              0   0.000%  [0.000%, 19.361%]       1 of 1                          946.7
+a perfect choice among R, P1, P2 (needs the truth)              0   0.000%  [0.000%, 19.361%]       1 of 1                               
+P1; where P2 differs, a perfect choice (needs the truth)        0   0.000%  [0.000%, 19.361%]       1 of 1                               
+"right pick when one existed": among the shots where the candidates that ran are not all equal and one is right.
+ms/shot: the mean over all shots of the decode calls the rule makes (and the network's batch-one time where it is asked).
+
+against relay-BP on the same shots: both fail, the rule only, relay-BP only, exact two-sided p (binomial on the discordant shots)
+P1: PriorTilt, first seed                                    0     0     1   p = 1
+P2: PriorTilt, second seed                                   0     0     1   p = 1
+P1; where P2 differs, the lowest weight of R, P1, P2         0     0     1   p = 1
+P1; where P2 differs, the lowest weight among the converged     0     0     1   p = 1
+the lowest weight among the converged of R, P1, P2           0     0     1   p = 1
+
+shots where no candidate converged: 0; the weight rule fails on 0 of them
+
+saved /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_Z.chunks.npz
+preflight_Z.npz: Z memory, p = 0.004, 16 shots, data sha256 795450f37a6ecaaefff72d78f5de5ca473a57e7991447b1b93366155c8a90e63
+  chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2)
+  problem sha256 cd04437a418d0c12385418e75903a21b0aa34d7c5f5bbf018d5852b36ccccbc5 (H, L and priors from the kit's circuit at this p)
+  decoder   ran on failures     rate  95% Wilson interval  unconverged iterations  ms/shot: mean   median      p99
+  R             16        0   0.000%  [0.000%, 19.361%]              0      410.7          125.8     37.5      961
+  P1            16        0   0.000%  [0.000%, 19.361%]              0      276.6           32.2     15.1      164
+  P2            16        0   0.000%  [0.000%, 19.361%]              0      389.4           45.7     22.2      272
+  times: the decode call alone, 2 process(es) side by side on AMD EPYC-Milan Processor
+
+candidates: 16 shots from 1 file(s)
+  /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_Z.chunks.npz: 16 shots of the data file with sha256 795450f37a6ecaaefff72d78f5de5ca473a57e7991447b1b93366155c8a90e63
+    Z memory, p = 0.004, chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2); times: 2 process(es) side by side on AMD EPYC-Milan Processor
+P1 and P2 differ on 0 shots (0.000%): only there the hierarchy runs relay-BP and asks the rule
+relay-BP ran on 16 shots; the candidates that ran are not all equal on 0 shots (0.000%), and on 0 of those one of them is right
+unconverged: R 0, P1 0, P2 0; no candidate converged on 0 shots
+
+rule                                                     failures     rate  95% Wilson interval    right pick when one existed   ms/shot
+R: relay-BP, kit settings                                       0   0.000%  [0.000%, 19.361%]       0 of 0                          125.8
+P1: PriorTilt, first seed                                       0   0.000%  [0.000%, 19.361%]       0 of 0                           32.2
+P2: PriorTilt, second seed                                      0   0.000%  [0.000%, 19.361%]       0 of 0                           45.7
+P1; where P2 differs, the lowest weight of R, P1, P2            0   0.000%  [0.000%, 19.361%]       0 of 0                           77.8
+P1; where P2 differs, the lowest weight among the converged        0   0.000%  [0.000%, 19.361%]       0 of 0                           77.8
+the lowest weight among the converged of R, P1, P2              0   0.000%  [0.000%, 19.361%]       0 of 0                          203.7
+a perfect choice among R, P1, P2 (needs the truth)              0   0.000%  [0.000%, 19.361%]       0 of 0                               
+P1; where P2 differs, a perfect choice (needs the truth)        0   0.000%  [0.000%, 19.361%]       0 of 0                               
+"right pick when one existed": among the shots where the candidates that ran are not all equal and one is right.
+ms/shot: the mean over all shots of the decode calls the rule makes (and the network's batch-one time where it is asked).
+
+against relay-BP on the same shots: both fail, the rule only, relay-BP only, exact two-sided p (binomial on the discordant shots)
+P1: PriorTilt, first seed                                    0     0     0   p = 1
+P2: PriorTilt, second seed                                   0     0     0   p = 1
+P1; where P2 differs, the lowest weight of R, P1, P2         0     0     0   p = 1
+P1; where P2 differs, the lowest weight among the converged     0     0     0   p = 1
+the lowest weight among the converged of R, P1, P2           0     0     0   p = 1
+
+shots where no candidate converged: 0; the weight rule fails on 0 of them
+
+wall time of this run: 20 s
+
+--- 3. neural.evaluate_stim with the checkpoints of the options
+checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt: step 120000, commit 7ff6a68b95916773a67d209959c92b04c2254cd1, training seed 1, reads detectors=all, logical operators: kit
+data: /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/preflight_X.npz (Stim circuit shots, p=0.004, seed 201, basis X)
+X memory: failures 1 of 16 (always-0 would fail 16)
+  logical error per shot 6.2500e-02, 95% Wilson interval [1.1119e-02, 2.8329e-01]
+  per cycle, this basis alone 5.3638e-03, interval [9.3137e-04, 2.7375e-02]
+  bits right 0.9792 (always-0 0.4844)
+batch-one inference on CPU x86_64, 1 torch threads: mean 22.77 ms, median 22.72 ms, p99 23.14 ms over 3 shots (the timer wraps the copy to the device, the network and the copy back)
+confidence of a shot = the smallest |logit| of its 12 outputs; the most confident shots are kept first:
+   kept  threshold  shots kept  failures kept  share of kept, 95% Wilson interval      failures in the rest
+    10%      6.710           2              0  0.000e+00 [0.000e+00, 6.576e-01]         1 of 14
+    25%      5.662           4              0  0.000e+00 [0.000e+00, 4.899e-01]         1 of 12
+    50%      5.202           8              0  0.000e+00 [0.000e+00, 3.244e-01]         1 of 8
+    75%      3.413          12              0  0.000e+00 [0.000e+00, 2.425e-01]         1 of 4
+    90%      2.992          14              0  0.000e+00 [0.000e+00, 2.153e-01]         1 of 2
+    95%      2.797          15              0  0.000e+00 [0.000e+00, 2.039e-01]         1 of 1
+    99%      0.003          16              1  6.250e-02 [1.112e-02, 2.833e-01]         0 of 0
+   100%      0.003          16              1  6.250e-02 [1.112e-02, 2.833e-01]         0 of 0
+  A threshold read from this table is fitted to these shots: freeze it and report it on another file.
+checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt: step 100000, commit db2de883f97771dab1140ac4956cad8c06f05aac, training seed 1, reads detectors=all, logical operators: light
+data: /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/preflight_Z.npz (Stim circuit shots, p=0.004, seed 202, basis Z)
+Z memory: failures 0 of 16 (always-0 would fail 16)
+  logical error per shot 0.0000e+00, 95% Wilson interval [0.0000e+00, 1.9361e-01]
+  per cycle, this basis alone 0.0000e+00, interval [0.0000e+00, 1.7772e-02]
+  bits right 1.0000 (always-0 0.5469)
+batch-one inference on CPU x86_64, 1 torch threads: mean 23.19 ms, median 23.25 ms, p99 23.39 ms over 3 shots (the timer wraps the copy to the device, the network and the copy back)
+confidence of a shot = the smallest |logit| of its 12 outputs; the most confident shots are kept first:
+   kept  threshold  shots kept  failures kept  share of kept, 95% Wilson interval      failures in the rest
+    10%      5.646           2              0  0.000e+00 [0.000e+00, 6.576e-01]         0 of 14
+    25%      4.975           4              0  0.000e+00 [0.000e+00, 4.899e-01]         0 of 12
+    50%      4.564           8              0  0.000e+00 [0.000e+00, 3.244e-01]         0 of 8
+    75%      3.950          12              0  0.000e+00 [0.000e+00, 2.425e-01]         0 of 4
+    90%      3.751          14              0  0.000e+00 [0.000e+00, 2.153e-01]         0 of 2
+    95%      3.303          15              0  0.000e+00 [0.000e+00, 2.039e-01]         0 of 1
+    99%      1.635          16              0  0.000e+00 [0.000e+00, 1.936e-01]         0 of 0
+   100%      1.635          16              0  0.000e+00 [0.000e+00, 1.936e-01]         0 of 0
+  A threshold read from this table is fitted to these shots: freeze it and report it on another file.
+
+--- 4. hierarchy.tcbp_member in /home/blakew3/envs/tcbp-py312/bin/python
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}, mode serial; 2 shot file(s)
+preflight_X.npz: X memory, p = 0.004, 16 shots, data sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1
+  H is 936 x 8784; building the decoder ...
+  model fitted in 54.1 s, decoder built in 51 ms
+  failures 0 of 16  0.000%  95% Wilson interval [0.000%, 19.361%]; the correction does not reproduce the syndrome on 0 shots
+  serial decode, the first decode of the basis untimed: mean 3.9 ms, median 3.3 ms, p99 13 ms per shot, on AMD EPYC-Milan Processor, GPU NVIDIA A100-SXM4-80GB
+  decoded a second time, 0 of the first 16 shots change their 12 bits
+  saved /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/tcbp/preflight_X.tcbp.npz
+preflight_Z.npz: Z memory, p = 0.004, 16 shots, data sha256 795450f37a6ecaaefff72d78f5de5ca473a57e7991447b1b93366155c8a90e63
+  H is 936 x 8784; building the decoder ...
+  model fitted in 54.4 s, decoder built in 44 ms
+  failures 0 of 16  0.000%  95% Wilson interval [0.000%, 19.361%]; the correction does not reproduce the syndrome on 0 shots
+  serial decode, the first decode of the basis untimed: mean 5.2 ms, median 3.3 ms, p99 25 ms per shot, on AMD EPYC-Milan Processor, GPU NVIDIA A100-SXM4-80GB
+  decoded a second time, 0 of the first 16 shots change their 12 bits
+  saved /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/tcbp/preflight_Z.tcbp.npz
+
+--- 5. hierarchy.ensemble --write-selection, and hierarchy.joint_member on shot 0 of each slice
+X memory, p = 0.004, 16 shots of the data file with sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1
+  R   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_X.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P1  from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_X.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P2  from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_X.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  T   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/tcbp/preflight_X.tcbp.npz: 16 shots; times: AMD EPYC-Milan Processor
+the always-on members present (P1, P2, T) are not unanimous on 0 shots (0.000%)
+
+row                                                                            failures     of     rate  95% Wilson interval    later stage on   ms/shot
+R alone                                                                               1     16   6.250%  [1.112%, 28.329%]                         748.3
+P1 alone                                                                              0     16   0.000%  [0.000%, 19.361%]                          85.6
+P2 alone                                                                              0     16   0.000%  [0.000%, 19.361%]                         112.8
+T alone                                                                               0     16   0.000%  [0.000%, 19.361%]                           3.9
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                 not measured: no logits
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                             0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     198.4
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2         0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     198.4
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                   not measured: no logits
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                      0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3
+c: as b, with J among the candidates where it exists                           not measured: no logits
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R           not measured: no logits
+e: as d, with J among the candidates where it exists                           not measured: no logits
+f: P1 where P1 = P2 = T; else J where it converged, else T                     not measured: no file for J
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R not measured: no logits
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network      not measured: no logits
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order      not measured: no file for J
+ORACLE (needs the truth): a perfect choice among R, P1, P2                            0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T                            0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                         0     16   0.000%  [0.000%, 19.361%]                              
+ms/shot: the sum of the decode calls a row makes, averaged over all shots; empty where a file holds no time per shot.
+Each time is from the machine named above for its member: times from different machines are added here, so read them as a rough cost.
+
+against relay-BP alone on the same shots: both fail, the row only, relay-BP alone only, exact two-sided p (binomial on the discordant shots)
+P1 alone                                                                           0     0     1   p = 1
+P2 alone                                                                           0     0     1   p = 1
+T alone                                                                            0     0     1   p = 1
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                          0     0     1   p = 1
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2      0     0     1   p = 1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                   0     0     1   p = 1
+ORACLE (needs the truth): a perfect choice among R, P1, P2                         0     0     1   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T                         0     0     1   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                      0     0     1   p = 1
+
+against TCBP-JOBS alone on the same shots: both fail, the row only, TCBP-JOBS alone only, exact two-sided p (binomial on the discordant shots)
+R alone                                                                            0     1     0   p = 1
+P1 alone                                                                           0     0     0   p = 1
+P2 alone                                                                           0     0     0   p = 1
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                          0     0     0   p = 1
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2      0     0     0   p = 1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                   0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among R, P1, P2                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                      0     0     0   p = 1
+
+wrote /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/preflight_X.selection.npz: 0 shots where P1, P2, T are not unanimous
+1 shot(s) to decode on 1 process(es); 0 kept from an earlier run
+preflight_X.npz shot 0: right, converged, 1463 iterations, 4 s
+
+saved /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/joint/preflight_X.joint.npz
+preflight_X.npz: X memory, p = 0.004, 1 listed shots of 16, data sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1
+  joint relay-BP on the listed shots: failures 0 of 1  0.0% [0.0%, 79.3%] (a hard subset: not a rate for the whole file); unconverged 0; iterations mean 1463
+  time per listed shot, the decode call alone on a fresh decoder: mean 4.2 s, median 4.2 s, largest 4.2 s; building the decoder: mean 0.06 s; 1 process(es) side by side on AMD EPYC-Milan Processor
+
+wall time of this run: 5 s
+Z memory, p = 0.004, 16 shots of the data file with sha256 795450f37a6ecaaefff72d78f5de5ca473a57e7991447b1b93366155c8a90e63
+  R   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_Z.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P1  from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_Z.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P2  from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_Z.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  T   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/tcbp/preflight_Z.tcbp.npz: 16 shots; times: AMD EPYC-Milan Processor
+the always-on members present (P1, P2, T) are not unanimous on 0 shots (0.000%)
+
+row                                                                            failures     of     rate  95% Wilson interval    later stage on   ms/shot
+R alone                                                                               0     16   0.000%  [0.000%, 19.361%]                         125.8
+P1 alone                                                                              0     16   0.000%  [0.000%, 19.361%]                          32.2
+P2 alone                                                                              0     16   0.000%  [0.000%, 19.361%]                          45.7
+T alone                                                                               0     16   0.000%  [0.000%, 19.361%]                           5.2
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                 not measured: no logits
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                             0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      77.8
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2         0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      77.8
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                   not measured: no logits
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                      0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0
+c: as b, with J among the candidates where it exists                           not measured: no logits
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R           not measured: no logits
+e: as d, with J among the candidates where it exists                           not measured: no logits
+f: P1 where P1 = P2 = T; else J where it converged, else T                     not measured: no file for J
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R not measured: no logits
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network      not measured: no logits
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order      not measured: no file for J
+ORACLE (needs the truth): a perfect choice among R, P1, P2                            0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T                            0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                         0     16   0.000%  [0.000%, 19.361%]                              
+ms/shot: the sum of the decode calls a row makes, averaged over all shots; empty where a file holds no time per shot.
+Each time is from the machine named above for its member: times from different machines are added here, so read them as a rough cost.
+
+against relay-BP alone on the same shots: both fail, the row only, relay-BP alone only, exact two-sided p (binomial on the discordant shots)
+P1 alone                                                                           0     0     0   p = 1
+P2 alone                                                                           0     0     0   p = 1
+T alone                                                                            0     0     0   p = 1
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                          0     0     0   p = 1
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2      0     0     0   p = 1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                   0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among R, P1, P2                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                      0     0     0   p = 1
+
+against TCBP-JOBS alone on the same shots: both fail, the row only, TCBP-JOBS alone only, exact two-sided p (binomial on the discordant shots)
+R alone                                                                            0     0     0   p = 1
+P1 alone                                                                           0     0     0   p = 1
+P2 alone                                                                           0     0     0   p = 1
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                          0     0     0   p = 1
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2      0     0     0   p = 1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                   0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among R, P1, P2                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                      0     0     0   p = 1
+
+wrote /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/preflight_Z.selection.npz: 0 shots where P1, P2, T are not unanimous
+1 shot(s) to decode on 1 process(es); 0 kept from an earlier run
+preflight_Z.npz shot 0: right, converged, 363 iterations, 1 s
+
+saved /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/joint/preflight_Z.joint.npz
+preflight_Z.npz: Z memory, p = 0.004, 1 listed shots of 16, data sha256 795450f37a6ecaaefff72d78f5de5ca473a57e7991447b1b93366155c8a90e63
+  joint relay-BP on the listed shots: failures 0 of 1  0.0% [0.0%, 79.3%] (a hard subset: not a rate for the whole file); unconverged 0; iterations mean 363
+  time per listed shot, the decode call alone on a fresh decoder: mean 1.1 s, median 1.1 s, largest 1.1 s; building the decoder: mean 0.06 s; 1 process(es) side by side on AMD EPYC-Milan Processor
+
+wall time of this run: 2 s
+
+--- 6. hierarchy.ensemble with every member and --rule f, then the pair score
+X memory, p = 0.004, 16 shots of the data file with sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1
+  R   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_X.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P1  from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_X.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P2  from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_X.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  T   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/tcbp/preflight_X.tcbp.npz: 16 shots; times: AMD EPYC-Milan Processor
+  J   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/joint/preflight_X.joint.npz: 1 shots; times: 1 process(es) on AMD EPYC-Milan Processor
+  network: time per call 22.8 ms (batch-one mean on CPU x86_64, 1 torch threads)
+the always-on members present (P1, P2, T) are not unanimous on 0 shots (0.000%)
+
+row                                                                            failures     of     rate  95% Wilson interval    later stage on   ms/shot
+R alone                                                                               1     16   6.250%  [1.112%, 28.329%]                         748.3
+P1 alone                                                                              0     16   0.000%  [0.000%, 19.361%]                          85.6
+P2 alone                                                                              0     16   0.000%  [0.000%, 19.361%]                         112.8
+T alone                                                                               0     16   0.000%  [0.000%, 19.361%]                           3.9
+J alone (on the shots it decoded)                                                     0      1   0.000%  [0.000%, 79.345%]                        4226.4
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                        0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     198.4
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                             0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     198.4
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2         0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     198.4
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                          0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                      0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3
+c: as b, with J among the candidates where it exists                                  0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3   (J exists on 0 of the 0 later-stage shots)
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R                  0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3
+e: as d, with J among the candidates where it exists                                  0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3   (J exists on 0 of the 0 later-stage shots)
+f: P1 where P1 = P2 = T; else J where it converged, else T                            0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3   <- the frozen rule   (J exists on 0 of the 0 later-stage shots)
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R        0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3   (J exists on 0 of the 0 later-stage shots)
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network             0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3   (J exists on 0 of the 0 later-stage shots)
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order             0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)     202.3   (J exists on 0 of the 0 later-stage shots)
+ORACLE (needs the truth): a perfect choice among R, P1, P2                            0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T                            0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                         0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                      0     16   0.000%  [0.000%, 19.361%]                              
+ms/shot: the sum of the decode calls a row makes, averaged over all shots; empty where a file holds no time per shot.
+Each time is from the machine named above for its member: times from different machines are added here, so read them as a rough cost.
+
+against relay-BP alone on the same shots: both fail, the row only, relay-BP alone only, exact two-sided p (binomial on the discordant shots)
+P1 alone                                                                           0     0     1   p = 1
+P2 alone                                                                           0     0     1   p = 1
+T alone                                                                            0     0     1   p = 1
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                     0     0     1   p = 1
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                          0     0     1   p = 1
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2      0     0     1   p = 1
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                       0     0     1   p = 1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                   0     0     1   p = 1
+c: as b, with J among the candidates where it exists                               0     0     1   p = 1
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R               0     0     1   p = 1
+e: as d, with J among the candidates where it exists                               0     0     1   p = 1
+f: P1 where P1 = P2 = T; else J where it converged, else T                         0     0     1   p = 1
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R     0     0     1   p = 1
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network          0     0     1   p = 1
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order          0     0     1   p = 1
+ORACLE (needs the truth): a perfect choice among R, P1, P2                         0     0     1   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T                         0     0     1   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                      0     0     1   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                   0     0     1   p = 1
+
+against TCBP-JOBS alone on the same shots: both fail, the row only, TCBP-JOBS alone only, exact two-sided p (binomial on the discordant shots)
+R alone                                                                            0     1     0   p = 1
+P1 alone                                                                           0     0     0   p = 1
+P2 alone                                                                           0     0     0   p = 1
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                     0     0     0   p = 1
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                          0     0     0   p = 1
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2      0     0     0   p = 1
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                       0     0     0   p = 1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                   0     0     0   p = 1
+c: as b, with J among the candidates where it exists                               0     0     0   p = 1
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R               0     0     0   p = 1
+e: as d, with J among the candidates where it exists                               0     0     0   p = 1
+f: P1 where P1 = P2 = T; else J where it converged, else T                         0     0     0   p = 1
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R     0     0     0   p = 1
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network          0     0     0   p = 1
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order          0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among R, P1, P2                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                      0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                   0     0     0   p = 1
+
+the network's own increment: a rule with the network against the same rule without learning, on the same candidates
+  a against aw: failures 0 against 0; both fail 0, only a fails 0, only aw fails 0; exact two-sided p = 1
+  a against ac: failures 0 against 0; both fail 0, only a fails 0, only ac fails 0; exact two-sided p = 1
+  b against bw: failures 0 against 0; both fail 0, only b fails 0, only bw fails 0; exact two-sided p = 1
+  h against f: failures 0 against 0; both fail 0, only h fails 0, only f fails 0; exact two-sided p = 1
+  g against gw: failures 0 against 0; both fail 0, only g fails 0, only gw fails 0; exact two-sided p = 1
+Z memory, p = 0.004, 16 shots of the data file with sha256 795450f37a6ecaaefff72d78f5de5ca473a57e7991447b1b93366155c8a90e63
+  R   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_Z.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P1  from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_Z.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P2  from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/cand/preflight_Z.chunks.npz: 16 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  T   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/tcbp/preflight_Z.tcbp.npz: 16 shots; times: AMD EPYC-Milan Processor
+  J   from /home/blakew3/mlBranchMidwest/runs/test/preflight_hierarchy_options_100656/joint/preflight_Z.joint.npz: 1 shots; times: 1 process(es) on AMD EPYC-Milan Processor
+  network: time per call 23.2 ms (batch-one mean on CPU x86_64, 1 torch threads)
+the always-on members present (P1, P2, T) are not unanimous on 0 shots (0.000%)
+
+row                                                                            failures     of     rate  95% Wilson interval    later stage on   ms/shot
+R alone                                                                               0     16   0.000%  [0.000%, 19.361%]                         125.8
+P1 alone                                                                              0     16   0.000%  [0.000%, 19.361%]                          32.2
+P2 alone                                                                              0     16   0.000%  [0.000%, 19.361%]                          45.7
+T alone                                                                               0     16   0.000%  [0.000%, 19.361%]                           5.2
+J alone (on the shots it decoded)                                                     0      1   0.000%  [0.000%, 79.345%]                        1054.0
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                        0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      77.8
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                             0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      77.8
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2         0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      77.8
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                          0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                      0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0
+c: as b, with J among the candidates where it exists                                  0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0   (J exists on 0 of the 0 later-stage shots)
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R                  0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0
+e: as d, with J among the candidates where it exists                                  0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0   (J exists on 0 of the 0 later-stage shots)
+f: P1 where P1 = P2 = T; else J where it converged, else T                            0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0   <- the frozen rule   (J exists on 0 of the 0 later-stage shots)
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R        0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0   (J exists on 0 of the 0 later-stage shots)
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network             0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0   (J exists on 0 of the 0 later-stage shots)
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order             0     16   0.000%  [0.000%, 19.361%]           0 (0.00%)      83.0   (J exists on 0 of the 0 later-stage shots)
+ORACLE (needs the truth): a perfect choice among R, P1, P2                            0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T                            0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                         0     16   0.000%  [0.000%, 19.361%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                      0     16   0.000%  [0.000%, 19.361%]                              
+ms/shot: the sum of the decode calls a row makes, averaged over all shots; empty where a file holds no time per shot.
+Each time is from the machine named above for its member: times from different machines are added here, so read them as a rough cost.
+
+against relay-BP alone on the same shots: both fail, the row only, relay-BP alone only, exact two-sided p (binomial on the discordant shots)
+P1 alone                                                                           0     0     0   p = 1
+P2 alone                                                                           0     0     0   p = 1
+T alone                                                                            0     0     0   p = 1
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                     0     0     0   p = 1
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                          0     0     0   p = 1
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2      0     0     0   p = 1
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                       0     0     0   p = 1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                   0     0     0   p = 1
+c: as b, with J among the candidates where it exists                               0     0     0   p = 1
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R               0     0     0   p = 1
+e: as d, with J among the candidates where it exists                               0     0     0   p = 1
+f: P1 where P1 = P2 = T; else J where it converged, else T                         0     0     0   p = 1
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R     0     0     0   p = 1
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network          0     0     0   p = 1
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order          0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among R, P1, P2                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                      0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                   0     0     0   p = 1
+
+against TCBP-JOBS alone on the same shots: both fail, the row only, TCBP-JOBS alone only, exact two-sided p (binomial on the discordant shots)
+R alone                                                                            0     0     0   p = 1
+P1 alone                                                                           0     0     0   p = 1
+P2 alone                                                                           0     0     0   p = 1
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                     0     0     0   p = 1
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                          0     0     0   p = 1
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2      0     0     0   p = 1
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                       0     0     0   p = 1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                   0     0     0   p = 1
+c: as b, with J among the candidates where it exists                               0     0     0   p = 1
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R               0     0     0   p = 1
+e: as d, with J among the candidates where it exists                               0     0     0   p = 1
+f: P1 where P1 = P2 = T; else J where it converged, else T                         0     0     0   p = 1
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R     0     0     0   p = 1
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network          0     0     0   p = 1
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order          0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among R, P1, P2                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T                         0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                      0     0     0   p = 1
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                   0     0     0   p = 1
+
+the network's own increment: a rule with the network against the same rule without learning, on the same candidates
+  a against aw: failures 0 against 0; both fail 0, only a fails 0, only aw fails 0; exact two-sided p = 1
+  a against ac: failures 0 against 0; both fail 0, only a fails 0, only ac fails 0; exact two-sided p = 1
+  b against bw: failures 0 against 0; both fail 0, only b fails 0, only bw fails 0; exact two-sided p = 1
+  h against f: failures 0 against 0; both fail 0, only h fails 0, only f fails 0; exact two-sided p = 1
+  g against gw: failures 0 against 0; both fail 0, only g fails 0, only gw fails 0; exact two-sided p = 1
+p = 0.004, 16 pairs: shot k of X (data sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1) with shot k of Z (795450f37a6ecaaefff72d78f5de5ca473a57e7991447b1b93366155c8a90e63)
+row                      failures [X Z]  failed pairs   rate per cycle
+R                                 [1 0]             1  5.36e-03 +- 5.5e-03
+P1                                [0 0]             0  0.00e+00 +- 0.0e+00
+P2                                [0 0]             0  0.00e+00 +- 0.0e+00
+T                                 [0 0]             0  0.00e+00 +- 0.0e+00
+a                                 [0 0]             0  0.00e+00 +- 0.0e+00
+aw                                [0 0]             0  0.00e+00 +- 0.0e+00
+ac                                [0 0]             0  0.00e+00 +- 0.0e+00
+b                                 [0 0]             0  0.00e+00 +- 0.0e+00
+bw                                [0 0]             0  0.00e+00 +- 0.0e+00
+c                                 [0 0]             0  0.00e+00 +- 0.0e+00
+d                                 [0 0]             0  0.00e+00 +- 0.0e+00
+e                                 [0 0]             0  0.00e+00 +- 0.0e+00
+f                                 [0 0]             0  0.00e+00 +- 0.0e+00   <- the marked rule
+h                                 [0 0]             0  0.00e+00 +- 0.0e+00
+g                                 [0 0]             0  0.00e+00 +- 0.0e+00
+gw                                [0 0]             0  0.00e+00 +- 0.0e+00
+oracle_R_P1_P2                    [0 0]             0  0.00e+00 +- 0.0e+00
+oracle_P1_P2_T                    [0 0]             0  0.00e+00 +- 0.0e+00
+oracle_P1_P2_T_R                  [0 0]             0  0.00e+00 +- 0.0e+00
+oracle_P1_P2_T_R_J                [0 0]             0  0.00e+00 +- 0.0e+00
+
+PREFLIGHT PASSED in 159 s: the plugin, candidates, evaluate_stim, tcbp_member, joint_member and ensemble all ran on 16 validation shots per basis

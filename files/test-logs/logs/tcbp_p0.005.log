@@ -1,0 +1,37 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}, mode serial; 2 shot file(s)
+test_X.npz: X memory, p = 0.005, 10000 shots, data sha256 1b13521cddb2bf5e5d4c7f1e85a8ecaaa3c72a0b99754a3f76b4a5a4a912fc8b
+  H is 936 x 8784; building the decoder ...
+  model fitted in 55.1 s, decoder built in 51 ms
+    1000 shots decoded, mean 9.0 ms
+    2000 shots decoded, mean 8.8 ms
+    3000 shots decoded, mean 9.0 ms
+    4000 shots decoded, mean 8.9 ms
+    5000 shots decoded, mean 8.9 ms
+    6000 shots decoded, mean 8.8 ms
+    7000 shots decoded, mean 8.8 ms
+    8000 shots decoded, mean 8.8 ms
+    9000 shots decoded, mean 8.8 ms
+    10000 shots decoded, mean 8.7 ms
+  failures 186 of 10000  1.860%  95% Wilson interval [1.613%, 2.144%]; the correction does not reproduce the syndrome on 0 shots
+  serial decode, the first decode of the basis untimed: mean 8.7 ms, median 5.5 ms, p99 43 ms per shot, on AMD EPYC-Milan Processor, GPU NVIDIA A100-SXM4-80GB
+  decoded a second time, 0 of the first 256 shots change their 12 bits
+  saved /home/blakew3/mlBranchMidwest/runs/test/tcbp_p0.005/test_X.tcbp.npz
+test_Z.npz: Z memory, p = 0.005, 10000 shots, data sha256 b86ae320d13fa555d8358fe399156d28d4e52b01fabf8eafa1b30e60bdcd0cef
+  H is 936 x 8784; building the decoder ...
+  model fitted in 55.3 s, decoder built in 45 ms
+    1000 shots decoded, mean 8.2 ms
+    2000 shots decoded, mean 8.2 ms
+    3000 shots decoded, mean 8.3 ms
+    4000 shots decoded, mean 8.3 ms
+    5000 shots decoded, mean 8.2 ms
+    6000 shots decoded, mean 8.1 ms
+    7000 shots decoded, mean 8.1 ms
+    8000 shots decoded, mean 8.2 ms
+    9000 shots decoded, mean 8.2 ms
+    10000 shots decoded, mean 8.2 ms
+  failures 177 of 10000  1.770%  95% Wilson interval [1.529%, 2.048%]; the correction does not reproduce the syndrome on 0 shots
+  serial decode, the first decode of the basis untimed: mean 8.2 ms, median 5.4 ms, p99 41 ms per shot, on AMD EPYC-Milan Processor, GPU NVIDIA A100-SXM4-80GB
+  decoded a second time, 0 of the first 256 shots change their 12 bits
+  saved /home/blakew3/mlBranchMidwest/runs/test/tcbp_p0.005/test_Z.tcbp.npz

@@ -30,3 +30,7 @@
 2026-11-22T10:35:12Z START net_p0.005
 2026-11-22T10:35:43Z END net_p0.005 exit 0: X memory: failures 1885 of 10000 (always-0 would fail 9999) Z memory: failures 1810 of 10000 (always-0 would fail 9999) 
 2026-11-22T10:35:43Z START net_p0.004
+2026-11-22T10:36:14Z END net_p0.004 exit 0: X memory: failures 420 of 10000 (always-0 would fail 9993) Z memory: failures 434 of 10000 (always-0 would fail 9998) 
+2026-11-22T10:36:14Z START net_p0.003
+2026-11-22T10:36:45Z END net_p0.003 exit 0: X memory: failures 64 of 10000 (always-0 would fail 9996) Z memory: failures 59 of 10000 (always-0 would fail 9992) 
+2026-11-22T10:37:01Z START cand_p0.004: weight 2, pid 224632; before it: tokens 8, CPUs in use 8.5, throttled so far 4839.1 s

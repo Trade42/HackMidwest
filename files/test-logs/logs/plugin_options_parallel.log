@@ -1,0 +1,5 @@
+X checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt, sha256 d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933
+PLUGIN_RULE X network    (network 60 failures, converged 67, on 25000 shots; logits of checkpoint step 120000)
+Z checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt, sha256 fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700
+PLUGIN_RULE Z network    (network 68 failures, converged 73, on 25000 shots; logits of checkpoint step 100000)
+wrote /home/blakew3/mlBranchMidwest/runs/test/hierarchy_options_parallel.json: {"rule": {"X": "network", "Z": "network"}, "seeds": [1, 1001], "checkpoints": {"X": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt", "Z": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt"}, "device": "cpu", "torch_threads": 1, "parallel": true}

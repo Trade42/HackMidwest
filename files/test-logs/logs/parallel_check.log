@@ -1,0 +1,5 @@
+validation_X.npz: X memory, p = 0.004, 300 shots, relay-BP and the rule ran on 1; shots where the two modes differ: 0
+  mean time per shot on this machine: sequential 139.3 ms, side by side 95.1 ms (wall time, two cores)
+validation_Z.npz: Z memory, p = 0.004, 300 shots, relay-BP and the rule ran on 1; shots where the two modes differ: 0
+  mean time per shot on this machine: sequential 95.8 ms, side by side 66.0 ms (wall time, two cores)
+RESULT: the side-by-side mode gives the sequential answers on every shot

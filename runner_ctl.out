@@ -16,3 +16,5 @@
 2026-11-22T10:10:01Z END ctl/080-predecoder-fresh-validation exit 0
 2026-11-22T10:10:34Z START ctl/090-z-final-checkpoint-to-logs at 7e18000
 2026-11-22T10:10:34Z END ctl/090-z-final-checkpoint-to-logs exit 0
+2026-11-22T10:36:34Z START ctl/100-test-logs-to-logs at dbaec47
+2026-11-22T10:36:39Z END ctl/100-test-logs-to-logs exit 0

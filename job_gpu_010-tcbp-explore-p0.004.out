@@ -17,3 +17,4 @@ train_X.npz: X memory, p = 0.004, 20000 shots, data sha256 98c0afeb2a0b6b27f3b68
     shots 0 to 4095 decoded
     shots 4096 to 8191 decoded
     shots 8192 to 12287 decoded
+    shots 12288 to 16383 decoded

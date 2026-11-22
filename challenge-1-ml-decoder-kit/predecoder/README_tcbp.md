@@ -404,7 +404,50 @@ priors of shots 0 to 49 (`logs/tcbp_speed_job1_summary.json`, `profile.variants`
     the server's exact build.
   - It holds an internal `set_priors`, and the message "the JOBS column costs are fixed at construction".
   - It exports no such function, so this was not tried.
-- Not tried: options that change the decoder (batch sizes, thread counts, JOBS's own settings).
+- Options that change the decoder: four were timed in job 2 (below), and none built faster. JOBS's own settings were
+  not tried.
+
+### tcbp-speed job 2: the decoder's free moved off the answer's path (validation)
+
+Server job `ctl/170-tcbp-speed-2.sh`, code at `958ffe9b`, run 18:19:49 to 18:26:48 UTC. Logs: `logs/tcbp_speed_job2*`.
+It used the same shots, priors, logits and machine as job 1. **This time another TCBP-JOBS process (the orchestrator's
+`cpu/110`) shared the GPU slice**, so every time here is 1 to 2 ms above job 1's. Compare arms within one process only.
+
+The job ran two processes, each with its own model fit. Each had a dense arm (for the answers) and an inline `csr` arm
+(for the time), beside the arm under test:
+
+- `csr_after`: the decoder is freed once the answer is recorded;
+- `csr_thread`: the decoder is freed by a background thread (1 process, 2 Python threads, a queue of at most 2).
+
+Times are per shot, in ms.
+
+| process: arm | answers against dense (bits, faults, corrections) | time to answer, mean (p99) | wall time per shot |
+|------|---|---:|---:|
+| A: dense | - | 50.4 (64.2) | 50.6 |
+| A: csr | 0, 0, 0 | 43.3 (57.9) | 43.5 |
+| A: **csr_after** | 0, 0, 0 | **39.2** (53.5) | 44.0 |
+| B: dense | - | 49.9 (64.3) | 50.1 |
+| B: csr | 0, 0, 0 | 43.7 (58.8) | 43.8 |
+| B: csr_thread | 0, 0, 0 | 40.0 (53.6) | 45.6 |
+
+- **Neither arm is a gain by the rule fixed before the run**: a gain needed a wall time per shot below `csr`'s in the
+  same process. `csr_after` is 0.5 ms slower and `csr_thread` 1.8 ms slower.
+- **Both give the answer about 4 ms sooner**: 4.1 ms for `csr_after` and 3.7 ms for `csr_thread`. In a loop that
+  decodes shot after shot, the free is still paid before the next shot.
+  - `csr_after` pays it in the gap between shots.
+  - `csr_thread` does not overlap it either: the free took 5.4 ms on the thread, against 4.6 ms inline, and the next
+    build grew by 0.9 ms. The thread did all 1,000 frees itself (`not_last_owner` 0, no errors).
+- Freeing after the answer helps a decoder that waits for each shot, if the free fits in the wait. In this pipeline, the
+  free could happen while the network (9.4 ms) runs on the next shot. That overlap was not tested here (no torch in the
+  TCBP environment).
+- **The thread is not shown safe.** Equal answers on 1,000 shots are weak evidence against a race between two threads.
+  It is not offered as an option of `tcbp.py`.
+- **Decoder options, timing probes only** (with CSR, 50 builds each):
+  - the reference build took 34.8 ms;
+  - `bp_batch_size=1` took 35.2 ms, `n_threads=1` 34.4 ms and `repeatable=False` 34.5 ms;
+  - `osd_batch_size=1` was refused ("osd_batch_size has no effect with osd_method=4").
+  
+  No option tried here shortens JOBS's set-up.
 
 ## What was not done, and what is not tested
 

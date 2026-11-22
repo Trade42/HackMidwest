@@ -50,6 +50,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `abl_pooled_only_network` | 79 | `tables/test_ablation.md` |
 | `abl_pooled_only_weight` | 57 | `tables/test_ablation.md` |
 | `abl_pooled_p` | 0.071 | `tables/test_ablation.md` |
+| `abl_verdict` | level with | `tables/test_ablation.md` |
 | `c3_ensemble_vs_hierarchy_both` | 2 | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_hierarchy_only_first` | 0 | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_hierarchy_only_second` | 1 | `tables/test_comparisons.md` |

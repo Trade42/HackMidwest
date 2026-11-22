@@ -467,6 +467,7 @@ def ladder_tables(combined):
         beats = pooled["a"] < pooled["aw"] and p_value < 0.05
         fact("slide3_title", "The network is a poor decoder alone; as a tie-break it " + ("beats the best hand-written rule on the test shots" if beats
              else "is level with the best hand-written rule"), source)
+        fact("abl_verdict", "better than" if beats else "level with", source)
         fact("slide3_close", (f"So most of the gain over relay-BP comes from the hierarchy, and the network adds a further {further:.1%} on the test shots."
                               if beats else "So the gain over relay-BP comes from the hierarchy itself; on the test shots the network does not add to it."), source)
     else:
@@ -476,6 +477,7 @@ def ladder_tables(combined):
         fact("framing", None, source)
         fact("slide3_title", "The network is a poor decoder alone; its value as a tie-break is decided on the test shots", source)
         fact("slide3_close", "The test shots decide whether the network adds to the hierarchy.", source)
+        fact("abl_verdict", "not yet compared with", source)
     ladder = write("test_ladder",
                    "**Whose gain is whose, on the test shots.** Every rung is scored on the same per-shot answers (relay-BP and PriorTilt under two seeds "
                    "on every shot, a fresh decoder per 500 shots), so each step is a paired comparison with the rung before it. These rows are combined "

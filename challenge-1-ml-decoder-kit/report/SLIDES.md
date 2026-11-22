@@ -158,7 +158,7 @@ Four things are learned: PriorTilt's 14 parameters (by its authors, IonQ), our n
 (a statistical model fitted on training shots), and the teammates' router. The honest account of ours:
 - The neural tie-break was motivated by a measurement: among 16 relay-BP candidates the right answer is present on
   <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, but the classical score picks it on only <!--f:cand_lowest-->71<!--/f--> (`report/tables/background.md`).
-  It clearly beats that classical score, but on the test shots it is level with the best hand-written rule
-  (<!--f:abl_pooled_a-->494<!--/f--> against <!--f:abl_pooled_aw-->472<!--/f--> failed pairs, p = <!--f:abl_pooled_p-->0.071<!--/f-->). Our gain over relay-BP comes from the hierarchy.
+  It clearly beats that classical score; on the test shots it is <!--f:abl_verdict-->level with<!--/f--> the best hand-written rule
+  (<!--f:abl_pooled_a-->494<!--/f--> against <!--f:abl_pooled_aw-->472<!--/f--> failed pairs, p = <!--f:abl_pooled_p-->0.071<!--/f-->). <!--f:slide3_close-->So the gain over relay-BP comes from the hierarchy itself; on the test shots the network does not add to it.<!--/f-->
 - The loss-time tracker is the learned part with a clear gain: it recovers <!--f:trk_gain-->58% (38% to 78%)<!--/f--> of what knowing the true loss time
   would give, on its own test shots.

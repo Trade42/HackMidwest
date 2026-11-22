@@ -18,8 +18,8 @@ them 1.64× more (95% 1.42–1.94): L3 passes the brief's 1.5 on the point estim
 
 **How far it got.** Done: L0; the map checks; L1 at 5e-4 (partly), 1e-3 and 2e-3; L3; L4; one L2 piece.
 Moved by the orchestrator: L1 at 2e-4 and the rest of 5e-4 to server jobs B and C, L2's other pieces to
-server job D, the slot-level oracle and a replication of L3 to server job A, and L5 to the task
-`loss-tracker`. Server tables are not in this file yet: HANDOFF.md lists them.
+server job D, the slot-level oracle and a replication of L3 to server job A (done, included below), and L5 to
+the task `loss-tracker`. The tables of jobs B, C and D are not in this file yet: HANDOFF.md lists them.
 
 ## The loss model (our assumption)
 
@@ -243,8 +243,7 @@ ORACLE cuts the failures by 1.64 against the starter's flag-aware decoder (4,000
 decoder with the same map. On the starter's own map it cuts them by 1.53 (2,000 shots). Every point estimate
 passes 1.5. The intervals reach down to 1.42 and 1.22, so 1.5 is likely but not certain; 1.2 is excluded on the
 4,000 shots. **L3 passes on the point estimate: the tracker idea goes on.** These are oracle numbers, a ceiling
-for any tracker of the loss round, not decoder results. The slot-level oracle (the true loss CX) and a second
-set of 4,000 shots are server job A (seed 5300), not yet in this file.
+for any tracker of the loss round, not decoder results. Server job A (seed 5300, below) replicates this on 4,000 more shots and adds the slot-level oracle.
 
 Two more observations. The oracle also converges faster: 1,655 mean iterations against 2,339, and 63
 unconverged shots against 108. And the exact location weights do not beat the starter's rounder ones
@@ -255,6 +254,40 @@ Commands: `loss/runs/L0_L1_s1e-3.sh` and `loss/runs/L3b_s1e-3.sh` (decodes), `lo
 `results/L3_starter_X_p0.004_s1e-3.{json,md}` (reference `starter`), `results/L3_oracles_X_p0.004_s1e-3.{json,md}`.
 Logs: `logs/L0_L1_s1e-3.log`, `logs/L3b_part1_laneD.log`.
 
+## Second machine: server job A (L3 replication, seed 5300)
+
+**A second machine's numbers.** The team's Linux server (ICRN), run by Sal: 10 worker processes, checkout of
+`loss-gates` at `6ea830ce35d1b6ab912e58f673e3fc542cd7b902`. Failure counts do not depend on the machine; times
+do, and none is quoted from it. Command, from `challenge-1-ml-decoder-kit/`:
+
+```sh
+python -m loss.job --basis X --p 0.004 --s 1e-3 --shots 4000 --seed 5300 --workers 10 --out ~/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300 \
+  --group starter,exact,oracle-round,starter-oracle-round,starter@0.5/stop1:4000 --group oracle-slot:4000 \
+  --table starter:starter,starter-oracle-round,oracle-round,oracle-slot,exact,starter@0.5/stop1 --table exact:exact,oracle-round,oracle-slot
+```
+
+Dataset: 4,000 shots, seeds 5300 and 5301, sha256 `60c09da58402097fd70cca4e6044fc4affadcfbfbcbc9fb2227694e4642a9310`,
+10.08 lost data atoms and 10.33 check heralds per shot. Its log and tables are on the branch `server-logs`
+(`loss_jobs.out`, `files/loss/L3_s1e-3_seed5300/tables.md`; "job done in 1682s", no error). Every row on
+the same 4,000 shots:
+
+| Condition | Failures / 4,000 | Fail fraction (95% Wilson) | Unconverged (right) | Mean iterations | vs `starter`: only starter / only cond | `starter` ÷ cond (95% bootstrap) |
+|---|---|---|---|---|---|---|
+| `starter` | 162 | 4.05% (3.48–4.71) | 112 (1) | 2,325 | reference | |
+| ORACLE `starter-oracle-round` | 107 | 2.67% (2.22–3.22) | 70 (0) | 1,698 | 86 / 31 (p = 4e-7) | 1.51 (1.28–1.79) |
+| ORACLE `oracle-round` | 96 | 2.40% (1.97–2.92) | 54 (0) | 1,634 | 90 / 24 (p = 4e-10) | 1.69 (1.44–2.01) |
+| ORACLE `oracle-slot` | 87 | 2.17% (1.77–2.68) | 70 (9) | 1,545 | 111 / 36 (p = 4e-10) | 1.86 (1.54–2.30) |
+| `exact` | 181 | 4.52% (3.92–5.21) | 131 (3) | 2,554 | 44 / 63 (p = 0.08) | 0.90 (0.80–1.01) |
+| `starter@0.5/stop1` | 178 | 4.45% (3.85–5.13) | 112 (1) | 1,020 | 9 / 25 (p = 0.009) | 0.91 (0.85–0.97) |
+
+Against `exact` (the same map): ORACLE `oracle-round` 1.89 (1.63–2.25), ORACLE `oracle-slot` 2.08 (1.73–2.58).
+
+It replicates every L3 finding of this PC on independent shots. The round-level oracle cuts failures 1.69×
+against the starter (this PC: 1.64×). Pooled over the 8,000 shots of both machines, it is 338 → 203, or 1.67×.
+The starter-map oracle cuts them 1.51× (this PC, 2,000 shots: 1.53×). The exact weights do not help, and
+stopping at the first solution costs failures. The new row is the slot-level oracle: knowing the exact loss CX
+instead of the round adds a little more (87 against 96 failures), for 1.86× in all.
+
 ## L2: the flag-to-prior map, piece by piece (s = 1e-3)
 
 How far it got: one of the five comparisons is measured on this PC; the rest is server job D (below).
@@ -264,7 +297,7 @@ How far it got: one of the five comparisons is measured on this PC; the rest is 
 | final-readout flip at 0.5 | in the starter | leave-one-out (`starter-nofinal`): server job D | to come |
 | hook columns of flagged check atoms of the other basis | in the starter (its docstring says otherwise) | leave-one-out (`starter-nohook`): server job D | to come |
 | lossless priors wherever no flag fired | in the starter | leave-one-out (`starter-ratebase`): server job D | to come |
-| location weights (geometric, exact P(lost before), the columns inside a run) | **missing from the starter** | `exact` 189 against `starter` 176 failures; 59 / 46 discordant, p = 0.24; ratio 0.93 (0.83–1.04) | **no**: it does not lower the failures |
+| location weights (geometric, exact P(lost before), the columns inside a run) | **missing from the starter** | `exact` 189 against `starter` 176 failures; 59 / 46 discordant, p = 0.24; ratio 0.93 (0.83–1.04). Server job A, 4,000 other shots: 181 against 162, 63 / 44, p = 0.08, ratio 0.90 (0.80–1.01) | **no**: it does not lower the failures |
 | cap on a raised prior: 0.5, 0.4, 0.25 | 0.5 | `exact@0.4`, `oracle-round@0.4`, `exact@0.25`, `oracle-round@0.25`: server job D | to come |
 
 The local L2 runs (`loss/runs/L2_s1e-3.sh`, 500 shots) were not reached: the orchestrator moved L2 to server
@@ -272,7 +305,35 @@ job D, on the 4,000 shots of job A (seed 5300), 1,000 shots per condition.
 
 ## L4: what per-shot priors cost
 
-L4_PLACEHOLDER
+Machine: this PC (AMD Ryzen 7 7730U), one process on CPU 0 with its sibling thread idle (lane D held), nice 15,
+the other lanes busy with other workers. Wall-clock `perf_counter`. Command: `loss/runs/L4_timing.sh`
+(`python -m loss.timing`). Data: the L0 dataset (lossless shots) and the L3 dataset (s = 1e-3).
+
+| What | Mean | Median | p95 | n |
+|---|---|---|---|---|
+| relay-BP decoder construction, lossless priors (H 936 × 8,784) | 7.8 ms | 7.4 ms | 9.9 ms | 30 |
+| relay-BP decoder construction, a shot's flag-aware priors | 8.1 ms | 7.4 ms | 10.9 ms | 30 |
+| building a shot's flag-aware priors (`starter`) | 0.26 ms | 0.25 ms | 0.36 ms | 200 |
+| BP-OSD (`ldpc` 2.4.1) construction | 113 ms | 113 ms | 118 ms | 5 |
+| BP-OSD `update_channel_probs` (new priors in place) | 1.7 ms | 1.7 ms | 1.8 ms | 30 |
+| relay-BP decode, lossless shots, one decoder reused | 571 ms | 76 ms | 1,458 ms | 100 |
+| relay-BP build + decode, lossless shots, a new decoder per shot | 625 ms | 96 ms | 1,206 ms | 100 |
+| flag-aware at s = 1e-3, per shot: priors + build + decode | 1,785 ms (0.5 + 7.9 + 1,776) | 248 ms | 10,658 ms | 30 |
+
+- **Relay-BP takes its priors only at construction.** Its Python methods are `decode`, `decode_batch`,
+  `decode_detailed` and `decode_detailed_batch`. So per-shot priors mean a new decoder per shot: about 8 ms,
+  against a median decode of 76 ms (lossless) or 239 ms (flag-aware, s = 1e-3). That is 10% and 3% of the
+  median, and under 1% of the mean, which the shots that run all 300 legs dominate.
+- The reused and the rebuilt decoder are not the same experiment: a reused decoder carries its random state
+  from shot to shot, so the two decode-time rows differ by more than the 8 ms of construction. Their medians
+  differ by 20 ms; their means are dominated by a few long shots.
+- **BP-OSD can change its priors without a rebuild.** `update_channel_probs` takes 1.7 ms, against 113 ms for
+  a new decoder. Checked: on 20 loss shots, a decoder built with the lossless priors and then updated to each
+  shot's priors decoded every shot exactly as a decoder built with that shot's priors (20 of 20 identical).
+- Clifft, single thread, on this core: 220 shots/s without loss, 177 shots/s at s = 1e-3, 162 shots/s with the
+  probes (1,000 shots each, compilation included).
+
+Results: `results/L4_timing.json`. Log: `logs/L4_timing.log`.
 
 ## L5: the flicker table
 

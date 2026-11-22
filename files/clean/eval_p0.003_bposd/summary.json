@@ -1,0 +1,142 @@
+{
+  "cycles": 12,
+  "p": 0.003,
+  "circuits": {
+    "X": {
+      "path": "/home/blakew3/mlBranchMidwest/clean-base/challenge-1-ml-decoder-kit/circuits/gross_X_r12_p0.001.stim",
+      "sha256": "d5e86451e36a799eceeb805aeea00bc9bce79c0d883ed454e4e2b3f44f5c5e4c"
+    },
+    "Z": {
+      "path": "/home/blakew3/mlBranchMidwest/clean-base/challenge-1-ml-decoder-kit/circuits/gross_Z_r12_p0.001.stim",
+      "sha256": "4ea8774901c63a476f4337d5d9b6c54c08eefd22f24036198f8333750f16c300"
+    }
+  },
+  "plugin_options": {},
+  "datasets": {
+    "test": {
+      "X": {
+        "path": "/home/blakew3/mlBranchMidwest/clean-base/challenge-1-ml-decoder-kit/data/p0.003/test_X.npz",
+        "sha256": "f7bc181399a0a8fd1324950c98a8419c0082d7c34940c03dfb34c9e2cefc1ff3",
+        "basis": "X",
+        "p": 0.003,
+        "seed": 301,
+        "shots": 10000,
+        "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+      },
+      "Z": {
+        "path": "/home/blakew3/mlBranchMidwest/clean-base/challenge-1-ml-decoder-kit/data/p0.003/test_Z.npz",
+        "sha256": "f5ac5b336f4155870fd8a6792ad61e21d5d76f04e05a9c09419879b6512e7f49",
+        "basis": "Z",
+        "p": 0.003,
+        "seed": 302,
+        "shots": 10000,
+        "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+      }
+    }
+  },
+  "package_versions": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "matplotlib": "3.11.2"
+  },
+  "machine": {
+    "system": "Linux",
+    "release": "6.8.0-149-generic",
+    "machine": "x86_64",
+    "processor": "",
+    "python": "3.12.16",
+    "cpu_count": 24,
+    "workers": 1,
+    "thread_environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": "1",
+      "RAYON_NUM_THREADS": null
+    },
+    "native_decoder_threads": "not exposed by the installed decoder API",
+    "resource_note": "ru_maxrss is peak memory of this parent process only; it excludes other workers"
+  },
+  "randomness": {
+    "dataset_seeds": {
+      "test": {
+        "X": 301,
+        "Z": 302
+      }
+    },
+    "relay_bp_seed": 0,
+    "relay_bp_seed_source": "installed API default; kit factory leaves it unset",
+    "bposd_seed": null,
+    "bposd_seed_note": "kit factory does not set a seed",
+    "decoder_order": [
+      "bposd"
+    ]
+  },
+  "outcome_policy": "Every returned prediction is scored, including unconverged results; exceptions fail the run.",
+  "timing": "Existing seconds fields preserve the kit decoder-call timer for baselines. Separate total_seconds fields time before_shot plus the complete decode_shot call for every decoder, including projection, router, and fallback work; one-time construction is separate. Batch throughput uses complete evaluation wall time.",
+  "decoders": [
+    {
+      "name": "bposd",
+      "configuration": {
+        "X": {
+          "max_iter": 80,
+          "bp_method": "minimum_sum",
+          "ms_scaling_factor": 1.0,
+          "osd_method": "OSD_CS",
+          "osd_order": 10
+        },
+        "Z": {
+          "max_iter": 80,
+          "bp_method": "minimum_sum",
+          "ms_scaling_factor": 1.0,
+          "osd_method": "OSD_CS",
+          "osd_order": 10
+        }
+      },
+      "setup_seconds_by_basis": {
+        "X": 0.05037021008320153,
+        "Z": 0.05556994304060936
+      },
+      "peak_parent_rss_bytes_before": 297340928,
+      "peak_parent_rss_bytes_after": 297340928,
+      "shot_metrics": "01_bposd_metrics.json",
+      "summary": {
+        "decoder": "bposd",
+        "p": 0.003,
+        "cycles": 12,
+        "shots_X": 10000,
+        "shots_Z": 10000,
+        "paired_shots": 10000,
+        "failures_X": 26,
+        "failures_Z": 34,
+        "failures_pair": 60,
+        "per_cycle_rate": 0.0005013802940021517,
+        "standard_error": 6.473484079760894e-05,
+        "mean_pair_ms": 128.46266032583083,
+        "median_pair_ms": 18.012112996075302,
+        "p99_pair_ms": 791.2902894010771,
+        "mean_pair_kit_ms": 128.46266032583083,
+        "mean_pair_total_ms": 128.74106703049037,
+        "median_pair_total_ms": 18.204904510639608,
+        "p99_pair_total_ms": 792.1291139943062,
+        "setup_seconds": 0.10594015312381089,
+        "before_shot_seconds": 0.0,
+        "decode_loop_seconds": 1288.2545039349934,
+        "evaluation_wall_seconds": 1290.0627021540422,
+        "batch_throughput_pairs_per_second": 7.751561209624005,
+        "converged_fraction": null,
+        "first_leg_converged_fraction": null,
+        "fallback_fraction": null,
+        "mean_iterations": null,
+        "threshold": null,
+        "threshold_X": null,
+        "threshold_Z": null,
+        "artifacts": "01_bposd_shots.npz"
+      }
+    }
+  ]
+}

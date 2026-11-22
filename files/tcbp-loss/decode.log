@@ -19,3 +19,9 @@ files ['X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz', 'X_f0.6_loss_s
   main block f0.4 700-799 done, 374 s; failures so far bm 41, fm 0, fh 5 of 800
   main block f0.6 700-799 done, 398 s; failures so far bm 446, fm 27, fh 196 of 800
   main block f0.4 800-899 done, 415 s; failures so far bm 45, fm 0, fh 5 of 900
+  main block f0.6 800-899 done, 439 s; failures so far bm 504, fm 32, fh 219 of 900
+  main block f0.4 900-999 done, 457 s; failures so far bm 49, fm 0, fh 5 of 1000
+  main block f0.6 900-999 done, 480 s; failures so far bm 562, fm 37, fh 242 of 1000
+  late block f0.4 0-99 done, 486 s; failures so far bh 12 of 100
+  late block f0.6 0-99 done, 496 s; failures so far bh 70 of 100
+  late block f0.4 100-199 done, 503 s; failures so far bh 24 of 200

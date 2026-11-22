@@ -10,3 +10,7 @@ plan /home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/plan.json: tasks [('f0.8
   f0.8-seed4800 block 500-599 done, 166 s; failures so far m 5, h 75, r 18 of 600
   f0.8-seed4800 block 600-699 done, 183 s; failures so far m 5, h 87, r 19 of 700
   f0.8-seed4800 block 700-799 done, 200 s; failures so far m 6, h 99, r 23 of 800
+  f0.8-seed4800 block 800-899 done, 217 s; failures so far m 7, h 108, r 25 of 900
+  f0.8-seed4800 block 900-999 done, 233 s; failures so far m 8, h 119, r 27 of 1000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-retrain/out-163ff2b/decode/f0.8-seed4800/per_shot.npz: 1000 shots scored
+done; 233 s

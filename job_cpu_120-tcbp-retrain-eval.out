@@ -20,3 +20,12 @@ NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
 evaluate kit exit 0
 evaluate retrained exit 0
 Sun Nov 22 18:37:02 UTC 2026
+decode exit 0
+error: unexpected argument '-3' found
+
+  tip: to pass '-3' as a value, use '-- -3'
+
+Usage: tail [OPTION]... [FILE]...
+
+For more information, try '--help'.
+Sun Nov 22 18:41:02 UTC 2026

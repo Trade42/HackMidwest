@@ -1,5 +1,12 @@
 # tcbp-fastpath: a fast path for easy shots
 
+**Where it ended (read this first).** After three declared rounds on validation, the rule frozen is C9
+(`FROZEN_RULE.md`). Run the network; if the head's total entropy is at most 69.1 bits, answer with TCBP-JOBS with the
+kit's priors, built once; otherwise run the TCBP version. On fresh held-out shots (X, p = 0.005, seed 2026112251) it
+**holds with a cost**: 48 failures against the TCBP version's 48 (1 added, 1 removed), 35% of the shots on the fast
+path, 33.5 ms mean against 46.2 ms, and the same p99. It is a p = 0.005 rule only. The sections below follow the
+order of the work: round 1 (a negative result), round 2, round 3, p = 0.004, and the held-out check.
+
 **Exploration, after the test results; a separate branch (`tcbp-fastpath`).** Validation shots only:
 `data/p0.005/validation_X.npz`, 5,000 Stim circuit shots, seed 201, X memory. No test file was opened. Nothing was
 decoded here: the tool reads saved per-shot files.

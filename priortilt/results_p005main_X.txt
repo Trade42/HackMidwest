@@ -1,0 +1,60 @@
+﻿basis X (validation_X + train_X): 25000 shots
+  a. P1 against P2: both fail 508, P1 only 234, P2 only 269, both right 23989 (McNemar exact p = 0.129)
+     patterns (ok = right, x = wrong): R ok P1 ok P2 ok: 23618; R ok P1 ok P2 x: 139; R ok P1 x P2 ok: 127; R ok P1 x P2 x: 90; R x P1 ok P2 ok: 371; R x P1 ok P2 x: 130; R x P1 x P2 ok: 107; R x P1 x P2 x: 418
+  b. predictions not all equal: 1276 shots (5.104%); failing shots inside that set: R 920 of 1026, P1 636 of 742, P2 671 of 777
+  c. rule: failures, logical error, mean time per shot (sum of the decoders it runs)
+     R alone                                    1026  4.104%   909.6 ms
+     P1 alone                                    742  2.968%   199.4 ms
+     P2 alone                                    777  3.108%   200.2 ms
+     lowest weight of R, P1, P2                  814  3.256%  1309.2 ms
+     majority (ties: lowest weight)              671  2.684%  1309.2 ms
+     P1 unless P1 != P2, then lowest weight      676  2.704%   579.0 ms
+     extra: lowest weight among converged        576  2.304%  1309.2 ms
+     P1 unless P1 != P2, then lowest weight among converged  571  2.284%   579.0 ms
+  unconverged: R 610, P1 228, P2 214 | data sha256 25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312, cfa08c9113b77521f7ba249ddffc0fb94cda783989066dbfa22b380d1747b26b
+=== network selection, step 60000
+X memory, p = 0.005, 25000 shots (validation_X + train_X, results_p005main); network = checkpoint_step60000.pt; network batch-one latency 17.1 ms (beside the trainer)
+not-all-equal set: 1276 shots; with at least one right candidate: 964; all three wrong: 418
+rule                                         failures   error   right pick when one existed (not-all-equal set)   ms/shot
+R alone                                          1026  4.104%                     356 of 964                         909.6
+P1 alone                                          742  2.968%                     640 of 964                         199.4
+P2 alone                                          777  3.108%                     605 of 964                         200.2
+8b lowest weight                                  814  3.256%                     568 of 964                        1309.2
+8b majority (ties: lowest weight)                 671  2.684%                     711 of 964                        1309.2
+8b P1 unless P1 != P2, then lowest weight         676  2.704%                     706 of 964                         579.0
+8b extra: lowest weight among converged           576  2.304%                     806 of 964                        1309.2
+a. network picks                                  705  2.820%                     677 of 964                        1326.3
+b. network breaks ties                            656  2.624%                     726 of 964                         579.5
+c. weight plus network, C = 10                    640  2.560%                     742 of 964                         579.5
+c. weight plus network, C = 30                    643  2.572%                     739 of 964                         579.5
+c. weight plus network, C = 100                   651  2.604%                     731 of 964                         579.5
+d. network alone                                 8252 33.008%                                                        17.1
+shots where R, P1 and P2 are all wrong: 418; the network alone is right on 30 of them
+inside the network's most confident shots (confidence = smallest |logit| of the 12):
+  top  10% (2500 shots): network fails 0, R fails 5, P1 fails 3, P2 fails 3
+  top  25% (6250 shots): network fails 9, R fails 20, P1 fails 13, P2 fails 15
+  top  50% (12500 shots): network fails 227, R fails 67, P1 fails 51, P2 fails 58
+Constants C, and any threshold read here, are fitted to these shots.
+=== network selection, step 110000
+X memory, p = 0.005, 25000 shots (validation_X + train_X, results_p005main); network = checkpoint_step110000.pt; network batch-one latency 16.4 ms (beside the trainer)
+not-all-equal set: 1276 shots; with at least one right candidate: 964; all three wrong: 418
+rule                                         failures   error   right pick when one existed (not-all-equal set)   ms/shot
+R alone                                          1026  4.104%                     356 of 964                         909.6
+P1 alone                                          742  2.968%                     640 of 964                         199.4
+P2 alone                                          777  3.108%                     605 of 964                         200.2
+8b lowest weight                                  814  3.256%                     568 of 964                        1309.2
+8b majority (ties: lowest weight)                 671  2.684%                     711 of 964                        1309.2
+8b P1 unless P1 != P2, then lowest weight         676  2.704%                     706 of 964                         579.0
+8b extra: lowest weight among converged           576  2.304%                     806 of 964                        1309.2
+a. network picks                                  641  2.564%                     741 of 964                        1325.6
+b. network breaks ties                            610  2.440%                     772 of 964                         579.5
+c. weight plus network, C = 10                    610  2.440%                     772 of 964                         579.5
+c. weight plus network, C = 30                    605  2.420%                     777 of 964                         579.5
+c. weight plus network, C = 100                   608  2.432%                     774 of 964                         579.5
+d. network alone                                 4564 18.256%                                                        16.4
+shots where R, P1 and P2 are all wrong: 418; the network alone is right on 50 of them
+inside the network's most confident shots (confidence = smallest |logit| of the 12):
+  top  10% (2500 shots): network fails 0, R fails 5, P1 fails 4, P2 fails 5
+  top  25% (6250 shots): network fails 1, R fails 20, P1 fails 13, P2 fails 18
+  top  50% (12500 shots): network fails 21, R fails 57, P1 fails 49, P2 fails 50
+Constants C, and any threshold read here, are fitted to these shots.

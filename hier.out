@@ -194,3 +194,7 @@ train_X.npz chunk 11: shots 5500 to 5999, failures R 0, P1 0, P2 0, relay-BP ran
 train_X.npz chunk 12: shots 6000 to 6499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 38 s
 train_X.npz chunk 13: shots 6500 to 6999, failures R 1, P1 0, P2 0, relay-BP ran on 500, 37 s
 train_X.npz chunk 14: shots 7000 to 7499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 26 s
+train_X.npz chunk 15: shots 7500 to 7999, failures R 0, P1 0, P2 0, relay-BP ran on 500, 47 s
+train_X.npz chunk 16: shots 8000 to 8499, failures R 1, P1 1, P2 1, relay-BP ran on 500, 38 s
+train_X.npz chunk 17: shots 8500 to 8999, failures R 0, P1 0, P2 0, relay-BP ran on 500, 34 s
+train_X.npz chunk 18: shots 9000 to 9499, failures R 1, P1 1, P2 1, relay-BP ran on 500, 28 s

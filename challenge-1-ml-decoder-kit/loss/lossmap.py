@@ -177,6 +177,8 @@ CONDITIONS = {
     "oracle-round":    dict(own=True, hook="geometric", data="oracle-round", final=True),
     "oracle-slot":     dict(own=True, hook="geometric", data="oracle-slot", final=True),
     "oracle-all":      dict(own=True, hook="oracle", data="oracle-slot", final=True),
+    # the starter's map (one column per cycle, uniform hooks) with the true loss round in place of the uniform guess
+    "starter-oracle-round": dict(own=True, hook="uniform", data="starter-oracle-round", final=True),
 }
 
 
@@ -264,6 +266,13 @@ class PriorBuilder:
             d = m.data[q]
             if spec["data"] == "starter":
                 cols.append(self.starter_cols[q]); vals.append(0.5 * (np.arange(CYCLES) + 0.5) / CYCLES)
+            elif spec["data"] == "starter-oracle-round":
+                c = (data_slot[i] - 1) // 6
+                post = np.zeros(72); post[6 * c:6 * c + 6] = self.w6
+                c_, a_ = m.data_activation(q, post)
+                tr = d["transition"] & (d["pos"] > 1)          # exactly the starter's 12 columns
+                assert (c_[tr] == self.starter_cols[q]).all()
+                cols.append(c_[tr]); vals.append(0.5 * a_[tr])
             else:
                 if spec["data"] == "uniform":
                     post = self.w72

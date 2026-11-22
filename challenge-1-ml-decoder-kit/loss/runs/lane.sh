@@ -22,13 +22,25 @@ lanes() {
   sleep 5
 }
 
-# part OUT DATA CONDITIONS START STOP   decode one part unless it exists
+# LANE=AD (default): each part takes lanes A+D if A is free, else D alone (see lanes).
+# LANE=A: each part takes lane A alone (4 workers, cores 4-7), for a second stream beside a lane-D stream.
+LANE=${LANE:-AD}
+
+# part OUT DATA CONDITIONS START STOP   decode one part unless it exists or another stream has claimed it
 part() {
   local out=$1 data=$2 conds=$3 start=$4 stop=$5
   [ -f "$out" ] && { echo "keep $out"; return 0; }
   mkdir -p "$(dirname "$out")"
-  lanes bash -c "\"$PY\" -m loss.decode --data \"$data\" --conditions \"$conds\" --start $start --stop $stop --workers \$WORKERS --out \"$out.tmp.npz\""
+  mkdir "$out.claim" 2>/dev/null || { echo "claimed by another stream: $out"; return 0; }
+  local cmd="\"$PY\" -m loss.decode --data \"$data\" --conditions \"$conds\" --start $start --stop $stop --workers \$WORKERS --out \"$out.tmp.npz\""
+  if [ "$LANE" = A ]; then
+    flock "$RUN/sim-a.lock" env WORKERS=4 nice -n 15 taskset -c 4-7 bash -c "$cmd"
+    sleep 5
+  else
+    lanes bash -c "$cmd"
+  fi
   mv "$out.tmp.npz" "$out"
+  rmdir "$out.claim"
 }
 
 # parts NAME DATA CONDITIONS STOP SIZE   decode shots 0..STOP in parts of SIZE (resumable)
@@ -40,9 +52,14 @@ parts() {
   done
 }
 
-# dataset OUT ARGS...   sample a dataset unless it exists (4 threads on lane D)
+# dataset OUT ARGS...   sample a dataset unless it exists (4 threads, on lane D, or lane A when LANE=A)
 dataset() {
   local out=$1; shift
   [ -f "$out" ] && { echo "keep $out"; return 0; }
-  flock "$RUN/sim-d.lock" nice -n 15 taskset -c 0-3 "$PY" -m loss.sample "$@" --threads 4 --out "$out"
+  if [ "$LANE" = A ]; then
+    flock "$RUN/sim-a.lock" nice -n 15 taskset -c 4-7 "$PY" -m loss.sample "$@" --threads 4 --out "$out.tmp.npz"
+  else
+    flock "$RUN/sim-d.lock" nice -n 15 taskset -c 0-3 "$PY" -m loss.sample "$@" --threads 4 --out "$out.tmp.npz"
+  fi
+  mv "$out.tmp.npz" "$out"
 }

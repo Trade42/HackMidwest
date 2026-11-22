@@ -31,12 +31,12 @@ def log_sigmoid(x):
     return -np.logaddexp(0.0, -x)
 
 
-def load(step, stems=STEMS):
+def load(step, stems=STEMS, results="results_8b", p="0.004"):
     parts, latency = [], []
     for stem in stems:
-        s = np.load(os.path.join(HERE, "results_8b", f"selector_{stem}.npz"))
-        e = np.load(os.path.join(EVAL, f"step{step}_{stem}_p0.004.npz"))
-        meta = json.load(open(os.path.join(EVAL, f"step{step}_{stem}_p0.004.json")))
+        s = np.load(os.path.join(HERE, results, f"selector_{stem}.npz"))
+        e = np.load(os.path.join(EVAL, f"step{step}_{stem}_p{p}.npz"))
+        meta = json.load(open(os.path.join(EVAL, f"step{step}_{stem}_p{p}.json")))
         if not np.array_equal(s["truth"], e["observables"]):
             raise SystemExit(f"{stem}: the network's observables and the selector file's truth differ")
         parts.append({**{k: s[k] for k in s.files if not k.startswith(("settings", "data_sha"))},
@@ -48,9 +48,20 @@ def load(step, stems=STEMS):
 
 
 def main():
-    step = int(sys.argv[1])
-    stems = tuple(sys.argv[2:]) or STEMS
-    d, net_ms = load(step, stems)
+    # analyze_network_select.py <step> [--results <folder>] [--p <p>] [<stem> ...]   (defaults: results_8b, 0.004)
+    args = sys.argv[1:]
+    step = int(args.pop(0))
+    results, p = "results_8b", "0.004"
+    while args and args[0].startswith("--"):
+        flag, value = args.pop(0), args.pop(0)
+        if flag == "--results":
+            results = value
+        elif flag == "--p":
+            p = value
+        else:
+            raise SystemExit(f"unknown option {flag}")
+    stems = tuple(args) or STEMS
+    d, net_ms = load(step, stems, results, p)
     truth, logits = d["truth"].astype(np.uint8), d["logits"]
     n = len(truth)
     pred = np.stack([d[f"predicted_{k}"] for k in NAMES])                       # [3, n, 12]
@@ -83,7 +94,7 @@ def main():
         choices[f"c. weight plus network, C = {c}"] = (np.where(p1_p2, 1, pick_c), sec[1] + sec[2] + np.where(p1_p2, 0, sec[0] + net_ms))
     net_wrong = ((logits > 0).astype(np.uint8) != truth).any(axis=1)
     some_right = right.any(axis=0)
-    print(f"X memory, p = 0.004, {n} shots ({' + '.join(stems)}); network = checkpoint_step{step}.pt; "
+    print(f"X memory, p = {p}, {n} shots ({' + '.join(stems)}, {results}); network = checkpoint_step{step}.pt; "
           f"network batch-one latency {net_ms:.1f} ms (beside the trainer)")
     print(f"not-all-equal set: {int(differ.sum())} shots; with at least one right candidate: {int((differ & some_right).sum())}; "
           f"all three wrong: {int((~some_right).sum())}")

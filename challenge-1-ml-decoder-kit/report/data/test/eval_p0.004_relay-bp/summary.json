@@ -1,0 +1,152 @@
+{
+  "cycles": 12,
+  "p": 0.004,
+  "circuits": {
+    "X": {
+      "path": "/home/blakew3/mlBranchMidwest/clean-base/challenge-1-ml-decoder-kit/circuits/gross_X_r12_p0.001.stim",
+      "sha256": "d5e86451e36a799eceeb805aeea00bc9bce79c0d883ed454e4e2b3f44f5c5e4c"
+    },
+    "Z": {
+      "path": "/home/blakew3/mlBranchMidwest/clean-base/challenge-1-ml-decoder-kit/circuits/gross_Z_r12_p0.001.stim",
+      "sha256": "4ea8774901c63a476f4337d5d9b6c54c08eefd22f24036198f8333750f16c300"
+    }
+  },
+  "plugin_options": {},
+  "datasets": {
+    "test": {
+      "X": {
+        "path": "/home/blakew3/mlBranchMidwest/clean-base/challenge-1-ml-decoder-kit/data/p0.004/test_X.npz",
+        "sha256": "53a7cee301600d36f3dad806a88f59ad6d84b681044b2548268c2ea9b5689e94",
+        "basis": "X",
+        "p": 0.004,
+        "seed": 301,
+        "shots": 10000,
+        "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+      },
+      "Z": {
+        "path": "/home/blakew3/mlBranchMidwest/clean-base/challenge-1-ml-decoder-kit/data/p0.004/test_Z.npz",
+        "sha256": "b61c1325de8852385d19ee5ce4eb41ea939b668f83fb3e994ce0f590218b3d56",
+        "basis": "Z",
+        "p": 0.004,
+        "seed": 302,
+        "shots": 10000,
+        "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+      }
+    }
+  },
+  "package_versions": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "matplotlib": "3.11.2"
+  },
+  "machine": {
+    "system": "Linux",
+    "release": "6.8.0-149-generic",
+    "machine": "x86_64",
+    "processor": "",
+    "python": "3.12.16",
+    "cpu_count": 24,
+    "workers": 1,
+    "thread_environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": "1",
+      "RAYON_NUM_THREADS": null
+    },
+    "native_decoder_threads": "not exposed by the installed decoder API",
+    "resource_note": "ru_maxrss is peak memory of this parent process only; it excludes other workers"
+  },
+  "randomness": {
+    "dataset_seeds": {
+      "test": {
+        "X": 301,
+        "Z": 302
+      }
+    },
+    "relay_bp_seed": 0,
+    "relay_bp_seed_source": "installed API default; kit factory leaves it unset",
+    "bposd_seed": null,
+    "bposd_seed_note": "kit factory does not set a seed",
+    "decoder_order": [
+      "relay-bp"
+    ]
+  },
+  "outcome_policy": "Every returned prediction is scored, including unconverged results; exceptions fail the run.",
+  "timing": "Existing seconds fields preserve the kit decoder-call timer for baselines. Separate total_seconds fields time before_shot plus the complete decode_shot call for every decoder, including projection, router, and fallback work; one-time construction is separate. Batch throughput uses complete evaluation wall time.",
+  "decoders": [
+    {
+      "name": "relay-bp",
+      "configuration": {
+        "X": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 5
+        },
+        "Z": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 5
+        }
+      },
+      "setup_seconds_by_basis": {
+        "X": 0.019470707047730684,
+        "Z": 0.0042068479815497994
+      },
+      "peak_parent_rss_bytes_before": 297947136,
+      "peak_parent_rss_bytes_after": 297947136,
+      "shot_metrics": "01_relay-bp_metrics.json",
+      "summary": {
+        "decoder": "relay-bp",
+        "p": 0.004,
+        "cycles": 12,
+        "shots_X": 10000,
+        "shots_Z": 10000,
+        "paired_shots": 10000,
+        "failures_X": 36,
+        "failures_Z": 47,
+        "failures_pair": 83,
+        "per_cycle_rate": 0.0006943119196903824,
+        "standard_error": 7.62163546764727e-05,
+        "mean_pair_ms": 319.2096700963681,
+        "median_pair_ms": 105.46222748234868,
+        "p99_pair_ms": 5513.6977593344645,
+        "mean_pair_kit_ms": 319.2096700963681,
+        "mean_pair_total_ms": 319.4572602664819,
+        "median_pair_total_ms": 105.67207547137514,
+        "p99_pair_total_ms": 5514.216688291635,
+        "setup_seconds": 0.023677555029280484,
+        "before_shot_seconds": 0.0,
+        "decode_loop_seconds": 3195.4301837150706,
+        "evaluation_wall_seconds": 3196.679122903035,
+        "batch_throughput_pairs_per_second": 3.128246413083397,
+        "converged_fraction": null,
+        "first_leg_converged_fraction": null,
+        "fallback_fraction": null,
+        "mean_iterations": null,
+        "threshold": null,
+        "threshold_X": null,
+        "threshold_Z": null,
+        "artifacts": "01_relay-bp_shots.npz"
+      }
+    }
+  ]
+}

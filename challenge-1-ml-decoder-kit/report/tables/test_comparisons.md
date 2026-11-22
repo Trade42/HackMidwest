@@ -12,7 +12,7 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.003 | our ensemble (combined offline) | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured |
 | 0.003 | our ensemble (combined offline) | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |
 | 0.003 | TCBP-JOBS (NVIDIA, GPU) | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
-| 0.004 | relay-BP with a learned router | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
+| 0.004 | relay-BP with a learned router | relay-BP (kit baseline) | 87 against 83 | 51 | 36 / 32 | 0.72 |
 | 0.004 | PriorTilt, one run | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, lowest-weight tie-break | PriorTilt, one run | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, lowest-weight tie-break | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |

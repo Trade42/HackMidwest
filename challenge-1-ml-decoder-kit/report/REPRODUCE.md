@@ -94,8 +94,12 @@ python -m evaluation.evaluate --test-x data/p0.004/test_X.npz --test-z data/p0.0
 
 with `hierarchy_options.json` holding `{"rule": "network", "checkpoints": {"X": ..., "Z": ...}, "seeds": [1, 1001], "device": "cpu", "torch_threads": 1}`.
 
-- The counts of a row do not depend on the machine: relay-BP and PriorTilt gave the same answers shot for shot on
-  three machines (`analysis/RESULTS.md`, `hierarchy/README.md`). The times do.
+- The counts of a row depend little on the machine, but not nothing. Relay-BP and PriorTilt gave the same answers
+  shot for shot on three x86 machines: our Linux PC, a Windows laptop and the Linux server (`analysis/RESULTS.md`,
+  `hierarchy/README.md`). A teammate's Mac (arm64) gave relay-BP a different outcome on <!--f:cross4_differ-->x<!--/f--> of the 10,000
+  test pairs at p = 0.004 (<!--f:cross4_earlier_pairs-->x<!--/f--> failed pairs against the server's <!--f:cross4_timed_pairs-->x<!--/f-->;
+  `report/tables/checks.md`). Expect counts within the statistical error on another machine, and the exact counts on
+  the same kind of machine. The times always depend on the machine.
 - A decoder keeps random state from shot to shot, so a row decodes its file in order, in one process.
 - **TCBP-JOBS** needs an NVIDIA GPU and `cudaq-qec`: `python -m hierarchy.tcbp_member --data data/p<p>/test_X.npz --out runs/tcbp_p<p> --final` (and the same for Z). **Not run here** (no GPU).
 

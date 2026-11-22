@@ -452,9 +452,14 @@ def earlier_table(measured):
         timed = measured[p].get(REFERENCE)
         earlier = rows["relay-bp"]
         if timed is None or timed["failed_pair"] is None:
+            for name in ("differ", "timed_pairs", "earlier_pairs"):
+                fact(f"cross{p[-1]}_{name}", None, "tables/checks.md")
             checks.append(f"p = {p}: relay-BP's timed row has not landed, so it cannot be compared with the teammates' earlier run ({where}).")
         else:
             differ = int((timed["failed_pair"] != earlier["failed_pair"]).sum())
+            fact(f"cross{p[-1]}_differ", differ, "tables/checks.md")
+            fact(f"cross{p[-1]}_timed_pairs", timed["failures_pair"], "tables/checks.md")
+            fact(f"cross{p[-1]}_earlier_pairs", earlier["failures_pair"], "tables/checks.md")
             if differ and timed["site"] == earlier["site"]:
                 raise Mismatch(f"p = {p}: relay-BP's timed row differs from the teammates' earlier run on the same machine on {differ} pairs; "
                                "relay-BP in one process on the same file should give the same answers")

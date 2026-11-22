@@ -364,7 +364,9 @@ The server's files are on the branch `server-logs` at `58b6e2d2`, under `files/t
 
 ## What was not done
 
-- **PriorTilt** with matched priors (the brief's optional decoder) and **the network**: not run.
+- **PriorTilt** with matched priors (the brief's optional decoder): not run. **The network** was not run in the
+  tables above. It ran only in the TCBP exploration (its section above: one file, X memory, factor 0.8), and
+  there it was not retrained on this noise.
 - **The fitted generic p** was run for BP-OSD at factors 0.8 and 0.9 and for relay-BP at 0.8 only; not for relay-BP
   at 0.7 and 0.9, BP-OSD at 0.7, Z memory, or any row with loss. Those comparisons are against the generic baseline
   at the same two-qubit error, which overstates the noise, and the tables name it.

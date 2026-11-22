@@ -59,10 +59,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c3_ensemble_vs_tcbp_only_first` | 0 | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_tcbp_only_second` | 1 | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_tcbp_p` | 1.00 | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_both` | 3 | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_only_first` | 0 | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_only_second` | 3 | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_p` | 0.25 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_both` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_only_first` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_only_second` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_p` | 1.00 | `tables/test_comparisons.md` |
 | `c3_hierarchy_converged_vs_relay_bp_both` | 2 | `tables/test_comparisons.md` |
 | `c3_hierarchy_converged_vs_relay_bp_only_first` | 1 | `tables/test_comparisons.md` |
 | `c3_hierarchy_converged_vs_relay_bp_only_second` | 3 | `tables/test_comparisons.md` |
@@ -83,16 +83,16 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c3_hierarchy_vs_tcbp_only_first` | 1 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_tcbp_only_second` | 1 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_tcbp_p` | 1.00 | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_priortilt_both` | 3 | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_priortilt_only_first` | 0 | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_priortilt_only_second` | 3 | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_priortilt_p` | 0.25 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_priortilt_both` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_priortilt_only_first` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_priortilt_only_second` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_priortilt_p` | 1.00 | `tables/test_comparisons.md` |
 | `c3_hierarchy_weight_vs_relay_bp_both` | 2 | `tables/test_comparisons.md` |
 | `c3_hierarchy_weight_vs_relay_bp_only_first` | 1 | `tables/test_comparisons.md` |
 | `c3_hierarchy_weight_vs_relay_bp_only_second` | 3 | `tables/test_comparisons.md` |
 | `c3_hierarchy_weight_vs_relay_bp_p` | 0.62 | `tables/test_comparisons.md` |
 | `c3_priortilt_vs_relay_bp_both` | 3 | `tables/test_comparisons.md` |
-| `c3_priortilt_vs_relay_bp_only_first` | 3 | `tables/test_comparisons.md` |
+| `c3_priortilt_vs_relay_bp_only_first` | 1 | `tables/test_comparisons.md` |
 | `c3_priortilt_vs_relay_bp_only_second` | 2 | `tables/test_comparisons.md` |
 | `c3_priortilt_vs_relay_bp_p` | 1.00 | `tables/test_comparisons.md` |
 | `c3_router_vs_relay_bp_both` | 4 | `tables/test_comparisons.md` |
@@ -452,18 +452,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_hierarchy_weight_xz` | 2, 1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_xz` | 1, 2 | `tables/test_p0.003.md` |
 | `t3_priortilt_both` | 3 | `tables/test_p0.003.md` |
-| `t3_priortilt_error` | 2.0e-05 | `tables/test_p0.003.md` |
-| `t3_priortilt_mean_ms` | 22.0 | `tables/test_p0.003.md` |
-| `t3_priortilt_median_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_priortilt_error` | 1.7e-05 | `tables/test_p0.003.md` |
+| `t3_priortilt_mean_ms` | 22.7 | `tables/test_p0.003.md` |
+| `t3_priortilt_median_ms` | 7.2 | `tables/test_p0.003.md` |
 | `t3_priortilt_only_relay` | 2 | `tables/test_p0.003.md` |
-| `t3_priortilt_only_this` | 3 | `tables/test_p0.003.md` |
-| `t3_priortilt_p99_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_priortilt_only_this` | 1 | `tables/test_p0.003.md` |
+| `t3_priortilt_p99_ms` | 188 | `tables/test_p0.003.md` |
 | `t3_priortilt_paired_p` | 1.00 | `tables/test_p0.003.md` |
-| `t3_priortilt_pairs` | 6 | `tables/test_p0.003.md` |
-| `t3_priortilt_rate` | 5.00e-05 | `tables/test_p0.003.md` |
-| `t3_priortilt_time_ratio` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_xz` | 3, 3 | `tables/test_p0.003.md` |
+| `t3_priortilt_pairs` | 4 | `tables/test_p0.003.md` |
+| `t3_priortilt_rate` | 3.33e-05 | `tables/test_p0.003.md` |
+| `t3_priortilt_time_ratio` | 0.26 | `tables/test_p0.003.md` |
+| `t3_priortilt_wall_hours` | 0.1 | `tables/test_p0.003.md` |
+| `t3_priortilt_xz` | 2, 2 | `tables/test_p0.003.md` |
 | `t3_relay_bp_both` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_error` | 1.9e-05 | `tables/test_p0.003.md` |
 | `t3_relay_bp_mean_ms` | 88.0 | `tables/test_p0.003.md` |

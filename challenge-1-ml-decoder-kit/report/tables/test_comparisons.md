@@ -3,11 +3,11 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | p | First decoder | Second decoder | Failed pairs: first against second | Both fail | Only the first fails / only the second fails | Exact p |
 |---|---|---|---|---|---|---|
 | 0.003 | relay-BP with a learned router | relay-BP (kit baseline) | 6 against 5 | 4 | 2 / 1 | 1.00 |
-| 0.003 | PriorTilt, one run (from per-shot files, not a timed evaluator row) | relay-BP (kit baseline) | 6 against 5 | 3 | 3 / 2 | 1.00 |
-| 0.003 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | PriorTilt, one run (from per-shot files, not a timed evaluator row) | 3 against 6 | 3 | 0 / 3 | 0.25 |
+| 0.003 | PriorTilt, one run | relay-BP (kit baseline) | 4 against 5 | 3 | 1 / 2 | 1.00 |
+| 0.003 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | PriorTilt, one run | 3 against 4 | 2 | 1 / 2 | 1.00 |
 | 0.003 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | relay-BP (kit baseline) | 3 against 5 | 2 | 1 / 3 | 0.62 |
 | 0.003 | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 3 against 3 | 2 | 1 / 1 | 1.00 |
-| 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | PriorTilt, one run (from per-shot files, not a timed evaluator row) | 3 against 6 | 3 | 0 / 3 | 0.25 |
+| 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | PriorTilt, one run | 3 against 4 | 2 | 1 / 2 | 1.00 |
 | 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | relay-BP (kit baseline) | 3 against 5 | 2 | 1 / 3 | 0.62 |
 | 0.003 | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 3 against 3 | 2 | 1 / 1 | 1.00 |
 | 0.003 | our hierarchy, neural tie-break | relay-BP (kit baseline) | 3 against 5 | 3 | 0 / 2 | 0.50 |

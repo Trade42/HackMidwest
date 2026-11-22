@@ -3,7 +3,7 @@
 | BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05 · 60 pairs · 129 ms | 4.02e-03 ± 1.8e-04 · 472 pairs · 302 ms | 2.30e-02 ± 4.6e-04 · 2433 pairs · 581 ms |
 | relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05 · 5 pairs · 88.0 ms | 6.94e-04 ± 7.6e-05 · 83 pairs · 319 ms | 7.33e-03 ± 2.5e-04 · 845 pairs · 1,471 ms |
 | relay-BP with a learned router | 5.00e-05 ± 2.0e-05 · 6 pairs · 42.5 ms | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | not measured |
-| PriorTilt, one run (from per-shot files, not a timed evaluator row) | 5.00e-05 ± 2.0e-05 · 6 pairs · 22.0 ms | not measured | 5.10e-03 ± 2.1e-04 · 595 pairs · 266 ms |
+| PriorTilt, one run | 3.33e-05 ± 1.7e-05 · 4 pairs · 22.7 ms | not measured | 5.10e-03 ± 2.1e-04 · 595 pairs · 266 ms |
 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 2.50e-05 ± 1.4e-05 · 3 pairs · 44.1 ms | not measured | 4.50e-03 ± 2.0e-04 · 527 pairs · 805 ms |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 2.50e-05 ± 1.4e-05 · 3 pairs · 44.1 ms | not measured | 3.99e-03 ± 1.8e-04 · 469 pairs · 805 ms |
 | our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · 45.7 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 216 ms | not measured |

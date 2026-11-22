@@ -1014,13 +1014,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "cf8ce0796eb5f2d07ee328176fd8dd65afdb9caa",
-  "copied_utc": "2026-11-22 12:29",
+  "commit": "13bb2892f2032707bf5e734a1860cd4efe3c6315",
+  "copied_utc": "2026-11-22 12:33",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `cf8ce0796eb5`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `13bb2892f203`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "c149f6c81fd005bcb60ec3e25d39b112d5f8fbe8c4afc6e48a713833ad675197"
+  "sha256": "4da7e5eea0e61a885d61e26f67dab3421c88a1c514f9e79e40feb6e2cfa655de"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -1222,14 +1222,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 19274,
-  "commit": "cf8ce0796eb5f2d07ee328176fd8dd65afdb9caa",
-  "copied_utc": "2026-11-22 12:29",
+  "bytes": 19501,
+  "commit": "13bb2892f2032707bf5e734a1860cd4efe3c6315",
+  "copied_utc": "2026-11-22 12:33",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `cf8ce0796eb5`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `13bb2892f203`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "d9b0fc5e3693f6af30ce65547fa3b1062c00db6fd70767760ad1265fbcf0debc"
+  "sha256": "28fb593ba870768211e8cb4a873c3276d75dd592da1112e75b66e15c26c438b9"
  },
  "test/ensemble_p0.003/test_X.json": {
   "branch": "origin/server-logs",
@@ -1429,6 +1429,39 @@
   "grows": false,
   "path": "files/clean/eval_p0.003_hierarchy/summary.json",
   "sha256": "78042a39aa7050858c80071786ea6c241fab95b01dc967a3947fe8b545b21530"
+ },
+ "test/eval_p0.003_priortilt/01_hierarchy_priortilt_plugin_make_decoder_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 321191,
+  "commit": "13bb2892f2032707bf5e734a1860cd4efe3c6315",
+  "copied_utc": "2026-11-22 12:33",
+  "file": "test/eval_p0.003_priortilt/01_hierarchy_priortilt_plugin_make_decoder_shots.npz",
+  "from": "branch `server-logs` at commit `13bb2892f203`, `files/clean/eval_p0.003_priortilt/01_hierarchy_priortilt_plugin_make_decoder_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_priortilt/01_hierarchy_priortilt_plugin_make_decoder_shots.npz",
+  "sha256": "6a1f7100ef9c7a0ca091e047c566667c11b130d233dd627fcf4a2aaf5b1c93c0"
+ },
+ "test/eval_p0.003_priortilt/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 847,
+  "commit": "13bb2892f2032707bf5e734a1860cd4efe3c6315",
+  "copied_utc": "2026-11-22 12:33",
+  "file": "test/eval_p0.003_priortilt/summary.csv",
+  "from": "branch `server-logs` at commit `13bb2892f203`, `files/clean/eval_p0.003_priortilt/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_priortilt/summary.csv",
+  "sha256": "01665926a0faf095814c31c80414d6e4cb1805b2d9030548687f0987e96bef4e"
+ },
+ "test/eval_p0.003_priortilt/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 7475,
+  "commit": "13bb2892f2032707bf5e734a1860cd4efe3c6315",
+  "copied_utc": "2026-11-22 12:33",
+  "file": "test/eval_p0.003_priortilt/summary.json",
+  "from": "branch `server-logs` at commit `13bb2892f203`, `files/clean/eval_p0.003_priortilt/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_priortilt/summary.json",
+  "sha256": "a353a367fa6ffcdaaa8cbd92f325791aad6b082c374c642833b768e3aaac5676"
  },
  "test/eval_p0.003_relay-bp/01_relay-bp_shots.npz": {
   "branch": "origin/server-logs",
@@ -1939,14 +1972,14 @@
  },
  "test/test_rows.out": {
   "branch": "origin/server-logs",
-  "bytes": 6698,
-  "commit": "cf8ce0796eb5f2d07ee328176fd8dd65afdb9caa",
-  "copied_utc": "2026-11-22 12:29",
+  "bytes": 6961,
+  "commit": "13bb2892f2032707bf5e734a1860cd4efe3c6315",
+  "copied_utc": "2026-11-22 12:33",
   "file": "test/test_rows.out",
-  "from": "branch `server-logs` at commit `cf8ce0796eb5`, `test_rows.out`",
+  "from": "branch `server-logs` at commit `13bb2892f203`, `test_rows.out`",
   "grows": true,
   "path": "test_rows.out",
-  "sha256": "2b71987a5b0f5ddccedabaa1b5e374a81bd0fe43d9744f78c7f1c181f95d4f77"
+  "sha256": "7864d27b8eeee6d82c71125414e49e73fb12cac266f0141f35c4a390c54554f9"
  },
  "test/test_run.out": {
   "branch": "origin/server-logs",

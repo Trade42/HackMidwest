@@ -10,7 +10,7 @@ fails 57.7%, and an ORACLE told when each atom was lost fails 1.64 times fewer s
 | BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05, 129 ms | 4.02e-03 ± 1.8e-04, 302 ms | 2.30e-02 ± 4.6e-04, 581 ms |
 | relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05, 88.0 ms | 6.94e-04 ± 7.6e-05, 319 ms | 7.33e-03 ± 2.5e-04, 1,471 ms |
 | relay-BP with a learned router | 5.00e-05 ± 2.0e-05, 42.5 ms | 7.28e-04 ± 7.8e-05, 315 ms | not measured |
-| PriorTilt, one run | 5.00e-05 ± 2.0e-05, not timed | not measured | 5.10e-03 ± 2.1e-04, not timed |
+| PriorTilt, one run | 3.33e-05 ± 1.7e-05, 22.7 ms | not measured | 5.10e-03 ± 2.1e-04, not timed |
 | our hierarchy, lowest-weight tie-break | 2.50e-05 ± 1.4e-05, not timed | not measured | 4.50e-03 ± 2.0e-04, not timed |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 2.50e-05 ± 1.4e-05, not timed | not measured | 3.99e-03 ± 1.8e-04, not timed |
 | our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05, 45.7 ms | 3.67e-04 ± 5.5e-05, 216 ms | not measured |

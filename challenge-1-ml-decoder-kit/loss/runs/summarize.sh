@@ -29,6 +29,11 @@ if [ -d $P/X_p0.004_s1e-3/aware ]; then
   sum --parts "$P/X_p0.004_s1e-3/*/*.npz" --data $D/X_p0.004_s1e-3_seed2300.npz --reference starter \
       --order $(pick starter,starter-oracle-round,oracle-round,oracle-slot,exact,starter@0.5/stop1) \
       --title "L3: the oracle against the starter's flag-aware decoder, s = 1e-3 (ORACLE rows use the true loss times)" --out $R/L3_starter_X_p0.004_s1e-3
+  if echo $avail | tr , '\n' | grep -Fxq starter-oracle-round; then
+    sum --parts "$P/X_p0.004_s1e-3/*/*.npz" --data $D/X_p0.004_s1e-3_seed2300.npz --reference oracle-round \
+        --order oracle-round,starter-oracle-round \
+        --title "L3: the two round-level ORACLES on their common shots, s = 1e-3" --out $R/L3_oracles_X_p0.004_s1e-3
+  fi
   sum --parts "$P/X_p0.004_s1e-3/*/*.npz" --data $D/X_p0.004_s1e-3_seed2300.npz --reference starter \
       --order $(pick starter,starter-nofinal,starter-nohook,starter-ratebase,starter-noown,exact) \
       --title "L2: leave-one-out from the starter's map, and the location weights (exact), s = 1e-3" --out $R/L2_X_p0.004_s1e-3

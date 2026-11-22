@@ -143,7 +143,9 @@ def summarize(rows, fit):
         pairs.append({"basis": row["basis"], "factor": row["factor"], "loss": row["loss"], "decoder": row["decoder"],
                       "flags": row["flags"], "generic": describe(row, fit), "generic_priors": row["priors"], **test,
                       "iterations_generic": float(row["iterations"][:n].mean()),
-                      "iterations_matched": float(reference["iterations"][:n].mean())})
+                      "iterations_matched": float(reference["iterations"][:n].mean()),
+                      "unconverged_generic": int((~row["converged"][:n]).sum()),
+                      "unconverged_matched": int((~reference["converged"][:n]).sum())})
     for point in {(p["basis"], p["factor"], p["loss"], p["decoder"], p["flags"]) for p in pairs}:
         group = [p for p in pairs if (p["basis"], p["factor"], p["loss"], p["decoder"], p["flags"]) == point]
         best = min(group, key=lambda p: (p["a_failures"], p["iterations_generic"]))
@@ -166,13 +168,18 @@ def markdown(rates, pairs, flags=()):
     lines += ["", "Paired, on the same shots (the generic row against the matched row of its point; **bold** marks the better "
               "generic row of a point):", "",
               "| Basis | Factor | Decoder | Generic picture | Shots | Failures: generic, matched | Only generic wrong | "
-              "Only matched wrong | Exact sign test p | Iterations: generic ÷ matched |", "|---|---|---|---|---|---|---|---|---|---|"]
+              "Only matched wrong | Exact sign test p | Mean iterations: generic ÷ matched | Unconverged: generic, matched |",
+              "|---|---|---|---|---|---|---|---|---|---|---|"]
     for p in pairs:
         name = f"**{p['generic']}**" if p["better_generic"] else p["generic"]
         ratio = p["iterations_generic"] / p["iterations_matched"]
         lines.append(f"| {p['basis']}{' + loss' if p['loss'] else ''} | {p['factor']:g} | {DECODER_NAMES[p['decoder']]} | {name} | {p['shots']} | "
                      f"{p['a_failures']}, {p['b_failures']} | {p['only_a']} | {p['only_b']} | {p['p']:.2g} | "
-                     f"{p['iterations_generic']:.0f} ÷ {p['iterations_matched']:.0f} = {ratio:.1f} |")
+                     f"{p['iterations_generic']:.0f} ÷ {p['iterations_matched']:.0f} = {ratio:.1f} | "
+                     f"{p['unconverged_generic']}, {p['unconverged_matched']} |")
+    lines += ["", "Iterations are belief-propagation iterations per shot, the same on any machine. Relay-BP often has its "
+              "answer inside its first leg of 80 iterations and never runs more than 80 + 300 x 60 = 18,080. BP-OSD stops BP at 80 iterations and then runs OSD on "
+              "every unconverged shot, so for BP-OSD the unconverged count is the costly part."]
     if flags:
         lines += ["", "What the loss flags add, on the same shots (the row that ignores the heralds against the flag-aware row, "
                   "same Pauli priors):", "",
@@ -210,7 +217,8 @@ def plot(rates, path, basis="X", loss=False, published_factor=1.0):
         axis.set_facecolor(SURFACE)
         axis.axhspan(1e-3, 1e-1, color=GRID, alpha=0.45, lw=0)
         axis.axvline(published_factor, color=MUTED, lw=1)
-        axis.text(published_factor, 0.985, "published figures ", color=MUTED, fontsize=8, ha="right", va="top",
+        label = "published figures, Pauli part only " if not loss else "published figures "
+        axis.text(published_factor, 0.985, label, color=MUTED, fontsize=8, ha="right", va="top",
                   rotation=90, transform=axis.get_xaxis_transform())
         for key, label, colour, marker in SERIES:
             points = [r for r in rates if r["decoder"] == decoder and key in _series(r)]
@@ -248,8 +256,11 @@ def plot(rates, path, basis="X", loss=False, published_factor=1.0):
     shots = sorted({r["shots"] for r in rates})
     figure.suptitle(f"{basis} memory{' with atom loss, flag-aware decoding' if loss else ''}, Gross code, 12 cycles: failures against the noise factor\n"
                     f"{' or '.join(str(s) for s in shots)} shots per point, 95% Wilson intervals; "
-                    "a hollow triangle is the upper limit where no shot failed", color=INK, fontsize=10, x=0.01, ha="left")
-    figure.tight_layout(rect=(0, 0.06, 1, 0.9))
+                    "a hollow triangle is the upper limit where no shot failed.\n"
+                    + ("Factor 1 = Infleqtion's published figures without atom loss, leakage or atom moves: "
+                       "today's machine sits above it." if not loss else "Factor 1 = Infleqtion's published figures, "
+                       "with atom loss; still without leakage or atom moves."), color=INK, fontsize=9.5, x=0.01, ha="left")
+    figure.tight_layout(rect=(0, 0.06, 1, 0.86))
     figure.savefig(path, dpi=150, facecolor=SURFACE)
     plt.close(figure)
     return True
@@ -261,8 +272,17 @@ def _series(rate):
     return lines + (["fit"] if "best p on train shots" in rate["picture"] else [])
 
 
+def _row_key(row):
+    """A name for one row in per_shot.npz: shots file, decoder, priors, flags."""
+    return "__".join([row["shots_file"].removesuffix(".npz"), row["decoder"], row["priors"], row["flags"] or "noflags"])
+
+
 def write_all(results, fit_path, out):
-    """Write tables.md, summary.json, rates.csv and the plot into `out`. Returns the markdown."""
+    """Write tables.md, summary.json, rates.csv, per_shot.npz and the plot into `out`. Returns the markdown.
+
+    per_shot.npz holds, for every row, a 2 x shots array (failed, converged) in shot order, and the iterations
+    of every shot as JSON: enough to recompute every count and paired test of the tables.
+    """
     out = Path(out)
     fit = json.loads(Path(fit_path).read_text()) if fit_path and Path(fit_path).exists() else {}
     rows = load_results(results)
@@ -272,6 +292,9 @@ def write_all(results, fit_path, out):
     out.mkdir(parents=True, exist_ok=True)
     (out / "tables.md").write_text(text)
     (out / "summary.json").write_text(json.dumps({"rates": rates, "paired": pairs, "flags": flags, "fit": fit}, indent=1))
+    np.savez_compressed(out / "per_shot.npz", **{_row_key(row): np.stack([row["failed"], row["converged"]]).astype(np.uint8)
+                                                for row in rows.values()},
+                        iterations=np.array(json.dumps({_row_key(row): row["iterations"].tolist() for row in rows.values()})))
     with open(out / "rates.csv", "w", newline="") as f:
         columns = ["basis", "factor", "loss", "decoder", "priors", "flags", "picture", "shots", "failures", "fraction",
                    "wilson_low", "wilson_high", "per_cycle", "unconverged", "mean_iterations", "mean_ms", "seed", "shots_sha256"]

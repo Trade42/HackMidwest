@@ -195,3 +195,17 @@ def test_wilson_interval_and_paired_counts():
     assert (test["only_a"], test["only_b"], test["a_failures"], test["b_failures"]) == (3, 0, 4, 1)
     assert test["p"] == pytest.approx(0.25)           # two-sided sign test: 2 * (1/2)^3
     assert paired(b, b)["p"] == 1.0
+
+
+def test_clifft_samples_our_circuit_like_stim_when_no_atom_is_lost():
+    """The loss runs use Clifft. With loss 0 its shots of our model's circuit must match Stim's statistically."""
+    pytest.importorskip("clifft")
+    from neutral_atom_noise.make_shots import sample_loss
+    circuit = model_circuit("X", neutral_atom(0.5))
+    det_clifft, obs_clifft, heralds = sample_loss(circuit, 0.0, 600, seed=3)
+    det_stim, _ = sample(circuit, 3000, seed=3)
+    assert not heralds.any()
+    weight_clifft, weight_stim = det_clifft.sum(axis=1), det_stim.sum(axis=1)
+    error = np.sqrt(weight_clifft.var() / 600 + weight_stim.var() / 3000)
+    assert abs(weight_clifft.mean() - weight_stim.mean()) < 4 * error
+    assert 0.4 < obs_clifft.mean() < 0.6        # undecoded logical bits are fair coins, as in the kit

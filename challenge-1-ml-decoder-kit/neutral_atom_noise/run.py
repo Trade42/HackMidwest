@@ -89,16 +89,30 @@ def _decode(k):
     return k, bool(wrong.any()), converged, iterations, int(np.packbits(wrong, bitorder="little").view(np.uint16)[0]), ms
 
 
-def decode_shots(shots_path, decoder, priors_spec, start, stop, workers, flags=None, progress=None):
-    """Decode shots start..stop-1 of a file. Returns a dict of per-shot arrays, in shot order."""
-    context = multiprocessing.get_context("fork")
+def open_pool(shots_path, decoder, priors_spec, flags, workers):
+    """Worker processes that hold one row's decoding problem. One pool serves every part of a row."""
+    return multiprocessing.get_context("fork").Pool(workers, initializer=_setup,
+                                                    initargs=(shots_path, decoder, priors_spec, flags))
+
+
+def decode_shots(shots_path, decoder, priors_spec, start, stop, workers, flags=None, progress=None, pool=None):
+    """Decode shots start..stop-1 of a file. Returns a dict of per-shot arrays, in shot order.
+
+    `pool` must come from open_pool with the same file, decoder, priors and flags; without it a pool is made.
+    """
+    own = pool is None
+    pool = open_pool(shots_path, decoder, priors_spec, flags, workers) if own else pool
     rows, began = {}, time.perf_counter()
-    with context.Pool(workers, initializer=_setup, initargs=(shots_path, decoder, priors_spec, flags)) as pool:
-        for n, row in enumerate(pool.imap_unordered(_decode, range(start, stop), chunksize=4), 1):
+    try:
+        for n, row in enumerate(pool.imap_unordered(_decode, range(start, stop), chunksize=1), 1):
             rows[row[0]] = row[1:]
             if progress and (n % progress == 0 or n == stop - start):
                 failures = sum(r[0] for r in rows.values())
                 print(f"  {n}/{stop - start} shots, {time.perf_counter() - began:.0f} s, {failures} failures", flush=True)
+    finally:
+        if own:
+            pool.close()
+            pool.join()
     table = np.array([rows[k] for k in range(start, stop)], dtype=np.float64)
     return {"shots": np.arange(start, stop), "failed": table[:, 0].astype(bool), "converged": table[:, 1].astype(bool),
             "iterations": table[:, 2].astype(np.int64), "wrong_mask": table[:, 3].astype(np.uint16), "ms": table[:, 4]}
@@ -109,7 +123,7 @@ def result_name(shots_path, decoder, priors_spec, flags, start, stop):
     return "__".join(parts) + f"__{start:06d}-{stop:06d}.npz"
 
 
-def run_part(shots_path, decoder, priors_spec, flags, start, stop, workers, out, command=None):
+def run_part(shots_path, decoder, priors_spec, flags, start, stop, workers, out, command=None, pool=None):
     """Decode one part of a shot file and save it in `out`. A part that is already there is kept.
 
     Returns the file's path and a one-line summary (None for a kept part).
@@ -119,9 +133,10 @@ def run_part(shots_path, decoder, priors_spec, flags, start, stop, workers, out,
     if path.exists():
         print(f"keep {path.name}", flush=True)
         return path, None
-    print(f"{path.name}: {decoder}, priors {priors_spec}, flags {flags}, {workers} workers", flush=True)
+    print(f"{time.strftime('%H:%M:%S', time.gmtime())} UTC {path.name}: {decoder}, priors {priors_spec}, flags {flags}, "
+          f"{workers} workers", flush=True)
     began = time.perf_counter()
-    result = decode_shots(shots_path, decoder, priors_spec, start, stop, workers, flags, progress=250)
+    result = decode_shots(shots_path, decoder, priors_spec, start, stop, workers, flags, progress=250, pool=pool)
     seconds = time.perf_counter() - began
     run = {"shots_file": Path(shots_path).name, "shots_sha256": sha256(shots_path), "shots_meta": load_shots(shots_path)["meta"],
            "decoder": decoder, "priors": priors_spec, "flags": flags, "start": start, "stop": stop, "workers": workers,

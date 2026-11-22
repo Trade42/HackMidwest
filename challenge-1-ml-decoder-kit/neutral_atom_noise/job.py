@@ -7,7 +7,7 @@ Run it from challenge-1-ml-decoder-kit/ with any Python that has this folder's r
 path of a particular machine: everything goes under --out, and --workers sets the number of processes.
 
 - Shots: OUTDIR/shots/. Test shots use --seed, train shots --train-seed. Their sha256 is printed.
-- Rows, for every factor and decoder:
+- Rows, for every factor and decoder (the train shots are a multiple of both part sizes):
     matched       priors from the circuit that made the shots
     generic-2q    the kit's uniform model at the p with the same total two-qubit error
     generic-fit   the kit's uniform model at the p that decodes best on TRAIN shots: p = multiplier x (the
@@ -19,7 +19,8 @@ path of a particular machine: everything goes under --out, and --workers sets th
 - Results: OUTDIR/results/, in parts of --part shots. A finished part is kept, so the same command resumes.
   --budget-minutes stops before a new part once the time is spent (exit code 3: more to do).
   --first N decodes only the first N test shots of every row; a later call without it (or with a larger N)
-  widens the same rows. Keep --part the same in every call on one OUTDIR.
+  widens the same rows. Keep --part and --relay-part the same in every call on one OUTDIR, and N a multiple
+  of both.
 - At the end: OUTDIR/tables.md, summary.json, rates.csv and the plot (summarize.py).
 """
 import argparse
@@ -30,7 +31,7 @@ from pathlib import Path
 
 from neutral_atom_noise.make_shots import make
 from neutral_atom_noise.model import neutral_atom
-from neutral_atom_noise.run import run_part
+from neutral_atom_noise.run import open_pool, result_name, run_part
 from neutral_atom_noise.summarize import load_results, write_all
 
 
@@ -39,12 +40,18 @@ class OutOfTime(Exception):
 
 
 def decode_all(shots_path, shots, decoder, priors, flags, args, folder, deadline):
-    """Decode `shots` shots of a file in parts, keeping finished parts."""
-    for start in range(0, shots, args.part):
-        if deadline and time.monotonic() > deadline:
-            raise OutOfTime
-        run_part(str(shots_path), decoder, priors, flags, start, min(start + args.part, shots), args.workers, folder,
-                 command="python -m neutral_atom_noise.job " + " ".join(sys.argv[1:]))
+    """Decode `shots` shots of a file in parts, keeping finished parts. One worker pool serves the whole row."""
+    part = args.part if decoder == "bposd" else args.relay_part
+    todo = [(start, min(start + part, shots)) for start in range(0, shots, part)
+            if not (Path(folder) / result_name(shots_path, decoder, priors, flags, start, min(start + part, shots))).exists()]
+    if not todo:
+        return
+    command = "python -m neutral_atom_noise.job " + " ".join(sys.argv[1:])
+    with open_pool(str(shots_path), decoder, priors, flags, args.workers) as pool:
+        for start, stop in todo:
+            if deadline and time.monotonic() > deadline:
+                raise OutOfTime
+            run_part(str(shots_path), decoder, priors, flags, start, stop, args.workers, folder, command=command, pool=pool)
 
 
 def fit_generic(factor, decoder, flags, args, out, deadline):
@@ -72,12 +79,14 @@ def main():
     parser.add_argument("--seed", type=int, required=True, help="seed of the test shots")
     parser.add_argument("--train-shots", type=int, default=250, help="a multiple of --part")
     parser.add_argument("--train-seed", type=int, default=None, help="seed of the train shots (default: seed + 1000)")
-    parser.add_argument("--grid", default="0.25,0.5,1,2", help="multipliers of the generic-2q p tried by generic-fit")
+    parser.add_argument("--grid", default="0.35,0.5,0.7,1", help="multipliers of the generic-2q p tried by generic-fit")
     parser.add_argument("--decoders", default="relay,bposd")
     parser.add_argument("--rows", default="matched,generic-2q,generic-fit")
     parser.add_argument("--loss", action="store_true", help="shots with atom loss (Clifft); rows are FLAGS/PRIORS")
     parser.add_argument("--workers", type=int, default=4, help="worker processes")
-    parser.add_argument("--part", type=int, default=125, help="shots per result file")
+    parser.add_argument("--part", type=int, default=125, help="shots per result file of BP-OSD")
+    parser.add_argument("--relay-part", type=int, default=50, help="shots per result file of relay-BP (its slow shots "
+                        "take up to 18,080 iterations: small parts keep a hold of the lane short)")
     parser.add_argument("--first", type=int, default=None, help="decode only the first N test shots of every row")
     parser.add_argument("--budget-minutes", type=float, default=None)
     parser.add_argument("--out", required=True)

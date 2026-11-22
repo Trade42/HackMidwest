@@ -6,9 +6,12 @@
 | X | 0.7 | BP-OSD | matched | 31 / 2000 | 1.55% (1.09%–2.19%) | 1.30e-03 | 840 | 49 | 456 |
 | X | 0.7 | BP-OSD | generic, same two-qubit error (p = 0.0104) | 26 / 375 | 6.93% (4.78%–9.96%) | 5.97e-03 | 310 | 73 | 1259 |
 | X | 0.8 | relay-BP | matched | 39 / 2000 | 1.95% (1.43%–2.65%) | 1.64e-03 | 18 | 978 | 787 |
+| X | 0.8 | relay-BP | generic, same two-qubit error (p = 0.0119) | 7 / 50 | 14.00% (6.95%–26.19%) | 1.25e-02 | 8 | 6915 | 6831 |
 | X | 0.8 | BP-OSD | matched | 91 / 2000 | 4.55% (3.72%–5.55%) | 3.87e-03 | 1177 | 60 | 998 |
-| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119), also the best p on train shots | 613 / 2000 | 30.65% (28.67%–32.71%) | 3.00e-02 | 1883 | 78 | 1394 |
+| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119) | 613 / 2000 | 30.65% (28.67%–32.71%) | 3.00e-02 | 1883 | 78 | 1394 |
+| X | 0.8 | BP-OSD | generic, best p on train shots (p = 0.0326) | 442 / 2000 | 22.10% (20.34%–23.97%) | 2.06e-02 | 1757 | 75 | 1100 |
 | X | 0.9 | relay-BP | matched | 31 / 500 | 6.20% (4.40%–8.67%) | 5.32e-03 | 16 | 2589 | 2464 |
+| X | 0.9 | relay-BP | generic, same two-qubit error (p = 0.0134) | 132 / 250 | 52.80% (46.62%–58.90%) | 6.06e-02 | 126 | 13813 | 12208 |
 | X | 0.9 | BP-OSD | matched | 238 / 2000 | 11.90% (10.55%–13.39%) | 1.05e-02 | 1482 | 69 | 830 |
 | X | 0.9 | BP-OSD | generic, same two-qubit error (p = 0.0134) | 1113 / 2000 | 55.65% (53.46%–57.81%) | 6.55e-02 | 1965 | 79 | 1793 |
 | X | 1 | relay-BP | matched | 42 / 250 | 16.80% (12.68%–21.93%) | 1.52e-02 | 30 | 5481 | 4967 |
@@ -19,7 +22,10 @@ Paired, on the same shots (the generic row against the matched row of its point;
 | Basis | Factor | Decoder | Generic picture | Shots | Failures: generic, matched | Only generic wrong | Only matched wrong | Exact sign test p | Mean iterations: generic ÷ matched | Unconverged: generic, matched |
 |---|---|---|---|---|---|---|---|---|---|---|
 | X | 0.7 | BP-OSD | **generic, same two-qubit error (p = 0.0104)** | 375 | 26, 9 | 21 | 4 | 0.00091 | 73 ÷ 47 = 1.6 | 310, 149 |
-| X | 0.8 | BP-OSD | **generic, same two-qubit error (p = 0.0119), also the best p on train shots** | 2000 | 613, 91 | 540 | 18 | 7.1e-135 | 78 ÷ 60 = 1.3 | 1883, 1177 |
+| X | 0.8 | relay-BP | **generic, same two-qubit error (p = 0.0119)** | 50 | 7, 0 | 7 | 0 | 0.016 | 6915 ÷ 654 = 10.6 | 8, 0 |
+| X | 0.8 | BP-OSD | generic, same two-qubit error (p = 0.0119) | 2000 | 613, 91 | 540 | 18 | 7.1e-135 | 78 ÷ 60 = 1.3 | 1883, 1177 |
+| X | 0.8 | BP-OSD | **generic, best p on train shots (p = 0.0326)** | 2000 | 442, 91 | 372 | 21 | 3.6e-84 | 75 ÷ 60 = 1.3 | 1757, 1177 |
+| X | 0.9 | relay-BP | **generic, same two-qubit error (p = 0.0134)** | 250 | 132, 14 | 118 | 0 | 6e-36 | 13813 ÷ 2630 = 5.3 | 126, 7 |
 | X | 0.9 | BP-OSD | **generic, same two-qubit error (p = 0.0134)** | 2000 | 1113, 238 | 887 | 12 | 2.6e-244 | 79 ÷ 69 = 1.2 | 1965, 1482 |
 
 Iterations are belief-propagation iterations per shot, the same on any machine. Relay-BP often has its answer inside its first leg of 80 iterations and never runs more than 80 + 300 x 60 = 18,080. BP-OSD stops BP at 80 iterations and then runs OSD on every unconverged shot, so for BP-OSD the unconverged count is the costly part.

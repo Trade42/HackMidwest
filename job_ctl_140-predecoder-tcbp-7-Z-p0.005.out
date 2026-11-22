@@ -17,3 +17,9 @@ TCBP-JOBS alone (stored)                                                    97 o
     against TCBP-JOBS alone (stored): both 24, only the first 11, only the second 73, exact p = 2.25e-12
 gate (validation_Z: TH fewer failures than the stored TCBP-JOBS, paired, p < 0.05): GO
 Sun Nov 22 16:19:19 UTC 2026
+step 2 exit 0
+  head: 9000 of 10000 shots, 551 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 10000 of 10000 shots, 601 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: failures 61 of 10000, 0.0061 [0.0048, 0.0078]; not reproduced 0; flagged not converged 7987; build 41.3 ms + decode 4.7 ms mean, p99 69 ms
+saved /home/blakew3/mlBranchMidwest/runs/predecoder-tcbp/test_Z_p0.005/per_shot.npz; 601 s
+Sun Nov 22 16:29:28 UTC 2026

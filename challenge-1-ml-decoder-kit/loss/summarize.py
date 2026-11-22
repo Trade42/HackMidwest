@@ -121,19 +121,29 @@ def markdown(rows, reference, title):
     return "\n".join(out) + "\n"
 
 
+def dataset_facts(path):
+    import hashlib
+    from loss.lossmodel import load_dataset
+    data = load_dataset(path)
+    lost = (data["data_slot"] > 0).sum(axis=1)
+    return {"file": path, "sha256": hashlib.sha256(open(path, "rb").read()).hexdigest(), **data["meta"],
+            "lost_data_atoms_per_shot": float(lost.mean()),
+            "check_heralds_per_shot": float(data["heralds"][:, :12 * 144].sum(axis=1).mean())}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--parts", required=True, nargs="+", help="globs of part files")
     ap.add_argument("--reference", default="blind")
     ap.add_argument("--order", help="comma-separated conditions, in table order")
     ap.add_argument("--title", default="")
-    ap.add_argument("--meta", default="{}", help="JSON of dataset facts to store beside the table")
+    ap.add_argument("--data", help="the dataset file: its meta, sha256 and loss counts go beside the table")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     per = load_parts(a.parts)
     rows = summarize(per, a.reference, a.order.split(",") if a.order else None)
     with open(a.out + ".json", "w") as f:
-        json.dump({"meta": json.loads(a.meta), "reference": a.reference, "rows": rows}, f, indent=1)
+        json.dump({"dataset": dataset_facts(a.data) if a.data else None, "reference": a.reference, "rows": rows}, f, indent=1)
     md = markdown(rows, a.reference, a.title or a.out)
     with open(a.out + ".md", "w") as f:
         f.write(md)

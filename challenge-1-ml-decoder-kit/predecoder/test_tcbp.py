@@ -123,3 +123,13 @@ def test_held_out_files_are_refused(tmp_path):
     held_out = small_file(tmp_path / "test_X.npz", 2)
     with pytest.raises(SystemExit):
         tcbp.main(["decode", "--decoder", "relay", "--data", str(held_out), "--arms", "fresh", "--out", str(tmp_path / "o")])
+
+
+def test_priors_are_capped_at_one_half():
+    """TCBP-JOBS refuses priors above 0.5: the cap changes only those, and counts them."""
+    before = dict(tcbp.CAPPED)
+    low = np.array([1e-4, 0.2, 0.5])
+    assert tcbp.capped(low) is low and tcbp.CAPPED == before
+    high = np.array([0.7, 0.1, 0.9999])
+    assert np.array_equal(tcbp.capped(high), [0.5, 0.1, 0.5])
+    assert tcbp.CAPPED["shots"] == before["shots"] + 1 and tcbp.CAPPED["columns"] == before["columns"] + 2

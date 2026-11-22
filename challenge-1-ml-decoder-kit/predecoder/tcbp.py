@@ -57,6 +57,12 @@ from predecoder.files import HELD_OUT, read_logits
 BITS = 1 << np.arange(12)             # the 12 predicted bits as one number, bit i = observable i
 FIELDS = ("failed", "reproduced", "flag", "n_faults", "seconds_build", "seconds_decode", "predicted_code", "logits_hash")
 CHUNK = 100                           # shots per part file of the decode command
+# TCBP-JOBS refuses a prior above 0.5 ("osd_method=4 (JOBS) requires every error rate to be at most 0.5"; the fit's
+# first run stopped on it at alpha 0.3, 15:07 UTC). Every shot's priors are therefore capped at 0.5 after mixing and
+# clipping. Shots below the cap are unchanged, so rows decoded before the cap existed (they passed the decoder's
+# check) are the same with it. CAPPED counts the shots and columns the cap changed, for the logs.
+PRIOR_CAP = 0.5
+CAPPED = {"shots": 0, "columns": 0}
 
 # The fit's grid (fixed before any TCBP-JOBS decode with the head's priors). The declared grid is the one
 # that made logs/fit_X_p0.004.json for relay-BP: log-odds mixing, alpha 0.1 to 0.7, eps 1e-4. The
@@ -128,6 +134,16 @@ def decode_one(builder, priors, syndrome):
     return error, (np.nan if flag is None else float(bool(flag))), built - start, done - built
 
 
+def capped(priors):
+    """The priors with every value above PRIOR_CAP set to PRIOR_CAP; CAPPED counts what changed."""
+    over = priors > PRIOR_CAP
+    if over.any():
+        CAPPED["shots"] += 1
+        CAPPED["columns"] += int(over.sum())
+        return np.minimum(priors, PRIOR_CAP)
+    return priors
+
+
 def row_hash(logits_row):
     """The first 8 bytes of the sha256 of a float16 logits row, as an unsigned integer (0 for the kit's priors)."""
     if logits_row is None:
@@ -150,6 +166,7 @@ def decode_shots(builder, problem, syndromes, truth, logits, setting, label, war
         else:
             priors = shot_priors(logits[k], problem.priors, setting["alpha"], setting["eps"], setting["mode"])
             hashes[k] = row_hash(logits[k])
+        priors = capped(priors)
         error, flag, build, decode = decode_one(builder, priors, syndromes[k])
         predicted = (problem.L @ error) % 2
         reproduced = np.array_equal((problem.H @ error) % 2, syndromes[k])
@@ -159,7 +176,8 @@ def decode_shots(builder, problem, syndromes, truth, logits, setting, label, war
             gc.collect()
             print(f"    {label}: {k + 1} of {len(syndromes)} shots, build {rows[:k + 1, 4].mean() * 1e3:.1f} ms, decode "
                   f"{rows[:k + 1, 5].mean() * 1e3:.1f} ms mean (last 200: {rows[k - 199:k + 1, 4].mean() * 1e3:.1f} + "
-                  f"{rows[k - 199:k + 1, 5].mean() * 1e3:.1f} ms), {time.time() - start:.0f} s", flush=True)
+                  f"{rows[k - 199:k + 1, 5].mean() * 1e3:.1f} ms), {time.time() - start:.0f} s; priors capped at {PRIOR_CAP} so far "
+                  f"on {CAPPED['shots']} shots, {CAPPED['columns']} columns", flush=True)
     return rows, hashes
 
 
@@ -331,7 +349,8 @@ def decode_command(args):
     np.savez_compressed(out / "per_shot.npz", **per_shot)
     with open(out / "summary.json", "w") as file:
         json.dump({"data": data.identity(), "shots": shots, "decoder": args.decoder, "version": version, "preset": args.preset,
-                   "overrides": args.opt, "head_priors": setting, "logits": meta, "arms": results,
+                   "overrides": args.opt, "head_priors": setting, "prior_cap": PRIOR_CAP, "capped_this_run": dict(CAPPED),
+                   "logits": meta, "arms": results,
                    "model_seconds": builder.model_seconds, "machine": where(args.decoder),
                    "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process, "
                             "shots one at a time; the network and head are not included (predecoder.evaluate)",
@@ -403,6 +422,7 @@ def fit_command(args):
                 np.savez(path, rows=rows, hashes=hashes)
             with np.load(path) as file:
                 results[(json.dumps(setting, sort_keys=True), index)] = file["rows"]
+            print(f"  capped at {PRIOR_CAP} so far: {CAPPED['shots']} shots, {CAPPED['columns']} columns", flush=True)
             print(f"  {data.path.name}: {shots} shots, {setting}, failures {int(results[(json.dumps(setting, sort_keys=True), index)][:, 0].sum())}, "
                   f"{time.time() - start:.0f} s; GPU memory {gpu_memory()}", flush=True)
     rows = []
@@ -438,7 +458,7 @@ def fit_command(args):
                    "decoder": args.decoder, "version": version, "preset": args.preset, "overrides": args.opt,
                    "model_seconds": builder.model_seconds, "machine": where(args.decoder), "rows": rows,
                    "chosen": None if chosen is None else {key: chosen[key] for key in ("mode", "alpha", "eps")},
-                   "extended": extended, "rule": RULE, "grid": GRID, "extension": {"low": EXTEND_LOW, "high": EXTEND_HIGH},
+                   "extended": extended, "rule": RULE, "prior_cap": PRIOR_CAP, "capped_this_run": dict(CAPPED), "grid": GRID, "extension": {"low": EXTEND_LOW, "high": EXTEND_HIGH},
                    "seconds": time.time() - start}, file, indent=1)
     print(f"saved {args.out}; {time.time() - start:.0f} s", flush=True)
 

@@ -1,0 +1,46 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/pred-tcbp-abb0560/challenge-1-ml-decoder-kit/data/p0.005/validation_X.npz",
+  "sha256": "25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312",
+  "basis": "X",
+  "p": 0.005,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 5000,
+ "decoder": "tcbp-jobs",
+ "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
+ "preset": "tcbp-jobs",
+ "overrides": {},
+ "head_priors": null,
+ "logits": null,
+ "arms": {
+  "fresh": {
+   "shots": 5000,
+   "failures": 96,
+   "share": 0.0192,
+   "wilson95": [
+    0.01574901752455041,
+    0.02338920467745358
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 4858,
+   "build_ms_mean": 40.74769473080523,
+   "decode_ms_mean": 8.526069616549648,
+   "build_decode_ms_mean": 49.27376434735488,
+   "build_decode_ms_median": 45.966707984916866,
+   "build_decode_ms_p99": 82.4343166081235
+  }
+ },
+ "model_seconds": 54.20646921999287,
+ "machine": {
+  "node": "jupyter-blakew3",
+  "processor": "x86_64",
+  "cpus": 24,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "omp_threads": "1"
+ },
+ "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process, shots one at a time; the network and head are not included (predecoder.evaluate)",
+ "seconds": 325.006236076355
+}

@@ -39,7 +39,32 @@ RESULTS: (filled in below as they arrive)
 
 ## Numbers
 
-(filled in)
+All runs are X memory at p = 0.005. Server: the team's notebook server, NVIDIA A100-SXM4-80GB, AMD EPYC-Milan,
+1 process with 1 CPU thread, cudaq-qec 0.9.0 (cudaqx `9043634b`), preset `tcbp-jobs` with no overrides. The jobs are
+the orchestrator's (`server-jobs/gpu/060`, `070`, ...), and their outputs are on `server-logs` under
+`files/predecoder-tcbp/`.
+
+### Job 1: the cheaper path, and TCBP-JOBS with the kit's priors built per shot (validation, no head)
+
+`python -m predecoder.tcbp probe` and `decode --arms fresh` on `data/p0.005/validation_X.npz` (5,000 shots, seed 201),
+commit `abb05607`, 14:54 to 14:59 UTC. Logs: `logs/tcbp_job1_probe.log`, `logs/tcbp_job1_validation_fresh.log`.
+
+- **The cheaper path does not exist in cudaq-qec 0.9.0.** A built `Decoder` offers only `decode`, `decode_async`,
+  `decode_batch`, `get_block_size`, `get_syndrome_size` and `get_version`. `decode()` takes a syndrome of floats, which
+  is soft information about the syndrome bits, not priors. Nothing sets the error rates of a decoder once it is built,
+  so the decoder is rebuilt for every shot. Not tested: passing H as a scipy sparse matrix, which the docstring calls
+  the preferred input and which may build faster.
+- **Time per shot**, one at a time: building the decoder takes 40.7 ms and decoding 8.5 ms, mean; p99 82 ms for the
+  two together. The model fit, once per run, takes 54 s.
+- **The decoder's `converged` flag** is False on 4,858 of 5,000 shots, including shots it gets right. It does not say
+  whether the answer reproduces the syndrome, which it does on all 5,000 (checked here as H e = s).
+- **Failures:** 96 of 5,000, 0.0192 [0.0157, 0.0234]. The stored TCBP-JOBS file (`files/tcbp_p0.005/validation_X.tcbp.npz`:
+  one decoder built once, `decode_batch`, its own model fit) fails 91. Shot by shot the two agree on the 12 bits except
+  on 44 shots: both fail 79, only per-shot 17, only stored 12, exact two-sided p = 0.46. **TCBP-JOBS does not repeat
+  itself across runs on hard shots**, the way relay-BP does not across seeds. Which of three causes does this (another
+  model fit, batch against single decoding, random draws inside JOBS) is measured in job 3.
+
+(further rows filled in as they arrive)
 
 ## What was not done
 

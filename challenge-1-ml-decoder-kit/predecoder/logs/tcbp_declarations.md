@@ -26,6 +26,18 @@
   before a validation number exists.
 - The chosen knobs are committed in `predecoder/logs/fit_tcbp_X_p0.005.json` before any validation decode.
 
+## 1b. A change forced by the decoder (15:10 UTC, during the fit; no validation number with the head's priors exists)
+
+The fit's first run stopped at alpha 0.3, on the failed file: `ValueError: ERROR: osd_method=4 (JOBS) requires every
+error rate to be at most 0.5 (column 2652 has prior LLR -0.215245)`. When the head is confident, the mixed priors go above
+0.5, and TCBP-JOBS refuses them. From commit 3 of this branch on, every shot's priors are therefore capped at 0.5 after
+mixing and clipping (`tcbp.PRIOR_CAP`). Rows below the cap are unchanged. The rows already decoded (the control, alpha
+0.1, alpha 0.2) passed the decoder's own check on every shot, so no prior of theirs was above 0.5, and the cap leaves
+them as they were. Their cached parts are reused. The train numbers seen before this change: the control left 341 of
+the 390 failed wrong and broke 5 of the 2,000 right; alpha 0.1, 175 and 3; alpha 0.2, 134 and 3. Nothing else was
+changed. The rule, the grid and the extension stay as declared in section 1. The runs log how many shots and columns
+the cap changed.
+
 ## 2. The validation arms (declared 2026-11-22 15:06 UTC; no number of TCBP-JOBS with the head's priors exists yet; the fit is running)
 
 What was known when this was written: job 1 (server, 14:54 to 14:59 UTC) decoded `data/p0.005/validation_X.npz` with

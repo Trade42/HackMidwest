@@ -687,9 +687,9 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pregate_only_fresh` | 12 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_p` | 0.24 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_shots` | 5,000 | `data/exploration/predecoder/compare_validation_X_summary.json` |
-| `ptpair_T` | not measured | `tables/predecoder_tcbp.md` |
-| `ptpair_TH` | not measured | `tables/predecoder_tcbp.md` |
-| `ptpair_p` | not measured | `tables/predecoder_tcbp.md` |
+| `ptpair_T` | 360 | `tables/predecoder_tcbp.md` |
+| `ptpair_TH` | 132 | `tables/predecoder_tcbp.md` |
+| `ptpair_p` | 3e-42 | `tables/predecoder_tcbp.md` |
 | `ptt3X_T` | 1 | `tables/predecoder_tcbp.md` |
 | `ptt3X_TH` | 0 | `tables/predecoder_tcbp.md` |
 | `ptt3X_fresh` | not measured | `tables/predecoder_tcbp.md` |
@@ -711,14 +711,14 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `ptt5X_vs_T_only_TH` | 22 | `tables/predecoder_tcbp.md` |
 | `ptt5X_vs_T_p` | 3e-21 | `tables/predecoder_tcbp.md` |
 | `ptt5X_vs_fresh_p` | 3e-21 | `tables/predecoder_tcbp.md` |
-| `ptt5Z_T` | not measured | `tables/predecoder_tcbp.md` |
-| `ptt5Z_TH` | not measured | `tables/predecoder_tcbp.md` |
+| `ptt5Z_T` | 177 | `tables/predecoder_tcbp.md` |
+| `ptt5Z_TH` | 61 | `tables/predecoder_tcbp.md` |
 | `ptt5Z_fresh` | not measured | `tables/predecoder_tcbp.md` |
-| `ptt5Z_vs_T_only_T` | not measured | `tables/predecoder_tcbp.md` |
-| `ptt5Z_vs_T_only_TH` | not measured | `tables/predecoder_tcbp.md` |
-| `ptt5Z_vs_T_p` | not measured | `tables/predecoder_tcbp.md` |
+| `ptt5Z_vs_T_only_T` | 136 | `tables/predecoder_tcbp.md` |
+| `ptt5Z_vs_T_only_TH` | 20 | `tables/predecoder_tcbp.md` |
+| `ptt5Z_vs_T_p` | 2e-22 | `tables/predecoder_tcbp.md` |
 | `ptt5Z_vs_fresh_p` | not measured | `tables/predecoder_tcbp.md` |
-| `ptt_statement` | On the test shots (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); one basis at a time, accuracy only; its knobs were fitted at p = 0.005 and applied unchanged at the lower p, with no validation there): X at p = 0.005, TH fails 72 against TCBP-JOBS's 186 (only TH 22, only TCBP-JOBS 136, exact p = 3e-21; the same run's kit-priors arm fails 186); X at p = 0.004, TH fails 4 against TCBP-JOBS's 20 (only TH 2, only TCBP-JOBS 18, exact p = 4e-04); X at p = 0.003, TH fails 0 against TCBP-JOBS's 1 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim). TCBP-JOBS's stored counts carry its fit's spread (above). | `tables/predecoder_tcbp.md` |
+| `ptt_statement` | On the test shots (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); one basis at a time, accuracy only; its knobs were fitted at p = 0.005 and applied unchanged at the lower p, with no validation there): X at p = 0.005, TH fails 72 against TCBP-JOBS's 186 (only TH 22, only TCBP-JOBS 136, exact p = 3e-21; the same run's kit-priors arm fails 186); X at p = 0.004, TH fails 4 against TCBP-JOBS's 20 (only TH 2, only TCBP-JOBS 18, exact p = 4e-04); X at p = 0.003, TH fails 0 against TCBP-JOBS's 1 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim); Z at p = 0.005, TH fails 61 against TCBP-JOBS's 177 (only TH 20, only TCBP-JOBS 136, exact p = 2e-22). TCBP-JOBS's stored counts carry its fit's spread (above). | `tables/predecoder_tcbp.md` |
 | `pttime_bd` | 46.4 | `tables/predecoder_tcbp.md` |
 | `pttime_build` | 42.6 | `tables/predecoder_tcbp.md` |
 | `pttime_decode` | 3.8 | `tables/predecoder_tcbp.md` |

@@ -2491,7 +2491,8 @@ def predecoder_tcbp_table(measured):
                  + (markdown(["Decoder", "Failed shots", "Share (95% interval)", "TH against it: both / only TH / only it (exact p)"], lines) if lines
                     else NOT_MEASURED)
                  + f"\n\n**Test shots: {PTCBP_LABEL}.** One basis at a time (X until the Z run lands), accuracy only. Its knobs were fitted at "
-                 "p = 0.005 and applied unchanged at p = 0.004 and 0.003, with no validation there. The declared pair is TH against TCBP-JOBS's stored "
+                 "p = 0.005 and applied unchanged at p = 0.004 and 0.003, with no validation there; on Z memory X's knobs were applied unchanged, with no Z fit "
+                 "(declared beforehand), after a validation gate on Z that passed. The declared pair is TH against TCBP-JOBS's stored "
                  "test file; at p = 0.005 the same run's kit-priors arm is the like-for-like control.\n\n"
                  + markdown(["p", "Basis", "TH fails", "TCBP-JOBS, its stored test file (its row in this report), fails",
                              "TH against it, the declared pair: both / only TH / only TCBP-JOBS (exact p)",
@@ -2612,7 +2613,10 @@ def readme_section(measured):
              "TCBP-JOBS in place of relay-BP in it (an after-test ablation); a learned predecoder that gives relay-BP per-shot priors from the network "
              "(`predecoder/`; X memory at p = 0.005 a secondary result, chosen after its own gate failed, and the other rows a registered extension run "
              "after it) and its fallback to TCBP-JOBS where relay-BP does not converge (`predecoder/fallback.py`; designed after the first test result)"
-             + ("; and TCBP-JOBS given the same per-shot priors (" + PTCBP_LABEL + ")" if FACTS.get("ptv_TH", (NOT_MEASURED,))[0] != NOT_MEASURED else "")
+             + ("; and TCBP-JOBS given the same per-shot priors (" + PTCBP_LABEL
+                + (f"; the kit's pair score at p = 0.005: {FACTS['ptpair_TH'][0]} failed pairs against TCBP-JOBS's {FACTS['ptpair_T'][0]}"
+                   if FACTS.get("ptpair_TH", (NOT_MEASURED,))[0] != NOT_MEASURED else "") + ")"
+                if FACTS.get("ptv_TH", (NOT_MEASURED,))[0] != NOT_MEASURED else "")
              + "; a learned selector among the ensemble's members (`selector/`; frozen on validation, its line not met on the test shots); and, on its "
                "own simulated shots, noise shaped like neutral-atom hardware (`neutral_atom_noise/`; exploration, the kit's decoders). None of these "
                "rows replaces the frozen decoder.",

@@ -1,0 +1,39 @@
+{
+ "data": {
+  "path": "/home/sal/hackMidwest/worktrees/predecoder-tcbp/challenge-1-ml-decoder-kit/data/p0.005/test_Z.npz",
+  "sha256": "b86ae320d13fa555d8358fe399156d28d4e52b01fabf8eafa1b30e60bdcd0cef",
+  "basis": "Z",
+  "p": 0.005,
+  "seed": 302,
+  "shots": 10000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 10000,
+ "arms": {
+  "TCBP-JOBS, head priors per shot": {
+   "failures": 61,
+   "share": 0.0061,
+   "wilson95": [
+    0.0047521031505545095,
+    0.007827210445981489
+   ]
+  },
+  "TCBP-JOBS alone (stored)": {
+   "failures": 177,
+   "share": 0.0177,
+   "wilson95": [
+    0.015294687342443603,
+    0.020475717491752213
+   ]
+  }
+ },
+ "pairs": {
+  "TCBP-JOBS, head priors per shot | TCBP-JOBS alone (stored)": {
+   "both": 41,
+   "only_first": 20,
+   "only_second": 136,
+   "p": 2.148185193413394e-22
+  }
+ },
+ "logits_rows_equal_to_local": 10000
+}

@@ -1,0 +1,14 @@
+check: ours: truth equals the file's observables: yes
+check: TCBP-JOBS: data_sha256 equals the file's: yes
+check: TCBP-JOBS: truth equals the file's observables: yes
+check: TCBP-JOBS: failed_T equals its predictions against the truth: yes
+check: evaluator: its summary's X data sha256 equals the file's: yes
+check: evaluator: failed_X equals its X predictions against the file's observables: yes
+test_X.npz (sha256 f7bc181399a0a8fd1324950c98a8419c0082d7c34940c03dfb34c9e2cefc1ff3), 10000 shots, X memory. Secondary, chosen after the p = 0.004 gate failed, accuracy only.
+  H (relay-BP, the head's priors)                    2 failures, 0.0002 [0.0001, 0.0007]
+  fresh (relay-BP, the kit's priors, per shot)       7 failures, 0.0007 [0.0003, 0.0014]
+  T (TCBP-JOBS)                                      1 failures, 0.0001 [0.0000, 0.0006]
+  R (the evaluator's relay-bp row, X)                2 failures, 0.0002 [0.0001, 0.0007]
+  H against fresh (relay-BP, the kit's priors, per shot): both fail 1, only H 1, only the other 6, exact two-sided p = 0.125
+  H against T (TCBP-JOBS): both fail 1, only H 1, only the other 0, exact two-sided p = 1
+  H against R (the evaluator's relay-bp row, X): both fail 1, only H 1, only the other 1, exact two-sided p = 1

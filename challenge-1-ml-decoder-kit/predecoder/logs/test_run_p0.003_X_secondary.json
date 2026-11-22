@@ -1,0 +1,70 @@
+{
+ "data": {
+  "path": "/home/sal/hackMidwest/worktrees/predecoder/challenge-1-ml-decoder-kit/data/p0.003/test_X.npz",
+  "sha256": "f7bc181399a0a8fd1324950c98a8419c0082d7c34940c03dfb34c9e2cefc1ff3",
+  "basis": "X",
+  "p": 0.003,
+  "seed": 301,
+  "shots": 10000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "checks": {
+  "ours: truth equals the file's observables": true,
+  "TCBP-JOBS: data_sha256 equals the file's": true,
+  "TCBP-JOBS: truth equals the file's observables": true,
+  "TCBP-JOBS: failed_T equals its predictions against the truth": true,
+  "evaluator: its summary's X data sha256 equals the file's": true,
+  "evaluator: failed_X equals its X predictions against the file's observables": true
+ },
+ "failures": {
+  "H (relay-BP, the head's priors)": {
+   "failures": 2,
+   "wilson95": [
+    5.4848926828014266e-05,
+    0.0007289958505534229
+   ]
+  },
+  "fresh (relay-BP, the kit's priors, per shot)": {
+   "failures": 7,
+   "wilson95": [
+    0.0003391263298297728,
+    0.0014443344491749323
+   ]
+  },
+  "T (TCBP-JOBS)": {
+   "failures": 1,
+   "wilson95": [
+    1.765267340620363e-05,
+    0.0005662689036505799
+   ]
+  },
+  "R (the evaluator's relay-bp row, X)": {
+   "failures": 2,
+   "wilson95": [
+    5.4848926828014266e-05,
+    0.0007289958505534229
+   ]
+  }
+ },
+ "pairs": {
+  "H against fresh (relay-BP, the kit's priors, per shot)": {
+   "both": 1,
+   "only_H": 1,
+   "only_other": 6,
+   "p": 0.125
+  },
+  "H against T (TCBP-JOBS)": {
+   "both": 1,
+   "only_H": 1,
+   "only_other": 0,
+   "p": 1.0
+  },
+  "H against R (the evaluator's relay-bp row, X)": {
+   "both": 1,
+   "only_H": 1,
+   "only_other": 1,
+   "p": 1.0
+  }
+ },
+ "label": "secondary, chosen after the p = 0.004 gate failed, X memory, accuracy only"
+}

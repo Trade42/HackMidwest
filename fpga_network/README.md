@@ -35,8 +35,19 @@ per shot: about 0.42 ms at the memory's peak rate (**estimated**).
 
 ### 2. Smaller numbers (`WIDTHS.md`, from `widths.py`)
 
-PENDING: the table on the team's `data/p0.004/validation_X.npz` (5,000 Stim shots, seed 201), with the float network
-beside it.
+The final table (`WIDTHS.md`) is PENDING. A first table on the step-70,000 checkpoint (`WIDTHS_step70000.md`;
+1,000 validation shots per width, 500 for the narrowest, plus 75 tie-break shots of `train_X.npz`; **simulated** in
+software) says:
+
+- **The float network here equals the laptop's**: 526 of 5,000 validation shots wrong, as on the laptop's GPU and in
+  `SCORES.md`; largest logit difference 0.0011, no bit of different sign.
+- **16 bits** changes 2 of 1,000 answers, and the largest float |logit| among the flipped bits is 0.011: rounding at
+  the decision boundary, not an error. It changes none of the 79 tie-break choices.
+- **12 bits** changes 16 answers, the network alone fails as often (110 against 110), and no tie-break choice changes.
+- **8 bits** (weights and values; stream and head at 16) with percentile ranges changes 79 answers and the network alone
+  fails 127 times against 110, but only 2 of 79 tie-break choices change and the tie-break fails as often as before.
+- **With ranges from the largest value seen, 10 bits and below break** (10 bits: 30% of shots wrong; 6 and 4 bits:
+  nearly every shot). Percentile ranges at those widths are in the final table.
 
 How the fixed-point network is made (`fixed_point.py`): every batch normalisation that follows a linear step is folded
 into it (the folded network gives the model's logits to within 4.5e-5); the two that act on the residual stream stay

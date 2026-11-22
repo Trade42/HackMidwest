@@ -1,0 +1,45 @@
+G1 run: {'host': 'luminaty', 'cpu': 'AMD Ryzen 7 7730U with Radeon Graphics', 'logical_cpus': 16, 'affinity': [8, 9, 10, 11, 12, 13, 14, 15], 'processes': 8, 'python': '3.12.15', 'numpy': '2.5.5', 'stim': '1.16.0', 'ldpc': '2.4.1', 'relay_bp': '0.2.2', 'nice': 15}
+dataset explore_X.npz p=0.005 X seed 9105 shots 20000 sha256 8fcd2650edbaec915e2d52ef73549d1aac69345ed7500738fb129a46a3f55ed4
+dataset explore_Z.npz p=0.005 Z seed 9106 shots 20000 sha256 43346c307e995fbb08e81f5cb807a438a668010e8afaf45d5c85ffadc065102a
+40 tasks, 0 already done, 40 to run on 8 processes
+[   1112 s] 1/40 g1_kit p=0.005 X explore_X.npz shots 1500..1999: 1107.9 s, mean iterations  2308.8, failures 18
+[   1141 s] 2/40 g1_kit p=0.005 X explore_X.npz shots 3500..3999: 1137.5 s, mean iterations  2364.6, failures 15
+[   1142 s] 3/40 g1_kit p=0.005 X explore_X.npz shots 0..499: 1138.6 s, mean iterations  2369.8, failures 23
+[   1165 s] 4/40 g1_leg1 p=0.005 X explore_X.npz shots 0..499:   22.3 s, mean iterations    48.7, failures 167
+[   1167 s] 5/40 g1_kit p=0.005 X explore_X.npz shots 500..999: 1164.0 s, mean iterations  2431.0, failures 18
+[   1177 s] 6/40 g1_kit p=0.005 X explore_X.npz shots 2500..2999: 1173.1 s, mean iterations  2442.8, failures 24
+[   1179 s] 7/40 g1_kit p=0.005 X explore_X.npz shots 2000..2499: 1175.6 s, mean iterations  2460.5, failures 20
+[   1187 s] 8/40 g1_leg1 p=0.005 X explore_X.npz shots 500..999:   22.3 s, mean iterations    49.0, failures 168
+[   1189 s] 9/40 g1_leg1 p=0.005 X explore_X.npz shots 1000..1499:   21.9 s, mean iterations    47.7, failures 163
+[   1199 s] 10/40 g1_leg1 p=0.005 X explore_X.npz shots 1500..1999:   22.0 s, mean iterations    48.0, failures 155
+[   1201 s] 11/40 g1_leg1 p=0.005 X explore_X.npz shots 2000..2499:   22.1 s, mean iterations    47.5, failures 155
+[   1208 s] 12/40 g1_leg1 p=0.005 X explore_X.npz shots 2500..2999:   21.2 s, mean iterations    45.1, failures 145
+[   1212 s] 13/40 g1_leg1 p=0.005 X explore_X.npz shots 3000..3499:   22.8 s, mean iterations    49.8, failures 180
+[   1212 s] 14/40 g1_kit p=0.005 X explore_X.npz shots 1000..1499: 1209.1 s, mean iterations  2541.0, failures 20
+[   1221 s] 15/40 g1_leg1 p=0.005 X explore_X.npz shots 3500..3999:   22.0 s, mean iterations    47.9, failures 163
+[   1224 s] 16/40 g1_leg1 p=0.005 X explore_X.npz shots 4000..4499:   22.7 s, mean iterations    49.5, failures 168
+[   1230 s] 17/40 g1_leg1 p=0.005 X explore_X.npz shots 4500..4999:   21.8 s, mean iterations    47.6, failures 166
+[   1314 s] 18/40 g1_kit p=0.005 X explore_X.npz shots 3000..3499: 1310.1 s, mean iterations  2746.4, failures 25
+[   2210 s] 19/40 g1_kit p=0.005 Z explore_Z.npz shots 1000..1499:  985.9 s, mean iterations  2141.2, failures 21
+[   2235 s] 20/40 g1_kit p=0.005 Z explore_Z.npz shots 0..499: 1020.0 s, mean iterations  2228.4, failures 12
+[   2243 s] 21/40 g1_kit p=0.005 Z explore_Z.npz shots 500..999: 1026.7 s, mean iterations  2229.2, failures 19
+[   2255 s] 22/40 g1_kit p=0.005 X explore_X.npz shots 4000..4499: 1143.2 s, mean iterations  2467.9, failures 21
+[   2296 s] 23/40 g1_kit p=0.005 X explore_X.npz shots 4500..4999: 1154.7 s, mean iterations  2502.9, failures 23
+[   2311 s] 24/40 g1_kit p=0.005 Z explore_Z.npz shots 1500..1999: 1084.1 s, mean iterations  2375.2, failures 21
+[   2316 s] 25/40 g1_leg1 p=0.005 Z explore_Z.npz shots 0..499:   17.3 s, mean iterations    46.5, failures 150
+[   2331 s] 26/40 g1_leg1 p=0.005 Z explore_Z.npz shots 500..999:   19.4 s, mean iterations    48.7, failures 162
+[   2336 s] 27/40 g1_leg1 p=0.005 Z explore_Z.npz shots 1000..1499:   20.3 s, mean iterations    48.4, failures 156
+[   2351 s] 28/40 g1_leg1 p=0.005 Z explore_Z.npz shots 1500..1999:   20.5 s, mean iterations    47.1, failures 157
+[   2357 s] 29/40 g1_leg1 p=0.005 Z explore_Z.npz shots 2000..2499:   20.9 s, mean iterations    49.1, failures 183
+[   2372 s] 30/40 g1_leg1 p=0.005 Z explore_Z.npz shots 2500..2999:   20.8 s, mean iterations    49.0, failures 174
+[   2378 s] 31/40 g1_leg1 p=0.005 Z explore_Z.npz shots 3000..3499:   20.8 s, mean iterations    49.1, failures 174
+[   2392 s] 32/40 g1_leg1 p=0.005 Z explore_Z.npz shots 3500..3999:   20.0 s, mean iterations    47.2, failures 160
+[   2399 s] 33/40 g1_leg1 p=0.005 Z explore_Z.npz shots 4000..4499:   21.3 s, mean iterations    50.0, failures 174
+[   2402 s] 34/40 g1_kit p=0.005 Z explore_Z.npz shots 2500..2999: 1084.8 s, mean iterations  2386.7, failures 21
+[   2412 s] 35/40 g1_leg1 p=0.005 Z explore_Z.npz shots 4500..4999:   19.8 s, mean iterations    47.9, failures 157
+[   2442 s] 36/40 g1_kit p=0.005 Z explore_Z.npz shots 2000..2499: 1208.7 s, mean iterations  2728.0, failures 24
+[   2842 s] 37/40 g1_kit p=0.005 Z explore_Z.npz shots 3500..3999:  606.2 s, mean iterations  2076.3, failures 22
+[   2851 s] 38/40 g1_kit p=0.005 Z explore_Z.npz shots 3000..3499:  641.3 s, mean iterations  2186.4, failures 18
+[   2866 s] 39/40 g1_kit p=0.005 Z explore_Z.npz shots 4000..4499:  623.1 s, mean iterations  2116.1, failures 15
+[   2939 s] 40/40 g1_kit p=0.005 Z explore_Z.npz shots 4500..4999:  680.2 s, mean iterations  2441.8, failures 24
+G1 run done

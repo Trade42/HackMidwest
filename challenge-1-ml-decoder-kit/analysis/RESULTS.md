@@ -2,6 +2,23 @@
 
 **These are exploration numbers on train, validation and exploration shots. Nothing here is a final result.** No test or go file was opened: the loader (`analysis/common.py`, `refuse_held_out`) refuses any file whose name starts with `test_` or `go_`.
 
+## In short
+
+Only what the tables below support. Relay-BP is the kit's baseline (80 / 60 / stop after 5, 300 legs); a pair is shot k of X with shot k of Z.
+
+- **G1, how relay-BP fails.** It is both: its failures split between "did not converge" and "converged to a wrong answer", and the mix moves with p. The unconverged share is 36% at p = 0.003 (44 failures), 41% at 0.004 (245) and 63% at 0.005 (404). At every p, 84% to 98% of the failures come from the shots whose first 80-iteration leg fails (3.5%, 14% and 36% of shots). Where the first leg converges, its answer is almost always right.
+- **G2, how much accuracy sits above relay-BP.** A lot, but most of it is not reached by simple means. At p = 0.004:
+  - decoding a failed shot again with other random draws fixes 44% of the failures (the re-roll floor);
+  - a larger budget fixes 53%;
+  - BP-OSD (order 10 or 60) and Tesseract (beam 5) fix 32% to 33%, below the floor;
+  - among 16 relay-BP candidates the right logical class is present for 79% of the converged-wrong failures, but the lowest weight picks it for only 49%, no better than one re-roll.
+  - Joint decoding on all 1,728 detectors fixes 43 of 44 failures at p = 0.003 and 89 of 100 sampled at 0.004, at about 60 to 70 times the time on a typical shot. It broke 0 of 300 and 1 of 200 controls.
+  - The relay-BP authors' own runs put joint decoding overall 2.5 times below separate decoding at p = 0.003, 1.3 times at 0.004, and above it at 0.005.
+- **G3, where the time goes.** The slowest 10% of shots take 48% to 71% of all iterations (p = 0.003 to 0.004).
+  - At p = 0.004 the later legs must stay at 60 iterations.
+  - Stopping after 3 solutions (80 / 60 / 3) cuts mean iterations 1.44 times with no measurable cost: 42 failed pairs against 51 of 5,000.
+  - Stopping at the first solution (80 / 60 / 1) cuts them 3.4 times for about 40% more failures.
+
 ## Setup
 
 - **Machine:** luminaty, AMD Ryzen 7 7730U (a 15 W laptop CPU, 8 cores, 16 threads), inside the dq fence. Every heavy run was niced (`nice -n 15`) and pinned to cores 8 to 15, which are 4 physical cores with 2 threads each, under the lane B and C locks. Other workers loaded cores 0 to 7 at the same time.
@@ -39,6 +56,20 @@ The exploration sets were made with the kit's `make_dataset.py` (`analysis/steps
 Since this task was briefed, `main` gained the team's own shot files at the other two noise levels (commit `80b9b48`): `data/p0.003/` and `data/p0.005/`, each with train (20,000), validation (5,000) and held-out test (10,000) files for X and Z. They are not the exploration sets used here, which came from other seeds (9103 to 9106) and are named by their sha256 above. Nothing here opened them.
 
 **Shot cuts, against the brief's aims:** the brief aimed at 100,000 shots per basis at p = 0.003 and 20,000 at 0.005. Its lanes were cut from 12 to 8 processes, and this CPU turned out about 2.7 times slower per process under full load than on one core. So p = 0.003 uses the first 50,000 shots of each file (the orchestrator's suggested cut) and p = 0.005 the first 5,000 (about 200 failures per basis, still above the brief's 100).
+
+## What was cut or changed against the brief
+
+- **Lanes.** The brief granted lanes B, C and D (12 processes). The orchestrator cut that to B and C (8 processes) at 01:43 UTC. Only the first smoke run (2 processes, 2 chunks of validation_X) ran on cores 0 to 3 as well.
+- **Shots.** At p = 0.003 G1 used 50,000 shots per basis, not 100,000. At p = 0.005 it used 5,000, not 20,000 (see Datasets).
+- **G2 samples.** These are seeded subsamples, stated in each table and set in `analysis/steps.sh`:
+  - at p = 0.005, 100 of the failures and 100 controls per basis;
+  - for the 16-candidate runs, at most 10 (p = 0.004) or 5 (p = 0.005) of G1's unconverged failures per basis;
+  - for joint decoding at p = 0.004, 50 failures and 100 controls per basis;
+  - at p = 0.003 the joint control was 150 shots per basis.
+- **G2 item 5, joint decoding,** was added by the orchestrator (2026-11-22 01:47 UTC), with setting (b) and p = 0.003 as its main point. Joint decoding at p = 0.005 (step 7b) was planned and then dropped by the orchestrator for the deadline: it was not run.
+- **On another machine.** G3 item 2 (the frontier) and G2 items 1 and 2 at p = 0.004 ran on the team's ICRN server, by the orchestrator's decision. That machine was shown to give luminaty's iterations and corrections exactly. Its milliseconds are its own.
+- **Not done.** G3 item 3 (four schedules at p = 0.003 and 0.005 on 3,000 shots) was not run. Tesseract was tried at its default beam only, inside the 30-minute box.
+- **Choices made here.** BP-OSD's "higher order" is OSD-CS order 60. On 5 failed shots it cost 1.9 times order 10, and order 20 or 40 differed little in cost.
 
 ## How every run is made reproducible
 
@@ -113,6 +144,41 @@ The kit's README reports 43 and 54 failures in 100,000 shots per basis at p = 0.
 - The first leg converges on 96.5% of shots. Keeping its answer there would cost 3 more failures than the kit's 44 (47 in all).
 - As at p = 0.004, the failures sit mostly where the first leg fails: 37 of 44.
 
+### p = 0.005 (the first 5,000 shots of each exploration file)
+
+| basis | shots | failures | did not converge | converged to a wrong answer | rate per basis [95% Wilson] | iterations mean / median / p90 / p99 / max | first leg converged |
+|---|---|---|---|---|---|---|---|
+| X | 5,000 | 207 | 125 | 82 | 4.14e-2 [3.62e-2, 4.73e-2] | 2,464 / 368 / 9,181 / 18,080 / 18,080 | 63.7% [62.4, 65.0] |
+| Z | 5,000 | 197 | 128 | 69 | 3.94e-2 [3.44e-2, 4.52e-2] | 2,291 / 372 / 7,101 / 18,080 / 18,080 | 64.1% [62.8, 65.4] |
+
+| basis | failures whose first leg converged | the first leg's own answer wrong, where it converged | failures if a decoder kept the first leg's answer whenever it converged | converged-wrong failures that ran at least 296 legs | iterations of the failed shots, median | unconverged shots scored right |
+|---|---|---|---|---|---|---|
+| X | 6 of 207 | 6 of 3,185 | 207 (kit: 207) | 45 of 82 | 18,080 | 1 of 126 |
+| Z | 3 of 197 | 5 of 3,206 | 199 (kit: 197) | 34 of 69 | 18,080 | 1 of 129 |
+
+The kit's README reports 411 and 414 failures in 10,000 shots per basis at p = 0.005 (4.1e-2), and the relay-BP authors 216 and 205 in 5,000 (4.3e-2 and 4.1e-2). Ours agree. Correction weight: median 57 faults on right shots against 66 on converged-wrong failures. Time per shot, 8 processes: mean 2.3 s (X) and 1.8 s (Z), median 0.35 and 0.28 s, p99 18 and 17 s.
+
+**What this says at p = 0.005:**
+
+- Here most failures did not converge: 253 of 404 (63%).
+- The first leg converges on only 64% of shots, and its answer there is almost always right (11 wrong in 6,391).
+- Of the 151 converged-wrong failures, 79 ran at least 296 legs, so they found only 1 to 4 solutions.
+- Relay-BP's failures at p = 0.005 are mostly shots where it runs out of budget, not shots where it is fooled.
+
+### Across p
+
+| p | failures X + Z (shots per basis) | did not converge | converged wrong | first leg converged | failures where the first leg did not converge |
+|---|---|---|---|---|---|
+| 0.003 | 44 (50,000) | 16 (36%) | 28 (64%) | 96.5% | 37 of 44 |
+| 0.004 | 245 (25,000) | 100 (41%) | 145 (59%) | 86.0% | 224 of 245 |
+| 0.005 | 404 (5,000) | 253 (63%) | 151 (37%) | 63.9% | 395 of 404 |
+
+**G1's answer: it is both, and the mix moves with p.**
+
+- At p = 0.003 and 0.004 most failures converged to a wrong answer: those need a better choice among solutions.
+- At p = 0.005 most did not converge: those need a solution found at all.
+- At every p, nearly all failures (84% to 98%) come from the shots whose first leg fails. Where the first leg converges, keeping its answer costs 0 to 5 failures per basis against the kit's 5-solution pick.
+
 ## G2: how much accuracy sits above relay-BP
 
 **The sets.** Per p and basis:
@@ -129,7 +195,7 @@ Every G2 decode runs on a fresh decoder per shot, so no result depends on the ot
 - The column "other's failures on all G1 shots" therefore scales up both parts: relay-BP's failures times (1 - fix rate), plus all of relay-BP's right shots times the control's break rate. Its range uses the exact (Clopper-Pearson) 95% intervals of both rates. With 122 controls, a break rate can only be bounded at about 3%, so the range is wide. **Read the fix rate, the cost per shot and the range, never the raw p-value, as the answer.**
 - **The re-roll floor.** Relay-BP is randomized: legs 2 onwards draw their memory strengths at random. `kit_fresh` decodes each shot again with the kit's settings and seed 0 on a fresh decoder, so with other random draws than in G1. It fixes failures by luck alone, and every other row's fixes should be read against it.
 
-### Items 1, 3 and 4 at p = 0.004, and the re-roll floor
+### Items 3 and 4 at p = 0.004, and the re-roll floor
 
 | decoder | basis | F | fixed: all / of unconverged / of converged-wrong | C | broken | 2 x 2: both wrong / only relay-BP / only other / both right | exact paired p | break rate [95% CP] | other's failures on all 25,000 shots, estimate [range], against relay-BP's | iterations mean F / C | ms mean F / C |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -269,6 +335,29 @@ In G1 at p = 0.004 the kit's separate relay-BP took a mean of 404 and 466 ms per
 - As a fallback after separate decoding, it would fix most of the flagged failures: 84% of the unconverged ones.
 
 ## G3: where relay-BP's time goes
+
+### Item 1: where the iterations go (from G1)
+
+`python -m analysis.g3_schedules tail` (in `analysis/steps.sh summarize-g3`; output `results/g3_tail.json`, log `logs/g3_tail.log`), from G1's per-shot iterations with the kit's schedule:
+
+| p | basis | shots | mean iterations | share of all iterations in the slowest 1% of shots | in the slowest 10% | in the unconverged shots (count) | in the failed shots (count) | derived: first leg's answer where it converged, else the kit's run: mean iterations (speed-up) | its failures against the kit's |
+|---|---|---|---|---|---|---|---|---|---|
+| 0.003 | X | 50,000 | 146 | 27.0% | 49.2% | 2.2% (9) | 2.8% (23) | 64 (2.27x) | 24 vs 23 |
+| 0.003 | Z | 50,000 | 143 | 24.6% | 47.7% | 2.3% (9) | 3.0% (21) | 61 (2.36x) | 23 vs 21 |
+| 0.004 | X | 25,000 | 539 | 31.4% | 70.9% | 7.6% (57) | 12.1% (122) | 396 (1.36x) | 125 vs 122 |
+| 0.004 | Z | 25,000 | 547 | 31.5% | 71.0% | 6.0% (45) | 11.2% (123) | 407 (1.34x) | 128 vs 123 |
+| 0.005 | X | 5,000 | 2464 | 7.3% | 65.9% | 18.5% (126) | 26.7% (207) | 2225 (1.11x) | 207 vs 207 |
+| 0.005 | Z | 5,000 | 2291 | 7.9% | 67.4% | 20.4% (129) | 27.4% (197) | 2060 (1.11x) | 199 vs 197 |
+
+The derived column is computed from G1's two passes (the first leg alone, and the kit's run). A real run of that rule would draw other random memory strengths on the shots it passes on, so its failures would differ shot by shot. As G2 shows, that changes the count only within noise.
+
+**What this says:**
+
+- At p = 0.003 and 0.004 the slowest 10% of shots take 48% to 71% of all iterations, and the slowest 1% take 25% to 32%.
+- At p = 0.005, 2.5% of shots run the whole 18,080-iteration budget without converging. They alone take a fifth of the iterations, and the slowest 10% take two thirds.
+- The failed shots take 3% (p = 0.003), 12% (0.004) and 27% (0.005) of all iterations, a share far above their number.
+- Stopping at the first leg where it converges cuts mean iterations 2.3 times at p = 0.003, 1.35 times at 0.004 and 1.1 times at 0.005, at 0 to 5 more failures per basis.
+- So what a faster first stage can save is the easy shots' extra legs; the tail of hard shots stays, and it holds most of the work at p = 0.004 and 0.005.
 
 ### Item 2: the speed against accuracy frontier at p = 0.004 (run on another machine)
 

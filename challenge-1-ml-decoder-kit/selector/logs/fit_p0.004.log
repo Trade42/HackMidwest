@@ -1,0 +1,29 @@
+# 2026-11-22T08:34:44Z on luminaty, from challenge-1-ml-decoder-kit/ at commit bc3b7d4; M = the folder of selector/get_members.sh, A = $M/laptop-artifacts/priortilt, F = $M/server-logs/files, O = an output folder
+$ python -m selector.fit --pool T P1 P2 R J --train $A/results_8b/selector_train_X.npz $F/tcbp_p0.004/train_X.tcbp.npz $F/joint_p0.004/train_X.joint.npz --train $A/results_8b/selector_train_Z.npz $F/tcbp_p0.004/train_Z.tcbp.npz $F/joint_p0.004/train_Z.joint.npz --out selector/models/p0.004.json
+fitting the selector on 2 training file(s); pool T, P1, P2, R, J
+  train_X.npz        X p = 0.004  shots  20000  choice shots    90  with a right answer    89   data sha256 98c0afeb2a0b6b27...
+  train_Z.npz        Z p = 0.004  shots  20000  choice shots   112  with a right answer   109   data sha256 14dce11586fa5125...
+
+5-fold cross-validation over the training choice shots that have a right answer (folds by shot, seed 20261122):
+    lambda   right    of   held out: both wrong, only the selector wrong, only TCBP-JOBS wrong
+     0.001     186   198       8     4    44
+      0.01     186   198       9     3    43
+       0.1     187   198      10     1    42
+         1     187   198      10     1    42
+chosen lambda 1; final fit on all 198 training choice shots with a right answer
+on the training choice shots themselves (in-sample, not a result): the selector right on 187, TCBP-JOBS on 146
+
+weights (on standardized features; a positive weight favours an answer with more of the feature):
+  has_T                  +0.175   (mean   0.379, spread   0.485)
+  n_priortilt            -0.001   (mean   0.758, spread   0.564)
+  has_R                  +0.013   (mean   0.379, spread   0.485)
+  J_converged            +0.474   (mean   0.336, spread   0.472)
+  J_unconverged          -0.083   (mean   0.043, spread   0.203)
+  pt_converged           +0.090   (mean   0.535, spread   0.499)
+  R_converged            +0.086   (mean   0.308, spread   0.462)
+  pt_weight_minus_T      -0.080   (mean   0.586, spread   1.074)
+  R_weight_minus_T       -0.031   (mean   0.074, spread   0.299)
+  pt_log_iterations      -0.039   (mean   2.590, spread   1.777)
+  R_log_iterations       +0.010   (mean   1.475, spread   1.911)
+
+wrote selector/models/p0.004.json  sha256 164990fdf389d0362218deb2aca6754f4e088dcc6fa4daf333f23292af9b5b31

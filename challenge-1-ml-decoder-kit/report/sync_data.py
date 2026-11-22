@@ -130,6 +130,9 @@ SOURCES = [
     ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/x_4h.ckpt_0.83h.eval_lowp.log", False),
     ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/x_1h_w32.log", False),
     ("loss/server/", "origin/server-logs", "files/loss/*/*.json", False),
+    # the folders merged at the end: the learned selector (its one test run is written in its README) and the neutral-atom noise study
+    ("background/selector_README.md", "tree", "selector/README.md", False),
+    ("background/neutral_atom_noise_RESULTS.md", "tree", "neutral_atom_noise/RESULTS.md", False),
     # the learned predecoder (predecoder/, merged into integration at 8ddf14e): its runs on the saved TEST shots (summary and the
     # secondary rows beside TCBP-JOBS and the evaluator's relay-BP; the per-shot file stays out of git), and the declared gate on exploration shots
     ("test/predecoder/", "tree", "predecoder/logs/test_run_p*_summary.json", False),

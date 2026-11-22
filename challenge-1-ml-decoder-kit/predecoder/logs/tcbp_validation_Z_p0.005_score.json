@@ -1,0 +1,38 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/pred-tcbp-76521b7/challenge-1-ml-decoder-kit/data/p0.005/validation_Z.npz",
+  "sha256": "24f12efa48d92b7a97767a36679be9216d75d5e6b88502e39f684ec17417774e",
+  "basis": "Z",
+  "p": 0.005,
+  "seed": 202,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 5000,
+ "arms": {
+  "TCBP-JOBS, head priors per shot": {
+   "failures": 35,
+   "share": 0.007,
+   "wilson95": [
+    0.005037635081136912,
+    0.00971931904862176
+   ]
+  },
+  "TCBP-JOBS alone (stored)": {
+   "failures": 97,
+   "share": 0.0194,
+   "wilson95": [
+    0.01592960665950528,
+    0.02360830846171585
+   ]
+  }
+ },
+ "pairs": {
+  "TCBP-JOBS, head priors per shot | TCBP-JOBS alone (stored)": {
+   "both": 24,
+   "only_first": 11,
+   "only_second": 73,
+   "p": 2.2490938201170897e-12
+  }
+ }
+}

@@ -1,9 +1,9 @@
 # Information: what we are building, why, and where everything is
 
-Last updated: 2026-11-22 14:20 UTC (the results on the held-out test shots; review corrections). This file is the overview of
-our part of the team's work on Infleqtion's Challenge 1 (ML-assisted decoding of the Gross code).
+Last updated: 2026-11-22 16:40 UTC (the predecoder, its TCBP version, the side folders brought in). This file is the
+overview of our part of the team's work on Infleqtion's Challenge 1 (ML-assisted decoding of the Gross code).
 It came in from the branch `integration`, our one working branch, which holds everything in the
-submission; the demo and improvement branches of section 12 are kept apart.
+submission; section 12 lists what is on `main` and the two branches still kept apart.
 
 Read this first, then the README of the folder you care about. Every number below names where
 it was measured. **Section 1a holds the results on the team's held-out test shots, from the one
@@ -35,6 +35,22 @@ studied atom loss, the part the challenge stresses: relay-BP with the loss flags
 shots where a loss-blind one fails 57.7%, and our loss-time tracker, which estimates from the
 syndrome when each atom was lost, recovers 58% (38% to 78%) of what knowing the true loss time
 would add.
+
+**Since the main run: a learned predecoder, and its TCBP version** (each run after the main test results were seen,
+and labelled so in the report). The same structured network gets a small head that turns each shot's syndrome into
+per-shot error probabilities (priors), handed to a standard decoder in place of the kit's fixed ones.
+With relay-BP (the predecoder; its knobs fitted on train shots and checked on validation before one registered run
+per test file) it fails 151 X shots of 10,000 at p = 0.005 (a secondary result: that run was chosen after the predecoder's own gate at p = 0.004 failed) against 433 for relay-BP with the kit's priors, and on
+the pair score 281 failed pairs against TCBP-JOBS's 360 (exact p = 7.6e-6). With TCBP-JOBS in place of relay-BP
+(the TCBP version; designed after the test results were seen; its two knobs fitted on train at p = 0.005 and frozen
+before validation, where it failed 33 against 91; then one registered run per test file) it fails **72 X shots
+against TCBP-JOBS's 186 at p = 0.005** (22 against 136 discordant, exact p = 2.9e-21), 4 against 20 at p = 0.004
+(p = 0.0004) and 0 against 1 at p = 0.003; on Z at p = 0.005 (X's knobs unchanged, a validation gate passed first)
+61 against 177, and on **the kit's pair score at p = 0.005, 132 failed pairs against TCBP-JOBS's 360 and relay-BP's
+845** (41 against 269 discordant, exact p = 3.0e-42). It costs about 56 ms per shot on the A100 (network 9.4 ms, a per-shot
+decoder build 42.6 ms, the decode 3.8 ms; not a clean timing), against about 9 ms for TCBP-JOBS alone and about
+760 ms for relay-BP's timed row. TCBP-JOBS's own model fit varies from run to run (91, 96 and 100 failures on the
+same 5,000 validation shots); on the test shots the same-run control failed exactly the stored file's 186 shots.
 
 ## 1a. Results on the held-out test shots
 
@@ -82,6 +98,18 @@ Whose gain is whose (copied from `report/tables/test_ladder_short.md`):
 | our hierarchy, neural tie-break | ours | 4 | 50 | 490 | 544 |
 | ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder) | nobody: needs the truth | 3 | 40 | 386 | 429 |
 | TCBP-JOBS (NVIDIA, GPU), for reference | NVIDIA | 3 | 41 | 360 | 404 |
+
+**After the main run** (X failures of 10,000 test shots unless marked; every row run after the main test results
+were seen; `report/tables/master_comparison.md` holds every method with its label and folder):
+
+| Decoder | p = 0.003 | p = 0.004 | p = 0.005 | Label |
+|---|---|---|---|---|
+| relay-BP with the kit's priors, same runs (the predecoder's control) | 7 | 39 | 433 (Z 398) | registered |
+| the predecoder: relay-BP with the head's priors | 2 | 15 | 151 (Z 132; pairs 281) | p = 0.005 X: secondary (chosen after its p = 0.004 gate failed); the rest: registered extension |
+| the predecoder, falling back to TCBP-JOBS where relay-BP did not converge | 1 | 10 | 107 (Z 100; pairs 206) | designed after the first test result |
+| TCBP-JOBS alone (stored test files) | 1 | 20 | 186 (Z 177; pairs 360) | reference |
+| **the TCBP version: TCBP-JOBS with the head's priors** | **0** | **4** | **72 (Z 61; pairs 132)** | designed after the test results were seen; registered runs |
+
 
 ## 2. The challenge
 
@@ -394,7 +422,7 @@ Branches of this repository:
 | Branch | What it holds | State |
 |---|---|---|
 | `main` | the kit, and the teammates' evaluator, shot files, router and baselines | shared by the team |
-| **`integration`** | **all of our submitted work, this file and the report** | our one working branch; merged into `main` by pull request #2 |
+| **`integration`** | **all of our submitted work, this file and the report** | our one working branch; merged into `main` by pull requests #2, #3 and #5 to #10 |
 | `server-logs` | logs and result files pushed from the GPU server: the test run's per-shot files under `files/clean/`, the final Z network under `files/ckpt/` | data only, never merged |
 | `laptop-artifacts` | the laptop's per-shot decode files, network checkpoints (the final X network: `cascade_X_s1/checkpoint_final_step120000.pt`) and scores | data only, never merged |
 
@@ -403,15 +431,19 @@ merged into `integration` (`MLDecoder` also into `main`, pull request #1). `MLDe
 and `loss-gates` stay on the remote because the team's top `README.md` links to them;
 `hierarchy` is also still on the remote, fully merged; `cascade` is deleted.
 
-Branches kept apart on purpose, each merged nowhere until the team decides:
+Brought into `main` after the main run, each as its own folder (pull requests #3 to #10, on the team's word):
+`predecoder` and `predecoder-tcbp` (folder `predecoder/`: the predecoder and its TCBP version), `learned-selector`
+(folder `selector/`: a small model choosing among the ensemble's members at p = 0.005; ahead on validation, level
+with TCBP-JOBS on the test shots, 353 against 360, p = 0.41) and `infleqtion-noise` (folder `neutral_atom_noise/`:
+our noise model built from Infleqtion's published figures, not Infleqtion's own model, with the TCBP pipeline tried
+on it as exploration). Their branches stay on the remote.
+
+Branches still kept apart:
 
 | Branch | What it holds |
 |---|---|
-| `fpga` | the tie-break network as a simulated FPGA design: with 12-bit weights and values it gets as many of 5,000 validation shots wrong as at 16 bits (239), and none of its 99 tie-break choices changes (24 shots of `validation_X.npz` and 75 of `train_X.npz`, p = 0.004); but its 10.7 Mb of weights do not fit the team's board (2.76 Mb of block RAM); and a check of the teammate's board demo (`fpga_router/CHECK_OF_fpga_board.md`) |
-| `infleqtion-noise` | result set C: decoders under a noise model shaped like Infleqtion's published figures |
-| `predecoder` | a head on the network that gives relay-BP per-shot priors: at p = 0.005 on validation 79 failures against 206 for relay-BP with the kit's priors; it missed its pass mark at p = 0.004 (14 against 20, not significant) |
-| `learned-selector` | a small model choosing among the ensemble's members at p = 0.005: ahead on validation, level with TCBP-JOBS on the test shots (353 against 360, p = 0.41) |
-| `network-first` | the network decides the X shots it is confident on, the hierarchy the rest: at p = 0.004, on 80,000 fresh X exploration shots, level in accuracy (229 against 237 failures, p = 0.28) at about 70% of the frozen rule's mean time on our PC; slower at p = 0.003; no time gain on Z, and no Z threshold in its options; not measured at p = 0.005, and no test-shot result |
+| `fpga` | the tie-break network as a simulated FPGA design: with 12-bit weights and values it gets as many of 5,000 validation shots wrong as at 16 bits (239), and none of its 99 tie-break choices changes; but its 10.7 Mb of weights do not fit the team's board (2.76 Mb of block RAM); and a check of the teammate's board demo. A teammate's pull request (#4) proposes it for `main` |
+| `network-first` | the network decides the X shots it is confident on, the hierarchy the rest: at p = 0.004, on 80,000 fresh X exploration shots, level in accuracy (229 against 237 failures, p = 0.28) at about 70% of the frozen rule's mean time on our PC; no test-shot result |
 
 Folders (inside `challenge-1-ml-decoder-kit/` unless noted):
 
@@ -424,6 +456,9 @@ Folders (inside `challenge-1-ml-decoder-kit/` unless noted):
 | `ml_decoder/` | `README.md` |
 | `report/` | `REPORT.md`, then `REPRODUCE.md` |
 | `loss_tracker/` | `RESULTS.md` |
+| `predecoder/` | `README.md` (the predecoder), then `README_tcbp.md` (its TCBP version) |
+| `selector/` | `README.md` |
+| `neutral_atom_noise/` | `README.md`, then `RESULTS.md` |
 | `server-jobs/` (top level) | `README.md`: the job scripts the team's server ran, kept as the record |
 | `evaluation/`, `data/`, `results/` | `evaluation/README.md` (the teammates') |
 | `fpga_router/` (top level) | `README.txt`: Verilog for a router's decision, simulated with stand-in weights; a stretch goal |
@@ -452,14 +487,17 @@ READMEs are how we keep being able to explain it.
 
 ## 13. What is next
 
-Done for the submission: the evaluator plugin, both networks, the one run on the test shots
-beside every baseline row, the ensemble, the loss-time tracker, the report with its plots, the
-reproduce script and the slides. Left:
+Done for the submission: the evaluator plugin, both networks, the one run on the test shots beside every baseline
+row, the ensemble, the loss-time tracker, the predecoder and its TCBP version with their registered test runs, the
+report with its plots and its table of every method, the reproduce script and the slides. Left:
 
-1. Pull request #2 merges `integration` into `main` with a merge commit.
-2. Joint decoding at p = 0.005, where the ensemble has not used it yet.
-3. A tie-breaker that beats the best hand-written rule: the network is level with it today.
-4. Stretch: the FPGA router on the board, the mismatch test (set D), a second code.
+1. Retrain the network's small head for each new noise picture (the Z head took about 25 minutes on a laptop GPU):
+   on the neutral-atom model TCBP-JOBS fails 25 of 2,000 shots with the true noise's priors and 209 with the
+   kit-trained head's (exploration, factor 0.8, server job cpu/090; `server-logs` `files/tcbp-noise/`), so most of the gap is the head's to close.
+2. The TCBP version with atom loss: it already builds one decoder per shot from per-shot priors, so the loss flags
+   (or the loss tracker's estimate) can enter at no extra cost; its network was trained without loss.
+3. A faster per-shot build for the TCBP version (42.6 of its 56 ms), and joint decoding at p = 0.005.
+4. Stretch: the FPGA router on the board, a second code.
 
 ## 14. Plain-words glossary
 

@@ -1,0 +1,353 @@
+{
+ "rates": [
+  {
+   "basis": "X",
+   "factor": 0.3,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "priors": "matched",
+   "flags": "starter",
+   "picture": "starter + matched",
+   "shots": 1000,
+   "failures": 0,
+   "fraction": 0.0,
+   "wilson_low": 0.0,
+   "wilson_high": 0.0038267585456940676,
+   "per_cycle": 0.0,
+   "unconverged": 0,
+   "mean_iterations": 62.557,
+   "median_iterations": 50.0,
+   "mean_ms": 70.66734051285312,
+   "shots_file": "X_f0.3_loss_seed6100.npz",
+   "seed": 6100,
+   "shots_sha256": "95fd319897dd11420a7fc6bb97ab7b04d5cf372bacce27732e9a14e7eb058252",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "X",
+   "factor": 0.4,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "priors": "matched",
+   "flags": "blind",
+   "picture": "blind + matched",
+   "shots": 300,
+   "failures": 18,
+   "fraction": 0.06,
+   "wilson_low": 0.03828636939007202,
+   "wilson_high": 0.09283944546082745,
+   "per_cycle": 0.005143012831822946,
+   "unconverged": 9,
+   "mean_iterations": 3002.56,
+   "median_iterations": 350.5,
+   "mean_ms": 2450.159359585183,
+   "shots_file": "X_f0.4_loss_seed6100.npz",
+   "seed": 6100,
+   "shots_sha256": "9c225b77e7e5a2913267843ed0e2e11518403fa2e47afcb462eeb2a7600d92fd",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "X",
+   "factor": 0.4,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "priors": "matched",
+   "flags": "starter",
+   "picture": "starter + matched",
+   "shots": 2000,
+   "failures": 0,
+   "fraction": 0.0,
+   "wilson_low": 0.0,
+   "wilson_high": 0.001917047311437806,
+   "per_cycle": 0.0,
+   "unconverged": 0,
+   "mean_iterations": 132.542,
+   "median_iterations": 75.0,
+   "mean_ms": 125.97992649069056,
+   "shots_file": "X_f0.4_loss_seed6100.npz",
+   "seed": 6100,
+   "shots_sha256": "9c225b77e7e5a2913267843ed0e2e11518403fa2e47afcb462eeb2a7600d92fd",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "X",
+   "factor": 0.4,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "priors": "generic-2q",
+   "flags": "starter",
+   "picture": "starter + generic, same two-qubit error (p = 0.0060)",
+   "shots": 1000,
+   "failures": 3,
+   "fraction": 0.003,
+   "wilson_low": 0.0010207838732076793,
+   "wilson_high": 0.008783014121212225,
+   "per_cycle": 0.0002503444102988084,
+   "unconverged": 1,
+   "mean_iterations": 708.666,
+   "median_iterations": 177.0,
+   "mean_ms": 622.6612317929976,
+   "shots_file": "X_f0.4_loss_seed6100.npz",
+   "seed": 6100,
+   "shots_sha256": "9c225b77e7e5a2913267843ed0e2e11518403fa2e47afcb462eeb2a7600d92fd",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "X",
+   "factor": 0.5,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "priors": "matched",
+   "flags": "starter",
+   "picture": "starter + matched",
+   "shots": 1000,
+   "failures": 8,
+   "fraction": 0.008,
+   "wilson_low": 0.004059195797851703,
+   "wilson_high": 0.01570633461111126,
+   "per_cycle": 0.0006691236782786492,
+   "unconverged": 3,
+   "mean_iterations": 492.815,
+   "median_iterations": 125.5,
+   "mean_ms": 415.63347577955574,
+   "shots_file": "X_f0.5_loss_seed6100.npz",
+   "seed": 6100,
+   "shots_sha256": "b4adce442e1591ce331f998f4bfa67c58a95d1907a1288111996c20392ff0c36",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "X",
+   "factor": 0.6,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "priors": "matched",
+   "flags": "blind",
+   "picture": "blind + matched",
+   "shots": 100,
+   "failures": 62,
+   "fraction": 0.62,
+   "wilson_low": 0.5220975521761144,
+   "wilson_high": 0.7090240081193264,
+   "per_cycle": 0.0774668808446417,
+   "unconverged": 51,
+   "mean_iterations": 13547.44,
+   "median_iterations": 18080.0,
+   "mean_ms": 12289.121999973431,
+   "shots_file": "X_f0.6_loss_seed6100.npz",
+   "seed": 6100,
+   "shots_sha256": "bcdcfdf177d27910b3096a2c1948034e6731fc876d68c861847864361c1e2282",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "X",
+   "factor": 0.6,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "priors": "matched",
+   "flags": "starter",
+   "picture": "starter + matched",
+   "shots": 1000,
+   "failures": 60,
+   "fraction": 0.06,
+   "wilson_low": 0.04689647258469258,
+   "wilson_high": 0.07647107493551819,
+   "per_cycle": 0.005143012831822946,
+   "unconverged": 44,
+   "mean_iterations": 2222.367,
+   "median_iterations": 272.0,
+   "mean_ms": 1755.040540266782,
+   "shots_file": "X_f0.6_loss_seed6100.npz",
+   "seed": 6100,
+   "shots_sha256": "bcdcfdf177d27910b3096a2c1948034e6731fc876d68c861847864361c1e2282",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "X",
+   "factor": 0.6,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "priors": "generic-2q",
+   "flags": "starter",
+   "picture": "starter + generic, same two-qubit error (p = 0.0089)",
+   "shots": 150,
+   "failures": 47,
+   "fraction": 0.31333333333333335,
+   "wilson_low": 0.2445491405247644,
+   "wilson_high": 0.391439750849377,
+   "per_cycle": 0.030839964573301515,
+   "unconverged": 45,
+   "mean_iterations": 9610.646666666667,
+   "median_iterations": 10555.5,
+   "mean_ms": 8723.42878285485,
+   "shots_file": "X_f0.6_loss_seed6100.npz",
+   "seed": 6100,
+   "shots_sha256": "bcdcfdf177d27910b3096a2c1948034e6731fc876d68c861847864361c1e2282",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "X",
+   "factor": 0.8,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "priors": "matched",
+   "flags": "starter",
+   "picture": "starter + matched",
+   "shots": 300,
+   "failures": 170,
+   "fraction": 0.5666666666666667,
+   "wilson_low": 0.5100989215349749,
+   "wilson_high": 0.6215486822754948,
+   "per_cycle": 0.06731460792695731,
+   "unconverged": 152,
+   "mean_iterations": 13217.17,
+   "median_iterations": 18080.0,
+   "mean_ms": 10263.71016759891,
+   "shots_file": "X_f0.8_loss_seed6100.npz",
+   "seed": 6100,
+   "shots_sha256": "4699825520052968e5e48c3310a883db05cf022e66e7001980b6b3e1dcf8e024",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  }
+ ],
+ "paired": [
+  {
+   "basis": "X",
+   "factor": 0.4,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "flags": "starter",
+   "generic": "starter + generic, same two-qubit error (p = 0.0060)",
+   "generic_priors": "generic-2q",
+   "shots": 1000,
+   "a_failures": 3,
+   "b_failures": 0,
+   "only_a": 3,
+   "only_b": 0,
+   "p": 0.25,
+   "iterations_generic": 708.666,
+   "iterations_matched": 119.069,
+   "unconverged_generic": 1,
+   "unconverged_matched": 0,
+   "better_generic": true
+  },
+  {
+   "basis": "X",
+   "factor": 0.6,
+   "uniform_p": null,
+   "loss": true,
+   "decoder": "relay",
+   "flags": "starter",
+   "generic": "starter + generic, same two-qubit error (p = 0.0089)",
+   "generic_priors": "generic-2q",
+   "shots": 150,
+   "a_failures": 47,
+   "b_failures": 10,
+   "only_a": 37,
+   "only_b": 0,
+   "p": 1.4551915228366852e-11,
+   "iterations_generic": 9610.646666666667,
+   "iterations_matched": 2095.6133333333332,
+   "unconverged_generic": 45,
+   "unconverged_matched": 6,
+   "better_generic": true
+  }
+ ],
+ "flags": [
+  {
+   "basis": "X",
+   "factor": 0.4,
+   "uniform_p": null,
+   "decoder": "relay",
+   "flags": "starter",
+   "picture": "matched",
+   "shots": 300,
+   "a_failures": 18,
+   "b_failures": 0,
+   "only_a": 18,
+   "only_b": 0,
+   "p": 7.62939453125e-06,
+   "iterations_blind": 3002.56,
+   "iterations_flags": 125.19333333333333
+  },
+  {
+   "basis": "X",
+   "factor": 0.6,
+   "uniform_p": null,
+   "decoder": "relay",
+   "flags": "starter",
+   "picture": "matched",
+   "shots": 100,
+   "a_failures": 62,
+   "b_failures": 9,
+   "only_a": 53,
+   "only_b": 0,
+   "p": 2.220446049250313e-16,
+   "iterations_blind": 13547.44,
+   "iterations_flags": 2489.17
+  }
+ ],
+ "fit": {}
+}

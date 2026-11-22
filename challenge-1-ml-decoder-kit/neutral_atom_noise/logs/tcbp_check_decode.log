@@ -1,0 +1,25 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+X_f0.8_seed4100_kitformat_p0.0326371.npz: 2000 shots, p=0.0326371 (the network's p input and the mixing base), decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs; head knobs {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, cap 0.5; stop at 2026-11-22T17:12:00Z; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
+  model fitted in 60.9 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 0-99 done, 85 s; failures so far m 0, g 48, h 8 of 100; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 100-199 done, 110 s; failures so far m 2, g 104, h 19 of 200; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 200-299 done, 133 s; failures so far m 5, g 143, h 28 of 300; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 300-399 done, 158 s; failures so far m 6, g 191, h 42 of 400; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 400-499 done, 182 s; failures so far m 6, g 238, h 54 of 500; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 500-599 done, 206 s; failures so far m 6, g 285, h 61 of 600; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 600-699 done, 230 s; failures so far m 9, g 327, h 68 of 700; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 700-799 done, 254 s; failures so far m 11, g 368, h 74 of 800; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 800-899 done, 278 s; failures so far m 12, g 419, h 87 of 900; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 900-999 done, 303 s; failures so far m 13, g 468, h 96 of 1000; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1000-1099 done, 334 s; failures so far m 13, g 516, h 112 of 1100; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1100-1199 done, 373 s; failures so far m 14, g 565, h 120 of 1200; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1200-1299 done, 404 s; failures so far m 15, g 619, h 136 of 1300; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1300-1399 done, 428 s; failures so far m 15, g 669, h 143 of 1400; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1400-1499 done, 452 s; failures so far m 17, g 719, h 154 of 1500; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1500-1599 done, 476 s; failures so far m 19, g 773, h 166 of 1600; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1600-1699 done, 500 s; failures so far m 19, g 821, h 176 of 1700; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1700-1799 done, 524 s; failures so far m 19, g 861, h 186 of 1800; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1800-1899 done, 548 s; failures so far m 21, g 911, h 197 of 1900; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1900-1999 done, 572 s; failures so far m 25, g 957, h 209 of 2000; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out-6569bd7/decode/per_shot.npz: 2000 shots scored; 572 s

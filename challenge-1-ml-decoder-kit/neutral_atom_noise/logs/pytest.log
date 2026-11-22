@@ -1,0 +1,9 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.15, pytest-9.2.0, pluggy-1.7.0
+rootdir: /home/sal/hackMidwest/worktrees/infleqtion-noise/challenge-1-ml-decoder-kit
+collected 41 items
+
+test_kit.py .......................                                      [ 56%]
+neutral_atom_noise/test_neutral_atom_noise.py ..................         [100%]
+
+============================= 41 passed in 42.62s ==============================

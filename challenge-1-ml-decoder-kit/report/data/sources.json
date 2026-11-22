@@ -32,6 +32,17 @@
   "path": "analysis/results/g3_frontier_p0.004.csv",
   "sha256": "b4cfac61ed00219af59c8eb999e99978fc63233ddf0df3c9ea5bed109102a185"
  },
+ "background/neutral_atom_noise_RESULTS.md": {
+  "branch": "tree",
+  "bytes": 30140,
+  "commit": "f51aabdf895b875dacca9bdc12008a8502d6bfaf",
+  "copied_utc": "2026-11-22 16:32",
+  "file": "background/neutral_atom_noise_RESULTS.md",
+  "from": "this branch, `challenge-1-ml-decoder-kit/neutral_atom_noise/RESULTS.md` (last changed in commit `f51aabdf895b`)",
+  "grows": false,
+  "path": "neutral_atom_noise/RESULTS.md",
+  "sha256": "202a46b270fb030aebad8ed6616060ade75ebda50defa1d40e062db8d1da6151"
+ },
  "background/plain_cnn_runs/README.md": {
   "branch": "origin/laptop-artifacts",
   "bytes": 2114,
@@ -108,6 +119,17 @@
   "grows": false,
   "path": "priortilt/results_hierarchy_heldout_step120000.txt",
   "sha256": "cedc75e25f17d71db2510e540194581645c255d9b590bccc36e6ab586fe26a49"
+ },
+ "background/selector_README.md": {
+  "branch": "tree",
+  "bytes": 22572,
+  "commit": "f70537ff16a2d803109b23b98f98f0e3522593ae",
+  "copied_utc": "2026-11-22 16:32",
+  "file": "background/selector_README.md",
+  "from": "this branch, `challenge-1-ml-decoder-kit/selector/README.md` (last changed in commit `f70537ff16a2`)",
+  "grows": false,
+  "path": "selector/README.md",
+  "sha256": "9d3f5da18bd7c4c2a358425ce3063c8a69ebb8c2483525e63981776d42a1b769"
  },
  "background/train_X_p0.0001_seed1.log": {
   "branch": "tree",
@@ -2922,6 +2944,28 @@
   "path": "predecoder/logs/test_run_p0.005_Z_head_arm_summary.json",
   "sha256": "8fa0312a8d784c7ed356b2bd6dd8f4b8f4995650e680e56d3235a77213c08481"
  },
+ "test/predecoder/test_run_p0.005_Z_secondary.json": {
+  "branch": "tree",
+  "bytes": 1816,
+  "commit": "13a90976795a079ba8fbb5c2f68fd0ec12ba959f",
+  "copied_utc": "2026-11-22 16:30",
+  "file": "test/predecoder/test_run_p0.005_Z_secondary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.005_Z_secondary.json` (last changed in commit `13a90976795a`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.005_Z_secondary.json",
+  "sha256": "d591e466253c1199110856a477b38e2c820683b6892d2e84711de5f5b9c3e9de"
+ },
+ "test/predecoder/test_run_p0.005_Z_summary.json": {
+  "branch": "tree",
+  "bytes": 3384,
+  "commit": "13a90976795a079ba8fbb5c2f68fd0ec12ba959f",
+  "copied_utc": "2026-11-22 16:30",
+  "file": "test/predecoder/test_run_p0.005_Z_summary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.005_Z_summary.json` (last changed in commit `13a90976795a`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.005_Z_summary.json",
+  "sha256": "c53609f2eaa3d85339cf3268456f4b11e81f712d1e896fe24ce0b8ae60779ae9"
+ },
  "test/predecoder_tcbp/job5_test_X_p0.005_summary.json": {
   "branch": "origin/server-logs",
   "bytes": 3523,
@@ -2932,6 +2976,17 @@
   "grows": false,
   "path": "files/predecoder-tcbp/test_X_p0.005/summary.json",
   "sha256": "7a61d12c53422212d2017c67811f8891b189aa4c9793abdc605b17d81f676015"
+ },
+ "test/predecoder_tcbp/tcbp_pair_test_p0.005.json": {
+  "branch": "tree",
+  "bytes": 568,
+  "commit": "be43e79e0d03802106b616b105bacc7028798da7",
+  "copied_utc": "2026-11-22 16:33",
+  "file": "test/predecoder_tcbp/tcbp_pair_test_p0.005.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/tcbp_pair_test_p0.005.json` (last changed in commit `be43e79e0d03`)",
+  "grows": false,
+  "path": "predecoder/logs/tcbp_pair_test_p0.005.json",
+  "sha256": "babf73bcd996b8988fe080c9b9fce6b08b6dda0c284cdc4889092fa3bd3fc075"
  },
  "test/predecoder_tcbp/tcbp_test_X_p0.003_score.json": {
   "branch": "tree",
@@ -2998,6 +3053,28 @@
   "grows": false,
   "path": "predecoder/logs/tcbp_test_X_p0.005_summary.json",
   "sha256": "7a61d12c53422212d2017c67811f8891b189aa4c9793abdc605b17d81f676015"
+ },
+ "test/predecoder_tcbp/tcbp_test_Z_p0.005_score.json": {
+  "branch": "tree",
+  "bytes": 885,
+  "commit": "be43e79e0d03802106b616b105bacc7028798da7",
+  "copied_utc": "2026-11-22 16:33",
+  "file": "test/predecoder_tcbp/tcbp_test_Z_p0.005_score.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/tcbp_test_Z_p0.005_score.json` (last changed in commit `be43e79e0d03`)",
+  "grows": false,
+  "path": "predecoder/logs/tcbp_test_Z_p0.005_score.json",
+  "sha256": "602ed6a9579e8786c4d9421a0d661e4484fba0715defd1ee3e4cd117261585cc"
+ },
+ "test/predecoder_tcbp/tcbp_test_Z_p0.005_summary.json": {
+  "branch": "tree",
+  "bytes": 2882,
+  "commit": "be43e79e0d03802106b616b105bacc7028798da7",
+  "copied_utc": "2026-11-22 16:33",
+  "file": "test/predecoder_tcbp/tcbp_test_Z_p0.005_summary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/tcbp_test_Z_p0.005_summary.json` (last changed in commit `be43e79e0d03`)",
+  "grows": false,
+  "path": "predecoder/logs/tcbp_test_Z_p0.005_summary.json",
+  "sha256": "0d255eb498651fe85e8153cca3a6dff2347b7c4036f4d95cfc4e20c2aadf24a4"
  },
  "test/runner_cpu.out": {
   "branch": "origin/server-logs",

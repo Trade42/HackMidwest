@@ -1,0 +1,4 @@
+=== 2026-11-22T11:04:25Z loss_check: lane C, head aa5ab0d
+{"file": "X_p0.004_s0.001_loss_seed5300.npz", "sha256": "79f78408864b0dfde0728533aa5a5a71afc750b64ecd2ad46250e6c56cc0db9c", "basis": "X", "factor": null, "uniform_p": 0.004, "loss": true, "shots": 100, "seed": 5300, "machine": "luminaty", "detection_events_per_shot": 372.67, "heralds_per_shot": 19.83}
+{"basis": "X", "p": 0.004, "s": 0.001, "shots": 100, "seed": 5300, "equal": {"detectors": true, "observables": true, "heralds": true, "failed": true, "converged": true, "iterations": true, "wrong_mask": true}, "all_equal": true, "failures_theirs": 3, "failures_ours": 3, "lost_data_atoms_per_shot": 9.75, "mean_iterations": 2763.36}
+=== 2026-11-22T11:07:23Z loss_check exit code 0

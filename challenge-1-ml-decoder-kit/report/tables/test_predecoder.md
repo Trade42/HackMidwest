@@ -15,9 +15,9 @@
 | 0.003 | X | TCBP-JOBS (NVIDIA, GPU; its row of this report) | 1 of 10,000 | 0.01% (0.00% to 0.06%) | 1 / 1 / 0 (p = 1.00) |  |
 | 0.003 | X | relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report) | 2 of 10,000 | 0.02% (0.01% to 0.07%) | 1 / 1 / 1 (p = 1.00) |  |
 | 0.005 | Z | relay-BP with the head's priors, a decoder built per shot (H; ours) [run after the p = 0.005 X test result (the registered extension)] | 132 of 10,000 | 1.32% (1.11% to 1.56%) |  | 695; 73 not converged |
-| 0.005 | Z | relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit) | not measured yet | not measured yet | not measured yet | not measured yet |
-| 0.005 | Z | TCBP-JOBS (NVIDIA, GPU; its row of this report) | not measured yet | not measured yet | not measured yet | not measured yet |
-| 0.005 | Z | relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report) | not measured yet | not measured yet | not measured yet | not measured yet |
+| 0.005 | Z | relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit) | 398 of 10,000 | 3.98% (3.61% to 4.38%) | 108 / 24 / 290 (p = 4e-59) | 2,364; 230 not converged |
+| 0.005 | Z | TCBP-JOBS (NVIDIA, GPU; its row of this report) | 177 of 10,000 | 1.77% (1.53% to 2.05%) | 76 / 56 / 101 (p = 4e-04) |  |
+| 0.005 | Z | relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report) | 427 of 10,000 | 4.27% (3.89% to 4.68%) | 117 / 15 / 310 (p = 8e-73) |  |
 
 Source: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.json` (copied from `predecoder/logs/`).
 

@@ -36,3 +36,4 @@
 2026-11-22T10:37:01Z START cand_p0.004: weight 2, pid 224632; before it: tokens 8, CPUs in use 8.5, throttled so far 4839.1 s
 2026-11-22T10:37:35Z END eval_p0.003_hierarchy-parallel exit 0: row p=0.003 hierarchy-parallel exit 0: hierarchy.plugin:make_decoder,1,2,3,2.50034381590325e-05,1.4436707608145305e-05,28.89913244624622 [CPUs in use 9.2, tokens 10, throttled so far 4839.1 s, load 15.19]
 2026-11-22T10:38:11Z START cand_p0.003: weight 1, pid 225750; before it: tokens 8, CPUs in use 8.8, throttled so far 4839.1 s
+2026-11-22T10:52:06Z END eval_p0.004_hierarchy-parallel exit 0: row p=0.004 hierarchy-parallel exit 0: hierarchy.plugin:make_decoder,18,26,44,0.00036740819646374767,5.53956189182081e-05,150.26713411582168 [CPUs in use 9.1, tokens 9, throttled so far 4840.7 s, load 15.00]

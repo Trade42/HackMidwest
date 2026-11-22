@@ -737,6 +737,88 @@ Files (in [`tcbp_retrain_results/run1/`](tcbp_retrain_results/run1/)):
 
 The server's files are on the branch `server-logs` at `7ebc7c29`, under `files/tcbp-retrain/`.
 
-### Run 2 (server job `cpu/130`; the full declared run)
+### Run 2 (server job `cpu/130`; the full declared run; **the primary result**, by amendment 3)
 
-Started 18:41:35 UTC. Its results are pending.
+The job started at 18:41:35 UTC. Every block finished in 1,905 s after the model fit (61 s), so all 4,000 shots of
+seed 4800 and all 2,000 of seed 4100 are scored. The network ran in float32 on the A100 slice, 8.7 to 9.2 ms per shot,
+one shot at a time; the slice was less loaded than in run 1.
+
+**Seed 4800** (primary; fresh; 4,000 shots):
+
+| Arm (same 4,000 shots) | Failures | 95% Wilson | Build + decode, mean ms |
+|---|---|---|---|
+| TCBP-JOBS, matched priors (m) | **56** | 1.08% to 1.81% | 50 |
+| TCBP-JOBS, retrained head on matched (r) | **99** | 2.04% to 3.00% | 48 |
+| TCBP-JOBS, kit head on matched (hm) | **161** | 3.46% to 4.68% | 52 |
+| TCBP-JOBS, kit head on generic (h) | **478** | 11.0% to 13.0% | 56 |
+| TCBP-JOBS, generic at p = 0.0326 (g) | **1,366** | 32.7% to 35.6% | 111 |
+
+| Pair | Changes | Failures | Only the first fails | Only the second fails | Sign test p |
+|---|---|---|---|---|---|
+| r vs m (primary) | the retrained head added to matched | 99, 56 | 54 | 11 | 6.0e-08 |
+| r vs h (primary) | the head and the base | 99, 478 | 6 | 385 | 1.9e-105 |
+| r vs hm | the head's training only (same base) | 99, 161 | 11 | 73 | 2.3e-12 |
+| hm vs m | the kit head added to matched | 161, 56 | 118 | 13 | 2.4e-22 |
+| h vs m | | 478, 56 | 428 | 6 | 4.1e-118 |
+| m vs g | the base only (no head) | 56, 1,366 | 5 | 1,315 | < 1e-300 |
+| r vs g | | 99, 1,366 | 8 | 1,275 | < 1e-300 |
+| h vs g | the kit head added to generic | 478, 1,366 | 84 | 972 | 2.8e-192 |
+| hm vs h (not in the declared list; a description) | the base only (kit head) | 161, 478 | 1 | 318 | 6.0e-94 |
+
+**Seed 4100** (secondary; phase 1's file, 2,000 shots):
+
+| Arm | Failures | 95% Wilson |
+|---|---|---|
+| m | 24 | 0.81% to 1.78% |
+| r | 44 | 1.64% to 2.94% |
+| hm | 75 | 3.00% to 4.68% |
+| h | 206 | 9.04% to 11.71% |
+
+The pairs on seed 4100:
+- r vs m: 44 against 24, only r 27, only m 7, p = 8e-4;
+- r vs hm: 5 against 36, p = 8e-7;
+- hm vs m: 54 against 3, p = 4e-13;
+- r vs h: 3 against 165.
+
+Phase 1 had 25 (m) and 209 (h) on this file.
+
+What this shows (run 2 is the primary result; run 1 agrees with it):
+
+- **Retraining the head helps against the kit-trained head, on the same base.** With the matched base for both, the
+  retrained head fails 99 shots and the kit head 161 (11 against 73 discordant shots, p = 2e-12). On seed 4100 it is
+  44 against 75. This is the head-alone comparison the task asked for.
+- **But no head beats the true error model here: both make TCBP-JOBS worse than matched priors alone.**
+  - The retrained head: 99 against 56 (54 against 11, p = 6e-8).
+  - The kit head: 161 against 56.
+  - By the declared claim rule, **the retrained head does not add to the matched priors.**
+  - Retraining removed about 60% of the harm the kit head did to that base: 105 extra failures became 43.
+- **On the generic base, the head helps a lot,** as in phase 1: h against g is 478 against 1,366. A team without the
+  true error model gains from the head. A team with it gains nothing from either head, at these knobs.
+- **The base matters most.** Without a head, matched against generic is 56 against 1,366. With the kit head, it is
+  161 against 478.
+- **Run 1 and run 2 agree on shots 0 to 999.**
+  - The network gave bit-identical logits on all 1,000 shots in both runs (row hashes).
+  - TCBP-JOBS gave the same 12 bits on 996 (m), 980 (h) and 998 (r) of the 1,000 shots.
+  - The failure counts are 8 and 9 (m), 119 and 122 (h), 27 and 27 (r). TCBP-JOBS is not exactly reproducible
+    between runs, as phase 2 found.
+- **Checks:**
+  - Every correction of every arm reproduces its syndrome.
+  - The plan the server used is the shipped one (`0b3ec316...`).
+  - The logits carry the declared heads and bases. hm's meta says the kit head was not trained with the matched base;
+    r's says the retrained head was.
+  - The cap at 0.5 changed 89,469 (h), 21,035 (hm) and 67,682 (r) columns in all on seed 4800: about 22, 5 and 17
+    per shot.
+  - TCBP-JOBS's own convergence flag is false on 3,339 (m), 4,000 (g), 3,490 (h), 3,421 (hm) and 2,859 (r) of the
+    4,000 shots.
+
+Files (in [`tcbp_retrain_results/run2/`](tcbp_retrain_results/run2/)):
+- `decode.log` and `evaluate_<file>_<head>.log`: the server's logs;
+- `<task>/per_shot.npz` and `<task>/summary.json`: every arm's outcome per shot, and the server's summary;
+- `logits_meta_*.json`, `plan.json`, and `job_cpu_130.sh.txt`, the job;
+- `score.json`, rebuilt here as for run 1.
+
+The server's files are on the branch `server-logs` at `55f88689`, under `files/tcbp-retrain-full/`.
+
+### The knob refit (server job `cpu/140`; `tcbp_retrain_refit_declared.md`)
+
+Started 19:16:59 UTC. Its results are pending.

@@ -1,0 +1,67 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+plan /home/blakew3/mlBranchMidwest/runs/tcbp-retrain-full/in/plan.json: tasks [('f0.8-seed4800', ['m', 'g', 'h', 'hm', 'r']), ('f0.8-seed4100', ['m', 'h', 'hm', 'r'])]; decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs; head knobs {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, cap 0.5; stop at 2026-11-22T19:26:35Z; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
+  model fitted in 61.2 s (one model, shared by every task); GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  f0.8-seed4800 block 0-99 done, 97 s; failures so far m 0, g 40, h 19, hm 7, r 3 of 100
+  f0.8-seed4100 block 0-99 done, 123 s; failures so far m 0, h 9, hm 2, r 2 of 100
+  f0.8-seed4800 block 100-199 done, 160 s; failures so far m 1, g 78, h 34, hm 11, r 5 of 200
+  f0.8-seed4100 block 100-199 done, 183 s; failures so far m 2, h 20, hm 5, r 5 of 200
+  f0.8-seed4800 block 200-299 done, 216 s; failures so far m 3, g 111, h 42, hm 16, r 9 of 300
+  f0.8-seed4100 block 200-299 done, 246 s; failures so far m 5, h 29, hm 9, r 7 of 300
+  f0.8-seed4800 block 300-399 done, 295 s; failures so far m 3, g 146, h 52, hm 20, r 13 of 400
+  f0.8-seed4100 block 300-399 done, 318 s; failures so far m 7, h 44, hm 15, r 8 of 400
+  f0.8-seed4800 block 400-499 done, 352 s; failures so far m 4, g 178, h 66, hm 23, r 14 of 500
+  f0.8-seed4100 block 400-499 done, 375 s; failures so far m 7, h 56, hm 19, r 10 of 500
+  f0.8-seed4800 block 500-599 done, 410 s; failures so far m 5, g 213, h 77, hm 28, r 18 of 600
+  f0.8-seed4100 block 500-599 done, 433 s; failures so far m 7, h 63, hm 22, r 11 of 600
+  f0.8-seed4800 block 600-699 done, 469 s; failures so far m 6, g 237, h 90, hm 29, r 19 of 700
+  f0.8-seed4100 block 600-699 done, 492 s; failures so far m 10, h 70, hm 27, r 15 of 700
+  f0.8-seed4800 block 700-799 done, 527 s; failures so far m 7, g 271, h 102, hm 33, r 23 of 800
+  f0.8-seed4100 block 700-799 done, 549 s; failures so far m 11, h 76, hm 30, r 18 of 800
+  f0.8-seed4800 block 800-899 done, 585 s; failures so far m 8, g 306, h 111, hm 35, r 25 of 900
+  f0.8-seed4100 block 800-899 done, 608 s; failures so far m 12, h 87, hm 33, r 21 of 900
+  f0.8-seed4800 block 900-999 done, 644 s; failures so far m 9, g 336, h 122, hm 38, r 27 of 1000
+  f0.8-seed4100 block 900-999 done, 667 s; failures so far m 13, h 96, hm 36, r 23 of 1000
+  f0.8-seed4800 block 1000-1099 done, 702 s; failures so far m 10, g 372, h 140, hm 42, r 29 of 1100
+  f0.8-seed4100 block 1000-1099 done, 725 s; failures so far m 13, h 112, hm 37, r 23 of 1100
+  f0.8-seed4800 block 1100-1199 done, 760 s; failures so far m 12, g 406, h 151, hm 46, r 30 of 1200
+  f0.8-seed4100 block 1100-1199 done, 783 s; failures so far m 14, h 120, hm 37, r 23 of 1200
+  f0.8-seed4800 block 1200-1299 done, 819 s; failures so far m 15, g 446, h 164, hm 52, r 34 of 1300
+  f0.8-seed4100 block 1200-1299 done, 843 s; failures so far m 15, h 136, hm 45, r 28 of 1300
+  f0.8-seed4800 block 1300-1399 done, 883 s; failures so far m 16, g 481, h 176, hm 56, r 36 of 1400
+  f0.8-seed4100 block 1300-1399 done, 910 s; failures so far m 15, h 142, hm 47, r 30 of 1400
+  f0.8-seed4800 block 1400-1499 done, 949 s; failures so far m 17, g 519, h 189, hm 59, r 39 of 1500
+  f0.8-seed4100 block 1400-1499 done, 971 s; failures so far m 17, h 152, hm 52, r 33 of 1500
+  f0.8-seed4800 block 1500-1599 done, 1004 s; failures so far m 19, g 556, h 204, hm 63, r 41 of 1600
+  f0.8-seed4100 block 1500-1599 done, 1026 s; failures so far m 19, h 163, hm 56, r 37 of 1600
+  f0.8-seed4800 block 1600-1699 done, 1059 s; failures so far m 21, g 594, h 217, hm 67, r 46 of 1700
+  f0.8-seed4100 block 1600-1699 done, 1080 s; failures so far m 19, h 173, hm 60, r 38 of 1700
+  f0.8-seed4800 block 1700-1799 done, 1113 s; failures so far m 23, g 623, h 227, hm 71, r 49 of 1800
+  f0.8-seed4100 block 1700-1799 done, 1135 s; failures so far m 19, h 182, hm 62, r 39 of 1800
+  f0.8-seed4800 block 1800-1899 done, 1167 s; failures so far m 25, g 655, h 239, hm 78, r 50 of 1900
+  f0.8-seed4100 block 1800-1899 done, 1189 s; failures so far m 21, h 194, hm 66, r 41 of 1900
+  f0.8-seed4800 block 1900-1999 done, 1221 s; failures so far m 27, g 686, h 247, hm 81, r 52 of 2000
+  f0.8-seed4100 block 1900-1999 done, 1244 s; failures so far m 24, h 206, hm 75, r 44 of 2000
+  f0.8-seed4800 block 2000-2099 done, 1276 s; failures so far m 29, g 713, h 258, hm 85, r 56 of 2100
+  f0.8-seed4800 block 2100-2199 done, 1309 s; failures so far m 32, g 755, h 279, hm 92, r 61 of 2200
+  f0.8-seed4800 block 2200-2299 done, 1341 s; failures so far m 32, g 787, h 284, hm 92, r 61 of 2300
+  f0.8-seed4800 block 2300-2399 done, 1375 s; failures so far m 35, g 828, h 298, hm 98, r 63 of 2400
+  f0.8-seed4800 block 2400-2499 done, 1407 s; failures so far m 35, g 857, h 310, hm 102, r 65 of 2500
+  f0.8-seed4800 block 2500-2599 done, 1440 s; failures so far m 38, g 888, h 323, hm 108, r 69 of 2600
+  f0.8-seed4800 block 2600-2699 done, 1473 s; failures so far m 40, g 926, h 333, hm 111, r 73 of 2700
+  f0.8-seed4800 block 2700-2799 done, 1506 s; failures so far m 41, g 954, h 340, hm 111, r 73 of 2800
+  f0.8-seed4800 block 2800-2899 done, 1538 s; failures so far m 43, g 986, h 356, hm 115, r 74 of 2900
+  f0.8-seed4800 block 2900-2999 done, 1570 s; failures so far m 43, g 1017, h 367, hm 120, r 76 of 3000
+  f0.8-seed4800 block 3000-3099 done, 1604 s; failures so far m 44, g 1056, h 378, hm 122, r 78 of 3100
+  f0.8-seed4800 block 3100-3199 done, 1637 s; failures so far m 46, g 1091, h 392, hm 127, r 81 of 3200
+  f0.8-seed4800 block 3200-3299 done, 1670 s; failures so far m 48, g 1135, h 410, hm 135, r 86 of 3300
+  f0.8-seed4800 block 3300-3399 done, 1702 s; failures so far m 50, g 1167, h 421, hm 140, r 89 of 3400
+  f0.8-seed4800 block 3400-3499 done, 1735 s; failures so far m 51, g 1198, h 432, hm 144, r 90 of 3500
+  f0.8-seed4800 block 3500-3599 done, 1769 s; failures so far m 52, g 1227, h 443, hm 150, r 92 of 3600
+  f0.8-seed4800 block 3600-3699 done, 1803 s; failures so far m 54, g 1266, h 451, hm 154, r 94 of 3700
+  f0.8-seed4800 block 3700-3799 done, 1836 s; failures so far m 54, g 1296, h 459, hm 156, r 96 of 3800
+  f0.8-seed4800 block 3800-3899 done, 1870 s; failures so far m 54, g 1326, h 467, hm 159, r 96 of 3900
+  f0.8-seed4800 block 3900-3999 done, 1905 s; failures so far m 56, g 1366, h 478, hm 161, r 99 of 4000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-retrain-full/out-cb739fb/decode/f0.8-seed4800/per_shot.npz: 4000 shots scored
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-retrain-full/out-cb739fb/decode/f0.8-seed4100/per_shot.npz: 2000 shots scored
+done; 1905 s

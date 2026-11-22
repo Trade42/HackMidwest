@@ -1,0 +1,36 @@
+{
+ "data": {
+  "path": "/home/sal/hackMidwest/orchestration/scratch/predecoder/z/subsets/train_Z_fresh_failed.npz",
+  "sha256": "acbe609cabc0d36d698306147c46c7e3b814dd049d206a18b127adad4e3fc901",
+  "basis": "Z",
+  "p": 0.004,
+  "seed": 102,
+  "shots": 95,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 95,
+ "columns": 8784,
+ "model": {
+  "head": "/home/sal/hackMidwest/orchestration/scratch/predecoder/z/head/head.pt",
+  "head_sha256": "083147d2ea941fbae1bc0c3096e06d3bb3a07ca46fd9360fd9304226e5825a61",
+  "head_step": 20000,
+  "trunk": "/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_Z_s1_final_step100000.pt",
+  "trunk_sha256": "fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700",
+  "trunk_step": 100000,
+  "head_commit": "ee359d7f2dfe0bda4057c7f434b0cf9f02d051fe",
+  "device": "cpu",
+  "torch": "2.15.0+cpu",
+  "torch_threads": 4
+ },
+ "seconds_batched_total": 8.988698244094849,
+ "per_shot_seconds": {
+  "what": "network + head, one shot at a time, on the device named",
+  "shots": 0,
+  "mean": null,
+  "median": null,
+  "p99": null
+ },
+ "batch_one_against_batched_largest_logit_gap": null,
+ "mean_probability_sum_per_shot": 55.925313527960526,
+ "kit_prior_sum": 47.311063309491075
+}

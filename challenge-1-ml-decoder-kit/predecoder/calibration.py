@@ -98,7 +98,7 @@ def main(argv=None):
     q_bp = np.stack(q_bp)
     q_kit = np.tile(kit, (args.shots, 1))
     converged = np.array(converged)
-    print(f"held-out error-model shots: X memory, p={args.p:g}, {args.shots} shots (seed {args.seed}, stream "
+    print(f"held-out error-model shots: {config['basis']} memory, p={args.p:g}, {args.shots} shots (seed {args.seed}, stream "
           f"{CALIBRATION_STREAM}), {y.sum() / args.shots:.1f} fired columns per shot; head {args.head} at step {saved['step']}")
     groups = {"all shots": np.ones(args.shots, bool), "BP's first leg converges": converged,
               "BP's first leg does not converge": ~converged}

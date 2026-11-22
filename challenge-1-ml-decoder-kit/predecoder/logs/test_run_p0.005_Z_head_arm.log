@@ -1,0 +1,24 @@
+/home/sal/hackMidwest/orchestration/scratch/predecoder/z/head/head.pt: OK
+/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_Z_s1_final_step100000.pt: OK
+data/p0.005/test_Z.npz: OK
+/home/sal/hackMidwest/orchestration/scratch/predecoder/z/fit_Z_p0.004.json: OK
+[test-head] 15:44:09 UTC, commit 87b484a6, lanes ABCD
+test_Z.npz: 10000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/z/logits_test_p0.005/logits.npy (417 s in batches of 32 on cpu)
+network + head, one shot at a time on cpu (16 threads), 200 shots: mean 26.7 ms, median 21.2 ms, p99 170.4 ms; batch one against batched: largest logit gap 0.00e+00
+the head's probabilities sum to 58.6 per shot (the kit's priors: 59.0)
+test_Z.npz: 10000 shots, p=0.005, arms ['head']; head priors {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}; 100 tasks to run in 16 processes (16 CPUs here, luminaty)
+  10 of 100 tasks done (head from shot 900), 81 s
+  20 of 100 tasks done (head from shot 2100), 145 s
+  30 of 100 tasks done (head from shot 3600), 200 s
+  40 of 100 tasks done (head from shot 4200), 237 s
+  50 of 100 tasks done (head from shot 5800), 279 s
+  60 of 100 tasks done (head from shot 5900), 329 s
+  70 of 100 tasks done (head from shot 7100), 371 s
+  80 of 100 tasks done (head from shot 7900), 430 s
+  90 of 100 tasks done (head from shot 9200), 477 s
+  100 of 100 tasks done (head from shot 9700), 519 s
+relay-BP at the kit's settings; 519 s. Time per shot: build + decode in these worker processes, plus the network and head (26.7 ms mean, cpu, from predecoder.evaluate)
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+head         132    0.0132 [0.0111, 0.0156]          73   1298       695     15.6     696.2    738.5   18284
+[test-head] done 15:59:57 UTC
+test-head exit 0

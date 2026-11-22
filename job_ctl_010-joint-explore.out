@@ -33,3 +33,23 @@ train_X.npz shot 1312: right, converged, 285 iterations, 1 s
 validation_X.npz shot 2484: right, converged, 13511 iterations, 40 s
 validation_X.npz shot 2653: right, converged, 12742 iterations, 40 s
 validation_X.npz shot 4302: right, converged, 9944 iterations, 37 s
+train_X.npz shot 1688: right, converged, 2880 iterations, 8 s
+train_X.npz shot 2020: right, converged, 1609 iterations, 5 s
+train_X.npz shot 424: right, converged, 11647 iterations, 38 s
+validation_X.npz shot 4413: right, converged, 18064 iterations, 50 s
+train_X.npz shot 2045: right, converged, 5135 iterations, 19 s
+train_X.npz shot 2589: right, converged, 3450 iterations, 11 s
+train_X.npz shot 2168: right, converged, 6106 iterations, 18 s
+train_X.npz shot 2366: right, converged, 8117 iterations, 26 s
+train_X.npz shot 476: right, converged, 18047 iterations, 61 s
+train_X.npz shot 3903: right, converged, 3379 iterations, 11 s
+train_X.npz shot 4381: right, converged, 4376 iterations, 14 s
+train_X.npz shot 4296: right, converged, 4809 iterations, 16 s
+train_X.npz shot 5690: right, converged, 511 iterations, 2 s
+train_X.npz shot 1760: right, converged, 18032 iterations, 54 s
+train_X.npz shot 1106: failed, NOT converged, 18080 iterations, 60 s
+train_X.npz shot 845: failed, NOT converged, 18080 iterations, 69 s
+train_X.npz shot 4265: right, converged, 7475 iterations, 24 s
+train_X.npz shot 5792: right, converged, 1958 iterations, 6 s
+train_X.npz shot 5737: right, converged, 2276 iterations, 8 s
+train_X.npz shot 6709: right, converged, 1002 iterations, 3 s

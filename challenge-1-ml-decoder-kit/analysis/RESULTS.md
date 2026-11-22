@@ -2,6 +2,23 @@
 
 **These are exploration numbers on train, validation and exploration shots. Nothing here is a final result.** No test or go file was opened: the loader (`analysis/common.py`, `refuse_held_out`) refuses any file whose name starts with `test_` or `go_`.
 
+## In short
+
+Only what the tables below support. Relay-BP is the kit's baseline (80 / 60 / stop after 5, 300 legs); a pair is shot k of X with shot k of Z.
+
+- **G1, how relay-BP fails.** It is both: its failures split between "did not converge" and "converged to a wrong answer", and the mix moves with p. The unconverged share is 36% at p = 0.003 (44 failures), 41% at 0.004 (245) and 63% at 0.005 (404). At every p, 84% to 98% of the failures come from the shots whose first 80-iteration leg fails (3.5%, 14% and 36% of shots). Where the first leg converges, its answer is almost always right.
+- **G2, how much accuracy sits above relay-BP.** A lot, but most of it is not reached by simple means. At p = 0.004:
+  - decoding a failed shot again with other random draws fixes 44% of the failures (the re-roll floor);
+  - a larger budget fixes 53%;
+  - BP-OSD (order 10 or 60) and Tesseract (beam 5) fix 32% to 33%, below the floor;
+  - among 16 relay-BP candidates the right logical class is present for 79% of the converged-wrong failures, but the lowest weight picks it for only 49%, no better than one re-roll.
+  - Joint decoding on all 1,728 detectors fixes 43 of 44 failures at p = 0.003 and 89 of 100 sampled at 0.004, at about 60 to 70 times the time on a typical shot. It broke 0 of 300 and 1 of 200 controls.
+  - The relay-BP authors' own runs put joint decoding overall 2.5 times below separate decoding at p = 0.003, 1.3 times at 0.004, and above it at 0.005.
+- **G3, where the time goes.** The slowest 10% of shots take 48% to 71% of all iterations (p = 0.003 to 0.004).
+  - At p = 0.004 the later legs must stay at 60 iterations.
+  - Stopping after 3 solutions (80 / 60 / 3) cuts mean iterations 1.44 times with no measurable cost: 42 failed pairs against 51 of 5,000.
+  - Stopping at the first solution (80 / 60 / 1) cuts them 3.4 times for about 40% more failures.
+
 ## Setup
 
 - **Machine:** luminaty, AMD Ryzen 7 7730U (a 15 W laptop CPU, 8 cores, 16 threads), inside the dq fence. Every heavy run was niced (`nice -n 15`) and pinned to cores 8 to 15, which are 4 physical cores with 2 threads each, under the lane B and C locks. Other workers loaded cores 0 to 7 at the same time.
@@ -39,6 +56,20 @@ The exploration sets were made with the kit's `make_dataset.py` (`analysis/steps
 Since this task was briefed, `main` gained the team's own shot files at the other two noise levels (commit `80b9b48`): `data/p0.003/` and `data/p0.005/`, each with train (20,000), validation (5,000) and held-out test (10,000) files for X and Z. They are not the exploration sets used here, which came from other seeds (9103 to 9106) and are named by their sha256 above. Nothing here opened them.
 
 **Shot cuts, against the brief's aims:** the brief aimed at 100,000 shots per basis at p = 0.003 and 20,000 at 0.005. Its lanes were cut from 12 to 8 processes, and this CPU turned out about 2.7 times slower per process under full load than on one core. So p = 0.003 uses the first 50,000 shots of each file (the orchestrator's suggested cut) and p = 0.005 the first 5,000 (about 200 failures per basis, still above the brief's 100).
+
+## What was cut or changed against the brief
+
+- **Lanes.** The brief granted lanes B, C and D (12 processes). The orchestrator cut that to B and C (8 processes) at 01:43 UTC. Only the first smoke run (2 processes, 2 chunks of validation_X) ran on cores 0 to 3 as well.
+- **Shots.** At p = 0.003 G1 used 50,000 shots per basis, not 100,000. At p = 0.005 it used 5,000, not 20,000 (see Datasets).
+- **G2 samples.** These are seeded subsamples, stated in each table and set in `analysis/steps.sh`:
+  - at p = 0.005, 100 of the failures and 100 controls per basis;
+  - for the 16-candidate runs, at most 10 (p = 0.004) or 5 (p = 0.005) of G1's unconverged failures per basis;
+  - for joint decoding at p = 0.004, 50 failures and 100 controls per basis;
+  - at p = 0.003 the joint control was 150 shots per basis.
+- **G2 item 5, joint decoding,** was added by the orchestrator (2026-11-22 01:47 UTC), with setting (b) and p = 0.003 as its main point. Joint decoding at p = 0.005 (step 7b) was planned and then dropped by the orchestrator for the deadline: it was not run.
+- **On another machine.** G3 item 2 (the frontier) and G2 items 1 and 2 at p = 0.004 ran on the team's ICRN server, by the orchestrator's decision. That machine was shown to give luminaty's iterations and corrections exactly. Its milliseconds are its own.
+- **Not done.** G3 item 3 (four schedules at p = 0.003 and 0.005 on 3,000 shots) was not run. Tesseract was tried at its default beam only, inside the 30-minute box.
+- **Choices made here.** BP-OSD's "higher order" is OSD-CS order 60. On 5 failed shots it cost 1.9 times order 10, and order 20 or 40 differed little in cost.
 
 ## How every run is made reproducible
 

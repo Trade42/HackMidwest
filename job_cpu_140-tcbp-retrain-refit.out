@@ -30,3 +30,12 @@ evaluate test4900 exit 0
 Sun Nov 22 19:18:54 UTC 2026
 fit exit 0
 Sun Nov 22 19:40:50 UTC 2026
+decode exit 0
+error: unexpected argument '-3' found
+
+  tip: to pass '-3' as a value, use '-- -3'
+
+Usage: tail [OPTION]... [FILE]...
+
+For more information, try '--help'.
+Sun Nov 22 19:52:23 UTC 2026

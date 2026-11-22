@@ -1,0 +1,5 @@
+eager      8.29 ms mean (median 8.26, p99 8.77) per shot; {'product': 'sparse'}; against eager {'largest_gap_float32': 0.0, 'rows_differ_float32': 0, 'rows_differ_float16': 0, 'entries_differ_float16': 0}
+cached     8.22 ms mean (median 8.15, p99 9.09) per shot; {'product': 'sparse'}; against eager {'largest_gap_float32': 0.0, 'rows_differ_float32': 0, 'rows_differ_float16': 0, 'entries_differ_float16': 0}
+dense      8.37 ms mean (median 8.29, p99 9.34) per shot; {'product': 'dense'}; against eager {'largest_gap_float32': 5.7220458984375e-06, 'rows_differ_float32': 1000, 'rows_differ_float16': 145, 'entries_differ_float16': 155}
+graph      1.73 ms mean (median 1.73, p99 1.79) per shot; {'product': 'sparse'}; against eager {'largest_gap_float32': 0.0, 'rows_differ_float32': 0, 'rows_differ_float16': 0, 'entries_differ_float16': 0}
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job3/net/summary.json

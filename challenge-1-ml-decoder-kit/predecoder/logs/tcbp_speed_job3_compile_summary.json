@@ -1,0 +1,34 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/tcbp-speed-fba1ca0/challenge-1-ml-decoder-kit/data/p0.005/validation_X.npz",
+  "sha256": "25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312",
+  "basis": "X",
+  "p": 0.005,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 1000,
+ "torch": "2.15.0+cu132",
+ "device": "cuda",
+ "gpu": "NVIDIA A100-SXM4-80GB MIG 2g.20gb",
+ "arms": {
+  "compile": {
+   "ms": {
+    "mean": 1.7400459195487201,
+    "median": 1.7319495091214776,
+    "p99": 1.9110159168485552
+   },
+   "notes": {
+    "product": "dense",
+    "compile_and_warm_seconds": 25.081153313978575
+   },
+   "against_eager": {
+    "largest_gap_float32": 0.007818222045898438,
+    "rows_differ_float32": 1000,
+    "rows_differ_float16": 831,
+    "entries_differ_float16": 1816
+   }
+  }
+ }
+}

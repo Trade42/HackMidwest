@@ -133,3 +133,16 @@ def test_priors_are_capped_at_one_half():
     high = np.array([0.7, 0.1, 0.9999])
     assert np.array_equal(tcbp.capped(high), [0.5, 0.1, 0.5])
     assert tcbp.CAPPED["shots"] == before["shots"] + 1 and tcbp.CAPPED["columns"] == before["columns"] + 2
+
+
+def test_logits_diff_counts_rows_and_entries(tmp_path):
+    shots = small_file(tmp_path / "validation_X.npz", 3)
+    a = fake_logits(tmp_path / "a", shots)
+    b = fake_logits(tmp_path / "b", shots)
+    raw = np.load(Path(a) / "logits.npy")
+    changed = raw.copy()
+    changed[1, :5] += np.float16(0.5)
+    np.save(Path(b) / "logits.npy", changed)
+    tcbp.main(["logits-diff", "--a", a, "--b", b, "--out", str(tmp_path / "d.json")])
+    result = json.loads((tmp_path / "d.json").read_text())
+    assert result["rows_differ"] == 1 and result["entries_differ"] == 5 and result["largest_gap"] > 0

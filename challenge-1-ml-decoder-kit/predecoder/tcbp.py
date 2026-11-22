@@ -531,6 +531,37 @@ def score_command(args):
             json.dump(summary, file, indent=1)
 
 
+# ---------- logits-diff (no decoder, no torch) ----------
+
+def logits_diff_command(args):
+    """How far two logits files of the same shots differ: the largest gap, and the rows and entries that differ."""
+    with open(Path(args.a) / "meta.json") as file:
+        meta_a = json.load(file)
+    with open(Path(args.b) / "meta.json") as file:
+        meta_b = json.load(file)
+    if meta_a["data"]["sha256"] != meta_b["data"]["sha256"]:
+        raise SystemExit("the two folders hold the logits of different shot files")
+    a, b = np.load(Path(args.a) / "logits.npy", mmap_mode="r"), np.load(Path(args.b) / "logits.npy", mmap_mode="r")
+    shots = min(len(a), len(b), args.limit or len(a))
+    gap, rows, entries = 0.0, 0, 0
+    for first in range(0, shots, 500):
+        x = np.asarray(a[first:min(first + 500, shots)], np.float32)
+        y = np.asarray(b[first:min(first + 500, shots)], np.float32)
+        differ = x != y
+        gap = max(gap, float(np.abs(x - y).max()))
+        rows += int(differ.any(axis=1).sum())
+        entries += int(differ.sum())
+    result = {"a": {"folder": str(args.a), "model": meta_a["model"]}, "b": {"folder": str(args.b), "model": meta_b["model"]},
+              "shots": shots, "largest_gap": gap, "rows_differ": rows, "entries_differ": entries,
+              "entries": shots * a.shape[1], "per_shot_seconds_b": meta_b.get("per_shot_seconds")}
+    print(f"{shots} shots: the float16 logits differ on {rows} rows and {entries} of {shots * a.shape[1]} entries; "
+          f"largest gap {gap:.3g} ({meta_a['model'].get('device')} {meta_a['model'].get('precision', '')} against "
+          f"{meta_b['model'].get('device')} {meta_b['model'].get('precision', '')})")
+    if args.out:
+        with open(args.out, "w") as file:
+            json.dump(result, file, indent=1)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -565,8 +596,14 @@ def main(argv=None):
     sub.add_argument("--logits", help="this PC's logits folder: check that the head arm used the same rows")
     sub.add_argument("--final", action="store_true")
     sub.add_argument("--out")
+    sub = commands.add_parser("logits-diff")
+    sub.add_argument("--a", required=True, help="a folder of predecoder.evaluate")
+    sub.add_argument("--b", required=True, help="another, for the same shot file")
+    sub.add_argument("--limit", type=int)
+    sub.add_argument("--out")
     args = parser.parse_args(argv)
-    {"decode": decode_command, "fit": fit_command, "probe": probe, "score": score_command}[args.command](args)
+    {"decode": decode_command, "fit": fit_command, "probe": probe, "score": score_command,
+     "logits-diff": logits_diff_command}[args.command](args)
 
 
 if __name__ == "__main__":

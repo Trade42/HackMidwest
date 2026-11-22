@@ -18,6 +18,10 @@ The time per shot is measured one shot at a time (batch one, as a decoder would 
 first --time-shots shots, after one warm-up shot: the network plus the head, on --device. The
 logits themselves are computed in batches; batch and batch-one results agree to float rounding.
 
+--precision fp32 runs the network in float32 on a GPU too: no float16 autocast, and no TF32 in
+matrix products or convolutions. The default ("auto") keeps float16 autocast on a GPU, as before;
+on a CPU both are float32. (On the laptop, float16 moved 33 of 5,000 relay-BP outcomes at p = 0.005.)
+
 Files named test_* or go_* are refused without --final.
 """
 import argparse
@@ -40,19 +44,28 @@ from predecoder.train import load_head, sha256_of
 class Predecoder:
     """The network and the head, loaded once: shot(s) -> logits of the kit's columns."""
 
-    def __init__(self, head_path, trunk_path=None, device="cpu", threads=None):
+    def __init__(self, head_path, trunk_path=None, device="cpu", threads=None, precision="auto"):
         if threads:
             torch.set_num_threads(int(threads))
         if device == "auto":
             device = "cuda" if torch.cuda.is_available() else "cpu"
         self.device = torch.device(device)
+        if precision not in ("auto", "fp32"):
+            raise ValueError("precision is auto or fp32")
+        self.float32 = precision == "fp32"
+        if self.float32 and self.device.type == "cuda":
+            torch.backends.cuda.matmul.allow_tf32 = False
+            torch.backends.cudnn.allow_tf32 = False
+            torch.set_float32_matmul_precision("highest")
         self.trunk, self.head, self.saved = load_head(head_path, self.device, trunk_path)
         self.logit_by_p = {}
         self.shift = math.log(self.saved["config"]["pos_weight"])     # a weighted loss learns odds pos_weight times too high
         self.record = {"head": str(head_path), "head_sha256": sha256_of(head_path), "head_step": self.saved["step"],
                        "trunk": str(trunk_path or self.saved["trunk_file"]), "trunk_sha256": self.saved["trunk_sha256"],
                        "trunk_step": self.saved["trunk_step"], "head_commit": self.saved["commit"],
-                       "device": str(self.device), "torch": torch.__version__, "torch_threads": torch.get_num_threads()}
+                       "device": str(self.device), "torch": torch.__version__, "torch_threads": torch.get_num_threads(),
+                       "precision": "float32" if self.float32 or self.device.type != "cuda" else "float16 autocast",
+                       "gpu": torch.cuda.get_device_name(self.device) if self.device.type == "cuda" else None}
 
     def prior_logit(self, p, priors):
         if p not in self.logit_by_p:
@@ -65,7 +78,7 @@ class Predecoder:
             full = torch.from_numpy(np.ascontiguousarray(detectors, dtype=np.uint8)).to(self.device)
             basis = torch.from_numpy(np.ascontiguousarray(basis_bits, dtype=np.uint8)).to(self.device)
             trunk_input = full if self.trunk.num_inputs == full.shape[1] else basis
-            amp = torch.float16 if self.device.type == "cuda" else None
+            amp = torch.float16 if self.device.type == "cuda" and not self.float32 else None
             with torch.autocast(self.device.type, dtype=amp, enabled=amp is not None):
                 features = self.trunk.features(trunk_input)
             logits = self.head(features, basis, self.prior_logit(p, priors)) - self.shift
@@ -80,6 +93,8 @@ def main(argv=None):
     parser.add_argument("--out", required=True)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--threads", type=int)
+    parser.add_argument("--precision", choices=("auto", "fp32"), default="auto",
+                        help="fp32: no float16 autocast and no TF32 on a GPU (default auto: float16 autocast on a GPU)")
     parser.add_argument("--batch", type=int, default=32)
     parser.add_argument("--time-shots", type=int, default=200)
     parser.add_argument("--limit", type=int, help="only the first this many shots (smoke runs)")
@@ -91,7 +106,7 @@ def main(argv=None):
     start = time.time()
     data = load_dataset(args.data)
     problem = kit_problem(data.basis, data.p)
-    model = Predecoder(args.head, args.trunk, args.device, args.threads)
+    model = Predecoder(args.head, args.trunk, args.device, args.threads, args.precision)
     if model.head.num_columns != problem.H.shape[1]:
         raise SystemExit("the head does not fit this problem")
     shots = len(data.detectors) if args.limit is None else min(args.limit, len(data.detectors))

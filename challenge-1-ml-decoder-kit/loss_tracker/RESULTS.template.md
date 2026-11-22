@@ -160,7 +160,37 @@ Commands: `loss_tracker/runs/val_references.sh` (`exact` and the ORACLE, with `l
 
 ### Test: one run of the frozen decoder
 
-{{include results/test_section.md}}
+The frozen pair (`runs/frozen.sh`: tracker version `order1_explain1`, soft posterior), with `starter`, `exact` and
+the ORACLE `oracle-round`, every condition on every one of the 4,000 test shots (seed 7300). Commands:
+`loss_tracker/runs/test.sh 0 0` (the tracker's output for the split; it reads detectors and heralds only), then
+two streams, `LANE=D loss_tracker/runs/test.sh 0 2000` and `LANE=B loss_tracker/runs/test.sh 2000 4000`, at
+commit `61d4e92` (the log's first line names it), and `loss_tracker/runs/test_summary.sh` for the tables. Logs:
+`logs/test_track.log`, `logs/test_laneD.log`, `logs/test_laneB.log`, `logs/test_summary.log`. Machine: this PC,
+lanes D and B, 4 processes each. Rows with `>` are second attempts computed from the per-shot results (`A>B`: A,
+and B where A did not converge); they are extra rows, not the frozen decoder.
+
+{{include results/test.md}}
+
+{{include results/test_notes.md}}
+
+#### A secondary row: the tracker version before the frozen one
+
+`order1_coupled2` (shared bits dropped instead of explained) had fewer failures on the validation shots than the
+frozen version (45 against 54, p = 0.18). It was decoded on the same test shots after the frozen run
+(`loss_tracker/runs/test_secondary.sh`, `loss_tracker/runs/test_summary.sh secondary`; log
+`logs/test_secondary.log`). It is not the frozen decoder, and the primary number does not use it.
+
+{{include results/test_secondary.md}}
+
+#### The replication on the team's server (secondary)
+
+The same job on a second seed (7310), sampled and decoded on the team's server by one command
+(`python -m loss_tracker.job --seed 7310 --shots 4000 --workers 4 --mode coupled --sweeps 1 --order 1 --explain
+--out ... --tables loss_tracker/tables/X_p0.004_s1e-3.npz --conditions starter,exact,tracker,oracle-round`, ctl job
+060 of the orchestrator, from `integration` at `650f7ae`). Its printout is `job_ctl_060-loss-tracker-replication.out`
+on the branch `server-logs`; its tables are copied here (`results/replication_seed7310*`).
+
+{{include results/replication.md}}
 
 ## Step 4
 

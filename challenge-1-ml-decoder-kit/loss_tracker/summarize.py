@@ -10,6 +10,9 @@ the share of the oracle's gain that a condition recovers,
 with a 95% bootstrap interval over shots (2,000 resamples, seed 0), and the same against `starter`.
 All comparisons are on the common prefix of shots that every listed condition has decoded.
 
+--also 'NAME=CONDITION@GLOB' adds condition CONDITION of other part files under the name NAME (for two tracker
+versions that were both decoded as `tracker`).
+
 --cascade 'A>B' adds a row computed from the per-shot results, with no new decoding: condition A, and where A did
 not converge, condition B (B's output is taken whether or not B converged; its iterations are added to A's).
 The rule reads only the decoders' convergence flags.
@@ -46,10 +49,17 @@ def main():
     ap.add_argument("--references", default="exact,starter", help="references of the paired tables and of the gain share")
     ap.add_argument("--title", default="")
     ap.add_argument("--cascade", action="append", default=[], help="'A>B': A, and B where A did not converge")
+    ap.add_argument("--also", action="append", default=[], help="'NAME=CONDITION@GLOB': a condition of other part files")
+    ap.add_argument("--pair", action="append", default=[], help="'A,B': also print the paired counts of two conditions")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     per = load_parts(a.parts)
     order = a.order.split(",") if a.order else list(per)
+    for spec in a.also:
+        name, _, rest = spec.partition("=")
+        cond, _, pattern = rest.partition("@")
+        per[name] = load_parts([pattern])[cond]
+        order.append(name)
     n = min(len(per[c]["failed"]) for c in order)
     per = {c: {k: v[:n] for k, v in per[c].items()} for c in order}          # the common prefix of shots
     for rule in a.cascade:
@@ -77,13 +87,22 @@ def main():
                 continue
             f_ref = per[ref]["failed"].astype(bool)
             for c in order:
-                if c in (ref, ORACLE) or c in a.references.split(","):
+                if c in (ref, ORACLE) or c in a.references.split(",") or c.startswith(ORACLE + ">"):
                     continue
                 f_c = per[c]["failed"].astype(bool)
                 sh, lo, hi = gain_share(f_ref, f_c, f_or)
                 out["gain_share"].append({"condition": c, "reference": ref, "ref_failures": int(f_ref.sum()), "cond_failures": int(f_c.sum()),
                                           "oracle_failures": int(f_or.sum()), "share": sh, "share95": [lo, hi]})
                 md.append(f"| {c} | {ref} | {int(f_ref.sum())}, {int(f_c.sum())}, {int(f_or.sum())} | {sh:.2f} ({lo:.2f}–{hi:.2f}) |")
+    for spec in a.pair:
+        x, y = spec.split(",")
+        fx, fy = per[x]["failed"].astype(bool), per[y]["failed"].astype(bool)
+        b, c = int((fx & ~fy).sum()), int((fy & ~fx).sum())
+        from loss.summarize import sign_test
+        out.setdefault("pairs", []).append({"a": x, "b": y, "a_failures": int(fx.sum()), "b_failures": int(fy.sum()), "a_only": b, "b_only": c,
+                                            "sign_test_p": sign_test(b, c)})
+        md += ["", f"Paired, `{x}` against `{y}`: failures {int(fx.sum())} and {int(fy.sum())}; shots only `{x}` fails {b}, only `{y}` fails {c}; "
+               f"sign test p = {sign_test(b, c):.2g}."]
     with open(a.out + ".json", "w") as f:
         json.dump(out, f, indent=1)
     with open(a.out + ".md", "w") as f:

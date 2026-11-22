@@ -77,3 +77,6 @@ plan /home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2/plan.json: tasks ['wrong-
   wrong-p block 2400-2499 done, 1440 s; failures so far m 43, g 49, h 15 of 2500
   si1000 block 2400-2499 done, 1460 s; failures so far m 4, g 7, h 1 of 2500
   biased block 2400-2499 done, 1482 s; failures so far m 247, g 266, h 376 of 2500
+  wrong-p block 2500-2599 done, 1502 s; failures so far m 45, g 51, h 15 of 2600
+  si1000 block 2500-2599 done, 1521 s; failures so far m 5, g 10, h 1 of 2600
+  biased block 2500-2599 done, 1544 s; failures so far m 260, g 284, h 393 of 2600

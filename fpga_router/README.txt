@@ -3,7 +3,8 @@ Router on the Urbana FPGA (XC7S50-CSGA324): the first design, kept as a record
 THE TRAINED BOARD DEMO IS ../fpga_board/ (a teammate's design: 17 features with the convergence flag, the teammates'
 frozen model results/router_p0.004/model_X.json, Vivado scripts). Build and load that one. This folder is the
 earlier design, checked here with open tools, and a second, independent trained router on 16 whole-number features.
-The check of ../fpga_board/ is CHECK_OF_fpga_board.md.
+The check of ../fpga_board/ is CHECK_OF_fpga_board.md; how to build it and load it on the board, with Vivado on
+the same machine or on another one, is BOARD_NOTES.md.
 
 What the router is. Relay-BP first finds one solution. If that took 1 to 80 iterations the shot is easy and the
 solution is kept. Otherwise a logistic model says "escalate" (run full relay-BP) or "accept". The router chooses

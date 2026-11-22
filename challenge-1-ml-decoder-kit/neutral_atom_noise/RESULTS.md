@@ -504,8 +504,8 @@ The server's files are on the branch `server-logs` at `acdd09a4`, under `files/t
 ## What was not done
 
 - **PriorTilt** with matched priors (the brief's optional decoder): not run. **The network** was not run in the
-  main tables. It ran only in the TCBP exploration sections above: phase 1 (one file), phase 2 (three files) and
-  phase 2b (two files), all X memory. It was never retrained on any of these noises.
+  main tables. It ran only in the TCBP exploration sections: phase 1 (one file), phase 2 (three files),
+  phase 2b (two files) and the atom-loss check (two files), all X memory. It was never retrained on any of these noises.
 - **The fitted generic p** was run for BP-OSD at factors 0.8 and 0.9 and for relay-BP at 0.8 only; not for relay-BP
   at 0.7 and 0.9, BP-OSD at 0.7, Z memory, or any row with loss. Those comparisons are against the generic baseline
   at the same two-qubit error, which overstates the noise, and the tables name it.

@@ -85,7 +85,7 @@ numbers are for X memory; every comparison is on the same shots.
    and 7 with matched ones (not significant, p = 0.18). It **hurts on Z-biased noise** (605 against 457 and 421).
    Phase 2b, SI1000 at p = 0.006 and 0.008 (a bracket chosen after p = 0.004 failed nothing in its first 600 shots): the network beats the
    generic priors at both (273 against 546; 2,060 against 2,560 of 3,000), whose p is not fitted for TCBP-JOBS. Against the matched ones
-   it is not significantly different at 0.006 (273 against 303, p = 0.07) and better at 0.008 (2,060 against 2,172), where 70% to 85% of shots fail in every arm.
+   it is not significantly different at 0.006 (273 against 303, p = 0.07) and better at 0.008 (2,060 against 2,172), where about 69% to 85% of shots fail in every arm.
 
 5. **Exploration, after the main results: the TCBP pipeline with atom loss** (TCBP-JOBS, RESULTS.md, 1,000 shots of each loss file).
    The flags help TCBP-JOBS as much as relay-BP (matched: 49 to 0 failures at f0.4, 562 to 37 at f0.6), and the network on a generic base with the flags (5 and 242) does not make up for knowing the noise's shape (matched + flags); the head's own effect is unmeasured.

@@ -49,3 +49,9 @@ fit of the knobs for tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/N
   train_X_T_failed.npz: 390 shots, {'mode': 'logodds', 'alpha': 0.5, 'eps': 0.0001}, failures 104, 326 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
     train_X_T_right alpha 0.5: 200 of 2000 shots, build 42.9 ms, decode 2.3 ms mean (last 200: 42.9 + 2.3 ms), 10 s; priors capped at 0.5 so far on 1307 shots, 4556 columns
     train_X_T_right alpha 0.5: 400 of 2000 shots, build 42.8 ms, decode 2.6 ms mean (last 200: 42.7 + 2.9 ms), 20 s; priors capped at 0.5 so far on 1505 shots, 6072 columns
+    train_X_T_right alpha 0.5: 600 of 2000 shots, build 42.8 ms, decode 2.5 ms mean (last 200: 42.7 + 2.3 ms), 31 s; priors capped at 0.5 so far on 1704 shots, 7603 columns
+    train_X_T_right alpha 0.5: 800 of 2000 shots, build 42.6 ms, decode 2.5 ms mean (last 200: 42.3 + 2.5 ms), 41 s; priors capped at 0.5 so far on 1904 shots, 9123 columns
+    train_X_T_right alpha 0.5: 1000 of 2000 shots, build 42.5 ms, decode 2.5 ms mean (last 200: 42.2 + 2.6 ms), 51 s; priors capped at 0.5 so far on 2104 shots, 10641 columns
+    train_X_T_right alpha 0.5: 1200 of 2000 shots, build 42.5 ms, decode 2.6 ms mean (last 200: 42.4 + 2.8 ms), 61 s; priors capped at 0.5 so far on 2304 shots, 12043 columns
+    train_X_T_right alpha 0.5: 1400 of 2000 shots, build 42.5 ms, decode 2.6 ms mean (last 200: 42.5 + 2.6 ms), 71 s; priors capped at 0.5 so far on 2504 shots, 13555 columns
+    train_X_T_right alpha 0.5: 1600 of 2000 shots, build 42.5 ms, decode 2.5 ms mean (last 200: 42.4 + 2.4 ms), 81 s; priors capped at 0.5 so far on 2704 shots, 15069 columns

@@ -1,0 +1,4 @@
+validation_X.npz: 1000 shots, p=0.004, arms ['head']; head priors {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}; 1 tasks to run in 1 processes (24 CPUs here, jupyter-blakew3)
+relay-BP at the kit's settings; 81 s. Time per shot: build + decode in these worker processes, plus the network and head (26.7 ms mean, cpu, from predecoder.evaluate)
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+head           6    0.0060 [0.0028, 0.0130]           3     41       205      4.4      62.9     94.0     657

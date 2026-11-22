@@ -1,0 +1,67 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+plan /home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2b/plan.json: tasks ['si1000-p0.006', 'si1000-p0.008']; decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs; head knobs {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, cap 0.5; stop at 2026-11-22T17:35:00Z; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
+  model fitted in 64.5 s (one model, shared by every task); GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  si1000-p0.006 block 0-99 done, 86 s; failures so far m 10, g 24, h 13 of 100
+  si1000-p0.008 block 0-99 done, 117 s; failures so far m 73, g 84, h 67 of 100
+  si1000-p0.006 block 100-199 done, 138 s; failures so far m 20, g 40, h 21 of 200
+  si1000-p0.008 block 100-199 done, 169 s; failures so far m 145, g 167, h 131 of 200
+  si1000-p0.006 block 200-299 done, 190 s; failures so far m 24, g 52, h 33 of 300
+  si1000-p0.008 block 200-299 done, 221 s; failures so far m 213, g 253, h 203 of 300
+  si1000-p0.006 block 300-399 done, 242 s; failures so far m 33, g 69, h 42 of 400
+  si1000-p0.008 block 300-399 done, 273 s; failures so far m 289, g 338, h 267 of 400
+  si1000-p0.006 block 400-499 done, 295 s; failures so far m 49, g 93, h 51 of 500
+  si1000-p0.008 block 400-499 done, 325 s; failures so far m 354, g 421, h 332 of 500
+  si1000-p0.006 block 500-599 done, 347 s; failures so far m 61, g 112, h 59 of 600
+  si1000-p0.008 block 500-599 done, 378 s; failures so far m 428, g 503, h 397 of 600
+  si1000-p0.006 block 600-699 done, 400 s; failures so far m 72, g 130, h 66 of 700
+  si1000-p0.008 block 600-699 done, 431 s; failures so far m 509, g 589, h 463 of 700
+  si1000-p0.006 block 700-799 done, 454 s; failures so far m 80, g 151, h 73 of 800
+  si1000-p0.008 block 700-799 done, 484 s; failures so far m 577, g 670, h 527 of 800
+  si1000-p0.006 block 800-899 done, 506 s; failures so far m 94, g 173, h 85 of 900
+  si1000-p0.008 block 800-899 done, 538 s; failures so far m 650, g 757, h 598 of 900
+  si1000-p0.006 block 900-999 done, 559 s; failures so far m 105, g 186, h 89 of 1000
+  si1000-p0.008 block 900-999 done, 590 s; failures so far m 726, g 847, h 675 of 1000
+  si1000-p0.006 block 1000-1099 done, 611 s; failures so far m 119, g 207, h 101 of 1100
+  si1000-p0.008 block 1000-1099 done, 642 s; failures so far m 798, g 930, h 741 of 1100
+  si1000-p0.006 block 1100-1199 done, 665 s; failures so far m 128, g 225, h 113 of 1200
+  si1000-p0.008 block 1100-1199 done, 695 s; failures so far m 875, g 1015, h 815 of 1200
+  si1000-p0.006 block 1200-1299 done, 718 s; failures so far m 139, g 245, h 122 of 1300
+  si1000-p0.008 block 1200-1299 done, 748 s; failures so far m 951, g 1103, h 879 of 1300
+  si1000-p0.006 block 1300-1399 done, 771 s; failures so far m 143, g 261, h 132 of 1400
+  si1000-p0.008 block 1300-1399 done, 802 s; failures so far m 1023, g 1192, h 948 of 1400
+  si1000-p0.006 block 1400-1499 done, 824 s; failures so far m 151, g 275, h 138 of 1500
+  si1000-p0.008 block 1400-1499 done, 855 s; failures so far m 1101, g 1275, h 1017 of 1500
+  si1000-p0.006 block 1500-1599 done, 877 s; failures so far m 161, g 296, h 149 of 1600
+  si1000-p0.008 block 1500-1599 done, 909 s; failures so far m 1180, g 1359, h 1087 of 1600
+  si1000-p0.006 block 1600-1699 done, 930 s; failures so far m 171, g 312, h 162 of 1700
+  si1000-p0.008 block 1600-1699 done, 962 s; failures so far m 1248, g 1445, h 1151 of 1700
+  si1000-p0.006 block 1700-1799 done, 984 s; failures so far m 182, g 334, h 174 of 1800
+  si1000-p0.008 block 1700-1799 done, 1017 s; failures so far m 1315, g 1529, h 1221 of 1800
+  si1000-p0.006 block 1800-1899 done, 1038 s; failures so far m 192, g 350, h 184 of 1900
+  si1000-p0.008 block 1800-1899 done, 1069 s; failures so far m 1387, g 1614, h 1293 of 1900
+  si1000-p0.006 block 1900-1999 done, 1091 s; failures so far m 203, g 374, h 196 of 2000
+  si1000-p0.008 block 1900-1999 done, 1121 s; failures so far m 1457, g 1701, h 1363 of 2000
+  si1000-p0.006 block 2000-2099 done, 1144 s; failures so far m 211, g 386, h 202 of 2100
+  si1000-p0.008 block 2000-2099 done, 1175 s; failures so far m 1531, g 1787, h 1437 of 2100
+  si1000-p0.006 block 2100-2199 done, 1199 s; failures so far m 224, g 409, h 209 of 2200
+  si1000-p0.008 block 2100-2199 done, 1228 s; failures so far m 1598, g 1870, h 1505 of 2200
+  si1000-p0.006 block 2200-2299 done, 1249 s; failures so far m 232, g 426, h 217 of 2300
+  si1000-p0.008 block 2200-2299 done, 1278 s; failures so far m 1673, g 1957, h 1572 of 2300
+  si1000-p0.006 block 2300-2399 done, 1298 s; failures so far m 241, g 439, h 226 of 2400
+  si1000-p0.008 block 2300-2399 done, 1325 s; failures so far m 1741, g 2046, h 1639 of 2400
+  si1000-p0.006 block 2400-2499 done, 1345 s; failures so far m 250, g 454, h 231 of 2500
+  si1000-p0.008 block 2400-2499 done, 1373 s; failures so far m 1807, g 2129, h 1701 of 2500
+  si1000-p0.006 block 2500-2599 done, 1393 s; failures so far m 258, g 473, h 238 of 2600
+  si1000-p0.008 block 2500-2599 done, 1421 s; failures so far m 1880, g 2215, h 1776 of 2600
+  si1000-p0.006 block 2600-2699 done, 1440 s; failures so far m 266, g 490, h 245 of 2700
+  si1000-p0.008 block 2600-2699 done, 1467 s; failures so far m 1954, g 2301, h 1854 of 2700
+  si1000-p0.006 block 2700-2799 done, 1488 s; failures so far m 282, g 515, h 258 of 2800
+  si1000-p0.008 block 2700-2799 done, 1516 s; failures so far m 2031, g 2393, h 1927 of 2800
+  si1000-p0.006 block 2800-2899 done, 1536 s; failures so far m 291, g 531, h 265 of 2900
+  si1000-p0.008 block 2800-2899 done, 1564 s; failures so far m 2102, g 2476, h 1993 of 2900
+  si1000-p0.006 block 2900-2999 done, 1584 s; failures so far m 303, g 546, h 273 of 3000
+  si1000-p0.008 block 2900-2999 done, 1611 s; failures so far m 2172, g 2560, h 2060 of 3000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2b-0a780d7/decode/si1000-p0.006/per_shot.npz: 3000 shots scored
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2b-0a780d7/decode/si1000-p0.008/per_shot.npz: 3000 shots scored
+done; 1611 s

@@ -427,6 +427,7 @@ Z-biased noise.
   - This task fails about 11% of shots, far above the 1% to 2% we aimed at when we chose its strength by reasoning.
 - **SI1000 at p = 0.004 fails rarely:** 7 (m), 13 (g) and 2 (h) of 4,000.
   - The head beats generic on the 15 shots where only one of them fails (2 against 13, p = 0.007). That is few shots.
+    Against matched the difference is not significant (2 against 7, p = 0.18), and neither is m vs g (p = 0.11).
   - The phase 2b declaration called this task uninformative after its first 600 shots, which had no failure at all. At
     4,000 shots it is weak evidence, not none.
   - Two more strengths, chosen after those first 600 shots, are in phase 2b below.
@@ -443,6 +444,56 @@ Files:
 
 The server's files are on the branch `server-logs` at `82d864a8`, under `files/tcbp-noise-2/`. Scored here with
 `python -m neutral_atom_noise.tcbp_check score --per-shot <per_shot.npz> --shots <the task's kit-format shot file> --out <json>`.
+
+## Exploration: SI1000 at two more strengths (phase 2b)
+
+**Exploration, after the main test results; a separate branch.** Declared before any number in
+[`tcbp_check2b_declared.md`](tcbp_check2b_declared.md) (commit `0a780d77`). **The two strengths were chosen after SI1000 at
+p = 0.004 had failed nothing in its first 600 shots, in every arm.** They are a bracket, not a tuning.
+
+The setup:
+- SI1000 is exactly as in phase 2 (no resonator idle), at p = 0.006 (Stim seed 7101) and p = 0.008 (seed 7102), 3,000 shots each,
+  all scored.
+- The arms and the knobs are as in phase 2. g is at p, and the head is told p, which is above its training range.
+- Server job `gpu/090` ran on the A100 slice, one TCBP-JOBS process, one model shared by both tasks, one thread.
+
+| Task | Shots scored | matched (m): failures, 95% Wilson | generic (g): failures, 95% Wilson | head (h): failures, 95% Wilson | not reproduced (m, g, h) |
+|---|---|---|---|---|---|
+| si1000-p0.006 | 3,000 | 303 (9.07% to 11.23%) | 546 (16.86% to 19.62%) | 273 (8.12% to 10.18%) | 0, 0, 0 |
+| si1000-p0.008 | 3,000 | 2172 (70.77% to 73.97%) | 2560 (84.02% to 86.55%) | 2060 (66.98% to 70.30%) | 0, 0, 0 |
+
+| Task | Pair | Failures | Only the first fails | Only the second fails | Sign test p |
+|---|---|---|---|---|---|
+| si1000-p0.006 | h vs g | 273, 546 | 38 | 311 | 2e-54 |
+| si1000-p0.006 | h vs m | 273, 303 | 116 | 146 | 0.073 |
+| si1000-p0.006 | m vs g | 303, 546 | 37 | 280 | 2.4e-47 |
+| si1000-p0.008 | h vs g | 2060, 2560 | 52 | 552 | 1.8e-106 |
+| si1000-p0.008 | h vs m | 2060, 2172 | 231 | 343 | 3.4e-06 |
+| si1000-p0.008 | m vs g | 2172, 2560 | 60 | 448 | 2e-74 |
+
+What this shows:
+
+- **The head helps on SI1000 at every strength tried.**
+  - At p = 0.006 the head fails 273, against 546 for g and 303 for m. Against g: 38 against 311 shots where only one
+    fails, p = 2e-54. Against m the difference is not significant (116 against 146, p = 0.07).
+  - At p = 0.008 most shots fail in every arm, and the head is better than both: 2,060 against 2,560 (g) and 2,172 (m).
+  - **At p = 0.008 the head even beats the matched priors** (231 against 343, p = 3e-6). The matched priors are the
+    true error model, but TCBP-JOBS is not a maximum-likelihood decoder, so the true priors need not be its best
+    priors. Per-shot priors can beat them.
+- **Knowing the shape helps TCBP-JOBS here**, as in phase 1: m against g is 303 against 546 at 0.006 (p = 2e-47) and
+  2,172 against 2,560 at 0.008.
+- **p = 0.008 is far past where the code works** (about 70% to 85% of shots fail). It is reported because it was
+  declared.
+- **Checks:**
+  - Every correction reproduces its syndrome.
+  - The cap at 0.5 changed 450 and 302 head-prior columns in all.
+  - Build + decode per shot, A100 slice, m / g / h: 64 / 74 / 58 ms (0.006), 91 / 103 / 88 ms (0.008).
+
+Files:
+- `logs/tcbp_check2b_*.log`;
+- `results/tcbp_check2b_si1000-p<p>_{per_shot.npz,summary.json,score.json}`.
+
+The server's files are on the branch `server-logs` at `acdd09a4`, under `files/tcbp-noise-2b/`.
 
 ## What was not done
 

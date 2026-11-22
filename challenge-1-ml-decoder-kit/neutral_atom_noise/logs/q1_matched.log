@@ -1,0 +1,227 @@
+=== 2026-11-22T08:58:54Z hold: lane B, lock /home/sal/hackMidwest/dq/run/sim-b.lock, CPUs 8-11, head 29518b2: job --factors 0.6,0.7,0.8 --decoders relay,bposd --rows matched
+{"file": "X_f0.6_seed4100.npz", "sha256": "d0c8df80ca56c97a54cda8ce3909b92bc70477e524e62b52a44bac8b1443eb48", "kept": true}
+08:58:58 UTC X_f0.6_seed4100__relay__matched__000000-000050.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 9 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000000-000050.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 126.7, "mean_ms": 123.1, "seconds": 9.3}
+08:59:07 UTC X_f0.6_seed4100__relay__matched__000050-000100.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000050-000100.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 111.3, "mean_ms": 141.8, "seconds": 1.9}
+08:59:09 UTC X_f0.6_seed4100__relay__matched__000100-000150.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 12 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000100-000150.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 674.8, "mean_ms": 537.4, "seconds": 12.3}
+08:59:21 UTC X_f0.6_seed4100__relay__matched__000150-000200.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000150-000200.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 160.4, "mean_ms": 180.3, "seconds": 2.7}
+08:59:24 UTC X_f0.6_seed4100__relay__matched__000200-000250.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000200-000250.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 150.7, "mean_ms": 165.7, "seconds": 2.3}
+08:59:26 UTC X_f0.6_seed4100__relay__matched__000250-000300.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 12 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000250-000300.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 451.6, "mean_ms": 310.4, "seconds": 11.5}
+08:59:38 UTC X_f0.6_seed4100__relay__matched__000300-000350.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000300-000350.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 133.8, "mean_ms": 144.3, "seconds": 1.9}
+08:59:40 UTC X_f0.6_seed4100__relay__matched__000350-000400.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 1 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000350-000400.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 83.6, "mean_ms": 93.6, "seconds": 1.3}
+08:59:41 UTC X_f0.6_seed4100__relay__matched__000400-000450.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000400-000450.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 133.7, "mean_ms": 146.7, "seconds": 2.6}
+08:59:44 UTC X_f0.6_seed4100__relay__matched__000450-000500.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000450-000500.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 119.2, "mean_ms": 134.3, "seconds": 1.7}
+08:59:46 UTC X_f0.6_seed4100__relay__matched__000500-000550.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000500-000550.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 107.8, "mean_ms": 119.5, "seconds": 1.5}
+08:59:47 UTC X_f0.6_seed4100__relay__matched__000550-000600.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 1 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000550-000600.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 76.9, "mean_ms": 87.8, "seconds": 1.1}
+08:59:48 UTC X_f0.6_seed4100__relay__matched__000600-000650.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000600-000650.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 158.9, "mean_ms": 168.4, "seconds": 2.2}
+08:59:50 UTC X_f0.6_seed4100__relay__matched__000650-000700.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 1 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000650-000700.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 80.6, "mean_ms": 93.0, "seconds": 1.2}
+08:59:52 UTC X_f0.6_seed4100__relay__matched__000700-000750.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 1 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000700-000750.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 99.7, "mean_ms": 105.5, "seconds": 1.4}
+08:59:53 UTC X_f0.6_seed4100__relay__matched__000750-000800.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000750-000800.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 125.3, "mean_ms": 131.9, "seconds": 2.0}
+08:59:55 UTC X_f0.6_seed4100__relay__matched__000800-000850.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 1 s, 1 failures
+{"result": "X_f0.6_seed4100__relay__matched__000800-000850.npz", "failures": 1, "shots": 50, "unconverged": 0, "mean_iterations": 98.6, "mean_ms": 109.1, "seconds": 1.4}
+08:59:56 UTC X_f0.6_seed4100__relay__matched__000850-000900.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000850-000900.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 124.2, "mean_ms": 130.5, "seconds": 1.8}
+08:59:58 UTC X_f0.6_seed4100__relay__matched__000900-000950.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 1 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000900-000950.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 87.7, "mean_ms": 98.6, "seconds": 1.3}
+09:00:00 UTC X_f0.6_seed4100__relay__matched__000950-001000.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__000950-001000.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 103.5, "mean_ms": 114.9, "seconds": 1.7}
+09:00:01 UTC X_f0.6_seed4100__relay__matched__001000-001050.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001000-001050.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 177.3, "mean_ms": 167.8, "seconds": 3.0}
+09:00:04 UTC X_f0.6_seed4100__relay__matched__001050-001100.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001050-001100.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 117.8, "mean_ms": 132.4, "seconds": 1.7}
+09:00:06 UTC X_f0.6_seed4100__relay__matched__001100-001150.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 5 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001100-001150.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 241.1, "mean_ms": 211.9, "seconds": 4.7}
+09:00:11 UTC X_f0.6_seed4100__relay__matched__001150-001200.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 1 failures
+{"result": "X_f0.6_seed4100__relay__matched__001150-001200.npz", "failures": 1, "shots": 50, "unconverged": 0, "mean_iterations": 100.8, "mean_ms": 120.2, "seconds": 1.6}
+09:00:12 UTC X_f0.6_seed4100__relay__matched__001200-001250.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001200-001250.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 181.9, "mean_ms": 178.1, "seconds": 3.5}
+09:00:16 UTC X_f0.6_seed4100__relay__matched__001250-001300.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001250-001300.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 107.9, "mean_ms": 116.1, "seconds": 1.7}
+09:00:18 UTC X_f0.6_seed4100__relay__matched__001300-001350.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 1 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001300-001350.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 94.9, "mean_ms": 106.5, "seconds": 1.4}
+09:00:19 UTC X_f0.6_seed4100__relay__matched__001350-001400.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001350-001400.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 132.0, "mean_ms": 154.6, "seconds": 2.0}
+09:00:21 UTC X_f0.6_seed4100__relay__matched__001400-001450.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001400-001450.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 216.2, "mean_ms": 213.7, "seconds": 3.3}
+09:00:24 UTC X_f0.6_seed4100__relay__matched__001450-001500.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 7 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001450-001500.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 315.5, "mean_ms": 261.9, "seconds": 6.7}
+09:00:31 UTC X_f0.6_seed4100__relay__matched__001500-001550.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001500-001550.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 125.2, "mean_ms": 144.6, "seconds": 1.8}
+09:00:33 UTC X_f0.6_seed4100__relay__matched__001550-001600.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001550-001600.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 116.1, "mean_ms": 126.1, "seconds": 1.6}
+09:00:34 UTC X_f0.6_seed4100__relay__matched__001600-001650.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001600-001650.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 108.8, "mean_ms": 118.8, "seconds": 1.6}
+09:00:36 UTC X_f0.6_seed4100__relay__matched__001650-001700.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 4 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001650-001700.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 223.2, "mean_ms": 207.2, "seconds": 3.8}
+09:00:40 UTC X_f0.6_seed4100__relay__matched__001700-001750.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001700-001750.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 171.3, "mean_ms": 167.8, "seconds": 2.7}
+09:00:43 UTC X_f0.6_seed4100__relay__matched__001750-001800.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001750-001800.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 100.1, "mean_ms": 115.6, "seconds": 1.5}
+09:00:44 UTC X_f0.6_seed4100__relay__matched__001800-001850.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 1 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001800-001850.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 99.5, "mean_ms": 111.1, "seconds": 1.5}
+09:00:46 UTC X_f0.6_seed4100__relay__matched__001850-001900.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001850-001900.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 170.6, "mean_ms": 169.0, "seconds": 2.8}
+09:00:48 UTC X_f0.6_seed4100__relay__matched__001900-001950.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001900-001950.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 115.3, "mean_ms": 125.9, "seconds": 1.7}
+09:00:50 UTC X_f0.6_seed4100__relay__matched__001950-002000.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.6_seed4100__relay__matched__001950-002000.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 108.0, "mean_ms": 118.0, "seconds": 1.6}
+09:00:52 UTC X_f0.6_seed4100__bposd__matched__000000-000125.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 19 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__000000-000125.npz", "failures": 0, "shots": 125, "unconverged": 36, "mean_iterations": 37.3, "mean_ms": 361.8, "seconds": 18.9}
+09:01:11 UTC X_f0.6_seed4100__bposd__matched__000125-000250.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 10 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__000125-000250.npz", "failures": 0, "shots": 125, "unconverged": 29, "mean_iterations": 35.5, "mean_ms": 289.4, "seconds": 9.6}
+09:01:20 UTC X_f0.6_seed4100__bposd__matched__000250-000375.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 12 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__000250-000375.npz", "failures": 0, "shots": 125, "unconverged": 35, "mean_iterations": 37.7, "mean_ms": 362.3, "seconds": 11.5}
+09:01:32 UTC X_f0.6_seed4100__bposd__matched__000375-000500.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 12 s, 1 failures
+{"result": "X_f0.6_seed4100__bposd__matched__000375-000500.npz", "failures": 1, "shots": 125, "unconverged": 37, "mean_iterations": 36.5, "mean_ms": 383.1, "seconds": 12.3}
+09:01:44 UTC X_f0.6_seed4100__bposd__matched__000500-000625.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 11 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__000500-000625.npz", "failures": 0, "shots": 125, "unconverged": 34, "mean_iterations": 37.2, "mean_ms": 352.3, "seconds": 11.3}
+09:01:55 UTC X_f0.6_seed4100__bposd__matched__000625-000750.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 9 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__000625-000750.npz", "failures": 0, "shots": 125, "unconverged": 25, "mean_iterations": 35.8, "mean_ms": 261.9, "seconds": 8.6}
+09:02:04 UTC X_f0.6_seed4100__bposd__matched__000750-000875.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 11 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__000750-000875.npz", "failures": 0, "shots": 125, "unconverged": 38, "mean_iterations": 39.8, "mean_ms": 324.7, "seconds": 10.5}
+09:02:15 UTC X_f0.6_seed4100__bposd__matched__000875-001000.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 8 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__000875-001000.npz", "failures": 0, "shots": 125, "unconverged": 29, "mean_iterations": 33.7, "mean_ms": 244.9, "seconds": 8.0}
+09:02:23 UTC X_f0.6_seed4100__bposd__matched__001000-001125.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 9 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__001000-001125.npz", "failures": 0, "shots": 125, "unconverged": 35, "mean_iterations": 36.4, "mean_ms": 287.8, "seconds": 9.3}
+09:02:32 UTC X_f0.6_seed4100__bposd__matched__001125-001250.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 10 s, 1 failures
+{"result": "X_f0.6_seed4100__bposd__matched__001125-001250.npz", "failures": 1, "shots": 125, "unconverged": 40, "mean_iterations": 40.3, "mean_ms": 316.4, "seconds": 10.0}
+09:02:42 UTC X_f0.6_seed4100__bposd__matched__001250-001375.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 9 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__001250-001375.npz", "failures": 0, "shots": 125, "unconverged": 34, "mean_iterations": 35.8, "mean_ms": 278.9, "seconds": 9.1}
+09:02:51 UTC X_f0.6_seed4100__bposd__matched__001375-001500.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 11 s, 2 failures
+{"result": "X_f0.6_seed4100__bposd__matched__001375-001500.npz", "failures": 2, "shots": 125, "unconverged": 41, "mean_iterations": 41.1, "mean_ms": 351.5, "seconds": 11.2}
+09:03:02 UTC X_f0.6_seed4100__bposd__matched__001500-001625.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 10 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__001500-001625.npz", "failures": 0, "shots": 125, "unconverged": 36, "mean_iterations": 39.1, "mean_ms": 316.1, "seconds": 10.0}
+09:03:12 UTC X_f0.6_seed4100__bposd__matched__001625-001750.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 11 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__001625-001750.npz", "failures": 0, "shots": 125, "unconverged": 39, "mean_iterations": 38.5, "mean_ms": 342.1, "seconds": 11.1}
+09:03:23 UTC X_f0.6_seed4100__bposd__matched__001750-001875.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 11 s, 0 failures
+{"result": "X_f0.6_seed4100__bposd__matched__001750-001875.npz", "failures": 0, "shots": 125, "unconverged": 39, "mean_iterations": 39.5, "mean_ms": 350.0, "seconds": 11.2}
+09:03:35 UTC X_f0.6_seed4100__bposd__matched__001875-002000.npz: bposd, priors matched, flags None, 4 workers
+  125/125 shots, 9 s, 1 failures
+{"result": "X_f0.6_seed4100__bposd__matched__001875-002000.npz", "failures": 1, "shots": 125, "unconverged": 31, "mean_iterations": 38.2, "mean_ms": 284.7, "seconds": 9.2}
+{"file": "X_f0.7_seed4100.npz", "sha256": "f0d885fdfbdbc183eee7f75e079e23e3a09cbef84492f6967dda8c4325c55609", "kept": true}
+09:03:44 UTC X_f0.7_seed4100__relay__matched__000000-000050.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 18 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000000-000050.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 635.6, "mean_ms": 436.3, "seconds": 17.8}
+09:04:02 UTC X_f0.7_seed4100__relay__matched__000050-000100.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 11 s, 1 failures
+{"result": "X_f0.7_seed4100__relay__matched__000050-000100.npz", "failures": 1, "shots": 50, "unconverged": 0, "mean_iterations": 579.6, "mean_ms": 399.1, "seconds": 10.7}
+09:04:12 UTC X_f0.7_seed4100__relay__matched__000100-000150.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 1 failures
+{"result": "X_f0.7_seed4100__relay__matched__000100-000150.npz", "failures": 1, "shots": 50, "unconverged": 0, "mean_iterations": 172.4, "mean_ms": 183.1, "seconds": 2.3}
+09:04:15 UTC X_f0.7_seed4100__relay__matched__000150-000200.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000150-000200.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 212.7, "mean_ms": 208.4, "seconds": 2.8}
+09:04:17 UTC X_f0.7_seed4100__relay__matched__000200-000250.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000200-000250.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 152.5, "mean_ms": 144.4, "seconds": 1.9}
+09:04:19 UTC X_f0.7_seed4100__relay__matched__000250-000300.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000250-000300.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 189.7, "mean_ms": 185.1, "seconds": 2.6}
+09:04:22 UTC X_f0.7_seed4100__relay__matched__000300-000350.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 5 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000300-000350.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 314.7, "mean_ms": 235.9, "seconds": 5.3}
+09:04:27 UTC X_f0.7_seed4100__relay__matched__000350-000400.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 4 s, 1 failures
+{"result": "X_f0.7_seed4100__relay__matched__000350-000400.npz", "failures": 1, "shots": 50, "unconverged": 0, "mean_iterations": 237.4, "mean_ms": 176.5, "seconds": 3.7}
+09:04:31 UTC X_f0.7_seed4100__relay__matched__000400-000450.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 2 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000400-000450.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 162.4, "mean_ms": 147.8, "seconds": 1.9}
+09:04:33 UTC X_f0.7_seed4100__relay__matched__000450-000500.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000450-000500.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 206.1, "mean_ms": 186.1, "seconds": 2.7}
+09:04:35 UTC X_f0.7_seed4100__relay__matched__000500-000550.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 8 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000500-000550.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 464.5, "mean_ms": 322.8, "seconds": 8.0}
+09:04:43 UTC X_f0.7_seed4100__relay__matched__000550-000600.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 12 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000550-000600.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 907.5, "mean_ms": 612.5, "seconds": 12.2}
+09:04:56 UTC X_f0.7_seed4100__relay__matched__000600-000650.npz: relay, priors matched, flags None, 4 workers
+  50/50 shots, 3 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000600-000650.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 226.3, "mean_ms": 197.3, "seconds": 3.3}
+budget of 6.0 minutes spent: rerun the same command to go on
+| Basis | Factor | Decoder | Picture of the noise | Failures / shots | Failure fraction (95% Wilson) | Per cycle | Unconverged | Mean iterations | Mean ms per shot |
+|---|---|---|---|---|---|---|---|---|---|
+| X | 0.6 | relay-BP | matched | 2 / 2000 | 0.10% (0.027%–0.36%) | 8.34e-05 | 0 | 156 | 155 |
+| X | 0.6 | BP-OSD | matched | 5 / 2000 | 0.25% (0.11%–0.58%) | 2.09e-04 | 558 | 38 | 319 |
+| X | 0.7 | relay-BP | matched | 3 / 650 | 0.46% (0.16%–1.35%) | 3.85e-04 | 0 | 343 | 264 |
+| X | 0.9 | BP-OSD | matched | 192 / 1500 | 12.80% (11.20%–14.59%) | 1.13e-02 | 1109 | 69 | 876 |
+
+Paired, on the same shots (the generic row against the matched row of its point; **bold** marks the better generic row of a point):
+
+| Basis | Factor | Decoder | Generic picture | Shots | Failures: generic, matched | Only generic wrong | Only matched wrong | Exact sign test p | Mean iterations: generic ÷ matched | Unconverged: generic, matched |
+|---|---|---|---|---|---|---|---|---|---|---|
+
+Iterations are belief-propagation iterations per shot, the same on any machine. Relay-BP often has its answer inside its first leg of 80 iterations and never runs more than 80 + 300 x 60 = 18,080. BP-OSD stops BP at 80 iterations and then runs OSD on every unconverged shot, so for BP-OSD the unconverged count is the costly part.
+
+job paused after 363 s
+=== 2026-11-22T09:05:01Z q1_matched: hold over, more to do

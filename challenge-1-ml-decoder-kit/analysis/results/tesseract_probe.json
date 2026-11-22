@@ -1,0 +1,86 @@
+{
+ "dataset": {
+  "path": "/home/sal/hackMidwest/repo/challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz",
+  "sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d"
+ },
+ "config": {
+  "det_beam": 5,
+  "pqlimit": 200000,
+  "no_revisit_dets": true
+ },
+ "timeout_seconds": 60.0,
+ "shots": [
+  {
+   "index": 4,
+   "seconds": 4.519516055006534,
+   "build_seconds": 0.25915564503520727,
+   "wrong": true,
+   "valid": true,
+   "confident": true,
+   "weight_llr": 321.6177984709093,
+   "role": "relay-BP failed",
+   "timed_out": false,
+   "relay_weight_llr": 313.8551940917969
+  },
+  {
+   "index": 18,
+   "seconds": 3.89757283590734,
+   "build_seconds": 0.25915564503520727,
+   "wrong": true,
+   "valid": true,
+   "confident": true,
+   "weight_llr": 280.44486011658654,
+   "role": "relay-BP failed",
+   "timed_out": false,
+   "relay_weight_llr": 251.2511444091797
+  },
+  {
+   "index": 168,
+   "seconds": 5.738240595906973,
+   "build_seconds": 0.25915564503520727,
+   "wrong": true,
+   "valid": true,
+   "confident": true,
+   "weight_llr": 301.8884976855903,
+   "role": "relay-BP failed",
+   "timed_out": false,
+   "relay_weight_llr": 299.1177673339844
+  },
+  {
+   "index": 0,
+   "seconds": 0.546698393765837,
+   "build_seconds": 0.25915564503520727,
+   "wrong": false,
+   "valid": true,
+   "confident": true,
+   "weight_llr": 238.5045734774869,
+   "role": "relay-BP right",
+   "timed_out": false,
+   "relay_weight_llr": 240.7604522705078
+  },
+  {
+   "index": 1,
+   "seconds": 0.18094043340533972,
+   "build_seconds": 0.25915564503520727,
+   "wrong": false,
+   "valid": true,
+   "confident": true,
+   "weight_llr": 203.1764224898433,
+   "role": "relay-BP right",
+   "timed_out": false,
+   "relay_weight_llr": 205.76914978027344
+  },
+  {
+   "index": 2,
+   "seconds": 0.3299018037505448,
+   "build_seconds": 0.25915564503520727,
+   "wrong": false,
+   "valid": true,
+   "confident": true,
+   "weight_llr": 227.3419597535812,
+   "role": "relay-BP right",
+   "timed_out": false,
+   "relay_weight_llr": 231.55238342285156
+  }
+ ]
+}

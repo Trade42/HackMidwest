@@ -25,7 +25,9 @@ which other shots were decoded. The variants:
   with no basis: all 1728 detectors of the shot and every mechanism, the same 12 observables.
   The relay-BP authors' joint ("xyz") runs use these same settings;
 - joint600: the same with num_sets=600. With the same seed its first 300 legs are joint's, so it
-  can differ from joint only on shots where joint found fewer than 5 solutions in 300 legs.
+  can differ from joint only on shots where joint found fewer than 5 solutions in 300 legs;
+- tesseract: the Tesseract search decoder (tesseract-decoder 0.1.1.dev20261117025421) on a DEM built
+  from the same H, L and priors, det_beam=5, pqlimit=200000, no_revisit_dets (the probe's settings).
 """
 import argparse
 import csv
@@ -48,8 +50,11 @@ VARIANTS = {
     "bposd_hi": {"kind": "bposd", "kwargs": {"osd_order": BPOSD_HI_ORDER}, "mode": "fresh", "seeds": [0]},
     "joint": {"kind": "relay", "kwargs": {}, "mode": "fresh", "seeds": [0], "problem": "full"},
     "joint600": {"kind": "relay", "kwargs": {"num_sets": 600}, "mode": "fresh", "seeds": [0], "problem": "full"},
+    "tesseract": {"kind": "tesseract", "kwargs": {"det_beam": 5, "pqlimit": 200_000, "no_revisit_dets": True},
+                  "mode": "fresh", "seeds": [0]},
 }
-SHOTS_PER_TASK = {"kit_fresh": 5, "big": 3, "cand16": 1, "bposd10": 25, "bposd_hi": 25, "joint": 1, "joint600": 1}
+SHOTS_PER_TASK = {"kit_fresh": 5, "big": 3, "cand16": 1, "bposd10": 25, "bposd_hi": 25, "joint": 1, "joint600": 1,
+                  "tesseract": 10}
 
 
 def parse_caps(text):
@@ -369,6 +374,7 @@ def cmd_summarize(args):
             w.writeheader()
             w.writerows(flat)
     print_tables(out)
+    print_markdown(out)
 
 
 def candidate_summary(sub, results, g1p, basis, n_fail_total, n_right_total):
@@ -409,6 +415,45 @@ def candidate_summary(sub, results, g1p, basis, n_fail_total, n_right_total):
             c[f"{key.split('_')[0]}_breaks"] = broken
             c[f"{key.split('_')[0]}_break_rate_ci"] = (lo, hi)
     return summary
+
+
+def print_markdown(out):
+    """The tables of RESULTS.md."""
+    print("\n| decoder | p | basis | F (relay-BP wrong) | fixed: all / of unconverged / of converged-wrong | C (relay-BP right) | broken |"
+          " 2 x 2: both wrong / only relay-BP / only other / both right | exact paired p | break rate [95% CP] |"
+          " other's failures on all G1 shots, estimate [range] vs relay-BP's | iterations mean F / C | ms mean F / C |")
+    print("|---|---|---|---|---|---|---|---|---|---|---|---|---|")
+    for v, tabs in out["tables"].items():
+        for tag, t in sorted(tabs.items()):
+            p, basis = tag[1:].split("_")
+            itF = t.get("iterations_F", {}).get("mean", float("nan"))
+            itC = t.get("iterations_C", {}).get("mean", float("nan"))
+            msF = t.get("ms_F", {}).get("mean", float("nan"))
+            msC = t.get("ms_C", {}).get("mean", float("nan"))
+            lo, hi = t["break_rate_ci"]
+            elo, ehi = t["other_failures_all_ci"]
+            print(f"| {v} | {p} | {basis} | {t['F']} | {t['fixes']} / {t['fixes_of_unconverged']} of {t['F_unconverged']} / "
+                  f"{t['fixes_of_converged_wrong']} of {t['F_converged_wrong']} | {t['C']} | {t['breaks']} | "
+                  f"{t['both_wrong']} / {t['only_a_wrong']} / {t['only_b_wrong']} / {t['both_right']} | {t['mcnemar_p']:.2g} | "
+                  f"{t['break_rate']:.3f} [{lo:.3f}, {hi:.3f}] | {t['other_failures_all_estimate']:.0f} [{elo:.0f}, {ehi:.0f}] vs "
+                  f"{t['relay_failures_total']} | {itF:.0f} / {itC:.0f} | {msF:.0f} / {msC:.0f} |"
+                  + ("" if t["complete"] else " INCOMPLETE |"))
+    if out["candidates"]:
+        print("\n| p | basis | set | shots | right class among candidates | lowest weight right | vote right | no candidate |"
+              " one distinct candidate | first leg converged: shots, any / lowest / vote right | first leg unconverged: same |")
+        print("|---|---|---|---|---|---|---|---|---|---|---|")
+        for tag, c in sorted(out["candidates"].items()):
+            p, basis = tag[1:].split("_")
+            for name in ("converged_wrong", "unconverged_sample", "control"):
+                if name not in c:
+                    continue
+                b = c[name]
+                lc, lu = b["leg1_converged"], b["leg1_unconverged"]
+                print(f"| {p} | {basis} | {name} | {b['shots']} | {b['any_right']} | {b['lowest_right']} | {b['vote_right']} | "
+                      f"{b['none_converged']} | {b['one_distinct']} | {lc['shots']}: {lc['any_right']} / {lc['lowest_right']} / "
+                      f"{lc['vote_right']} | {lu['shots']}: {lu['any_right']} / {lu['lowest_right']} / {lu['vote_right']} |")
+    if "joint600_check" in out:
+        print("\njoint600 check:", out["joint600_check"])
 
 
 def print_tables(out):

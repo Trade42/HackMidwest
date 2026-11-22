@@ -114,7 +114,7 @@ def dem_from_matrices(prob):
     for k in range(H.shape[1]):
         dets = H.indices[H.indptr[k]:H.indptr[k + 1]]
         obs = L.indices[L.indptr[k]:L.indptr[k + 1]]
-        lines.append(f"error({prob.priors[k]!r}) " + " ".join([f"D{d}" for d in dets] + [f"L{o}" for o in obs]))
+        lines.append(f"error({float(prob.priors[k]):.17g}) " + " ".join([f"D{d}" for d in dets] + [f"L{o}" for o in obs]))
     return stim.DetectorErrorModel("\n".join(lines))
 
 

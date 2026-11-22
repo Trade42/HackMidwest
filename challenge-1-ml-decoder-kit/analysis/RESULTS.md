@@ -45,7 +45,19 @@ Relay-BP keeps its random state from one decode to the next: its memory strength
 - **G1 and G3:** every dataset is cut into fixed 500-shot chunks in file order. Each chunk is decoded in order on a fresh decoder with seed 0, which is the constructor's default and what the kit's `relay_decoder` gets. Each chunk's output is its own file, and the outputs are put back together in file order (`analysis/common.py`).
 - **G2:** every shot gets its own fresh decoder (one per seed for the 16 candidates). No G2 result depends on which other shots were decoded.
 - **Scoring is the kit's.** Every decode goes through `decoders.score`: a shot fails when any of the 12 predicted observables is wrong. An unconverged shot is scored on the correction relay-BP returned, which is the first leg's hard decision. The per-shot predictions are checked against `score`'s failure flags.
-- **The truth reaches no decoder.** The observables are used only for scoring and, in G2, to pick the control shots and to score the candidates.
+- **The truth reaches no decoder.** The observables are used only for scoring and, in G2, to pick the failed and control sets (from G1's scores) and to score the candidates.
+
+### The process-count check (done-when 4): passed
+
+`analysis/check_processes.py` (run inside `analysis/steps.sh step2`; output `results/check_processes.json`, log `logs/check_processes.log`), on `validation_X.npz` at p = 0.004:
+
+| check | shots | result |
+|---|---|---|
+| one process decodes chunks 2 to 5 again, against G1's 8-process run | 2,000 | **identical**: 0 shots differ in failed, converged, iterations, predicted bits, weight (count and log-odds), validity or correction (hash); 11 failures in both |
+| the kit's plain `decode()` against `decode_detailed()`, chunk 0, fresh decoders | 500 | identical corrections on all 500 |
+| control: one decoder for chunks 0 and 1 without the fresh start at shot 500 | 1,000 | chunk 0 identical; in chunk 1, **309 of 500 corrections and 492 of 500 iteration counts differ** |
+
+So the outputs do not depend on the process count, and the check can see the decoder's carried-over state when it is there.
 
 ## G1: how relay-BP fails
 

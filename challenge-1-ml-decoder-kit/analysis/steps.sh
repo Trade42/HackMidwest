@@ -35,10 +35,13 @@ case "${1:?step}" in
       $PY -m analysis.check_processes --data $D004/validation_X.npz --cache '$S/cache' --chunks 2 3 4 5 \
           --out $R/check_processes.json > $L/check_processes.log 2>&1 &
       $PY -m analysis.tesseract_probe --data $D004/validation_X.npz --pershot $R/pershot/g1_p0.004_X_validation.npz \
-          --shots 3 --timeout 60 --out $R/tesseract_probe.json > $L/tesseract_probe.log 2>&1 &
+          --shots 3 --timeout 60 --out $R/tesseract_probe.json > $L/tesseract_probe.log 2>&1 &   # rerun alone after a fix, see RESULTS.md
       $PY -m analysis.g2_headroom run --selection $R/g2_selection_p0.004.npz --data $P004 --cache '$S/cache' \
           --processes 4 --only bposd10 bposd_hi kit_fresh --log $L/g2_run_step2.log > /dev/null 2>&1 &
       wait" ;;
+  step2b)     # G2 item 4: Tesseract on every failure and control shot at p = 0.004
+    $LOCK $PY -m analysis.g2_headroom run --selection $R/g2_selection_p0.004.npz --data $P004 --cache "$S/cache" \
+        --processes 8 --only tesseract --log $L/g2_run_step2b.log ;;
   step3)      # G1 at p = 0.003: the first 50,000 shots of each exploration file
     $LOCK $PY -m analysis.g1_relay_failures run --data $P003 --cache "$S/cache" --processes 8 --max-shots 50000 \
         --log $L/g1_run_p0.003.log ;;

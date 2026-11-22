@@ -1,0 +1,60 @@
+{
+ "dataset": {
+  "path": "/home/sal/hackMidwest/repo/challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz",
+  "sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d"
+ },
+ "machine": {
+  "host": "luminaty",
+  "cpu": "AMD Ryzen 7 7730U with Radeon Graphics",
+  "logical_cpus": 16,
+  "affinity": [
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  "processes": 1,
+  "python": "3.12.15",
+  "numpy": "2.5.5",
+  "stim": "1.16.0",
+  "ldpc": "2.4.1",
+  "relay_bp": "0.2.2",
+  "nice": 15
+ },
+ "one_process_vs_g1": {
+  "chunks": [
+   2,
+   3,
+   4,
+   5
+  ],
+  "shots": 2000,
+  "differing_shots_per_field": {
+   "failed": 0,
+   "converged": 0,
+   "iterations": 0,
+   "pred": 0,
+   "wcount": 0,
+   "wllr": 0,
+   "valid": 0,
+   "ehash": 0
+  },
+  "identical": true,
+  "g1_failures_in_these_chunks": 11,
+  "redo_failures": 11
+ },
+ "decode_vs_decode_detailed": {
+  "shots": 500,
+  "differing_corrections": 0,
+  "identical": true
+ },
+ "order_control": {
+  "chunk0_differing": 0,
+  "chunk1_differing_corrections": 309,
+  "chunk1_differing_iterations": 492
+ }
+}

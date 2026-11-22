@@ -54,6 +54,8 @@ def main():
             [("relay-BP right", int(i)) for i in np.flatnonzero(~failed)[: args.shots]]
     rows = []
     ctx = get_context("fork")
+    _init(args.data, config)          # build once here first: a broken DEM fails loudly instead of in a pool
+    print(f"decoder built in {_DEC['build']:.1f} s", flush=True)
     pool = None
     for role, k in picks:
         if pool is None:

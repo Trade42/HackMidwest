@@ -231,9 +231,9 @@ def where_text(row):
     text = f"{row['device']}, {row['workers']} process" + (f" on {row['cores']} cores" if row.get("cores", 1) > 1 else "") + f", {row['site']}"
     if row.get("retimed"):
         first = row["retimed"]["first"]
-        text += (f"; **the time is from a second run in a quiet window** (`{row['retimed']['folder']}`), whose answers equal the first run's on every pair; "
-                 f"the first run's mean was {ms(first['mean_ms'])} ms"
-                 + (f", throttled for {first['throttle_share']:.1%} of its wall time" if first.get("throttle_share") is not None else ""))
+        text += (f"; **re-timed: a second run in a quiet window confirms the time** (`{row['retimed']['folder']}`); its answers equal the first "
+                 f"run's on every pair, the time shown is the second run's, and the first run's mean was {ms(first['mean_ms'])} ms"
+                 + (f", with the CPU quota throttling at most {first['throttle_share']:.1%} of one process's time" if first.get("throttle_share") is not None else ""))
     if row.get("during"):
         during = row["during"]
         others = ", ".join(f"{kind.replace('_', ' ')} {count}" for kind, count in during["other_max"].items() if count)

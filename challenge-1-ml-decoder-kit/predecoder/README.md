@@ -29,9 +29,14 @@ should find the answer sooner and fail less.
   so that 70 cannot be checked, and the gap shows how much a count moves with the last digits
   of the priors. At p = 0.003 neither fails much: 2 against 0 (p = 0.5).
 
-Whether the p = 0.005 result earns one run on the held-out test shots is Sal's decision: the
-gate fixed in advance was p = 0.004, and it did not pass. Details, commands and logs for every
-number are under "Numbers".
+- **On the held-out test shots, one run at p = 0.005** (Sal's yes at 13:34 UTC; a secondary
+  result, chosen after the p = 0.004 gate failed; X memory only): relay-BP with the head's
+  priors fails **151** of 10,000 shots against **433** with the kit's priors, 2.9 times fewer
+  (only the head's 26 against only the kit's priors' 308, p = 2e-62), with 3.4 times fewer
+  iterations. On the same shots TCBP-JOBS fails 186 (61 against 96, p = 0.0065; chosen after
+  the p = 0.004 gate failed, X only, accuracy only).
+
+Details, commands and logs for every number are under "Numbers".
 
 | file | what it does |
 |------|--------------|
@@ -48,6 +53,7 @@ number are under "Numbers".
 | `plugin.py` | the decoder for the team's evaluator (`evaluation.evaluate`) |
 | `plugin_check.py` | checks that the plugin, through the evaluator's loop, gives `compare.py`'s answers |
 | `files.py` | small file helpers without torch, so the decoding worker processes stay small |
+| `secondary.py` | the test run's secondary rows: the head's answers against two other decoders' files, same shots |
 | `oracle.py` | the ceiling: relay-BP told the true faults (a diagnostic, never a result) |
 | `test_predecoder.py` | tests |
 
@@ -180,8 +186,10 @@ BP as they are, which made BP worse on train shots.
  "device": "cpu", "torch_threads": 4}
 ```
 
-**If Sal decides on one run on the held-out test shots** (written before any test result
-exists; the declared gate at p = 0.004 did not pass, so this is his call). From commit `1bf0e7b`,
+**The one run on the held-out test shots** (written before any test result existed; the
+declared gate at p = 0.004 did not pass, so it was Sal's call: he said yes at 13:34 UTC on
+2026-11-22, and it ran once, 13:34:51 to 14:17:34 UTC, with lanes A, B and C, 12 threads and 12
+processes in place of the 16 below: `logs/test-run.sh.txt` is the script as run). From commit `1bf0e7b`,
 the commit the validation results came from, with nothing changed; the logits on a CPU in 32-bit
 floats, the setting of the headline numbers, which a second machine reproduces byte for byte
 (the reviewer's logits at p = 0.004 equal ours):
@@ -494,6 +502,53 @@ machine gets it back.
 - These knobs were never fitted at 0.005 or 0.003, and nothing was changed after these
   numbers were seen.
 
+### The one run on the held-out test shots (p = 0.005, X memory)
+
+**Secondary, chosen after the p = 0.004 gate failed, X only.** Sal said yes at 13:34 UTC; the
+orchestrator passed it on. One run, `--final`, from the detached checkout of `1bf0e7b`, with
+the head (`38ab667e...`), the final X trunk (`d8d1c70f...`) and the frozen knobs
+(`logs/fit_X_p0.004.json`, `b45a0d75...`), each checked by sha256 before it started; the network
+on this PC's CPU in 32-bit floats; relay-BP at the kit's settings, built per shot, 12 processes
+(lanes A, B and C: `flock` on their locks in that order, `nice -n 15`, `taskset -c 4-15`).
+Shots: `data/p0.005/test_X.npz`, 10,000, seed 301, sha256 `1b13521c...`. Logs:
+`logs/test_run_p0.005_X.log`, `logs/test_run_p0.005_X_summary.json`,
+`logs/test_run_p0.005_X_logits_meta.json`; the script, `logs/test-run.sh.txt`. The per-shot file
+stays in the orchestration scratch (it holds the test shots' truth).
+
+| arm | failures of 10,000 | share, 95% interval | unconverged | hard shots | mean iterations |
+|---|---|---|---|---|---|
+| the kit's priors, per shot ("fresh") | 433 | 0.0433 [0.0395, 0.0475] | 258 | 3,641 | 2,436 |
+| **the head's priors, per shot** | **151** | 0.0151 [0.0129, 0.0177] | 90 | 1,316 | 711 |
+
+**The declared pair, head against fresh:** both fail 125, only the head 26, only the kit's
+priors 308, exact two-sided p = 2.4e-62. 2.9 times fewer failures and 3.4 times fewer
+iterations, as on the validation file (79 against 206 there, on the same device).
+
+Time (a shared 12-worker pool on this PC, not a clean timing: 12 processes on 6 physical
+cores with both threads busy, the machine's load about 14 from other work): the network and
+head took 19.1 ms per shot one at a time on 12 CPU threads; building and decoding took 599 ms
+per shot on average with the head's priors against 2,041 ms with the kit's. The two arms ran
+one after the other in that pool, so the load may have differed between them; the iterations
+are the machine-free measure.
+
+**Beside two other decoders on the same test shots** (chosen after the p = 0.004 gate failed,
+X only, accuracy only;
+`python -m predecoder.secondary`, `logs/test_run_p0.005_X_secondary.log`). The two files were
+named by the orchestrator, from `origin/server-logs` at `e91760d`: TCBP-JOBS,
+`files/clean/tcbp_p0.005/test_X.tcbp.npz` (sha256 `ba3b9ab7...`), and the team evaluator's
+relay-bp row, `files/clean/eval_p0.005_relay-bp/01_relay-bp_shots.npz` (sha256 `c42661e5...`,
+its X column). Both were checked against the test file: its sha256, its truth, and their own
+stored failures. Nothing else of those folders was read.
+
+| decoder on the same 10,000 test X shots | failures | share, 95% interval | H against it: both, only H, only it, p |
+|---|---|---|---|
+| H, relay-BP with the head's priors | 151 | 0.0151 [0.0129, 0.0177] | |
+| T, TCBP-JOBS | 186 | 0.0186 [0.0161, 0.0214] | 90, 61, 96, p = 0.0065 |
+| R, the evaluator's relay-bp (built once) | 432 | 0.0432 [0.0394, 0.0474] | 124, 27, 308, p = 1.5e-61 |
+
+These rows are X memory alone: the kit's score is per pair of an X and a Z shot, and Z has no
+head here.
+
 ## What is tested, what is not, and what is left
 
 `test_predecoder.py`, 19 tests (`python -m pytest -p no:cacheprovider test_kit.py neural predecoder`:
@@ -516,10 +571,9 @@ machine gets it back.
 
 Not tested, or not done:
 
-- **The held-out test files were not used** (the kill line at p = 0.004 did not pass). A run on
-  them, at p = 0.005 or at all, is Sal's call; if it is made, it should run from commit
-  `1bf0e7b` with `logs/fit_X_p0.004.json`, the head and trunk named above, the network on a
-  CPU in 32-bit floats (the commands are under "Commands"), and nothing else changed.
+- **The held-out test files were used once**, at p = 0.005 for X memory, on Sal's yes, after the
+  declared gate at p = 0.004 failed (above). No other test file was decoded, and nothing was
+  changed after the result.
 - **Z memory has no head.** The plugin decodes Z with the kit's relay-BP, so a pair score from
   the evaluator would mix the two. A Z head needs a Z network (`--logicals light` changes the
   observables, which `mapping.py` does not handle yet).

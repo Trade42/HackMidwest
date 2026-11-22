@@ -37,8 +37,10 @@ team's best single decoder. The head was not retrained. The knobs were refitted 
   the same run. The 12 bits, the faults and the whole corrections were the same on all 1,000 validation shots tried.
   The registered numbers above were made with the dense path and are unchanged.
 - **The network as a CUDA graph** (tcbp-speed job 3): 1.73 ms per shot instead of 8.29 ms eager, with logits equal to
-  eager's bit for bit on 1,000 validation shots. With both speed-ups, a shot takes about 38 ms (network + build +
-  decode) instead of about 56 ms, with the same answers on the 1,000 shots checked.
+  eager's bit for bit on 1,000 validation shots. With both speed-ups, a shot takes about 38 ms (network 1.7 + build 34.0
+  + decode 2.7; separate timers; + 4.6 ms free) instead of about 52 ms (8.3 + 41.2 + 2.7, the old path measured the same
+  way on the same 1,000 shots). The answers were the same on all 1,000 shots checked. The registered 56 ms is another
+  measurement, on other shots.
 
 **Erratum.** `logs/tcbp_test_registered_spec.md` says "Written 2026-11-22 15:52 UTC" and cites dq-orch-6's decision as
 "15:49 UTC". Both true times are 15:42 UTC. The spec's commit, `dad4fd50`, is dated 15:42:59 UTC, before any test number
@@ -397,8 +399,9 @@ order that rotated from block to block.
 
 - Every correction reproduces its syndrome.
 - Dense equals dense again, so the decoder is repeatable within the run, and "the same" means something.
-- All four arms also equal job 3's head arm on all 1,000 shots, bits and faults (`tcbp_speed report`,
-  `logs/tcbp_speed_job1_report_vs_job3.json`). Job 3 is another run with another model fit.
+- All four arms also equal, on all 1,000 shots, the head arm of the validation run above ("Job 3: validation",
+  `ctl/130`), bits and faults (`tcbp_speed report`, `logs/tcbp_speed_job1_report_vs_job3.json`). That run had another
+  model fit.
 
 **Time per shot.** Shots ran one at a time. One timer wraps the shot's whole cost: the priors (the head's logits mixed
 with the kit's and capped), the build, the decode, and freeing the decoder. The network and head (9.4 ms, job 4) are
@@ -529,7 +532,8 @@ environment (torch 2.15.0+cu132), TCBP-JOBS in the teammates' environment.
   eager's exactly on all 1,000 shots (float32, bit for bit).
   - The decoders read the float16 logits, so the priors are the same, and so are TCBP-JOBS's answers.
   - Decoding the graph's logits with TCBP-JOBS (head arm, CSR H) on the same 1,000 shots gives 3 failures. The 12 bits
-    and faults equal job 3's head arm (CPU logits) on every shot (`logs/tcbp_speed_job3_analysis.json`).
+    and faults equal, on every shot, the head arm of the validation run above ("Job 3: validation", `ctl/130`, CPU
+    logits). See `logs/tcbp_speed_job3_analysis.json`, made by `python -m predecoder.tcbp_speed_job3`.
 - What costs the time is launching many small GPU operations one by one, not the arithmetic. Building the head's
   sparse matrix only once saves 0.1 ms.
 - torch.compile is as fast, but its logits are not the same. It changed 1,816 float16 entries in 831 of the 1,000
@@ -551,16 +555,20 @@ environment (torch 2.15.0+cu132), TCBP-JOBS in the teammates' environment.
 knobs. This is an accuracy experiment on the first 2,000 validation shots. The knobs were fitted for `tcbp-jobs`, not
 for this preset.
 
-- **It fails 1,163 of 2,000** (0.58 [0.56, 0.60]), against 9 for TCBP-JOBS with the head's priors on the same shots
-  (job 3: both fail 9, only BP 1,154, only TCBP-JOBS 0).
+- **It fails 1,163 of 2,000** (0.58 [0.56, 0.60]), against 9 for TCBP-JOBS with the head's priors on the same shots,
+  in the validation run above (`ctl/130`): both fail 9, only BP 1,154, only TCBP-JOBS 0.
 - 1,644 of its 2,000 corrections do not reproduce their syndrome.
 - It is fast (build 3.4 + decode 0.5 ms), but it is not a decoder on its own here: JOBS is what makes the answers
   right.
 
-**The pipeline per X shot with both speed-ups** (A100; network + build + decode, the sum of separate timers from jobs
-3 and 1; the free not included): network as a CUDA graph 1.7 + build with CSR 34.0 + decode 2.7 = **about 38 ms**,
-against the registered 9.4 + 42.6 + 3.8 = about 56 ms. Every answer is the same on the 1,000 validation shots checked.
-Freeing the decoder adds 4.6 ms per shot, before the next shot can start. `fast_network.py` has no test of its own:
+**The pipeline per X shot with both speed-ups.** These are sums of separate timers from tcbp-speed jobs 3 and 1 (A100,
+the same first 1,000 validation shots; network + build + decode, without the free).
+
+- With both speed-ups: the network as a CUDA graph 1.7 + build with CSR 34.0 + decode 2.7 = **about 38 ms**.
+- The old path, measured the same way: eager network 8.3 + dense build 41.2 + decode 2.7 = about 52 ms.
+- Every answer is the same on those 1,000 shots.
+- Freeing the decoder adds 4.6 ms per shot, before the next shot can start.
+- The registered "about 56 ms" (9.4 + 42.6 + 3.8) is another measurement: jobs 4 and 5, other shots and other runs. `fast_network.py` has no test of its own:
 its CPU arms ran on 5 shots on luminaty, and the graph arm needs a GPU.
 
 ## What was not done, and what is not tested

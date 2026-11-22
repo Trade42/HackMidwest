@@ -122,7 +122,8 @@ the matching ones above:
 
 ## Amendment 2: the full run restored (declared before any decode)
 
-Written 2026-11-22 at about 18:36 UTC. At that time the head had finished training (laptop-artifacts `07930fcc`,
+Written 2026-11-22 before 18:34 UTC (pushed in `bf5cf0a4` at 18:34:11; the text first said "about 18:36", corrected
+afterwards). At that time the head had finished training (laptop-artifacts `07930fcc`,
 `head.pt` sha256 `b42d71d5...`, step 20,000), and no decode with it, and no decode of the seed-4800 file, existed.
 
 **Why:** Sal, relayed by `dq-orch-6` at about 18:34 UTC, says there is more time than 30 minutes. **Amendment 1 is
@@ -135,7 +136,7 @@ Nothing else changes. With a deadline, the scored set is still the longest prefi
 
 ## Amendment 3: two runs (declared before any number of either)
 
-Written 2026-11-22 at 18:36 UTC, before any decode result of either run reached us.
+Written 2026-11-22 before 18:36 UTC (pushed in `cb739fbe` at 18:35:46), before any decode result of either run reached us.
 
 **What happened.** The orchestrator pushed server job `cpu/120-tcbp-retrain-eval.sh` (integration `64956ccc`) at 18:34:26 UTC
 from amendment 1's draft:

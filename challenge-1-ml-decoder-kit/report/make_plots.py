@@ -211,6 +211,14 @@ def ler_vs_p(measured):
     p_axis(axes)
     end_labels(axes, labels)
     note = missing_note(measured, own)
+    offline = {}
+    for p in P_VALUES:
+        for key, row in measured[p].items():
+            if row is not None and row.get("offline") and DECODERS[key].figures == "all":
+                offline.setdefault(DECODERS[key].short, []).append(p)
+    if offline:
+        note += (" Combined offline from saved answers (no time; a fresh relay-BP per 500 shots): "
+                 + "; ".join(f"{name} at p = {', '.join(str(p) for p in ps)}" for name, ps in offline.items()) + ".")
     if own:
         note += " TCBP-JOBS is drawn from the teammates' run on its own sampled shots (hollow, dotted; interval from the logged error)."
     if limits:
@@ -259,6 +267,9 @@ def time_vs_p(measured):
     if not lines["tcbp"]:
         note += (" TCBP-JOBS: only its p = 0.003 time on its own shots is usable; at p = 0.004 and 0.005 its GPU was shared with a training of ours."
                  if own else " TCBP-JOBS has no usable time yet.")
+    else:
+        note += (" TCBP-JOBS runs on a GPU (an A100 slice) and its timer covers the decode call alone, so its line is not comparable with the CPU rows,"
+                 " which time the whole decode of a pair in one process.")
     footnote(figure, note.strip())
     return save(figure, "time_vs_p")
 
@@ -301,7 +312,7 @@ def ler_vs_time(measured):
     axes.set_xlabel("mean time per pair")
     axes.set_ylabel("logical error rate per cycle")
     end_labels(axes, labels)
-    footnote(figure, (missing_note(measured, {}) + unclean_note(measured) + " CPU rows: one process each on the server; a GPU row is marked. "
+    footnote(figure, (missing_note(measured, {}) + unclean_note(measured) + " CPU rows: one process each on the server, timing the whole decode of a pair. TCBP-JOBS (GPU) times its decode call alone: not comparable. "
                       "Rows combined offline from per-shot files have no time measured in one process and are not drawn.").strip())
     return save(figure, "ler_vs_time")
 
@@ -451,7 +462,7 @@ def where_failures(combined, measured):
         axes.barh(y, differ / total * width, left=left, height=0.34, color=orange, edgecolor="none")
         axes.text(0, y + 0.3, label, fontsize=15, va="bottom", ha="left", color=INK)
         axes.text(max(left / 2, 0.001), y, f"agree: {same:,}", fontsize=13.5, va="center", ha="center" if left > 0.2 else "left", color=INK)
-        text = f"disagree: {differ:,} ({differ / total:.1%})"
+        text = f"disagree: {differ:,} ({differ / total:.2%})" if differ / total < 0.01 else f"disagree: {differ:,} ({differ / total:.1%})"
         if differ / total * width > 0.25:
             axes.text(left + differ / total * width / 2, y, text, fontsize=13.5, va="center", ha="center", color="#ffffff")
         else:

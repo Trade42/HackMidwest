@@ -4,3 +4,7 @@ both ended
 Sun Nov 22 07:12:45 UTC 2026
 checkout: 6ea830c loss: job.py, a self-contained sample-decode-summarize job for another machine (no lanes, no scratch)
 decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 0..500 conditions ['starter-nofinal', 'starter-nohook', 'starter-ratebase'] workers 10
+  50/500 shots, 26s, failures so far starter-nofinal=3 starter-nohook=2 starter-ratebase=1
+  100/500 shots, 40s, failures so far starter-nofinal=6 starter-nohook=3 starter-ratebase=3
+  150/500 shots, 59s, failures so far starter-nofinal=8 starter-nohook=4 starter-ratebase=4
+  200/500 shots, 75s, failures so far starter-nofinal=13 starter-nohook=5 starter-ratebase=8

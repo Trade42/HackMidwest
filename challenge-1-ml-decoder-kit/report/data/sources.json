@@ -805,13 +805,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "4c798d78cdbdc967ba651042fc7f0eb1d5424cc3",
-  "copied_utc": "2026-11-22 09:56",
+  "commit": "2e63c6f89c5ae37eac643386005d4eee2d3256c4",
+  "copied_utc": "2026-11-22 10:07",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `4c798d78cdbd`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `2e63c6f89c5a`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "642d27015538ac14f91aaaae27c34d66ccc0be982e45aceb518761fd1c867ec2"
+  "sha256": "3a4df9e5ff380e89bc5c12450f58d2db48837d20a056d3c110f701fafe58d696"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -826,14 +826,14 @@
  },
  "networks/cascade_Z_s1.train.log": {
   "branch": "origin/server-logs",
-  "bytes": 39379,
-  "commit": "4c798d78cdbdc967ba651042fc7f0eb1d5424cc3",
-  "copied_utc": "2026-11-22 09:56",
+  "bytes": 40993,
+  "commit": "2e63c6f89c5ae37eac643386005d4eee2d3256c4",
+  "copied_utc": "2026-11-22 10:07",
   "file": "networks/cascade_Z_s1.train.log",
-  "from": "branch `server-logs` at commit `4c798d78cdbd`, `cascade_Z_s1.train.log`",
+  "from": "branch `server-logs` at commit `2e63c6f89c5a`, `cascade_Z_s1.train.log`",
   "grows": true,
   "path": "cascade_Z_s1.train.log",
-  "sha256": "a971a38086e6eae37236a6bf2fee5c81df002c4aad5c966ae3bccaa5f04849f5"
+  "sha256": "872427da9f6672f585e63ad40164d937ae9c3681f88fdc97abeca617b5d8d704"
  },
  "tcbp_own_shots/tcbp-jobs_p0.003_shots10000_seed1_20261122_005215_437826+0000.log": {
   "branch": "tree",
@@ -1013,14 +1013,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 10754,
-  "commit": "4c798d78cdbdc967ba651042fc7f0eb1d5424cc3",
-  "copied_utc": "2026-11-22 09:56",
+  "bytes": 11305,
+  "commit": "2e63c6f89c5ae37eac643386005d4eee2d3256c4",
+  "copied_utc": "2026-11-22 10:07",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `4c798d78cdbd`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `2e63c6f89c5a`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "d870337ece296599720a71c42b906bfaff5d1768bb1e26ef436a8fd927dc8683"
+  "sha256": "b5f8ea1a5755e6b5a5c88d8d6373af098de442d525c74f795b1087e952e766bb"
  },
  "test/eval_p0.003_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",
@@ -1266,14 +1266,14 @@
  },
  "test/runner_ctl.out": {
   "branch": "origin/server-logs",
-  "bytes": 908,
-  "commit": "899798eb29a7881712d1f7126fe7ad2cef5f1af0",
-  "copied_utc": "2026-11-22 09:43",
+  "bytes": 982,
+  "commit": "2e63c6f89c5ae37eac643386005d4eee2d3256c4",
+  "copied_utc": "2026-11-22 10:07",
   "file": "test/runner_ctl.out",
-  "from": "branch `server-logs` at commit `899798eb29a7`, `runner_ctl.out`",
+  "from": "branch `server-logs` at commit `2e63c6f89c5a`, `runner_ctl.out`",
   "grows": true,
   "path": "runner_ctl.out",
-  "sha256": "1a7ba9811139432233f8d79d00bebed545941736b377c829acc7ee8324da0dd2"
+  "sha256": "55ea77e563c4b270f95e0112829d1868b5c558214c6df5929a9d7c7ff7148b29"
  },
  "test/runner_gpu.out": {
   "branch": "origin/server-logs",
@@ -1285,5 +1285,16 @@
   "grows": true,
   "path": "runner_gpu.out",
   "sha256": "28a14412604b44a440cf33072cfad2a7cdd0f215213d7cba7ac056553ec9c3fc"
+ },
+ "test/test_run.out": {
+  "branch": "origin/server-logs",
+  "bytes": 1210,
+  "commit": "2e63c6f89c5ae37eac643386005d4eee2d3256c4",
+  "copied_utc": "2026-11-22 10:07",
+  "file": "test/test_run.out",
+  "from": "branch `server-logs` at commit `2e63c6f89c5a`, `test_run.out`",
+  "grows": true,
+  "path": "test_run.out",
+  "sha256": "c98bc2bedb62708932894d682523517e1ded04a320414ac21de45016b891b516"
  }
 }

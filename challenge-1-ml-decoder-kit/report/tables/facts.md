@@ -256,10 +256,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_X_wrong3` | 0.5% | `tables/networks.md` |
 | `net_X_wrong4` | 3.8% | `tables/networks.md` |
 | `net_X_wrong5` | 18.3% | `tables/networks.md` |
-| `net_Z_step` | 96,000 | `tables/networks.md` |
+| `net_Z_step` | 100,000 | `tables/networks.md` |
 | `net_Z_wrong3` | 0.5% | `tables/networks.md` |
-| `net_Z_wrong4` | 4.2% | `tables/networks.md` |
-| `net_Z_wrong5` | 18.8% | `tables/networks.md` |
+| `net_Z_wrong4` | 4.1% | `tables/networks.md` |
+| `net_Z_wrong5` | 18.6% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |

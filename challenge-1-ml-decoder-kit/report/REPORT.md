@@ -279,6 +279,14 @@ believes, instead of choosing among finished answers. The head is ours; relay-BP
   pairs. The test run's own times come from a shared 12-worker pool on the team's PC and are not clean, so its table gives
   iterations instead; the clean time is the one above, on exploration shots. `APPENDIX.md` K has the table.
 
+### TCBP-JOBS with the head's priors (`predecoder/`, formerly the branch `predecoder-tcbp`): designed after the test results were seen
+
+The same idea as the predecoder, with TCBP-JOBS in place of relay-BP: TCBP-JOBS gets, for each shot, the priors the
+network's head computes from that shot. It was designed after the test results were seen, on what was a separate branch.
+On exploration shots (the 5,000 validation X shots at p = 0.005, not test shots), it fails <!--f:ptv_TH-->33<!--/f--> against <!--f:ptv_fresh-->100<!--/f--> for
+TCBP-JOBS with the kit's priors in the same run (only TH <!--f:ptv_fresh_only_TH-->8<!--/f-->, only the kit's priors <!--f:ptv_fresh_only_other-->75<!--/f-->, exact p = <!--f:ptv_fresh_p-->9e-15<!--/f-->),
+and against <!--f:ptv_stored-->91<!--/f--> for the stored TCBP-JOBS file, another fit. <!--f:ptt_statement-->On the test shots (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); one basis at a time, accuracy only; its knobs were fitted at p = 0.005 and applied unchanged at the lower p, with no validation there): X at p = 0.005, TH fails 72 against TCBP-JOBS's 186 (only TH 22, only TCBP-JOBS 136, exact p = 3e-21; the same run's kit-priors arm fails 186); X at p = 0.004, TH fails 4 against TCBP-JOBS's 20 (only TH 2, only TCBP-JOBS 18, exact p = 4e-04); X at p = 0.003, TH fails 0 against TCBP-JOBS's 1 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim). TCBP-JOBS's stored counts carry its fit's spread (above).<!--/f--> `APPENDIX.md` L has the table.
+
 ### Which method at which noise level: an operating rule chosen after the test results were seen
 
 Sal asked which method to use at each noise level. The table answers from the rows measured above. It is **an operating
@@ -343,6 +351,7 @@ row comes from.
 | the predecoder with the fallback to TCBP-JOBS (Z memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened |  |  | Z: 100 shots |
 | the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened | X: 1 shot |  |  |
 | the predecoder with the fallback, the kit's pair score | `predecoder/fallback.py` | post hoc: designed after the first test result |  |  | 206 pairs |
+| TCBP-JOBS with the head's priors (X memory only) | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch | X: 0 shots | X: 4 shots | X: 72 shots (same-run control, the kit's priors: 186) |
 <!-- END table:master_comparison -->
 
 ### On the exploration shots (not test shots)

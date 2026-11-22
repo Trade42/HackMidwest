@@ -185,5 +185,7 @@ PREDECODER_FALLBACK_LABEL = ("designed after the first test result; frozen on th
 # exact p = 0.057; p = 0.005 87 / 20 / 158, exact p = 8e-28. Only the verdict is quoted in the operating rule.
 OPERATING_PAIRED = {"0.004": "not a significant difference", "0.005": "a significant difference"}
 
-# TCBP-JOBS given the head's priors (branch predecoder-tcbp): named in the README section only once its files are in report/data.
-PTCBP_LABEL = "designed after the test results were seen; a separate branch (predecoder-tcbp)"
+# TCBP-JOBS given the head's priors per shot (branch predecoder-tcbp): designed after the test results were seen, on a separate branch.
+# Its validation score (exploration shots) and the slots of its test rows, filled only from files when they land.
+PTCBP_LABEL = "designed after the test results were seen; formerly a separate branch (predecoder-tcbp)"
+PTCBP_TEST = [("0.005", "X"), ("0.004", "X"), ("0.003", "X"), ("0.005", "Z")]

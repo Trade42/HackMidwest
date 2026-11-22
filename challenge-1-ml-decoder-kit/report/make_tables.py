@@ -27,7 +27,7 @@ import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, EXTENSION, PTCBP_LABEL, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, OPERATING_PAIRED, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
+from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, EXTENSION, PTCBP_LABEL, PTCBP_TEST, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, OPERATING_PAIRED, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
                          REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256)
 
 HERE = Path(__file__).resolve().parent
@@ -242,7 +242,7 @@ def load_test_rows(data=DATA):
                                  and row["failed_pair"] is not None else None)
                 row["interval"] = stats.per_cycle_interval(row["failures_pair"], row["shots"])
     known = {spec.folder.format(p=p) + suffix for spec in TEST_ROWS for p in P_VALUES for suffix in ("", RETIME)}
-    known |= {f"ensemble_p{p}" for p in P_VALUES} | {f"net_p{p}" for p in P_VALUES} | {"predecoder"}
+    known |= {f"ensemble_p{p}" for p in P_VALUES} | {f"net_p{p}" for p in P_VALUES} | {"predecoder", "predecoder_tcbp"}
     extra = sorted(path.name for path in (data / "test").glob("*") if path.is_dir() and path.name not in known) if (data / "test").is_dir() else []
     return measured, extra, combined
 
@@ -2291,7 +2291,8 @@ LABELS = {"pre": "pre-registered (the test run)", "pre-offline": "pre-registered
           "secondary": "secondary: chosen after the predecoder's p = 0.004 gate failed",
           "extension": "registered extension, run after the X p = 0.005 test result",
           "post hoc": "post hoc: designed after the first test result",
-          "after-design": "designed after the first test result; frozen before this file was opened"}
+          "after-design": "designed after the first test result; frozen before this file was opened",
+          "ptcbp": "designed after the test results were seen; formerly a separate branch"}
 
 
 def master_table(measured, combined):
@@ -2335,6 +2336,16 @@ def master_table(measured, combined):
             f"{basis}: {FACTS[n + '_rule'][0]} shot{'' if FACTS[n + '_rule'][0] == '1' else 's'}")
     if FACTS.get("pair_rule", (NOT_MEASURED,))[0] != NOT_MEASURED:
         put("the predecoder with the fallback, the kit's pair score", "`predecoder/fallback.py`", "post hoc", "0.005", f"{FACTS['pair_rule'][0]} pairs")
+    for p, basis in PTCBP_TEST:
+        n = f"ptt{p[-1]}{basis}"
+        if FACTS.get(f"{n}_TH", (NOT_MEASURED,))[0] == NOT_MEASURED:
+            continue
+        control = FACTS[f"{n}_fresh"][0]
+        put(f"TCBP-JOBS with the head's priors ({basis} memory only)", "`predecoder/` (formerly branch `predecoder-tcbp`)", "ptcbp", p,
+            f"{basis}: {FACTS[n + '_TH'][0]} shots" + (f" (same-run control, the kit's priors: {control})" if control != NOT_MEASURED else ""))
+    if FACTS.get("ptpair_TH", (NOT_MEASURED,))[0] != NOT_MEASURED:
+        put("TCBP-JOBS with the head's priors, the kit's pair score", "`predecoder/` (formerly branch `predecoder-tcbp`)", "ptcbp", "0.005",
+            f"{FACTS['ptpair_TH'][0]} pairs (TCBP-JOBS's stored file: {FACTS['ptpair_T'][0]})")
     lines = [[method, folder, label] + [cells.get(p, "") for p in P_VALUES] for (method, folder, label), cells in groups.items()]
     return write("master_comparison",
                  "**Every method we ran on the test shots, in one table.** Each cell is that method's own measured row: failed pairs of 10,000 (the kit's "
@@ -2343,6 +2354,99 @@ def master_table(measured, combined):
                  "Times: one process on the team's server unless the cell says otherwise; TCBP-JOBS's is a GPU decode call; the predecoder's is a clean "
                  "one-thread sample on 1,000 validation shots (exploration shots). The paired tests are in the tables each row comes from.\n\n"
                  + markdown(["Method", "Folder", "Label"] + [f"p = {p}" for p in P_VALUES], lines))
+
+
+def predecoder_tcbp_table(measured):
+    """TCBP-JOBS given the head's per-shot priors (branch predecoder-tcbp): its validation score, exploration shots, and its test rows
+    when their files land. Designed after the test results were seen; every row says so."""
+    source = "tables/predecoder_tcbp.md"
+    lines, test_lines = [], []
+    score = DATA / "exploration" / "predecoder_tcbp" / "tcbp_validation_X_p0.005_score.json"
+    order = [("TCBP-JOBS, head priors per shot", "TCBP-JOBS with the head's priors, per shot (TH)", "TH"),
+             ("TCBP-JOBS, fresh priors per shot", "TCBP-JOBS with the kit's priors, per shot, the same run (the like-for-like control)", "fresh"),
+             ("TCBP-JOBS alone (stored)", "TCBP-JOBS with the kit's priors, the stored file (another fit)", "stored"),
+             ("relay-BP, head priors per shot (H)", "relay-BP with the head's priors (H, the predecoder)", "H"),
+             ("the frozen fallback rule: H where H converged, else T (stored)", "the frozen fallback rule (post hoc on test X at p = 0.005)", "rule"),
+             ("fallback b2: H where H converged, else TCBP-JOBS with head priors", "H where H converged, else TH (designed after the test results)", "b2")]
+    if score.is_file():
+        record = json.loads(score.read_text(encoding="utf-8"))
+        if record["data"]["basis"] != "X" or record["data"]["seed"] != 201 or abs(record["data"]["p"] - 0.005) > 1e-12:
+            raise Mismatch("exploration/predecoder_tcbp: not the validation X file at p = 0.005")
+        arms, pairs, shots = record["arms"], record["pairs"], record["shots"]
+        for key, label, short in order:
+            count = arms[key]["failures"]
+            low, high = stats.wilson(count, shots)
+            pair = pairs.get(f"TCBP-JOBS, head priors per shot | {key}")
+            lines.append([label, f"{count} of {shots:,}", f"{count / shots:.2%} ({low:.2%} to {high:.2%})",
+                          "" if pair is None else f"{pair['both']} / {pair['only_first']} / {pair['only_second']} (p = {stats.p_text(pair['p'])})"])
+            fact(f"ptv_{short}", count, source)
+            if pair is not None:
+                fact(f"ptv_{short}_only_TH", pair["only_first"], source)
+                fact(f"ptv_{short}_only_other", pair["only_second"], source)
+                fact(f"ptv_{short}_p", stats.p_text(pair["p"]), source)
+    TH, T, FRESH = "TCBP-JOBS, head priors per shot", "TCBP-JOBS alone (stored)", "TCBP-JOBS, fresh priors per shot"
+    for p, basis in PTCBP_TEST:
+        n = f"ptt{p[-1]}{basis}"
+        file = DATA / "test" / "predecoder_tcbp" / f"tcbp_test_{basis}_p{p}_score.json"
+        if not file.is_file():
+            test_lines.append([p, basis] + ["not measured yet"] * 5)
+            for name in ("TH", "T", "fresh", "vs_T_only_TH", "vs_T_only_T", "vs_T_p", "vs_fresh_p"):
+                fact(f"{n}_{name}", None, source)
+            continue
+        record = json.loads(file.read_text(encoding="utf-8"))
+        if record["data"]["sha256"] != TEST_SHA256[p][basis] or record["data"]["basis"] != basis:
+            raise Mismatch(f"test/predecoder_tcbp/{file.name}: not the team's test file")
+        arms, pairs = record["arms"], record["pairs"]
+        tcbp = measured[p].get("tcbp")
+        if tcbp is not None and arms[T]["failures"] != tcbp[f"failures_{basis}"]:
+            raise Mismatch(f"test/predecoder_tcbp/{file.name}: the stored TCBP-JOBS fails {arms[T]['failures']} shots there and {tcbp[f'failures_{basis}']} in its row")
+        declared, fresh = pairs[f"{TH} | {T}"], pairs.get(f"{TH} | {FRESH}")
+        test_lines.append([p, basis, f"{arms[TH]['failures']} of {record['shots']:,}", f"{arms[T]['failures']}",
+                           f"{declared['both']} / {declared['only_first']} / {declared['only_second']} (p = {stats.p_text(declared['p'])})",
+                           f"{arms[FRESH]['failures']}" if FRESH in arms else "not run (X at p = 0.005 only)",
+                           "" if fresh is None else f"{fresh['both']} / {fresh['only_first']} / {fresh['only_second']} (p = {stats.p_text(fresh['p'])})"])
+        for name, value in (("TH", arms[TH]["failures"]), ("T", arms[T]["failures"]), ("fresh", arms[FRESH]["failures"] if FRESH in arms else None),
+                            ("vs_T_only_TH", declared["only_first"]), ("vs_T_only_T", declared["only_second"]), ("vs_T_p", stats.p_text(declared["p"])),
+                            ("vs_fresh_p", fresh and stats.p_text(fresh["p"]))):
+            fact(f"{n}_{name}", value, source)
+    landed = [(p, basis) for p, basis in PTCBP_TEST if FACTS[f"ptt{p[-1]}{basis}_TH"][0] != NOT_MEASURED]
+    fact("ptt_statement", landed and ("On the test shots (" + PTCBP_LABEL + "; one basis at a time, accuracy only; its knobs were fitted at p = 0.005 and "
+         "applied unchanged at the lower p, with no validation there): " + "; ".join(
+             f"{basis} at p = {p}, TH fails {FACTS[f'ptt{p[-1]}{basis}_TH'][0]} against TCBP-JOBS's {FACTS[f'ptt{p[-1]}{basis}_T'][0]} (only TH "
+             f"{FACTS[f'ptt{p[-1]}{basis}_vs_T_only_TH'][0]}, only TCBP-JOBS {FACTS[f'ptt{p[-1]}{basis}_vs_T_only_T'][0]}, exact p = "
+             f"{FACTS[f'ptt{p[-1]}{basis}_vs_T_p'][0]}" + (": no claim" if float(FACTS[f'ptt{p[-1]}{basis}_vs_T_p'][0]) >= 0.05 else "")
+             + (f"; the same run's kit-priors arm fails {FACTS[f'ptt{p[-1]}{basis}_fresh'][0]}" if FACTS[f"ptt{p[-1]}{basis}_fresh"][0] != NOT_MEASURED else "")
+             + ")" for p, basis in landed) + ". TCBP-JOBS's stored counts carry its fit's spread (above).") or "Its test rows have not landed yet.", source)
+    pair_file = DATA / "test" / "predecoder_tcbp" / "tcbp_pair_test_p0.005.json"
+    if pair_file.is_file():
+        record = json.loads(pair_file.read_text(encoding="utf-8"))
+        tcbp = measured["0.005"].get("tcbp")
+        if tcbp is not None and record["T"]["failed_pairs"] != tcbp["failures_pair"]:
+            raise Mismatch("test/predecoder_tcbp/tcbp_pair_test_p0.005.json: TCBP-JOBS's failed pairs differ from its row")
+        pair = record["pair"]
+        test_lines.append(["0.005", "pairs", f"{record['TH']['failed_pairs']} of {record['TH']['pairs']:,} pairs", f"{record['T']['failed_pairs']}",
+                           f"{pair['both']} / {pair['only_TH']} / {pair['only_T']} (p = {stats.p_text(pair['p'])})", "", ""])
+        fact("ptpair_TH", record["TH"]["failed_pairs"], source)
+        fact("ptpair_T", record["T"]["failed_pairs"], source)
+        fact("ptpair_p", stats.p_text(pair["p"]), source)
+    else:
+        for name in ("TH", "T", "p"):
+            fact(f"ptpair_{name}", None, source)
+    return write("predecoder_tcbp",
+                 f"**TCBP-JOBS with the head's priors: {PTCBP_LABEL}.** TCBP-JOBS (NVIDIA's GPU decoder) given, for each shot, the priors our "
+                 "network's head computes from that shot's detectors, in place of the kit's fixed priors.\n\n"
+                 "**Exploration shots, not test shots:** the 5,000 shots of `data/p0.005/validation_X.npz`. TH against each row: both fail / only TH "
+                 "/ only that row (exact p), on the same shots.\n\n"
+                 + (markdown(["Decoder", "Failed shots", "Share (95% interval)", "TH against it: both / only TH / only it (exact p)"], lines) if lines
+                    else NOT_MEASURED)
+                 + f"\n\n**Test shots: {PTCBP_LABEL}.** One basis at a time (X until the Z run lands), accuracy only. Its knobs were fitted at "
+                 "p = 0.005 and applied unchanged at p = 0.004 and 0.003, with no validation there. The declared pair is TH against TCBP-JOBS's stored "
+                 "test file; at p = 0.005 the same run's kit-priors arm is the like-for-like control.\n\n"
+                 + markdown(["p", "Basis", "TH fails", "TCBP-JOBS, its stored test file (its row in this report), fails",
+                             "TH against it, the declared pair: both / only TH / only TCBP-JOBS (exact p)",
+                             "TCBP-JOBS with the kit's priors in the same run (the like-for-like control) fails", "TH against that control (exact p)"],
+                            test_lines)
+                 + "\n\nSource: `report/data/exploration/predecoder_tcbp/` (branch `predecoder-tcbp` at `dad4fd50`) and `report/data/test/predecoder_tcbp/`.")
 
 
 def ours_at(measured, p):
@@ -2520,6 +2624,7 @@ def main(argv=None):
         tables["test_network_timed"] = network_timed_table(measured)
         tables["predecoder_latency"] = predecoder_latency_table(measured)
         tables["operating_rule"] = operating_rule_table(measured)
+        tables["predecoder_tcbp"] = predecoder_tcbp_table(measured)
         tables["master_comparison"] = master_table(measured, combined)
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))

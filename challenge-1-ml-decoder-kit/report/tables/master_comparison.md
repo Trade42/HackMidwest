@@ -24,3 +24,4 @@
 | the predecoder with the fallback to TCBP-JOBS (Z memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened |  |  | Z: 100 shots |
 | the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened | X: 1 shot |  |  |
 | the predecoder with the fallback, the kit's pair score | `predecoder/fallback.py` | post hoc: designed after the first test result |  |  | 206 pairs |
+| TCBP-JOBS with the head's priors (X memory only) | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch | X: 0 shots | X: 4 shots | X: 72 shots (same-run control, the kit's priors: 186) |

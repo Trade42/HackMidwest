@@ -145,6 +145,16 @@ SOURCES = [
     ("exploration/predecoder/latency_validation_X_p0.004/", "origin/server-logs", "files/predecoder/latency_validation_X_p0.004/*", False),
     ("exploration/predecoder/latency_validation_X_p0.003/", "origin/server-logs", "files/predecoder/latency_validation_X_p0.003/*", False),
     ("exploration/predecoder/job_cpu_060-predecoder-latency-p0.003-p0.004.out", "origin/server-logs", "job_cpu_060-predecoder-latency-p0.003-p0.004.out", False),
+    # TCBP-JOBS with the head's priors (branch predecoder-tcbp, pinned): its validation score, and its test scores when they land
+    ("exploration/predecoder_tcbp/", "origin/predecoder-tcbp@dad4fd50073bc18f582565da403867fb6d9afb5d",
+     "challenge-1-ml-decoder-kit/predecoder/logs/tcbp_validation_X_p0.005_score.json", False),
+    ("exploration/predecoder_tcbp/", "origin/predecoder-tcbp@dad4fd50073bc18f582565da403867fb6d9afb5d",
+     "challenge-1-ml-decoder-kit/predecoder/logs/tcbp_validation_X_p0.005_score.log", False),
+    ("exploration/predecoder_tcbp/", "origin/predecoder-tcbp@dad4fd50073bc18f582565da403867fb6d9afb5d",
+     "challenge-1-ml-decoder-kit/predecoder/logs/tcbp_job3_validation_summary.json", False),
+    ("test/predecoder_tcbp/", "tree", "predecoder/logs/tcbp_test_*_score.json", False),
+    ("test/predecoder_tcbp/", "tree", "predecoder/logs/tcbp_test_*_summary.json", False),
+    ("test/predecoder_tcbp/", "tree", "predecoder/logs/tcbp_pair_test_*.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.log", False),
 ]

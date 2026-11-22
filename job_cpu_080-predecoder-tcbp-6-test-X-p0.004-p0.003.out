@@ -17,3 +17,9 @@ logits.npy: OK
 data/p0.003/test_X.npz: OK
 predecoder/logs/fit_tcbp_X_p0.005.json: OK
 Sun Nov 22 15:59:53 UTC 2026
+p 0.003 decode exit 0
+  head: 9000 of 10000 shots, 519 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 10000 of 10000 shots, 570 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: failures 0 of 10000, 0.0000 [0.0000, 0.0004]; not reproduced 0; flagged not converged 3534; build 42.6 ms + decode 2.7 ms mean, p99 60 ms
+saved /home/blakew3/mlBranchMidwest/runs/predecoder-tcbp/test_X_p0.003/per_shot.npz; 570 s
+Sun Nov 22 16:09:53 UTC 2026

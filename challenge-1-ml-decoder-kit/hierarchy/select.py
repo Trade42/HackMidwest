@@ -249,6 +249,11 @@ def report(pool, sources, rows, network_note=None, out=print):
                 out(f"{row.name:56s} {both:5d} {only_rule:5d} {only_relay:5d}   p = {p_value:.3g}")
     stuck = count["none_converged"]
     by_key = {row.key: row for row in rows}
+    if "network" in by_key:
+        both, only_network, only_weight, p_value = paired_test(by_key["network"].failed, by_key["weight"].failed)
+        out("")
+        out(f"the network rule against the weight rule on the same shots: both fail {both}, the network rule only {only_network}, "
+            f"the weight rule only {only_weight}, exact two-sided p = {p_value:.3g}")
     out("")
     out(f"shots where no candidate converged: {int(stuck.sum())}; the weight rule fails on {int(by_key['weight'].failed[stuck].sum())} of them"
         + (f", the network rule on {int(by_key['network'].failed[stuck].sum())}" if "network" in by_key else ""))

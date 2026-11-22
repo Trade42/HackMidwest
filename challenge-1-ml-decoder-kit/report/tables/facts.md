@@ -646,19 +646,19 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t5_hierarchy_p99_ms` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_paired_p` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_pairs` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_both` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_error` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_mean_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_median_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_only_relay` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_only_this` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_p99_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_paired_p` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_pairs` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_rate` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_time_ratio` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_wall_hours` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_parallel_xz` | not measured | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_both` | 386 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_error` | 1.9e-04 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_mean_ms` | 608 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_median_ms` | 138 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_only_relay` | 459 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_only_this` | 93 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_p99_ms` | 7,794 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_paired_p` | 4e-59 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_pairs` | 479 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_rate` | 4.08e-03 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_time_ratio` | 0.41 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_wall_hours` | 1.7 | `tables/test_p0.005.md` |
+| `t5_hierarchy_parallel_xz` | 245, 238 | `tables/test_p0.005.md` |
 | `t5_hierarchy_rate` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_time_ratio` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_wall_hours` | not measured | `tables/test_p0.005.md` |

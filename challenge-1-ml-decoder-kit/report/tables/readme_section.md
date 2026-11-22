@@ -14,7 +14,7 @@ fails 57.7%, and an ORACLE told when each atom was lost fails 1.64 times fewer s
 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured |
 | our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05, 45.7 ms | 3.67e-04 ± 5.5e-05, 216 ms | not measured |
-| our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 2.50e-05 ± 1.4e-05, 28.9 ms | 3.67e-04 ± 5.5e-05, 150 ms | not measured |
+| our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 2.50e-05 ± 1.4e-05, 28.9 ms | 3.67e-04 ± 5.5e-05, 150 ms | 4.08e-03 ± 1.9e-04, 608 ms |
 | our ensemble (combined offline) | not measured | not measured | not measured |
 | TCBP-JOBS (NVIDIA, GPU) | 2.50e-05 ± 1.4e-05, 3.9 ms | 3.42e-04 ± 5.3e-05, 7.8 ms | 3.05e-03 ± 1.6e-04, 16.9 ms |
 

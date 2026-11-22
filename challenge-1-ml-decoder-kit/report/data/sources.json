@@ -1014,13 +1014,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "263e707dbb87791ea154dfb297c0eea493a78429",
-  "copied_utc": "2026-11-22 11:33",
+  "commit": "2c98f8695f3ba9d1fb08f3147ed9d54427a17e16",
+  "copied_utc": "2026-11-22 12:09",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `263e707dbb87`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `2c98f8695f3b`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "4d018e90660d08c3b915c790cf74c7ddf23a493a34c85d0f79a59f75322c6935"
+  "sha256": "c806849ddc7de1f2822acc91394ffe4a2db06bc5549fc16d3a5928272b4133ab"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -1222,14 +1222,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 16171,
-  "commit": "263e707dbb87791ea154dfb297c0eea493a78429",
-  "copied_utc": "2026-11-22 11:33",
+  "bytes": 18166,
+  "commit": "2c98f8695f3ba9d1fb08f3147ed9d54427a17e16",
+  "copied_utc": "2026-11-22 12:09",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `263e707dbb87`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `2c98f8695f3b`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "abd16d0f2b94d56f7d48aa3d0795f6c0fe62be244efc5c9d1770f8cababa71d9"
+  "sha256": "cee599b1694f0c056b5262a46188f5b6d324d24475377694773c3206fb8b8093"
  },
  "test/eval_p0.003_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",
@@ -1618,6 +1618,39 @@
   "path": "files/clean/eval_p0.005_bposd/summary.json",
   "sha256": "23252cbf15fd752cfbdd3b74f23be380a1323c2013427470993c13c7b22a35cd"
  },
+ "test/eval_p0.005_hierarchy-parallel/01_hierarchy_plugin_make_decoder_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 357695,
+  "commit": "2c98f8695f3ba9d1fb08f3147ed9d54427a17e16",
+  "copied_utc": "2026-11-22 12:09",
+  "file": "test/eval_p0.005_hierarchy-parallel/01_hierarchy_plugin_make_decoder_shots.npz",
+  "from": "branch `server-logs` at commit `2c98f8695f3b`, `files/clean/eval_p0.005_hierarchy-parallel/01_hierarchy_plugin_make_decoder_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.005_hierarchy-parallel/01_hierarchy_plugin_make_decoder_shots.npz",
+  "sha256": "1badc9319037e4d5af96e221e2418a6abbd70cf19d61794df21b1fc4d4f6cf80"
+ },
+ "test/eval_p0.005_hierarchy-parallel/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 838,
+  "commit": "2c98f8695f3ba9d1fb08f3147ed9d54427a17e16",
+  "copied_utc": "2026-11-22 12:09",
+  "file": "test/eval_p0.005_hierarchy-parallel/summary.csv",
+  "from": "branch `server-logs` at commit `2c98f8695f3b`, `files/clean/eval_p0.005_hierarchy-parallel/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.005_hierarchy-parallel/summary.csv",
+  "sha256": "5b9d17844432f2abbef2cf487b41b6cacfbd3ee541e00d1c30bfed4813069512"
+ },
+ "test/eval_p0.005_hierarchy-parallel/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 13195,
+  "commit": "2c98f8695f3ba9d1fb08f3147ed9d54427a17e16",
+  "copied_utc": "2026-11-22 12:09",
+  "file": "test/eval_p0.005_hierarchy-parallel/summary.json",
+  "from": "branch `server-logs` at commit `2c98f8695f3b`, `files/clean/eval_p0.005_hierarchy-parallel/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.005_hierarchy-parallel/summary.json",
+  "sha256": "76562f4049547f6bde69d425912c9db3cf903fdc74e6842ed8b97c7f085c3da6"
+ },
  "test/eval_p0.005_relay-bp/01_relay-bp_shots.npz": {
   "branch": "origin/server-logs",
   "bytes": 481351,
@@ -1752,14 +1785,14 @@
  },
  "test/test_rows.out": {
   "branch": "origin/server-logs",
-  "bytes": 5041,
-  "commit": "263e707dbb87791ea154dfb297c0eea493a78429",
-  "copied_utc": "2026-11-22 11:33",
+  "bytes": 5442,
+  "commit": "2c98f8695f3ba9d1fb08f3147ed9d54427a17e16",
+  "copied_utc": "2026-11-22 12:09",
   "file": "test/test_rows.out",
-  "from": "branch `server-logs` at commit `263e707dbb87`, `test_rows.out`",
+  "from": "branch `server-logs` at commit `2c98f8695f3b`, `test_rows.out`",
   "grows": true,
   "path": "test_rows.out",
-  "sha256": "80508d2be0ba1c2ef900cfaf58c9bf1ff4dfe7ad8790618de2595fb575a3e347"
+  "sha256": "833b27fa20d4368497a99c216e9e56537d609e3ea3bb1c6a34e1b9844f0c869d"
  },
  "test/test_run.out": {
   "branch": "origin/server-logs",

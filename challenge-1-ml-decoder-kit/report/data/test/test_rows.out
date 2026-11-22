@@ -41,3 +41,5 @@
 2026-11-22T11:01:02Z END eval_p0.004_hierarchy exit 0: row p=0.004 hierarchy exit 0: hierarchy.plugin:make_decoder,18,26,44,0.00036740819646374767,5.53956189182081e-05,216.4562748659635 [CPUs in use 6.7, tokens 6, throttled so far 4840.7 s, load 10.29]
 2026-11-22T11:01:24Z START cand_p0.005: weight 4, pid 245830; before it: tokens 5, CPUs in use 6.5, throttled so far 4840.7 s
 2026-11-22T11:19:03Z END cand_p0.004 exit 0: wall time of this run: 2512 s [CPUs in use 8.7, tokens 9, throttled so far 4844.7 s, load 12.33]
+2026-11-22T12:07:39Z END eval_p0.005_hierarchy-parallel exit 0: row p=0.005 hierarchy-parallel exit 0: hierarchy.plugin:make_decoder,245,238,479,0.004082079544122319,0.00018634410396356493,607.7329459226225 [CPUs in use 6.1, tokens 7, throttled so far 4844.9 s, load 10.55]
+2026-11-22T12:08:10Z START joint_p0.003: weight 4, pid 302948; before it: tokens 5, CPUs in use 6.1, throttled so far 4844.9 s

@@ -1,0 +1,6 @@
+﻿kit noise channels (name, args): targets {('Z_ERROR', (0.004,)): 1872, ('X_ERROR', (0.004,)): 1728, ('DEPOLARIZE2', (0.004,)): 20736, ('M', ()): 864, ('DEPOLARIZE1', (0.004,)): 3312, ('MX', ()): 1008}
+PriorTilt noise channels (name, args): targets {('DEPOLARIZE1', (0.004,)): 5400, ('DEPOLARIZE2', (0.004,)): 20736, ('M', (0.004,)): 864, ('MX', (0.004,)): 1008}
+kit gates {'RX': 13, 'R': 12, 'TICK': 97, 'CX': 84, 'DETECTOR': 1728, 'OBSERVABLE_INCLUDE': 12}
+PriorTilt gates {'RX': 13, 'R': 13, 'TICK': 97, 'CX': 84, 'DETECTOR': 936, 'OBSERVABLE_INCLUDE': 12}
+kit: sum of priors 47.31 (expected faults per shot), quantiles/p [0.267, 0.5333, 0.5333, 3.5598, 3.6866], 9 distinct values; most common prior/p: [(0.5333, 5184), (1.3291, 864), (3.5598, 864), (3.6866, 792), (1.8574, 792), (1.2648, 72)]
+PriorTilt: sum of priors 46.95 (expected faults per shot), quantiles/p [0.5333, 0.5333, 0.5333, 3.2333, 3.6866], 9 distinct values; most common prior/p: [(0.5333, 5184), (1.3291, 864), (3.2333, 864), (3.6866, 792), (1.8574, 792), (1.9886, 72)]

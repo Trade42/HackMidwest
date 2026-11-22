@@ -1,0 +1,18 @@
+﻿p=0.004 Z / validation_Z: 5000 shots
+  relay-BP  failures   20  logical error 0.400% [95% Wilson 0.259%, 0.617%]  time/shot mean 143.4 ms, median 36.7, p99 2897 ms  iterations mean 535, median 136, p99 10777  unconverged 7  side-by-side processes 4-5
+  PriorTilt failures   20  logical error 0.400% [95% Wilson 0.259%, 0.617%]  time/shot mean 45.1 ms, median 6.2, p99 742 ms  iterations mean 377, median 53, p99 6129  unconverged 6  side-by-side processes 3-5
+  paired table (rows relay-BP, columns PriorTilt): both fail 10, relay-BP only 10, PriorTilt only 10, both right 4970
+  McNemar exact (two-sided binomial on 20 discordant shots): p = 1
+  data sha256: ['843c4daf24e2b56c5988670550bbcdbac8f50b18dbb9d24beb64969146cb8e20']
+p=0.004 Z / train_Z: 20000 shots
+  relay-BP  failures  103  logical error 0.515% [95% Wilson 0.425%, 0.624%]  time/shot mean 145.2 ms, median 36.4, p99 3272 ms  iterations mean 550, median 137, p99 12232  unconverged 38  side-by-side processes 2-3
+  PriorTilt failures   86  logical error 0.430% [95% Wilson 0.348%, 0.531%]  time/shot mean 47.1 ms, median 6.2, p99 746 ms  iterations mean 399, median 53, p99 6312  unconverged 23  side-by-side processes 2-3
+  paired table (rows relay-BP, columns PriorTilt): both fail 53, relay-BP only 50, PriorTilt only 33, both right 19864
+  McNemar exact (two-sided binomial on 83 discordant shots): p = 0.0784
+  data sha256: ['14dce11586fa51256f476224d0fe3965e0562f2d8f68cba6192883a65fb6b24a']
+p=0.004 Z / all files: 25000 shots
+  relay-BP  failures  123  logical error 0.492% [95% Wilson 0.413%, 0.587%]  time/shot mean 144.9 ms, median 36.4, p99 3241 ms  iterations mean 547, median 137, p99 12086  unconverged 45  side-by-side processes 2-5
+  PriorTilt failures  106  logical error 0.424% [95% Wilson 0.351%, 0.513%]  time/shot mean 46.7 ms, median 6.2, p99 745 ms  iterations mean 394, median 53, p99 6278  unconverged 29  side-by-side processes 2-5
+  paired table (rows relay-BP, columns PriorTilt): both fail 63, relay-BP only 60, PriorTilt only 43, both right 24834
+  McNemar exact (two-sided binomial on 103 discordant shots): p = 0.114
+  data sha256: ['14dce11586fa51256f476224d0fe3965e0562f2d8f68cba6192883a65fb6b24a', '843c4daf24e2b56c5988670550bbcdbac8f50b18dbb9d24beb64969146cb8e20']

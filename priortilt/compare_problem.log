@@ -1,0 +1,66 @@
+﻿basis X, p 0.003
+  kit circuit: 288 qubits, 1872 measurements, 1728 detectors, 12 observables; kit H (936, 8784), mechanisms sharing a detector set: 0
+  PriorTilt circuit: 288 qubits, 1872 measurements, 936 detectors, 12 observables; noise strengths [0.003]
+  PriorTilt dem_to_matrices: H (936, 8784) vs kit (936, 8784), L (12, 8784) vs (12, 8784), nnz 30672 vs 30672
+    max |sorted prior difference| = 2.564e-03
+    column-weight histogram equal: True; row-weight histogram equal: True
+    (column weight, observable weight, prior) multiset equal: False
+  kit dem_matrices on PriorTilt circuit: H (0, 82) vs kit (936, 8784), L (12, 82) vs (12, 8784), nnz 0 vs 30672
+    prior counts differ
+    column-weight histogram equal: False; row-weight histogram equal: False
+    (column weight, observable weight, prior) multiset equal: False
+basis X, p 0.004
+  kit circuit: 288 qubits, 1872 measurements, 1728 detectors, 12 observables; kit H (936, 8784), mechanisms sharing a detector set: 0
+  PriorTilt circuit: 288 qubits, 1872 measurements, 936 detectors, 12 observables; noise strengths [0.004]
+  PriorTilt dem_to_matrices: H (936, 8784) vs kit (936, 8784), L (12, 8784) vs (12, 8784), nnz 30672 vs 30672
+    max |sorted prior difference| = 3.402e-03
+    column-weight histogram equal: True; row-weight histogram equal: True
+    (column weight, observable weight, prior) multiset equal: False
+  kit dem_matrices on PriorTilt circuit: H (0, 82) vs kit (936, 8784), L (12, 82) vs (12, 8784), nnz 0 vs 30672
+    prior counts differ
+    column-weight histogram equal: False; row-weight histogram equal: False
+    (column weight, observable weight, prior) multiset equal: False
+basis X, p 0.005
+  kit circuit: 288 qubits, 1872 measurements, 1728 detectors, 12 observables; kit H (936, 8784), mechanisms sharing a detector set: 0
+  PriorTilt circuit: 288 qubits, 1872 measurements, 936 detectors, 12 observables; noise strengths [0.005]
+  PriorTilt dem_to_matrices: H (936, 8784) vs kit (936, 8784), L (12, 8784) vs (12, 8784), nnz 30672 vs 30672
+    max |sorted prior difference| = 4.232e-03
+    column-weight histogram equal: True; row-weight histogram equal: True
+    (column weight, observable weight, prior) multiset equal: False
+  kit dem_matrices on PriorTilt circuit: H (0, 82) vs kit (936, 8784), L (12, 82) vs (12, 8784), nnz 0 vs 30672
+    prior counts differ
+    column-weight histogram equal: False; row-weight histogram equal: False
+    (column weight, observable weight, prior) multiset equal: False
+basis Z, p 0.003
+  kit circuit: 288 qubits, 1872 measurements, 1728 detectors, 12 observables; kit H (936, 8784), mechanisms sharing a detector set: 0
+  PriorTilt circuit: 288 qubits, 1872 measurements, 936 detectors, 12 observables; noise strengths [0.003]
+  PriorTilt dem_to_matrices: H (936, 8784) vs kit (936, 8784), L (12, 8784) vs (12, 8784), nnz 30672 vs 30672
+    max |sorted prior difference| = 2.763e-03
+    column-weight histogram equal: True; row-weight histogram equal: True
+    (column weight, observable weight, prior) multiset equal: False
+  kit dem_matrices on PriorTilt circuit: H (0, 65) vs kit (936, 8784), L (12, 65) vs (12, 8784), nnz 0 vs 30672
+    prior counts differ
+    column-weight histogram equal: False; row-weight histogram equal: False
+    (column weight, observable weight, prior) multiset equal: False
+basis Z, p 0.004
+  kit circuit: 288 qubits, 1872 measurements, 1728 detectors, 12 observables; kit H (936, 8784), mechanisms sharing a detector set: 0
+  PriorTilt circuit: 288 qubits, 1872 measurements, 936 detectors, 12 observables; noise strengths [0.004]
+  PriorTilt dem_to_matrices: H (936, 8784) vs kit (936, 8784), L (12, 8784) vs (12, 8784), nnz 30672 vs 30672
+    max |sorted prior difference| = 3.667e-03
+    column-weight histogram equal: True; row-weight histogram equal: True
+    (column weight, observable weight, prior) multiset equal: False
+  kit dem_matrices on PriorTilt circuit: H (0, 65) vs kit (936, 8784), L (12, 65) vs (12, 8784), nnz 0 vs 30672
+    prior counts differ
+    column-weight histogram equal: False; row-weight histogram equal: False
+    (column weight, observable weight, prior) multiset equal: False
+basis Z, p 0.005
+  kit circuit: 288 qubits, 1872 measurements, 1728 detectors, 12 observables; kit H (936, 8784), mechanisms sharing a detector set: 0
+  PriorTilt circuit: 288 qubits, 1872 measurements, 936 detectors, 12 observables; noise strengths [0.005]
+  PriorTilt dem_to_matrices: H (936, 8784) vs kit (936, 8784), L (12, 8784) vs (12, 8784), nnz 30672 vs 30672
+    max |sorted prior difference| = 4.564e-03
+    column-weight histogram equal: True; row-weight histogram equal: True
+    (column weight, observable weight, prior) multiset equal: False
+  kit dem_matrices on PriorTilt circuit: H (0, 65) vs kit (936, 8784), L (12, 65) vs (12, 8784), nnz 0 vs 30672
+    prior counts differ
+    column-weight histogram equal: False; row-weight histogram equal: False
+    (column weight, observable weight, prior) multiset equal: False

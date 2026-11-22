@@ -1,0 +1,18 @@
+﻿p=0.004 X / validation_X: 5000 shots
+  relay-BP  failures   31  logical error 0.620% [95% Wilson 0.437%, 0.879%]  time/shot mean 155.0 ms, median 36.9, p99 3883 ms  iterations mean 565, median 135, p99 13982  unconverged 17  side-by-side processes 1-5
+  PriorTilt failures   26  logical error 0.520% [95% Wilson 0.355%, 0.761%]  time/shot mean 47.5 ms, median 6.2, p99 751 ms  iterations mean 392, median 52, p99 6211  unconverged 10  side-by-side processes 2-5
+  paired table (rows relay-BP, columns PriorTilt): both fail 15, relay-BP only 16, PriorTilt only 11, both right 4958
+  McNemar exact (two-sided binomial on 27 discordant shots): p = 0.442
+  data sha256: ['b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d']
+p=0.004 X / train_X: 20000 shots
+  relay-BP  failures   91  logical error 0.455% [95% Wilson 0.371%, 0.558%]  time/shot mean 156.1 ms, median 40.1, p99 3152 ms  iterations mean 533, median 136, p99 11028  unconverged 40  side-by-side processes 1-5
+  PriorTilt failures   76  logical error 0.380% [95% Wilson 0.304%, 0.475%]  time/shot mean 49.2 ms, median 6.5, p99 778 ms  iterations mean 376, median 51, p99 6137  unconverged 19  side-by-side processes 2-5
+  paired table (rows relay-BP, columns PriorTilt): both fail 40, relay-BP only 51, PriorTilt only 36, both right 19873
+  McNemar exact (two-sided binomial on 87 discordant shots): p = 0.133
+  data sha256: ['98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc']
+p=0.004 X / all files: 25000 shots
+  relay-BP  failures  122  logical error 0.488% [95% Wilson 0.409%, 0.582%]  time/shot mean 155.9 ms, median 39.5, p99 3291 ms  iterations mean 539, median 135, p99 11355  unconverged 57  side-by-side processes 1-5
+  PriorTilt failures  102  logical error 0.408% [95% Wilson 0.336%, 0.495%]  time/shot mean 48.8 ms, median 6.4, p99 771 ms  iterations mean 379, median 51, p99 6146  unconverged 29  side-by-side processes 2-5
+  paired table (rows relay-BP, columns PriorTilt): both fail 55, relay-BP only 67, PriorTilt only 47, both right 24831
+  McNemar exact (two-sided binomial on 114 discordant shots): p = 0.0747
+  data sha256: ['98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc', 'b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d']

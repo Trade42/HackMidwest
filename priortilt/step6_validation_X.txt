@@ -1,0 +1,6 @@
+﻿p=0.004 X / validation_X: 5000 shots
+  relay-BP  failures   31  logical error 0.620% [95% Wilson 0.437%, 0.879%]  time/shot mean 155.0 ms, median 36.9, p99 3883 ms  iterations mean 565, median 135, p99 13982  unconverged 17  side-by-side processes 1-5
+  PriorTilt failures   26  logical error 0.520% [95% Wilson 0.355%, 0.761%]  time/shot mean 47.5 ms, median 6.2, p99 751 ms  iterations mean 392, median 52, p99 6211  unconverged 10  side-by-side processes 2-5
+  paired table (rows relay-BP, columns PriorTilt): both fail 15, relay-BP only 16, PriorTilt only 11, both right 4958
+  McNemar exact (two-sided binomial on 27 discordant shots): p = 0.442
+  data sha256: ['b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d']

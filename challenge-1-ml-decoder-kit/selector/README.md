@@ -5,7 +5,7 @@ frozen p = 0.005 model (`models/p0.005.json`, sha256 `696bf544...698ce6`, commit
 on the test shots by the orchestrator. It failed 353 of 10,000 pairs, against TCBP-JOBS's 360: paired,
 23 against 30, p = 0.41. It is level with the plain vote gw (354). On the validation shots it had
 passed the kill line (172 against 187, p = 0.004), so that gain did not hold up on new shots. See "The
-test shots" below. This is the branch `learned-selector`, merged nowhere. Nothing in this folder fitted
+test shots" below. It was built on the branch `learned-selector` and brought into `main` as this folder on Sal's word (16:27 UTC). Nothing in this folder fitted
 or chose anything on a `test_*` or `go_*` file.
 
 ## The idea in plain words

@@ -40,7 +40,7 @@ would add.
 and labelled so in the report). The same structured network gets a small head that turns each shot's syndrome into
 per-shot error probabilities (priors), handed to a standard decoder in place of the kit's fixed ones.
 With relay-BP (the predecoder; its knobs fitted on train shots and checked on validation before one registered run
-per test file) it fails 151 X shots of 10,000 at p = 0.005 against 433 for relay-BP with the kit's priors, and on
+per test file) it fails 151 X shots of 10,000 at p = 0.005 (a secondary result: that run was chosen after the predecoder's own gate at p = 0.004 failed) against 433 for relay-BP with the kit's priors, and on
 the pair score 281 failed pairs against TCBP-JOBS's 360 (exact p = 7.6e-6). With TCBP-JOBS in place of relay-BP
 (the TCBP version; designed after the test results were seen; its two knobs fitted on train at p = 0.005 and frozen
 before validation, where it failed 33 against 91; then one registered run per test file) it fails **72 X shots
@@ -105,7 +105,7 @@ were seen; `report/tables/master_comparison.md` holds every method with its labe
 | Decoder | p = 0.003 | p = 0.004 | p = 0.005 | Label |
 |---|---|---|---|---|
 | relay-BP with the kit's priors, same runs (the predecoder's control) | 7 | 39 | 433 (Z 398) | registered |
-| the predecoder: relay-BP with the head's priors | 2 | 15 | 151 (Z 132; pairs 281) | registered extension |
+| the predecoder: relay-BP with the head's priors | 2 | 15 | 151 (Z 132; pairs 281) | p = 0.005 X: secondary (chosen after its p = 0.004 gate failed); the rest: registered extension |
 | the predecoder, falling back to TCBP-JOBS where relay-BP did not converge | 1 | 10 | 107 (Z 100; pairs 206) | designed after the first test result |
 | TCBP-JOBS alone (stored test files) | 1 | 20 | 186 (Z 177; pairs 360) | reference |
 | **the TCBP version: TCBP-JOBS with the head's priors** | **0** | **4** | **72 (Z 61; pairs 132)** | designed after the test results were seen; registered runs |
@@ -493,7 +493,7 @@ report with its plots and its table of every method, the reproduce script and th
 
 1. Retrain the network's small head for each new noise picture (the Z head took about 25 minutes on a laptop GPU):
    on the neutral-atom model TCBP-JOBS fails 25 of 2,000 shots with the true noise's priors and 209 with the
-   kit-trained head's, so most of the gap is the head's to close.
+   kit-trained head's (exploration, factor 0.8, server job cpu/090; `server-logs` `files/tcbp-noise/`), so most of the gap is the head's to close.
 2. The TCBP version with atom loss: it already builds one decoder per shot from per-shot priors, so the loss flags
    (or the loss tracker's estimate) can enter at no extra cost; its network was trained without loss.
 3. A faster per-shot build for the TCBP version (42.6 of its 56 ms), and joint decoding at p = 0.005.

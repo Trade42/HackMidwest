@@ -1,0 +1,1087 @@
+{
+ "basis": "X",
+ "seed": 201,
+ "shots": 400,
+ "locations": [
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "own check: measurement flip": [
+     201,
+     400,
+     0.5025
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "own check 0, cycle 5, after CX 1"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "own check: measurement flip": [
+     191,
+     400,
+     0.4775
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "own check 0, cycle 5, after CX 2"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "own check: measurement flip": [
+     223,
+     400,
+     0.5575
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "own check 0, cycle 5, after CX 3"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "own check: measurement flip": [
+     183,
+     400,
+     0.4575
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "own check 0, cycle 5, after CX 4"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "own check: measurement flip": [
+     198,
+     400,
+     0.495
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "own check 0, cycle 5, after CX 5"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "own check: measurement flip": [
+     202,
+     400,
+     0.505
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "own check 0, cycle 5, after CX 6"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "other check: hook k=1": [
+     188,
+     400,
+     0.47
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "other check 216, cycle 5, after CX 1"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "other check: hook k=2": [
+     204,
+     400,
+     0.51
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "other check 216, cycle 5, after CX 2"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "other check: hook k=3": [
+     194,
+     400,
+     0.485
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "other check 216, cycle 5, after CX 3"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "other check: hook k=4": [
+     212,
+     400,
+     0.53
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "other check 216, cycle 5, after CX 4"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "other check: hook k=5": [
+     189,
+     400,
+     0.4725
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "other check 216, cycle 5, after CX 5"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {},
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 0.0,
+   "mean_check_losses_per_shot": 1.0,
+   "label": "other check 216, cycle 5, after CX 6"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     193,
+     400,
+     0.4825
+    ],
+    "data: first after loss (transition)": [
+     189,
+     400,
+     0.4725
+    ],
+    "data: later transition": [
+     2157,
+     4400,
+     0.4902
+    ]
+   },
+   "pair_both_fired": [
+    94,
+    400,
+    0.235
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 1"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     177,
+     400,
+     0.4425
+    ],
+    "data: first after loss (transition)": [
+     200,
+     400,
+     0.5
+    ],
+    "data: later transition": [
+     2218,
+     4400,
+     0.5041
+    ]
+   },
+   "pair_both_fired": [
+    123,
+    400,
+    0.3075
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 2"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     203,
+     400,
+     0.5075
+    ],
+    "data: first after loss (transition)": [
+     207,
+     400,
+     0.5175
+    ],
+    "data: later transition": [
+     2287,
+     4400,
+     0.5198
+    ]
+   },
+   "pair_both_fired": [
+    111,
+    400,
+    0.2775
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 3"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     211,
+     400,
+     0.5275
+    ],
+    "data: first after loss (transition)": [
+     199,
+     400,
+     0.4975
+    ],
+    "data: later transition": [
+     2165,
+     4400,
+     0.492
+    ]
+   },
+   "pair_both_fired": [
+    102,
+    400,
+    0.255
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 4"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     212,
+     400,
+     0.53
+    ],
+    "data: first after loss (same run)": [
+     212,
+     400,
+     0.53
+    ],
+    "data: later transition": [
+     2201,
+     4400,
+     0.5002
+    ]
+   },
+   "pair_both_fired": [
+    106,
+    400,
+    0.265
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 5"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     184,
+     400,
+     0.46
+    ],
+    "data: first after loss (same run)": [
+     197,
+     400,
+     0.4925
+    ],
+    "data: later transition": [
+     2239,
+     4400,
+     0.5089
+    ]
+   },
+   "pair_both_fired": [
+    97,
+    400,
+    0.2425
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 6"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     203,
+     400,
+     0.5075
+    ],
+    "data: first after loss (transition)": [
+     196,
+     400,
+     0.49
+    ],
+    "data: later transition": [
+     1229,
+     2400,
+     0.5121
+    ]
+   },
+   "pair_both_fired": [
+    98,
+    400,
+    0.245
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 31"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     191,
+     400,
+     0.4775
+    ],
+    "data: first after loss (transition)": [
+     225,
+     400,
+     0.5625
+    ],
+    "data: later transition": [
+     1185,
+     2400,
+     0.4938
+    ]
+   },
+   "pair_both_fired": [
+    108,
+    400,
+    0.27
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 32"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     204,
+     400,
+     0.51
+    ],
+    "data: first after loss (transition)": [
+     208,
+     400,
+     0.52
+    ],
+    "data: later transition": [
+     1181,
+     2400,
+     0.4921
+    ]
+   },
+   "pair_both_fired": [
+    111,
+    400,
+    0.2775
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 33"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     194,
+     400,
+     0.485
+    ],
+    "data: first after loss (transition)": [
+     200,
+     400,
+     0.5
+    ],
+    "data: later transition": [
+     1195,
+     2400,
+     0.4979
+    ]
+   },
+   "pair_both_fired": [
+    102,
+    400,
+    0.255
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 34"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     192,
+     400,
+     0.48
+    ],
+    "data: first after loss (same run)": [
+     195,
+     400,
+     0.4875
+    ],
+    "data: later transition": [
+     1177,
+     2400,
+     0.4904
+    ]
+   },
+   "pair_both_fired": [
+    94,
+    400,
+    0.235
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 35"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     213,
+     400,
+     0.5325
+    ],
+    "data: first after loss (same run)": [
+     183,
+     400,
+     0.4575
+    ],
+    "data: later transition": [
+     1181,
+     2400,
+     0.4921
+    ]
+   },
+   "pair_both_fired": [
+    94,
+    400,
+    0.235
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 36"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     202,
+     400,
+     0.505
+    ],
+    "data: first after loss (same run)": [
+     200,
+     400,
+     0.5
+    ]
+   },
+   "pair_both_fired": [
+    93,
+    400,
+    0.2325
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 71"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     206,
+     400,
+     0.515
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 72, after CX 72"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     214,
+     400,
+     0.535
+    ],
+    "data: first after loss (transition)": [
+     214,
+     400,
+     0.535
+    ],
+    "data: later transition": [
+     2202,
+     4400,
+     0.5005
+    ]
+   },
+   "pair_both_fired": [
+    106,
+    400,
+    0.265
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 1"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     185,
+     400,
+     0.4625
+    ],
+    "data: first after loss (transition)": [
+     201,
+     400,
+     0.5025
+    ],
+    "data: later transition": [
+     2239,
+     4400,
+     0.5089
+    ]
+   },
+   "pair_both_fired": [
+    99,
+    400,
+    0.2475
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 2"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     196,
+     400,
+     0.49
+    ],
+    "data: first after loss (same run)": [
+     202,
+     400,
+     0.505
+    ],
+    "data: later transition": [
+     2200,
+     4400,
+     0.5
+    ]
+   },
+   "pair_both_fired": [
+    117,
+    400,
+    0.2925
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 3"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     204,
+     400,
+     0.51
+    ],
+    "data: first after loss (same run)": [
+     207,
+     400,
+     0.5175
+    ],
+    "data: later transition": [
+     2143,
+     4400,
+     0.487
+    ]
+   },
+   "pair_both_fired": [
+    102,
+    400,
+    0.255
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 4"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     209,
+     400,
+     0.5225
+    ],
+    "data: first after loss (transition)": [
+     211,
+     400,
+     0.5275
+    ],
+    "data: later transition": [
+     1987,
+     4000,
+     0.4968
+    ]
+   },
+   "pair_both_fired": [
+    100,
+    400,
+    0.25
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 5"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     205,
+     400,
+     0.5125
+    ],
+    "data: first after loss (transition)": [
+     190,
+     400,
+     0.475
+    ],
+    "data: later transition": [
+     2045,
+     4000,
+     0.5112
+    ]
+   },
+   "pair_both_fired": [
+    95,
+    400,
+    0.2375
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 6"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     212,
+     400,
+     0.53
+    ],
+    "data: first after loss (transition)": [
+     197,
+     400,
+     0.4925
+    ],
+    "data: later transition": [
+     1185,
+     2400,
+     0.4938
+    ]
+   },
+   "pair_both_fired": [
+    91,
+    400,
+    0.2275
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 31"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     195,
+     400,
+     0.4875
+    ],
+    "data: first after loss (transition)": [
+     193,
+     400,
+     0.4825
+    ],
+    "data: later transition": [
+     1259,
+     2400,
+     0.5246
+    ]
+   },
+   "pair_both_fired": [
+    109,
+    400,
+    0.2725
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 32"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     209,
+     400,
+     0.5225
+    ],
+    "data: first after loss (same run)": [
+     220,
+     400,
+     0.55
+    ],
+    "data: later transition": [
+     1160,
+     2400,
+     0.4833
+    ]
+   },
+   "pair_both_fired": [
+    100,
+    400,
+    0.25
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 33"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     196,
+     400,
+     0.49
+    ],
+    "data: first after loss (same run)": [
+     211,
+     400,
+     0.5275
+    ],
+    "data: later transition": [
+     1220,
+     2400,
+     0.5083
+    ]
+   },
+   "pair_both_fired": [
+    106,
+    400,
+    0.265
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 34"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     182,
+     400,
+     0.455
+    ],
+    "data: first after loss (transition)": [
+     188,
+     400,
+     0.47
+    ],
+    "data: later transition": [
+     1028,
+     2000,
+     0.514
+    ]
+   },
+   "pair_both_fired": [
+    95,
+    400,
+    0.2375
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 35"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     194,
+     400,
+     0.485
+    ],
+    "data: first after loss (transition)": [
+     212,
+     400,
+     0.53
+    ],
+    "data: later transition": [
+     985,
+     2000,
+     0.4925
+    ]
+   },
+   "pair_both_fired": [
+    108,
+    400,
+    0.27
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 36"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     196,
+     400,
+     0.49
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 71"
+  },
+  {
+   "shots": 400,
+   "in_flag_span": 400,
+   "in_truth_span": 400,
+   "independent": 400,
+   "fire_rate": {
+    "data: final readout": [
+     208,
+     400,
+     0.52
+    ]
+   },
+   "pair_both_fired": [
+    0,
+    0,
+    0.0
+   ],
+   "mean_lost_data_per_shot": 1.0,
+   "mean_check_losses_per_shot": 0.0,
+   "label": "data 144, after CX 72"
+  }
+ ],
+ "seconds": 90.0
+}

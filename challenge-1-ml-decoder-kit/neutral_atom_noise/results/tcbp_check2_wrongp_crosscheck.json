@@ -1,0 +1,60 @@
+{
+ "shots": 4000,
+ "what": "not declared: a check of the harness and the cost of the wrong p to the head",
+ "m_vs_stored_fresh": {
+  "same_12_bits": 3973,
+  "failures_m": 68,
+  "failures_stored_fresh": 72
+ },
+ "h_vs_stored_head": {
+  "failures": [
+   24,
+   25
+  ],
+  "only_ours": 0,
+  "only_stored": 1,
+  "sign_test_p": 1.0,
+  "wilson_ours": [
+   0.004035366496863108,
+   0.00891256347336196
+  ],
+  "wilson_stored": [
+   0.004237069176935509,
+   0.00921038107164471
+  ]
+ },
+ "g_vs_stored_fresh": {
+  "failures": [
+   75,
+   72
+  ],
+  "only_ours": 16,
+  "only_stored": 13,
+  "sign_test_p": 0.711071103811264,
+  "wilson_ours": [
+   0.014984977546057104,
+   0.02343848662028057
+  ],
+  "wilson_stored": [
+   0.01431842208902676,
+   0.022606481242245464
+  ]
+ },
+ "m_vs_stored_head": {
+  "failures": [
+   68,
+   25
+  ],
+  "only_ours": 52,
+  "only_stored": 9,
+  "sign_test_p": 1.802802378388091e-08,
+  "wilson_ours": [
+   0.013432529484506985,
+   0.02149429273334465
+  ],
+  "wilson_stored": [
+   0.004237069176935509,
+   0.00921038107164471
+  ]
+ }
+}

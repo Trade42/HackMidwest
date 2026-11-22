@@ -362,6 +362,88 @@ Files:
 
 The server's files are on the branch `server-logs` at `58b6e2d2`, under `files/tcbp-noise/`.
 
+## Exploration: the TCBP pipeline on three more pictures of the noise (phase 2)
+
+**Exploration, after the main test results; a separate branch.** Declared before any number in
+[`tcbp_check2_declared.md`](tcbp_check2_declared.md) (commit `7f44d465`). Run in server job `cpu/100` on the A100
+slice. TCBP-JOBS (cudaq-qec 0.9.0, preset `tcbp-jobs`) used one model, fitted once and shared by the three tasks, one
+decoder built per shot, one CPU thread. The network ran in float32 on the same GPU. Everything is X memory, 4,000 shots per
+task, all scored. Every comparison is on the same shots. The arms:
+- **g:** the kit's uniform priors at a stated p, with nothing fitted;
+- **m:** the true error model of the shots;
+- **h:** the network and head at the frozen TCBP knobs (no refit), told g's p.
+
+The three tasks:
+- **wrong-p:** the kit's own shots at p = 0.005: the first 4,000 of `data/p0.005/validation_X.npz` (seed 201;
+  validation shots, used here for exploration). They are decoded as if the noise were p = 0.004: g is the kit's priors at
+  0.004, m the kit's priors at 0.005, and h is told 0.004.
+- **si1000:** SI1000 (Gidney, Newman, Fowler, Broughton, Quantum 5, 605 (2021), Table 2) at p = 0.004 on the kit's
+  circuit, **without its resonator idle** (2p), which our rewrite cannot place. Stim seed 7100. g is at p = 0.004.
+- **biased:** Z-biased one-qubit Pauli noise, bias 100, total p = 0.003 after each CX on both qubits and on idle
+  qubits, with readout and reset flips p. Stim seed 7200. g is at the model's two-qubit error, 0.005991, which is above the
+  network's training range of 0.003 to 0.005.
+
+| Task | Shots scored | matched (m): failures, 95% Wilson | generic (g): failures, 95% Wilson | head (h): failures, 95% Wilson | not reproduced (m, g, h) |
+|---|---|---|---|---|---|
+| wrong-p | 4,000 | 68 (1.34% to 2.15%) | 75 (1.50% to 2.34%) | 24 (0.40% to 0.89%) | 0, 0, 0 |
+| si1000 | 4,000 | 7 (0.08% to 0.36%) | 13 (0.19% to 0.56%) | 2 (0.01% to 0.18%) | 0, 0, 0 |
+| biased | 4,000 | 421 (9.61% to 11.51%) | 457 (10.48% to 12.45%) | 605 (14.05% to 16.27%) | 0, 0, 0 |
+
+| Task | Pair | Failures | Only the first fails | Only the second fails | Sign test p |
+|---|---|---|---|---|---|
+| wrong-p | h vs g | 24, 75 | 6 | 57 | 1.6e-11 |
+| wrong-p | h vs m | 24, 68 | 8 | 52 | 5.2e-09 |
+| wrong-p | m vs g | 68, 75 | 9 | 16 | 0.23 |
+| si1000 | h vs g | 2, 13 | 2 | 13 | 0.0074 |
+| si1000 | h vs m | 2, 7 | 2 | 7 | 0.18 |
+| si1000 | m vs g | 7, 13 | 2 | 8 | 0.11 |
+| biased | h vs g | 605, 457 | 248 | 100 | 1.2e-15 |
+| biased | h vs m | 605, 421 | 257 | 73 | 3.6e-25 |
+| biased | m vs g | 421, 457 | 66 | 102 | 0.0068 |
+
+What this shows: **the picture is mixed.** The head helps on the kit's kind of noise and on SI1000, and hurts on
+Z-biased noise.
+
+- **The head helps on the kit's own kind of noise, even told the wrong strength.**
+  - On wrong-p the head fails 24 shots, against 75 for g (told 0.004) and 68 for m (the true 0.005).
+  - A 20% error in the overall strength barely moves TCBP-JOBS itself: m against g is 68 against 75, with 9 and 16
+    discordant shots (p = 0.23).
+  - The 0.004 vector is the 0.005 one times 0.8 in every column, so this tests the strength, not the shape.
+  - A check, not declared: compared with the pipeline's own stored run on the same shots
+    (`files/predecoder-tcbp/validation_X_p0.005_per_shot.npz`, `tcbp_crosscheck_wrongp.py`), the head told 0.004
+    fails 24 and the head told 0.005 fails 25 (only ours 0, only stored 1). Telling the head the wrong p cost nothing
+    here.
+  - The harness agrees with the pipeline: our m arm gives the same 12 bits as the stored TCBP-JOBS run with the kit's
+    priors at 0.005 on 3,973 of the 4,000 shots (68 against 72 failures). The stored file's own two runs of that arm
+    differ by a few shots too (96 and 100 failures of 5,000).
+- **The head hurts on Z-biased noise.**
+  - On biased the head fails 605 shots, against 457 for g and 421 for m (h vs g: 248 against 100, p = 1e-15; h vs m:
+    257 against 73).
+  - Matched beats generic only a little (421 against 457, 66 against 102, p = 0.007), because here the two prior
+    vectors are close column by column. 95% of the matched priors lie between 0.80 and 1.49 times the generic ones, and
+    the mean gap in log-odds is 0.13, against 3.9 in phase 1. So the kit's picture is nearly right for what X memory
+    sees.
+  - The head, told a p above its training range on noise of another shape, moves the priors the wrong way.
+  - This task fails about 11% of shots, far above the 1% to 2% we aimed at when we chose its strength by reasoning.
+- **SI1000 at p = 0.004 fails rarely:** 7 (m), 13 (g) and 2 (h) of 4,000.
+  - The head beats generic on the 15 shots where only one of them fails (2 against 13, p = 0.007). That is few shots.
+  - The phase 2b declaration called this task uninformative after its first 600 shots, which had no failure at all. At
+    4,000 shots it is weak evidence, not none.
+  - Two more strengths, chosen after those first 600 shots, are in phase 2b below.
+- **Checks:**
+  - Every correction of every arm reproduces its syndrome (0 not reproduced).
+  - The cap at 0.5 changed 732, 610 and 1,475 head-prior columns in all (wrong-p, si1000, biased).
+  - Build + decode per shot (A100 slice, one thread, m / g / h): 58 / 57 / 50 ms (wrong-p), 52 / 55 / 50 ms (si1000),
+    70 / 71 / 63 ms (biased).
+
+Files:
+- `logs/tcbp_check2_decode.log` and `logs/tcbp_check2_evaluate_<task>.log`;
+- `results/tcbp_check2_<task>_{per_shot.npz,summary.json,score.json}`;
+- `results/tcbp_check2_wrongp_crosscheck.json`.
+
+The server's files are on the branch `server-logs` at `82d864a8`, under `files/tcbp-noise-2/`. Scored here with
+`python -m neutral_atom_noise.tcbp_check score --per-shot <per_shot.npz> --shots <the task's kit-format shot file> --out <json>`.
+
 ## What was not done
 
 - **PriorTilt** with matched priors (the brief's optional decoder): not run. **The network** was not run in the

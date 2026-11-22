@@ -49,3 +49,4 @@ shots where no candidate converged: 4; the weight rule fails on 4 of them
 wall time of this run: 730 s
 saved 1 decoder summaries in /home/blakew3/mlBranchMidwest/runs/hier/plumbing_p0.004
 2 job(s) to run on 2 process(es); 0 part(s) kept from an earlier run
+validation_Z.npz session: shots 0 to 4999, failures R 10, P1 23, P2 17, relay-BP ran on 20, 576 s

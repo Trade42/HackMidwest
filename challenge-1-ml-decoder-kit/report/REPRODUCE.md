@@ -64,17 +64,19 @@ data-only branches of this repository.
 | Network | Branch | Commit | Path | Bytes | sha256 |
 |---|---|---|---|---|---|
 | X memory, step 120,000 (the end of its run) | `laptop-artifacts` | `2f752e9367f80e1180711ded6b6ca854a5c0c147` | `cascade_X_s1/checkpoint_final_step120000.pt` | 14,701,836 | `d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933` |
-| Z memory, step 100,000 (the end of its run) | **not in the repository** (see below) | | the team's server, `~/mlBranchMidwest/runs/cascade_Z_s1/checkpoint.pt` | 14,695,308 | `fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700` |
+| Z memory, step 100,000 (the end of its run) | `server-logs` | `ce700eaa6c65ec80c04c044ae4fc6b4625b44188` | `files/ckpt/cascade_Z_s1_final_step100000.pt` | 14,695,308 | `fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700` |
 
-**The Z network is not in this repository yet.** It is on the team's server only, so the row with the neural
-tie-break cannot be rebuilt from a clone. The test job recorded its sha256 before decoding
-(`report/data/test/test_run.out`, the line "1. Z checkpoint"), and the X checkpoint's line is beside it. Its training
-log is `report/data/networks/cascade_Z_s1.train.log`. If the file is committed to a data branch, this line names the
-commit. Until then, the row with the lowest-weight tie-break needs no network and can be rebuilt from a clone.
+Both are the files the test job decoded with: it recorded their sha256 before opening the test files
+(`report/data/test/test_run.out`). Their training logs are `report/data/networks/`.
+
+Run here: `report/reproduce_ours.sh checkpoints` fetched both files from their commits and checked both sha256 (OK,
+under a second). With them in place, `report/reproduce_ours.sh smoke` ran the neural tie-break through the evaluator
+on its 24 training pairs: the plugin recorded the rule "network" for both bases, with these two checkpoints by
+sha256 and step (53 s; 0 failures of 24 pairs, which checks the plumbing only).
 
 | Command | What it does | Status |
 |---|---|---|
-| `report/reproduce_ours.sh checkpoints` | fetches both files into `runs/checkpoints/` and checks their sha256 | the X file's sha256 was checked here from its commit; the stage cannot run until the Z file is committed |
+| `report/reproduce_ours.sh checkpoints` | fetches both files into `runs/checkpoints/` and checks their sha256 | **run here** (see below) |
 | `python -m neural.train --out runs/cascade_X_s1 --seed 1 --steps 120000 --lr-decay-steps 120000` | trains the X network from nothing (an 8 GB GPU, several hours) | **not run here** (no GPU): it ran on the laptop; its log is `report/data/networks/cascade_X_s1.train.log` |
 | `python -m neural.train --basis Z --logicals light --init-from <X checkpoint> --out runs/cascade_Z_s1 --seed 1 --steps-start 1000 --steps-anneal 6000 --steps 100000 --lr-decay-steps 100000` | trains the Z network, starting from the X network's weights mirrored | **not run here**: it ran on the server; its log is `report/data/networks/cascade_Z_s1.train.log` |
 

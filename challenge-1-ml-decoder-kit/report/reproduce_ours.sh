@@ -28,10 +28,10 @@ CKPT_X_BRANCH=laptop-artifacts
 CKPT_X_COMMIT=2f752e9367f80e1180711ded6b6ca854a5c0c147
 CKPT_X_PATH=cascade_X_s1/checkpoint_final_step120000.pt
 CKPT_X_SHA256=d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933
-CKPT_Z_BRANCH=${CKPT_Z_BRANCH:-PENDING}
-CKPT_Z_COMMIT=${CKPT_Z_COMMIT:-PENDING}
-CKPT_Z_PATH=${CKPT_Z_PATH:-PENDING}
-CKPT_Z_SHA256=${CKPT_Z_SHA256:-PENDING}
+CKPT_Z_BRANCH=server-logs
+CKPT_Z_COMMIT=ce700eaa6c65ec80c04c044ae4fc6b4625b44188
+CKPT_Z_PATH=files/ckpt/cascade_Z_s1_final_step100000.pt
+CKPT_Z_SHA256=fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700
 export PRIORTILT_REPO PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 stage=${1:-}
 
@@ -96,9 +96,6 @@ EOF
     ;;
   checkpoints)
     # The two frozen networks are kept on data-only branches of this repository, not in the source tree.
-    if [ "$CKPT_Z_COMMIT" = PENDING ]; then
-      echo "the Z checkpoint's location is not filled in yet (see REPRODUCE.md)" >&2; exit 1
-    fi
     mkdir -p "$CHECKPOINTS"
     git fetch origin "$CKPT_X_BRANCH" "$CKPT_Z_BRANCH"
     git show "$CKPT_X_COMMIT:$CKPT_X_PATH" > "$CHECKPOINTS/cascade_X.pt"

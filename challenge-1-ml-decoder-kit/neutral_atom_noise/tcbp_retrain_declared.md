@@ -1,7 +1,8 @@
 # TCBP pipeline with the head retrained on the neutral-atom-shaped noise: declared before any number
 
-**Label: exploration, after the main test results; a separate branch (`tcbp-retrain`).** Written 2026-11-22 about
-18:15 UTC by the implementer of task `tcbp-retrain`. At that time the head was still training on the laptop: no decode
+**Label: exploration, after the main test results; a separate branch (`tcbp-retrain`).** Written 2026-11-22 before
+18:10 UTC (pushed in commit `7d8c80e7` at 18:10; this line corrected afterwards, nothing else changed) by the
+implementer of task `tcbp-retrain`. At that time the head was still training on the laptop: no decode
 with it, and no decode of the new shot file by any decoder, existed. Every number below is reported whatever it shows.
 
 ## Why
@@ -20,8 +21,8 @@ the head alone on the noise of the shots: the same trunk, the same architecture 
   error-model shots drawn by torch from stream seeds of `--seed 1`, never Stim shots, so they are disjoint from every
   test file.
 - **The head's base prior:** the matched vector, `matched_priors("X", neutral_atom(0.8))`, sha256 of its float64
-  values `181d3c74...`. The merged mechanism priors equal it to 4.9e-17. The untrained head is therefore exactly
-  arm m below.
+  values `181d3c74...`. The merged mechanism priors equal it to 4.9e-17. The untrained head is therefore arm m below,
+  up to the float16 rounding of the saved logits.
 - **Recipe:** the X head's recipe (seed 1, batch 64, lr 1e-3, warmup 500, weight decay 1e-4, project 32, hidden 64,
   shape width 16), 20,000 steps, with a cap of 0.75 hours on the laptop's RTX 4060.
 - **The checkpoint used:** the last one the run writes (`head.pt`), at step 20,000 or wherever the cap stops it.

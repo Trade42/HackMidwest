@@ -1,0 +1,41 @@
+{
+ "shots_file": "/home/sal/hackMidwest/orchestration/scratch/tcbp-retrain/shots/X_f0.8_seed5800.npz",
+ "shots_sha256": "cb298991b34b44b44ff6a54651ccc185c186a310131fd8d698947cbd34ad804b",
+ "shots": 1500,
+ "seed": 5800,
+ "basis": "X",
+ "noise": {
+  "cx_depolarize2": 0.0,
+  "cx_phase": 0.005840000000000001,
+  "cx_scatter": 0.00012552,
+  "idle_depolarize": 0.0,
+  "idle_phase": 0.000856225145421341,
+  "measure_flip": 0.010000000000000002,
+  "reset_flip": 0.016800000000000016,
+  "loss": 0.002
+ },
+ "factor": 0.8,
+ "converted": "X_f0.8_seed5800_kitformat_p0.0326371.npz",
+ "converted_sha256": "2adc8b256b8952d98c7c64cfd90feace9e050d420b3d2daf596d6cc923cac1d5",
+ "p": 0.0326371,
+ "columns": 8784,
+ "rows": 936,
+ "h_l_sha256": "a4a80003a0b234e0e10b5d65d38ce5181c39670732e0f473df0aee1796c2c8b0",
+ "generic": {
+  "what": "kit uniform model at p = 0.0326371",
+  "max": 0.10998880032223951,
+  "min": 0.008780320698230367,
+  "sum": 367.00855938719116,
+  "capped_columns": 0,
+  "sha256": "b8d59cb850ee6842011283d559b33e560c07ceecd2edfed2f10617ce6557a9ea"
+ },
+ "matched": {
+  "what": "priors.matched_priors(basis, noise of the file's meta), floor 1e-9",
+  "max": 0.059138303421918385,
+  "min": 8.36799999999404e-05,
+  "sum": 87.40596151024322,
+  "columns_fired": 8784,
+  "capped_columns": 0,
+  "sha256": "45704fcb9f2bde6fdbc6a7f0fa975f7e343c5283179e65a4cf0af45a741fc3ac"
+ }
+}

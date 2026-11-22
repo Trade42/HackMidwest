@@ -64,9 +64,12 @@ case "${1:?step}" in
     $LOCK $PY -m analysis.g2_headroom run --selection $R/g2_selection_p0.004.npz $R/g2_selection_p0.005.npz \
         --data $P004 $P005 --cache "$S/cache" --processes 8 --only big cand16 bposd10 bposd_hi kit_fresh --p 0.005 \
         --caps "${CAPS7:-cand16@0.004=all/all/10,cand16@0.005=all/all/5}" --log $L/g2_run_step7.log ;;
+  step7b)     # G2 item 5 at p = 0.005, setting (a) only, on a seeded 10 failures and 20 controls per basis
+    $LOCK $PY -m analysis.g2_headroom run --selection $R/g2_selection_p0.005.npz --data $P005 --cache "$S/cache" \
+        --processes 8 --only joint --caps "${CAPS7B:-joint@0.005=10/20/all}" --log $L/g2_run_step7b.log ;;
   summarize-g2)
     $PY -m analysis.g2_headroom summarize --selection $R/g2_selection_p0.00[345].npz --data $P004 $P003 $P005 \
-        --cache "$S/cache" --caps "${CAPS:-joint@0.004=50/100/all,joint600@0.004=50/100/all},${CAPS7:-cand16@0.004=all/all/10,cand16@0.005=all/all/5}" \
+        --cache "$S/cache" --caps "${CAPS:-joint@0.004=50/100/all,joint600@0.004=50/100/all},${CAPS7:-cand16@0.004=all/all/10,cand16@0.005=all/all/5},${CAPS7B:-joint@0.005=10/20/all}" \
         --out $R | tee $L/g2_summary.log ;;
   step8)      # G3: the 16-schedule frontier on the validation files at p = 0.004. It ran on another machine as
               # python -m analysis.remote g3 (see RESULTS.md); this is the same run under luminaty's lanes

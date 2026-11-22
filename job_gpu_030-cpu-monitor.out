@@ -1,0 +1,13 @@
+monitor started, pid 73397
+Sun Nov 22 06:48:44 UTC 2026
+cpu.max: 1200000 100000
+cpu.stat:
+usage_usec 80971275048
+user_usec 79558036353
+system_usec 1413238695
+core_sched.force_idle_usec 0
+nr_periods 126950
+nr_throttled 39767
+throttled_usec 3824392262
+nr_bursts 0
+burst_usec 0

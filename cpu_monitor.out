@@ -1,0 +1,2 @@
+# one line per minute. cpus: CPUs used on average over the minute (the quota is 12). thr_s and thr_n: seconds and periods the quota throttled the notebook in the minute.
+# time_utc cpus thr_s thr_n | evaluator joint loss_job candidates tcbp_member evaluate_stim python_all | load_1m

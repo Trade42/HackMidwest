@@ -2,3 +2,5 @@ Sun Nov 22 07:02:49 UTC 2026
 checkout: e7fc4ae server-jobs: ctl 030, the p = 0.005 validation_Z candidates now, on the idle CPUs
 10 job(s) to run on 8 process(es); 0 part(s) kept from an earlier run
 validation_Z.npz chunk 6: shots 3000 to 3499, failures R 18, P1 13, P2 13, relay-BP ran on 500, 417 s
+validation_Z.npz chunk 1: shots 500 to 999, failures R 14, P1 14, P2 11, relay-BP ran on 500, 441 s
+validation_Z.npz chunk 3: shots 1500 to 1999, failures R 16, P1 12, P2 14, relay-BP ran on 500, 476 s

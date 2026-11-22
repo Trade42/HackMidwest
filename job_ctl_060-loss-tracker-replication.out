@@ -92,3 +92,4 @@ decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz sho
   100/500 shots, 68s, failures so far starter=3 exact=3 tracker=2 oracle-round=2
   200/500 shots, 135s, failures so far starter=6 exact=8 tracker=4 oracle-round=3
   300/500 shots, 189s, failures so far starter=9 exact=12 tracker=7 oracle-round=4
+  400/500 shots, 264s, failures so far starter=13 exact=16 tracker=9 oracle-round=5

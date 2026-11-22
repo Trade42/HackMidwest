@@ -1,0 +1,16 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+test_Z.npz: 10000 shots, p=0.004, arms ['head'], decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}; head priors {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
+  model fitted in 54.5 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 1000 of 10000 shots, 103 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 2000 of 10000 shots, 152 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 3000 of 10000 shots, 201 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 4000 of 10000 shots, 250 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 5000 of 10000 shots, 298 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 6000 of 10000 shots, 347 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 7000 of 10000 shots, 395 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 8000 of 10000 shots, 444 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 9000 of 10000 shots, 493 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 10000 of 10000 shots, 541 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: failures 6 of 10000, 0.0006 [0.0003, 0.0013]; not reproduced 0; flagged not converged 6102; build 41.0 ms + decode 1.6 ms mean, p99 49 ms
+saved /home/blakew3/mlBranchMidwest/runs/predecoder-tcbp/test_Z_p0.004/per_shot.npz; 542 s

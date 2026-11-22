@@ -23,8 +23,12 @@ team's best single decoder. The head was not retrained. The knobs were refitted 
   - p = 0.004: TH **4** against 20 (p = 0.0004);
   - p = 0.003: 0 against 1, no claim;
   - Z at p = 0.005 (X's knobs, no Z fit): TH **61** against 177 (p = 2.2e-22);
+  - Z at p = 0.004 and 0.003 (run 4, branch `tcbp-zlowp`; no validation at these p): TH **6** against 21
+    (p = 0.00073), and 1 against 2 (no claim);
   - **the kit's pair score at p = 0.005: 132 failed pairs of 10,000 against TCBP-JOBS's 360 (p = 3.0e-42), a rate per
-    cycle of 1.11e-3 against 3.05e-3.**
+    cycle of 1.11e-3 against 3.05e-3;**
+  - **at p = 0.004: 10 against 41 (p = 3.4e-7), 8.3e-5 against 3.42e-4 per cycle;** at p = 0.003: 1 against 3, no
+    claim.
 - **Latency on the A100, one shot at a time, one process:** network and head 9.4 ms (float32), building TCBP-JOBS with
   the shot's priors 42.6 ms, decoding 3.8 ms; about 56 ms mean in all. Building is the cost: cudaq-qec 0.9.0 cannot
   change a built decoder's priors. Running the network on the GPU changed no outcome on 1,000 validation shots.
@@ -41,6 +45,7 @@ committed in `26dcea76` at 15:04:38 UTC. Each was committed before the numbers i
 | `tcbp.py` | `decode`: TCBP-JOBS with one decoder built per shot from that shot's priors (arms `fresh`: the kit's priors; `head`: the head's). `fit`: the knob fit on train subsets. `score`: the counts and paired tests, on this PC, from the per-shot files. `probe`: prints a built decoder's interface |
 | `test_tcbp.py` | tests without a GPU: the kit's relay-BP stands in for TCBP-JOBS behind the same calls |
 | `logs/tcbp_declarations.md` | what was fixed before each number: the fit, the arms, the test run |
+| `logs/tcbp_zlowp_declared.md` | run 4 (Z at p = 0.004 and 0.003, and the pair score there), declared before its numbers |
 
 ## How it works
 
@@ -297,6 +302,51 @@ with its error from `decoders.per_cycle_rate`):
 Paired over the 10,000 pairs: both fail 91, only TH 41, only TCBP-JOBS 269, exact two-sided p = 3.0e-42. **TH fails 2.7
 times fewer pairs.** This is the registered run 3 (designed after the test results were seen; a separate branch). The
 Z knobs were not fitted for Z.
+
+### Run 4: Z at p = 0.004 and 0.003, and the kit's pair score at all three p (branch `tcbp-zlowp`)
+
+**Designed after the test results were seen; no validation at these p, as for X; a separate branch** (`tcbp-zlowp`,
+from `main` at `e6c2a5a0`). It was declared in `logs/tcbp_zlowp_declared.md`, commit `a8e24119`, before any number of
+this run existed. The logits' sha256s were added in `f6482040` before the files left luminaty.
+- **Network:** the Z head `083147d2...` on the Z trunk `fad24e80...`, on luminaty's CPU in float32 with 16 threads
+  (`logs/tcbp_zlowp_logits.log`).
+- **Knobs:** X's frozen file `76970106...`, unchanged.
+- **Arm:** the head arm only, once per file, `--final`.
+- **Server:** job cpu/110 (integration `2e9590f9`), checkout `f6482040`, A100, 1 process, 1 CPU thread, p = 0.004 and
+  then 0.003. It ran beside the speed job ctl/160 on the GPU slice.
+- **Inputs:** every input was checked by sha256 on the server, and every decoded row's logits hash equals luminaty's
+  file on 10,000 of 10,000 shots at both p.
+- **Logs:** `logs/tcbp_test_Z_p0.00{4,3}_{decode.log,summary.json,score.log,score.json}` and
+  `logs/tcbp_pair_test_p0.00{4,3}.{json,log}`.
+- **Per-shot files** (on `server-logs`, `files/predecoder-tcbp/test_Z_p0.00{4,3}/per_shot.npz`; not committed here):
+  p = 0.004 sha256 `767dc1895c6e42f2f6934eeb3d76106bccc7b337559a7631a99c6c8f5fad3160`, p = 0.003
+  `a24ea569110902ae2792964d72109395a04543d81039f45c711287c55e3f9a46`.
+
+**Z memory, head arm, against the stored TCBP-JOBS test_Z files** (the declared pair):
+
+| p | shots | TH failures | TCBP-JOBS alone, stored | both, only TH, only T | exact p | model fit; build + decode, mean (p99) |
+|---|---|---|---|---|---|---|
+| 0.004 | `test_Z.npz`, 10,000, seed 302, sha256 `b61c1325...` | **6**, 0.0006 [0.0003, 0.0013] | 21, 0.0021 [0.0014, 0.0032] | 4, 2, 17 | **0.00073** | 54.5 s; 41.0 + 1.6 ms (49 ms) |
+| 0.003 | `test_Z.npz`, 10,000, seed 302, sha256 `f5ac5b33...` | 1, 0.0001 [0.0000, 0.0006] | 2, 0.0002 [0.0001, 0.0007] | 1, 0, 1 | 1 (no claim) | 54.4 s; 41.7 + 4.0 ms (62 ms) |
+
+**The kit's score at every p: pairs of shot k of X and shot k of Z** (`python -m predecoder.tcbp pair --final`). X is
+run 2's per-shot file at p = 0.004 and 0.003, and run 1's at p = 0.005. A pair fails when either shot fails. The rate
+per cycle is `1 - (1 - P)^(1/12)`, with its error from `decoders.per_cycle_rate`.
+
+| p | TH: failed pairs of 10,000 [X Z] | TH rate per cycle | TCBP-JOBS alone: failed pairs [X Z] | TCBP-JOBS rate per cycle | both, only TH, only T | exact p |
+|---|---|---|---|---|---|---|
+| 0.005 | **132** [72 61], 0.0132 [0.0111, 0.0156] | **1.11e-3 ± 0.10e-3** | 360 [186 177], 0.0360 [0.0325, 0.0398] | 3.05e-3 ± 0.16e-3 | 91, 41, 269 | **3.0e-42** |
+| 0.004 | **10** [4 6], 0.0010 [0.0005, 0.0018] | **8.3e-5 ± 2.6e-5** | 41 [20 21], 0.0041 [0.0030, 0.0056] | 3.42e-4 ± 0.53e-4 | 6, 4, 35 | **3.4e-7** |
+| 0.003 | 1 [0 1], 0.0001 [0.0000, 0.0006] | 8.3e-6 ± 8.3e-6 | 3 [1 2], 0.0003 [0.0001, 0.0009] | 2.5e-5 ± 1.4e-5 | 1, 0, 2 | 0.5 (no claim) |
+
+- **At p = 0.004 TH fails 4 times fewer pairs** (10 against 41, p = 3.4e-7). On Z alone it fails 6 against 21
+  (p = 0.00073), in line with X's 4 against 20.
+- **At p = 0.003 both decoders are near zero** (1 against 3 pairs), so no claim can be made, as declared.
+- **Limits:**
+  - there is no same-run kit-priors arm, so each comparison is with a stored TCBP-JOBS file from another model fit,
+    and carries its run-to-run spread;
+  - the knobs were fitted on X at p = 0.005 and applied here unchanged, to Z, at lower p, with no validation.
+- The decoder's own `converged` flag was False on 6,102 shots (p = 0.004) and 3,871 (p = 0.003). It is not used.
 
 ## What was not done, and what is not tested
 

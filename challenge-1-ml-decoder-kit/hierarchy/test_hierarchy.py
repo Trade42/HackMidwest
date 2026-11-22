@@ -817,3 +817,124 @@ def test_side_by_side_mode_gives_the_sequential_answers(tmp_path, shot_files, ca
     assert "side by side" in session.settings["parallel"] and session.hierarchy.process.is_alive()
     session.hierarchy.close()
     assert not session.hierarchy.process.is_alive()
+
+
+# ---------- network first (the option network_first, off by default) ----------
+
+class CountingHierarchy(StubHierarchy):
+    """A stub that also counts how often the first two stages ran."""
+
+    def __init__(self, *answers):
+        super().__init__(*answers)
+        self.first_calls = 0
+
+    def first_two(self, syndrome):
+        self.first_calls += 1
+        return super().first_two(syndrome)
+
+
+class CountingNetwork(StubNetwork):
+    calls = 0
+
+    def __call__(self, full, basis):
+        self.calls += 1
+        return super().__call__(full, basis)
+
+
+def test_network_first_answers_alone_when_confident_and_otherwise_runs_the_hierarchy():
+    shot = (np.zeros(1728, np.uint8), np.zeros(936, np.uint8))
+    disagree = lambda: CountingHierarchy(candidate("P1", RIGHT, 9.0), candidate("P2", WRONG_A, 4.0), candidate("R", WRONG_B, 6.0))
+    sure = CountingNetwork(WRONG_C, strength=8.0)                                 # confidence 8 on every bit
+    stages = disagree()
+    session = HierarchySession(fake_problem(), {"rule": "network", "network_first": {"X": 5.0, "Z": None}}, hierarchy=stages, network=sure)
+    result = session.decode_shot(*shot)
+    assert validate_shot_result(result).tolist() == WRONG_C.tolist() and result.metrics["stage"] == "network_first"
+    assert stages.first_calls == 0 and stages.third_calls == 0 and sure.calls == 1 and result.metrics["confidence"] == 8.0
+    assert session.settings["network_first"]["threshold"] == 5.0
+    json.dumps(result.metrics)
+    # Below the threshold the hierarchy runs as it is, and the network rule reuses the logits: one network call per shot.
+    stages, unsure = disagree(), CountingNetwork(RIGHT, strength=2.0)
+    session = HierarchySession(fake_problem(), {"rule": "network", "network_first": {"X": 5.0, "Z": None}}, hierarchy=stages, network=unsure)
+    result = session.decode_shot(*shot)
+    assert result.metrics["stage"] == "network" and result.metrics["winner"] == "P1" and result.metrics["network_first"] is False
+    assert stages.first_calls == 1 and stages.third_calls == 1 and unsure.calls == 1
+    # With the rule "converged" the network is asked only by the first stage.
+    stages, unsure = disagree(), CountingNetwork(RIGHT, strength=2.0)
+    session = HierarchySession(fake_problem(), {"rule": "converged", "network_first": {"X": 5.0, "Z": None}}, hierarchy=stages, network=unsure)
+    assert session.decode_shot(*shot).metrics["stage"] == "converged" and unsure.calls == 1
+    # A threshold of null, or no option, is the frozen plugin: the network is never asked first.
+    for options in ({"rule": "network"}, {"rule": "network", "network_first": {"X": None, "Z": None}}):
+        stages, network = disagree(), CountingNetwork(RIGHT, strength=8.0)
+        result = HierarchySession(fake_problem(), options, hierarchy=stages, network=network).decode_shot(*shot)
+        assert result.metrics["stage"] == "network" and stages.first_calls == 1 and network.calls == 1 and "confidence" not in result.metrics
+    for wrong in ({"X": 5.0}, {"X": 5.0, "Z": None, "Y": 1.0}, 5.0):
+        with pytest.raises(ValueError, match="network_first"):
+            HierarchySession(fake_problem(), {"rule": "weight", "network_first": wrong}, hierarchy=disagree())
+    with pytest.raises(ValueError, match="no checkpoint"):
+        HierarchySession(fake_problem(), {"rule": "weight", "network_first": {"X": 5.0, "Z": None}}, hierarchy=disagree())
+
+
+def test_network_first_threshold_procedure():
+    """The smallest threshold that adds no failure on the given shots; ties of confidence move together."""
+    confidence = np.array([9.0, 8.0, 7.0, 7.0, 6.0, 5.0, 4.0])
+    frozen = np.array([0, 0, 0, 1, 0, 0, 1], bool)
+    network = np.array([0, 0, 1, 0, 1, 0, 0], bool)
+    # Covering down to 7 (both shots of 7): +1 -1 = 0; down to 6: +1; down to 5: +1; down to 4: 0. The smallest allowed c is 4.
+    assert plugin_options.network_first_threshold(frozen, network, confidence) == (4.0, 1.0, 2)
+    assert plugin_options.network_first_threshold(frozen, np.ones(7, bool), confidence) == (None, 0.0, 2)   # nothing qualifies
+    assert plugin_options.network_first_threshold(frozen, frozen, confidence)[0] == 4.0                     # equal answers: cover all
+    assert plugin_options.apply_threshold(7.0, frozen, network, confidence) == (pytest.approx(4 / 7), 2)
+    assert plugin_options.apply_threshold(None, frozen, network, confidence) == (0.0, 2)
+
+
+def test_plugin_options_network_first_and_its_refusals(tmp_path, capsys):
+    candidates_file = write_candidates(tmp_path / "c.npz", HAND_MADE)
+    logits = write_logits(tmp_path / "l.npz", HAND_MADE_LOGITS)
+    (tmp_path / "x.pt").write_bytes(b"stands in for a checkpoint")
+    command = ["--out", str(tmp_path / "o.json"), "--x-checkpoint", str(tmp_path / "x.pt"), "--x-candidates", candidates_file,
+               "--x-logits", logits, "--network-first"]
+    options = plugin_options.main(command)
+    printed = capsys.readouterr().out
+    # The hand-made network is sure (|logit| 8) of "no flip" on shots 0 to 2 and of a wrong answer on 3 and 4;
+    # the network rule fails on shots 1, 3, 4. Covering shots 0 to 4 fails on 3 and 4 only: c = 8 covers all, 2 failures.
+    assert options["network_first"] == {"X": 8.0, "Z": None}
+    assert "NETWORK_FIRST X 8    (the network answers 100.0% of 5 shots; failures 2 with it, 3 without)" in printed
+    assert "NETWORK_FIRST Z none" in printed
+    held = arrays_of(candidates_file) | {"data_name": "go_X.npz"}
+    np.savez(tmp_path / "held.npz", **held)
+    with pytest.raises(SystemExit, match="held-out file go_X.npz"):
+        plugin_options.main([*command[:4], "--x-candidates", str(tmp_path / "held.npz"), "--x-logits", logits, "--network-first"])
+
+
+@needs_priortilt
+def test_network_first_through_the_evaluator_ignores_the_truth(tmp_path, shot_files, monkeypatch):
+    """The plugin with a network-first stage through the real evaluator: shuffled truth, the same answers."""
+    torch = pytest.importorskip("torch")
+    from evaluation import evaluate
+
+    torch.set_num_threads(1)
+    checkpoint = tiny_checkpoint(tmp_path / "x.pt", "X")
+    network, data = Network(checkpoint, fake_problem("X")), load_shots(shot_files["X"])
+    confidence = [float(np.abs(network(full, part)[0]).min()) for full, part in zip(data.detectors, data.basis_input, strict=True)]
+    threshold = float(np.median(confidence))                # an untrained network: about half the shots above, half below
+    options = tmp_path / "options.json"
+    options.write_text(json.dumps({"rule": {"X": "network", "Z": "converged"}, "checkpoints": {"X": checkpoint},
+                                   "network_first": {"X": threshold, "Z": None}, "torch_threads": 1, **QUICK_OPTIONS}))
+    shuffled = {}
+    for basis, path in shot_files.items():
+        arrays = arrays_of(path)
+        arrays["observables"] = arrays["observables"][np.random.default_rng(5).permutation(SHOTS)]
+        shuffled[basis] = tmp_path / f"shuffled_{basis}.npz"
+        np.savez_compressed(shuffled[basis], **arrays)
+    runs = {}
+    for name, files in (("original", shot_files), ("shuffled", shuffled)):
+        monkeypatch.setattr(sys, "argv", ["evaluate", "--test-x", str(files["X"]), "--test-z", str(files["Z"]), "--decoder",
+                                          "hierarchy.plugin:make_decoder", "--plugin-options", str(options), "--out", str(tmp_path / name)])
+        evaluate.main()
+        runs[name] = arrays_of(tmp_path / name / "01_hierarchy_plugin_make_decoder_shots.npz")
+    for basis in "XZ":
+        assert np.array_equal(runs["original"][f"predictions_{basis}"], runs["shuffled"][f"predictions_{basis}"])
+    metrics = json.loads((tmp_path / "original" / "01_hierarchy_plugin_make_decoder_metrics.json").read_text())
+    stages = [shot["stage"] for shot in metrics["X"]]
+    assert "network_first" in stages and set(stages) - {"network_first"}          # both kinds of X shot occur
+    assert "network_first" not in [shot["stage"] for shot in metrics["Z"]]

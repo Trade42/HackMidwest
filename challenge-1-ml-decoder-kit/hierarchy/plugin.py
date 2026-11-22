@@ -23,6 +23,13 @@ The three decoders read the 936 basis bits. The network reads the shot's detecto
 1,728, or the 936 if the checkpoint was trained on those) and nothing else. It is loaded once,
 when the session is made. The truth never reaches a session.
 
+Network first (the option network_first, off by default): before stage 1 the network reads
+the shot. If its confidence, the smallest |logit| of its 12 outputs (as neural.evaluate_stim
+defines it), is at least the basis' threshold, its own answer in the kit's 12 bits is
+returned and no other decoder runs. Otherwise the stages above run as they are; where the
+rule is "network", the logits already computed for the shot are used, not computed again.
+The thresholds come from hierarchy.plugin_options --network-first.
+
 A network trained with `--logicals light` (neural/, used for Z memory) predicts 12 other
 logical operators than the kit's. Its 12 logits are then compared with each candidate's bits
 in those operators (rules.bits_for_network), so the rule is the same for both kinds of network.
@@ -36,6 +43,9 @@ Options (a JSON object; every key is optional):
   constant        C of the "network" rule, default none. Fit it on other shots (hierarchy.select).
   device          for the network: "cpu" (default), "cuda" or "auto"
   torch_threads   CPU threads for the network (default: torch's own choice)
+  network_first   {"X": c_X, "Z": c_Z}: per basis the confidence threshold of the network-first stage, or
+                  null for none. Both bases must be named; a basis with a threshold needs a checkpoint.
+                  Default: no such stage.
   parallel        true: the two PriorTilt decodes of a shot run side by side, P2 in a helper process
                   that lives as long as the session. The answers are the same; the session then uses
                   two cores, and a shot's time is wall time, not CPU time. Default false.
@@ -54,8 +64,8 @@ from evaluation.adapters import ShotResult
 from hierarchy.rules import ORDER, bits_for_network, lowest_weight, most_likely
 from hierarchy.stages import DEFAULT_SEEDS, Hierarchy, ParallelHierarchy, decoder_settings, problem_sha256, sha256_of
 
-OPTIONS = {"rule", "checkpoints", "seeds", "constant", "device", "torch_threads", "parallel", "priortilt_repo",
-           "priortilt_max_rounds", "relay_sets"}
+OPTIONS = {"rule", "checkpoints", "seeds", "constant", "device", "torch_threads", "parallel", "network_first",
+           "priortilt_repo", "priortilt_max_rounds", "relay_sets"}
 RULES = ("network", "weight", "converged")
 
 
@@ -144,6 +154,21 @@ class HierarchySession:
                 note = f"no checkpoint was given for {problem.basis} memory, so the weight rule is used in place of the network rule"
         self.network = network if self.rule == "network" else None
         self.constant = options.get("constant") if self.rule == "network" else None
+        self.first_network, self.first_threshold = None, None
+        first = options.get("network_first")
+        if first is not None:
+            if not isinstance(first, dict) or set(first) != {"X", "Z"}:
+                raise ValueError('network_first names a threshold (or null) for exactly "X" and "Z"')
+            if first[problem.basis] is not None:
+                self.first_threshold = float(first[problem.basis])
+                if self.network is not None:
+                    self.first_network = self.network
+                elif network is not None:
+                    self.first_network = network
+                elif checkpoint:
+                    self.first_network = Network(checkpoint, problem, options.get("device", "cpu"), options.get("torch_threads"))
+                else:
+                    raise ValueError(f"network_first gives {problem.basis} a threshold, and the options hold no checkpoint for it")
         self.settings = {
             "decoder": "hierarchy: PriorTilt under two seeds; where their predictions differ, relay-BP joins and the rule chooses",
             "rule": self.rule, "rule_asked": asked, "rule_note": note, "constant": self.constant, "seeds": seeds,
@@ -151,6 +176,8 @@ class HierarchySession:
             "problem_sha256": problem_sha256(problem),
             "parallel": ("P1 and P2 of a shot run side by side on two cores: the times are wall time" if options.get("parallel")
                          else "no: every stage runs in this one process, one after the other"),
+            "network_first": (None if self.first_threshold is None else
+                              {"threshold": self.first_threshold, "network": getattr(self.first_network, "record", None)}),
             "state": "decoders are built once and keep their state: relay-BP sees only the shots where P1 and P2 differ",
         }
         self.setup_seconds = perf_counter() - start
@@ -159,9 +186,19 @@ class HierarchySession:
         syndrome = np.ascontiguousarray(basis, dtype=np.uint8)
         if syndrome.shape != (self.problem.H.shape[0],):
             raise ValueError("the basis syndrome does not have one bit per row of H")
+        early = {}
+        if self.first_threshold is not None:
+            start = perf_counter()
+            logits, network_answer = self.first_network(full, syndrome)
+            logits, network_answer = np.asarray(logits, np.float64), np.asarray(network_answer, np.uint8)
+            confidence = float(np.abs(logits).min())
+            early = {"network_first": confidence >= self.first_threshold, "confidence": confidence,
+                     "seconds_network": perf_counter() - start, "logits": logits.tolist(), "network_answer": network_answer.tolist()}
+            if early["network_first"]:
+                return ShotResult(network_answer, {"stage": "network_first", "fallback_used": False} | early)
         first, second = self.hierarchy.first_two(syndrome)
         if np.array_equal(first.predicted, second.predicted):
-            return ShotResult(first.predicted, self._metrics("agree", first, [first, second]))
+            return ShotResult(first.predicted, self._metrics("agree", first, [first, second], early))
 
         third = self.hierarchy.third(syndrome)
         by_name = {candidate.name: candidate for candidate in (first, second, third)}
@@ -170,13 +207,16 @@ class HierarchySession:
         # the shot when `not any(candidate.converged for candidate in candidates)`.
         predicted = np.stack([candidate.predicted for candidate in candidates])[:, None, :]   # [candidates, 1 shot, 12]
         weight = np.array([[candidate.weight] for candidate in candidates])
-        extra = {f"predicted_{candidate.name}": candidate.predicted.tolist() for candidate in candidates}
+        extra = early | {f"predicted_{candidate.name}": candidate.predicted.tolist() for candidate in candidates}
         if self.rule == "network":
-            start = perf_counter()
-            logits, network_answer = self.network(full, syndrome)
-            logits, network_answer = np.asarray(logits, np.float64), np.asarray(network_answer, np.uint8)
-            extra |= {"seconds_network": perf_counter() - start, "logits": logits.tolist(),
-                      "network_answer": network_answer.tolist()}
+            if early and self.first_network is self.network:      # the network has read this shot already
+                logits, network_answer = np.asarray(early["logits"], np.float64), np.asarray(early["network_answer"], np.uint8)
+            else:
+                start = perf_counter()
+                logits, network_answer = self.network(full, syndrome)
+                logits, network_answer = np.asarray(logits, np.float64), np.asarray(network_answer, np.uint8)
+                extra |= {"seconds_network": perf_counter() - start, "logits": logits.tolist(),
+                          "network_answer": network_answer.tolist()}
             in_its_bits = bits_for_network(predicted, (logits > 0)[None], network_answer[None], self.network.model_from_kit)
             choice = int(most_likely(in_its_bits, logits[None], weight, self.constant)[0])
         else:

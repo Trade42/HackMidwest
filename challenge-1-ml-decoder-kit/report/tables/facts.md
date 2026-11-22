@@ -202,10 +202,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c5_router_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
 | `c5_router_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
 | `c5_router_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
-| `c5_tcbp_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
-| `c5_tcbp_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c5_tcbp_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c5_tcbp_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
+| `c5_tcbp_vs_relay_bp_both` | 306 | `tables/test_comparisons.md` |
+| `c5_tcbp_vs_relay_bp_only_first` | 54 | `tables/test_comparisons.md` |
+| `c5_tcbp_vs_relay_bp_only_second` | 539 | `tables/test_comparisons.md` |
+| `c5_tcbp_vs_relay_bp_p` | 1e-101 | `tables/test_comparisons.md` |
 | `cand_lowest` | 71 | `tables/background.md` |
 | `cand_present` | 114 | `tables/background.md` |
 | `cand_shots` | 145 | `tables/background.md` |
@@ -598,17 +598,17 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t4_tcbp_time_ratio` | not measured | `tables/test_p0.004.md` |
 | `t4_tcbp_wall_hours` | not measured | `tables/test_p0.004.md` |
 | `t4_tcbp_xz` | 20, 21 | `tables/test_p0.004.md` |
-| `t5_bposd_both` | not measured | `tables/test_p0.005.md` |
+| `t5_bposd_both` | 714 | `tables/test_p0.005.md` |
 | `t5_bposd_error` | 4.6e-04 | `tables/test_p0.005.md` |
 | `t5_bposd_mean_ms` | 581 | `tables/test_p0.005.md` |
 | `t5_bposd_median_ms` | 546 | `tables/test_p0.005.md` |
-| `t5_bposd_only_relay` | not measured | `tables/test_p0.005.md` |
-| `t5_bposd_only_this` | not measured | `tables/test_p0.005.md` |
+| `t5_bposd_only_relay` | 131 | `tables/test_p0.005.md` |
+| `t5_bposd_only_this` | 1719 | `tables/test_p0.005.md` |
 | `t5_bposd_p99_ms` | 1,093 | `tables/test_p0.005.md` |
-| `t5_bposd_paired_p` | not measured | `tables/test_p0.005.md` |
+| `t5_bposd_paired_p` | 0e+00 | `tables/test_p0.005.md` |
 | `t5_bposd_pairs` | 2433 | `tables/test_p0.005.md` |
 | `t5_bposd_rate` | 2.30e-02 | `tables/test_p0.005.md` |
-| `t5_bposd_time_ratio` | not measured | `tables/test_p0.005.md` |
+| `t5_bposd_time_ratio` | 0.40 | `tables/test_p0.005.md` |
 | `t5_bposd_wall_hours` | 1.6 | `tables/test_p0.005.md` |
 | `t5_bposd_xz` | 1307, 1320 | `tables/test_p0.005.md` |
 | `t5_ensemble_both` | not measured | `tables/test_p0.005.md` |
@@ -690,18 +690,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t5_priortilt_wall_hours` | not measured | `tables/test_p0.005.md` |
 | `t5_priortilt_xz` | not measured | `tables/test_p0.005.md` |
 | `t5_relay_bp_both` | not measured | `tables/test_p0.005.md` |
-| `t5_relay_bp_error` | not measured | `tables/test_p0.005.md` |
-| `t5_relay_bp_mean_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_relay_bp_median_ms` | not measured | `tables/test_p0.005.md` |
+| `t5_relay_bp_error` | 2.5e-04 | `tables/test_p0.005.md` |
+| `t5_relay_bp_mean_ms` | 1,471 | `tables/test_p0.005.md` |
+| `t5_relay_bp_median_ms` | 424 | `tables/test_p0.005.md` |
 | `t5_relay_bp_only_relay` | not measured | `tables/test_p0.005.md` |
 | `t5_relay_bp_only_this` | not measured | `tables/test_p0.005.md` |
-| `t5_relay_bp_p99_ms` | not measured | `tables/test_p0.005.md` |
+| `t5_relay_bp_p99_ms` | 8,270 | `tables/test_p0.005.md` |
 | `t5_relay_bp_paired_p` | not measured | `tables/test_p0.005.md` |
-| `t5_relay_bp_pairs` | not measured | `tables/test_p0.005.md` |
-| `t5_relay_bp_rate` | not measured | `tables/test_p0.005.md` |
-| `t5_relay_bp_time_ratio` | not measured | `tables/test_p0.005.md` |
-| `t5_relay_bp_wall_hours` | not measured | `tables/test_p0.005.md` |
-| `t5_relay_bp_xz` | not measured | `tables/test_p0.005.md` |
+| `t5_relay_bp_pairs` | 845 | `tables/test_p0.005.md` |
+| `t5_relay_bp_rate` | 7.33e-03 | `tables/test_p0.005.md` |
+| `t5_relay_bp_time_ratio` | 1.00 | `tables/test_p0.005.md` |
+| `t5_relay_bp_wall_hours` | 4.1 | `tables/test_p0.005.md` |
+| `t5_relay_bp_xz` | 432, 427 | `tables/test_p0.005.md` |
 | `t5_router_both` | not measured | `tables/test_p0.005.md` |
 | `t5_router_error` | not measured | `tables/test_p0.005.md` |
 | `t5_router_mean_ms` | not measured | `tables/test_p0.005.md` |
@@ -715,14 +715,14 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t5_router_time_ratio` | not measured | `tables/test_p0.005.md` |
 | `t5_router_wall_hours` | not measured | `tables/test_p0.005.md` |
 | `t5_router_xz` | not measured | `tables/test_p0.005.md` |
-| `t5_tcbp_both` | not measured | `tables/test_p0.005.md` |
+| `t5_tcbp_both` | 306 | `tables/test_p0.005.md` |
 | `t5_tcbp_error` | 1.6e-04 | `tables/test_p0.005.md` |
 | `t5_tcbp_mean_ms` | 16.9 | `tables/test_p0.005.md` |
 | `t5_tcbp_median_ms` | 13.3 | `tables/test_p0.005.md` |
-| `t5_tcbp_only_relay` | not measured | `tables/test_p0.005.md` |
-| `t5_tcbp_only_this` | not measured | `tables/test_p0.005.md` |
+| `t5_tcbp_only_relay` | 539 | `tables/test_p0.005.md` |
+| `t5_tcbp_only_this` | 54 | `tables/test_p0.005.md` |
 | `t5_tcbp_p99_ms` | 56.4 | `tables/test_p0.005.md` |
-| `t5_tcbp_paired_p` | not measured | `tables/test_p0.005.md` |
+| `t5_tcbp_paired_p` | 1e-101 | `tables/test_p0.005.md` |
 | `t5_tcbp_pairs` | 360 | `tables/test_p0.005.md` |
 | `t5_tcbp_rate` | 3.05e-03 | `tables/test_p0.005.md` |
 | `t5_tcbp_time_ratio` | not measured | `tables/test_p0.005.md` |

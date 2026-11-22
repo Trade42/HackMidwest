@@ -40,4 +40,4 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.005 | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |
 | 0.005 | our ensemble (combined offline) | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured |
 | 0.005 | our ensemble (combined offline) | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |
-| 0.005 | TCBP-JOBS (NVIDIA, GPU) | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
+| 0.005 | TCBP-JOBS (NVIDIA, GPU) | relay-BP (kit baseline) | 360 against 845 | 306 | 54 / 539 | 1e-101 |

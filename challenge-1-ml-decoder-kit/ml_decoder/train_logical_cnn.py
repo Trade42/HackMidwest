@@ -3,7 +3,7 @@
   python train_logical_cnn.py --basis X --hours 8                        overnight on the RTX 4060
   python train_logical_cnn.py --basis X --minutes 2 --width 32 --depth 2 --batch 256      quick check on any machine
   python train_logical_cnn.py --basis X --eval model_X.pt --shots 20000                   error rates of a saved model
-  python train_logical_cnn.py --basis X --train-shots 500000 --report-shots 100000 --seed 1 --threads 4 ...   repeatable
+  python train_logical_cnn.py --basis X --train-shots 500000 --report-shots 100000 --seed 1 --threads 4     repeatable
 
 It lives in challenge-1-ml-decoder-kit/ml_decoder/ and finds the kit one folder up (or pass --kit). Needs PyTorch.
 The data never runs out: faults are drawn on the GPU from the kit's own error model at a random p per batch, with

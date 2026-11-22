@@ -19,7 +19,7 @@
 | 0.004 | X | 4 of 10,000 | 20 | 2 / 2 / 18 (p = 4e-04) | not run (X at p = 0.005 only) |  |
 | 0.003 | X | 0 of 10,000 | 1 | 0 / 0 / 1 (p = 1.00) | not run (X at p = 0.005 only) |  |
 | 0.005 | Z | 61 of 10,000 | 177 | 41 / 20 / 136 (p = 2e-22) | not run (X at p = 0.005 only) |  |
-| 0.005 | pairs | 132 of 10,000 pairs | 360 | 91 / 41 / 269 (p = 3e-42) |  |  |
+| 0.005 | pairs | 132 of 10,000 pairs (1.11e-03 ± 9.6e-05 per cycle) | 360 (3.05e-03 ± 1.6e-04 per cycle) | 91 / 41 / 269 (p = 3e-42) |  |  |
 
 **Its time per X shot: not a clean timing.** An A100 MIG slice, one process, one shot at a time, 1 CPU thread; server job 5 ran beside job 6, another TCBP-JOBS process on the same slice (`runner_gpu.out`, `runner_cpu.out`); the network's time is from validation shots. Per X shot, not per pair; ms: mean / median / 99th percentile. For scale: TCBP-JOBS alone takes 8.7 ms per X shot (a GPU decode call), relay-BP's timed row 760, and the relay-BP predecoder 212 (`predecoder_latency.md`).
 

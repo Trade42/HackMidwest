@@ -594,6 +594,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `op5_choice` | the predecoder with the fallback | `tables/operating_rule.md` |
 | `op_statement` | Which method at which noise level (an operating rule chosen after the test results were seen, from the measured rows; not a frozen decoder): at p = 0.003, our pipeline (1 X failure, 23.7 ms per X shot; level on failures with the predecoder with the fallback, and faster); at p = 0.004, the predecoder with the fallback (10 X failures against our pipeline's 18, not a significant difference, at 94.0 against 104 ms per X shot); at p = 0.005, the predecoder with the fallback (107 X failures against our pipeline's 245, a significant difference, at 212 against 420 ms per X shot). The counts are of 10,000 X test shots and are not paired here (the predecoder's per-shot answers are not in the repository; the two verdicts against our pipeline are the review's paired count on that file), so a difference of a few shots is within the noise; the times come from other runs on other shots and are a guide, not a paired measurement; the fallback needs a GPU for TCBP-JOBS; the fallback rule was designed after the first test result, so its counts at p = 0.005 and 0.004 are post hoc, not held out. | `tables/operating_rule.md` |
 | `pair_H` | 281 | `tables/test_predecoder.md` |
+| `pair_H_rate` | 2.37e-03 ± 1.4e-04 | `tables/test_predecoder.md` |
 | `pair_H_vs_R_only_mine` | 39 | `tables/test_predecoder.md` |
 | `pair_H_vs_R_only_other` | 603 | `tables/test_predecoder.md` |
 | `pair_H_vs_R_p` | 6e-131 | `tables/test_predecoder.md` |
@@ -601,8 +602,11 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pair_H_vs_T_only_other` | 193 | `tables/test_predecoder.md` |
 | `pair_H_vs_T_p` | 8e-06 | `tables/test_predecoder.md` |
 | `pair_R` | 845 | `tables/test_predecoder.md` |
+| `pair_R_rate` | 7.33e-03 ± 2.5e-04 | `tables/test_predecoder.md` |
 | `pair_T` | 360 | `tables/test_predecoder.md` |
+| `pair_T_rate` | 3.05e-03 ± 1.6e-04 | `tables/test_predecoder.md` |
 | `pair_rule` | 206 | `tables/test_predecoder.md` |
+| `pair_rule_rate` | 1.73e-03 ± 1.2e-04 | `tables/test_predecoder.md` |
 | `pair_rule_vs_R_only_mine` | 27 | `tables/test_predecoder.md` |
 | `pair_rule_vs_R_only_other` | 666 | `tables/test_predecoder.md` |
 | `pair_rule_vs_R_p` | 1e-160 | `tables/test_predecoder.md` |
@@ -679,7 +683,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pre5Z_vs_fresh_p` | 4e-59 | `tables/test_predecoder.md` |
 | `pre_columns` | 8,784 | `tables/test_predecoder.md` |
 | `pre_extension` | On the X test shots at p = 0.004, relay-BP with the head's priors fails 15 against 39 with the kit's priors (only the head's 3 against 27, exact p = 8e-06: a significant gain), and TCBP-JOBS fails 20 (only the head's 7 against 12, exact p = 0.36). On the X test shots at p = 0.003, relay-BP with the head's priors fails 2 against 7 with the kit's priors (only the head's 1 against 6, exact p = 0.12: not significant, so the declared line, a paired exact p below 0.05, is not passed at this p), and TCBP-JOBS fails 1 (only the head's 1 against 0, exact p = 1.00). On the Z test shots at p = 0.005, relay-BP with the head's priors fails 132 against 398 with the kit's priors (only the head's 24 against 290, exact p = 4e-59: a significant gain), and TCBP-JOBS fails 177 (only the head's 56 against 101, exact p = 4e-04). | `tables/test_predecoder.md` |
-| `pre_pair` | Scored as the kit scores (a pair of an X and a Z shot fails when either fails), at p = 0.005: relay-BP with the head's priors fails 281 pairs against TCBP-JOBS's 360 (only H 114, only TCBP-JOBS 193, exact p = 8e-06) and relay-BP's 845 (exact p = 6e-131); the fallback rule, post hoc on its X half, fails 206 (against TCBP-JOBS: only the rule 39, only TCBP-JOBS 193, exact p = 1e-25). This pair score is part of the registered extension, not a held-out result, and it is not in the pair-scored tables of our decoder; accuracy only (its times come from a shared pool on the team's PC); TCBP-JOBS's counts come from its stored test file and carry its fit's spread (above). | `tables/test_predecoder.md` |
+| `pre_pair` | Scored as the kit scores (a pair of an X and a Z shot fails when either fails), at p = 0.005: relay-BP with the head's priors fails 281 pairs, a logical error rate of 2.37e-03 ± 1.4e-04 per cycle, against TCBP-JOBS's 360 (3.05e-03 ± 1.6e-04) (only H 114, only TCBP-JOBS 193, exact p = 8e-06) and relay-BP's 845 (exact p = 6e-131); the fallback rule, post hoc on its X half, fails 206, 1.73e-03 ± 1.2e-04 per cycle (against TCBP-JOBS: only the rule 39, only TCBP-JOBS 193, exact p = 1e-25). This pair score is part of the registered extension, not a held-out result, and it is not in the pair-scored tables of our decoder; accuracy only (its times come from a shared pool on the team's PC); TCBP-JOBS's counts come from its stored test file and carry its fit's spread (above). | `tables/test_predecoder.md` |
 | `pre_z_reason` | the Z run of the registered extension is a later run, shown below | `tables/test_predecoder.md` |
 | `pregate_H` | 14 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_fresh` | 20 | `data/exploration/predecoder/compare_validation_X_summary.json` |
@@ -687,8 +691,12 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pregate_only_fresh` | 12 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_p` | 0.24 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_shots` | 5,000 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `ptpair_R` | 845 | `tables/predecoder_tcbp.md` |
+| `ptpair_R_rate` | 7.33e-03 ± 2.5e-04 | `tables/predecoder_tcbp.md` |
 | `ptpair_T` | 360 | `tables/predecoder_tcbp.md` |
 | `ptpair_TH` | 132 | `tables/predecoder_tcbp.md` |
+| `ptpair_TH_rate` | 1.11e-03 ± 9.6e-05 | `tables/predecoder_tcbp.md` |
+| `ptpair_T_rate` | 3.05e-03 ± 1.6e-04 | `tables/predecoder_tcbp.md` |
 | `ptpair_p` | 3e-42 | `tables/predecoder_tcbp.md` |
 | `ptt3X_T` | 1 | `tables/predecoder_tcbp.md` |
 | `ptt3X_TH` | 0 | `tables/predecoder_tcbp.md` |
@@ -718,7 +726,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `ptt5Z_vs_T_only_TH` | 20 | `tables/predecoder_tcbp.md` |
 | `ptt5Z_vs_T_p` | 2e-22 | `tables/predecoder_tcbp.md` |
 | `ptt5Z_vs_fresh_p` | not measured | `tables/predecoder_tcbp.md` |
-| `ptt_statement` | On the test shots (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); one basis at a time, accuracy only; its knobs were fitted at p = 0.005 and applied unchanged at the lower p, with no validation there): X at p = 0.005, TH fails 72 against TCBP-JOBS's 186 (only TH 22, only TCBP-JOBS 136, exact p = 3e-21; the same run's kit-priors arm fails 186); X at p = 0.004, TH fails 4 against TCBP-JOBS's 20 (only TH 2, only TCBP-JOBS 18, exact p = 4e-04); X at p = 0.003, TH fails 0 against TCBP-JOBS's 1 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim); Z at p = 0.005, TH fails 61 against TCBP-JOBS's 177 (only TH 20, only TCBP-JOBS 136, exact p = 2e-22). TCBP-JOBS's stored counts carry its fit's spread (above). | `tables/predecoder_tcbp.md` |
+| `ptt_statement` | On the test shots (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); one basis at a time, accuracy only; its knobs were fitted at p = 0.005 and applied unchanged at the lower p, with no validation there): X at p = 0.005, TH fails 72 against TCBP-JOBS's 186 (only TH 22, only TCBP-JOBS 136, exact p = 3e-21; the same run's kit-priors arm fails 186); X at p = 0.004, TH fails 4 against TCBP-JOBS's 20 (only TH 2, only TCBP-JOBS 18, exact p = 4e-04); X at p = 0.003, TH fails 0 against TCBP-JOBS's 1 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim); Z at p = 0.005, TH fails 61 against TCBP-JOBS's 177 (only TH 20, only TCBP-JOBS 136, exact p = 2e-22). Scored as the kit scores (a pair fails when its X or its Z shot fails), at p = 0.005 TH fails 132 pairs, a logical error rate of 1.11e-03 ± 9.6e-05 per cycle, against TCBP-JOBS's 360 (3.05e-03 ± 1.6e-04) and relay-BP's 845 (7.33e-03 ± 2.5e-04), exact p = 3e-42 against TCBP-JOBS; at p = 0.004 and 0.003 it is X only, with no pair rate. TCBP-JOBS's stored counts carry its fit's spread (above). | `tables/predecoder_tcbp.md` |
 | `pttime_bd` | 46.4 | `tables/predecoder_tcbp.md` |
 | `pttime_build` | 42.6 | `tables/predecoder_tcbp.md` |
 | `pttime_decode` | 3.8 | `tables/predecoder_tcbp.md` |

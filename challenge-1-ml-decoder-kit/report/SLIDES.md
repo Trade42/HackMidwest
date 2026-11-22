@@ -38,7 +38,7 @@ Words used, each with its meaning:
 
 Source: `report/tables/exploration_p0.004.md` and `report/tables/where_failures.md`.
 
-## Slide 3. <!--f:slide3_title-->The network is a poor decoder alone; as a tie-break it is level with the best hand-written rule<!--/f-->
+## Slide 3. <!--f:slide3_title-->The network is a poor decoder alone, and as a tie-break it is no better than the best hand-written rule<!--/f-->
 
 **Show:** `figures/learning_curves.png`, then the ablation table of `REPORT.md`, section 4.
 
@@ -47,8 +47,8 @@ Source: `report/tables/exploration_p0.004.md` and `report/tables/where_failures.
   <!--f:t4_relay_bp_xz-->36, 47<!--/f--> of 10,000 wrong (X, Z).
 - As a tie-break it clearly beats the plain lowest-weight rule (on <!--f:a80_shots-->80,000<!--/f--> fresh shots: <!--f:a80_a-->237<!--/f--> against <!--f:a80_aw-->298<!--/f--> failures,
   p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f-->). Against the best hand-written rule it is level: <!--f:a80_a-->237<!--/f--> against <!--f:a80_ac-->253<!--/f--> there (p = <!--f:a80_a_vs_ac_p-->0.12<!--/f-->), and
-  <!--f:abl_pooled_a-->494<!--/f--> against <!--f:abl_pooled_aw-->472<!--/f--> failed pairs on the test shots (p = <!--f:abl_pooled_p-->0.071<!--/f-->).
-- <!--f:slide3_close-->So the gain over relay-BP comes from the hierarchy itself; on the test shots the network does not add to it.<!--/f-->
+  <!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs on the test shots (p = <!--f:abl_pooled_p-->0.15<!--/f-->).
+- <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
 
 Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
 
@@ -108,7 +108,7 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 ## Questions a judge will ask, with honest answers
 
 **Whose gain is whose?**
-On the test shots: <!--f:framing_slide-->The hierarchy is the result (799 failed pairs for relay-BP, 472 for the hierarchy, over p = 0.003, 0.005); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 472 pairs and the network 494; only the network rule fails 79 pairs, only the classical rule 57, exact p = 0.071.<!--/f--> The table `report/tables/test_ladder.md` has every rung. On the practice shots:
+On the test shots: <!--f:framing_slide-->On the test shots (one offline decode of each shot, the same candidates for every rung; p = 0.003, 0.004, 0.005 together), relay-BP fails 889 pairs, PriorTilt run once (IonQ's decoder) 672, and our decoder as frozen (two PriorTilt runs, relay-BP where they disagree, the neural tie-break) 544; a perfect tie-break would fail 429. Of the drop from relay-BP to our decoder, 63% is already there with PriorTilt run once; the hierarchy around it gives the rest. As an ablation, with the best hand-written tie-break (lowest weight among the converged candidates) in place of the network, the hierarchy fails 525: the network is no better than the hand-written rule (no significant difference). The classical tie-break (lowest weight among the converged candidates) fails 525 pairs and the network 544; only the network rule fails 87 pairs, only the classical rule 68, exact p = 0.15.<!--/f--> The table `report/tables/test_ladder.md` has every rung. On the practice shots:
 PriorTilt alone already beats relay-BP on the practice shots, and that part is IonQ's. Our hierarchy adds to it: on
 <!--f:expl_pairs-->25,000<!--/f--> practice pairs at p = 0.004, relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its seed, and
 the hierarchy with its best classical tie-break <!--f:expl_pairs_C-->140<!--/f--> (only relay-BP fails <!--f:expl_pairs_C_only_relay-->128<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_C_only_ours-->23<!--/f-->). The neural tie-break's step on top is smaller, and on these shots not significant, measured on X memory
@@ -158,7 +158,7 @@ Four things are learned: PriorTilt's 14 parameters (by its authors, IonQ), our n
 (a statistical model fitted on training shots), and the teammates' router. The honest account of ours:
 - The neural tie-break was motivated by a measurement: among 16 relay-BP candidates the right answer is present on
   <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, but the classical score picks it on only <!--f:cand_lowest-->71<!--/f--> (`report/tables/background.md`).
-  It clearly beats that classical score; on the test shots it is <!--f:abl_verdict-->level with<!--/f--> the best hand-written rule
-  (<!--f:abl_pooled_a-->494<!--/f--> against <!--f:abl_pooled_aw-->472<!--/f--> failed pairs, p = <!--f:abl_pooled_p-->0.071<!--/f-->). <!--f:slide3_close-->So the gain over relay-BP comes from the hierarchy itself; on the test shots the network does not add to it.<!--/f-->
+  It clearly beats that classical score; on the test shots it is <!--f:abl_verdict-->no better than<!--/f--> the best hand-written rule
+  (<!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs, p = <!--f:abl_pooled_p-->0.15<!--/f-->). <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
 - The loss-time tracker is the learned part with a clear gain: it recovers <!--f:trk_gain-->58% (38% to 78%)<!--/f--> of what knowing the true loss time
   would give, on its own test shots.

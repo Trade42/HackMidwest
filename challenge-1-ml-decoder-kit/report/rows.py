@@ -105,6 +105,7 @@ COMPARISONS = [
     ("priortilt", "relay-bp"),
     ("hierarchy-weight", "priortilt"),
     ("hierarchy-weight", "relay-bp"),
+    ("hierarchy", "priortilt"),
     ("hierarchy", "hierarchy-converged"),
     ("hierarchy-converged", "priortilt"),
     ("hierarchy-converged", "relay-bp"),

@@ -3,6 +3,7 @@ p,first,second,first_failed_pairs,second_failed_pairs,both_fail,only_first_fails
 0.003,priortilt,relay-bp,4,5,3,1,2,1.0
 0.003,hierarchy-weight,priortilt,3,4,2,1,2,1.0
 0.003,hierarchy-weight,relay-bp,3,5,2,1,3,0.625
+0.003,hierarchy,priortilt,3,4,3,0,1,1.0
 0.003,hierarchy,hierarchy-converged,3,3,2,1,1,1.0
 0.003,hierarchy-converged,priortilt,3,4,2,1,2,1.0
 0.003,hierarchy-converged,relay-bp,3,5,2,1,3,0.625
@@ -13,8 +14,18 @@ p,first,second,first_failed_pairs,second_failed_pairs,both_fail,only_first_fails
 0.003,ensemble,tcbp,2,3,2,0,1,1.0
 0.003,tcbp,relay-bp,3,5,2,1,3,0.625
 0.004,router,relay-bp,87,83,51,36,32,0.716300760154337
+0.004,priortilt,relay-bp,71,83,43,28,40,0.1818100545355934
+0.004,hierarchy-weight,priortilt,57,71,51,6,20,0.009355306625366211
+0.004,hierarchy-weight,relay-bp,57,83,37,20,46,0.0018582303075658085
+0.004,hierarchy,priortilt,44,71,33,11,38,0.00014197068519905542
+0.004,hierarchy,hierarchy-converged,44,53,34,10,19,0.13604594767093658
+0.004,hierarchy-converged,priortilt,53,71,47,6,24,0.0014309063553810122
+0.004,hierarchy-converged,relay-bp,53,83,34,19,49,0.00035795527161316536
+0.004,hierarchy,hierarchy-weight,44,57,34,10,23,0.03508203336969018
 0.004,hierarchy,relay-bp,44,83,29,15,54,2.612848003590018e-06
 0.004,hierarchy,tcbp,44,41,24,20,17,0.7428293587290682
+0.004,ensemble,hierarchy,16,44,13,3,31,7.660128176212311e-07
+0.004,ensemble,tcbp,16,41,15,1,26,4.172325134277344e-07
 0.004,tcbp,relay-bp,41,83,27,14,56,4.3028401315359276e-07
 0.005,priortilt,relay-bp,595,845,439,156,406,1.1698762381497606e-26
 0.005,hierarchy-weight,priortilt,527,595,461,66,134,1.737586927936315e-06

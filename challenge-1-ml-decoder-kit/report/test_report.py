@@ -146,7 +146,7 @@ def test_scripts_on_a_stand_in(tmp_path):
     ladder = (tmp_path / "tables" / "test_ladder.md").read_text()
     assert "ORACLE: a perfect tie-break" in ladder and "| 0.004 | every rung | not measured" in ladder
     facts = (tmp_path / "tables" / "facts.md").read_text()
-    assert "`framing` | The hierarchy is the result" in facts
+    assert "`framing` | On the test shots (one offline decode of each shot" in facts and "no better than the hand-written rule" in facts
     assert "not measured" in (tmp_path / "tables" / "test_p0.005.md").read_text()
     assert "the same outcome on every one of the 10,000 pairs" in (tmp_path / "tables" / "checks.md").read_text()
     done = run("report.make_plots", data, tmp_path)

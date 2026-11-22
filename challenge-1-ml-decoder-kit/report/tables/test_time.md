@@ -15,7 +15,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.004 | BP-OSD (kit baseline) | 472 of 10,000 | 302 | 0.94 | 350 | 863 | CPU, 1 core |
 | 0.004 | relay-BP (kit baseline) | 83 of 10,000 | 319 | the reference | 106 | 5,514 | CPU, 1 core |
 | 0.004 | relay-BP with a learned router | 87 of 10,000 | 315 | 0.99 | 15.0 | 6,865 | CPU, 1 core |
-| 0.004 | PriorTilt, one run (from per-shot files, not a timed evaluator row) | 71 of 10,000 | not timed in one process |  |  |  |  |
+| 0.004 | PriorTilt, one run | 74 of 10,000 | 87.3 | 0.27 | 34.2 | 884 | CPU, 1 core |
 | 0.004 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 57 of 10,000 | not timed in one process |  |  |  |  |
 | 0.004 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 53 of 10,000 | not timed in one process |  |  |  |  |
 | 0.004 | our hierarchy, neural tie-break | 44 of 10,000 | 216 | 0.68 | 83.1 | 2,064 | CPU, 1 core |
@@ -24,7 +24,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.004 | TCBP-JOBS (NVIDIA, GPU) | 41 of 10,000 | 7.8 | not comparable: another device and timer | 5.8 | 35.3 | GPU |
 | 0.005 | BP-OSD (kit baseline) | 2433 of 10,000 | 581 | 0.40 | 546 | 1,093 | CPU, 1 core |
 | 0.005 | relay-BP (kit baseline) | 845 of 10,000 | 1,471 | the reference | 424 | 8,270 | CPU, 1 core |
-| 0.005 | relay-BP with a learned router | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.005 | relay-BP with a learned router | 807 of 10,000 | 1,928 | 1.31 | 303 | 12,708 | CPU, 1 core |
 | 0.005 | PriorTilt, one run (from per-shot files, not a timed evaluator row) | 595 of 10,000 | not timed in one process |  |  |  |  |
 | 0.005 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 527 of 10,000 | not timed in one process |  |  |  |  |
 | 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 469 of 10,000 | not timed in one process |  |  |  |  |

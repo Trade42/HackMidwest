@@ -32,3 +32,9 @@ Sun Nov 22 18:32:33 UTC 2026
   head: 2000 of 2000 shots, 64 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: failures 1163 of 2000, 0.5815 [0.5597, 0.6029]; not reproduced 1644; flagged not converged 1544; build 3.4 ms + decode 0.5 ms mean, p99 5 ms
 saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job3/bp_only/per_shot.npz; 64 s
+a graph-logits decode exit 0
+Sun Nov 22 18:34:17 UTC 2026
+  head: 1000 of 1000 shots, 96 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: failures 3 of 1000, 0.0030 [0.0010, 0.0088]; not reproduced 0; flagged not converged 787; build 34.2 ms + decode 2.7 ms mean, p99 49 ms
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job3/decode_graph/per_shot.npz; 96 s
+exit codes: network 0, compile 0, probe 0, bp-only 0, graph decode 0

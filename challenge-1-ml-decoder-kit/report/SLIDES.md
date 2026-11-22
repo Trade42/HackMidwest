@@ -154,6 +154,11 @@ No. Rules, seeds and checkpoints were chosen on the train and validation files; 
 unless told that the run is final; the test files were decoded once.
 
 **What does machine learning add, exactly?**
-Three things are learned: PriorTilt's 14 parameters (by its authors), the neural tie-break (ours), and the
-teammates' router. The measurement that motivated a learned tie-break: among 16 relay-BP candidates the right answer
-is present on <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, but the classical score picks it on only <!--f:cand_lowest-->71<!--/f--> (`report/tables/background.md`).
+Four things are learned: PriorTilt's 14 parameters (by its authors, IonQ), our neural tie-break, our loss-time tracker
+(a statistical model fitted on training shots), and the teammates' router. The honest account of ours:
+- The neural tie-break was motivated by a measurement: among 16 relay-BP candidates the right answer is present on
+  <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, but the classical score picks it on only <!--f:cand_lowest-->71<!--/f--> (`report/tables/background.md`).
+  It clearly beats that classical score, but on the test shots it is level with the best hand-written rule
+  (<!--f:abl_pooled_a-->494<!--/f--> against <!--f:abl_pooled_aw-->472<!--/f--> failed pairs, p = <!--f:abl_pooled_p-->0.071<!--/f-->). Our gain over relay-BP comes from the hierarchy.
+- The loss-time tracker is the learned part with a clear gain: it recovers <!--f:trk_gain-->58% (38% to 78%)<!--/f--> of what knowing the true loss time
+  would give, on its own test shots.

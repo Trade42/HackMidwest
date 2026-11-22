@@ -4,3 +4,6 @@ plan /home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2b/plan.json: tasks ['si100
   model fitted in 64.5 s (one model, shared by every task); GPU memory [Insufficient Permissions], [Insufficient Permissions]
   si1000-p0.006 block 0-99 done, 86 s; failures so far m 10, g 24, h 13 of 100
   si1000-p0.008 block 0-99 done, 117 s; failures so far m 73, g 84, h 67 of 100
+  si1000-p0.006 block 100-199 done, 138 s; failures so far m 20, g 40, h 21 of 200
+  si1000-p0.008 block 100-199 done, 169 s; failures so far m 145, g 167, h 131 of 200
+  si1000-p0.006 block 200-299 done, 190 s; failures so far m 24, g 52, h 33 of 300

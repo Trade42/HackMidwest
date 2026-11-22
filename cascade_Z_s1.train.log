@@ -251,3 +251,11 @@ step 56000 of 100000 | training noise p=0.0055 | mean training loss 0.2357 | lea
   p=0.004  shots wrong 0.0624 (always-0 1.0000)  bits right 0.9863 (always-0 0.4990)
   p=0.005  shots wrong 0.2318 (always-0 0.9998)  bits right 0.9388 (always-0 0.4998)
 speed: 894 shots/s in training, 0.143 s per step, report 8.8 s, peak GPU memory 3.91 GB in tensors and 5.94 GB held by PyTorch
+step 58000 of 100000 | training noise p=0.0055 | mean training loss 0.2307 | learning rate 4.38e-04
+  averaged weights on 5000 error-model shots per p (not Stim shots); 95% interval of a share: +-0.014 or less
+  p=0.001  shots wrong 0.0002 (always-0 0.9772)  bits right 0.9999 (always-0 0.6074)
+  p=0.002  shots wrong 0.0014 (always-0 0.9976)  bits right 0.9998 (always-0 0.5287)
+  p=0.003  shots wrong 0.0116 (always-0 0.9992)  bits right 0.9981 (always-0 0.5041)
+  p=0.004  shots wrong 0.0572 (always-0 1.0000)  bits right 0.9876 (always-0 0.4990)
+  p=0.005  shots wrong 0.2244 (always-0 0.9998)  bits right 0.9406 (always-0 0.4998)
+speed: 782 shots/s in training, 0.164 s per step, report 8.8 s, peak GPU memory 3.91 GB in tensors and 5.94 GB held by PyTorch

@@ -11,3 +11,26 @@ checkpoint /home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/z_final.pt: step 220
 Z memory: failures 2625 of 20000 (always-0 would fail 19993)
 checkpoint /home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/z_final.pt: step 22000, commit db2de883f97771dab1140ac4956cad8c06f05aac, training seed 1, reads detectors=all, logical operators: light
 Z memory: failures 679 of 5000 (always-0 would fail 4997)
+X checkpoint /home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/x_final.pt, sha256 ec72edf4492e5ad37179f876070388a8173b4612559e85e55f2a553df2e9a606
+PLUGIN_RULE X network    (network 59 failures, converged 67, on 25000 shots; logits of checkpoint step 80000)
+Z checkpoint /home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/z_final.pt, sha256 2e7d8faa43b2e08b110cae73b14d2ec4d2651995d10c1e1ca0d88dcef23a809d
+PLUGIN_RULE Z converged    (network 83 failures, converged 73, on 25000 shots; logits of checkpoint step 22000)
+wrote /home/blakew3/mlBranchMidwest/runs/test-dry/hierarchy_options.json: {"rule": {"X": "network", "Z": "converged"}, "seeds": [1, 1001], "checkpoints": {"X": "/home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/x_final.pt", "Z": "/home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/z_final.pt"}, "device": "cpu", "torch_threads": 1}
+2026-11-22T08:07:54Z 2. the plugin's options: {
+  "rule": {
+    "X": "network",
+    "Z": "converged"
+  },
+  "seeds": [
+    1,
+    1001
+  ],
+  "checkpoints": {
+    "X": "/home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/x_final.pt",
+    "Z": "/home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/z_final.pt"
+  },
+  "device": "cpu",
+  "torch_threads": 1
+}
+options ok: /home/blakew3/mlBranchMidwest/runs/test-dry/hierarchy_options.json {'X': 'network', 'Z': 'converged'} sequential
+options ok: /home/blakew3/mlBranchMidwest/runs/test-dry/hierarchy_options_parallel.json {'X': 'network', 'Z': 'converged'} side by side

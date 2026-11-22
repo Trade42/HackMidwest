@@ -1,28 +1,85 @@
 # Information: what we are building, why, and where everything is
 
-Last updated: 2026-11-22 06:25 UTC. This file is the overview of our part of the team's work on
-Infleqtion's Challenge 1 (ML-assisted decoding of the Gross code). It lives on the branch
-`integration`, our one working branch: everything we have built is merged here.
+Last updated: 2026-11-22 13:12 UTC (the results on the held-out test shots). This file is the overview of
+our part of the team's work on Infleqtion's Challenge 1 (ML-assisted decoding of the Gross code).
+It lives on the branch `integration`, our one working branch: everything we have built is merged
+here.
 
 Read this first, then the README of the folder you care about. Every number below names where
-it was measured. **Unless a line says otherwise, numbers are on exploration shots (the train
-and validation files), not on the held-out test files, and the code behind them is not reviewed
-yet.**
+it was measured. **Section 1a holds the results on the team's held-out test shots, from the one
+run of the frozen decoder on the team's server; its tables are copied from
+`challenge-1-ml-decoder-kit/report/`, where a script makes every table from committed files.
+From section 2 on, unless a line says otherwise, numbers are on exploration shots (the train and
+validation files), measured while we were building.**
 
 ## 1. In one paragraph
 
-We are building a hierarchical decoder for the Gross code `[[144, 12, 12]]`. A fast decoder runs
-twice with different random seeds. When its two answers agree, that answer is final. When they
-disagree, which happens on about 1 shot in 250, a third decoder joins and a neural network
-that follows the code's structure picks the most likely answer. On 50,000 practice shots at
-p = 0.004 the version without the network fails 34% fewer shots than relay-BP in about a
-quarter less time, and with the network on X memory it fails 47% fewer. NVIDIA's GPU decoder
-TCBP-JOBS, which teammates ran as an extra reference, is stronger still at p = 0.004 and 0.005,
-so the next stage adds stronger members and lets the network choose among them. Beside it we
-study atom loss, the part the challenge stresses: a decoder that ignores loss fails on most
-shots, one that uses the loss flags on about 4%, and we measured that knowing when an atom was
-lost would cut that 1.6 times more, so we are building a tracker that estimates that time from
-the syndrome history.
+We built a hierarchical decoder for the Gross code `[[144, 12, 12]]`. A fast decoder (IonQ's
+PriorTilt) runs twice with different random seeds. When its two answers agree, that answer is
+final. When they disagree (about 0.4% of shots at p = 0.004), relay-BP joins and a
+neural network that follows the code's structure picks the most likely of the three answers. On
+the team's held-out test shots (10,000 pairs per noise level, timed on the team's server, one
+CPU core), it fails fewer pairs than relay-BP at p = 0.004 (44 against 83) and p = 0.005 (479
+against 845), in 0.68 and 0.56 of relay-BP's time, and as many within the error at p = 0.003 (3
+against 5) in 0.52 of its time; with the two fast decodes side by side on two cores the times are
+0.33, 0.47 and 0.41 of relay-BP's. NVIDIA's GPU decoder TCBP-JOBS, which teammates ran as an extra
+reference, is level with it at p = 0.003 and 0.004 and ahead at p = 0.005 (360 against 479). An
+ensemble whose rule was frozen before the test run (take the answer where both PriorTilt runs and
+TCBP-JOBS agree; otherwise decode both check types jointly), combined offline from the saved
+answers, fails 16 pairs against TCBP-JOBS's 41 at p = 0.004 (exact p = 4e-7); at p = 0.005 it
+equals TCBP-JOBS, because joint decoding was not run there. As a tie-breaker the network is no
+better than the best hand-written rule (544 against 525 failed pairs over the three noise levels
+in one offline decode, exact p = 0.15; 47 against 56 on the timed rows at p = 0.003 and 0.004,
+p = 0.11), so the gain over relay-BP is PriorTilt's and the hierarchy's. Beside it we
+studied atom loss, the part the challenge stresses: relay-BP with the loss flags fails 4.4% of
+shots where a loss-blind one fails 57.7%, and our loss-time tracker, which estimates from the
+syndrome when each atom was lost, recovers 58% (38% to 78%) of what knowing the true loss time
+would add.
+
+## 1a. Results on the held-out test shots
+
+The one run on the test shots (2026-11-22, 10:23 to 13:05 UTC, on the team's server; the
+GPU rows on its idle A100): every decoder decoded the same saved test shots once, with every
+setting frozen before. Copied from `challenge-1-ml-decoder-kit/report/tables/test_sweep.md` at
+`integration` 9df6863:
+
+| Decoder | p = 0.003 | p = 0.004 | p = 0.005 |
+|---|---|---|---|
+| BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05 · 60 pairs · 129 ms | 4.02e-03 ± 1.8e-04 · 472 pairs · 302 ms | 2.30e-02 ± 4.6e-04 · 2433 pairs · 581 ms |
+| relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05 · 5 pairs · 88.0 ms | 6.94e-04 ± 7.6e-05 · 83 pairs · 319 ms | 7.33e-03 ± 2.5e-04 · 845 pairs · 1,471 ms |
+| relay-BP with a learned router | 5.00e-05 ± 2.0e-05 · 6 pairs · 42.5 ms | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | 6.99e-03 ± 2.5e-04 · 807 pairs · 1,928 ms |
+| PriorTilt, one run | 3.33e-05 ± 1.7e-05 · 4 pairs · 22.7 ms | 6.19e-04 ± 7.2e-05 · 74 pairs · 87.3 ms | 5.15e-03 ± 2.1e-04 · 601 pairs · 264 ms |
+| our hierarchy, lowest-weight tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · offline, no time | 4.76e-04 ± 6.3e-05 · 57 pairs · offline, no time | 4.50e-03 ± 2.0e-04 · 527 pairs · offline, no time |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | 3.33e-05 ± 1.7e-05 · 4 pairs · 46.3 ms | 4.34e-04 ± 6.0e-05 · 52 pairs · 218 ms | 3.99e-03 ± 1.8e-04 · 469 pairs · offline, no time |
+| our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · 45.7 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 216 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 825 ms |
+| our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 2.50e-05 ± 1.4e-05 · 3 pairs · 28.9 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 150 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 608 ms |
+| our ensemble (combined offline) | 1.67e-05 ± 1.2e-05 · 2 pairs · offline, no time | 1.33e-04 ± 3.3e-05 · 16 pairs · offline, no time | 3.05e-03 ± 1.6e-04 · 360 pairs · offline, no time; fails exactly TCBP-JOBS's shots |
+| TCBP-JOBS (NVIDIA, GPU) | 2.50e-05 ± 1.4e-05 · 3 pairs · 3.9 ms | 3.42e-04 ± 5.3e-05 · 41 pairs · 7.8 ms | 3.05e-03 ± 1.6e-04 · 360 pairs · 16.9 ms |
+
+Each cell: logical error rate per cycle ± the kit's error · failed pairs of 10,000 · mean time per pair. "Offline" marks a row combined from saved per-shot answers, with no time measured in one process. Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.
+
+- **Times** are per pair (one X shot plus one Z shot), each row in one process on one CPU core
+  unless the row says otherwise; TCBP-JOBS runs on a GPU, one shot at a time.
+- **Two relay-BP numbers.** The timed relay-BP row (one decoder for all shots) and the relay-BP
+  inside the offline rows (a fresh decoder every 500 shots) fail different shots: at p = 0.005,
+  845 against 794 pairs. Relay-BP is randomized, so each run draws differently. Every comparison
+  in the report stays inside one of the two (`report/tables/checks.md`).
+- **The ensemble's rule is ours; its members are NVIDIA's, IonQ's and the kit's.** It has no time
+  measured as one decoder: joint decoding took about 24 s a shot on the 0.47% of shots it ran on.
+
+Whose gain is whose (copied from `report/tables/test_ladder_short.md`):
+
+**Whose gain is whose, on the test shots**: failed pairs of 10,000 per noise level, every rung scored on the same per-shot answers (one offline decode: relay-BP and PriorTilt under two seeds on every shot, a fresh decoder per 500 shots; not the timed rows above). `APPENDIX.md` B has each rung's paired test against the rung before it and against relay-BP.
+
+| Rung | Whose work | p = 0.003 | p = 0.004 | p = 0.005 | All three p |
+|---|---|---|---|---|---|
+| relay-BP (kit baseline), a fresh decoder per 500 shots (the ensemble's member) | the kit | 5 | 90 | 794 | 889 |
+| PriorTilt, one run (seed A) | IonQ | 6 | 71 | 595 | 672 |
+| our hierarchy, lowest-weight tie-break (nothing learned by us) | ours | 3 | 57 | 527 | 587 |
+| our hierarchy, lowest weight among the converged candidates (nothing learned by us) | ours | 3 | 53 | 469 | 525 |
+| our hierarchy, neural tie-break | ours | 4 | 50 | 490 | 544 |
+| ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder) | nobody: needs the truth | 3 | 40 | 386 | 429 |
+| TCBP-JOBS (NVIDIA, GPU), for reference | NVIDIA | 3 | 41 | 360 | 404 |
 
 ## 2. The challenge
 
@@ -80,10 +137,11 @@ teammates on a GPU, is NVIDIA's TCBP-JOBS (`tcbp_jobs_baseline.py`, logs in `res
 | 0.005 | 192, 188 | 3.2e-3 | 2.2 times lower |
 
 - **TCBP-JOBS is therefore the real bar at p = 0.004 and 0.005.**
-- Its logged times (4.3 ms, 42.9 ms and 81.7 ms per pair) are not comparable yet: the runs at
-  p = 0.004 and 0.005 shared the GPU with one of our trainings, so they are inflated. They need
-  repeating on an idle GPU before any latency is quoted.
-- Its rows come from its own sampled shots, not from the team's saved test files.
+- Its logged times (4.3 ms, 42.9 ms and 81.7 ms per pair) were not comparable: the runs at
+  p = 0.004 and 0.005 shared the GPU with one of our trainings. **Re-run on the team's test shots
+  on the idle server GPU, one shot at a time:** 3 / 41 / 360 failed pairs at 3.9 / 7.8 / 16.9 ms
+  per pair (section 1a).
+- The table above comes from its own sampled shots, not from the team's saved test files.
 
 ## 4. Who does what
 
@@ -110,7 +168,7 @@ flowchart TD
     Q -- "no: about 0.4%" --> R["relay-BP gives a third candidate"]
     R --> N["Neural network reads all 1,728 bits and picks the most likely candidate"]
     N --> A
-    N -. "planned" .-> J["Joint decoding of both check types for the shots that stay doubtful"]
+    N -. "the ensemble, combined offline" .-> J["Joint decoding of both check types for the shots that stay doubtful"]
     J -.-> A
 ```
 
@@ -172,14 +230,14 @@ beside a GPU training, so compare them with each other only):
 - First number at p = 0.005 (20,000 X shots made on the laptop): PriorTilt alone fails 612
   against relay-BP's 883, 31% fewer, at 201 ms against 937 ms per shot.
 
-**Where this stands against TCBP-JOBS.** At p = 0.004 the hierarchy is at about 5e-4 per cycle
-by estimate from the practice shots: below relay-BP (8.7e-4) and above TCBP-JOBS (3.4e-4). Even
-a perfect tie-breaker over its three candidates would not pass TCBP-JOBS. The next stage is
-therefore an ensemble: stronger members where the fast ones disagree or look doubtful (joint
-decoding, more relay-BP re-rolls, TCBP-JOBS itself), and the network choosing among all of
-them. The evidence that this can work: with 16 relay-BP candidates per shot the right answer is
-among them in 79% of relay-BP's converged-wrong failures, while "lowest weight" picks it in
-only 49% (section 8). A set of decoders whose mistakes differ can beat each of its members.
+**Where this stands against TCBP-JOBS** (written before the test run; section 1a has the
+test numbers). On the practice shots at p = 0.004 the hierarchy was below relay-BP and above
+TCBP-JOBS, and even a perfect tie-breaker over its three candidates would not pass TCBP-JOBS.
+So we built an ensemble: stronger members where the fast ones disagree (joint decoding,
+TCBP-JOBS itself) under a fixed rule. On the test shots at p = 0.004 it fails 16 pairs against
+TCBP-JOBS's 41. The evidence that led there: with 16 relay-BP candidates per shot the right
+answer is among them in 79% of relay-BP's converged-wrong failures, while "lowest weight" picks
+it in only 49% (section 8).
 
 Code: `challenge-1-ml-decoder-kit/hierarchy/` (`candidates.py`, `select.py`, `rules.py`,
 `stages.py`; the evaluator plugin is being written). Its README has the install and the
@@ -298,15 +356,15 @@ Each is kept with its numbers, as the challenge asks where an approach falls sho
 - **Longer training as a tie-breaker:** only 66, 65 and 63 failures at steps 30,000, 40,000 and
   50,000, while the network alone improved from 27% to 16% of shots wrong.
 
-## 10. Result sets planned for the submission
+## 10. Result sets for the submission
 
 | Set | Noise | Compared | State |
 |---|---|---|---|
-| A (required) | the kit's circuits at p = 0.003, 0.004, 0.005 | our hierarchy against BP-OSD and relay-BP on the team's test shots; PriorTilt and TCBP-JOBS as extra rows | decoder being finished; test run not done |
-| B | A plus atom loss at several rates | loss-blind, flag-aware, and ours with the tracker | flag-aware and oracle measured at one rate |
-| C | a neutral-atom-style model from Infleqtion's published figures | each decoder with generic and with matching priors | not started |
-| D | decode at one p with priors for another | every decoder | not started |
-| E | what did not work | section 9 | being collected |
+| A (required) | the kit's circuits at p = 0.003, 0.004, 0.005 | our hierarchy against BP-OSD and relay-BP on the team's test shots; PriorTilt once, the teammates' router, TCBP-JOBS and our ensemble as extra rows | **done**: section 1a and `report/REPORT.md` |
+| B | A plus atom loss | loss-blind, flag-aware, ours with the tracker, and the true loss time (ORACLE) | done at one loss rate (`loss/`, `loss_tracker/`) |
+| C | a neutral-atom-style model from Infleqtion's published figures | each decoder with generic and with matching priors | done on the branch `infleqtion-noise` (not merged; a demo) |
+| D | decode at one p with priors for another | every decoder | not done |
+| E | what did not work | section 9 and the report's own section | done |
 
 ## 11. Rules we hold ourselves to
 
@@ -328,20 +386,23 @@ Branches of this repository:
 | Branch | What it holds | State |
 |---|---|---|
 | `main` | the kit, and the teammates' evaluator, shot files, router and baselines | shared by the team |
-| **`integration`** | **all of our work, and this file** | our one working branch; not reviewed as a whole yet |
-| `server-logs` | training logs and small result files pushed from the GPU server every 5 minutes | data only, never merged |
-| `laptop-artifacts` | the laptop's per-shot decode files, network checkpoints and scores | data only, never merged |
+| **`integration`** | **all of our work, this file and the report** | our one working branch; it reaches `main` through one pull request |
+| `server-logs` | logs and result files pushed from the GPU server: the test run's per-shot files under `files/clean/`, the final Z network under `files/ckpt/` | data only, never merged |
+| `laptop-artifacts` | the laptop's per-shot decode files, network checkpoints (the final X network: `cascade_X_s1/checkpoint_final_step120000.pt`) and scores | data only, never merged |
 
-Five older task branches are being retired. Their work is already merged into `integration`,
-and each is deleted once its last commits are in:
+The five older task branches (`MLDecoder`, `gates`, `loss-gates`, `cascade`, `hierarchy`) are
+merged into `integration` (`MLDecoder` also into `main`, pull request #1). `MLDecoder`, `gates`
+and `loss-gates` stay on the remote because the team's top `README.md` links to them.
 
-| Old branch | Its folder on `integration` | State |
-|---|---|---|
-| `MLDecoder` | `ml_decoder/` (plain CNN first stage), `starter_scripts/` (loss and sizing starters), `fpga_router/` | pull request #1, in its second review |
-| `gates` | `analysis/`: the measurements of section 8 | finishing |
-| `loss-gates` | `loss/`: section 7 | finishing |
-| `cascade` | `neural/`: section 6 | finishing |
-| `hierarchy` | `hierarchy/`: section 5 | in progress |
+Branches kept apart on purpose, each merged nowhere until the team decides:
+
+| Branch | What it holds |
+|---|---|
+| `fpga` | the tie-break network as a simulated FPGA design: with 12-bit weights none of its 99 tie-break choices on 5,000 validation shots changes, but its 10.7 Mb of weights do not fit the team's board; and a check of the teammate's board demo (`fpga_router/CHECK_OF_fpga_board.md`) |
+| `infleqtion-noise` | result set C: decoders under a noise model shaped like Infleqtion's published figures |
+| `predecoder` | a head on the network that gives relay-BP per-shot priors: at p = 0.005 on validation 79 failures against 206 for relay-BP with the kit's priors; it missed its pass mark at p = 0.004 (14 against 20, not significant) |
+| `learned-selector` | a small model choosing among the ensemble's members at p = 0.005: ahead on validation, level with TCBP-JOBS on the test shots (353 against 360, p = 0.41) |
+| `network-first` | the network decides the shots it is confident on, the hierarchy the rest: faster on average at p = 0.004 and above, no change in accuracy |
 
 Folders (inside `challenge-1-ml-decoder-kit/` unless noted):
 
@@ -378,16 +439,14 @@ READMEs are how we keep being able to explain it.
 
 ## 13. What is next
 
-1. Finish the `hierarchy` evaluator plugin; decode the practice shots at p = 0.003 and 0.005.
-2. Train the Z network; keep training X.
-3. One run of the frozen decoder on the team's test shots at the three noise levels, through
-   the team's evaluator, beside the baseline rows.
-4. The ensemble: joint decoding, more relay-BP candidates and TCBP-JOBS as further members,
-   with the network as the selector and as the filter that decides when the slow members run.
-   This is what can pass TCBP-JOBS.
-5. The loss-time tracker, then loss at other rates and in Z memory.
-6. The plots, the reproduce script, the README for the judges and the slides.
-7. Stretch: the realistic-noise set, the mismatch test, the FPGA router, a second code.
+Done for the submission: the evaluator plugin, both networks, the one run on the test shots
+beside every baseline row, the ensemble, the loss-time tracker, the report with its plots, the
+reproduce script and the slides. Left:
+
+1. One pull request from `integration` into `main`, merged with a merge commit.
+2. Joint decoding at p = 0.005, where the ensemble has not used it yet.
+3. A tie-breaker that beats the best hand-written rule: the network is level with it today.
+4. Stretch: the FPGA router on the board, the mismatch test (set D), a second code.
 
 ## 14. Plain-words glossary
 

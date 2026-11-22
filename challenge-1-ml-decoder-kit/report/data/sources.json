@@ -527,6 +527,17 @@
   "path": "predecoder/fastpath/result3_p0.005.json",
   "sha256": "e5c5c5efbabf00e797feabcf915322e4158a2bfb52bfa11ac8641955970c5d1d"
  },
+ "exploration/predecoder_tcbp/fastpath/result_holdout_p0.005.json": {
+  "branch": "tree",
+  "bytes": 1374,
+  "commit": "46dd4ac6d5702c38c9a061da38387ee65df0f5c7",
+  "copied_utc": "2026-11-22 19:03",
+  "file": "exploration/predecoder_tcbp/fastpath/result_holdout_p0.005.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/fastpath/result_holdout_p0.005.json` (last changed in commit `46dd4ac6d570`)",
+  "grows": false,
+  "path": "predecoder/fastpath/result_holdout_p0.005.json",
+  "sha256": "66f08eb68e0bcc13c352956ac9c615059e7a06248c1712e21c997eeba7645507"
+ },
  "exploration/predecoder_tcbp/gpu_network_decode_val1000_fp32_summary.json": {
   "branch": "origin/server-logs",
   "bytes": 2925,

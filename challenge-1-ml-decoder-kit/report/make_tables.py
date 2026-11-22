@@ -2631,7 +2631,7 @@ def predecoder_tcbp_table(measured):
                          f"{held['failures']['F']}; {held['fast_fraction']:.1%} of the shots on the fast path; {ms(today['rule_mean'])} ms mean against "
                          f"{ms(today['TH_alone_mean'])} for the TCBP version alone ({1 - today['rule_mean'] / today['TH_alone_mean']:.0%} lower), 99th "
                          f"percentile {ms(today['rule_p99'])} against {ms(today['TH_alone_p99'])}, with today's component times (the network as a CUDA "
-                         f"graph, {ms(today['network_ms'])} ms; TCBP-JOBS's decode times from per-shot builds on a shared GPU). A rule for p = 0.005 only")
+                         f"graph, {ms(today['network_ms'])} ms; TCBP-JOBS's decode times from per-shot builds on a shared GPU)")
         fact("ptfast_statement",
              "A fast path for easy shots (`predecoder/fastpath/`, branch `tcbp-fastpath`; exploration after the test results, on the 5,000 validation X "
              "shots at p = 0.005; no test file opened): a check sends a shot to TCBP-JOBS with the kit's priors, built once, and the rest to the TCBP "

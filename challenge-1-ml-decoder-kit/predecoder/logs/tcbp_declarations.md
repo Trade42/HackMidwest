@@ -95,3 +95,5 @@ logits (from dq-predecoder) are recorded here, with their sha256, when they arri
   The logits' sha256 is added when dq-predecoder sends them.
 - The knobs: X's TCBP file (`76970106...`: log-odds alpha 0.4, eps 1e-4, cap 0.5), NOT dq-predecoder's relay-BP Z
   knobs (`fit_Z_p0.004.json`, alpha 0.2).
+- test_Z logits (from dq-predecoder at 15:51 UTC): `scratch/predecoder/z/logits_test_p0.005/logits.npy`, sha256
+  `576849a572746ccc29e56d2e2d447b03ba8335dfbca6851a6bb49a59e5052deb` (Z head `083147d2...`, CPU, 16 threads, commit `87b484a6`).

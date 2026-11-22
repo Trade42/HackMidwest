@@ -487,6 +487,25 @@ threshold does not fix it (at 50% coverage, chosen on train: validation 15 again
 The time gain is real on X, where the network can answer three quarters of the shots, and
 nil on Z with the young Z network.
 
+**Held out on 80,000 fresh shots, with the final X network** (step 120,000, sha256
+`d8d1c70f...`): the ablation set of part 1 (16 files of 5,000 X shots at p = 0.004 from the
+kit's `make_dataset.py`, seeds 9401 to 9416, never used for any fit), decoded in session mode
+as the plugin decodes; the network's logits on this PC's CPU. The frozen rule for X is
+"network", as the procedure chose with this checkpoint (60 against 67). Offline: on the
+shots the network leaves to the hierarchy, the frozen run's PriorTilt draws are used.
+
+| threshold | the network answers | failures of 80,000, network first against the frozen rule | paired: network first only / frozen only, p | mean time per shot (this PC's stage times) |
+|---|---|---|---|---|
+| c fitted on train_X alone: 2.546 | 80.4% | 242 against 237 | 32 / 27, p = 0.60 | 243 ms against 352 ms |
+| c from the procedure on train + validation: 2.809 | 76.6% | 229 against 237 | 17 / 25, p = 0.28 | 255 ms against 352 ms |
+
+So on ten times the shots the stage is level in accuracy within noise, and it takes about
+70% of the frozen rule's mean time here. The median shot is slower (49 ms, the network's call
+on 2 CPU threads, against 40 ms), and the slowest shots are faster. The commands:
+`scratch/hierarchy/ablation/network_first.py` (an analysis script, not part of the
+repository), with the train_X candidates, the network's train_X logits, the rule and the
+folder of the 80,000 shots' logits.
+
 **Checked with the real evaluator, on this PC** (the first 200 shots of each p = 0.004
 validation file; X step 90,000 on one CPU thread; rules X "network", Z "converged"; lane A,
 other jobs beside it):

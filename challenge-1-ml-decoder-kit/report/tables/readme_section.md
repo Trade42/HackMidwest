@@ -7,7 +7,7 @@ fails 57.7%, and an ORACLE told when each atom was lost fails 1.64 times fewer s
 
 | Decoder | p = 0.003 | p = 0.004 | p = 0.005 |
 |---|---|---|---|
-| BP-OSD (kit baseline) | not measured | 4.02e-03 ± 1.8e-04, 302 ms | not measured |
+| BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05, 129 ms | 4.02e-03 ± 1.8e-04, 302 ms | not measured |
 | relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05, 88.0 ms | 6.94e-04 ± 7.6e-05, 319 ms | not measured |
 | relay-BP with a learned router | 5.00e-05 ± 2.0e-05, 42.5 ms | 7.28e-04 ± 7.8e-05, 315 ms | not measured |
 | PriorTilt, one run | not measured | not measured | not measured |

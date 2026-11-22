@@ -254,24 +254,24 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_X_wrong3` | 0.6% | `tables/networks.md` |
 | `net_X_wrong4` | 4.5% | `tables/networks.md` |
 | `net_X_wrong5` | 20.1% | `tables/networks.md` |
-| `net_Z_step` | 64,000 | `tables/networks.md` |
+| `net_Z_step` | 66,000 | `tables/networks.md` |
 | `net_Z_wrong3` | 0.8% | `tables/networks.md` |
 | `net_Z_wrong4` | 5.1% | `tables/networks.md` |
-| `net_Z_wrong5` | 21.9% | `tables/networks.md` |
+| `net_Z_wrong5` | 21.0% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
-| `t3_bposd_both` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_error` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_mean_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_median_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_only_relay` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_only_this` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_p99_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_pairs` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
+| `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |
+| `t3_bposd_mean_ms` | 129 (not clean) | `tables/test_p0.003.md` |
+| `t3_bposd_median_ms` | 18.2 | `tables/test_p0.003.md` |
+| `t3_bposd_only_relay` | 0 | `tables/test_p0.003.md` |
+| `t3_bposd_only_this` | 55 | `tables/test_p0.003.md` |
+| `t3_bposd_p99_ms` | 792 | `tables/test_p0.003.md` |
+| `t3_bposd_paired_p` | 6e-17 | `tables/test_p0.003.md` |
+| `t3_bposd_pairs` | 60 | `tables/test_p0.003.md` |
+| `t3_bposd_rate` | 5.01e-04 | `tables/test_p0.003.md` |
 | `t3_bposd_time_ratio` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_bposd_xz` | not measured | `tables/test_p0.003.md` |
+| `t3_bposd_wall_hours` | 0.4 | `tables/test_p0.003.md` |
+| `t3_bposd_xz` | 26, 34 | `tables/test_p0.003.md` |
 | `t3_ensemble_both` | not measured | `tables/test_p0.003.md` |
 | `t3_ensemble_error` | not measured | `tables/test_p0.003.md` |
 | `t3_ensemble_mean_ms` | not measured | `tables/test_p0.003.md` |

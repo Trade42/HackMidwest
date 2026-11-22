@@ -2,7 +2,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 
 | p | Decoder | Failed pairs | Mean time per pair, ms | Mean time ÷ relay-BP's | Median, ms | 99th percentile, ms | Runs on |
 |---|---|---|---|---|---|---|---|
-| 0.003 | BP-OSD (kit baseline) | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.003 | BP-OSD (kit baseline) | 60 of 10,000 | 129 (not clean) | time not clean | 18.2 | 792 | CPU, 1 core |
 | 0.003 | relay-BP (kit baseline) | 5 of 10,000 | 88.0 (not clean) | time not clean | 54.0 | 579 | CPU, 1 core |
 | 0.003 | relay-BP with a learned router | 6 of 10,000 | 42.5 (not clean) | time not clean | 9.5 | 627 | CPU, 1 core |
 | 0.003 | PriorTilt, one run | not measured | not measured | not measured | not measured | not measured | not measured |

@@ -3,7 +3,7 @@ The two networks, from their training logs (`report/data/networks/*.train.log`).
 | Network | Trained on | Size | Started from | Training step (last in the copied log) | Shots seen | Shots per second (median of the log) | GPU hours so far (shots seen ÷ that speed) | Shots wrong at p = 0.003 / 0.004 / 0.005 |
 |---|---|---|---|---|---|---|---|---|
 | X memory (`cascade_X_s1`) | a laptop GPU (RTX 4060, 8 GB) | width 128, depth 8, 893,697 parameters | random weights | 100,000 of 120,000 | 12,800,000 | 723 | 4.9 | 0.6% / 4.5% / 20.1% |
-| Z memory (`cascade_Z_s1`) | the ICRN server (A100 slice, 20 GB) | width 128, depth 8, 893,697 parameters | the X network's weights, mirrored | 64,000 of 100,000 | 8,192,000 | 876 | 2.6 | 0.8% / 5.1% / 21.9% |
+| Z memory (`cascade_Z_s1`) | the ICRN server (A100 slice, 20 GB) | width 128, depth 8, 893,697 parameters | the X network's weights, mirrored | 66,000 of 100,000 | 8,448,000 | 876 | 2.7 | 0.8% / 5.1% / 21.0% |
 
 The X network alone, on the team's Stim shot files (exploration shots; `report/data/exploration/cascade_X_s1/SCORES.md`), share of shots wrong:
 

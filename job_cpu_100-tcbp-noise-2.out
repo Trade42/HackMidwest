@@ -1,1 +1,36 @@
 Sun Nov 22 16:33:28 UTC 2026
+plan.json: OK
+biased/biased_X_kitformat_p0.005991.npz: OK
+biased/priors_generic.npy: OK
+biased/priors_matched.npy: OK
+biased/transfer.json: OK
+si1000/priors_generic.npy: OK
+si1000/priors_matched.npy: OK
+si1000/si1000_X_kitformat_p0.004.npz: OK
+si1000/transfer.json: OK
+wrong-p/priors_generic.npy: OK
+wrong-p/priors_matched.npy: OK
+wrong-p/transfer.json: OK
+wrong-p/wrong-p_X_kitformat_p0.004.npz: OK
+head_X.pt: OK
+trunk_X.pt: OK
+plan.json: OK
+wrong-p/wrong-p_X_kitformat_p0.004.npz: OK
+wrong-p/priors_generic.npy: OK
+wrong-p/priors_matched.npy: OK
+wrong-p/transfer.json: OK
+si1000/si1000_X_kitformat_p0.004.npz: OK
+si1000/priors_generic.npy: OK
+si1000/priors_matched.npy: OK
+si1000/transfer.json: OK
+biased/biased_X_kitformat_p0.005991.npz: OK
+biased/priors_generic.npy: OK
+biased/priors_matched.npy: OK
+biased/transfer.json: OK
+predecoder/logs/fit_tcbp_X_p0.005.json: OK
+PYT=/home/blakew3/.conda/envs/cascade/bin/python
+Sun Nov 22 16:34:31 UTC 2026
+name, memory.used [MiB], utilization.gpu [%]
+NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
+evaluate wrong-p exit 0
+evaluate si1000 exit 0

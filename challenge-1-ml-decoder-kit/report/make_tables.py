@@ -230,7 +230,7 @@ def where_text(row):
         text += (f"; while it ran: {during['cpus_mean']:.1f} CPUs busy on average (at most {during['cpus_max']:.1f}), up to {during['evaluators_max']} "
                  f"evaluator rows at once" + (f", other work of ours at most: {others}" if others else "")
                  + f", the CPU quota throttled the notebook for {during['throttled_s']:,.0f} s summed over its CPUs"
-                 + (f" during the row's {during['wall_s']:,.0f} s, about {row['throttle_share']:.1%} of one process's time"
+                 + (f" during the row's {during['wall_s']:,.0f} s, at most {row['throttle_share']:.1%} of one process's time"
                     if during.get("wall_s") and row.get("throttle_share") is not None else ""))
         if not row.get("time_clean", True):
             text += f"; **time not clean** (throttled more than {THROTTLE_LIMIT:.0%} of its wall time): the counts stand, the time does not"
@@ -1349,26 +1349,20 @@ def checks_text(measured, extra, cross_checks):
 
 
 def tcbp_statement(measured):
-    """Where TCBP-JOBS stands against our decoder, said the same way wherever the comparison appears."""
+    """Where TCBP-JOBS stands against our decoder, said the same way wherever the comparison appears; every clause names both."""
     value = lambda name: FACTS[name][0]
     both = [p for p in P_VALUES if measured[p]["tcbp"] and measured[p]["hierarchy"]]
-    ahead = [p for p in both if measured[p]["tcbp"]["failures_pair"] < measured[p]["hierarchy"]["failures_pair"]]
-    behind = [p for p in both if measured[p]["tcbp"]["failures_pair"] > measured[p]["hierarchy"]["failures_pair"]]
-    counts = lambda levels: ", ".join(f"{measured[p]['tcbp']['failures_pair']} against {measured[p]['hierarchy']['failures_pair']} at p = {p}" for p in levels)
     if both:
-        parts = []
-        if ahead:
-            parts.append(f"TCBP-JOBS, NVIDIA's GPU decoder, fails fewer pairs than our decoder on the test shots ({counts(ahead)})")
-        if behind:
-            parts.append(("and more" if ahead else "TCBP-JOBS, NVIDIA's GPU decoder, fails more pairs than our decoder on the test shots") + f" ({counts(behind)})")
-        same = [p for p in both if p not in ahead and p not in behind]
-        if same:
-            parts.append(f"the two fail equally many pairs at p = {', '.join(same)}")
-        text = ("; ".join(parts) if not (ahead and behind) else " ".join(parts)) + "."
-        text = text[0].upper() + text[1:]
+        clauses = []
+        for p in both:
+            tcbp, ours = measured[p]["tcbp"]["failures_pair"], measured[p]["hierarchy"]["failures_pair"]
+            verb = "fewer" if tcbp < ours else "more" if tcbp > ours else "as many"
+            clauses.append(f"at p = {p} TCBP-JOBS fails {verb} pairs than our decoder ({tcbp} against {ours})" if verb != "as many"
+                           else f"at p = {p} TCBP-JOBS and our decoder fail as many pairs ({tcbp} against {ours})")
+        text = "Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: " + "; ".join(clauses) + "."
     elif FACTS.get("expl_pairs_T", (NOT_MEASURED,))[0] != NOT_MEASURED:
-        text = (f"TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than "
-                f"our hierarchy ({value('expl_pairs_T')} against {value('expl_pairs_C')} of {value('expl_pairs')}).")
+        text = (f"TCBP-JOBS, NVIDIA's GPU decoder, is not measured against our decoder on the test shots yet; on the exploration shots at p = 0.004 "
+                f"TCBP-JOBS fails fewer pairs than our hierarchy ({value('expl_pairs_T')} against {value('expl_pairs_C')} of {value('expl_pairs')}).")
     else:
         text = "TCBP-JOBS, NVIDIA's GPU decoder, is not measured against our decoder on the same shots."
     fact("tcbp_statement", text, "tables/test_all.md, tables/exploration_p0.004.md")

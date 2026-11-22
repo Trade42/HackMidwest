@@ -298,7 +298,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
-| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair; with its two fast decodes side by side on two cores, 28.9 ms per pair. The two fail equally many pairs at p = 0.003. | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
+| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair; with its two fast decodes side by side on two cores, 28.9 ms per pair. Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3). | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
 | `framing` | not measured | `tables/test_ablation.md` |
 | `framing_slide` | pending: the ablation on the test shots has not landed. | `tables/test_ablation.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
@@ -736,7 +736,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `tcbp_own4_xz` | 18, 23 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_rate` | 3.20e-03 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_xz` | 192, 188 | `tables/tcbp_own_shots.md` |
-| `tcbp_statement` | The two fail equally many pairs at p = 0.003. | `tables/test_all.md, tables/exploration_p0.004.md` |
+| `tcbp_statement` | Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3). | `tables/test_all.md, tables/exploration_p0.004.md` |
 | `test_frozen_commit` | fd3aed3c0d1f | `data/test/test_run.out` |
 | `trk_atoms` | 39,909 | `data/loss/tracker/accuracy_test.json` |
 | `trk_exact` | 196 of 4,000 | `data/loss/tracker/test.json` |

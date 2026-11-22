@@ -586,6 +586,48 @@ def report_command(args):
             json.dump(result, file, indent=1)
 
 
+# ---------- probe-rates (job 3 b; the TCBP env, no model fit) ----------
+
+def probe_rates_command(args):
+    """Every public name of cudaq_qec, nv_qldpc, a built Decoder and its result; the docs of those that sound like
+    changing error rates; and whether the plugin exports a C symbol for it. A bp60 decoder is built (no model): the
+    Decoder class is the same for every preset."""
+    import ctypes
+    import re
+
+    import cudaq_qec as qec
+    from cudaq_qec.plugins import nv_qldpc
+
+    data = tcbp.load(args.data, False)
+    problem = tcbp.problem_of(data)
+    dense = np.ascontiguousarray(problem.H.toarray(), dtype=np.uint8)
+    decoder = qec.get_decoder("nv-qldpc-decoder", tcbp.h_matrix(dense, "csr"), error_rate_vec=np.asarray(problem.priors, float),
+                              **nv_qldpc.preset("bp60"))
+    result = decoder.decode(np.ascontiguousarray(data.basis_input[0], dtype=np.uint8))
+    words = re.compile(r"rate|prior|weight|llr|update|set|reset|config|reinit|rebuild", re.I)
+    report = {}
+    for label, thing in (("cudaq_qec", qec), ("nv_qldpc", nv_qldpc), ("Decoder", decoder), ("DecoderResult", result)):
+        names = sorted(name for name in dir(thing) if not name.startswith("__"))
+        report[label] = {"names": names, "docs": {name: (getattr(getattr(thing, name), "__doc__", "") or "")[:1500]
+                                                  for name in names if words.search(name)}}
+        print(f"{label}: {names}", flush=True)
+        for name, doc in report[label]["docs"].items():
+            print(f"  {label}.{name}: {doc[:600]!r}", flush=True)
+    library = ctypes.CDLL(nv_qldpc.plugin_path())
+    symbols = {}
+    for name in ("set_priors", "nvqldpc_set_priors", "nvqldpc_update_priors", "nvqldpc_set_error_rates",
+                 "nvqldpc_update_error_rates", "update_error_rates", "set_error_rates"):
+        symbols[name] = hasattr(library, name)
+    raw = Path(nv_qldpc.plugin_path()).read_bytes()
+    report["plugin"] = {"path": nv_qldpc.plugin_path(), "exported": symbols,
+                        "strings": {text: text.encode() in raw for text in ("set_priors", "the JOBS column costs are fixed at construction")}}
+    candidates = [name for name in report["Decoder"]["names"] if re.search(r"rate|prior|weight|llr", name, re.I)]
+    report["decoder_candidates"] = candidates
+    print(f"plugin: {report['plugin']}\ncandidate methods on a built Decoder: {candidates or 'none'}", flush=True)
+    with open(args.out, "w") as file:
+        json.dump(report, file, indent=1)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -611,8 +653,11 @@ def main(argv=None):
     sub.add_argument("--reference", help="per_shot.npz of tcbp.py decode on the same shot file (another run)")
     sub.add_argument("--reference-arm", default="head")
     sub.add_argument("--out")
+    sub = commands.add_parser("probe-rates")
+    sub.add_argument("--data", required=True)
+    sub.add_argument("--out", required=True)
     args = parser.parse_args(argv)
-    {"run": run, "report": report_command}[args.command](args)
+    {"run": run, "report": report_command, "probe-rates": probe_rates_command}[args.command](args)
 
 
 if __name__ == "__main__":

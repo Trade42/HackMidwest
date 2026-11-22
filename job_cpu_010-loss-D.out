@@ -8,3 +8,7 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 
   100/500 shots, 40s, failures so far starter-nofinal=6 starter-nohook=3 starter-ratebase=3
   150/500 shots, 59s, failures so far starter-nofinal=8 starter-nohook=4 starter-ratebase=4
   200/500 shots, 75s, failures so far starter-nofinal=13 starter-nohook=5 starter-ratebase=8
+  250/500 shots, 88s, failures so far starter-nofinal=15 starter-nohook=5 starter-ratebase=9
+  300/500 shots, 102s, failures so far starter-nofinal=17 starter-nohook=9 starter-ratebase=13
+  350/500 shots, 125s, failures so far starter-nofinal=23 starter-nohook=10 starter-ratebase=16
+  400/500 shots, 147s, failures so far starter-nofinal=25 starter-nohook=13 starter-ratebase=20

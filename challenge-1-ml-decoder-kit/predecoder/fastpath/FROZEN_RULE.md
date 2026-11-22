@@ -17,6 +17,11 @@ for shot). The mean is 38.8 ms against 51.1 ms for TH alone, and the p99 is the 
 network). It is being checked once on fresh shots (seed 2026112251, `CRITERION_4.md`); see the README for the
 result.
 
+**For p = 0.005 only.** Applied unchanged at p = 0.004 (`README.md`, "p = 0.004 validation"), 69.1 bits sends 87.5% of
+the shots to F and adds 2 failures. A deployment needs a threshold per p, or one scaled with p. At p = 0.004 the
+criterion chose C2 (syndrome weight <= 127, 64% fast, 24.2 ms mean). That choice rests on 12 F-only shots and is not
+frozen.
+
 ## How it was chosen (three looks at the same validation shots)
 
 | round | criterion (commit) | chosen | mean ms | p99 ms | note |

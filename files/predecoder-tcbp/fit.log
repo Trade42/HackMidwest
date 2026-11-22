@@ -1,3 +1,8 @@
 /home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
   import cudaq
 fit of the knobs for tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)) on train_X_T_failed.npz (weight 1), train_X_T_right.npz (weight 9.805), p=0.005; 12 rows; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
+  model fitted in 55.1 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+    train_X_T_failed alpha 0: 200 of 390 shots, build 41.1 ms, decode 18.8 ms mean (last 200: 41.1 + 18.8 ms), 13 s
+  train_X_T_failed.npz: 390 shots, {'mode': 'linear', 'alpha': 0.0, 'eps': 1e-06}, failures 341, 81 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+    train_X_T_right alpha 0: 200 of 2000 shots, build 40.9 ms, decode 8.5 ms mean (last 200: 40.9 + 8.5 ms), 11 s
+    train_X_T_right alpha 0: 400 of 2000 shots, build 41.5 ms, decode 9.2 ms mean (last 200: 42.0 + 9.8 ms), 23 s

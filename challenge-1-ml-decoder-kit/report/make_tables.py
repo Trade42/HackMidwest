@@ -1966,7 +1966,10 @@ def predecoder_table(measured):
         f"On the {basis} test shots at p = {p}, relay-BP with the head's priors fails {FACTS[f'pre{p[-1]}{basis}_H'][0]} "
         + (f"against {FACTS[f'pre{p[-1]}{basis}_fresh'][0]} with the kit's priors (only the head's "
            f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_fresh_only_other'][0]}, exact p = "
-           f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_p'][0]})" if FACTS[f"pre{p[-1]}{basis}_fresh"][0] != NOT_MEASURED
+           f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_p'][0]}"
+           + (": not significant, so the declared line, a paired exact p below 0.05, is not passed at this p)"
+              if float(FACTS[f"pre{p[-1]}{basis}_vs_fresh_p"][0]) >= 0.05 else ": a significant gain)")
+           if FACTS[f"pre{p[-1]}{basis}_fresh"][0] != NOT_MEASURED
            else "(the kit's priors, the declared comparison, not measured yet)")
         + f", and TCBP-JOBS fails {FACTS[f'pre{p[-1]}{basis}_T'][0]} (only the head's "
         f"{FACTS[f'pre{p[-1]}{basis}_vs_T_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_T_only_other'][0]}, exact p = {FACTS[f'pre{p[-1]}{basis}_vs_T_p'][0]})."

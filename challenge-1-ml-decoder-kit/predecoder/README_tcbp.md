@@ -10,7 +10,23 @@ two knobs (log-odds alpha, eps). Until now the mixed priors went to relay-BP. Th
 NVIDIA's GPU decoder (cudaq-qec 0.9.0, `nv-qldpc-decoder`, preset `tcbp-jobs`), which on its own was already the
 team's best single decoder. The head was not retrained. The knobs were refitted for TCBP-JOBS on train shots only.
 
-RESULTS: (filled in below as they arrive)
+**The result in short** (X memory; every number is from Stim circuit shots):
+
+- **Validation** (`data/p0.005/validation_X.npz`, 5,000 shots), the kill line fixed in advance: TCBP-JOBS with the head's
+  priors (TH) fails **33**, against **91** for TCBP-JOBS alone. Paired, only TH fails 8 and only TCBP-JOBS 66:
+  p = 1.8e-12, **PASSED**. Against the same run's TCBP-JOBS with the kit's priors (100): 8 against 75.
+- **Test** (registered; designed after the test results were seen; a separate branch):
+  - p = 0.005: TH **72** of 10,000, against **186** for TCBP-JOBS alone (22 against 136, p = 2.9e-21), 151 for
+    relay-BP with the head's priors, and 107 for the fallback rule;
+  - p = 0.004: TH **4** against 20 (p = 0.0004);
+  - p = 0.003: 0 against 1, no claim.
+- **Latency on the A100, one shot at a time, one process:** network and head 9.4 ms (float32), building TCBP-JOBS with
+  the shot's priors 42.6 ms, decoding 3.8 ms; about 56 ms mean in all. Building is the cost: cudaq-qec 0.9.0 cannot
+  change a built decoder's priors. Running the network on the GPU changed no outcome on 1,000 validation shots.
+
+**Erratum.** `logs/tcbp_test_registered_spec.md` says "Written 2026-11-22 15:52 UTC" and cites dq-orch-6's decision as
+"15:49 UTC". Both true times are 15:42 UTC. The spec's commit, `dad4fd50`, is dated 15:42:59 UTC, before any test number
+of this branch. Only the typed times were wrong; the spec itself is unchanged.
 
 | file | what it does |
 |------|--------------|
@@ -198,7 +214,58 @@ cpu/070 at `8c25c16d`. Logs: `logs/tcbp_job4_gpu_*`.
   mean. These are separate timers. The p99 of the sum was not measured as one timer; the parts are 19.8 and 65 ms.
   Most of it is building the decoder, which cudaq-qec 0.9.0 cannot avoid (job 1).
 
-(test rows filled in as they arrive)
+### The registered test runs (designed after the test results were seen; a separate branch)
+
+The spec, `logs/tcbp_test_registered_spec.md`, was committed at `dad4fd50` (15:42:59 UTC) before any of these numbers
+existed; see the erratum at the top about its typed time. Each run is one decode with `--final`, from its checkout,
+with every input checked by sha256:
+- the test file;
+- the knobs `76970106...`;
+- the logits, which are dq-predecoder's registered CPU float32 bytes, sent in parts and reassembled; every decoded
+  row's hash equals luminaty's file on 10,000 of 10,000 shots, at every p.
+The runs were server jobs gpu/080 (p = 0.005) and cpu/080 (p = 0.004, then 0.003), on the A100, side by side, 1
+process each. Scored here with `tcbp score --final`; logs `logs/tcbp_test_X_p0.00*_{decode.log,score.log,score.json}`.
+
+**X memory, p = 0.005** (`data/p0.005/test_X.npz`, 10,000 shots, seed 301):
+
+| decoder, the same 10,000 shots | failures | share, 95% interval | build + decode per shot, A100, mean (p99) |
+|---|---|---|---|
+| **TH: TCBP-JOBS with the head's priors** | **72** | **0.0072 [0.0057, 0.0091]** | 42.6 + 3.8 ms (69 ms) |
+| TCBP-JOBS with the kit's priors, per shot, this run's model ("fresh") | 186 | 0.0186 [0.0161, 0.0214] | 43.0 + 11.2 ms (99 ms) |
+| the same, built once, `decode_batch` | 186 | 0.0186 | |
+| TCBP-JOBS alone, the stored file | 186 | 0.0186 [0.0161, 0.0214] | |
+| H: relay-BP with the head's priors (dq-predecoder's registered run) | 151 | 0.0151 [0.0129, 0.0177] | |
+| the frozen fallback rule: H where H converged, else T | 107 | 0.0107 [0.0089, 0.0129] | |
+| (b2): H where H converged, else TH (not a candidate) | 90 | 0.0090 [0.0073, 0.0110] | |
+
+| pair (same shots) | both fail | only TH | only the other | exact two-sided p |
+|---|---|---|---|---|
+| **TH against TCBP-JOBS alone, stored (the declared pair)** | 50 | 22 | 136 | **2.9e-21** |
+| TH against this run's fresh arm | 50 | 22 | 136 | 2.9e-21 |
+| TH against H | 65 | 7 | 86 | 2.1e-18 |
+| TH against the frozen fallback rule | 57 | 15 | 50 | 1.6e-5 |
+| TH against (b2) | 65 | 7 | 25 | 0.0021 |
+
+- TH fails 2.6 times less than TCBP-JOBS alone, as on validation (33 against 91 and 100), and less than every other
+  decoder the team had on these shots.
+- On the test shots this run's kit-priors arm, the batch check and the stored file agree on every shot (186, the
+  same shots). On validation, three model fits gave 91, 96 and 100. So the like-for-like pair and the declared pair
+  coincide here.
+- The cap at 0.5 changed 3,779 columns on 3,040 of the 10,000 shots.
+
+**X memory, p = 0.004 and p = 0.003, head arm only** (the p = 0.005 knobs, unchanged; no validation at these p):
+
+| p | shots | TH failures | TCBP-JOBS alone, stored | both, only TH, only T | exact p | build + decode, mean (p99) |
+|---|---|---|---|---|---|---|
+| 0.004 | `test_X.npz`, 10,000, sha256 `53a7cee3...` | **4**, 0.0004 [0.0002, 0.0010] | 20, 0.0020 [0.0013, 0.0031] | 2, 2, 18 | **0.0004** | 43.1 + 1.9 ms (55 ms) |
+| 0.003 | `test_X.npz`, 10,000, sha256 `f7bc1813...` | 0, 0 [0, 0.0004] | 1, 0.0001 [0, 0.0006] | 0, 0, 1 | 1 (no claim) | 42.6 + 2.7 ms (60 ms) |
+
+The gain holds at p = 0.004: 5 times fewer failures. At p = 0.003 both are near zero, so no claim can be made there.
+
+**Z memory and the pair score:** job ctl/140 (Z at p = 0.005, with X's knobs and the gate inside the job). Results
+below when they land.
+
+(Z rows filled in as they arrive)
 
 ## What was not done, and what is not tested
 

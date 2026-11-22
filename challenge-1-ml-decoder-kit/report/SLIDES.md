@@ -28,15 +28,16 @@ Words used, each with its meaning:
 - If they differ, relay-BP joins as a third opinion and a tie-break picks one of the answers: a hand-written rule, or
   a neural network that reads the whole syndrome.
 
-## Slide 2. The failures hide in the <!--f:expl_disagree_share-->0.4%<!--/f--> of shots where the two decodes disagree
+## Slide 2. The failures hide in the <!--f:tsplit_share-->0.45%<!--/f--> of shots where the two fast decodes disagree
 
-**Show:** `figures/where_failures.png`.
+**Show:** `figures/where_failures.png` (the test shots at p = 0.004, our decoder as it ran).
 
-- On <!--f:expl_shots-->50,000<!--/f--> practice shots the two runs disagree on only <!--f:expl_disagree-->214<!--/f--> shots.
-- Those <!--f:expl_disagree-->214<!--/f--> shots hold <!--f:expl_one_run_wrong_disagree-->145<!--/f--> of the <!--f:expl_one_run_wrong-->208<!--/f--> failures of a single run. So "do they agree?" is a cheap alarm for a hard shot.
-- <!--f:expl_left_agree-->63<!--/f--> failures are shots where both runs agree on a wrong answer. No tie-break can fix those: that is our floor.
+- On the <!--f:tsplit_shots-->20,000<!--/f--> test shots at p = 0.004 (X and Z memory), the two PriorTilt runs disagree on only <!--f:tsplit_disagree-->90<!--/f-->.
+- Those few shots hold <!--f:tsplit_fail_disagree-->27<!--/f--> of our <!--f:tsplit_fail-->44<!--/f--> failed shots. So "do they agree?" is a cheap alarm for a hard shot, and
+  only those shots pay for relay-BP and the tie-break.
+- The other <!--f:tsplit_fail_agree-->17<!--/f--> failures are shots where both runs agree on a wrong answer. No tie-break can fix those: that is our floor.
 
-Source: `report/tables/exploration_p0.004.md` and `report/tables/where_failures.md`.
+Source: `report/tables/where_failures.md`. The design was chosen on practice shots before, where the same pattern held.
 
 ## Slide 3. <!--f:slide3_title-->The network is a poor decoder alone, and as a tie-break it is no better than the best hand-written rule<!--/f-->
 
@@ -60,7 +61,7 @@ Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
 <!-- END table:test_sweep -->
 
 - <!--f:slide4_relay-->Failed pairs of 10,000, ours against relay-BP on the same pairs: p = 0.003: 3 against 5 (exact p = 0.50); p = 0.004: 44 against 83 (exact p = 3e-06); p = 0.005: 479 against 845 (exact p = 4e-59).<!--/f-->
-- <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference).<!--/f-->
+- <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, exact p = 1e-11).<!--/f-->
 - At p = 0.003 every good decoder fails only a handful of pairs in 10,000, so nothing separates there.
 
 ## Slide 5. <!--f:slide5_title-->Our decoder takes 0.52 to 0.68 of relay-BP's mean time per pair on one core and 0.33 to 0.47 with its two fast decodes on two cores<!--/f-->
@@ -68,7 +69,7 @@ Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
 **Show:** `figures/time_vs_p.png`, then `figures/ler_vs_time.png`.
 
 - Every time is per pair (an X shot and a Z shot), with every stage counted, one process per row on the same server.
-- <!--f:slide5_lines-->p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 88.0 and 579; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514.<!--/f-->
+- <!--f:slide5_lines-->p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 88.0 and 579; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514; p = 0.005: ours 825 ms mean and 9,885 ms at the 99th percentile, relay-BP 1,471 and 8,270.<!--/f-->
 - TCBP-JOBS runs on a GPU and its timer covers the decode call alone: its time is shown, not compared as a ratio.
 
 ## Slide 6. With atom loss, the flags matter most, and knowing when an atom was lost is worth more still
@@ -116,8 +117,8 @@ the hierarchy with its best classical tie-break <!--f:expl_pairs_C-->140<!--/f--
 `report/tables/exploration_p0.004.md`.
 
 **What is on the test shots and what is not?**
-On the test shots: the rows of the comparison table and the three plots made from it, decoded once with everything
-frozen. Not on the test shots: every number used to design the decoder (the practice shots), the loss study (its own
+On the test shots: the rows of the comparison table and the three plots made from it, decoded with everything frozen
+beforehand. Not on the test shots: every number used to design the decoder (the practice shots), the loss study (its own
 simulated shots), the learning curves (shots drawn for training reports), and the measurements of slide 7. Each
 table says which it is.
 
@@ -145,13 +146,14 @@ our hierarchy runs on one CPU core.
 A time ratio means nothing without the accuracy beside it: stopping relay-BP at its first answer is several times
 faster and fails more (`report/tables/background.md`). Our mean time divided by relay-BP's, on the same server and
 the same test pairs: <!--f:t3_hierarchy_time_ratio-->0.52<!--/f--> at p = 0.003, <!--f:t4_hierarchy_time_ratio-->0.68<!--/f--> at p = 0.004,
-<!--f:t5_hierarchy_time_ratio-->not measured<!--/f--> at p = 0.005, with <!--f:t3_hierarchy_pairs-->3<!--/f-->, <!--f:t4_hierarchy_pairs-->44<!--/f--> and <!--f:t5_hierarchy_pairs-->not measured<!--/f--> failed pairs
+<!--f:t5_hierarchy_time_ratio-->0.56<!--/f--> at p = 0.005, with <!--f:t3_hierarchy_pairs-->3<!--/f-->, <!--f:t4_hierarchy_pairs-->44<!--/f--> and <!--f:t5_hierarchy_pairs-->479<!--/f--> failed pairs
 against relay-BP's <!--f:t3_relay_bp_pairs-->5<!--/f-->, <!--f:t4_relay_bp_pairs-->83<!--/f--> and <!--f:t5_relay_bp_pairs-->845<!--/f-->. The table `report/tables/test_time.md`
 puts every ratio beside its failures.
 
 **Did anything tune on the test shots?**
 No. Rules, seeds and checkpoints were chosen on the train and validation files; our tools refuse files named `test_`
-unless told that the run is final; the test files were decoded once.
+unless told that the run is final. Every setting was frozen before the test files were opened; the frozen decoder and
+its ablation arms (the hand-written tie-breaks) then decoded them, and nothing was chosen from those runs.
 
 **What does machine learning add, exactly?**
 Four things are learned: PriorTilt's 14 parameters (by its authors, IonQ), our neural tie-break, our loss-time tracker

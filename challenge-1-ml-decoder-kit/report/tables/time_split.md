@@ -4,3 +4,4 @@ Where our decoder's time goes on the test shots, per pair (an X shot and a Z sho
 |---|---|---|---|---|---|---|
 | 0.003 | our hierarchy, neural tie-break | 2 of 20,000 | 45.0 | 0.5 | 0.0 | 45.7 |
 | 0.004 | our hierarchy, neural tie-break | 90 of 20,000 | 178 | 37.6 | 0.2 | 216 |
+| 0.005 | our hierarchy, neural tie-break | 609 of 20,000 | 540 | 282 | 1.7 | 825 |

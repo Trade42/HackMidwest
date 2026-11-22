@@ -61,16 +61,16 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c3_ensemble_vs_tcbp_only_first` | 0 | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_tcbp_only_second` | 1 | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_tcbp_p` | 1.00 | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_both` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_both` | 3 | `tables/test_comparisons.md` |
 | `c3_hierarchy_converged_vs_priortilt_only_first` | 1 | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_only_second` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_only_second` | 1 | `tables/test_comparisons.md` |
 | `c3_hierarchy_converged_vs_priortilt_p` | 1.00 | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_relay_bp_both` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_relay_bp_both` | 3 | `tables/test_comparisons.md` |
 | `c3_hierarchy_converged_vs_relay_bp_only_first` | 1 | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_relay_bp_only_second` | 3 | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_relay_bp_p` | 0.62 | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_converged_both` | 2 | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_converged_only_first` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_relay_bp_only_second` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_relay_bp_p` | 1.00 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_converged_both` | 3 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_converged_only_first` | 0 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_hierarchy_converged_only_second` | 1 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_hierarchy_converged_p` | 1.00 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_hierarchy_weight_both` | 2 | `tables/test_comparisons.md` |
@@ -165,10 +165,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c4_tcbp_vs_relay_bp_only_first` | 14 | `tables/test_comparisons.md` |
 | `c4_tcbp_vs_relay_bp_only_second` | 56 | `tables/test_comparisons.md` |
 | `c4_tcbp_vs_relay_bp_p` | 4e-07 | `tables/test_comparisons.md` |
-| `c5_ensemble_vs_hierarchy_both` | not measured | `tables/test_comparisons.md` |
-| `c5_ensemble_vs_hierarchy_only_first` | not measured | `tables/test_comparisons.md` |
-| `c5_ensemble_vs_hierarchy_only_second` | not measured | `tables/test_comparisons.md` |
-| `c5_ensemble_vs_hierarchy_p` | not measured | `tables/test_comparisons.md` |
+| `c5_ensemble_vs_hierarchy_both` | 265 | `tables/test_comparisons.md` |
+| `c5_ensemble_vs_hierarchy_only_first` | 95 | `tables/test_comparisons.md` |
+| `c5_ensemble_vs_hierarchy_only_second` | 214 | `tables/test_comparisons.md` |
+| `c5_ensemble_vs_hierarchy_p` | 1e-11 | `tables/test_comparisons.md` |
 | `c5_ensemble_vs_tcbp_both` | 360 | `tables/test_comparisons.md` |
 | `c5_ensemble_vs_tcbp_only_first` | 0 | `tables/test_comparisons.md` |
 | `c5_ensemble_vs_tcbp_only_second` | 0 | `tables/test_comparisons.md` |
@@ -181,26 +181,26 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c5_hierarchy_converged_vs_relay_bp_only_first` | 88 | `tables/test_comparisons.md` |
 | `c5_hierarchy_converged_vs_relay_bp_only_second` | 464 | `tables/test_comparisons.md` |
 | `c5_hierarchy_converged_vs_relay_bp_p` | 1e-62 | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_hierarchy_converged_both` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_hierarchy_converged_only_first` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_hierarchy_converged_only_second` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_hierarchy_converged_p` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_hierarchy_weight_both` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_hierarchy_weight_only_first` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_hierarchy_weight_only_second` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_hierarchy_weight_p` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_priortilt_both` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_priortilt_only_first` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_priortilt_only_second` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_priortilt_p` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_tcbp_both` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_tcbp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_tcbp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c5_hierarchy_vs_tcbp_p` | not measured | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_hierarchy_converged_both` | 338 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_hierarchy_converged_only_first` | 141 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_hierarchy_converged_only_second` | 131 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_hierarchy_converged_p` | 0.59 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_hierarchy_weight_both` | 364 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_hierarchy_weight_only_first` | 115 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_hierarchy_weight_only_second` | 163 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_hierarchy_weight_p` | 0.005 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_priortilt_both` | 370 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_priortilt_only_first` | 109 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_priortilt_only_second` | 225 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_priortilt_p` | 2e-10 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_relay_bp_both` | 386 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_relay_bp_only_first` | 93 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_relay_bp_only_second` | 459 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_relay_bp_p` | 4e-59 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_tcbp_both` | 265 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_tcbp_only_first` | 214 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_tcbp_only_second` | 95 | `tables/test_comparisons.md` |
+| `c5_hierarchy_vs_tcbp_p` | 1e-11 | `tables/test_comparisons.md` |
 | `c5_hierarchy_weight_vs_priortilt_both` | 461 | `tables/test_comparisons.md` |
 | `c5_hierarchy_weight_vs_priortilt_only_first` | 66 | `tables/test_comparisons.md` |
 | `c5_hierarchy_weight_vs_priortilt_only_second` | 134 | `tables/test_comparisons.md` |
@@ -317,7 +317,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
-| `findings` | On the test shots (one offline decode of each shot, the same candidates for every rung; p = 0.003, 0.004, 0.005 together), relay-BP fails 889 pairs, PriorTilt run once (IonQ's decoder) 672, and our decoder as frozen (two PriorTilt runs, relay-BP where they disagree, the neural tie-break) 544; a perfect tie-break would fail 429. Of the drop from relay-BP to our decoder, 63% is already there with PriorTilt run once; the hierarchy around it gives the rest. As an ablation, with the best hand-written tie-break (lowest weight among the converged candidates) in place of the network, the hierarchy fails 525: the network is no better than the hand-written rule (no significant difference). The classical tie-break (lowest weight among the converged candidates) fails 525 pairs and the network 544; only the network rule fails 87 pairs, only the classical rule 68, exact p = 0.15. On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair; PriorTilt run once fails 4 in 22.7 ms per pair; with its two fast decodes side by side on two cores, 28.9 ms per pair; at p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair; PriorTilt run once fails 71 (offline, no time); with its two fast decodes side by side on two cores, 150 ms per pair. Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference). Our ensemble, combined offline from saved answers with its rule frozen beforehand (where two PriorTilt runs and TCBP-JOBS agree, that answer; otherwise joint decoding of both check types, the slow decoder of the measurements before building): at p = 0.003 2 against TCBP-JOBS's 3 failed pairs (only the ensemble fails 0, only TCBP-JOBS 1, exact p = 1.00; joint decoding ran on 5 disputed shots, about 5 s each); at p = 0.004 16 against TCBP-JOBS's 41 failed pairs (only the ensemble fails 1, only TCBP-JOBS 26, exact p = 4e-07; joint decoding ran on 93 disputed shots, about 24 s each); at p = 0.005 joint decoding was not run, so the ensemble fails exactly TCBP-JOBS's 360 pairs. Its members are NVIDIA's, IonQ's and the kit's; the rule is ours, and it has no time measured as one decoder. | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
+| `findings` | On the test shots (one offline decode of each shot, the same candidates for every rung; p = 0.003, 0.004, 0.005 together), relay-BP fails 889 pairs, PriorTilt run once (IonQ's decoder) 672, and our decoder as frozen (two PriorTilt runs, relay-BP where they disagree, the neural tie-break) 544; a perfect tie-break would fail 429. Of the drop from relay-BP to our decoder, 63% is already there with PriorTilt run once; the hierarchy around it gives the rest. As an ablation, with the best hand-written tie-break (lowest weight among the converged candidates) in place of the network, the hierarchy fails 525: the network is no better than the hand-written rule (no significant difference). The classical tie-break (lowest weight among the converged candidates) fails 525 pairs and the network 544; only the network rule fails 87 pairs, only the classical rule 68, exact p = 0.15. On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair; PriorTilt run once fails 4 in 22.7 ms per pair; with its two fast decodes side by side on two cores, 28.9 ms per pair; at p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair; PriorTilt run once fails 71 (offline, no time); with its two fast decodes side by side on two cores, 150 ms per pair; at p = 0.005 our decoder fails 479 of 10,000 pairs, relay-BP 845 (only ours fails 93, only relay-BP 459, exact p = 4e-59), in 825 ms per pair against relay-BP's 1,471 ms per pair; PriorTilt run once fails 595 (offline, no time); with its two fast decodes side by side on two cores, 608 ms per pair. Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, exact p = 1e-11). Our ensemble, combined offline from saved answers with its rule frozen beforehand (where two PriorTilt runs and TCBP-JOBS agree, that answer; otherwise joint decoding of both check types, the slow decoder of the measurements before building): at p = 0.003 2 against TCBP-JOBS's 3 failed pairs (only the ensemble fails 0, only TCBP-JOBS 1, exact p = 1.00; joint decoding ran on 5 disputed shots, about 5 s each); at p = 0.004 16 against TCBP-JOBS's 41 failed pairs (only the ensemble fails 1, only TCBP-JOBS 26, exact p = 4e-07; joint decoding ran on 93 disputed shots, about 24 s each); at p = 0.005 joint decoding was not run, so the ensemble fails exactly TCBP-JOBS's 360 pairs. Its members are NVIDIA's, IonQ's and the kit's; the rule is ours, and it has no time measured as one decoder. | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
 | `framing` | On the test shots (one offline decode of each shot, the same candidates for every rung; p = 0.003, 0.004, 0.005 together), relay-BP fails 889 pairs, PriorTilt run once (IonQ's decoder) 672, and our decoder as frozen (two PriorTilt runs, relay-BP where they disagree, the neural tie-break) 544; a perfect tie-break would fail 429. Of the drop from relay-BP to our decoder, 63% is already there with PriorTilt run once; the hierarchy around it gives the rest. As an ablation, with the best hand-written tie-break (lowest weight among the converged candidates) in place of the network, the hierarchy fails 525: the network is no better than the hand-written rule (no significant difference). The classical tie-break (lowest weight among the converged candidates) fails 525 pairs and the network 544; only the network rule fails 87 pairs, only the classical rule 68, exact p = 0.15. | `tables/test_ablation.md` |
 | `framing_slide` | On the test shots (one offline decode of each shot, the same candidates for every rung; p = 0.003, 0.004, 0.005 together), relay-BP fails 889 pairs, PriorTilt run once (IonQ's decoder) 672, and our decoder as frozen (two PriorTilt runs, relay-BP where they disagree, the neural tie-break) 544; a perfect tie-break would fail 429. Of the drop from relay-BP to our decoder, 63% is already there with PriorTilt run once; the hierarchy around it gives the rest. As an ablation, with the best hand-written tie-break (lowest weight among the converged candidates) in place of the network, the hierarchy fails 525: the network is no better than the hand-written rule (no significant difference). The classical tie-break (lowest weight among the converged candidates) fails 525 pairs and the network 544; only the network rule fails 87 pairs, only the classical rule 68, exact p = 0.15. | `tables/test_ablation.md` |
 | `lad3_P1_pairs` | 6 | `tables/test_ladder.md` |
@@ -398,10 +398,11 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `slide3_title` | The network is a poor decoder alone, and as a tie-break it is no better than the best hand-written rule | `tables/test_ablation.md` |
 | `slide4_relay` | Failed pairs of 10,000, ours against relay-BP on the same pairs: p = 0.003: 3 against 5 (exact p = 0.50); p = 0.004: 44 against 83 (exact p = 3e-06); p = 0.005: 479 against 845 (exact p = 4e-59). | `tables/test_p<p>.md` |
 | `slide4_title` | On the test shots our decoder fails fewer pairs than relay-BP at p = 0.004 and 0.005, and as many within the error at p = 0.003; it is level with TCBP-JOBS at p = 0.003 and 0.004, and behind it at p = 0.005 | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md` |
-| `slide5_lines` | p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 88.0 and 579; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514. | `tables/test_time.md` |
+| `slide5_lines` | p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 88.0 and 579; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514; p = 0.005: ours 825 ms mean and 9,885 ms at the 99th percentile, relay-BP 1,471 and 8,270. | `tables/test_time.md` |
 | `slide5_title` | Our decoder takes 0.52 to 0.68 of relay-BP's mean time per pair on one core and 0.33 to 0.47 with its two fast decodes on two cores | `tables/test_time.md` |
 | `split3_hierarchy_disagree` | 2 | `tables/time_split.md` |
 | `split4_hierarchy_disagree` | 90 | `tables/time_split.md` |
+| `split5_hierarchy_disagree` | 609 | `tables/time_split.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |
 | `t3_bposd_mean_ms` | 129 | `tables/test_p0.003.md` |
@@ -429,19 +430,19 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_ensemble_wall_hours` | not measured | `tables/test_p0.003.md` |
 | `t3_ensemble_xz` | 1, 1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_both` | 3 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_both` | 2 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_error` | 1.4e-05 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_mean_ms` | 44.1 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_median_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_only_relay` | 3 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_both` | 3 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_error` | 1.7e-05 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_mean_ms` | 46.3 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_median_ms` | 14.4 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_only_relay` | 2 | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_only_this` | 1 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_p99_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_paired_p` | 0.62 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_pairs` | 3 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_rate` | 2.50e-05 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_time_ratio` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_xz` | 2, 1 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_p99_ms` | 399 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_paired_p` | 1.00 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_pairs` | 4 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_rate` | 3.33e-05 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_time_ratio` | 0.53 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_wall_hours` | 0.1 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_xz` | 2, 2 | `tables/test_p0.003.md` |
 | `t3_hierarchy_error` | 1.4e-05 | `tables/test_p0.003.md` |
 | `t3_hierarchy_mean_ms` | 45.7 | `tables/test_p0.003.md` |
 | `t3_hierarchy_median_ms` | 14.2 | `tables/test_p0.003.md` |
@@ -688,7 +689,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t5_ensemble_time_ratio` | not measured | `tables/test_p0.005.md` |
 | `t5_ensemble_wall_hours` | not measured | `tables/test_p0.005.md` |
 | `t5_ensemble_xz` | 186, 177 | `tables/test_p0.005.md` |
-| `t5_hierarchy_both` | not measured | `tables/test_p0.005.md` |
+| `t5_hierarchy_both` | 386 | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_both` | 381 | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_error` | 1.8e-04 | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_mean_ms` | 805 | `tables/test_p0.005.md` |
@@ -702,14 +703,14 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t5_hierarchy_converged_time_ratio` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_wall_hours` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_xz` | 241, 231 | `tables/test_p0.005.md` |
-| `t5_hierarchy_error` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_mean_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_median_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_only_relay` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_only_this` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_p99_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_paired_p` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_pairs` | not measured | `tables/test_p0.005.md` |
+| `t5_hierarchy_error` | 1.9e-04 | `tables/test_p0.005.md` |
+| `t5_hierarchy_mean_ms` | 825 | `tables/test_p0.005.md` |
+| `t5_hierarchy_median_ms` | 246 | `tables/test_p0.005.md` |
+| `t5_hierarchy_only_relay` | 459 | `tables/test_p0.005.md` |
+| `t5_hierarchy_only_this` | 93 | `tables/test_p0.005.md` |
+| `t5_hierarchy_p99_ms` | 9,885 | `tables/test_p0.005.md` |
+| `t5_hierarchy_paired_p` | 4e-59 | `tables/test_p0.005.md` |
+| `t5_hierarchy_pairs` | 479 | `tables/test_p0.005.md` |
 | `t5_hierarchy_parallel_both` | 386 | `tables/test_p0.005.md` |
 | `t5_hierarchy_parallel_error` | 1.9e-04 | `tables/test_p0.005.md` |
 | `t5_hierarchy_parallel_mean_ms` | 608 | `tables/test_p0.005.md` |
@@ -723,9 +724,9 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t5_hierarchy_parallel_time_ratio` | 0.41 | `tables/test_p0.005.md` |
 | `t5_hierarchy_parallel_wall_hours` | 1.7 | `tables/test_p0.005.md` |
 | `t5_hierarchy_parallel_xz` | 245, 238 | `tables/test_p0.005.md` |
-| `t5_hierarchy_rate` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_time_ratio` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_wall_hours` | not measured | `tables/test_p0.005.md` |
+| `t5_hierarchy_rate` | 4.08e-03 | `tables/test_p0.005.md` |
+| `t5_hierarchy_time_ratio` | 0.56 | `tables/test_p0.005.md` |
+| `t5_hierarchy_wall_hours` | 2.3 | `tables/test_p0.005.md` |
 | `t5_hierarchy_weight_both` | 432 | `tables/test_p0.005.md` |
 | `t5_hierarchy_weight_error` | 2.0e-04 | `tables/test_p0.005.md` |
 | `t5_hierarchy_weight_mean_ms` | 805 | `tables/test_p0.005.md` |
@@ -739,7 +740,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t5_hierarchy_weight_time_ratio` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_weight_wall_hours` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_weight_xz` | 269, 262 | `tables/test_p0.005.md` |
-| `t5_hierarchy_xz` | not measured | `tables/test_p0.005.md` |
+| `t5_hierarchy_xz` | 245, 238 | `tables/test_p0.005.md` |
 | `t5_priortilt_both` | 439 | `tables/test_p0.005.md` |
 | `t5_priortilt_error` | 2.1e-04 | `tables/test_p0.005.md` |
 | `t5_priortilt_mean_ms` | 266 | `tables/test_p0.005.md` |
@@ -801,7 +802,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `tcbp_own4_xz` | 18, 23 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_rate` | 3.20e-03 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_xz` | 192, 188 | `tables/tcbp_own_shots.md` |
-| `tcbp_statement` | Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference). | `tables/test_all.md, tables/exploration_p0.004.md` |
+| `tcbp_statement` | Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, exact p = 1e-11). | `tables/test_all.md, tables/exploration_p0.004.md` |
 | `test_frozen_commit` | fd3aed3c0d1f | `data/test/test_run.out` |
 | `trk_atoms` | 39,909 | `data/loss/tracker/accuracy_test.json` |
 | `trk_exact` | 196 of 4,000 | `data/loss/tracker/test.json` |
@@ -824,3 +825,9 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `trk_vs_exact` | only the flag-aware decoder fails 81 shots, only the tracker 32, sign test p = 5e-06; 1.33 times fewer failures with the tracker (1.18 to 1.51) | `data/loss/tracker/test.json` |
 | `trk_vs_starter` | only the flag-aware decoder fails 75 shots, only the tracker 30, sign test p = 1e-05; 1.31 times fewer failures with the tracker (1.17 to 1.48) | `data/loss/tracker/test.json` |
 | `trk_within1` | 79.8% | `data/loss/tracker/accuracy_test.json` |
+| `tsplit_disagree` | 90 | `tables/where_failures.md` |
+| `tsplit_fail` | 44 | `tables/where_failures.md` |
+| `tsplit_fail_agree` | 17 | `tables/where_failures.md` |
+| `tsplit_fail_disagree` | 27 | `tables/where_failures.md` |
+| `tsplit_share` | 0.45% | `tables/where_failures.md` |
+| `tsplit_shots` | 20,000 | `tables/where_failures.md` |

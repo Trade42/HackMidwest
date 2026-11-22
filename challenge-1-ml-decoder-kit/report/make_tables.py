@@ -836,8 +836,19 @@ def failure_split(combined, measured=None):
 
 
 def failure_split_table(combined, measured=None):
+    sets = failure_split(combined, measured)
     lines = [[name, what, f"{same + differ:,}", f"{same:,}", f"{differ:,}", f"{differ / (same + differ):.1%}" if same + differ else ""]
-             for name, bars in failure_split(combined, measured).items() for what, same, differ in bars]
+             for name, bars in sets.items() for what, same, differ in bars]
+    timed = sets.get("test shots, p = 0.004, the timed decoder")
+    source = "tables/where_failures.md"
+    if timed:
+        (_, same, differ), (_, fail_agree, fail_differ) = timed[0], timed[1]
+        for name, value in (("tsplit_shots", f"{same + differ:,}"), ("tsplit_disagree", differ), ("tsplit_share", f"{differ / (same + differ):.2%}"),
+                            ("tsplit_fail", fail_agree + fail_differ), ("tsplit_fail_disagree", fail_differ), ("tsplit_fail_agree", fail_agree)):
+            fact(name, value, source)
+    else:
+        for name in ("tsplit_shots", "tsplit_disagree", "tsplit_share", "tsplit_fail", "tsplit_fail_disagree", "tsplit_fail_agree"):
+            fact(name, None, source)
     return write("where_failures", "Where the failures are. \"Agree\" means the two runs of PriorTilt (two random seeds) predict the same 12 bits; the hierarchy "
                  "then takes that answer, and a wrong one cannot be repaired by any tie-break. X and Z memory shots are counted together.\n\n"
                  + markdown(["Shots", "Set", "Shots in the set", "The two runs agree", "They disagree", "Share in \"disagree\""], lines))

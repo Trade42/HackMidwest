@@ -1,1 +1,5 @@
 40 job(s) to run on 4 process(es); 0 part(s) kept from an earlier run
+test_X.npz chunk 3: shots 1500 to 1999, failures R 22, P1 15, P2 12, relay-BP ran on 500, 466 s
+test_X.npz chunk 2: shots 1000 to 1499, failures R 20, P1 13, P2 15, relay-BP ran on 500, 484 s
+test_X.npz chunk 0: shots 0 to 499, failures R 18, P1 14, P2 13, relay-BP ran on 500, 489 s
+test_X.npz chunk 1: shots 500 to 999, failures R 20, P1 17, P2 24, relay-BP ran on 500, 535 s

@@ -1,1 +1,12 @@
 waited 0 s
+head_X.pt: FAILED open or read
+trunk_X.pt: FAILED open or read
+head_X.pt: OK
+trunk_X.pt: OK
+logits.npy: OK
+data/p0.005/validation_X.npz: OK
+predecoder/logs/fit_tcbp_X_p0.005.json: OK
+PYT=/home/blakew3/.conda/envs/cascade/bin/python
+Sun Nov 22 18:29:34 UTC 2026
+GPU 0: NVIDIA A100-SXM4-80GB (UUID: GPU-438f01eb-c6d1-c950-6a50-daa2f9c0bdc2)
+  MIG 2g.20gb     Device  0: (UUID: MIG-b8335f1f-c00b-5a22-8a6e-e63d2468741e)

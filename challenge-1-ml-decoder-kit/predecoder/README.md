@@ -18,7 +18,7 @@ should find the answer sooner and fail less.
   negative result, and the held-out test shots were not used.
 - What it does do, clearly: relay-BP needs **2.9 times fewer iterations** (189 against 554 on
   average; fewer on 4,758 of the 5,000 shots), the shots whose first leg fails fall from 691 to
-  163, and the slowest 1% of shots take 2.1 s instead of 10.5 s.
+  163, and the slowest 1% of shots need 2,012 iterations or more instead of 13,940.
 
 - **At p = 0.005 the same head and knobs give a large gain** (a secondary result: the knobs
   were fitted at p = 0.004 and not changed): 70 failures against 206 on 5,000 validation
@@ -42,6 +42,8 @@ number are under "Numbers".
 | `compare.py` | the measurement: the kit's priors against the head's, on the same Stim shots |
 | `candidate.py` | the head's answer beside the hierarchy's members (R, P1, P2, T), read from their files |
 | `plugin.py` | the decoder for the team's evaluator (`evaluation.evaluate`) |
+| `plugin_check.py` | checks that the plugin, through the evaluator's loop, gives `compare.py`'s answers |
+| `files.py` | small file helpers without torch, so the decoding worker processes stay small |
 | `oracle.py` | the ceiling: relay-BP told the true faults (a diagnostic, never a result) |
 | `test_predecoder.py` | tests |
 
@@ -110,57 +112,83 @@ the kit's priors, paired, with p < 0.05 (head against fresh; reported also again
 
 ## Commands
 
+These are the commands that made the numbers below, in order (placeholders in angle brackets).
+
 ```sh
 # tests (about 4 minutes on 4 CPU threads)
-python -m pytest -p no:cacheprovider predecoder
+python -m pytest -p no:cacheprovider test_kit.py neural predecoder
 
 # the ceiling: relay-BP told the true faults, on DEM shots
 python -m predecoder.oracle --p 0.004 --shots 300 --seed 11 --workers 4
 
-# train the head (a GPU; about 0.06 s per step expected on an RTX 4060, not measured yet)
-python -m predecoder.train --trunk <cascade_X_s1 checkpoint> --out <run folder> --seed 1 \
+# 1. train the head (a GPU: 0.072 s per step on the laptop's RTX 4060, 36 minutes for 30,000 steps)
+python -m predecoder.train --trunk <final X checkpoint> --out <run folder> --seed 1 \
     --steps 30000 --batch 64 --p-train 0.003 0.004 0.005 --report-every 2000 --report-shots 500
 
-# the head's logits on a shot file, and the time of one shot
-python -m predecoder.evaluate --head <run folder>/head.pt --trunk <cascade_X_s1 checkpoint> \
-    --data data/p0.004/train_X.npz --limit 1000 --out <logits_train>
-python -m predecoder.evaluate --head <run folder>/head.pt --trunk <cascade_X_s1 checkpoint> \
-    --data data/p0.004/validation_X.npz --out <logits_validation>
+# 2. check it on held-out error-model shots, against the kit's priors and BP's own beliefs
+python -m predecoder.calibration --head <run folder>/head.pt --trunk <final X checkpoint> --p 0.004 --shots 1000 --seed 77
 
-# fit the two knobs on train shots, then the measurement on validation shots
-python -m predecoder.priors --data data/p0.004/train_X.npz --logits <logits_train> --shots 1000 --out <fit.json>
+# 3. the train shots relay-BP fails with the kit's priors, and a sample of the ones it gets right
+python -m predecoder.compare --data data/p0.004/train_X.npz --arms fresh --workers 6 --out <train compare folder>
+python -m predecoder.subset --data data/p0.004/train_X.npz --per-shot <train compare folder>/per_shot.npz \
+    --arm fresh --right 2000 --seed 5 --out <subset folder>
+
+# 4. the head's logits on those two files and on the validation file (and the time of one shot)
+python -m predecoder.evaluate --head <head.pt> --trunk <final X checkpoint> --data <subset folder>/train_X_fresh_failed.npz \
+    --out <logits_failed> --time-shots 0
+python -m predecoder.evaluate --head <head.pt> --trunk <final X checkpoint> --data <subset folder>/train_X_fresh_right.npz \
+    --out <logits_right> --time-shots 0
+python -m predecoder.evaluate --head <head.pt> --trunk <final X checkpoint> --data data/p0.004/validation_X.npz \
+    --out <logits_validation> --time-shots 200
+
+# 5. fit the two knobs on the train files only. The default grid (alpha 0.3 to 0.7) chose its
+#    edge, so the rule extended it; this is the command that made logs/fit_X_p0.004.json:
+python -m predecoder.priors --data <subset folder>/train_X_fresh_failed.npz <subset folder>/train_X_fresh_right.npz \
+    --weights 1 9.9555 --logits <logits_failed> <logits_right> --alphas 0.1 0.2 0.3 0.4 0.5 0.6 0.7 --workers 4 \
+    --out <fit.json>
+
+# 6. the measurement on the validation shots
 python -m predecoder.compare --data data/p0.004/validation_X.npz --logits <logits_validation> \
-    --settings <fit.json> --arms fresh head kit --workers 4 --out <compare folder>
+    --settings predecoder/logs/fit_X_p0.004.json --arms kit fresh head --kit-chunk 500 --workers 4 --out <compare folder>
 
-# the head's answer beside the hierarchy's members (read from their files), on validation_X
+# 7. the head's answer beside the hierarchy's members (read from their files)
 python -m predecoder.candidate --ours <compare folder>/per_shot.npz \
     --members <laptop-artifacts: priortilt/results_8b/selector_validation_X.npz> \
     --tcbp <server-logs: files/tcbp_p0.004/validation_X.tcbp.npz>
+
+# 8. the plugin gives compare.py's answers (the first 200 validation shots through the evaluator's loop)
+python -m predecoder.plugin_check --data data/p0.004/validation_X.npz --per-shot <compare folder>/per_shot.npz \
+    --head <head.pt> --trunk <final X checkpoint> --settings predecoder/logs/fit_X_p0.004.json --shots 200
 
 # the team's evaluator
 python -m evaluation.evaluate --test-x <X shots> --test-z <Z shots> --decoder predecoder.plugin:make_decoder \
     --plugin-options <options.json> --out <folder>
 ```
 
-The fit's two train files come from a run of the "fresh" arm on the train file:
-
-```sh
-python -m predecoder.compare --data data/p0.004/train_X.npz --arms fresh --workers 4 --out <train compare folder>
-python -m predecoder.subset --data data/p0.004/train_X.npz --per-shot <train compare folder>/per_shot.npz \
-    --arm fresh --right 2000 --seed 5 --out <subset folder>
-# then predecoder.evaluate on each of the two files, and the fit:
-python -m predecoder.priors --data <subset folder>/train_X_fresh_failed.npz <subset folder>/train_X_fresh_right.npz \
-    --weights 1 <the right-file weight subset.py prints> --logits <logits of the failed file> <logits of the right file> \
-    --workers 4 --out <fit.json>
-```
-
 `options.json` of the plugin (X memory gets the head; Z memory, which has no head, runs the kit's
-relay-BP):
+relay-BP). `settings` is required with a head: without the fitted knobs the head's numbers go to
+BP as they are, which made BP worse on train shots.
 
 ```json
-{"heads": {"X": "<head.pt>"}, "trunks": {"X": "<the trunk checkpoint>"}, "settings": "<fit.json>",
+{"heads": {"X": "<head.pt>"}, "trunks": {"X": "<the trunk checkpoint>"}, "settings": "predecoder/logs/fit_X_p0.004.json",
  "device": "cpu", "torch_threads": 4}
 ```
+
+**If Sal decides on one run on the held-out test shots** (written before any test result
+exists; the declared gate at p = 0.004 did not pass, so this is his call). From commit `1bf0e7b`,
+the commit the validation results came from, with nothing changed; the logits on the device the
+p = 0.005 validation result used (a GPU):
+
+```sh
+python -m predecoder.evaluate --head <head.pt, sha256 38ab667e...> --trunk <final X checkpoint, sha256 d8d1c70f...> \
+    --data data/p0.005/test_X.npz --out <logits_test> --device cuda --final
+python -m predecoder.compare --data data/p0.005/test_X.npz --logits <logits_test> --settings predecoder/logs/fit_X_p0.004.json \
+    --arms kit fresh head --kit-chunk 500 --workers <cores> --out <test compare folder> --final
+```
+
+The declared pair is head against fresh. Use `compare.py` for this, not the plugin through the
+evaluator: on a GPU the plugin's batch-one logits differ from the batched ones in their last
+digits (up to 1.6e-2 on the laptop), so its answers would not be exactly `compare.py`'s.
 
 ## Numbers
 
@@ -349,14 +377,17 @@ How to read it:
   differ only in relay-BP's random draws, and that alone gave 5 against 16 here. A single seed
   of relay-BP carries that much noise, so the honest bar is the per-shot decoder.
 - The work is a clear effect, not noise: the head's priors need fewer iterations on 4,758 of
-  5,000 shots, the hard shots fall by a factor 4.2, and the slow tail shrinks five times. In
+  5,000 shots, the hard shots fall by a factor 4.2, and the slowest 1% need 2,012 iterations or more against 13,940. In
   time per shot this PC's busy CPU eats most of that in the network (170 ms mean), so the
   latency gain is for a GPU (22 ms per shot for the network and head there) and is stated here
   only in iterations, which do not depend on the machine.
 - On the train subsets the same knobs left 21 of 89 failures wrong while breaking none of
   2,000 right shots (`logs/fit_X_p0.004.log`). That pointed to a larger gain than validation
-  shows (14 of 20, not about 5 of 20). Validation holds only 20 failures, too few to tell the
-  two apart, and nothing was tuned on validation to close the gap.
+  shows (14 of 20, not about 5 of 20). The train figure is biased upwards: the 89 shots were
+  chosen as the ones relay-BP with seed 0 got wrong, and any other draw of relay-BP alone fixes
+  about 44% of such shots (gate G2). So the fit ranks settings but overstates the gain; the
+  validation count (12 fixed, 6 broken) is the unbiased reading. Nothing was tuned on
+  validation to close the gap.
 - One wrinkle of the fit: the first grid (alpha 0.3 to 0.7) chose its edge, 0.3, by 1 broken
   right shot against 4 for the others (each counts 10 times). That difference is itself mostly
   chance. The rule then extended the grid to 0.1 and 0.2 on train shots and chose 0.2, which
@@ -419,8 +450,8 @@ p = 4.1e-32. At p = 0.003 only the head fails, on 2 shots (p = 0.5): one does no
 
 ## What is tested, what is not, and what is left
 
-`test_predecoder.py`, 18 tests (`python -m pytest -p no:cacheprovider test_kit.py neural predecoder`:
-92 pass, `logs/pytest_kit_neural_predecoder.log`):
+`test_predecoder.py`, 19 tests (`python -m pytest -p no:cacheprovider test_kit.py neural predecoder`:
+93 pass, `logs/pytest_kit_neural_predecoder.log`):
 
 - the mapping: on 200 sampled shots H x fired columns = the basis detectors and L x them = the
   observables, the merged priors equal the kit's, a flipped column breaks the check, and the
@@ -430,7 +461,8 @@ p = 4.1e-32. At p = 0.003 only the head fails, on 2 shots (p = 0.5): one does no
 - the priors: mixing and clipping; relay-BP really reads them (told the true faults it converges
   in its first leg, with fewer iterations); a decoder built per shot repeats itself;
 - the plugin: the truth-shuffle test (the observables permuted between shots change no
-  prediction), the priors relay-BP is built with are the head's mixed and clipped ones, a basis
+  prediction), the priors relay-BP is built with are the head's mixed and clipped ones, a head
+  without fitted knobs is refused, a basis
   without a head runs the kit's relay-BP;
 - the scripts end to end on a few shots: train, evaluate, compare (three arms; the counts add
   up), subset and the weighted fit, calibration, the candidate counts, and the refusal of
@@ -451,3 +483,9 @@ Not tested, or not done:
   was built or fitted with it.
 - Latencies: the per-shot times above come from busy machines with different process counts;
   only the iteration counts compare cleanly.
+
+**The plugin gives compare.py's answers** (`logs/plugin_check_validation_X_200.log`, this PC's CPU,
+4 threads): the first 200 validation shots through `evaluation.adapters.create_session` and
+`evaluation.evaluate.run_basis` give the same 12 bits as the head arm on 200 of 200 (1 failure in
+both). Everything inside `decode_shot` (network, head, building relay-BP, decoding) takes 108 ms
+median, 198 ms mean, 1.7 s p99 per shot here.

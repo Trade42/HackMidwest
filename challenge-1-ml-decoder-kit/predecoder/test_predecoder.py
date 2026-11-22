@@ -254,6 +254,14 @@ def test_plugin_hands_its_priors_to_relay_bp(trained, tmp_path, monkeypatch):
     assert seen[0].min() >= 1e-4 and seen[0].max() <= 1 - 1e-4
 
 
+def test_plugin_refuses_a_head_without_knobs(trained):
+    from predecoder.plugin import make_decoder
+
+    trunk, head_path = trained
+    with pytest.raises(ValueError):
+        make_decoder(kit_problem("X", 0.004), {"heads": {"X": head_path}, "trunks": {"X": trunk}})
+
+
 def test_plugin_without_a_head_runs_the_kit_decoder():
     from predecoder.plugin import make_decoder
 

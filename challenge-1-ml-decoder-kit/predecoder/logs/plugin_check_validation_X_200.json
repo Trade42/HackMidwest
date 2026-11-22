@@ -1,0 +1,53 @@
+{
+ "data": {
+  "path": "/home/sal/hackMidwest/worktrees/predecoder/challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz",
+  "sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d",
+  "basis": "X",
+  "p": 0.004,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 200,
+ "same_prediction": 200,
+ "failures_plugin": 1,
+ "failures_compare": 1,
+ "seconds_mean": 0.19813898460473867,
+ "seconds_median": 0.10783564439043403,
+ "seconds_p99": 1.7055574659397814,
+ "device": "cpu",
+ "threads": 4,
+ "settings": {
+  "decoder": "network + head -> this shot's priors -> relay-BP built per shot",
+  "head_priors": {
+   "mode": "logodds",
+   "alpha": 0.2,
+   "eps": 0.0001
+  },
+  "predecoder": {
+   "head": "/home/sal/hackMidwest/orchestration/scratch/predecoder/head/predecoder_X_s1/head.pt",
+   "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+   "head_step": 30000,
+   "trunk": "/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_X_s1_final_step120000.pt",
+   "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+   "trunk_step": 120000,
+   "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+   "device": "cpu",
+   "torch": "2.15.0+cpu",
+   "torch_threads": 4
+  },
+  "relay": {
+   "alpha": 1.0,
+   "gamma0": 0.15,
+   "pre_iter": 80,
+   "num_sets": 300,
+   "set_max_iter": 60,
+   "gamma_dist_interval": [
+    -0.22628432386414646,
+    0.6216020925981884
+   ],
+   "stop_nconv": 5,
+   "seed_of_per_shot_decoders": 0
+  }
+ }
+}

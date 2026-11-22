@@ -19,7 +19,8 @@ Options (a JSON object):
 
   heads        {"X": <head.pt of predecoder.train>}
   trunks       {"X": <the trunk checkpoint>} (default: the path stored in head.pt; its sha256 is checked)
-  settings     the fit file of predecoder.priors, or {"mode": ..., "alpha": ..., "eps": ...}
+  settings     REQUIRED with a head: the fit file of predecoder.priors (predecoder/logs/fit_X_p0.004.json),
+               or {"mode": ..., "alpha": ..., "eps": ...}
   device       for the network: "cpu" (default), "cuda" or "auto"
   torch_threads  CPU threads for the network
   relay_changes  settings of relay-BP to replace, for quick tests only
@@ -55,6 +56,9 @@ class PredecoderSession:
             predecoder = Predecoder(head, (options.get("trunks") or {}).get(problem.basis), options.get("device", "cpu"),
                                     options.get("torch_threads"))
         self.predecoder = predecoder
+        if predecoder is not None and options.get("settings") is None:
+            # The default (the head's numbers as they are, alpha 1) makes relay-BP worse: give the fitted knobs.
+            raise ValueError('a head needs its fitted knobs: give "settings" (the fit file of predecoder.priors)')
         self.prior_settings = load_settings(options.get("settings"))
         self.kit_decoder = None if predecoder is not None else kit_session(problem.H, self.priors, **self.relay_changes)
         self.settings = {

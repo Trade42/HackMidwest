@@ -14,3 +14,14 @@ RESULT (1000 shots of validation_X.npz, head priors, one model; reference: dense
   csr_after    failures 3, not reproduced 0; total 43.8 ms mean (median 42.9, p99 58.2) = priors 0.18 + build 35.8 + decode 3.1 + free 4.6 (after); answer 39.2 ms (p99 53.5); wall 44.0 ms per shot; differs from dense on bits 0, faults 0, corrections 0 -> SAME
   csr_after against csr (same process): wall +0.51 ms per shot -> NO GAIN by the rule; answer -4.14 ms; the next parts moved by priors +0.00, build +0.46, decode +0.03 ms
 saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job2a; 207 s
+B exit 0
+Sun Nov 22 18:26:48 UTC 2026
+  shots 900-999 done by dense, csr, csr_thread; 140 s; dense 49.9 ms; csr 43.7 ms; csr_thread 40.0 ms
+
+RESULT (1000 shots of validation_X.npz, head priors, one model; reference: dense):
+  dense        failures 3, not reproduced 0; total 49.9 ms mean (median 49.3, p99 64.3) = priors 0.19 + build 42.2 + decode 2.9 + free 4.6 (inline); answer 49.9 ms (p99 64.3); wall 50.1 ms per shot
+  csr          failures 3, not reproduced 0; total 43.7 ms mean (median 42.6, p99 58.8) = priors 0.17 + build 35.8 + decode 3.1 + free 4.6 (inline); answer 43.7 ms (p99 58.8); wall 43.8 ms per shot; differs from dense on bits 0, faults 0, corrections 0 -> SAME
+  csr_thread   failures 3, not reproduced 0; total 40.0 ms mean (median 39.8, p99 53.7) = priors 0.21 + build 36.7 + decode 3.1 + free 5.4 (thread); answer 40.0 ms (p99 53.6); wall 45.6 ms per shot; differs from dense on bits 0, faults 0, corrections 0 -> SAME
+  csr_thread against csr (same process): wall +1.76 ms per shot -> NO GAIN by the rule; answer -3.67 ms; the next parts moved by priors +0.04, build +0.91, decode +0.00 ms; thread: {'frees': 1000, 'not_last_owner': 0, 'errors': [], 'queue_depth': 2}
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job2b; 198 s
+exit codes: A 0, B 0

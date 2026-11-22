@@ -21,3 +21,9 @@ meta.json: OK
 data/p0.003/test_Z.npz: OK
 predecoder/logs/fit_tcbp_X_p0.005.json: OK
 Sun Nov 22 18:17:43 UTC 2026
+p 0.003 decode exit 0
+  head: 9000 of 10000 shots, 526 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 10000 of 10000 shots, 574 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: failures 1 of 10000, 0.0001 [0.0000, 0.0006]; not reproduced 0; flagged not converged 3871; build 41.7 ms + decode 4.0 ms mean, p99 62 ms
+saved /home/blakew3/mlBranchMidwest/runs/predecoder-tcbp/test_Z_p0.003/per_shot.npz; 574 s
+Sun Nov 22 18:27:25 UTC 2026

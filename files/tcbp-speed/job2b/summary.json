@@ -40,10 +40,12 @@
   }
  },
  "threads": {
-  "OMP_NUM_THREADS": "1",
-  "OPENBLAS_NUM_THREADS": "1",
-  "MKL_NUM_THREADS": "1",
-  "NUMEXPR_NUM_THREADS": "1"
+  "csr_thread": {
+   "frees": 1000,
+   "not_last_owner": 0,
+   "errors": [],
+   "queue_depth": 2
+  }
  },
  "model_seconds": 57.8231187639758,
  "facts": {
@@ -113,5 +115,216 @@
    "py-spy": null
   }
  },
- "seconds": 57.85974431037903
+ "seconds": 197.91742992401123,
+ "arms_run": [
+  "dense",
+  "csr",
+  "csr_thread"
+ ],
+ "sparse_dtypes": {
+  "csr": "uint8",
+  "csr_thread": "uint8"
+ },
+ "free_modes": {
+  "dense": "inline",
+  "csr": "inline",
+  "csr_thread": "thread"
+ },
+ "check": {
+  "dense": {
+   "failures": 3,
+   "not_reproduced": 0,
+   "flag_not_converged": 787,
+   "ms": {
+    "seconds_priors": {
+     "n": 1000,
+     "mean": 0.18933532934170216,
+     "median": 0.18426153110340238,
+     "p90": 0.22777925478294492,
+     "p99": 0.30409359256736934,
+     "max": 0.5523300496861339
+    },
+    "seconds_build": {
+     "n": 1000,
+     "mean": 42.21673617535271,
+     "median": 42.119865014683455,
+     "p90": 43.61609319457784,
+     "p99": 46.73254011780955,
+     "max": 59.4069849466905
+    },
+    "seconds_decode": {
+     "n": 1000,
+     "mean": 2.875459949253127,
+     "median": 2.4018765543587506,
+     "p90": 4.501691914629191,
+     "p99": 16.682727079605684,
+     "max": 40.72878905571997
+    },
+    "seconds_free": {
+     "n": 1000,
+     "mean": 4.604639463475905,
+     "median": 4.587861069012433,
+     "p90": 4.6696059522219,
+     "p99": 4.829653528286143,
+     "max": 5.847588065080345
+    },
+    "seconds_total": {
+     "n": 1000,
+     "mean": 49.88617091742344,
+     "median": 49.301806022413075,
+     "p90": 52.59442649548873,
+     "p99": 64.27740770974195,
+     "max": 88.92665803432465
+    },
+    "seconds_answer": {
+     "n": 1000,
+     "mean": 49.88617091742344,
+     "median": 49.301806022413075,
+     "p90": 52.59442649548873,
+     "p99": 64.27740770974195,
+     "max": 88.92665803432465
+    }
+   },
+   "wall_ms_per_shot": 50.08384331292473
+  },
+  "csr": {
+   "failures": 3,
+   "not_reproduced": 0,
+   "flag_not_converged": 787,
+   "ms": {
+    "seconds_priors": {
+     "n": 1000,
+     "mean": 0.1699610184878111,
+     "median": 0.16049150144681334,
+     "p90": 0.21076906705275178,
+     "p99": 0.28495707083493466,
+     "max": 0.4289079224690795
+    },
+    "seconds_build": {
+     "n": 1000,
+     "mean": 35.778048948035575,
+     "median": 34.937392454594374,
+     "p90": 37.55153699312359,
+     "p99": 39.55348044401034,
+     "max": 258.64514405839145
+    },
+    "seconds_decode": {
+     "n": 1000,
+     "mean": 3.0769726620055735,
+     "median": 2.519863483030349,
+     "p90": 4.9944193102419385,
+     "p99": 15.59302068082615,
+     "max": 37.61244297493249
+    },
+    "seconds_free": {
+     "n": 1000,
+     "mean": 4.6293041948229074,
+     "median": 4.581109096761793,
+     "p90": 4.6900609391741455,
+     "p99": 5.539251781301573,
+     "max": 6.610205047763884
+    },
+    "seconds_total": {
+     "n": 1000,
+     "mean": 43.65428682335187,
+     "median": 42.63948602601886,
+     "p90": 46.359998488333076,
+     "p99": 58.847558175912106,
+     "max": 265.87052596732974
+    },
+    "seconds_answer": {
+     "n": 1000,
+     "mean": 43.65428682335187,
+     "median": 42.63948602601886,
+     "p90": 46.359998488333076,
+     "p99": 58.847558175912106,
+     "max": 265.87052596732974
+    }
+   },
+   "bits_differ": 0,
+   "faults_differ": 0,
+   "corrections_differ": 0,
+   "same_as_dense": true,
+   "wall_ms_per_shot": 43.81817969784606
+  },
+  "csr_thread": {
+   "failures": 3,
+   "not_reproduced": 0,
+   "flag_not_converged": 787,
+   "ms": {
+    "seconds_priors": {
+     "n": 1000,
+     "mean": 0.20663154765497893,
+     "median": 0.1816070289351046,
+     "p90": 0.3051389241591096,
+     "p99": 0.39550183573737735,
+     "max": 0.5523189902305603
+    },
+    "seconds_build": {
+     "n": 1000,
+     "mean": 36.69252772873733,
+     "median": 36.86246700817719,
+     "p90": 39.276789128780365,
+     "p99": 40.65486872452311,
+     "max": 41.37375403661281
+    },
+    "seconds_decode": {
+     "n": 1000,
+     "mean": 3.077401014743373,
+     "median": 2.5396004784852266,
+     "p90": 4.731287085451186,
+     "p99": 15.251812132773912,
+     "max": 40.02071707509458
+    },
+    "seconds_free": {
+     "n": 1000,
+     "mean": 5.412245689891279,
+     "median": 5.860337521880865,
+     "p90": 6.144717859569937,
+     "p99": 6.90427670488134,
+     "max": 13.330625020898879
+    },
+    "seconds_total": {
+     "n": 1000,
+     "mean": 40.01087156473659,
+     "median": 39.76589202648029,
+     "p90": 43.295510788448155,
+     "p99": 53.6612843722105,
+     "max": 79.23696807119995
+    },
+    "seconds_answer": {
+     "n": 1000,
+     "mean": 39.986081934999675,
+     "median": 39.73401599796489,
+     "p90": 43.25249831890687,
+     "p99": 53.638359108008444,
+     "max": 79.20770300552249
+    }
+   },
+   "bits_differ": 0,
+   "faults_differ": 0,
+   "corrections_differ": 0,
+   "same_as_dense": true,
+   "wall_ms_per_shot": 45.574242318980396,
+   "against_csr": {
+    "wall_ms_per_shot_difference": 1.7560626211343333,
+    "answer_ms_difference": -3.668204888352193,
+    "parts_ms_difference": {
+     "priors": 0.03667052916716784,
+     "build": 0.9144787807017565,
+     "decode": 0.00042835273779928684
+    },
+    "verdict": "NO GAIN"
+   }
+  }
+ },
+ "rule": "fixed before job 2 ran: an arm that moves the free is a gain over csr only if its wall time per shot (its blocks' wall time over its shots, a thread arm's block ending when its thread has freed every decoder) is below csr's in the same process; its time to answer is reported beside it",
+ "capped_in_check": {
+  "what": "counted over every arm's decodes",
+  "shots": 864,
+  "columns": 1041
+ },
+ "model_option_unchanged": true,
+ "repeatable": null,
+ "timer": "seconds_total: one perf_counter timer around the shot's priors (shot_priors and the 0.5 cap), tcbp.decode_one (get_decoder with the shot's priors, decode(), the cut to 0/1) and freeing the decoder; one process, shots one at a time, the GPU shared with whatever else runs on it. seconds_answer: the same timer stopped when the answer is in the caller's hands (inline arms: after the free; csr_after and csr_thread: before it). wall_ms_per_shot: the arm's blocks' wall time over its shots, scoring included (the same for every arm), a thread arm's drain included"
 }

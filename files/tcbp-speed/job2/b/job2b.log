@@ -1,0 +1,21 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+validation_X.npz: 1000 shots, p=0.005, decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}; head priors {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}; arms ['dense', 'csr', 'csr_thread'], blocks of 100
+  model fitted in 57.8 s; facts: {'version': 'cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)', 'machine': {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}, 'h_shape': [936, 8784], 'h_ones': 30672, 'model_bytes': 2538, 'model_option': 'ndarray of 2538 bytes', 'dense_bytes': 8221824, 'profilers_on_path': {'nsys': None, 'ncu': None, 'perf': None, 'py-spy': None}}
+  shots 0-99 done by dense, csr, csr_thread; 14 s; dense 50.7 ms; csr 44.1 ms; csr_thread 42.3 ms
+  shots 100-199 done by csr, csr_thread, dense; 29 s; dense 50.7 ms; csr 44.5 ms; csr_thread 42.0 ms
+  shots 200-299 done by csr_thread, dense, csr; 43 s; dense 50.7 ms; csr 44.1 ms; csr_thread 41.7 ms
+  shots 300-399 done by dense, csr, csr_thread; 58 s; dense 50.8 ms; csr 44.7 ms; csr_thread 41.7 ms
+  shots 400-499 done by csr, csr_thread, dense; 72 s; dense 50.7 ms; csr 44.5 ms; csr_thread 41.6 ms
+  shots 500-599 done by csr_thread, dense, csr; 86 s; dense 50.6 ms; csr 44.2 ms; csr_thread 41.5 ms
+  shots 600-699 done by dense, csr, csr_thread; 99 s; dense 50.4 ms; csr 43.9 ms; csr_thread 41.0 ms
+  shots 700-799 done by csr, csr_thread, dense; 113 s; dense 50.2 ms; csr 43.7 ms; csr_thread 40.6 ms
+  shots 800-899 done by csr_thread, dense, csr; 126 s; dense 50.0 ms; csr 43.8 ms; csr_thread 40.3 ms
+  shots 900-999 done by dense, csr, csr_thread; 140 s; dense 49.9 ms; csr 43.7 ms; csr_thread 40.0 ms
+
+RESULT (1000 shots of validation_X.npz, head priors, one model; reference: dense):
+  dense        failures 3, not reproduced 0; total 49.9 ms mean (median 49.3, p99 64.3) = priors 0.19 + build 42.2 + decode 2.9 + free 4.6 (inline); answer 49.9 ms (p99 64.3); wall 50.1 ms per shot
+  csr          failures 3, not reproduced 0; total 43.7 ms mean (median 42.6, p99 58.8) = priors 0.17 + build 35.8 + decode 3.1 + free 4.6 (inline); answer 43.7 ms (p99 58.8); wall 43.8 ms per shot; differs from dense on bits 0, faults 0, corrections 0 -> SAME
+  csr_thread   failures 3, not reproduced 0; total 40.0 ms mean (median 39.8, p99 53.7) = priors 0.21 + build 36.7 + decode 3.1 + free 5.4 (thread); answer 40.0 ms (p99 53.6); wall 45.6 ms per shot; differs from dense on bits 0, faults 0, corrections 0 -> SAME
+  csr_thread against csr (same process): wall +1.76 ms per shot -> NO GAIN by the rule; answer -3.67 ms; the next parts moved by priors +0.04, build +0.91, decode +0.00 ms; thread: {'frees': 1000, 'not_last_owner': 0, 'errors': [], 'queue_depth': 2}
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job2b; 198 s

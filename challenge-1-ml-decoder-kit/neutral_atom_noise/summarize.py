@@ -225,7 +225,7 @@ def plot(rates, path, basis="X", loss=False, published_factor=1.0):
         axis.axhspan(1e-3, 1e-1, color=GRID, alpha=0.45, lw=0)
         axis.axvline(published_factor, color=MUTED, lw=1)
         label = "published figures, Pauli part only " if not loss else "published figures "
-        axis.text(published_factor, 0.985, label, color=MUTED, fontsize=8, ha="right", va="top",
+        axis.text(published_factor, 0.02, label, color=MUTED, fontsize=8, ha="right", va="bottom",
                   rotation=90, transform=axis.get_xaxis_transform())
         for key, label, colour, marker in SERIES:
             points = [r for r in rates if r["decoder"] == decoder and key in _series(r)]
@@ -252,7 +252,7 @@ def plot(rates, path, basis="X", loss=False, published_factor=1.0):
         for side in ("top", "right", "left"):
             axis.spines[side].set_visible(False)
         axis.spines["bottom"].set_color(AXIS)
-        axis.text(0.02, 1e-2, "0.1% to 10%", color=MUTED, fontsize=8, va="center", transform=axis.get_yaxis_transform())
+        axis.text(0.02, 7e-2, "band: 0.1% to 10%", color=MUTED, fontsize=8, va="top", transform=axis.get_yaxis_transform())
     axes[0][0].set_ylabel("shots with a wrong logical bit", color=MUTED)
     axes[0][0].set_yticks([1e-3, 1e-2, 1e-1, 1.0])
     axes[0][0].set_yticklabels(["0.1%", "1%", "10%", "100%"])
@@ -267,7 +267,7 @@ def plot(rates, path, basis="X", loss=False, published_factor=1.0):
                     + ("Factor 1 = Infleqtion's published figures without atom loss, leakage or atom moves: "
                        "today's machine sits above it." if not loss else "Factor 1 = Infleqtion's published figures, "
                        "with atom loss; still without leakage or atom moves."), color=INK, fontsize=9.5, x=0.01, ha="left")
-    figure.tight_layout(rect=(0, 0.06, 1, 0.86))
+    figure.subplots_adjust(left=0.07, right=0.99, top=0.78, bottom=0.2, wspace=0.06)
     figure.savefig(path, dpi=150, facecolor=SURFACE)
     plt.close(figure)
     return True

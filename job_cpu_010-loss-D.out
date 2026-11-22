@@ -35,3 +35,7 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 
   250/500 shots, 80s, failures so far exact@0.4=5 oracle-round@0.4=4 exact@0.25=10 oracle-round@0.25=7
   300/500 shots, 92s, failures so far exact@0.4=7 oracle-round@0.4=6 exact@0.25=13 oracle-round@0.25=10
   350/500 shots, 113s, failures so far exact@0.4=9 oracle-round@0.4=7 exact@0.25=17 oracle-round@0.25=13
+  400/500 shots, 133s, failures so far exact@0.4=11 oracle-round@0.4=7 exact@0.25=20 oracle-round@0.25=13
+  450/500 shots, 149s, failures so far exact@0.4=13 oracle-round@0.4=10 exact@0.25=23 oracle-round@0.25=15
+  500/500 shots, 177s, failures so far exact@0.4=16 oracle-round@0.4=11 exact@0.25=29 oracle-round@0.25=17
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/exactcap0.4+oracle-roundcap0.4+exactcap0.25+oracle-roundcap0.25/000000-000500.npz.tmp.npz in 177s

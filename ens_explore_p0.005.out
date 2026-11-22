@@ -1,0 +1,147 @@
+2026-11-22T07:20:50Z waiting for: /home/blakew3/mlBranchMidwest/runs/lap/selector_p0.005_validation_X.npz /home/blakew3/mlBranchMidwest/runs/tcbp_p0.005/validation_X.tcbp.npz
+2026-11-22T07:21:05Z inputs ready
+X memory, p = 0.005, 5000 shots of the data file with sha256 25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312
+  R   from /home/blakew3/mlBranchMidwest/runs/lap/selector_p0.005_validation_X.npz: 5000 shots; times: no record in the file
+  P1  from /home/blakew3/mlBranchMidwest/runs/lap/selector_p0.005_validation_X.npz: 5000 shots; times: no record in the file
+  P2  from /home/blakew3/mlBranchMidwest/runs/lap/selector_p0.005_validation_X.npz: 5000 shots; times: no record in the file
+  T   from /home/blakew3/mlBranchMidwest/runs/tcbp_p0.005/validation_X.tcbp.npz: 5000 shots; times: AMD EPYC-Milan Processor (no time per shot in the file)
+  J   from no file: joint decoding was not run (--no-joint): 0 shots; times: none
+the always-on members present (P1, P2, T) are not unanimous on 185 shots (3.700%)
+
+row                                                                            failures     of     rate  95% Wilson interval    later stage on   ms/shot
+R alone                                                                             194   5000   3.880%  [3.379%, 4.452%]                         884.7
+P1 alone                                                                            137   5000   2.740%  [2.323%, 3.230%]                         193.5
+P2 alone                                                                            152   5000   3.040%  [2.599%, 3.553%]                         189.5
+T alone                                                                              91   5000   1.820%  [1.485%, 2.229%]                              
+J alone (on the shots it decoded)                                                     0      0   0.000%  [0.000%, 100.000%]                              
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                 not measured: no logits
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                           129   5000   2.580%  [2.176%, 3.057%]         141 (2.82%)     536.5
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2       108   5000   2.160%  [1.792%, 2.601%]         141 (2.82%)     536.5
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                   not measured: no logits
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                    107   5000   2.140%  [1.774%, 2.579%]         185 (3.70%)          
+c: as b, with J among the candidates where it exists                           not measured: no logits
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R           not measured: no logits
+e: as d, with J among the candidates where it exists                           not measured: no logits
+f: P1 where P1 = P2 = T; else J where it converged, else T                           91   5000   1.820%  [1.485%, 2.229%]         185 (3.70%)             <- the frozen rule   (J exists on 0 of the 185 later-stage shots)
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R not measured: no logits
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network      not measured: no logits
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order            90   5000   1.800%  [1.467%, 2.207%]         185 (3.70%)             (J exists on 0 of the 185 later-stage shots)
+ORACLE (needs the truth): a perfect choice among R, P1, P2                           75   5000   1.500%  [1.198%, 1.876%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T                           53   5000   1.060%  [0.811%, 1.384%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                        50   5000   1.000%  [0.759%, 1.316%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                     50   5000   1.000%  [0.759%, 1.316%]                              
+ms/shot: the sum of the decode calls a row makes, averaged over all shots; empty where a file holds no time per shot.
+Each time is from the machine named above for its member: times from different machines are added here, so read them as a rough cost.
+
+against relay-BP alone on the same shots: both fail, the row only, relay-BP alone only, exact two-sided p (binomial on the discordant shots)
+P1 alone                                                                          92    45   102   p = 2.94e-06
+P2 alone                                                                         107    45    87   p = 0.000323
+T alone                                                                           76    15   118   p = 5.09e-21
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                        110    19    84   p = 6.21e-11
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2     91    17   103   p = 3.41e-16
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                  93    14   101   p = 1.98e-17
+f: P1 where P1 = P2 = T; else J where it converged, else T                        76    15   118   p = 5.09e-21
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order         85     5   109   p = 1.48e-26
+ORACLE (needs the truth): a perfect choice among R, P1, P2                        75     0   119   p = 3.01e-36
+ORACLE (needs the truth): a perfect choice among P1, P2, T                        50     3   144   p = 5.94e-39
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                     50     0   144   p = 8.97e-44
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                  50     0   144   p = 8.97e-44
+
+against TCBP-JOBS alone on the same shots: both fail, the row only, TCBP-JOBS alone only, exact two-sided p (binomial on the discordant shots)
+R alone                                                                           76   118    15   p = 5.09e-21
+P1 alone                                                                          60    77    31   p = 1.12e-05
+P2 alone                                                                          67    85    24   p = 3.5e-09
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                         67    62    24   p = 5.08e-05
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2     60    48    31   p = 0.0712
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                  89    18     2   p = 0.000402
+f: P1 where P1 = P2 = T; else J where it converged, else T                        91     0     0   p = 1
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order         77    13    14   p = 1
+ORACLE (needs the truth): a perfect choice among R, P1, P2                        50    25    41   p = 0.064
+ORACLE (needs the truth): a perfect choice among P1, P2, T                        53     0    38   p = 7.28e-12
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                     50     0    41   p = 9.09e-13
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                  50     0    41   p = 9.09e-13
+
+wrote /home/blakew3/mlBranchMidwest/runs/sel_p0.005/validation_X.selection.npz: 185 shots where P1, P2, T are not unanimous
+ensemble X: exit 0
+2026-11-22T07:21:09Z waiting for: /home/blakew3/mlBranchMidwest/runs/hier/cand_p0.005_valZ/validation_Z.chunks.npz /home/blakew3/mlBranchMidwest/runs/tcbp_p0.005/validation_Z.tcbp.npz
+2026-11-22T07:21:24Z inputs ready
+Z memory, p = 0.005, 5000 shots of the data file with sha256 24f12efa48d92b7a97767a36679be9216d75d5e6b88502e39f684ec17417774e
+  R   from /home/blakew3/mlBranchMidwest/runs/hier/cand_p0.005_valZ/validation_Z.chunks.npz: 5000 shots; times: 8 process(es) on AMD EPYC-Milan Processor
+  P1  from /home/blakew3/mlBranchMidwest/runs/hier/cand_p0.005_valZ/validation_Z.chunks.npz: 5000 shots; times: 8 process(es) on AMD EPYC-Milan Processor
+  P2  from /home/blakew3/mlBranchMidwest/runs/hier/cand_p0.005_valZ/validation_Z.chunks.npz: 5000 shots; times: 8 process(es) on AMD EPYC-Milan Processor
+  T   from /home/blakew3/mlBranchMidwest/runs/tcbp_p0.005/validation_Z.tcbp.npz: 5000 shots; times: AMD EPYC-Milan Processor (no time per shot in the file)
+  J   from no file: joint decoding was not run (--no-joint): 0 shots; times: none
+the always-on members present (P1, P2, T) are not unanimous on 179 shots (3.580%)
+
+row                                                                            failures     of     rate  95% Wilson interval    later stage on   ms/shot
+R alone                                                                             189   5000   3.780%  [3.286%, 4.345%]                         717.7
+P1 alone                                                                            144   5000   2.880%  [2.451%, 3.381%]                         135.3
+P2 alone                                                                            145   5000   2.900%  [2.470%, 3.403%]                         135.3
+T alone                                                                              97   5000   1.940%  [1.593%, 2.361%]                              
+J alone (on the shots it decoded)                                                     0      0   0.000%  [0.000%, 100.000%]                              
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                 not measured: no logits
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                           118   5000   2.360%  [1.974%, 2.819%]         145 (2.90%)     402.5
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2       104   5000   2.080%  [1.720%, 2.514%]         145 (2.90%)     402.5
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                   not measured: no logits
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                    113   5000   2.260%  [1.883%, 2.710%]         179 (3.58%)          
+c: as b, with J among the candidates where it exists                           not measured: no logits
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R           not measured: no logits
+e: as d, with J among the candidates where it exists                           not measured: no logits
+f: P1 where P1 = P2 = T; else J where it converged, else T                           97   5000   1.940%  [1.593%, 2.361%]         179 (3.58%)             <- the frozen rule   (J exists on 0 of the 179 later-stage shots)
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R not measured: no logits
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network      not measured: no logits
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order            92   5000   1.840%  [1.503%, 2.251%]         179 (3.58%)             (J exists on 0 of the 179 later-stage shots)
+ORACLE (needs the truth): a perfect choice among R, P1, P2                           82   5000   1.640%  [1.323%, 2.031%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T                           63   5000   1.260%  [0.986%, 1.609%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                        55   5000   1.100%  [0.846%, 1.429%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                     55   5000   1.100%  [0.846%, 1.429%]                              
+ms/shot: the sum of the decode calls a row makes, averaged over all shots; empty where a file holds no time per shot.
+Each time is from the machine named above for its member: times from different machines are added here, so read them as a rough cost.
+
+against relay-BP alone on the same shots: both fail, the row only, relay-BP alone only, exact two-sided p (binomial on the discordant shots)
+P1 alone                                                                          96    48    93   p = 0.000188
+P2 alone                                                                          94    51    95   p = 0.000339
+T alone                                                                           75    22   114   p = 3.62e-16
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                        100    18    89   p = 1.78e-12
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2     89    15   100   p = 1.35e-16
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                  92    21    97   p = 7.27e-13
+f: P1 where P1 = P2 = T; else J where it converged, else T                        75    22   114   p = 3.62e-16
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order         79    13   110   p = 2.61e-20
+ORACLE (needs the truth): a perfect choice among R, P1, P2                        82     0   107   p = 1.23e-32
+ORACLE (needs the truth): a perfect choice among P1, P2, T                        55     8   134   p = 1.28e-30
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                     55     0   134   p = 9.18e-41
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                  55     0   134   p = 9.18e-41
+
+against TCBP-JOBS alone on the same shots: both fail, the row only, TCBP-JOBS alone only, exact two-sided p (binomial on the discordant shots)
+R alone                                                                           75   114    22   p = 3.62e-16
+P1 alone                                                                          76    68    21   p = 5.99e-07
+P2 alone                                                                          69    76    28   p = 2.74e-06
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                         69    49    28   p = 0.022
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2     65    39    32   p = 0.477
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                  94    19     3   p = 0.000855
+f: P1 where P1 = P2 = T; else J where it converged, else T                        97     0     0   p = 1
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order         82    10    15   p = 0.424
+ORACLE (needs the truth): a perfect choice among R, P1, P2                        55    27    42   p = 0.0912
+ORACLE (needs the truth): a perfect choice among P1, P2, T                        63     0    34   p = 1.16e-10
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                     55     0    42   p = 4.55e-13
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                  55     0    42   p = 4.55e-13
+
+wrote /home/blakew3/mlBranchMidwest/runs/sel_p0.005/validation_Z.selection.npz: 179 shots where P1, P2, T are not unanimous
+ensemble Z: exit 0
+p = 0.005, 5000 pairs: shot k of X (data sha256 25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312) with shot k of Z (24f12efa48d92b7a97767a36679be9216d75d5e6b88502e39f684ec17417774e)
+row                      failures [X Z]  failed pairs   rate per cycle
+R                             [194 189]           373  6.44e-03 +- 3.3e-04
+P1                            [137 144]           276  4.72e-03 +- 2.8e-04
+P2                            [152 145]           289  4.95e-03 +- 2.9e-04
+T                               [91 97]           187  3.17e-03 +- 2.3e-04
+aw                            [129 118]           241  4.11e-03 +- 2.6e-04
+ac                            [108 104]           207  3.52e-03 +- 2.4e-04
+bw                            [107 113]           218  3.71e-03 +- 2.5e-04
+f                               [91 97]           187  3.17e-03 +- 2.3e-04   <- the marked rule
+gw                              [90 92]           179  3.03e-03 +- 2.3e-04
+oracle_R_P1_P2                  [75 82]           155  2.62e-03 +- 2.1e-04
+oracle_P1_P2_T                  [53 63]           116  1.95e-03 +- 1.8e-04
+oracle_P1_P2_T_R                [50 55]           105  1.77e-03 +- 1.7e-04
+oracle_P1_P2_T_R_J              [50 55]           105  1.77e-03 +- 1.7e-04
+pair score: exit 0
+2026-11-22T07:21:31Z ENS-EXPLORE p0.005 END

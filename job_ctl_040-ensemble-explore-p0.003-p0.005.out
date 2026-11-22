@@ -1,0 +1,10 @@
+checkout: /home/blakew3/mlBranchMidwest/ens-explore at 472b18f server-jobs: ctl 040, the ensemble's exploration tables at p = 0.003 and 0.005 (validation files)
+Sun Nov 22 07:20:46 UTC 2026
+-rw-rw-r--+ 1 blakew3 blakew3 285359 Nov 22 07:20 /home/blakew3/mlBranchMidwest/runs/lap/selector_p0.005_validation_X.npz
+p = 0.003 script started, pid 86053
+p = 0.005 script started, pid 86054
+==> /home/blakew3/mlBranchMidwest/runs/ens_explore_p0.003.out <==
+2026-11-22T07:20:50Z waiting for: /home/blakew3/mlBranchMidwest/runs/hier/cand_p0.003/validation_X.chunks.npz /home/blakew3/mlBranchMidwest/runs/hier/cand_p0.003/validation_Z.chunks.npz /home/blakew3/mlBranchMidwest/runs/tcbp_p0.003/validation_X.tcbp.npz /home/blakew3/mlBranchMidwest/runs/tcbp_p0.003/validation_Z.tcbp.npz
+
+==> /home/blakew3/mlBranchMidwest/runs/ens_explore_p0.005.out <==
+2026-11-22T07:20:50Z waiting for: /home/blakew3/mlBranchMidwest/runs/lap/selector_p0.005_validation_X.npz /home/blakew3/mlBranchMidwest/runs/tcbp_p0.005/validation_X.tcbp.npz

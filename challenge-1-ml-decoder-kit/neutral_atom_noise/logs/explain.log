@@ -1,0 +1,10 @@
+# python -m neutral_atom_noise.explain --factors 0.7,0.9   (2026-11-22T07:58:01Z, luminaty, head deac911)
+| Factor | Priors | Expected faults per shot | share: 3 or 4 detectors | share: 5 or 6 detectors | share: readout-like (one check, two rounds) | share: flips a logical bit |
+|---|---|---|---|---|---|---|
+| 0.7 | matched | 76.8 | 41.3% | 0.2% | 58.6% | 19.3% |
+| 0.7 | generic (p = 0.0104) | 121.7 | 66.3% | 7.9% | 25.8% | 34.4% |
+| 0.9 | matched | 97.9 | 41.5% | 0.2% | 58.3% | 19.4% |
+| 0.9 | generic (p = 0.0134) | 155.6 | 66.3% | 7.9% | 25.8% | 34.5% |
+
+factor 0.7: 5256 of 8784 columns are at least 20 times rarer in the matched picture than in the generic one; the largest matched ÷ generic ratio is 1.43
+factor 0.9: 5256 of 8784 columns are at least 20 times rarer in the matched picture than in the generic one; the largest matched ÷ generic ratio is 1.43

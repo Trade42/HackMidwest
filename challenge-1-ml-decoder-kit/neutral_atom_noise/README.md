@@ -77,6 +77,7 @@ given.
 | `job.py` | everything in one command: shots, all rows, the fitted generic p, tables, plot |
 | `summarize.py` | tables with intervals and paired tests, and the plot |
 | `loss_check.py` | checks our loss loop against `loss/`'s own job |
+| `explain.py` | how the matched and the generic picture of the noise differ, kind of fault by kind of fault |
 | `test_neutral_atom_noise.py` | tests |
 
 ## Run it

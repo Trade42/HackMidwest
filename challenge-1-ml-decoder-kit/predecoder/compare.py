@@ -8,7 +8,8 @@ Run from challenge-1-ml-decoder-kit/ (needs the logits of predecoder.evaluate fo
 Three arms, each relay-BP at the kit's settings, on the same Stim shots of the file:
 
   kit     the kit's relay-BP, built once with the kit's priors, decoding the shots in file order
-          (what evaluation.evaluate runs as "relay-bp"; it carries its random state from shot to shot)
+          (what evaluation.evaluate runs as "relay-bp"; it carries its random state from shot to shot).
+          With --kit-chunk N, one such decoder per chunk of N shots, the chunks side by side.
   fresh   relay-BP built per shot with the kit's priors (seed 0 on every shot)
   head    relay-BP built per shot with this shot's priors from the head (seed 0 on every shot)
 
@@ -27,7 +28,8 @@ Both depend on the machine and on what else runs on it: the log names the proces
 
 The "fresh" and "head" arms are decoded in chunks of --chunk shots, each saved to
 <out>/parts/ as soon as it is done, so a stopped run continues where it stopped. The "kit" arm
-runs in one process, in file order, and is saved when it ends.
+runs one process per chunk of --kit-chunk shots (default: one chunk, the whole file), each in
+file order, each saved when it ends.
 
 Files named test_* or go_* are refused without --final.
 """
@@ -49,7 +51,8 @@ from predecoder.evaluate import HELD_OUT, read_logits
 from predecoder.priors import load_settings, shot_priors
 
 ARMS = ("kit", "fresh", "head")
-FIELDS = ("failed", "converged", "iterations", "seconds_build", "seconds_decode", "first_leg")
+FIELDS = ("failed", "converged", "iterations", "seconds_build", "seconds_decode", "first_leg", "predicted_code")
+BITS = 1 << np.arange(12)            # the 12 predicted bits as one number, bit i = observable i
 _JOB = {}
 
 
@@ -60,7 +63,7 @@ def _start(H, L, kit_priors, logits_path, prior_settings, syndromes, truth):
 
 def _row(result, truth, first_leg):
     return (bool((result.predicted != truth).any()), result.converged, result.iterations, result.seconds_build,
-            result.seconds_decode, first_leg)
+            result.seconds_decode, first_leg, int(result.predicted.astype(np.int64) @ BITS))
 
 
 def _run(task):
@@ -81,6 +84,19 @@ def _run(task):
         result = decode_with_priors(H, L, priors, syndromes[k])
         rows.append(_row(result, truth[k], first_leg_converges(H, priors, syndromes[k])))   # untimed
     return arm, first, np.array(rows, dtype=np.float64)
+
+
+def part_tag(data_sha256, arm, extra=None):
+    """The fingerprint in a part file's name: the shot file, the arm, and for the head arm the head and the knobs."""
+    what = {"data": data_sha256, "arm": arm} | (extra or {})
+    return hashlib.sha256(json.dumps(what, sort_keys=True).encode()).hexdigest()[:12]
+
+
+def _padded(rows):
+    """A part file with the columns of FIELDS; parts written before a column existed get NaN there."""
+    if rows.shape[1] == len(FIELDS):
+        return rows
+    return np.hstack([rows, np.full((len(rows), len(FIELDS) - rows.shape[1]), np.nan)])
 
 
 def summarise(arm, values, network_seconds=0.0):
@@ -104,6 +120,7 @@ def main(argv=None):
     parser.add_argument("--arms", nargs="+", choices=ARMS, default=list(ARMS))
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--chunk", type=int, default=100)
+    parser.add_argument("--kit-chunk", type=int, help="shots per built-once decoder of the kit arm (default: all)")
     parser.add_argument("--limit", type=int, help="only the first this many shots")
     parser.add_argument("--out", required=True)
     parser.add_argument("--final", action="store_true", help="allow a held-out file (test_*, go_*)")
@@ -123,18 +140,19 @@ def main(argv=None):
     prior_settings = load_settings(args.settings)
     out = Path(args.out)
     (out / "parts").mkdir(parents=True, exist_ok=True)
+    kit_chunk = args.kit_chunk or shots
 
     def part(arm, first):
         """A part file's name carries a fingerprint of what it holds: the shot file, and for the head arm the head and the knobs."""
-        what = {"data": data.sha256, "arm": arm}
+        what = {"kit_chunk": kit_chunk} if arm == "kit" and kit_chunk != shots else {}
         if arm == "head":
             what |= {"head": meta["model"]["head_sha256"], "trunk": meta["model"]["trunk_sha256"], "priors": prior_settings}
-        tag = hashlib.sha256(json.dumps(what, sort_keys=True).encode()).hexdigest()[:12]
-        return out / "parts" / f"{arm}_{tag}_{first:06d}_{shots}.npy"
+        return out / "parts" / f"{arm}_{part_tag(data.sha256, arm, what)}_{first:06d}_{shots}.npy"
 
     tasks = []
-    if "kit" in args.arms and not part("kit", 0).exists():
-        tasks.append(("kit", 0, shots))                       # first, as it is the longest
+    kit_firsts = list(range(0, shots, kit_chunk))
+    if "kit" in args.arms:                                     # first, as they are the longest
+        tasks += [("kit", first, min(first + kit_chunk, shots)) for first in kit_firsts if not part("kit", first).exists()]
     for arm in ("fresh", "head"):
         if arm in args.arms:
             tasks += [(arm, first, min(first + args.chunk, shots)) for first in range(0, shots, args.chunk)
@@ -154,14 +172,16 @@ def main(argv=None):
     results, per_shot = {}, {"truth": truth}
     network = (meta or {}).get("per_shot_seconds", {}).get("mean") or 0.0
     for arm in args.arms:
-        firsts = [0] if arm == "kit" else range(0, shots, args.chunk)
-        rows = np.concatenate([np.load(part(arm, first)) for first in firsts])
-        values = {field: rows[:, i] for i, field in enumerate(FIELDS)}
+        firsts = kit_firsts if arm == "kit" else range(0, shots, args.chunk)
+        rows = np.concatenate([_padded(np.load(part(arm, first))) for first in firsts])
+        values = {field: rows[:, i] if i < rows.shape[1] else np.full(len(rows), np.nan) for i, field in enumerate(FIELDS)}
         if arm == "kit" and "fresh" in args.arms:
-            values["first_leg"] = np.concatenate([np.load(part("fresh", first)) for first in range(0, shots, args.chunk)])[:, 5]
+            values["first_leg"] = np.concatenate([_padded(np.load(part("fresh", first))) for first in range(0, shots, args.chunk)])[:, 5]
         results[arm] = summarise(arm, values, network if arm == "head" else 0.0)
         for field, column in values.items():
             per_shot[f"{field}_{arm}"] = column
+        if not np.isnan(values["predicted_code"]).any():
+            per_shot[f"predicted_{arm}"] = ((values["predicted_code"].astype(np.int64)[:, None] & BITS) > 0).astype(np.uint8)
     pairs = {}
     for a, b in (("head", "fresh"), ("head", "kit"), ("fresh", "kit")):
         if a in results and b in results:
@@ -188,6 +208,7 @@ def main(argv=None):
     np.savez_compressed(out / "per_shot.npz", **per_shot)
     with open(out / "summary.json", "w") as file:
         json.dump({"data": data.identity(), "shots": shots, "relay": settings(), "head_priors": prior_settings,
+                   "kit_arm": f"one decoder built once per chunk of {kit_chunk} shots, decoding in file order",
                    "logits": meta, "arms": results, "pairs": pairs, "workers": args.workers, "machine": platform.node(),
                    "cpus": os.cpu_count()}, file, indent=1)
 

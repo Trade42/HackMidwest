@@ -22,6 +22,7 @@ The measurement is not in yet; every number that is in is listed under "Numbers"
 | `calibration.py` | held-out check of the head against the kit's priors and BP's own beliefs |
 | `decode.py` | relay-BP built with one shot's priors; the paired test and the Wilson interval |
 | `compare.py` | the measurement: the kit's priors against the head's, on the same Stim shots |
+| `candidate.py` | the head's answer beside the hierarchy's members (R, P1, P2, T), read from their files |
 | `plugin.py` | the decoder for the team's evaluator (`evaluation.evaluate`) |
 | `oracle.py` | the ceiling: relay-BP told the true faults (a diagnostic, never a result) |
 | `test_predecoder.py` | tests |
@@ -113,9 +114,34 @@ python -m predecoder.priors --data data/p0.004/train_X.npz --logits <logits_trai
 python -m predecoder.compare --data data/p0.004/validation_X.npz --logits <logits_validation> \
     --settings <fit.json> --arms fresh head kit --workers 4 --out <compare folder>
 
+# the head's answer beside the hierarchy's members (read from their files), on validation_X
+python -m predecoder.candidate --ours <compare folder>/per_shot.npz \
+    --members <laptop-artifacts: priortilt/results_8b/selector_validation_X.npz> \
+    --tcbp <server-logs: files/tcbp_p0.004/validation_X.tcbp.npz>
+
 # the team's evaluator
 python -m evaluation.evaluate --test-x <X shots> --test-z <Z shots> --decoder predecoder.plugin:make_decoder \
     --plugin-options <options.json> --out <folder>
+```
+
+The fit's two train files come from a run of the "fresh" arm on the train file:
+
+```sh
+python -m predecoder.compare --data data/p0.004/train_X.npz --arms fresh --workers 4 --out <train compare folder>
+python -m predecoder.subset --data data/p0.004/train_X.npz --per-shot <train compare folder>/per_shot.npz \
+    --arm fresh --right 2000 --seed 5 --out <subset folder>
+# then predecoder.evaluate on each of the two files, and the fit:
+python -m predecoder.priors --data <subset folder>/train_X_fresh_failed.npz <subset folder>/train_X_fresh_right.npz \
+    --weights 1 <the right-file weight subset.py prints> --logits <logits of the failed file> <logits of the right file> \
+    --workers 4 --out <fit.json>
+```
+
+`options.json` of the plugin (X memory gets the head; Z memory, which has no head, runs the kit's
+relay-BP):
+
+```json
+{"heads": {"X": "<head.pt>"}, "trunks": {"X": "<the trunk checkpoint>"}, "settings": "<fit.json>",
+ "device": "cpu", "torch_threads": 4}
 ```
 
 ## Numbers
@@ -191,3 +217,33 @@ Even this weak head steers relay-BP: the hard shots fall from 51 to 11 with a ha
 log-odds. Taken at face value (alpha 1) the head makes BP worse: the double-counting the knobs
 are there for. 300 shots are too few for failures. These numbers set the default grid of the
 fit (log-odds, alpha 0.3 to 0.7); they are train shots, and no knob was chosen on them.
+
+### The baselines on the validation shots, and the train failures of the fit (no head yet)
+
+**Validation** (`data/p0.004/validation_X.npz`, 5,000 Stim shots, seed 201; this PC, lane A,
+4 processes on 2 physical cores, both threads busy, so the times are inflated; log
+`logs/compare_validation_X_kit_fresh.log`; the first attempt, stopped by hand to use smaller
+kit chunks, is `logs/compare_validation_X_kit_fresh_part1_stopped.log`, and its finished fresh
+chunks were reused):
+
+    python -m predecoder.compare --data data/p0.004/validation_X.npz --arms kit fresh --kit-chunk 500 --workers 4 --out <folder>
+
+| arm | failures, 95% interval | unconverged | hard shots | mean iterations | build + decode, mean |
+|---|---|---|---|---|---|
+| kit (built once per 500 shots, in order) | 31, 0.0062 [0.0044, 0.0088] | 17 | 691 | 565 | 538 ms |
+| fresh (built per shot, seed 0) | 20, 0.0040 [0.0026, 0.0062] | 11 | 691 | 554 | 442 ms |
+
+Paired, fresh against kit: both fail 15, only fresh 5, only kit 16, exact two-sided p = 0.027.
+The kit arm equals the laptop's relay-BP on the same file shot for shot (same failures, same
+predicted bits, same iteration counts: `selector_validation_X.npz`, R, on
+`origin/laptop-artifacts`), a check across two machines. The two arms differ only in relay-BP's
+random draws (gate G2: another draw changes about 44% of relay-BP's failures), so the gap
+between them is the size of the noise a single seed carries. The kill line is read against
+"fresh", the stronger of the two here.
+
+**Train** (`data/p0.004/train_X.npz`, 20,000 shots, seed 101; run by the orchestrator on the
+teammate's server, job ctl/070, 6 processes, 666 s; `logs/server_job_ctl_070_fresh_train.out`,
+`logs/server_fresh_train_p0.004_summary.json`): the fresh arm fails 89, 0.0045 [0.0036, 0.0055],
+40 unconverged, 2,759 hard, mean 534 iterations, 168 ms per shot on that machine. `subset.py`
+(seed 5, `logs/subset_train_X.log`) wrote the 89 failed shots and 2,000 of the 19,911 right ones
+for the fit; the right file's weight is 9.9555.

@@ -1,0 +1,29 @@
+{
+ "source": {
+  "path": "/home/sal/hackMidwest/worktrees/predecoder/challenge-1-ml-decoder-kit/data/p0.004/train_X.npz",
+  "sha256": "98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc",
+  "basis": "X",
+  "p": 0.004,
+  "seed": 101,
+  "shots": 20000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "decoded_shots": 20000,
+ "from": "/home/sal/hackMidwest/orchestration/scratch/predecoder/server/fresh_train_per_shot.npz",
+ "arm": "fresh",
+ "failed": 89,
+ "right": 19911,
+ "sample": 2000,
+ "seed": 5,
+ "right_weight": 9.9555,
+ "files": {
+  "train_X_fresh_failed": {
+   "path": "/home/sal/hackMidwest/orchestration/scratch/predecoder/subsets/train_X_fresh_failed.npz",
+   "shots": 89
+  },
+  "train_X_fresh_right": {
+   "path": "/home/sal/hackMidwest/orchestration/scratch/predecoder/subsets/train_X_fresh_right.npz",
+   "shots": 2000
+  }
+ }
+}

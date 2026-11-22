@@ -34,8 +34,10 @@ lowest score; ties go to fewer weighted hard shots (relay-BP's first leg alone, 
 with the same priors, does not converge), then fewer mean iterations. Row 1 is the kit's
 priors, the control: it must fail every shot of the failed file and none of the right file.
 The rule was fixed before any trained head was decoded. Every row goes into the JSON file.
+Each (file, setting) is saved in <out>.parts/ as soon as it is done, so a stopped fit resumes.
 """
 import argparse
+import hashlib
 import itertools
 import json
 import multiprocessing
@@ -145,16 +147,27 @@ def main(argv=None):
         raise SystemExit("all files must have the same basis and p")
     settings_grid = grid(args.modes, args.alphas, args.eps)
     keys = [json.dumps(setting, sort_keys=True) for setting in settings_grid]
+    cache = Path(args.out).with_suffix(".parts")
+    cache.mkdir(parents=True, exist_ok=True)
     results = {}
     for index, (data, meta, logits_path) in enumerate(files):
         shots = len(data.detectors) if args.shots is None else min(args.shots, len(data.detectors))
-        tasks = [(k, setting, data.basis_input[k], data.observables[k]) for setting in settings_grid for k in range(shots)]
-        results[index] = {key: np.zeros((shots, 3)) for key in keys}
+        results[index] = {}
         with multiprocessing.get_context("spawn").Pool(args.workers, _start,
                                                        (problem.H.tocsr(), problem.L, str(logits_path), problem.priors)) as pool:
-            for key, shot, failed, hard, iterations in pool.imap_unordered(_decode, tasks, chunksize=8):
-                results[index][key][shot] = failed, hard, iterations
-        print(f"  {data.path.name}: {shots} shots x {len(settings_grid)} settings, {time.time() - start:.0f} s", flush=True)
+            for setting, key in zip(settings_grid, keys):
+                # One file per (shot file, head, setting): a stopped fit continues where it stopped.
+                what = json.dumps({"data": data.sha256, "head": meta["model"]["head_sha256"], "shots": shots, "setting": setting},
+                                  sort_keys=True)
+                path = cache / f"{hashlib.sha256(what.encode()).hexdigest()[:16]}.npy"
+                if not path.exists():
+                    tasks = [(k, setting, data.basis_input[k], data.observables[k]) for k in range(shots)]
+                    values = np.zeros((shots, 3))
+                    for _, shot, failed, hard, iterations in pool.imap_unordered(_decode, tasks, chunksize=4):
+                        values[shot] = failed, hard, iterations
+                    np.save(path, values)
+                results[index][key] = np.load(path)
+                print(f"  {data.path.name}: {shots} shots, {setting}, {time.time() - start:.0f} s", flush=True)
     rows = []
     print(f"fit on {', '.join(f'{d.path.name} (weight {w:g})' for (d, _, _), w in zip(files, weights))}, p={problem.p:g}; "
           f"relay-BP at the kit's settings, a decoder built per shot; {args.workers} processes, {time.time() - start:.0f} s")

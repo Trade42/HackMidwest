@@ -278,6 +278,7 @@ def test_evaluate_then_compare(trained, tmp_path):
     for arm in ("kit", "fresh", "head"):
         assert summary["arms"][arm]["shots"] == 4
         assert summary["arms"][arm]["failures"] == int(per_shot[f"failed_{arm}"].sum())
+        assert np.array_equal((per_shot[f"predicted_{arm}"] != per_shot["truth"]).any(axis=1), per_shot[f"failed_{arm}"] > 0)
     assert summary["arms"]["head"]["network_seconds_mean"] > 0
 
 
@@ -340,3 +341,25 @@ def test_calibration_runs(trained, tmp_path):
                       "--out", str(tmp_path / "cal.json")])
     rows = json.loads((tmp_path / "cal.json").read_text())["rows"]
     assert rows["all shots"]["shots"] == 4 and rows["all shots"]["head"]["log_loss"] > 0
+
+
+def test_candidate_counts(tmp_path):
+    """The head's answer beside the members: the counts of a hand-made case."""
+    from predecoder import candidate
+
+    truth = np.zeros((4, 12), np.uint8)
+    wrong = np.zeros(12, np.uint8)
+    wrong[0] = 1
+    def bits(*bad):
+        out = truth.copy()
+        out[list(bad)] = wrong
+        return out
+    np.savez(tmp_path / "ours.npz", truth=truth, predicted_head=bits(3))
+    np.savez(tmp_path / "members.npz", truth=truth, predicted_R=bits(0, 1), predicted_P1=bits(0, 1), predicted_P2=bits(0, 2))
+    np.savez(tmp_path / "tcbp.npz", truth=truth, predicted_T=bits(0, 1))
+    candidate.main(["--ours", str(tmp_path / "ours.npz"), "--members", str(tmp_path / "members.npz"),
+                    "--tcbp", str(tmp_path / "tcbp.npz"), "--out", str(tmp_path / "c.json")])
+    c = json.loads((tmp_path / "c.json").read_text())
+    assert c["failures"] == {"R": 2, "P1": 2, "P2": 2, "T": 2, "H": 1}
+    assert c["disagree"] == 2 and c["all_members_fail"] == 1 and c["head_right_where_all_members_fail"] == 1
+    assert c["oracle_with_head"] == 0 and c["members_agree_but_wrong"] == 1 and c["head_right_there"] == 1

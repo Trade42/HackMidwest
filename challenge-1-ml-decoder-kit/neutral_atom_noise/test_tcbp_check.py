@@ -44,3 +44,20 @@ def test_sign_test_and_wilson():
     assert low == 0.0 and abs(high - 0.2775) < 1e-4
     low, high = wilson(91, 2000)
     assert low < 91 / 2000 < high
+
+
+def test_phase2_models_have_the_declared_rates():
+    import stim
+
+    from circuit import GROSS_CIRCUITS
+    from neutral_atom_noise.tcbp_models import biased_channel, biased_circuit, biased_two_qubit_error, si1000_noise
+
+    px, py, pz = biased_channel(0.003, 100)
+    assert abs(px + py + pz - 0.003) < 1e-15 and px == py and abs(pz / (px + py) - 100) < 1e-9
+    assert abs(biased_two_qubit_error(0.003) - 0.005991) < 1e-12
+    noise = si1000_noise(0.004)
+    assert (noise.cx_depolarize2, noise.measure_flip, noise.reset_flip) == (0.004, 0.02, 0.008)
+    assert abs(noise.idle_depolarize - 0.0004) < 1e-15
+    circuit = biased_circuit(stim.Circuit.from_file(GROSS_CIRCUITS["X"]), 0.003, 100)
+    names = {instruction.name for instruction in circuit.flattened()}
+    assert "DEPOLARIZE1" not in names and "DEPOLARIZE2" not in names and "PAULI_CHANNEL_1" in names

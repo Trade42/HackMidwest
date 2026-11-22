@@ -99,7 +99,66 @@ with the same kit priors, built per shot, gets 49 of them right and breaks 5 oth
 subsets overstate any gain: part of what a setting "fixes" is the decoder's own run-to-run change. The fit ranks
 settings; validation gives the unbiased count. TCBP-JOBS takes alpha 0.4, against relay-BP's 0.2 at p = 0.004.
 
-(further rows filled in as they arrive)
+### Job 3: validation (`data/p0.005/validation_X.npz`, 5,000 Stim shots, seed 201): the kill line is PASSED
+
+The knobs are frozen. The logits are luminaty's CPU float32 bytes behind H = 79 (sha256 `14eea54d...`; every
+decoded row's hash equals this PC's file on 5,000 of 5,000). One process with one model: the head arm, then the
+kit's-priors arm ("fresh"), then the batch check. Server job ctl/130 at `86259291`, 15:29 to 15:40 UTC, alongside the
+fit's last rows. Logs: `logs/tcbp_job3_validation.log`, `logs/tcbp_validation_X_p0.005_score.log`.
+
+    python -m predecoder.tcbp decode --data data/p0.005/validation_X.npz --logits <logits> \
+        --settings predecoder/logs/fit_tcbp_X_p0.005.json --arms head fresh --batch-check --out <folder>
+    python -m predecoder.tcbp score --data data/p0.005/validation_X.npz --tcbp-head <folder>/per_shot.npz \
+        --tcbp <files/tcbp_p0.005/validation_X.tcbp.npz> --relay-head <relay-BP head arm per_shot.npz> --logits <logits>
+
+| decoder, the same 5,000 shots | failures | share, 95% interval | build + decode per shot, A100, mean |
+|---|---|---|---|
+| **TH: TCBP-JOBS with the head's priors** | **33** | **0.0066 [0.0047, 0.0093]** | 42.3 + 3.8 ms (p99 64 ms) |
+| TCBP-JOBS with the kit's priors, per shot, this run's model ("fresh") | 100 | 0.0200 [0.0165, 0.0243] | 42.1 + 12.9 ms (p99 119 ms) |
+| the same, built once, `decode_batch` (batch check) | 100 | 0.0200 | |
+| TCBP-JOBS alone, the stored file (its own model fit) | 91 | 0.0182 [0.0148, 0.0223] | |
+| H: relay-BP with the head's priors (luminaty CPU logits) | 79 | 0.0158 [0.0127, 0.0196] | |
+| the frozen fallback rule: H where H converged, else T | 50 | 0.0100 [0.0076, 0.0132] | |
+| (b2): H where H converged, else TH (not a candidate, §2b) | 44 | 0.0088 [0.0066, 0.0118] | |
+
+| pair (same shots) | both fail | only TH | only the other | exact two-sided p |
+|---|---|---|---|---|
+| **TH against TCBP-JOBS alone, stored (the kill line)** | 25 | 8 | 66 | **1.8e-12** |
+| TH against this run's fresh arm (like for like: same model, only the priors differ) | 25 | 8 | 75 | 9.1e-15 |
+| TH against H | 29 | 4 | 50 | 3.8e-11 |
+| TH against the frozen fallback rule | 28 | 5 | 22 | 0.0015 |
+| TH against (b2) | 29 | 4 | 15 | 0.019 |
+
+How to read it:
+- **TCBP-JOBS fails 2.8 to 3 times less with the head's priors.** That holds against the stored file (91) and
+  against the same run's kit-priors arm (100). It beats every decoder the team had on these shots, including the
+  fallback rule (50). The fit's train rows had pointed this way: 107 of 390 left wrong against 341.
+- **The model fit changes TCBP-JOBS's answers.** The batch check equals the fresh arm on all 5,000 shots, both bits and
+  number of faults, so batch against single decoding changes nothing. Three fits of `init_tcbp_model` with the kit's
+  priors gave 91, 96 and 100 failures (job 1 against job 3: bits differ on 42 shots). Every comparison with a stored
+  file therefore also mixes two model fits; the like-for-like pair is TH against this run's fresh arm.
+- The decoder's own `converged` flag is False on 3,863 shots with the head's priors and 4,858 with the kit's. It is
+  not used.
+- The choice of (a) over (b2) was made on Sal's word before (b2) was computed (§2b). By the declared rule of §2
+  (fewer failures), (a) would also have been chosen: 33 against 44.
+
+### Job 4: the whole pipeline on the GPU (the network on the A100 in float32)
+
+`python -m predecoder.evaluate ... --device cuda --precision fp32 --threads 1 --time-shots 1000 --limit 1000` on the first
+1,000 validation shots, then `tcbp logits-diff` against the CPU bytes and `tcbp decode` with the GPU logits. Server job
+cpu/070 at `8c25c16d`. Logs: `logs/tcbp_job4_gpu_*`.
+
+- **Network + head, one shot at a time on the A100, float32:** 9.4 ms mean, 8.5 ms median, 19.8 ms p99. With float16
+  autocast: 11.5 / 10.1 / 24.9 ms.
+- **The float32 logits against the CPU's:** they differ on 893 of 1,000 rows, but only on 2,251 of 8,784,000 entries, by
+  at most 0.0156 (one float16 step). Float16 autocast differs on every row (2.9 million entries, up to 1.79).
+- **Decoded with TCBP-JOBS and the frozen knobs, the GPU logits give the same 12 bits, and the same number of faults,
+  as the CPU logits on all 1,000 shots** (3 failures in both), although the two decodes used different model fits.
+- **The pipeline's time per shot on the A100, one process:** network 9.4 + build 41.8 + decode 4.4 ms, about 56 ms
+  mean. These are separate timers. The p99 of the sum was not measured as one timer; the parts are 19.8 and 65 ms.
+  Most of it is building the decoder, which cudaq-qec 0.9.0 cannot avoid (job 1).
+
+(test rows filled in as they arrive)
 
 ## What was not done
 

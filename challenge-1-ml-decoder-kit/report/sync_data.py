@@ -256,6 +256,49 @@ def derive_plugin_metrics(records, now):
     return derived
 
 
+TCBP_FITS = [("stored", "files/tcbp_p0.005/validation_X.tcbp.npz", "failed_T", "predicted_T"),
+             ("job1", "files/predecoder-tcbp/validation_X_p0.005_fresh_per_shot.npz", "failed_fresh", "predicted_fresh"),
+             ("job3", "files/predecoder-tcbp/validation_X_p0.005_per_shot.npz", "failed_fresh", "predicted_fresh")]
+
+
+def derive_tcbp_fits(records, now):
+    """TCBP-JOBS's model fit varies from run to run: three fits with the kit's priors on the same validation X shots at p = 0.005.
+    Only the kit-prior arm of each file is kept (job 3's file also holds an arm of another branch, which stays out); the three files must
+    hold the same shots (equal truth arrays), and job 3's batch decode is checked against its per-shot decode."""
+    import io
+    import numpy as np
+    name = "exploration/tcbp_fits/validation_X_p0.005_fits.npz"
+    got = {key: read_source("origin/server-logs", path) for key, path, _, _ in TCBP_FITS}
+    if any(value is None for value in got.values()):
+        return []
+    shas = {key: sha256(data) for key, (data, _) in got.items()}
+    if name in records and records[name].get("source_sha256") == shas and (DATA / name).is_file():
+        return []
+    arrays, truth = {}, None
+    for key, path, failed, predicted in TCBP_FITS:
+        with np.load(io.BytesIO(got[key][0]), allow_pickle=False) as file:
+            if truth is None:
+                truth = file["truth"]
+            elif not np.array_equal(truth, file["truth"]):
+                raise RuntimeError(f"{path}: other shots than {TCBP_FITS[0][1]}")
+            arrays[f"failed_{key}"] = file[failed].astype(bool)
+            if key == "job3":
+                arrays["job3_batch_equals_per_shot"] = np.array(bool(np.array_equal(file["predicted_batch"], file[predicted])))
+    with np.load(io.BytesIO(got["stored"][0]), allow_pickle=False) as file:
+        arrays["data_sha256"] = file["data_sha256"]
+    buffer = io.BytesIO()
+    np.savez_compressed(buffer, truth_sha256=np.array(sha256(truth.tobytes())), **arrays)
+    target = DATA / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(buffer.getvalue())
+    commit = got["stored"][1]
+    records[name] = {"file": name, "from": "derived by `report/sync_data.py` from branch `server-logs` at commit `" + commit[:12] + "`: "
+                     + "; ".join(f"`{path}` (sha256 `{shas[key][:16]}…`, its `{failed}`)" for key, path, failed, _ in TCBP_FITS),
+                     "branch": "origin/server-logs", "commit": commit, "path": "; ".join(path for _, path, _, _ in TCBP_FITS),
+                     "source_sha256": shas, "sha256": sha256(target.read_bytes()), "bytes": target.stat().st_size, "copied_utc": now, "grows": False}
+    return [name]
+
+
 def write_sources_md(records):
     lines = ["# Where every file in this folder came from", "",
              "Written by `python -m report.sync_data`; do not edit by hand. The tables and figures of the report read",
@@ -320,6 +363,8 @@ def main(argv=None):
             (changed if old else copied).append(name)
     if args.only is None:
         copied += derive_plugin_metrics(records, now)
+    if args.only is None or any("exploration/tcbp_fits/".startswith(only) or only.startswith("exploration/tcbp_fits/") for only in args.only):
+        copied += derive_tcbp_fits(records, now)
     RECORD.parent.mkdir(parents=True, exist_ok=True)
     RECORD.write_text(json.dumps(records, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     write_sources_md(records)

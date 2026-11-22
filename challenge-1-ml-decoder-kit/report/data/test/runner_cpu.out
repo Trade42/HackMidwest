@@ -8,3 +8,9 @@
 2026-11-22T07:28:16Z END cpu/030-candidates-explore exit 0
 2026-11-22T12:14:42Z START cpu/040-retime-p0.003-baselines at 8552db3
 2026-11-22T12:14:46Z END cpu/040-retime-p0.003-baselines exit 0
+2026-11-22T14:57:57Z START cpu/050-predecoder-latency at 823a4c6
+2026-11-22T15:04:03Z END cpu/050-predecoder-latency exit 0
+2026-11-22T15:14:38Z START cpu/060-predecoder-latency-p0.003-p0.004 at b239513
+2026-11-22T15:19:54Z END cpu/060-predecoder-latency-p0.003-p0.004 exit 0
+2026-11-22T15:33:40Z START cpu/070-predecoder-tcbp-4-gpu-network at e3f9479
+2026-11-22T15:37:36Z END cpu/070-predecoder-tcbp-4-gpu-network exit 0

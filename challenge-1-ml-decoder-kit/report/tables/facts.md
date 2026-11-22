@@ -566,8 +566,8 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `nt5_converged_only_arm` | not measured | `tables/test_network_timed.md` |
 | `nt5_converged_only_net` | not measured | `tables/test_network_timed.md` |
 | `nt5_converged_p` | not measured | `tables/test_network_timed.md` |
-| `nt5_two_ms_arm` | not measured | `tables/test_network_timed.md` |
-| `nt5_two_ms_net` | not measured | `tables/test_network_timed.md` |
+| `nt5_two_ms_arm` | 604 | `tables/test_network_timed.md` |
+| `nt5_two_ms_net` | 608 | `tables/test_network_timed.md` |
 | `nt5_weight_arm` | not measured | `tables/test_network_timed.md` |
 | `nt5_weight_ms_arm` | not measured | `tables/test_network_timed.md` |
 | `nt5_weight_ms_net` | not measured | `tables/test_network_timed.md` |
@@ -1095,19 +1095,19 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t5_hierarchy_converged_p99_ms` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_paired_p` | 1e-62 | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_pairs` | 469 | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_both` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_error` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_mean_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_median_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_only_relay` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_only_this` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_p99_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_paired_p` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_pairs` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_rate` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_time_ratio` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_wall_hours` | not measured | `tables/test_p0.005.md` |
-| `t5_hierarchy_converged_parallel_xz` | not measured | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_both` | 382 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_error` | 1.9e-04 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_mean_ms` | 604 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_median_ms` | 138 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_only_relay` | 463 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_only_this` | 99 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_p99_ms` | 7,747 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_paired_p` | 3e-57 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_pairs` | 481 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_rate` | 4.10e-03 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_time_ratio` | 0.41 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_wall_hours` | 1.7 | `tables/test_p0.005.md` |
+| `t5_hierarchy_converged_parallel_xz` | 239, 248 | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_rate` | 3.99e-03 | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_time_ratio` | not measured | `tables/test_p0.005.md` |
 | `t5_hierarchy_converged_wall_hours` | not measured | `tables/test_p0.005.md` |
@@ -1205,6 +1205,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `tcbp_fit3_s` | 54.5 and 54.8 | `data/tcbp_own_shots/tcbp-jobs_p0.003_shots10000_seed1_20261122_005215_437826+0000.log` |
 | `tcbp_fit4_s` | 120.2 and 121.6 | `data/tcbp_own_shots/tcbp-jobs_p0.004_shots10000_seed1_20261122_043426_147901+0000.log` |
 | `tcbp_fit5_s` | 119.3 and 121.2 | `data/tcbp_own_shots/tcbp-jobs_p0.005_shots10000_seed1_20261122_050203_539870+0000.log` |
+| `tcbp_fit_caveat` | A caveat on every comparison with TCBP-JOBS: it fits its model when it starts, and the fit varies from run to run. On the same 5,000 validation X shots at p = 0.005 (exploration shots), three fits with the kit's priors fail 91, 96 and 100 shots (batch and per-shot decoding give the same answers, so the spread is the fit's), about ±5% around their mean. A comparison with TCBP-JOBS's stored test file carries that spread; a fresh arm in the same run is the like-for-like control. | `data/exploration/tcbp_fits/validation_X_p0.005_fits.npz` |
 | `tcbp_own3_rate` | 4.17e-05 | `tables/tcbp_own_shots.md` |
 | `tcbp_own3_xz` | 2, 3 | `tables/tcbp_own_shots.md` |
 | `tcbp_own4_rate` | 3.42e-04 | `tables/tcbp_own_shots.md` |

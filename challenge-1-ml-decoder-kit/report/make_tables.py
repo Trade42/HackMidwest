@@ -1536,6 +1536,23 @@ def tcbp_statement(measured):
     fact("tcbp_statement", text, "tables/test_all.md, tables/exploration_p0.004.md")
 
 
+def tcbp_fit_caveat():
+    """TCBP-JOBS fits its model at start-up and the fit varies from run to run: three fits on the same validation X shots at p = 0.005."""
+    file = DATA / "exploration" / "tcbp_fits" / "validation_X_p0.005_fits.npz"
+    if not file.is_file():
+        fact("tcbp_fit_caveat", "", "data/exploration/tcbp_fits/validation_X_p0.005_fits.npz")
+        return
+    with np.load(file, allow_pickle=False) as data:
+        counts = [int(data[f"failed_{key}"].sum()) for key in ("stored", "job1", "job3")]
+        batch = bool(data["job3_batch_equals_per_shot"])
+    spread = (max(counts) - min(counts)) / (sum(counts) / len(counts)) / 2
+    fact("tcbp_fit_caveat", f"A caveat on every comparison with TCBP-JOBS: it fits its model when it starts, and the fit varies from run to run. On the same "
+                            f"5,000 validation X shots at p = 0.005 (exploration shots), three fits with the kit's priors fail {counts[0]}, {counts[1]} and "
+                            f"{counts[2]} shots" + (" (batch and per-shot decoding give the same answers, so the spread is the fit's)" if batch else "")
+                            + f", about ±{spread:.0%} around their mean. A comparison with TCBP-JOBS's stored test file carries that spread; a fresh "
+                            "arm in the same run is the like-for-like control.", "data/exploration/tcbp_fits/validation_X_p0.005_fits.npz")
+
+
 def time_words(row):
     """A row's mean time per pair in words, with its state: measured and clean, not clean, or not timed in one process."""
     if row is None or row["mean_ms"] is None or row.get("offline"):
@@ -2424,6 +2441,7 @@ def main(argv=None):
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)
+        tcbp_fit_caveat()
         ensemble_statement(measured, combined)
         swap_statement()
         timed_ablation(measured)

@@ -46,8 +46,10 @@ DECODERS = {decoder.key: decoder for decoder in [
             "nothing of ours (PriorTilt's parameters are its authors')", "#eb6834", "^", ours=True),
     Decoder("hierarchy", "our hierarchy, neural tie-break", "ours", "ours",
             "a neural network picks among the candidates where the fast decodes disagree", "#eb6834", "^", ours=True),
+    Decoder("hierarchy-parallel", "our hierarchy, neural tie-break, the two fast decodes side by side on two cores", "ours, 2 cores", "ours",
+            "the same decoder as the row above; only the wall time differs", "#e34948", ">", ours=True),
     Decoder("ensemble", "our ensemble (combined offline)", "ours, ensemble", "ours",
-            "the same network, choosing among more members", "#008300", "X", ours=True),
+            "only the rules that use the network have a learned part: see the rule named in the row", "#008300", "X", ours=True),
     Decoder("tcbp", "TCBP-JOBS (NVIDIA, GPU)", "TCBP-JOBS (GPU)", "NVIDIA; run by teammates", "a model it fits at start-up, per memory basis", "#1baf7a", "P"),
 ]}
 
@@ -62,6 +64,7 @@ class TestRow:
     name: str = ""  # for "evaluator": the decoder's name inside summary.json, when the folder holds several
     rule: str = ""  # for our plugin: the tie-break the row's own summary.json must record ("network" or "weight")
     member: str = ""  # the row of hierarchy.ensemble's offline output that stands in when there is no evaluator row
+    cores: int = 1    # CPU cores the row's one process uses at once
 
 
 # The rows of the table on the test shots, in table order. Folder names are the server job's.
@@ -72,6 +75,7 @@ TEST_ROWS = [
     TestRow("priortilt", "eval_p{p}_priortilt", "evaluator", member="P1"),
     TestRow("hierarchy-weight", "eval_p{p}_hierarchy-weight", "evaluator", rule="weight", member="aw"),
     TestRow("hierarchy", "eval_p{p}_hierarchy", "evaluator", rule="network"),
+    TestRow("hierarchy-parallel", "eval_p{p}_hierarchy-parallel", "evaluator", rule="network", cores=2),
     TestRow("ensemble", "ensemble_p{p}", "ensemble"),
     TestRow("tcbp", "tcbp_p{p}", "tcbp", member="T"),
 ]
@@ -83,9 +87,12 @@ LADDER = [
     ("R", "relay-BP (kit baseline)", "the kit"),
     ("P1", "PriorTilt, one run (seed A)", "IonQ"),
     ("aw", "our hierarchy, lowest-weight tie-break (nothing learned by us)", "ours"),
+    ("ac", "our hierarchy, lowest weight among the converged candidates (nothing learned by us)", "ours"),
     ("a", "our hierarchy, neural tie-break", "ours"),
     ("floor", "ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder)", "nobody: needs the truth"),
 ]
+
+OPTIONAL_RUNGS = ("ac",)   # left out of the ladder, without a "not measured" line, when the files do not hold them
 
 # Further paired comparisons on the test shots, (row, against): who adds what, and where TCBP-JOBS stands.
 # Each is made only where both rows have a per-shot file for the same test files.

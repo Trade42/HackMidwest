@@ -100,7 +100,7 @@ per-shot files" is combined offline from saved answers and has no time measured 
 
 ![Mean decoding time per pair against p](figures/time_vs_p.png)
 
-**What the numbers say.** <!--f:framing-->not measured<!--/f--> <!--f:tcbp_statement-->TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 162 of 25,000).<!--/f--> Our timed decoder against relay-BP on the same pairs:
+**What the numbers say.** <!--f:framing-->not measured<!--/f--> <!--f:tcbp_statement-->TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000).<!--/f--> Our timed decoder against relay-BP on the same pairs:
 at p = 0.003, <!--f:t3_hierarchy_pairs-->not measured<!--/f--> failed pairs against <!--f:t3_relay_bp_pairs-->not measured<!--/f--> (only ours fails <!--f:t3_hierarchy_only_this-->not measured<!--/f-->, only
 relay-BP <!--f:t3_hierarchy_only_relay-->not measured<!--/f-->), <!--f:t3_hierarchy_mean_ms-->not measured<!--/f--> ms against <!--f:t3_relay_bp_mean_ms-->not measured<!--/f--> ms per pair; at p = 0.004,
 <!--f:t4_hierarchy_pairs-->not measured<!--/f--> against <!--f:t4_relay_bp_pairs-->not measured<!--/f--> (only ours <!--f:t4_hierarchy_only_this-->not measured<!--/f-->, only relay-BP <!--f:t4_hierarchy_only_relay-->not measured<!--/f-->),
@@ -126,12 +126,13 @@ with the gain of the hierarchy itself, which needs no learning of ours.
 ### On the exploration shots (not test shots)
 
 At p = 0.004, on <!--f:expl_pairs-->25,000<!--/f--> pairs of the train and validation files: relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one
-PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its random seed, our hierarchy with the lowest-weight
-tie-break <!--f:expl_pairs_W-->162<!--/f--> (only relay-BP fails <!--f:expl_pairs_W_only_relay-->111<!--/f--> pairs, only the hierarchy
-<!--f:expl_pairs_W_only_ours-->28<!--/f-->), and TCBP-JOBS <!--f:expl_pairs_T-->113<!--/f-->. On X memory, the neural tie-break lowers the hierarchy's
-failures from <!--f:expl_X_W-->77<!--/f--> to <!--f:expl_X_N-->59<!--/f--> of 25,000 shots (only the network rule fails <!--f:expl_X_N_vs_W_only_network-->6<!--/f-->
-shots, only the weight rule <!--f:expl_X_N_vs_W_only_weight-->21<!--/f-->, exact p = <!--f:expl_X_N_vs_W_p-->0.006<!--/f-->). The rules were chosen on these
-shots, which flatters them; the test table is the number to quote. Three things to take from it:
+PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its random seed, our hierarchy <!--f:expl_pairs_C-->140<!--/f--> with its
+best tie-break that needs no learning, the lowest weight among the converged candidates (only relay-BP fails
+<!--f:expl_pairs_C_only_relay-->128<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_C_only_ours-->23<!--/f-->), and TCBP-JOBS <!--f:expl_pairs_T-->113<!--/f-->. On X memory, the
+neural tie-break (the network at training step <!--f:expl_X_N_step-->70,000<!--/f-->) fails <!--f:expl_X_N-->59<!--/f--> of 25,000 shots where that classical
+tie-break fails <!--f:expl_X_C-->67<!--/f--> (only the network rule fails <!--f:expl_X_N_vs_C_only_network-->7<!--/f--> shots, only the classical rule
+<!--f:expl_X_N_vs_C_only_classical-->15<!--/f-->, exact p = <!--f:expl_X_N_vs_C_p-->0.13<!--/f-->). The rules were chosen on these shots, which flatters them;
+the test table is the number to quote. Three things to take from it:
 
 - **PriorTilt is IonQ's decoder, not ours.** One run of it already fails less often than relay-BP, and by how much
   depends on its random seed. A single run is not a stable number.
@@ -182,13 +183,12 @@ Each with its count and its file in `APPENDIX.md`, "What we measured before buil
 - **Longer training of the network** improved it a lot as a decoder and only a little as a tie-breaker: the hard
   shots are hard for the network too.
 
-Two more attempts have no log in the repository, so no number of theirs is used anywhere in this report: a plain
-network of the first default size did not learn in a short first run on the laptop, and a smaller one learned at low
-noise only (`information.md`, section 9).
+The laptop's early runs of plain networks at the challenge's noise are in the same table, from the laptop's own
+record of them (`report/data/background/plain_cnn_runs/`).
 
 ## 7. Where it falls short
 
-- **TCBP-JOBS.** <!--f:tcbp_statement-->TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 162 of 25,000).<!--/f--> It needs a GPU; our hierarchy runs on one CPU core.
+- **TCBP-JOBS.** <!--f:tcbp_statement-->TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000).<!--/f--> It needs a GPU; our hierarchy runs on one CPU core.
 - **Agreeing but wrong.** On the exploration shots, <!--f:expl_left_agree-->63<!--/f--> of the <!--f:expl_left-->162<!--/f--> shots the hierarchy still fails
   are shots where the two fast decodes agree on a wrong answer. No tie-break can fix those; only a better test for a
   hard shot, or more members on every shot, can.

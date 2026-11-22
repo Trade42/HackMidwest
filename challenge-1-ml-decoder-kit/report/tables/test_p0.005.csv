@@ -5,5 +5,6 @@ p,decoder,label,built_by,measured
 0.005,priortilt,"PriorTilt, one run",IonQ (arXiv:2611.13373),False
 0.005,hierarchy-weight,"our hierarchy, lowest-weight tie-break",ours,False
 0.005,hierarchy,"our hierarchy, neural tie-break",ours,False
+0.005,hierarchy-parallel,"our hierarchy, neural tie-break, the two fast decodes side by side on two cores",ours,False
 0.005,ensemble,our ensemble (combined offline),ours,False
 0.005,tcbp,"TCBP-JOBS (NVIDIA, GPU)",NVIDIA; run by teammates,False

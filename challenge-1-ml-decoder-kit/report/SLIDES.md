@@ -45,8 +45,8 @@ Source: `report/tables/exploration_p0.004.md`, the last table.
   at all 72 positions, and has <!--f:net_parameters-->893,697<!--/f--> parameters.
 - Alone it is far worse than relay-BP, so we never use it alone. We only ask it which of two or three given answers
   is more likely.
-- On 25,000 practice shots of X memory, the hierarchy fails <!--f:expl_X_W-->77<!--/f--> times with the classical tie-break and <!--f:expl_X_N-->59<!--/f--> times with
-  the network (at training step <!--f:expl_X_N_step-->70,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times.
+- On 25,000 practice shots of X memory, the hierarchy fails <!--f:expl_X_C-->67<!--/f--> times with its best classical tie-break and <!--f:expl_X_N-->59<!--/f-->
+  times with the network (at training step <!--f:expl_X_N_step-->70,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times.
 
 Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 
@@ -108,8 +108,8 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 On the test shots: <!--f:framing-->not measured<!--/f--> The table `report/tables/test_ladder.md` has every rung. On the practice shots:
 PriorTilt alone already beats relay-BP on the practice shots, and that part is IonQ's. Our hierarchy adds to it: on
 <!--f:expl_pairs-->25,000<!--/f--> practice pairs at p = 0.004, relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its seed, and
-the hierarchy with the classical tie-break <!--f:expl_pairs_W-->162<!--/f--> (only relay-BP fails <!--f:expl_pairs_W_only_relay-->111<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_W_only_ours-->28<!--/f-->). The neural tie-break adds a smaller step on top, measured on X memory
-(<!--f:expl_X_W-->77<!--/f--> to <!--f:expl_X_N-->59<!--/f--> failures of 25,000 shots). *Pending: the same split on the test shots.* Source:
+the hierarchy with its best classical tie-break <!--f:expl_pairs_C-->140<!--/f--> (only relay-BP fails <!--f:expl_pairs_C_only_relay-->128<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_C_only_ours-->23<!--/f-->). The neural tie-break adds a smaller step on top, measured on X memory
+(<!--f:expl_X_C-->67<!--/f--> to <!--f:expl_X_N-->59<!--/f--> failures of 25,000 shots; only the network rule fails <!--f:expl_X_N_vs_C_only_network-->7<!--/f-->, only the classical rule <!--f:expl_X_N_vs_C_only_classical-->15<!--/f-->, exact p = <!--f:expl_X_N_vs_C_p-->0.13<!--/f-->). *Pending: the same split on the test shots.* Source:
 `report/tables/exploration_p0.004.md`.
 
 **What is on the test shots and what is not?**
@@ -133,9 +133,9 @@ for a pair of atoms; the top of our range, 2e-3 per atom, is half of that, by ou
 
 **Where does TCBP-JOBS stand against you?**
 Ahead, at p = 0.004 and 0.005, as measured so far. Its logged rate per cycle at p = 0.004, on its own sampled shots, is
-<!--f:tcbp_own4_rate-->3.42e-04<!--/f-->; on the practice pairs relay-BP is at <!--f:expl_rate_R-->8.20e-04<!--/f--> and our hierarchy with the classical tie-break at
-<!--f:expl_rate_W-->5.42e-04<!--/f-->. We also ran TCBP-JOBS on those same practice pairs: it fails <!--f:expl_pairs_T-->113<!--/f--> of <!--f:expl_pairs-->25,000<!--/f-->,
-our hierarchy <!--f:expl_pairs_W-->162<!--/f-->, relay-BP <!--f:expl_pairs_R-->245<!--/f-->. *Pending: the same comparison on the saved test shots, pair by pair.* It needs a GPU;
+<!--f:tcbp_own4_rate-->3.42e-04<!--/f-->; on the practice pairs relay-BP is at <!--f:expl_rate_R-->8.20e-04<!--/f--> and our hierarchy with its best classical tie-break at
+<!--f:expl_rate_C-->4.68e-04<!--/f-->. We also ran TCBP-JOBS on those same practice pairs: it fails <!--f:expl_pairs_T-->113<!--/f--> of <!--f:expl_pairs-->25,000<!--/f-->,
+our hierarchy <!--f:expl_pairs_C-->140<!--/f-->, relay-BP <!--f:expl_pairs_R-->245<!--/f-->. *Pending: the same comparison on the saved test shots, pair by pair.* It needs a GPU;
 our hierarchy runs on one CPU core.
 
 **Did anything tune on the test shots?**

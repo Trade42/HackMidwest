@@ -27,6 +27,8 @@ KIT = Path(__file__).resolve().parent.parent
 DATA = Path(__file__).resolve().parent / "data"
 RECORD = DATA / "sources.json"
 
+NETWORK_STEP = 70000   # the newest snapshot of the X network whose logits are copied; older copies are removed by hand
+
 # (destination under report/data/, where from, path or pattern there, grows?)
 # "tree" is the working tree of this branch, relative to challenge-1-ml-decoder-kit/.
 # A pattern with * is matched against every file under its fixed prefix; the part matched from
@@ -59,16 +61,17 @@ SOURCES = [
     ("tcbp_own_shots/", "tree", "results/tcbp-jobs_p0.005_shots10000_seed1_20261122_050203_539870+0000.log", False),
     # exploration shots (train and validation files): the laptop's per-shot decodes and tables
     ("exploration/priortilt/", "origin/laptop-artifacts", "priortilt/results_8b/selector_*.npz", False),
-    ("exploration/priortilt/", "origin/laptop-artifacts", "priortilt/results_8b.txt", False),
+    ("exploration/priortilt/", "origin/laptop-artifacts", "priortilt/results_8b.txt", True),   # the laptop adds rules to it
     ("exploration/priortilt/", "origin/laptop-artifacts", "priortilt/results_network_select_step*.txt", False),
     ("exploration/priortilt/", "origin/laptop-artifacts", "priortilt/results_step9_p0.005_X.txt", False),
     ("exploration/priortilt_p0.005/", "origin/laptop-artifacts", "priortilt/results_p005main/selector_*.npz", False),
-    ("exploration/priortilt_p0.005/", "origin/laptop-artifacts", "priortilt/results_p005main_*.txt", False),
+    ("exploration/priortilt_p0.005/", "origin/laptop-artifacts", "priortilt/results_p005main_*.txt", True),
     # TCBP-JOBS on the same exploration shots at p = 0.004 (batch mode on a shared GPU: answers only, no times)
     ("exploration/tcbp_p0.004/", "origin/server-logs", "files/tcbp_p0.004/*.tcbp.npz", False),
     ("exploration/cascade_X_s1/", "origin/laptop-artifacts", "cascade_X_s1/SCORES.md", True),
-    ("exploration/cascade_X_s1/", "origin/laptop-artifacts", "cascade_X_s1/eval/step60000_validation_X_p0.004.npz", False),
-    ("exploration/cascade_X_s1/", "origin/laptop-artifacts", "cascade_X_s1/eval/step60000_train_X_p0.004.npz", False),
+    # the X network's per-shot logits on the exploration shots, for ONE snapshot (NETWORK_STEP): the tie-break is recomputed from them
+    ("exploration/cascade_X_s1/", "origin/laptop-artifacts", f"cascade_X_s1/eval/step{NETWORK_STEP}_validation_X_p0.004.npz", False),
+    ("exploration/cascade_X_s1/", "origin/laptop-artifacts", f"cascade_X_s1/eval/step{NETWORK_STEP}_train_X_p0.004.npz", False),
     # the networks' training logs
     ("networks/cascade_X_s1.train.log", "origin/laptop-artifacts", "cascade_X_s1/train.log", True),
     ("networks/cascade_Z_s1.train.log", "origin/server-logs", "cascade_Z_s1.train.log", True),
@@ -88,6 +91,11 @@ SOURCES = [
     ("background/", "tree", "ml_decoder/logs/relay_schedule_paired_X_p0.004_5000_seed1.log", False),
     ("background/", "tree", "ml_decoder/logs/predecoder_real2_p0.004_300_300_300_20.log", False),
     ("background/", "tree", "ml_decoder/logs/train_X_p0.0001_seed1.log", False),
+    # the laptop's early plain-CNN runs: its table of the runs, and the logs of the two runs the report names
+    ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/README.md", False),
+    ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/x_4h.log", False),
+    ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/x_4h.ckpt_0.83h.eval_lowp.log", False),
+    ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/x_1h_w32.log", False),
     ("loss/server/", "origin/server-logs", "files/loss/*/*.json", False),
 ]
 

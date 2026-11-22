@@ -8,5 +8,6 @@ What each decoder needed for its row on the test shots. Memory is the peak resid
 | PriorTilt, one run | not measured | not measured | not measured | 14 parameters, fitted by its authors |
 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | nothing of ours (PriorTilt's parameters are its authors') |
 | our hierarchy, neural tie-break | not measured | not measured | not measured | a neural network picks among the candidates where the fast decodes disagree |
-| our ensemble (combined offline) | not measured | not measured | not measured | the same network, choosing among more members |
+| our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured | the same decoder as the row above; only the wall time differs |
+| our ensemble (combined offline) | not measured | not measured | not measured | only the rules that use the network have a learned part: see the rule named in the row |
 | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | a model it fits at start-up, per memory basis |

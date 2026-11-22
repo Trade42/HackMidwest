@@ -415,16 +415,20 @@ def selector_files(folder, names):
     return joined
 
 
-def weight_rule(shots):
+def weight_rule(shots, converged_only=False):
     """The hierarchy without a network, scored offline on per-shot candidates.
 
     P1 where P1 and P2 predict the same 12 bits; otherwise the candidate of lowest weight among
     relay-BP, P1 and P2 (the weight is the sum of log((1 - prior) / prior) over a candidate's
-    faults: lower is a more probable explanation). Returns (failed, agreed, seconds): the time
-    is the sum of the decode calls the rule makes, so relay-BP counts only where it runs.
+    faults: lower is a more probable explanation). With converged_only, the choice is among the
+    candidates that converged (among all three if none did). Returns (failed, agreed, seconds):
+    the time is the sum of the decode calls the rule makes, so relay-BP counts only where it runs.
     """
     agreed = (shots["predicted_P1"] == shots["predicted_P2"]).all(axis=1)
     weights = np.stack([shots["weight_R"], shots["weight_P1"], shots["weight_P2"]], axis=1)
+    if converged_only:
+        converged = np.stack([shots["converged_R"], shots["converged_P1"], shots["converged_P2"]], axis=1).astype(bool)
+        weights = np.where(converged | ~converged.any(axis=1, keepdims=True), weights, np.inf)
     failed_each = np.stack([shots["failed_R"], shots["failed_P1"], shots["failed_P2"]], axis=1).astype(bool)
     pick = np.argmin(weights, axis=1)
     failed = np.where(agreed, shots["failed_P1"].astype(bool), failed_each[np.arange(len(pick)), pick])

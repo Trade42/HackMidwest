@@ -14,6 +14,9 @@ as Markdown and as CSV.
 <!-- BEGIN table:test_p0.005 -->
 <!-- END table:test_p0.005 -->
 
+<!-- BEGIN table:test_time -->
+<!-- END table:test_time -->
+
 ![Accuracy against time](figures/ler_vs_time.png)
 
 ## B. Paired comparisons on the test shots

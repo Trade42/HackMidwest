@@ -6,5 +6,6 @@
 | PriorTilt, seed A | IonQ | 137 of 5,000 | 2.74% (2.32% to 3.23%) | 92 / 45 / 102 (p = 3e-06) | 193 |
 | PriorTilt, seed B | IonQ | 152 of 5,000 | 3.04% (2.60% to 3.55%) | 107 / 45 / 87 (p = 3e-04) | 190 |
 | our hierarchy, lowest-weight tie-break | ours | 129 of 5,000 | 2.58% (2.18% to 3.06%) | 110 / 19 / 84 (p = 6e-11) | 537 |
+| our hierarchy, lowest weight among the converged candidates | ours | 108 of 5,000 | 2.16% (1.79% to 2.60%) | 91 / 17 / 103 (p = 3e-16) | 537 |
 
 Source: `report/data/exploration/priortilt_p0.005/selector_validation_X.npz`.

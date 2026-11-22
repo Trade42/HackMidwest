@@ -6,6 +6,7 @@
 | PriorTilt, one run | not measured | not measured | not measured |
 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured |
 | our hierarchy, neural tie-break | not measured | not measured | not measured |
+| our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured |
 | our ensemble (combined offline) | not measured | not measured | not measured |
 | TCBP-JOBS (NVIDIA, GPU) | not measured on these shots; on its own shots: 4.17e-05 ± 1.9e-05 | not measured on these shots; on its own shots: 3.42e-04 ± 5.3e-05 | not measured on these shots; on its own shots: 3.20e-03 ± 1.6e-04 |
 

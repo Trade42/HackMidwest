@@ -452,11 +452,11 @@ record of them (`report/data/background/plain_cnn_runs/`).
   apart there.
 - **The network** is small and was trained for hours, not days; the Z network started later than the X network.
 - **Loss** is measured for X memory at p = 0.004 only, under our own loss model.
-- **Our pipeline under atom loss is not tested.** The loss results (`loss/`, `loss_tracker/`) were decoded with the
-  kit's relay-BP and BP-OSD, and so were the neutral-atom noise results (`neutral_atom_noise/`). The TCBP
-  version is the natural place for loss: it already builds a decoder for each shot from per-shot priors, so
-  loss-aware priors (the flag conditioning of `loss/`, the loss tracker's posterior) could enter with no extra build.
-  Its network was trained without loss.
+- **Our pipeline under atom loss is tested only as exploration, after the test results were seen.** The loss
+  results of `loss/` and `loss_tracker/` were decoded with the kit's relay-BP. The TCBP version was then tried with
+  atom loss on the neutral-atom model (`neutral_atom_noise/RESULTS.md`, section "Exploration: the TCBP pipeline
+  with atom loss"): the loss flags help TCBP-JOBS as much as they help relay-BP, and the kit-trained head with the
+  flags stays behind matched priors with the flags. Its network was never retrained with loss; that is the next step.
 - **A dependency with a licence.** PriorTilt is CC BY-NC-SA 4.0 (non-commercial); none of its code is in this
   repository.
 - **Work outside this submission.** One further study lives on a branch that is not merged, so no number from it is

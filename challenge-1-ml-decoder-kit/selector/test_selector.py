@@ -244,3 +244,24 @@ def test_evaluate_on_held_out_files_needs_the_frozen_sha(tmp_path):
         E.main(["--model", str(model_path), "--x", *map(str, x)])
     results = E.main(["--model", str(model_path), "--expect-sha256", sha, "--x", *map(str, x)])
     assert results["X"]["shots"] == 80
+
+
+@pytest.mark.parametrize("drop", ["converged_T", "weight_T", "weight_P1", "converged_R", "iterations_P2"])
+def test_a_member_file_without_a_field_the_features_read_is_refused(tmp_path, drop):
+    paths, _ = make_members(tmp_path, with_joint=False)
+    for path in paths:
+        with np.load(path) as file:
+            arrays = {key: file[key] for key in file.files if key != drop}
+        np.savez(path, **arrays)
+    with pytest.raises(SystemExit, match="holds no"):
+        F.load(paths)
+
+
+def test_a_nan_weight_of_T_is_refused(tmp_path):
+    paths, _ = make_members(tmp_path, with_joint=False)
+    with np.load(paths[1]) as file:
+        arrays = {key: file[key] for key in file.files}
+    arrays["weight_T"][3] = np.nan
+    np.savez(paths[1], **arrays)
+    with pytest.raises(SystemExit, match="no weight for T"):
+        F.load(paths)

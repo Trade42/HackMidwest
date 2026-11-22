@@ -93,6 +93,9 @@ def load(paths):
         with np.load(path, allow_pickle=False) as file:
             rows = file["shot"].astype(int) if "shot" in file.files else np.arange(count)
             for name in [key[len("predicted_"):] for key in file.files if key.startswith("predicted_")]:
+                missing = [f"{field}_{name}" for field in ("converged", "weight") if f"{field}_{name}" not in file.files]
+                if missing:     # load_members would take a missing convergence as True and a missing weight as NaN
+                    raise SystemExit(f"{path} holds no {', '.join(missing)}: the selector's features need them")
                 for field, into in (("iterations", iterations), ("n_faults", n_faults)):
                     values = np.full(count, np.nan)
                     if f"{field}_{name}" in file.files:
@@ -101,6 +104,8 @@ def load(paths):
     for name in ALWAYS_ON:
         if name not in members or not members[name].covers.all():
             raise SystemExit(f"the selector needs {name} on every shot: give its file among the member files ({', '.join(map(str, paths))})")
+    if np.isnan(members["T"].weight).any():
+        raise SystemExit(f"{members['T'].source} holds no weight for T on some shots: the selector's features need it")
     for name in ("P1", "P2", "R"):
         if name in members and np.isnan(iterations[name][members[name].covers]).any():
             raise SystemExit(f"{members[name].source} holds no iteration count for {name} on some shots: the selector's features need them")

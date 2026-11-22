@@ -3,3 +3,5 @@ checkout: c2a6db5 predecoder: first-leg measure, weighted train-subset fit, cali
 train_X.npz: 20000 shots, p=0.004, arms ['fresh']; head priors {'mode': 'linear', 'alpha': 1.0, 'eps': 1e-06}; 200 tasks to run in 6 processes (24 CPUs here, jupyter-blakew3)
   10 of 200 tasks done (fresh from shot 800), 84 s
   20 of 200 tasks done (fresh from shot 1900), 116 s
+  30 of 200 tasks done (fresh from shot 3100), 145 s
+  40 of 200 tasks done (fresh from shot 4100), 175 s

@@ -6,7 +6,7 @@ orchestrator named (from origin/server-logs; nothing else of those folders is re
   python -m predecoder.secondary --final --data data/p0.005/test_X.npz --ours <test compare folder>/per_shot.npz \\
       --tcbp <test_X.tcbp.npz> --evaluator-shots <01_relay-bp_shots.npz> --evaluator-summary <its summary.json>
 
-Secondary, chosen after the p = 0.004 gate failed, X memory only, accuracy only: it counts the
+Secondary, chosen after the p = 0.004 gate failed, accuracy only; either memory basis: it counts the
 shots each decoder gets wrong and the paired counts with an exact two-sided test. It checks that
 every file was made from this shot file (its sha256, and the truth or the failures it holds).
 """
@@ -39,18 +39,18 @@ def main(argv=None):
     with np.load(args.tcbp, allow_pickle=False) as file:
         tcbp = {key: file[key] for key in file.files}
     with np.load(args.evaluator_shots, allow_pickle=False) as file:
-        evaluator = {key: file[key] for key in ("predictions_X", "failed_X")}
+        evaluator = {key: file[key] for key in (f"predictions_{data.basis}", f"failed_{data.basis}")}
     with open(args.evaluator_summary) as file:
-        evaluator_data = json.load(file)["datasets"]["test"]["X"]
+        evaluator_data = json.load(file)["datasets"]["test"][data.basis]
     checks = {
         "ours: truth equals the file's observables": bool(np.array_equal(ours["truth"], truth)),
         "TCBP-JOBS: data_sha256 equals the file's": str(tcbp["data_sha256"]) == data.sha256,
         "TCBP-JOBS: truth equals the file's observables": bool(np.array_equal(tcbp["truth"], truth)),
         "TCBP-JOBS: failed_T equals its predictions against the truth": bool(
             np.array_equal(tcbp["failed_T"], (tcbp["predicted_T"] != truth).any(axis=1))),
-        "evaluator: its summary's X data sha256 equals the file's": evaluator_data["sha256"] == data.sha256,
-        "evaluator: failed_X equals its X predictions against the file's observables": bool(
-            np.array_equal(evaluator["failed_X"], (evaluator["predictions_X"] != truth).any(axis=1))),
+        f"evaluator: its summary's {data.basis} data sha256 equals the file's": evaluator_data["sha256"] == data.sha256,
+        f"evaluator: failed_{data.basis} equals its {data.basis} predictions against the file's observables": bool(
+            np.array_equal(evaluator[f"failed_{data.basis}"], (evaluator[f"predictions_{data.basis}"] != truth).any(axis=1))),
     }
     for name, ok in checks.items():
         print(f"check: {name}: {'yes' if ok else 'NO'}")
@@ -60,12 +60,12 @@ def main(argv=None):
               "fresh (relay-BP, the kit's priors, per shot)": (ours["predicted_fresh"] != truth).any(axis=1)
               if "predicted_fresh" in ours else ours["failed_fresh"] > 0,
               "T (TCBP-JOBS)": (tcbp["predicted_T"] != truth).any(axis=1),
-              "R (the evaluator's relay-bp row, X)": (evaluator["predictions_X"] != truth).any(axis=1)}
+              f"R (the evaluator's relay-bp row, {data.basis})": (evaluator[f"predictions_{data.basis}"] != truth).any(axis=1)}
     shots = len(truth)
-    print(f"{data.path.name} (sha256 {data.sha256}), {shots} shots, X memory. Secondary, chosen after the p = 0.004 gate "
-          "failed, X only, accuracy only.")
+    print(f"{data.path.name} (sha256 {data.sha256}), {shots} shots, {data.basis} memory. Secondary, chosen after the "
+          "p = 0.004 gate failed, accuracy only.")
     summary = {"data": data.identity(), "checks": checks, "failures": {}, "pairs": {},
-               "label": "secondary, chosen after the p = 0.004 gate failed, X only, accuracy only"}
+               "label": f"secondary, chosen after the p = 0.004 gate failed, {data.basis} memory, accuracy only"}
     for name, values in failed.items():
         low, high = wilson(int(values.sum()), shots)
         summary["failures"][name] = {"failures": int(values.sum()), "wilson95": [low, high]}

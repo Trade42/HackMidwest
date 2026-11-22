@@ -132,3 +132,29 @@ withdrawn, and the run is the one first declared above:**
 - the stopping rule above, with the deadline the orchestrator writes into the job (its start + 45 minutes).
 
 Nothing else changes. With a deadline, the scored set is still the longest prefix of whole blocks.
+
+## Amendment 3: two runs (declared before any number of either)
+
+Written 2026-11-22 at 18:36 UTC, before any decode result of either run reached us.
+
+**What happened.** The orchestrator pushed server job `cpu/120-tcbp-retrain-eval.sh` (integration `64956ccc`) at 18:34:26 UTC
+from amendment 1's draft:
+- its inputs are laptop-artifacts `fe9e0de6`, with `tcbp-retrain/plan.json` sha256 `6a20a1ab...`;
+- it covers seed 4800, shots 0 to 999, arms m, h and r, and stops at 18:48 UTC.
+
+Amendment 2 (pushed 15 s earlier) had restored the full run, so the two crossed. They are reconciled as follows:
+
+- **Run 1** is job `cpu/120`. It runs, and it is reported, exactly under amendment 1's rules.
+- **Run 2** is amendment 2's full run, as first declared above:
+  - both files, with arms m, g, h, hm and r on seed 4800 and m, h, hm and r on seed 4100;
+  - all shots, blocks of 100, tasks in turn;
+  - a deadline of the job's start + 45 minutes;
+  - a second server job after run 1, with a plan of its own (`plan.json` with both tasks) and its own output folders.
+  - It is sent whatever run 1 shows: the choice to run it was made here, before run 1 had any number.
+- **Which result is primary:**
+  - run 2's seed-4800 result (r vs m and r vs h on its scored set), if that set holds at least 1,000 shots;
+  - otherwise run 1's.
+  - The other run is reported beside it in every case.
+- **Overlap.** Run 2 decodes shots 0 to 999 of seed 4800 again with m, h and r. Comparing the two runs there is a
+  check of how reproducible TCBP-JOBS is (phase 2 saw a few shots differ between two runs of one arm). It is not a
+  second sample.

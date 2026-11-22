@@ -35,9 +35,9 @@ Every method in one table first (each row's label says what kind of number it is
 | the predecoder with the fallback to TCBP-JOBS (Z memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened |  |  | Z: 100 shots |
 | the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened | X: 1 shot |  |  |
 | the predecoder with the fallback, the kit's pair score | `predecoder/fallback.py` | post hoc: designed after the first test result |  |  | 206 pairs · 1.73e-03 ± 1.2e-04 per cycle (post hoc) |
-| TCBP-JOBS with the head's priors (X memory only) | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch | X: 0 shots; X only, no pair rate | X: 4 shots; X only, no pair rate | X: 72 shots (same-run control, the kit's priors: 186) |
-| TCBP-JOBS with the head's priors (Z memory only) | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch |  |  | Z: 61 shots |
-| TCBP-JOBS with the head's priors, the kit's pair score | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch |  |  | 132 pairs · 1.11e-03 ± 9.6e-05 per cycle (TCBP-JOBS's stored file: 360 pairs, 3.05e-03 ± 1.6e-04) |
+| TCBP-JOBS with the head's priors (its X shots) | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch | X: 0 shots; no validation at these p | X: 4 shots; no validation at these p | X: 72 shots (same-run control, the kit's priors: 186) |
+| TCBP-JOBS with the head's priors (its Z shots) | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch | Z: 1 shot; no validation at these p | Z: 6 shots; no validation at these p | Z: 61 shots |
+| TCBP-JOBS with the head's priors, the kit's pair score | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch | 1 pair · 8.33e-06 ± 8.3e-06 per cycle (TCBP-JOBS's stored file: 3 pairs, 2.50e-05 ± 1.4e-05; exact p = 0.50, no claim); no validation at these p | 10 pairs · 8.34e-05 ± 2.6e-05 per cycle (TCBP-JOBS's stored file: 41 pairs, 3.42e-04 ± 5.3e-05); no validation at these p | 132 pairs · 1.11e-03 ± 9.6e-05 per cycle (TCBP-JOBS's stored file: 360 pairs, 3.05e-03 ± 1.6e-04) |
 | a learned selector among the ensemble's members | `selector/` | frozen on validation shots, run once on the test shots; its declared line (fewer failed pairs than TCBP-JOBS, paired) not met |  |  | 353 pairs (against TCBP-JOBS's 360: only the selector 23, only TCBP-JOBS 30, exact p = 0.41) |
 
 Not in this table, because it decodes its own simulated shots, not the saved test files: `neutral_atom_noise/` (exploration; a noise model built from Infleqtion's published figures, not Infleqtion's noise model, decoded with the kit's relay-BP and BP-OSD; `neutral_atom_noise/RESULTS.md`).
@@ -613,19 +613,19 @@ Source: `report/data/test/ensemble_p<p>/test_{X,Z}.npz` and `.json`.
 | 0.003 | the predecoder (network and head, then relay-BP with the head's priors) | 2 of 10,000 | 52.9 | validation sample (exploration shots) |
 | 0.003 | the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after the first test result: post hoc at p = 0.005 and 0.004) | 1 of 10,000 | 52.9 | validation sample, plus TCBP-JOBS's GPU decode on the 0.1% of shots that fall back |
 | 0.003 | TCBP-JOBS alone (NVIDIA, GPU), for reference | 1 of 10,000 | 2.0 | test shots; a GPU decode call alone |
-| 0.003 | TCBP-JOBS with the head's priors (the TCBP version; designed after the test results were seen), a reference row, not one of the rule's options | 0 of 10,000 | not timed |  |
+| 0.003 | TCBP-JOBS with the head's priors (the TCBP version; designed after the test results were seen; no validation at these p), a reference row, not one of the rule's options | 0 of 10,000 | not timed |  |
 | 0.004 | our pipeline (the hierarchy with the network), one core | 18 of 10,000 | 104 | test shots, its timed row |
 | 0.004 | our pipeline, its two fast decodes on two cores | 18 of 10,000 | 71.7 | test shots, its timed row |
 | 0.004 | the predecoder (network and head, then relay-BP with the head's priors) | 15 of 10,000 | 94.0 | validation sample (exploration shots) |
 | 0.004 | the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after the first test result: post hoc at p = 0.005 and 0.004) | 10 of 10,000 | 94.0 | validation sample, plus TCBP-JOBS's GPU decode on the 0.3% of shots that fall back |
 | 0.004 | TCBP-JOBS alone (NVIDIA, GPU), for reference | 20 of 10,000 | 3.9 | test shots; a GPU decode call alone |
-| 0.004 | TCBP-JOBS with the head's priors (the TCBP version; designed after the test results were seen), a reference row, not one of the rule's options | 4 of 10,000 | not timed |  |
+| 0.004 | TCBP-JOBS with the head's priors (the TCBP version; designed after the test results were seen; no validation at these p), a reference row, not one of the rule's options | 4 of 10,000 | not timed |  |
 | 0.005 | our pipeline (the hierarchy with the network), one core | 245 of 10,000 | 420 | test shots, its timed row |
 | 0.005 | our pipeline, its two fast decodes on two cores | 245 of 10,000 | 310 | test shots, its timed row |
 | 0.005 | the predecoder (network and head, then relay-BP with the head's priors) | 151 of 10,000 | 212 | validation sample (exploration shots) |
 | 0.005 | the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after the first test result: post hoc at p = 0.005 and 0.004) | 107 of 10,000 | 212 | validation sample, plus TCBP-JOBS's GPU decode on the 0.8% of shots that fall back |
 | 0.005 | TCBP-JOBS alone (NVIDIA, GPU), for reference | 186 of 10,000 | 8.7 | test shots; a GPU decode call alone |
-| 0.005 | TCBP-JOBS with the head's priors (the TCBP version; designed after the test results were seen), a reference row, not one of the rule's options | 72 of 10,000 | 55.8 | an A100 slice, not a clean timing (network on validation shots, build and decode on the test shots) |
+| 0.005 | TCBP-JOBS with the head's priors (the TCBP version; designed after the test results were seen), a reference row, not one of the rule's options | 72 of 10,000 | 55.8 | an A100 slice, not a clean timing (network on validation shots, build and decode on the test shots); after the speed work about 38 ms (validation shots, each part timed alone; about 52 for the registered path measured the same way) |
 <!-- END table:operating_rule -->
 
 <!-- BEGIN table:test_predecoder -->
@@ -691,7 +691,7 @@ Source: `report/data/test/predecoder/pair_test_p0.005.{json,log}` (`predecoder.p
 | the frozen fallback rule (post hoc on test X at p = 0.005) | 50 of 5,000 | 1.00% (0.76% to 1.32%) | 28 / 5 / 22 (p = 0.002) |
 | H where H converged, else TH (designed after the test results) | 44 of 5,000 | 0.88% (0.66% to 1.18%) | 29 / 4 / 15 (p = 0.019) |
 
-**Test shots: designed after the test results were seen; formerly a separate branch (predecoder-tcbp).** One basis at a time (X until the Z run lands), accuracy only. Its knobs were fitted at p = 0.005 and applied unchanged at p = 0.004 and 0.003, with no validation there; on Z memory X's knobs were applied unchanged, with no Z fit (declared beforehand), after a validation gate on Z that passed. The declared pair is TH against TCBP-JOBS's stored test file; at p = 0.005 the same run's kit-priors arm is the like-for-like control.
+**Test shots: designed after the test results were seen; formerly a separate branch (predecoder-tcbp).** Decoded one basis at a time, accuracy only; the rows "pairs" score both bases as the kit does (a pair fails when its X or its Z shot fails). Its knobs were fitted on X at p = 0.005 and applied unchanged to Z (no Z fit, declared beforehand) and at p = 0.004 and 0.003: **no validation at these p** (X in run 2, Z in run 4, `predecoder/logs/tcbp_zlowp_declared.md`). Z at p = 0.005 first passed a validation gate on Z. The declared pair is TH against TCBP-JOBS's stored test file; only X at p = 0.005 has a same-run kit-priors arm, the like-for-like control.
 
 | p | Basis | TH fails | TCBP-JOBS, its stored test file (its row in this report), fails | TH against it, the declared pair: both / only TH / only TCBP-JOBS (exact p) | TCBP-JOBS with the kit's priors in the same run (the like-for-like control) fails | TH against that control (exact p) |
 |---|---|---|---|---|---|---|
@@ -699,7 +699,11 @@ Source: `report/data/test/predecoder/pair_test_p0.005.{json,log}` (`predecoder.p
 | 0.004 | X | 4 of 10,000 | 20 | 2 / 2 / 18 (p = 4e-04) | not run (X at p = 0.005 only) |  |
 | 0.003 | X | 0 of 10,000 | 1 | 0 / 0 / 1 (p = 1.00) | not run (X at p = 0.005 only) |  |
 | 0.005 | Z | 61 of 10,000 | 177 | 41 / 20 / 136 (p = 2e-22) | not run (X at p = 0.005 only) |  |
+| 0.004 | Z | 6 of 10,000 | 21 | 4 / 2 / 17 (p = 7e-04) | not run (X at p = 0.005 only) |  |
+| 0.003 | Z | 1 of 10,000 | 2 | 1 / 0 / 1 (p = 1.00) | not run (X at p = 0.005 only) |  |
 | 0.005 | pairs | 132 of 10,000 pairs (1.11e-03 ± 9.6e-05 per cycle) | 360 (3.05e-03 ± 1.6e-04 per cycle) | 91 / 41 / 269 (p = 3e-42) |  |  |
+| 0.004 | pairs | 10 of 10,000 pairs (8.34e-05 ± 2.6e-05 per cycle) | 41 (3.42e-04 ± 5.3e-05 per cycle) | 6 / 4 / 35 (p = 3e-07) |  |  |
+| 0.003 | pairs | 1 of 10,000 pairs (8.33e-06 ± 8.3e-06 per cycle) | 3 (2.50e-05 ± 1.4e-05 per cycle) | 1 / 0 / 2 (p = 0.50: no claim) |  |  |
 
 **Its time per X shot: not a clean timing.** An A100 MIG slice, one process, one shot at a time, 1 CPU thread; server job 5 ran beside job 6, another TCBP-JOBS process on the same slice (`runner_gpu.out`, `runner_cpu.out`); the network's time is from validation shots. Per X shot, not per pair; ms: mean / median / 99th percentile. For scale: TCBP-JOBS alone takes 8.7 ms per X shot (a GPU decode call), relay-BP's timed row 760, and the relay-BP predecoder 212 (`predecoder_latency.md`).
 
@@ -709,5 +713,17 @@ Source: `report/data/test/predecoder/pair_test_p0.005.{json,log}` (`predecoder.p
 | TCBP-JOBS built with the head's priors and run, per shot | 46.4 | 44.6 | 69.2 | the 10,000 test X shots at p = 0.005 (server job 5; build 42.6, decode 3.8 ms on average) |
 | the two together | 55.8 |  |  |  |
 
-Source: `report/data/exploration/predecoder_tcbp/` (branch `predecoder-tcbp` at `dad4fd50`; job 4 from `server-logs`) and `report/data/test/predecoder_tcbp/` (job 5 from `server-logs`).
+**Its time per X shot after the speed work (branch `tcbp-speed`): exploration shots, each part timed alone, not one end-to-end timer.** The first 1,000 validation X shots at p = 0.005, the A100 MIG slice, one process, 1 CPU thread; ms, mean per X shot. Both columns were measured the same way on the same shots, so they compare like for like; the registered time above is another measurement, on other shots. The test numbers were made with the registered path and were not rerun. The decoded CUDA graph's logits give the same 12 bits and faults as the validation run's head arm (`ctl/130`) on every shot.
+
+| Part | The registered path: eager network, H dense | With the speed work: CUDA graph, H as a scipy CSR matrix | Same answers, and notes |
+|---|---|---|---|
+| the network and head, float32, one shot at a time (job 3) | 8.3 | 1.7 | logits equal eager's bit for bit on 1,000 of 1,000 rows |
+| TCBP-JOBS built with the shot's priors (job 1, the arms taking turns) | 41.2 | 34.0 | the 12 bits, the faults and the whole corrections equal on 1,000 of 1,000 shots |
+| its decode (job 1) | 2.7 | 2.7 |  |
+| **the sum, network + build + decode** | **52.2** | **38.5** | separate timers, not one end-to-end timer |
+| freeing the decoder, before the next shot (not in the sum; job 1) | 4.6 | 4.8 | medians 4.6 and 4.6 ms; the largest CSR free took 228 ms |
+
+A fast path for easy shots (`predecoder/fastpath/`, branch `tcbp-fastpath`; exploration after the test results, on the 5,000 validation X shots at p = 0.005; no test file opened): a check sends a shot to TCBP-JOBS with the kit's priors, built once, and the rest to the TCBP version, with the rule that it add no failure. On its own time model (the TCBP version alone 51.1 ms: one timer over the priors, the CSR build, the decode and the free, plus the eager network's 9.4 ms), the syndrome weight (round 1) saves 1.8 ms (49.3), and TCBP-JOBS's own decode time (round 2) saves more (43.4 ms mean) but worsens the 99th percentile (103 against 63.1 ms), with a threshold in ms that does not carry from one run to another. The head's entropy (C9, round 3) sends 35.4% of the shots to the fast path with 0 added failures, 38.8 ms mean and the same 99th percentile (63.1 ms): a third look at the same validation shots; not confirmed on fresh shots (its one held-out check is declared in `predecoder/fastpath/CRITERION_4.md`).
+
+Source: `report/data/exploration/predecoder_tcbp/` (branch `predecoder-tcbp` at `dad4fd50`; job 4 from `server-logs`; `speed/` from branch `tcbp-speed` and `fastpath/` from branch `tcbp-fastpath`, both merged into `predecoder/`) and `report/data/test/predecoder_tcbp/` (job 5 from `server-logs`; Z and the pair score at p = 0.004 and 0.003 from branch `tcbp-zlowp`, merged into `predecoder/`).
 <!-- END table:predecoder_tcbp -->

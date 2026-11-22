@@ -162,6 +162,14 @@ SOURCES = [
     ("exploration/predecoder_tcbp/gpu_network_decode_val1000_fp32_summary.json", "origin/server-logs",
      "files/predecoder-tcbp/gpu_network/decode_val1000_fp32_summary.json", False),
     ("test/predecoder_tcbp/job5_test_X_p0.005_summary.json", "origin/server-logs", "files/predecoder-tcbp/test_X_p0.005/summary.json", False),
+    # its speed work (branch tcbp-speed, merged into predecoder/; the first 1,000 validation X shots at p = 0.005, the A100, separate timers):
+    # job 1 builds TCBP-JOBS with H as a scipy CSR matrix beside the dense path, job 3 runs the network as a CUDA graph beside eager
+    ("exploration/predecoder_tcbp/speed/", "tree", "predecoder/logs/tcbp_speed_job1_summary.json", False),
+    ("exploration/predecoder_tcbp/speed/", "tree", "predecoder/logs/tcbp_speed_job1_report_vs_job3.json", False),
+    ("exploration/predecoder_tcbp/speed/", "tree", "predecoder/logs/tcbp_speed_job3_network_summary.json", False),
+    ("exploration/predecoder_tcbp/speed/", "tree", "predecoder/logs/tcbp_speed_job3_analysis.json", False),
+    # a fast path for easy shots (branch tcbp-fastpath, merged into predecoder/fastpath/; validation X at p = 0.005): rounds 1 to 3 in one file
+    ("exploration/predecoder_tcbp/fastpath/", "tree", "predecoder/fastpath/result3_p0.005.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.log", False),
 ]

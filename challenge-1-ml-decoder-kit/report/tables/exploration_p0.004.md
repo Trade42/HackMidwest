@@ -12,9 +12,10 @@
 | X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 40,000) | ours | 65 of 25,000 | 0.260% (0.204% to 0.331%) | the laptop's table gives the count only | 118 |
 | X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 50,000) | ours | 63 of 25,000 | 0.252% (0.197% to 0.322%) | the laptop's table gives the count only | 118 |
 | X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 60,000) | ours | 62 of 25,000 | 0.248% (0.194% to 0.318%) | the laptop's table gives the count only | 118 |
-| X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 70,000) | ours | 59 of 25,000 | 0.236% (0.183% to 0.304%) | 47 / 12 / 75 (p = 3e-12) | 118 |
+| X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 70,000) | ours | 59 of 25,000 | 0.236% (0.183% to 0.304%) | the laptop's table gives the count only | 118 |
 | X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 80,000) | ours | 59 of 25,000 | 0.236% (0.183% to 0.304%) | the laptop's table gives the count only | 118 |
 | X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 90,000) | ours | 62 of 25,000 | 0.248% (0.194% to 0.318%) | the laptop's table gives the count only | 118 |
+| X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 100,000) | ours | 59 of 25,000 | 0.236% (0.183% to 0.304%) | 45 / 14 / 77 (p = 1e-11) | 118 |
 | Z memory, 25,000 shots | relay-BP (kit baseline) | the kit | 123 of 25,000 | 0.492% (0.413% to 0.587%) | the reference | 171 |
 | Z memory, 25,000 shots | PriorTilt, seed A | IonQ | 106 of 25,000 | 0.424% (0.351% to 0.513%) | 63 / 43 / 60 (p = 0.11) | 55.6 |
 | Z memory, 25,000 shots | PriorTilt, seed B | IonQ | 107 of 25,000 | 0.428% (0.354% to 0.517%) | 63 / 44 / 60 (p = 0.14) | 57.1 |
@@ -22,7 +23,7 @@
 | Z memory, 25,000 shots | our hierarchy, lowest weight among the converged candidates | ours | 73 of 25,000 | 0.292% (0.232% to 0.367%) | 64 / 9 / 59 (p = 4e-10) | 131 |
 | Z memory, 25,000 shots | TCBP-JOBS (NVIDIA, GPU; answers only, no time) | NVIDIA; run by us | 60 of 25,000 | 0.240% (0.187% to 0.309%) | 46 / 14 / 77 (p = 1e-11) |  |
 
-The neural tie-break against the lowest-weight tie-break on the same 25,000 X shots (network at training step 70,000, recomputed here from its per-shot logits): both fail 56, only the network rule fails 3, only the weight rule fails 21 (exact p = 3e-04). Against the better classical tie-break, lowest weight among the converged candidates: both fail 52, only the network rule fails 7, only the classical rule fails 15 (exact p = 0.13).
+The neural tie-break against the lowest-weight tie-break on the same 25,000 X shots (network at training step 100,000, recomputed here from its per-shot logits): both fail 54, only the network rule fails 5, only the weight rule fails 23 (exact p = 9e-04). Against the better classical tie-break, lowest weight among the converged candidates: both fail 52, only the network rule fails 7, only the classical rule fails 15 (exact p = 0.13).
 
 The same decodes as pairs (shot k of X with shot k of Z), the kit's score; times per pair:
 

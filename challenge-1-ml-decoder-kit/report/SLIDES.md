@@ -46,7 +46,7 @@ Source: `report/tables/exploration_p0.004.md`, the last table.
 - Alone it is far worse than relay-BP, so we never use it alone. We only ask it which of two or three given answers
   is more likely.
 - On 25,000 practice shots of X memory, the hierarchy fails <!--f:expl_X_C-->67<!--/f--> times with its best classical tie-break and <!--f:expl_X_N-->59<!--/f-->
-  times with the network (at training step <!--f:expl_X_N_step-->70,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times.
+  times with the network (at training step <!--f:expl_X_N_step-->100,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times.
 
 Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 
@@ -143,7 +143,7 @@ A time ratio means nothing without the accuracy beside it: stopping relay-BP at 
 faster and fails more (`report/tables/background.md`). Our mean time divided by relay-BP's, on the same server and
 the same test pairs: <!--f:t3_hierarchy_time_ratio-->not measured<!--/f--> at p = 0.003, <!--f:t4_hierarchy_time_ratio-->not measured<!--/f--> at p = 0.004,
 <!--f:t5_hierarchy_time_ratio-->not measured<!--/f--> at p = 0.005, with <!--f:t3_hierarchy_pairs-->not measured<!--/f-->, <!--f:t4_hierarchy_pairs-->not measured<!--/f--> and <!--f:t5_hierarchy_pairs-->not measured<!--/f--> failed pairs
-against relay-BP's <!--f:t3_relay_bp_pairs-->not measured<!--/f-->, <!--f:t4_relay_bp_pairs-->83<!--/f--> and <!--f:t5_relay_bp_pairs-->not measured<!--/f-->. The table `report/tables/test_time.md`
+against relay-BP's <!--f:t3_relay_bp_pairs-->5<!--/f-->, <!--f:t4_relay_bp_pairs-->83<!--/f--> and <!--f:t5_relay_bp_pairs-->not measured<!--/f-->. The table `report/tables/test_time.md`
 puts every ratio beside its failures.
 
 **Did anything tune on the test shots?**

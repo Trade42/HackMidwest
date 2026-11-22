@@ -27,7 +27,7 @@ KIT = Path(__file__).resolve().parent.parent
 DATA = Path(__file__).resolve().parent / "data"
 RECORD = DATA / "sources.json"
 
-NETWORK_STEP = 70000   # the newest snapshot of the X network whose logits are copied; older copies are removed by hand
+NETWORK_STEP = 100000   # the newest snapshot of the X network whose logits are copied; older copies are removed by hand
 
 # (destination under report/data/, where from, path or pattern there, grows?)
 # "tree" is the working tree of this branch, relative to challenge-1-ml-decoder-kit/.

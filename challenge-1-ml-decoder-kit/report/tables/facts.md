@@ -59,10 +59,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c3_priortilt_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
 | `c3_priortilt_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
 | `c3_priortilt_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
-| `c3_router_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
-| `c3_router_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_router_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_router_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
+| `c3_router_vs_relay_bp_both` | 4 | `tables/test_comparisons.md` |
+| `c3_router_vs_relay_bp_only_first` | 2 | `tables/test_comparisons.md` |
+| `c3_router_vs_relay_bp_only_second` | 1 | `tables/test_comparisons.md` |
+| `c3_router_vs_relay_bp_p` | 1.00 | `tables/test_comparisons.md` |
 | `c3_tcbp_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
 | `c3_tcbp_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
 | `c3_tcbp_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
@@ -150,9 +150,9 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `cand_lowest` | 71 | `tables/background.md` |
 | `cand_present` | 114 | `tables/background.md` |
 | `cand_shots` | 145 | `tables/background.md` |
-| `cross3_differ` | not measured | `tables/checks.md` |
-| `cross3_earlier_pairs` | not measured | `tables/checks.md` |
-| `cross3_timed_pairs` | not measured | `tables/checks.md` |
+| `cross3_differ` | 0 | `tables/checks.md` |
+| `cross3_earlier_pairs` | 5 | `tables/checks.md` |
+| `cross3_timed_pairs` | 5 | `tables/checks.md` |
 | `cross4_differ` | 65 | `tables/checks.md` |
 | `cross4_earlier_pairs` | 84 | `tables/checks.md` |
 | `cross4_timed_pairs` | 83 | `tables/checks.md` |
@@ -193,15 +193,15 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl5_shots` | 5,000 | `tables/exploration_p0.005.md` |
 | `expl_X_C` | 67 | `tables/exploration_p0.004.md` |
 | `expl_X_N` | 59 | `tables/exploration_p0.004.md` |
-| `expl_X_N_only_ours` | 12 | `tables/exploration_p0.004.md` |
-| `expl_X_N_only_relay` | 75 | `tables/exploration_p0.004.md` |
-| `expl_X_N_step` | 70,000 | `tables/exploration_p0.004.md` |
+| `expl_X_N_only_ours` | 14 | `tables/exploration_p0.004.md` |
+| `expl_X_N_only_relay` | 77 | `tables/exploration_p0.004.md` |
+| `expl_X_N_step` | 100,000 | `tables/exploration_p0.004.md` |
 | `expl_X_N_vs_C_only_classical` | 15 | `tables/exploration_p0.004.md` |
 | `expl_X_N_vs_C_only_network` | 7 | `tables/exploration_p0.004.md` |
 | `expl_X_N_vs_C_p` | 0.13 | `tables/exploration_p0.004.md` |
-| `expl_X_N_vs_W_only_network` | 3 | `tables/exploration_p0.004.md` |
-| `expl_X_N_vs_W_only_weight` | 21 | `tables/exploration_p0.004.md` |
-| `expl_X_N_vs_W_p` | 3e-04 | `tables/exploration_p0.004.md` |
+| `expl_X_N_vs_W_only_network` | 5 | `tables/exploration_p0.004.md` |
+| `expl_X_N_vs_W_only_weight` | 23 | `tables/exploration_p0.004.md` |
+| `expl_X_N_vs_W_p` | 9e-04 | `tables/exploration_p0.004.md` |
 | `expl_X_P1` | 102 | `tables/exploration_p0.004.md` |
 | `expl_X_P2` | 82 | `tables/exploration_p0.004.md` |
 | `expl_X_R` | 122 | `tables/exploration_p0.004.md` |
@@ -250,14 +250,14 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `loss_oracle_ratio` | 1.64 | `tables/loss.md` |
 | `loss_oracle_ratio_interval` | 1.42 to 1.94 | `tables/loss.md` |
 | `loss_oracle_share` | 2.7% | `tables/loss.md` |
-| `net_X_step` | 90,000 | `tables/networks.md` |
-| `net_X_wrong3` | 0.8% | `tables/networks.md` |
-| `net_X_wrong4` | 5.2% | `tables/networks.md` |
-| `net_X_wrong5` | 21.2% | `tables/networks.md` |
-| `net_Z_step` | 62,000 | `tables/networks.md` |
-| `net_Z_wrong3` | 0.9% | `tables/networks.md` |
-| `net_Z_wrong4` | 5.2% | `tables/networks.md` |
-| `net_Z_wrong5` | 22.3% | `tables/networks.md` |
+| `net_X_step` | 100,000 | `tables/networks.md` |
+| `net_X_wrong3` | 0.6% | `tables/networks.md` |
+| `net_X_wrong4` | 4.5% | `tables/networks.md` |
+| `net_X_wrong5` | 20.1% | `tables/networks.md` |
+| `net_Z_step` | 64,000 | `tables/networks.md` |
+| `net_Z_wrong3` | 0.8% | `tables/networks.md` |
+| `net_Z_wrong4` | 5.1% | `tables/networks.md` |
+| `net_Z_wrong5` | 21.9% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
 | `t3_bposd_both` | not measured | `tables/test_p0.003.md` |
 | `t3_bposd_error` | not measured | `tables/test_p0.003.md` |
@@ -338,26 +338,26 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_priortilt_wall_hours` | not measured | `tables/test_p0.003.md` |
 | `t3_priortilt_xz` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_both` | not measured | `tables/test_p0.003.md` |
-| `t3_relay_bp_error` | not measured | `tables/test_p0.003.md` |
-| `t3_relay_bp_mean_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_relay_bp_median_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_relay_bp_error` | 1.9e-05 | `tables/test_p0.003.md` |
+| `t3_relay_bp_mean_ms` | 88.0 (not clean) | `tables/test_p0.003.md` |
+| `t3_relay_bp_median_ms` | 54.0 | `tables/test_p0.003.md` |
 | `t3_relay_bp_only_relay` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_only_this` | not measured | `tables/test_p0.003.md` |
-| `t3_relay_bp_p99_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_relay_bp_p99_ms` | 579 | `tables/test_p0.003.md` |
 | `t3_relay_bp_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_relay_bp_pairs` | not measured | `tables/test_p0.003.md` |
-| `t3_relay_bp_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_relay_bp_pairs` | 5 | `tables/test_p0.003.md` |
+| `t3_relay_bp_rate` | 4.17e-05 | `tables/test_p0.003.md` |
 | `t3_relay_bp_time_ratio` | not measured | `tables/test_p0.003.md` |
-| `t3_relay_bp_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_relay_bp_xz` | not measured | `tables/test_p0.003.md` |
-| `t3_router_both` | not measured | `tables/test_p0.003.md` |
+| `t3_relay_bp_wall_hours` | 0.2 | `tables/test_p0.003.md` |
+| `t3_relay_bp_xz` | 2, 3 | `tables/test_p0.003.md` |
+| `t3_router_both` | 4 | `tables/test_p0.003.md` |
 | `t3_router_error` | 2.0e-05 | `tables/test_p0.003.md` |
 | `t3_router_mean_ms` | 42.5 (not clean) | `tables/test_p0.003.md` |
 | `t3_router_median_ms` | 9.5 | `tables/test_p0.003.md` |
-| `t3_router_only_relay` | not measured | `tables/test_p0.003.md` |
-| `t3_router_only_this` | not measured | `tables/test_p0.003.md` |
+| `t3_router_only_relay` | 1 | `tables/test_p0.003.md` |
+| `t3_router_only_this` | 2 | `tables/test_p0.003.md` |
 | `t3_router_p99_ms` | 627 | `tables/test_p0.003.md` |
-| `t3_router_paired_p` | not measured | `tables/test_p0.003.md` |
+| `t3_router_paired_p` | 1.00 | `tables/test_p0.003.md` |
 | `t3_router_pairs` | 6 | `tables/test_p0.003.md` |
 | `t3_router_rate` | 5.00e-05 | `tables/test_p0.003.md` |
 | `t3_router_time_ratio` | not measured | `tables/test_p0.003.md` |

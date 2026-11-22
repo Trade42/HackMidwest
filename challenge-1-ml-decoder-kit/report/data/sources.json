@@ -1014,13 +1014,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "0263164146b8492f909b186d9ca092403792ad41",
-  "copied_utc": "2026-11-22 10:55",
+  "commit": "dddb2cd92e4afa8772c354a0efdd1d0def2f2327",
+  "copied_utc": "2026-11-22 11:02",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `0263164146b8`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `dddb2cd92e4a`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "f31450fbf949e3df48a2a5f782d7ac762492584451da2d4cceac9c8384db7ed6"
+  "sha256": "c7ab2555367955157099ca6b6a401a2e7029c5710eb3d46e7ad40d06cdf094db"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -1222,14 +1222,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 14023,
-  "commit": "0263164146b8492f909b186d9ca092403792ad41",
-  "copied_utc": "2026-11-22 10:55",
+  "bytes": 14471,
+  "commit": "dddb2cd92e4afa8772c354a0efdd1d0def2f2327",
+  "copied_utc": "2026-11-22 11:02",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `0263164146b8`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `dddb2cd92e4a`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "ecb5d4da21dfa16310013db007eafe731db8a961cdf5ddf540be11abad78ca56"
+  "sha256": "0b4c16ad7729b5c48bfdfbc47799dcc5b3855ed46630797fc6be75dd3a70480c"
  },
  "test/eval_p0.003_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",
@@ -1474,6 +1474,51 @@
   "path": "files/clean/eval_p0.004_hierarchy-parallel/summary.json",
   "sha256": "f88d027ee1703f4d5614247519bdcb9cc222662808105eeee18bad85d68a388b"
  },
+ "test/eval_p0.004_hierarchy/01_hierarchy_plugin_make_decoder_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 349627,
+  "commit": "dddb2cd92e4afa8772c354a0efdd1d0def2f2327",
+  "copied_utc": "2026-11-22 11:02",
+  "file": "test/eval_p0.004_hierarchy/01_hierarchy_plugin_make_decoder_shots.npz",
+  "from": "branch `server-logs` at commit `dddb2cd92e4a`, `files/clean/eval_p0.004_hierarchy/01_hierarchy_plugin_make_decoder_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy/01_hierarchy_plugin_make_decoder_shots.npz",
+  "sha256": "dd327bcc35cead0ac32acb6ffa4a78378fc0e9e287d63e79c91c3ca61064ed37"
+ },
+ "test/eval_p0.004_hierarchy/plugin_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 202906,
+  "commit": "dddb2cd92e4afa8772c354a0efdd1d0def2f2327",
+  "copied_utc": "2026-11-22 11:02",
+  "file": "test/eval_p0.004_hierarchy/plugin_shots.npz",
+  "from": "derived by `report/sync_data.py` from branch `server-logs` at commit `dddb2cd92e4a`, `files/clean/eval_p0.004_hierarchy/01_hierarchy_plugin_make_decoder_metrics.json` (sha256 `b833cce9627e4f99\u2026`)",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy/01_hierarchy_plugin_make_decoder_metrics.json",
+  "sha256": "0617d96b048ac20098a919beda4b3e491666b922c8a212d76c6827da762adfef",
+  "source_sha256": "b833cce9627e4f99d415bd48164c47090a8c9b8dc2e92bb857a8ec74ebba535d"
+ },
+ "test/eval_p0.004_hierarchy/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 829,
+  "commit": "dddb2cd92e4afa8772c354a0efdd1d0def2f2327",
+  "copied_utc": "2026-11-22 11:02",
+  "file": "test/eval_p0.004_hierarchy/summary.csv",
+  "from": "branch `server-logs` at commit `dddb2cd92e4a`, `files/clean/eval_p0.004_hierarchy/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy/summary.csv",
+  "sha256": "b009723b1c25464cabf737029b185b3a5d467ce570fdac7d054e696a7e5c4d6b"
+ },
+ "test/eval_p0.004_hierarchy/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 13123,
+  "commit": "dddb2cd92e4afa8772c354a0efdd1d0def2f2327",
+  "copied_utc": "2026-11-22 11:02",
+  "file": "test/eval_p0.004_hierarchy/summary.json",
+  "from": "branch `server-logs` at commit `dddb2cd92e4a`, `files/clean/eval_p0.004_hierarchy/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy/summary.json",
+  "sha256": "e95b11e3d5543781f27808b09d856ba7921b40c3c6ba178ef43bba815d69149c"
+ },
  "test/eval_p0.004_relay-bp/01_relay-bp_shots.npz": {
   "branch": "origin/server-logs",
   "bytes": 452527,
@@ -1674,14 +1719,14 @@
  },
  "test/test_rows.out": {
   "branch": "origin/server-logs",
-  "bytes": 4378,
-  "commit": "0263164146b8492f909b186d9ca092403792ad41",
-  "copied_utc": "2026-11-22 10:55",
+  "bytes": 4899,
+  "commit": "dddb2cd92e4afa8772c354a0efdd1d0def2f2327",
+  "copied_utc": "2026-11-22 11:02",
   "file": "test/test_rows.out",
-  "from": "branch `server-logs` at commit `0263164146b8`, `test_rows.out`",
+  "from": "branch `server-logs` at commit `dddb2cd92e4a`, `test_rows.out`",
   "grows": true,
   "path": "test_rows.out",
-  "sha256": "ea065474b7a93ea91e2e5d7105ca0259db4cc5ad4c33ac40c33874dded28fa28"
+  "sha256": "9a1f5670f39c4f97b092ef2233a7d067bb943f9c1da93eb4c22eaf04d3440422"
  },
  "test/test_run.out": {
   "branch": "origin/server-logs",

@@ -1357,8 +1357,15 @@ def tcbp_statement(measured):
         for p in both:
             tcbp, ours = measured[p]["tcbp"]["failures_pair"], measured[p]["hierarchy"]["failures_pair"]
             verb = "fewer" if tcbp < ours else "more" if tcbp > ours else "as many"
-            clauses.append(f"at p = {p} TCBP-JOBS fails {verb} pairs than our decoder ({tcbp} against {ours})" if verb != "as many"
-                           else f"at p = {p} TCBP-JOBS and our decoder fail as many pairs ({tcbp} against {ours})")
+            text = (f"at p = {p} TCBP-JOBS fails {verb} pairs than our decoder ({tcbp} against {ours}" if verb != "as many"
+                    else f"at p = {p} TCBP-JOBS and our decoder fail as many pairs ({tcbp} against {ours}")
+            first, second = measured[p]["tcbp"]["failed_pair"], measured[p]["hierarchy"]["failed_pair"]
+            if first is not None and second is not None:
+                paired = stats.paired(second, first)          # reference: ours; row: TCBP-JOBS
+                significant = "" if paired["p"] < 0.05 else ", not a significant difference"
+                text += (f"; only TCBP-JOBS fails {paired['row_only']}, only ours {paired['reference_only']}, "
+                         f"exact p = {stats.p_text(paired['p'])}{significant}")
+            clauses.append(text + ")")
         text = "Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: " + "; ".join(clauses) + "."
     elif FACTS.get("expl_pairs_T", (NOT_MEASURED,))[0] != NOT_MEASURED:
         text = (f"TCBP-JOBS, NVIDIA's GPU decoder, is not measured against our decoder on the test shots yet; on the exploration shots at p = 0.004 "

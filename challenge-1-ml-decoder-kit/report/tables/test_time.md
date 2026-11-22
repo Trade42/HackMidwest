@@ -18,7 +18,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.004 | PriorTilt, one run | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured | not measured | not measured |
-| 0.004 | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.004 | our hierarchy, neural tie-break | 44 of 10,000 | 216 | 0.68 | 83.1 | 2,064 | CPU, 1 core |
 | 0.004 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 44 of 10,000 | 150 | 0.47 | 55.5 | 1,292 | CPU, 2 cores |
 | 0.004 | our ensemble (combined offline) | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.004 | TCBP-JOBS (NVIDIA, GPU) | 41 of 10,000 | 7.8 | not comparable: another device and timer | 5.8 | 35.3 | GPU |

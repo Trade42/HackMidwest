@@ -144,8 +144,8 @@ our hierarchy runs on one CPU core.
 **"Another team is at 0.3 times the baseline's time." How do you compare?**
 A time ratio means nothing without the accuracy beside it: stopping relay-BP at its first answer is several times
 faster and fails more (`report/tables/background.md`). Our mean time divided by relay-BP's, on the same server and
-the same test pairs: <!--f:t3_hierarchy_time_ratio-->0.52<!--/f--> at p = 0.003, <!--f:t4_hierarchy_time_ratio-->not measured<!--/f--> at p = 0.004,
-<!--f:t5_hierarchy_time_ratio-->not measured<!--/f--> at p = 0.005, with <!--f:t3_hierarchy_pairs-->3<!--/f-->, <!--f:t4_hierarchy_pairs-->not measured<!--/f--> and <!--f:t5_hierarchy_pairs-->not measured<!--/f--> failed pairs
+the same test pairs: <!--f:t3_hierarchy_time_ratio-->0.52<!--/f--> at p = 0.003, <!--f:t4_hierarchy_time_ratio-->0.68<!--/f--> at p = 0.004,
+<!--f:t5_hierarchy_time_ratio-->not measured<!--/f--> at p = 0.005, with <!--f:t3_hierarchy_pairs-->3<!--/f-->, <!--f:t4_hierarchy_pairs-->44<!--/f--> and <!--f:t5_hierarchy_pairs-->not measured<!--/f--> failed pairs
 against relay-BP's <!--f:t3_relay_bp_pairs-->5<!--/f-->, <!--f:t4_relay_bp_pairs-->83<!--/f--> and <!--f:t5_relay_bp_pairs-->not measured<!--/f-->. The table `report/tables/test_time.md`
 puts every ratio beside its failures.
 

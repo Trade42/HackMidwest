@@ -7,3 +7,5 @@ Where the failures are. "Agree" means the two runs of PriorTilt (two random seed
 | exploration shots, p = 0.004 | shots wrong under the hierarchy, lowest-weight tie-break | 162 | 63 | 99 | 61.1% |
 | test shots, p = 0.003, the timed decoder | all shots | 20,000 | 19,998 | 2 | 0.0% |
 | test shots, p = 0.003, the timed decoder | shots wrong under our decoder, neural tie-break | 3 | 3 | 0 | 0.0% |
+| test shots, p = 0.004, the timed decoder | all shots | 20,000 | 19,910 | 90 | 0.4% |
+| test shots, p = 0.004, the timed decoder | shots wrong under our decoder, neural tie-break | 44 | 17 | 27 | 61.4% |

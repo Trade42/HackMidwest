@@ -70,3 +70,4 @@
 2026-11-22T14:04:23Z START eval_p0.004_hierarchy-weight: weight 1, pid 402683; before it: tokens 6, CPUs in use 5.1, throttled so far 4845.0 s
 2026-11-22T14:05:03Z START eval_p0.003_hierarchy-converged-parallel: weight 2, pid 403379; before it: tokens 7, CPUs in use 6.4, throttled so far 4845.0 s
 2026-11-22T14:05:43Z START eval_p0.003_hierarchy-weight: weight 1, pid 403842; before it: tokens 9, CPUs in use 7.7, throttled so far 4845.0 s
+2026-11-22T14:10:12Z END eval_p0.003_hierarchy-converged-parallel exit 0: row p=0.003 hierarchy-converged-parallel exit 0: hierarchy.plugin:make_decoder,2,2,4,3.3339446006586115e-05,1.6670973765342545e-05,29.029626443819144 [CPUs in use 6.9, tokens 10, throttled so far 4845.3 s, load 12.43]

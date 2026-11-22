@@ -18,16 +18,19 @@ import argparse
 import time
 
 import numpy as np
+import scipy.sparse as sp
 import torch
 
 from circuit import dem_matrices, detector_ids, sample
 from make_circuit import memory_experiment
+from neural.graph import build_graph, check_parity_matrix, gf2_inverse
 
 
 class DemSampler:
     """Samples (detectors, observables) at any of a fixed list of noise strengths."""
 
-    def __init__(self, code="gross", basis="X", rounds=None, detectors="all", noise_levels=(0.004,), device="cpu"):
+    def __init__(self, code="gross", basis="X", rounds=None, detectors="all", noise_levels=(0.004,), device="cpu",
+                 logicals="kit"):
         self.device = torch.device(device)
         self.priors = {}
         for p in noise_levels:
@@ -37,6 +40,8 @@ class DemSampler:
             elif (H != self.H).nnz or (L != self.L).nnz:
                 raise ValueError("the error model's mechanisms changed with the noise strength")
             self.priors[p] = torch.tensor(priors, dtype=torch.float32, device=self.device)
+        if logicals != "kit":   # label the shots with the model's logical operators instead of the kit's
+            self.L = model_label_matrix(build_graph(code, basis, rounds, logicals), self.H, self.L, detectors)
         self.num_detectors, self.num_mechanisms = self.H.shape
         self.num_observables = self.L.shape[0]
         # Row lists of every mechanism, padded with one extra "nowhere" row.
@@ -68,6 +73,24 @@ class DemSampler:
         flat = (shot[:, None] * (num_rows + 1) + rows).reshape(-1)
         counts = torch.bincount(flat, minlength=shots * (num_rows + 1)).reshape(shots, num_rows + 1)
         return (counts[:, :num_rows] & 1).to(torch.uint8)
+
+
+def model_label_matrix(graph, H, L, detectors):
+    """L for the model's logical operators (see graph.py), from the kit's H and L.
+
+    model bits = inverse(kit_from_model) x (kit bits + kit_from_checks x check parities), and
+    both the kit bits and the check parities are linear in the fired mechanisms. So the change
+    of operators is one new matrix L, computed once.
+    """
+    used = graph.basis_detectors if detectors == "basis" else np.arange(graph.num_detectors)
+    as_int = lambda matrix: sp.csr_matrix(matrix).astype(np.int64)
+    check_parities = as_int(check_parity_matrix(graph, used)) @ as_int(H)        # [n2, mechanisms]
+    kit = as_int(L) + as_int(graph.kit_from_checks) @ check_parities
+    kit.data %= 2
+    model = as_int(gf2_inverse(graph.kit_from_model)) @ kit
+    model.data %= 2
+    model.eliminate_zeros()
+    return model.astype(np.uint8).tocsc()
 
 
 def _position_in_column(counts):

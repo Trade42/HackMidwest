@@ -25,3 +25,13 @@ files ['X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz', 'X_f0.6_loss_s
   late block f0.4 0-99 done, 486 s; failures so far bh 12 of 100
   late block f0.6 0-99 done, 496 s; failures so far bh 70 of 100
   late block f0.4 100-199 done, 503 s; failures so far bh 24 of 200
+  late block f0.6 100-199 done, 513 s; failures so far bh 136 of 200
+  late block f0.4 200-299 done, 519 s; failures so far bh 30 of 300
+  late block f0.6 200-299 done, 528 s; failures so far bh 205 of 300
+  late block f0.4 300-399 done, 535 s; failures so far bh 39 of 400
+  late block f0.6 300-399 done, 544 s; failures so far bh 270 of 400
+  late block f0.4 400-499 done, 550 s; failures so far bh 54 of 500
+  late block f0.6 400-499 done, 560 s; failures so far bh 342 of 500
+  late block f0.4 500-599 done, 567 s; failures so far bh 58 of 600
+  late block f0.6 500-599 done, 576 s; failures so far bh 416 of 600
+  late block f0.4 600-699 done, 583 s; failures so far bh 65 of 700

@@ -76,6 +76,17 @@ def test_every_copied_file_matches_its_record():
         assert hashlib.sha256((REPORT / "data" / name).read_bytes()).hexdigest() == record["sha256"], name
 
 
+def test_the_top_readme_holds_the_generated_section():
+    """Once our section is appended to the top-level README.md, it must be the generated one, and nothing above it may change."""
+    from report.make_tables import README_HEADING
+    readme = (KIT.parent / "README.md").read_text(encoding="utf-8")
+    if README_HEADING not in readme:
+        pytest.skip("our section is not appended yet")
+    section = (REPORT / "tables" / "readme_section.md").read_text(encoding="utf-8")
+    assert readme.endswith("\n\n" + section)
+    assert len(section.rstrip("\n").split("\n")) <= 25
+
+
 def stand_in(folder):
     """A copy of report/data/ whose test/ rows are the teammates' committed evaluator runs."""
     data = folder / "data"

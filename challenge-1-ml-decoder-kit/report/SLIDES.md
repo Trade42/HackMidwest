@@ -45,8 +45,8 @@ Source: `report/tables/exploration_p0.004.md`, the last table.
   at all 72 positions, and has <!--f:net_parameters-->893,697<!--/f--> parameters.
 - Alone it is far worse than relay-BP, so we never use it alone. We only ask it which of two or three given answers
   is more likely.
-- On 25,000 practice shots of X memory, the hierarchy fails <!--f:expl_X_W-->77<!--/f--> times with the classical tie-break and <!--f:expl_X_N-->62<!--/f--> times with
-  the network (at training step <!--f:expl_X_N_step-->60,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times.
+- On 25,000 practice shots of X memory, the hierarchy fails <!--f:expl_X_W-->77<!--/f--> times with the classical tie-break and <!--f:expl_X_N-->59<!--/f--> times with
+  the network (at training step <!--f:expl_X_N_step-->70,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times.
 
 Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 
@@ -109,7 +109,7 @@ On the test shots: <!--f:framing-->not measured<!--/f--> The table `report/table
 PriorTilt alone already beats relay-BP on the practice shots, and that part is IonQ's. Our hierarchy adds to it: on
 <!--f:expl_pairs-->25,000<!--/f--> practice pairs at p = 0.004, relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its seed, and
 the hierarchy with the classical tie-break <!--f:expl_pairs_W-->162<!--/f--> (only relay-BP fails <!--f:expl_pairs_W_only_relay-->111<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_W_only_ours-->28<!--/f-->). The neural tie-break adds a smaller step on top, measured on X memory
-(<!--f:expl_X_W-->77<!--/f--> to <!--f:expl_X_N-->62<!--/f--> failures of 25,000 shots). *Pending: the same split on the test shots.* Source:
+(<!--f:expl_X_W-->77<!--/f--> to <!--f:expl_X_N-->59<!--/f--> failures of 25,000 shots). *Pending: the same split on the test shots.* Source:
 `report/tables/exploration_p0.004.md`.
 
 **What is on the test shots and what is not?**
@@ -127,8 +127,9 @@ GPU: its time is shown and marked, and it is a different kind of machine. *Pendi
 **What does the loss model assume?**
 After every two-qubit gate each of its two atoms is lost with a fixed probability. A lost check atom is flagged at
 its measurement and replaced; a lost data atom stays lost and is flagged only at the end; flags are never wrong.
-Losses are independent. It is our simplified model, built from published figures; it is not Infleqtion's hardware
-model, and the results are for X memory at p = 0.004 only.
+Losses are independent. It is our simplified model; it is not Infleqtion's hardware model, and the results are for
+X memory at p = 0.004 only. For scale, Infleqtion's paper arXiv:2408.08288 reports about 0.38% atom loss per CZ gate
+for a pair of atoms; the top of our range, 2e-3 per atom, is half of that, by our own reading.
 
 **Where does TCBP-JOBS stand against you?**
 Ahead, at p = 0.004 and 0.005, as measured so far. Its logged rate per cycle at p = 0.004, on its own sampled shots, is

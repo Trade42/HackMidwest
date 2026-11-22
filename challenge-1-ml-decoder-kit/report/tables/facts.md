@@ -150,10 +150,16 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `cand_lowest` | 71 | `tables/background.md` |
 | `cand_present` | 114 | `tables/background.md` |
 | `cand_shots` | 145 | `tables/background.md` |
-| `expl_X_N` | 62 | `tables/exploration_p0.004.md` |
+| `expl5_disagree` | 141 | `tables/exploration_p0.005.md` |
+| `expl5_our` | 129 | `tables/exploration_p0.005.md` |
+| `expl5_priortilt,` | 137 | `tables/exploration_p0.005.md` |
+| `expl5_priortilt,_B` | 152 | `tables/exploration_p0.005.md` |
+| `expl5_relay` | 194 | `tables/exploration_p0.005.md` |
+| `expl5_shots` | 5,000 | `tables/exploration_p0.005.md` |
+| `expl_X_N` | 59 | `tables/exploration_p0.004.md` |
 | `expl_X_N_only_ours` | 15 | `tables/exploration_p0.004.md` |
 | `expl_X_N_only_relay` | 75 | `tables/exploration_p0.004.md` |
-| `expl_X_N_step` | 60,000 | `tables/exploration_p0.004.md` |
+| `expl_X_N_step` | 70,000 | `tables/exploration_p0.004.md` |
 | `expl_X_N_vs_W_only_network` | 6 | `tables/exploration_p0.004.md` |
 | `expl_X_N_vs_W_only_weight` | 21 | `tables/exploration_p0.004.md` |
 | `expl_X_N_vs_W_p` | 0.006 | `tables/exploration_p0.004.md` |
@@ -198,10 +204,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `loss_oracle_ratio` | 1.64 | `tables/loss.md` |
 | `loss_oracle_ratio_interval` | 1.42 to 1.94 | `tables/loss.md` |
 | `loss_oracle_share` | 2.7% | `tables/loss.md` |
-| `net_X_step` | 60,000 | `tables/networks.md` |
-| `net_X_wrong3` | 3.2% | `tables/networks.md` |
-| `net_X_wrong4` | 11.3% | `tables/networks.md` |
-| `net_X_wrong5` | 33.3% | `tables/networks.md` |
+| `net_X_step` | 70,000 | `tables/networks.md` |
+| `net_X_wrong3` | 2.6% | `tables/networks.md` |
+| `net_X_wrong4` | 9.7% | `tables/networks.md` |
+| `net_X_wrong5` | 30.3% | `tables/networks.md` |
 | `net_Z_step` | 32,000 | `tables/networks.md` |
 | `net_Z_wrong3` | 1.9% | `tables/networks.md` |
 | `net_Z_wrong4` | 10.0% | `tables/networks.md` |

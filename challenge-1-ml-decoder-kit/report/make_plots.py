@@ -33,7 +33,7 @@ from matplotlib.ticker import FuncFormatter, NullFormatter  # noqa: E402
 
 from report import loaders, stats  # noqa: E402
 from report.loaders import DATA, Mismatch  # noqa: E402
-from report.make_tables import load_test_rows  # noqa: E402
+from report.make_tables import failure_split, load_test_rows  # noqa: E402
 from report.rows import DECODERS, LOSS_CONDITIONS, P_RAMP, P_VALUES, TCBP_OWN  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
@@ -220,7 +220,7 @@ def time_vs_p(measured):
     labels, values, lines = [], [], series(measured)
     for key, points in lines.items():
         decoder = DECODERS[key]
-        points = [(p, row) for p, row in points if row["mean_ms"] is not None]
+        points = [(p, row) for p, row in points if row["mean_ms"] is not None and not row.get("offline")]   # only rows timed in one process
         if not points:
             continue
         hollow = key == "hierarchy-weight"
@@ -264,7 +264,7 @@ def ler_vs_time(measured):
     labels, xs_all, ys_all = [], [], []
     for key, points in series(measured).items():
         decoder = DECODERS[key]
-        points = [(p, row) for p, row in points if row["mean_ms"] is not None and row["rate"] > 0]
+        points = [(p, row) for p, row in points if row["mean_ms"] is not None and row["rate"] > 0 and not row.get("offline")]
         if not points:
             continue
         hollow = key == "hierarchy-weight"
@@ -294,7 +294,8 @@ def ler_vs_time(measured):
     axes.set_xlabel("mean time per pair")
     axes.set_ylabel("logical error rate per cycle")
     end_labels(axes, labels)
-    footnote(figure, (missing_note(measured, {}) + " CPU rows: one process each on the server; a GPU row is marked.").strip())
+    footnote(figure, (missing_note(measured, {}) + " CPU rows: one process each on the server; a GPU row is marked. "
+                      "Rows combined offline from per-shot files have no time measured in one process and are not drawn.").strip())
     return save(figure, "ler_vs_time")
 
 
@@ -394,30 +395,27 @@ def learning_curves():
 
 # ---------- 6. where the failures are ----------
 
-def where_failures():
-    folder = DATA / "exploration" / "priortilt"
-    shots = loaders.selector_files(folder, ["selector_validation_X.npz", "selector_train_X.npz", "selector_validation_Z.npz", "selector_train_Z.npz"])
-    figure, axes = plt.subplots(figsize=(11, 5.6))
-    figure.subplots_adjust(left=0.03, right=0.97, top=0.74, bottom=0.2)
+def where_failures(combined):
+    sets = failure_split(combined)
+    name = "test shots, p = 0.004" if "test shots, p = 0.004" in sets else next(iter(sets), None)
+    figure, axes = plt.subplots(figsize=(11, 5.6 if not name or len(sets[name]) < 4 else 6.6))
+    figure.subplots_adjust(left=0.03, right=0.97, top=0.76, bottom=0.2)
     figure.text(0.02, 0.945, "Most failures sit where two fast decodes disagree", fontsize=20, fontweight="bold", va="center")
-    figure.text(0.02, 0.87, "p = 0.004, 50,000 exploration shots (X and Z memory); two runs of PriorTilt with different random seeds", fontsize=14, color=SECONDARY, va="center")
     axes.axis("off")
-    if shots is None:
+    if name is None:
         axes.text(0.5, 0.5, "not measured", ha="center", va="center", fontsize=18, color=MUTED, transform=axes.transAxes)
         return save(figure, "where_failures")
-    failed, agreed, _ = loaders.weight_rule(shots)
-    first = shots["failed_P1"].astype(bool)
-    bars = [(f"All {len(agreed):,} shots", int(agreed.sum()), int((~agreed).sum())),
-            (f"The {int(first.sum())} shots one fast decode gets wrong", int((first & agreed).sum()), int((first & ~agreed).sum())),
-            (f"The {int(failed.sum())} shots still wrong after the tie-break (lowest weight)", int((failed & agreed).sum()), int((failed & ~agreed).sum()))]
-    scale = max(first.sum(), 1)
+    bars = sets[name]
+    figure.text(0.02, 0.875, f"{name}, X and Z memory; two runs of PriorTilt with different random seeds", fontsize=14, color=SECONDARY, va="center")
+    scale = max(bars[1][1] + bars[1][2], 1)
     axes.set_xlim(0, 1)
     axes.set_ylim(-0.6, len(bars) - 0.25)
     orange = DECODERS["hierarchy"].colour
-    for index, (label, same, differ) in enumerate(bars):
+    for index, (what, same, differ) in enumerate(bars):
         y = len(bars) - 1 - index
-        total = same + differ
-        width = 1.0 if index == 0 else total / scale     # the two failure bars share one scale; the first bar is all shots
+        total = max(same + differ, 1)
+        label = f"All {total:,} shots" if index == 0 else f"The {total:,} {what}"
+        width = 1.0 if index == 0 else total / scale     # the failure bars share one scale; the first bar is all shots
         left = same / total * width
         axes.barh(y, max(left - 0.003, 0), height=0.34, color=NEUTRAL, edgecolor="none")
         axes.barh(y, differ / total * width, left=left, height=0.34, color=orange, edgecolor="none")
@@ -431,7 +429,7 @@ def where_failures():
     axes.plot([], [], color=NEUTRAL, linewidth=9, label="the two fast decodes give the same answer: it is final")
     axes.plot([], [], color=orange, linewidth=9, label="they disagree: a third decoder joins and a tie-break chooses")
     axes.legend(loc="upper left", bbox_to_anchor=(0.0, -0.02), ncol=1, fontsize=13.5)
-    footnote(figure, "The two lower bars share one scale. Shots that are wrong although the two decodes agree cannot be fixed by any tie-break.", room=False)
+    footnote(figure, "The lower bars share one scale. Shots that are wrong although the two decodes agree cannot be fixed by any tie-break.", room=False)
     return save(figure, "where_failures")
 
 
@@ -439,8 +437,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.parse_args(argv)
     try:
-        measured, _, _ = load_test_rows()
-        names = [ler_vs_p(measured), time_vs_p(measured), ler_vs_time(measured), loss(), learning_curves(), where_failures()]
+        measured, _, combined = load_test_rows()
+        names = [ler_vs_p(measured), time_vs_p(measured), ler_vs_time(measured), loss(), learning_curves(), where_failures(combined)]
     except Mismatch as problem:
         print(f"STOPPED: {problem}", file=sys.stderr)
         return 1

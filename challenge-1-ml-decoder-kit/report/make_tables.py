@@ -614,6 +614,65 @@ def exploration_table():
     return write("exploration_p0.004", text, records), facts
 
 
+def failure_split(combined):
+    """Where the failures are: {set of shots: [(what, shots where the two fast decodes agree, where they disagree)]}.
+
+    One entry for the exploration shots at p = 0.004 (the laptop's per-shot files) and one per noise
+    level of the test shots (the offline combination's files), X and Z memory shots together.
+    """
+    sets = {}
+    names = ["selector_validation_X.npz", "selector_train_X.npz", "selector_validation_Z.npz", "selector_train_Z.npz"]
+    shots = loaders.selector_files(DATA / "exploration" / "priortilt", names)
+    if shots is not None:
+        failed, agreed, _ = loaders.weight_rule(shots)
+        sets["exploration shots, p = 0.004"] = (agreed, [("one fast decode (PriorTilt, seed A)", shots["failed_P1"].astype(bool)),
+                                                        ("the hierarchy, lowest-weight tie-break", failed)])
+    for p in P_VALUES:
+        rows = combined[p]["rows"] if combined.get(p) else {}
+        if "aw" in rows and rows["aw"]["later"] and "P1" in rows:
+            join = lambda row: np.concatenate([row["failed"]["X"], row["failed"]["Z"]])
+            agreed = ~np.concatenate([rows["aw"]["later"]["X"], rows["aw"]["later"]["Z"]]).astype(bool)
+            sets[f"test shots, p = {p}"] = (agreed, [("one fast decode (PriorTilt, seed A)", join(rows["P1"])), ("the hierarchy, lowest-weight tie-break", join(rows["aw"]))]
+                                            + ([("the hierarchy, neural tie-break", join(rows["a"]))] if "a" in rows else []))
+    return {name: [("all shots", int(agreed.sum()), int((~agreed).sum()))]
+                  + [(f"shots wrong under {label}", int((mask & agreed).sum()), int((mask & ~agreed).sum())) for label, mask in masks]
+            for name, (agreed, masks) in sets.items()}
+
+
+def failure_split_table(combined):
+    lines = [[name, what, f"{same + differ:,}", f"{same:,}", f"{differ:,}", f"{differ / (same + differ):.1%}" if same + differ else ""]
+             for name, bars in failure_split(combined).items() for what, same, differ in bars]
+    return write("where_failures", "Where the failures are. \"Agree\" means the two runs of PriorTilt (two random seeds) predict the same 12 bits; the hierarchy "
+                 "then takes that answer, and a wrong one cannot be repaired by any tie-break. X and Z memory shots are counted together.\n\n"
+                 + markdown(["Shots", "Set", "Shots in the set", "The two runs agree", "They disagree", "Share in \"disagree\""], lines))
+
+
+def exploration_p5_table():
+    """p = 0.005 on exploration shots: the team's validation_X file, the first look at the hierarchy at that noise."""
+    shots = loaders.selector_files(DATA / "exploration" / "priortilt_p0.005", ["selector_validation_X.npz"])
+    if shots is None:
+        return write("exploration_p0.005", NOT_MEASURED)
+    failed, agreed, seconds = loaders.weight_rule(shots)
+    reference, lines = shots["failed_R"].astype(bool), []
+    for label, whose, mask, time in (("relay-BP (kit baseline)", "the kit", reference, shots["seconds_R"]),
+                                     ("PriorTilt, seed A", "IonQ", shots["failed_P1"].astype(bool), shots["seconds_P1"]),
+                                     ("PriorTilt, seed B", "IonQ", shots["failed_P2"].astype(bool), shots["seconds_P2"]),
+                                     ("our hierarchy, lowest-weight tie-break", "ours", failed, seconds)):
+        count, total = int(mask.sum()), len(mask)
+        lines.append([label, whose, f"{count} of {total:,}", percent(count, total), "the reference" if mask is reference else pair_text(stats.paired(reference, mask)),
+                      ms(float(np.mean(time)) * 1e3)])
+        fact(f"expl5_{label.split()[0].split('-')[0].lower()}{'_B' if 'seed B' in label else ''}", count, "tables/exploration_p0.005.md")
+    fact("expl5_disagree", int((~agreed).sum()), "tables/exploration_p0.005.md")
+    fact("expl5_shots", f"{len(agreed):,}", "tables/exploration_p0.005.md")
+    return write("exploration_p0.005",
+                 f"**Exploration shots, not test shots**: X memory at p = 0.005, the team's `data/p0.005/validation_X.npz` ({len(agreed):,} shots), decoded on the "
+                 f"laptop beside a GPU training (compare the times with each other only; a time is per shot of one basis). The two PriorTilt runs disagree on "
+                 f"{int((~agreed).sum())} shots ({(~agreed).mean():.1%}).\n\n"
+                 + markdown(["Decoder", "Built by", "Failures", "Share of shots (95% interval)",
+                             "Against relay-BP, same shots: both fail / only this row / only relay-BP (exact p)", "Mean time per shot, ms"], lines)
+                 + "\n\nSource: `report/data/exploration/priortilt_p0.005/selector_validation_X.npz`.")
+
+
 # ---------- loss ----------
 
 def loss_table():
@@ -846,6 +905,49 @@ def checks_text(measured, extra, cross_checks):
     return write("checks", "\n".join(lines))
 
 
+# ---------- the section for the top-level README ----------
+
+README_HEADING = "## Our part: a hierarchical decoder with a learned tie-breaker, and a study of atom loss"
+
+
+def readme_section(measured):
+    """The one section appended to the top-level README.md: at most 25 lines, every number from the tables above."""
+    value = lambda name: FACTS[name][0]
+    ahead = [p for p in P_VALUES if measured[p]["tcbp"] and measured[p]["hierarchy"] and measured[p]["tcbp"]["failures_pair"] < measured[p]["hierarchy"]["failures_pair"]]
+    both = [p for p in P_VALUES if measured[p]["tcbp"] and measured[p]["hierarchy"]]
+    if ahead:
+        tcbp = f"TCBP-JOBS, NVIDIA's GPU decoder, fails fewer pairs than our decoder at p = {', '.join(ahead)}."
+    elif both:
+        tcbp = f"TCBP-JOBS, NVIDIA's GPU decoder, does not fail fewer pairs than our decoder at p = {', '.join(both)}."
+    else:
+        tcbp = (f"On the exploration shots at p = 0.004, TCBP-JOBS (NVIDIA, GPU) fails fewer pairs than our hierarchy: {value('expl_pairs_T')} against "
+                f"{value('expl_pairs_W')} of {value('expl_pairs')}.")
+    lines = [README_HEADING, "",
+             "Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural",
+             "network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). " + value("framing"),
+             f"Under atom loss (our own simplified model), relay-BP with the loss flags fails {value('loss_aware_share')} of shots where a loss-blind one",
+             f"fails {value('loss_blind_share')}, and an ORACLE told when each atom was lost fails {value('loss_oracle_ratio')} times fewer still: the ceiling for a loss-time tracker (`loss/`).",
+             ""]
+    header = ["Decoder"] + [f"p = {p}" for p in P_VALUES]
+    table = []
+    for key in DECODERS:
+        cells = []
+        for p in P_VALUES:
+            row = measured[p][key]
+            cells.append(NOT_MEASURED if row is None else f"{stats.sci(row['rate'])} ± {stats.sci(row['error'], 1)}, "
+                         + (f"{ms(row['mean_ms'])} ms" if row["mean_ms"] is not None and not row.get("offline") else "not timed"))
+        table.append([DECODERS[key].label] + cells)
+    lines += markdown(header, table).split("\n")
+    lines += ["",
+              "Test shots (10,000 pairs per p): logical error rate per cycle ± the kit's error, mean time per pair. " + tcbp,
+              "", "![Logical error rate per cycle against p](challenge-1-ml-decoder-kit/report/figures/ler_vs_p.png)", "",
+              "Write-up, with every table made by a script from committed files: [report/REPORT.md](challenge-1-ml-decoder-kit/report/REPORT.md). "
+              "Everything we built and why: [information.md](information.md)."]
+    if len(lines) > 25:
+        raise Mismatch(f"the README section has {len(lines)} lines; the limit is 25")
+    return write("readme_section", "\n".join(lines))
+
+
 # ---------- copying the tables into the documents ----------
 
 def inject(tables):
@@ -878,9 +980,11 @@ def main(argv=None):
         tables = {f"test_p{p}": per_p[p] for p in P_VALUES} | {
             "test_sweep": sweep, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
             "test_comparisons": comparisons_table(measured), "test_ladder": ladder, "test_ablation": ablated,
+            "where_failures": failure_split_table(combined), "exploration_p0.005": exploration_p5_table(),
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
             "resources": resources_table(measured)}
         tables["checks"] = checks_text(measured, extra, cross_checks)
+        readme_section(measured)
         write("facts", "Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there as `<!--f:name-->value<!--/f-->`), "
                        "each with the generated table it is taken from.\n\n"
               + markdown(["Name", "Value", "From"], [[f"`{name}`", value, f"`{source}`"] for name, (value, source) in sorted(FACTS.items())]))

@@ -155,7 +155,13 @@ ahead of our three-candidate hierarchy.** Its row on the saved test shots is in 
 <!-- BEGIN table:exploration_p0.004 -->
 <!-- END table:exploration_p0.004 -->
 
-Read from this table, on exploration shots at p = 0.004:
+<!-- BEGIN table:where_failures -->
+<!-- END table:where_failures -->
+
+<!-- BEGIN table:exploration_p0.005 -->
+<!-- END table:exploration_p0.005 -->
+
+Read from these tables, on exploration shots:
 
 - **PriorTilt is IonQ's decoder, not ours.** One run of it already fails less often than relay-BP, and by how much
   depends on its random seed (the two seeds in the table). That spread is itself a finding: a single run is not a
@@ -186,8 +192,10 @@ gone. The challenge stresses this case.
 - **The loss-time tracker** is our attempt to reach that ceiling from the syndrome history alone. *Pending: its rows.*
 - **What the model assumes.** After every CX gate each of its two atoms is lost with probability s. A lost check atom
   is flagged at its measurement and replaced; a lost data atom stays lost and is flagged only at the end. Flags are
-  perfect. This is our simplified model, built from published figures (s = 2e-3 is about today's hardware by
-  Infleqtion's paper arXiv:2408.08288). It is not Infleqtion's hardware model.
+  perfect, and losses are independent. This is our simplified model. It is not Infleqtion's hardware model. For
+  scale: Infleqtion's paper arXiv:2408.08288 reports about 0.38% atom loss per CZ gate for a pair of atoms; split
+  evenly between the two atoms, which is our reading and not a figure of the paper, that is about s = 2e-3, the top
+  of the range studied here.
 
 ## 6. What we measured before building, and what did not work
 

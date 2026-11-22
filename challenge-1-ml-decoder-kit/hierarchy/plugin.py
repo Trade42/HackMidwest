@@ -36,6 +36,9 @@ Options (a JSON object; every key is optional):
   constant        C of the "network" rule, default none. Fit it on other shots (hierarchy.select).
   device          for the network: "cpu" (default), "cuda" or "auto"
   torch_threads   CPU threads for the network (default: torch's own choice)
+  parallel        true: the two PriorTilt decodes of a shot run side by side, P2 in a helper process
+                  that lives as long as the session. The answers are the same; the session then uses
+                  two cores, and a shot's time is wall time, not CPU time. Default false.
   priortilt_repo  a clone of PriorTilt's repository (default: the environment variable PRIORTILT_REPO)
   priortilt_max_rounds, relay_sets   smaller budgets, for quick tests only
 
@@ -49,9 +52,9 @@ import numpy as np
 
 from evaluation.adapters import ShotResult
 from hierarchy.rules import ORDER, bits_for_network, lowest_weight, most_likely
-from hierarchy.stages import DEFAULT_SEEDS, Hierarchy, decoder_settings, problem_sha256, sha256_of
+from hierarchy.stages import DEFAULT_SEEDS, Hierarchy, ParallelHierarchy, decoder_settings, problem_sha256, sha256_of
 
-OPTIONS = {"rule", "checkpoints", "seeds", "constant", "device", "torch_threads", "priortilt_repo",
+OPTIONS = {"rule", "checkpoints", "seeds", "constant", "device", "torch_threads", "parallel", "priortilt_repo",
            "priortilt_max_rounds", "relay_sets"}
 RULES = ("network", "weight", "converged")
 
@@ -123,7 +126,7 @@ class HierarchySession:
             relay_changes = {"num_sets": options["relay_sets"]} if options.get("relay_sets") is not None else None
             decoders = decoder_settings(problem.p, seeds, options.get("priortilt_repo"),
                                         options.get("priortilt_max_rounds"), relay_changes)
-            hierarchy = Hierarchy(problem, decoders)
+            hierarchy = (ParallelHierarchy if options.get("parallel") else Hierarchy)(problem, decoders)
         self.hierarchy = hierarchy
 
         self.rule, note = asked, None
@@ -141,6 +144,8 @@ class HierarchySession:
             "rule": self.rule, "rule_asked": asked, "rule_note": note, "constant": self.constant, "seeds": seeds,
             "tie_order": list(ORDER), "decoders": decoders, "network": getattr(self.network, "record", None),
             "problem_sha256": problem_sha256(problem),
+            "parallel": ("P1 and P2 of a shot run side by side on two cores: the times are wall time" if options.get("parallel")
+                         else "no: every stage runs in this one process, one after the other"),
             "state": "decoders are built once and keep their state: relay-BP sees only the shots where P1 and P2 differ",
         }
         self.setup_seconds = perf_counter() - start

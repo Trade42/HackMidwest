@@ -17,6 +17,7 @@ PriorTilt its random stream), so an answer depends on which shots the decoder sa
 import hashlib
 import importlib.util
 import json
+import multiprocessing
 import os
 import platform
 import subprocess
@@ -212,6 +213,58 @@ class Hierarchy:
 
     def third(self, syndrome):
         return self.relay.run(syndrome)
+
+
+def _second_seed_worker(connection, basis, H, L, priors, p, settings):
+    """The helper process of ParallelHierarchy: PriorTilt under the second seed, one answer per syndrome received."""
+    stage = Stage("P2", Problem(basis, H, L, priors, p, None), settings)
+    connection.send("ready")
+    while True:
+        try:
+            syndrome = connection.recv()
+        except EOFError:
+            return
+        if syndrome is None:
+            return
+        connection.send(stage.run(syndrome))
+
+
+class ParallelHierarchy(Hierarchy):
+    """The same stages, with the two PriorTilt decodes of a shot side by side on two cores.
+
+    PriorTilt's Python module keeps the interpreter lock while it decodes, so threads would
+    not help. P2 therefore lives in a helper process that is started once, with the session,
+    and stays alive: it holds the second-seed decoder and sees every shot in order, so its
+    answers are those of the sequential Hierarchy, bit for bit. A shot then takes the longer
+    of the two decodes instead of their sum, in wall time; the CPU time is unchanged.
+    """
+
+    def __init__(self, problem, settings):
+        self.p1, self.relay = Stage("P1", problem, settings), Stage("R", problem, settings)
+        context = multiprocessing.get_context("spawn")
+        self.connection, other_end = context.Pipe()
+        self.process = context.Process(target=_second_seed_worker, daemon=True,
+                                       args=(other_end, problem.basis, problem.H, problem.L, problem.priors, problem.p, settings))
+        self.process.start()
+        other_end.close()
+        if self.connection.recv() != "ready":
+            raise RuntimeError("the helper process for the second PriorTilt decode did not start")
+
+    def first_two(self, syndrome):
+        self.connection.send(syndrome)        # P2 starts in the helper ...
+        first = self.p1.run(syndrome)         # ... while P1 runs here
+        return first, self.connection.recv()  # an EOFError here means the helper died: the run stops
+
+    def close(self):
+        if self.process.is_alive():
+            self.connection.send(None)
+            self.process.join(timeout=10)
+
+    def __del__(self):
+        try:
+            self.close()
+        except (OSError, ValueError, AttributeError):
+            pass
 
 
 # ---------- the record of a run ----------

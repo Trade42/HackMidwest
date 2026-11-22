@@ -1,0 +1,46 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/seed4800/X_f0.8_seed4800_kitformat_p0.0326371.npz",
+  "sha256": "32fc7703d19ba4e7e1c1c058a459afe1356f0662d789afb030d07353324ac94a",
+  "basis": "X",
+  "p": 0.0326371,
+  "seed": 4800,
+  "shots": 4000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 4000,
+ "columns": 8784,
+ "model": {
+  "head": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/head_X_na0.8.pt",
+  "head_sha256": "b42d71d584c95da84aa4f086c8c23fa49d846f559407ae11fd7a4d89abf091fa",
+  "head_step": 20000,
+  "trunk": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/trunk_X.pt",
+  "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+  "trunk_step": 120000,
+  "head_commit": "f4948928e232b742bd6a3a8096f42d2aa7b956f7",
+  "device": "cuda",
+  "torch": "2.15.0+cu132",
+  "torch_threads": 1,
+  "precision": "float32",
+  "gpu": "NVIDIA A100-SXM4-80GB MIG 2g.20gb"
+ },
+ "seconds_batched_total": 16.156117916107178,
+ "per_shot_seconds": {
+  "what": "network + head, one shot at a time, on the device named",
+  "shots": 100,
+  "mean": 0.02357175188953988,
+  "median": 0.023527474491856992,
+  "p99": 0.024096803573193038
+ },
+ "batch_one_against_batched_largest_logit_gap": 0.015625,
+ "mean_probability_sum_per_shot": 86.939087890625,
+ "kit_prior_sum": 367.00855938719116,
+ "base_priors": {
+  "what": "--base-priors",
+  "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/seed4800/priors_matched.npy",
+  "sha256": "181d3c74ffe422d23864d5c7b45a2b68ec209adebe494c21259554e6178d4b7e",
+  "file_sha256": "45704fcb9f2bde6fdbc6a7f0fa975f7e343c5283179e65a4cf0af45a741fc3ac",
+  "sum": 87.40596151024322,
+  "trained_with_this_base": true
+ }
+}

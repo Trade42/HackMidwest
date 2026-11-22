@@ -1,0 +1,268 @@
+{
+ "task": "f0.8-seed4800",
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/seed4800/X_f0.8_seed4800_kitformat_p0.0326371.npz",
+  "sha256": "32fc7703d19ba4e7e1c1c058a459afe1356f0662d789afb030d07353324ac94a",
+  "basis": "X",
+  "p": 0.0326371,
+  "seed": 4800,
+  "shots": 4000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "transfer": {
+  "shots_file": "/home/sal/hackMidwest/orchestration/scratch/tcbp-retrain/shots/X_f0.8_seed4800.npz",
+  "shots_sha256": "b2c023bbf24108ee771d6ebea4405971888164732aad0ab0da53be4848bc1162",
+  "shots": 4000,
+  "seed": 4800,
+  "basis": "X",
+  "noise": {
+   "cx_depolarize2": 0.0,
+   "cx_phase": 0.005840000000000001,
+   "cx_scatter": 0.00012552,
+   "idle_depolarize": 0.0,
+   "idle_phase": 0.000856225145421341,
+   "measure_flip": 0.010000000000000002,
+   "reset_flip": 0.016800000000000016,
+   "loss": 0.002
+  },
+  "factor": 0.8,
+  "converted": "X_f0.8_seed4800_kitformat_p0.0326371.npz",
+  "converted_sha256": "32fc7703d19ba4e7e1c1c058a459afe1356f0662d789afb030d07353324ac94a",
+  "p": 0.0326371,
+  "columns": 8784,
+  "rows": 936,
+  "h_l_sha256": "a4a80003a0b234e0e10b5d65d38ce5181c39670732e0f473df0aee1796c2c8b0",
+  "generic": {
+   "what": "kit uniform model at p = 0.0326371",
+   "max": 0.10998880032223951,
+   "min": 0.008780320698230367,
+   "sum": 367.00855938719116,
+   "capped_columns": 0,
+   "sha256": "b8d59cb850ee6842011283d559b33e560c07ceecd2edfed2f10617ce6557a9ea"
+  },
+  "matched": {
+   "what": "priors.matched_priors(basis, noise of the file's meta), floor 1e-9",
+   "max": 0.059138303421918385,
+   "min": 8.36799999999404e-05,
+   "sum": 87.40596151024322,
+   "columns_fired": 8784,
+   "capped_columns": 0,
+   "sha256": "45704fcb9f2bde6fdbc6a7f0fa975f7e343c5283179e65a4cf0af45a741fc3ac"
+  }
+ },
+ "plan": {
+  "label": "exploration, task tcbp-retrain",
+  "declared": "neutral_atom_noise/tcbp_retrain_declared.md",
+  "tasks": [
+   {
+    "name": "f0.8-seed4800",
+    "data": "seed4800/X_f0.8_seed4800_kitformat_p0.0326371.npz",
+    "transfer": "seed4800/transfer.json",
+    "generic": "seed4800/priors_generic.npy",
+    "matched": "seed4800/priors_matched.npy",
+    "arms": [
+     "m",
+     "h",
+     "r"
+    ],
+    "shots": 4000,
+    "seed": 4800,
+    "factor": 0.8,
+    "p": 0.0326371
+   }
+  ],
+  "heads": {
+   "kit": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+   "retrained": "b42d71d584c95da84aa4f086c8c23fa49d846f559407ae11fd7a4d89abf091fa"
+  },
+  "knobs": {
+   "mode": "logodds",
+   "alpha": 0.4,
+   "eps": 0.0001
+  },
+  "prior_cap": 0.5,
+  "block": 100,
+  "arm_order": [
+   "m",
+   "g",
+   "h",
+   "hm",
+   "r"
+  ]
+ },
+ "decoder": "tcbp-jobs",
+ "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
+ "preset": "tcbp-jobs",
+ "head_knobs": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "prior_cap": 0.5,
+ "logits": {
+  "h": {
+   "data": {
+    "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/seed4800/X_f0.8_seed4800_kitformat_p0.0326371.npz",
+    "sha256": "32fc7703d19ba4e7e1c1c058a459afe1356f0662d789afb030d07353324ac94a",
+    "basis": "X",
+    "p": 0.0326371,
+    "seed": 4800,
+    "shots": 4000,
+    "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+   },
+   "shots": 4000,
+   "columns": 8784,
+   "model": {
+    "head": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/head_X.pt",
+    "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+    "head_step": 30000,
+    "trunk": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/trunk_X.pt",
+    "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+    "trunk_step": 120000,
+    "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+    "device": "cuda",
+    "torch": "2.15.0+cu132",
+    "torch_threads": 1,
+    "precision": "float32",
+    "gpu": "NVIDIA A100-SXM4-80GB MIG 2g.20gb"
+   },
+   "seconds_batched_total": 14.948458194732666,
+   "per_shot_seconds": {
+    "what": "network + head, one shot at a time, on the device named",
+    "shots": 100,
+    "mean": 0.023544154592091217,
+    "median": 0.023525765514932573,
+    "p99": 0.02415607287432068
+   },
+   "batch_one_against_batched_largest_logit_gap": 0.0078125,
+   "mean_probability_sum_per_shot": 107.4217421875,
+   "kit_prior_sum": 367.00855938719116,
+   "base_priors": {
+    "what": "the kit's priors at the file's p = 0.0326371",
+    "sha256": "82f4a9a230290115511a275398d5cb65812c303dd193bc597f97ec19d3d31ac0",
+    "sum": 367.00855938719116,
+    "trained_with_this_base": true
+   }
+  },
+  "r": {
+   "data": {
+    "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/seed4800/X_f0.8_seed4800_kitformat_p0.0326371.npz",
+    "sha256": "32fc7703d19ba4e7e1c1c058a459afe1356f0662d789afb030d07353324ac94a",
+    "basis": "X",
+    "p": 0.0326371,
+    "seed": 4800,
+    "shots": 4000,
+    "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+   },
+   "shots": 4000,
+   "columns": 8784,
+   "model": {
+    "head": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/head_X_na0.8.pt",
+    "head_sha256": "b42d71d584c95da84aa4f086c8c23fa49d846f559407ae11fd7a4d89abf091fa",
+    "head_step": 20000,
+    "trunk": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/trunk_X.pt",
+    "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+    "trunk_step": 120000,
+    "head_commit": "f4948928e232b742bd6a3a8096f42d2aa7b956f7",
+    "device": "cuda",
+    "torch": "2.15.0+cu132",
+    "torch_threads": 1,
+    "precision": "float32",
+    "gpu": "NVIDIA A100-SXM4-80GB MIG 2g.20gb"
+   },
+   "seconds_batched_total": 16.156117916107178,
+   "per_shot_seconds": {
+    "what": "network + head, one shot at a time, on the device named",
+    "shots": 100,
+    "mean": 0.02357175188953988,
+    "median": 0.023527474491856992,
+    "p99": 0.024096803573193038
+   },
+   "batch_one_against_batched_largest_logit_gap": 0.015625,
+   "mean_probability_sum_per_shot": 86.939087890625,
+   "kit_prior_sum": 367.00855938719116,
+   "base_priors": {
+    "what": "--base-priors",
+    "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-retrain/in/seed4800/priors_matched.npy",
+    "sha256": "181d3c74ffe422d23864d5c7b45a2b68ec209adebe494c21259554e6178d4b7e",
+    "file_sha256": "45704fcb9f2bde6fdbc6a7f0fa975f7e343c5283179e65a4cf0af45a741fc3ac",
+    "sum": 87.40596151024322,
+    "trained_with_this_base": true
+   }
+  }
+ },
+ "stop_at": "2026-11-22T18:48:00Z",
+ "block": 100,
+ "arm_order": [
+  "m",
+  "h",
+  "r"
+ ],
+ "model_seconds": 61.51228081295267,
+ "machine": {
+  "node": "jupyter-blakew3",
+  "processor": "x86_64",
+  "cpus": 24,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "omp_threads": "1"
+ },
+ "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process",
+ "capped_columns": {
+  "m": 0,
+  "h": 22357,
+  "r": 16864
+ },
+ "seconds": 233.38806629180908,
+ "shots_scored": 1000,
+ "arms": {
+  "m": {
+   "shots": 1000,
+   "failures": 8,
+   "share": 0.008,
+   "wilson95": [
+    0.004059195797851703,
+    0.01570633461111126
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 846,
+   "build_ms_mean": 42.820960748009384,
+   "decode_ms_mean": 6.659719391958788,
+   "build_decode_ms_mean": 49.48068013996817,
+   "build_decode_ms_median": 47.480545996222645,
+   "build_decode_ms_p99": 79.0066943108104
+  },
+  "h": {
+   "shots": 1000,
+   "failures": 119,
+   "share": 0.119,
+   "wilson95": [
+    0.10037518423128733,
+    0.14054080578053152
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 871,
+   "build_ms_mean": 43.249336050939746,
+   "decode_ms_mean": 13.35328967438545,
+   "build_decode_ms_mean": 56.6026257253252,
+   "build_decode_ms_median": 50.64901948207989,
+   "build_decode_ms_p99": 99.65498281642793
+  },
+  "r": {
+   "shots": 1000,
+   "failures": 27,
+   "share": 0.027,
+   "wilson95": [
+    0.01862138272015455,
+    0.03899873086407203
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 715,
+   "build_ms_mean": 43.13687512639444,
+   "decode_ms_mean": 6.350965521414764,
+   "build_decode_ms_mean": 49.48784064780921,
+   "build_decode_ms_median": 46.573748462833464,
+   "build_decode_ms_p99": 83.30286687356418
+  }
+ },
+ "saved_utc": "2026-11-22T18:41:02.543943+00:00"
+}

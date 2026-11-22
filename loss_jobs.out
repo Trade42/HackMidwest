@@ -419,3 +419,26 @@ wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/parts/starter+st
 decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/data.npz shots 5500..6000 conditions ['starter', 'starter@0.5/stop1'] workers 10
   50/500 shots, 6s, failures so far starter=0 starter@0.5/stop1=0
   100/500 shots, 9s, failures so far starter=1 starter@0.5/stop1=1
+  150/500 shots, 11s, failures so far starter=1 starter@0.5/stop1=1
+  200/500 shots, 13s, failures so far starter=1 starter@0.5/stop1=1
+  250/500 shots, 14s, failures so far starter=1 starter@0.5/stop1=2
+  300/500 shots, 17s, failures so far starter=1 starter@0.5/stop1=3
+  350/500 shots, 18s, failures so far starter=3 starter@0.5/stop1=5
+  400/500 shots, 19s, failures so far starter=4 starter@0.5/stop1=7
+  450/500 shots, 21s, failures so far starter=4 starter@0.5/stop1=7
+  500/500 shots, 32s, failures so far starter=7 starter@0.5/stop1=10
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/parts/starter+startercap0.5_stop1/005500-006000.npz.tmp.npz in 32s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/data.npz shots 6000..6500 conditions ['starter', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 6s, failures so far starter=0 starter@0.5/stop1=0
+  100/500 shots, 7s, failures so far starter=0 starter@0.5/stop1=0
+  150/500 shots, 8s, failures so far starter=0 starter@0.5/stop1=2
+  200/500 shots, 9s, failures so far starter=0 starter@0.5/stop1=2
+  250/500 shots, 10s, failures so far starter=0 starter@0.5/stop1=2
+  300/500 shots, 12s, failures so far starter=0 starter@0.5/stop1=2
+  350/500 shots, 13s, failures so far starter=0 starter@0.5/stop1=2
+  400/500 shots, 15s, failures so far starter=0 starter@0.5/stop1=2
+  450/500 shots, 17s, failures so far starter=0 starter@0.5/stop1=2
+  500/500 shots, 26s, failures so far starter=4 starter@0.5/stop1=6
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/parts/starter+startercap0.5_stop1/006000-006500.npz.tmp.npz in 27s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/data.npz shots 6500..7000 conditions ['starter', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 6s, failures so far starter=0 starter@0.5/stop1=0

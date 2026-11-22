@@ -7,3 +7,10 @@ validation_X.npz: X memory, p = 0.004, 5000 shots, data sha256 b00ee09c35ed088a1
   H is 936 x 8784; building the decoder ...
   model fitted in 117.7 s, decoder built in 57 ms
 WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 while decoding 4096 syndromes. Set bp_batch_size > 1 at construction to decode syndromes in parallel.
+    shots 0 to 4095 decoded
+    shots 4096 to 4999 decoded
+  failures 16 of 5000  0.320%  95% Wilson interval [0.197%, 0.519%]; the correction does not reproduce the syndrome on 0 shots
+  decode_batch: no time per shot; 116.0 s for the file
+  decoded a second time, 0 of the first 256 shots change their 12 bits
+  saved /home/blakew3/mlBranchMidwest/runs/tcbp_p0.004/validation_X.tcbp.npz
+train_X.npz: X memory, p = 0.004, 20000 shots, data sha256 98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc

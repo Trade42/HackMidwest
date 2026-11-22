@@ -151,8 +151,11 @@ class Builder:
         return self.qec.get_decoder("nv-qldpc-decoder", self.matrix, error_rate_vec=np.asarray(priors, float), **self.options)
 
 
-def decode_one(builder, priors, syndrome):
-    """(error vector, decoder's converged flag, build seconds, decode seconds) for one shot with its own decoder."""
+def decode_one(builder, priors, syndrome, keep=False):
+    """(error vector, decoder's converged flag, build seconds, decode seconds) for one shot with its own decoder.
+
+    The decoder is freed here, before this returns. keep=True (tcbp_speed.py) adds a fifth item, a list holding the
+    decoder and its result and nothing else holding them: whoever clears that list frees them."""
     from tcbp_jobs_baseline import hard
 
     start = time.perf_counter()
@@ -164,8 +167,13 @@ def decode_one(builder, priors, syndrome):
     if error.shape != (builder.columns,):
         raise SystemExit(f"decode returned an error vector of shape {error.shape}; H has {builder.columns} columns")
     flag = getattr(result, "converged", None)
+    answer = (error, (np.nan if flag is None else float(bool(flag))), built - start, done - built)
+    if keep:
+        held = [decoder, result]
+        del decoder, result
+        return answer + (held,)
     del decoder, result
-    return error, (np.nan if flag is None else float(bool(flag))), built - start, done - built
+    return answer
 
 
 def capped(priors):

@@ -32,6 +32,16 @@ one options dict and the same priors for every arm; only the form of H differs (
      If dense and dense again differ on any shot, the decoder is not repeatable in this run and no arm can be called
      the same: the summary says so.
 
+  Job 2 adds two arms that move the decoder's free (about 4.6 ms with JOBS) off the answer's path, both with H CSR:
+     csr_after   tcbp.decode_one(keep=True) hands the decoder back; it is freed once the answer is recorded;
+     csr_thread  it is handed to a Releaser thread that frees it while the loop goes on (1 process, 2 Python threads;
+                 a bounded queue; the thread checks it holds the decoder's last reference, and is joined at the end).
+     Each is timed to its answer (seconds_answer) and by its blocks' wall time per shot (a thread arm's block ends
+     when its thread has freed every decoder). The rule, fixed before the run: an arm is a gain over csr only if its
+     wall time per shot is below csr's in the same process. Run the thread arm in a process of its own, beside dense
+     and csr, so that a crash in it cannot take the other arms with it. --profile-set options times builds with
+     decoder options changed (OPTION_PROBES): other decoders, timing probes only.
+
   python -m predecoder.tcbp_speed report --summary <folder>/summary.json --per-shot <folder>/check_per_shot.npz \\
       --reference <tcbp.py decode folder>/per_shot.npz            the tables, and the arms against another run's head arm
 
@@ -62,9 +72,13 @@ import numpy as np
 from predecoder import tcbp
 from predecoder.files import read_logits
 
-ARMS = ("dense", "csr", "csc", "dense_again")         # dense_again: the registered path a second time (repeatability)
+ARMS = ("dense", "csr", "csc", "dense_again")         # the default (job 1); dense_again: the registered path again
+FREE_ARMS = ("csr_after", "csr_thread")              # job 2: H CSR, the decoder freed after the answer, or on a thread
+ALL_ARMS = ARMS + FREE_ARMS
 FIELDS = ("predicted_code", "n_faults", "failed", "reproduced", "flag",
-          "seconds_priors", "seconds_build", "seconds_decode", "seconds_free", "seconds_total")
+          "seconds_priors", "seconds_build", "seconds_decode", "seconds_free", "seconds_total", "seconds_answer")
+# seconds_total: from the shot's start until the loop is free for the next shot; seconds_answer: until the answer is in
+# the caller's hands. For the inline arms they are the same (tcbp.decode_one frees before it returns).
 SPARSE_DTYPES = (np.uint8, np.int32, np.float64, np.bool_)     # tried in this order if get_decoder refuses one
 
 
@@ -74,7 +88,12 @@ def error_hash(error):
 
 
 def stats(values_ms):
+    """Mean, median, p90, p99 and max of the values that were measured (a NaN is a value not measured)."""
     values = np.asarray(values_ms, np.float64)
+    values = values[~np.isnan(values)]
+    if not len(values):
+        return {"n": 0, "mean": float("nan"), "median": float("nan"), "p90": float("nan"), "p99": float("nan"),
+                "max": float("nan")}
     return {"n": int(len(values)), "mean": float(values.mean()), "median": float(np.median(values)),
             "p90": float(np.percentile(values, 90)), "p99": float(np.percentile(values, 99)), "max": float(values.max())}
 
@@ -112,8 +131,13 @@ def facts(builder, version):
 
 # ---------- 2. profile ----------
 
-def profile(builder, priors, syndromes, out, builds):
-    """cProfile of `builds` shots of the registered path, then timing-only builds of each variant."""
+# Job 2's timing probes: decoder options seen in the plugin's binary (PyPI wheel strings, so their meaning is a guess).
+# Each makes a different decoder; none is a candidate without a check of its answers.
+OPTION_PROBES = ({"osd_batch_size": 1}, {"bp_batch_size": 1}, {"n_threads": 1}, {"repeatable": False})
+
+
+def profile(builder, priors, syndromes, out, builds, which="all"):
+    """cProfile of `builds` shots of the registered path, then timing-only builds of each variant of `which`."""
     result = {}
     profiler = cProfile.Profile()
     seconds = []
@@ -137,9 +161,10 @@ def profile(builder, priors, syndromes, out, builds):
     if builder.decoder == "relay":
         result["variants"] = "skipped: the relay stand-in has no get_decoder"
         return result
-    result["python_parts"] = python_parts(builder, priors)
+    if which == "all":
+        result["python_parts"] = python_parts(builder, priors)
     result["variants"] = {}
-    for name, matrix, options in variants(builder, out):
+    for name, matrix, options in variants(builder, out, which):
         try:
             result["variants"][name] = time_builds(builder, matrix, options, priors, builds)
             row = result["variants"][name]
@@ -151,13 +176,19 @@ def profile(builder, priors, syndromes, out, builds):
     return result
 
 
-def variants(builder, out):
+def variants(builder, out, which="all"):
     """(name, H, options) of the timing probes. Every get_decoder call gets error_rate_vec from the shot's priors."""
     from cudaq_qec.plugins import nv_qldpc
     from scipy import sparse
 
     dense, options = builder.dense, builder.options
     csr, csc = tcbp.h_matrix(dense, "csr"), tcbp.h_matrix(dense, "csc")
+    if which == "options":
+        rows = [("tcbp-jobs, H CSR (the probes' reference)", csr, options)]
+        for change in OPTION_PROBES:
+            name = ", ".join(f"{key}={value}" for key, value in change.items())
+            rows.append((f"tcbp-jobs, H CSR, {name} (another decoder: timing only)", csr, dict(options, **change)))
+        return rows
     model_path = out / "tcbp_model.bin"
     model_path.write_bytes(bytes(builder.model))
     by_path = dict(options, tcbp_model=str(model_path))
@@ -215,62 +246,157 @@ def python_parts(builder, priors):
 
 # ---------- 3. check ----------
 
+def h_form(arm):
+    return "dense" if arm.startswith("dense") else arm.split("_")[0]
+
+
+def free_mode(arm):
+    """inline: tcbp.decode_one frees the decoder before it returns (the registered path); after: the caller frees it
+    once the answer is recorded; thread: a Releaser thread frees it while the loop goes on."""
+    return "after" if arm.endswith("_after") else "thread" if arm.endswith("_thread") else "inline"
+
+
+class Releaser:
+    """A thread that frees the decoders handed to it (the lists of tcbp.decode_one(keep=True)) and times each free.
+
+    The queue holds at most `depth` decoders, so they cannot pile up on the GPU if the thread falls behind: put()
+    waits instead, and that wait is inside the shot's time. The thread checks that its list is the decoder's only
+    holder before it clears it (not_last_owner counts the shots where it was not, so the free happened elsewhere)."""
+
+    def __init__(self, depth=2):
+        import queue
+        import threading
+
+        self.queue = queue.Queue(maxsize=depth)
+        self.seconds, self.not_last_owner, self.errors = {}, 0, []
+        self.thread = threading.Thread(target=self._work, name="tcbp-free", daemon=False)
+        self.thread.start()
+
+    def _work(self):
+        import sys
+
+        while True:
+            item = self.queue.get()
+            try:
+                if item is None:
+                    return
+                key, held = item
+                del item
+                if sys.getrefcount(held[0]) > 2:            # the list's own reference and getrefcount's argument
+                    self.not_last_owner += 1
+                start = time.perf_counter()
+                held.clear()
+                self.seconds[key] = time.perf_counter() - start
+                del held
+            except BaseException as error:  # noqa: BLE001  reported in the summary
+                self.errors.append(repr(error))
+            finally:
+                self.queue.task_done()
+
+    def put(self, key, held):
+        self.queue.put((key, held))
+
+    def drain(self):
+        self.queue.join()
+
+    def stop(self):
+        if self.thread.is_alive():
+            self.queue.put(None)
+            self.thread.join()
+
+
 def arm_builders(builder, problem, syndromes, logits, setting, arms):
     """{arm: builder}: dense arms use the registered builder itself; a sparse arm shares its model and options and
     takes the first dtype of SPARSE_DTYPES that get_decoder accepts (one untimed shot each). An arm none of them
-    builds is dropped, and said so."""
-    builders, dtypes = {}, {}
+    builds is dropped, and said so. Arms of the same form (csr, csr_after, csr_thread) share one builder."""
+    builders, dtypes, forms = {}, {}, {}
     priors = head_priors(problem, logits[0], setting)
     for arm in arms:
-        if arm.startswith("dense"):
+        form = h_form(arm)
+        if form == "dense":
             builders[arm] = builder
+            continue
+        if form in forms:
+            builders[arm], dtypes[arm] = forms[form]
             continue
         for dtype in SPARSE_DTYPES:
             try:
-                other = builder.with_h_format(arm, dtype)
+                other = builder.with_h_format(form, dtype)
                 tcbp.decode_one(other, priors, syndromes[0])
             except BaseException as error:  # noqa: BLE001  SystemExit of h_matrix included
                 print(f"  arm {arm} with dtype {np.dtype(dtype).name} refused: {error!r}", flush=True)
                 continue
             builders[arm], dtypes[arm] = other, np.dtype(dtype).name
+            forms[form] = (other, np.dtype(dtype).name)
             break
         else:
             print(f"  arm {arm} dropped: no dtype of {[np.dtype(d).name for d in SPARSE_DTYPES]} built", flush=True)
     return builders, dtypes
 
 
-def check(builders, problem, syndromes, truth, logits, setting, block, out):
-    """Every shot by every arm, blocks of `block` shots, arms in a rotating order. Returns per-shot rows per arm."""
+def check(builders, problem, syndromes, truth, logits, setting, block, out, depth=2):
+    """Every shot by every arm, blocks of `block` shots, arms in a rotating order. Returns per-shot rows per arm, and
+    per arm the wall time of its blocks (a thread arm's block ends when its thread has freed every decoder)."""
     arms = list(builders)
     shots = len(syndromes)
     rows = {arm: np.zeros((shots, len(FIELDS)), np.float64) for arm in arms}
     codes = {arm: np.zeros(shots, np.int64) for arm in arms}
     hashes = {arm: np.zeros(shots, np.uint64) for arm in arms}
+    walls = {arm: 0.0 for arm in arms}
     logits_hashes = np.array([tcbp.row_hash(logits[k]) for k in range(shots)], np.uint64)
-    for arm in arms:                                                        # each arm's first build, untimed
-        tcbp.decode_one(builders[arm], head_priors(problem, logits[0], setting), syndromes[0])
-    start = time.time()
-    for index, first in enumerate(range(0, shots, block)):
-        last = min(first + block, shots)
-        turn = index % len(arms)
-        for arm in arms[turn:] + arms[:turn]:
-            for k in range(first, last):
-                begin = time.perf_counter()
-                priors = head_priors(problem, logits[k], setting)
-                ready = time.perf_counter()
-                error, flag, build, decode = tcbp.decode_one(builders[arm], priors, syndromes[k])
-                end = time.perf_counter()
-                predicted = (problem.L @ error) % 2
-                codes[arm][k] = int(np.asarray(predicted, np.int64) @ tcbp.BITS)
-                hashes[arm][k] = error_hash(error)
-                rows[arm][k] = (codes[arm][k], int(error.sum()), bool((predicted != truth[k]).any()),
-                                np.array_equal((problem.H @ error) % 2, syndromes[k]), flag,
-                                ready - begin, build, decode, (end - ready) - build - decode, end - begin)
-        save_check(out, rows, codes, hashes, logits_hashes, truth, last)
-        print(f"  shots {first}-{last - 1} done by {', '.join(arms[turn:] + arms[:turn])}; {time.time() - start:.0f} s; "
-              + "; ".join(f"{arm} {rows[arm][:last, FIELDS.index('seconds_total')].mean() * 1e3:.1f} ms" for arm in arms),
-              flush=True)
-    return rows, codes, hashes, logits_hashes
+    releasers = {arm: Releaser(depth) for arm in arms if free_mode(arm) == "thread"}
+    column = {name: FIELDS.index(name) for name in FIELDS}
+    try:
+        for arm in arms:                                                    # each arm's first build, untimed
+            tcbp.decode_one(builders[arm], head_priors(problem, logits[0], setting), syndromes[0])
+        start = time.time()
+        for index, first in enumerate(range(0, shots, block)):
+            last = min(first + block, shots)
+            turn = index % len(arms)
+            for arm in arms[turn:] + arms[:turn]:
+                mode = free_mode(arm)
+                block_start = time.perf_counter()
+                for k in range(first, last):
+                    begin = time.perf_counter()
+                    priors = head_priors(problem, logits[k], setting)
+                    ready = time.perf_counter()
+                    if mode == "inline":
+                        error, flag, build, decode = tcbp.decode_one(builders[arm], priors, syndromes[k])
+                        answered = end = time.perf_counter()
+                        free = (end - ready) - build - decode
+                    else:
+                        error, flag, build, decode, held = tcbp.decode_one(builders[arm], priors, syndromes[k], keep=True)
+                        answered = time.perf_counter()
+                        if mode == "after":
+                            held.clear()
+                            end = time.perf_counter()
+                            free = end - answered
+                        else:
+                            releasers[arm].put(k, held)
+                            end = time.perf_counter()
+                            free = np.nan                           # the thread's own timer, filled in below
+                        del held
+                    predicted = (problem.L @ error) % 2
+                    codes[arm][k] = int(np.asarray(predicted, np.int64) @ tcbp.BITS)
+                    hashes[arm][k] = error_hash(error)
+                    rows[arm][k] = (codes[arm][k], int(error.sum()), bool((predicted != truth[k]).any()),
+                                    np.array_equal((problem.H @ error) % 2, syndromes[k]), flag,
+                                    ready - begin, build, decode, free, end - begin, answered - begin)
+                if mode == "thread":
+                    releasers[arm].drain()
+                    for k in range(first, last):
+                        rows[arm][k, column["seconds_free"]] = releasers[arm].seconds.get(k, np.nan)
+                walls[arm] += time.perf_counter() - block_start
+            save_check(out, rows, codes, hashes, logits_hashes, truth, last)
+            print(f"  shots {first}-{last - 1} done by {', '.join(arms[turn:] + arms[:turn])}; {time.time() - start:.0f} s; "
+                  + "; ".join(f"{arm} {rows[arm][:last, column['seconds_total']].mean() * 1e3:.1f} ms" for arm in arms),
+                  flush=True)
+    finally:
+        for releaser in releasers.values():
+            releaser.stop()
+    threads = {arm: {"frees": len(r.seconds), "not_last_owner": r.not_last_owner, "errors": r.errors[:20],
+                     "queue_depth": depth} for arm, r in releasers.items()}
+    return rows, codes, hashes, logits_hashes, walls, threads
 
 
 def save_check(out, rows, codes, hashes, logits_hashes, truth, done):
@@ -346,7 +472,7 @@ def run(args):
     priors = [head_priors(problem, logits[k], setting) for k in range(min(args.profile_builds, shots) or 1)]
     if args.profile_builds:
         try:
-            summary["profile"] = profile(builder, priors, syndromes, out, args.profile_builds)
+            summary["profile"] = profile(builder, priors, syndromes, out, args.profile_builds, args.profile_set)
         except Exception as error:          # noqa: BLE001  the check still runs
             summary["profile"] = {"error": repr(error), "traceback": traceback.format_exc()[-2000:]}
             print(f"profile FAILED: {error!r}", flush=True)
@@ -355,8 +481,16 @@ def run(args):
     arms = list(builders)
     summary["arms_run"], summary["sparse_dtypes"] = arms, dtypes
     tcbp.CAPPED.update(shots=0, columns=0)
-    rows, codes, hashes, _ = check(builders, problem, syndromes, truth, logits, setting, args.block, out)
+    summary["free_modes"] = {arm: free_mode(arm) for arm in arms}
+    rows, codes, hashes, _, walls, threads = check(builders, problem, syndromes, truth, logits, setting, args.block, out,
+                                                   args.queue_depth)
     summary["check"] = compare(rows, codes, hashes, arms)
+    for arm in arms:
+        summary["check"][arm]["wall_ms_per_shot"] = walls[arm] / shots * 1e3
+    summary["threads"] = threads
+    summary["rule"] = ("fixed before job 2 ran: an arm that moves the free is a gain over csr only if its wall time per "
+                       "shot (its blocks' wall time over its shots, a thread arm's block ending when its thread has freed "
+                       "every decoder) is below csr's in the same process; its time to answer is reported beside it")
     summary["capped_in_check"] = {"what": "counted over every arm's decodes", **tcbp.CAPPED}
     if model_before is not None:
         summary["model_option_unchanged"] = hashlib.sha256(bytes(builder.options["tcbp_model"])).hexdigest() == model_before
@@ -364,7 +498,10 @@ def run(args):
     summary["repeatable"] = repeatable
     summary["timer"] = ("seconds_total: one perf_counter timer around the shot's priors (shot_priors and the 0.5 cap), "
                         "tcbp.decode_one (get_decoder with the shot's priors, decode(), the cut to 0/1) and freeing the "
-                        "decoder; one process, shots one at a time, the GPU shared with whatever else runs on it")
+                        "decoder; one process, shots one at a time, the GPU shared with whatever else runs on it. "
+                        "seconds_answer: the same timer stopped when the answer is in the caller's hands (inline arms: "
+                        "after the free; csr_after and csr_thread: before it). wall_ms_per_shot: the arm's blocks' wall "
+                        "time over its shots, scoring included (the same for every arm), a thread arm's drain included")
     save()
     print(f"\nRESULT ({shots} shots of {data.path.name}, head priors, one model; reference: dense):", flush=True)
     for arm in arms:
@@ -375,7 +512,23 @@ def run(args):
         print(f"  {arm:12s} failures {row['failures']}, not reproduced {row['not_reproduced']}; total {ms['seconds_total']['mean']:.1f} ms "
               f"mean (median {ms['seconds_total']['median']:.1f}, p99 {ms['seconds_total']['p99']:.1f}) = priors "
               f"{ms['seconds_priors']['mean']:.2f} + build {ms['seconds_build']['mean']:.1f} + decode {ms['seconds_decode']['mean']:.1f} "
-              f"+ free {ms['seconds_free']['mean']:.1f}{same}", flush=True)
+              f"+ free {ms['seconds_free']['mean']:.1f} ({free_mode(arm)}); answer {ms['seconds_answer']['mean']:.1f} ms "
+              f"(p99 {ms['seconds_answer']['p99']:.1f}); wall {row['wall_ms_per_shot']:.1f} ms per shot{same}", flush=True)
+    if "csr" in arms:
+        base = summary["check"]["csr"]
+        for arm in [arm for arm in arms if free_mode(arm) != "inline"]:
+            row = summary["check"][arm]
+            moved = {part: row["ms"][f"seconds_{part}"]["mean"] - base["ms"][f"seconds_{part}"]["mean"]
+                     for part in ("priors", "build", "decode")}
+            verdict = "GAIN" if row["wall_ms_per_shot"] < base["wall_ms_per_shot"] else "NO GAIN"
+            row["against_csr"] = {"wall_ms_per_shot_difference": row["wall_ms_per_shot"] - base["wall_ms_per_shot"],
+                                  "answer_ms_difference": row["ms"]["seconds_answer"]["mean"] - base["ms"]["seconds_answer"]["mean"],
+                                  "parts_ms_difference": moved, "verdict": verdict}
+            print(f"  {arm} against csr (same process): wall {row['wall_ms_per_shot'] - base['wall_ms_per_shot']:+.2f} ms per shot "
+                  f"-> {verdict} by the rule; answer {row['against_csr']['answer_ms_difference']:+.2f} ms; the next parts "
+                  f"moved by {', '.join(f'{part} {value:+.2f}' for part, value in moved.items())} ms"
+                  + (f"; thread: {threads[arm]}" if arm in threads else ""), flush=True)
+        save()
     if repeatable is False:
         print("  dense and dense_again differ: the decoder is not repeatable in this run, so no arm can be called the same",
               flush=True)
@@ -442,8 +595,11 @@ def main(argv=None):
     sub.add_argument("--settings", required=True, help="the fit file of tcbp.py (the knobs)")
     sub.add_argument("--limit", type=int, default=1000)
     sub.add_argument("--block", type=int, default=100)
-    sub.add_argument("--arms", nargs="+", choices=ARMS, default=list(ARMS))
+    sub.add_argument("--arms", nargs="+", choices=ALL_ARMS, default=list(ARMS))
     sub.add_argument("--profile-builds", type=int, default=50, help="0: no profile")
+    sub.add_argument("--profile-set", choices=("all", "options"), default="all",
+                     help="all: job 1's variants; options: H CSR with decoder options changed (timing probes only)")
+    sub.add_argument("--queue-depth", type=int, default=2, help="the most decoders waiting for csr_thread's thread")
     sub.add_argument("--decoder", choices=("tcbp-jobs", "relay"), default="tcbp-jobs")
     sub.add_argument("--preset", default="tcbp-jobs")
     sub.add_argument("--opt", type=json.loads, default={})

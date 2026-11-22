@@ -393,8 +393,9 @@ priors of shots 0 to 49 (`logs/tcbp_speed_job1_summary.json`, `profile.variants`
 
 - The equal answers are shown on 1,000 validation X shots at p = 0.005, with the head's priors. Not shown: Z, other p,
   the kit's priors, and the test files.
-- A sparse H goes through another constructor of the plugin ("sparse" rather than "dense", in its own error messages).
-  1,000 shots with equal whole corrections are evidence, not a proof, that the two agree on every shot.
+- A sparse H may go through another constructor of the plugin. The binary in the PyPI wheel (read on luminaty, see below)
+  has error messages naming a "dense constructor" and a "sparse constructor". 1,000 shots with equal whole corrections
+  are evidence, not a proof, that the two agree on every shot.
 - The registered numbers (validation, test, the pair score) were made with the dense path and were not rerun.
 - The GPU is a MIG slice that other jobs may share. The arms took turns, so any load slowed all of them alike.
 - **A built decoder's priors still cannot be changed in place.** The Python `Decoder` of 0.9.0 offers no way to do it

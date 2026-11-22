@@ -85,3 +85,34 @@ def test_check_with_the_stand_in_matches_the_head_arm(tmp_path):
     report = json.loads((tmp_path / "report.json").read_text())["reference"]
     assert report["logits_rows_equal"] == 4
     assert all(report[arm] == {"bits_differ": 0, "faults_differ": 0} for arm in tcbp_speed.ARMS)
+
+
+def test_the_free_after_the_answer_or_on_a_thread(tmp_path):
+    """csr_after and csr_thread give dense's answers; the thread frees every decoder itself, and is stopped."""
+    import threading
+
+    shots = small_file(tmp_path / "validation_X.npz", 4)
+    logits = fake_logits(tmp_path / "logits", shots)
+    settings = tmp_path / "fit.json"
+    settings.write_text(json.dumps({"chosen": {"mode": "logodds", "alpha": 0.3, "eps": 1e-4}}))
+    tcbp_speed.main(["run", "--decoder", "relay", "--data", str(shots), "--logits", logits, "--settings", str(settings),
+                     "--limit", "4", "--block", "2", "--profile-builds", "0", "--arms", "dense", "csr", "csr_after",
+                     "csr_thread", "--out", str(tmp_path / "speed")])
+    assert not [thread for thread in threading.enumerate() if thread.name == "tcbp-free"]     # stopped and joined
+    summary = json.loads((tmp_path / "speed" / "summary.json").read_text())
+    assert summary["free_modes"] == {"dense": "inline", "csr": "inline", "csr_after": "after", "csr_thread": "thread"}
+    for arm in ("csr", "csr_after", "csr_thread"):
+        assert summary["check"][arm]["same_as_dense"]
+    assert summary["threads"]["csr_thread"] == {"frees": 4, "not_last_owner": 0, "errors": [], "queue_depth": 2}
+    for arm in ("csr_after", "csr_thread"):
+        assert summary["check"][arm]["against_csr"]["verdict"] in ("GAIN", "NO GAIN")
+    with np.load(tmp_path / "speed" / "check_per_shot.npz") as file:
+        fields = list(file["fields"])
+        rows = {arm: file[f"rows_{arm}"] for arm in summary["arms_run"]}
+    for arm, row in rows.items():
+        answer, total = row[:, fields.index("seconds_answer")], row[:, fields.index("seconds_total")]
+        assert not np.isnan(row[:, fields.index("seconds_free")]).any()
+        if arm in ("dense", "csr"):
+            assert np.array_equal(answer, total)                         # inline: the free comes before the answer
+        else:
+            assert (answer < total).all()                                # the answer comes first

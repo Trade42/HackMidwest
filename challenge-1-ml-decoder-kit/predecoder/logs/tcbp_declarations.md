@@ -86,3 +86,12 @@ Registered in `logs/tcbp_test_registered_spec.md` before any number of them exis
 inside it (dq-orch-6, 15:49 UTC): X's frozen knobs, no Z fit; validation_Z first; test_Z only if validation_Z beats
 the stored TCBP-JOBS validation_Z file, paired, p < 0.05; then the pair score against TCBP-JOBS's 360. The Z head's
 logits (from dq-predecoder) are recorded here, with their sha256, when they arrive:
+- validation_Z: `scratch/predecoder/z/logits_validation_p0.005/logits.npy`, sha256
+  `db786d0a04f8f72157e7c812ab690708c0c3208529365eb51c915cbf46a53a49`. Z head `083147d2...` (laptop-artifacts `a2c3d5d`,
+  `predecoder_Z_s1/head.pt`), Z trunk `fad24e80...`, luminaty CPU, 4 threads. Shots `data/p0.005/validation_Z.npz`
+  `24f12efa...`. The gate's stored file is `files/tcbp_p0.005/validation_Z.tcbp.npz`, sha256 `b0ba027a704c734a8c77b55e557b698dfc851e27e273b07df623cbbf76b27619`.
+- test_Z: shots `data/p0.005/test_Z.npz`, `b86ae320d13fa555d8358fe399156d28d4e52b01fabf8eafa1b30e60bdcd0cef`. The stored
+  TCBP-JOBS file is `files/clean/tcbp_p0.005/test_Z.tcbp.npz`, `23ae160e02bf9f6085ff17d2b0d89a5b376c7f589bbfde6da89dd09a831de037`.
+  The logits' sha256 is added when dq-predecoder sends them.
+- The knobs: X's TCBP file (`76970106...`: log-odds alpha 0.4, eps 1e-4, cap 0.5), NOT dq-predecoder's relay-BP Z
+  knobs (`fit_Z_p0.004.json`, alpha 0.2).

@@ -27,7 +27,7 @@ takes the highest. The facts are:
 - how many iterations PriorTilt and relay-BP needed (a decoder that struggled is less trustworthy).
 
 It costs nothing extra to decode, because it only reads answers that are already computed. Its own
-work is about 0.1 ms per disagreeing shot on this PC.
+work is 0.1 to 0.2 ms per disagreeing shot on this PC.
 
 **The model** is a *conditional logit*, the simplest logistic model for "which of these is the right
 one":
@@ -66,7 +66,8 @@ before it was scored.
 
 Fitted on p = 0.005 `train_X` (20,000 shots, 785 disagreeing) and p = 0.004 `train_X` and `train_Z`
 (202 disagreeing), log `logs/fit_p0.005.log`. Scored once on p = 0.005 `validation_X` (Stim seed 201,
-data sha256 `25e9ce8e...`) and `validation_Z` (seed 202, `24f12efa...`), log `logs/validation_p0.005.log`.
+data sha256 `25e9ce8e...`) and `validation_Z` (seed 202, `24f12efa...`), log `logs/validation_p0.005.log`;
+the Wilson intervals of the failed pairs are in `logs/pair_wilson_p0.005.log`.
 
 | row | failures [X Z] | failed pairs of 5,000 | 95% Wilson interval (pairs) | rate per cycle (the kit's) |
 |---|---|---|---|---|
@@ -101,8 +102,9 @@ How to read it:
 - **Z is the weaker basis** (4 against 8). Every p = 0.005 training shot is an X shot. The only Z
   training shots are those of p = 0.004.
 - **The train cross-validation predicted this size of gain.** On the held-out training folds it was
-  wrong alone on 19 shots and TCBP-JOBS alone on 50, out of 814. That is +31 on 814 shots, or about
-  +11 on the 364 disagreeing validation shots; validation gave +12 (20 against 8).
+  wrong alone on 19 shots and TCBP-JOBS alone on 50. That is +31 on the 814 disagreeing training shots
+  that have a right answer. Like for like, it predicts about +11 on the 298 disagreeing validation
+  shots that have one (31 x 298 / 814 = 11.3); validation gave +12 (20 against 8).
 - **Not separated from the plain vote.** Against gw: 172 against 179 pairs; both 162, only the
   selector 10, only gw 17, p = 0.25. The vote alone is not separated from TCBP-JOBS either (179
   against 187; 20 against 28, p = 0.31). So the learned model is the only row here that beats
@@ -137,7 +139,8 @@ Paired on pairs:
 
 At p = 0.004 the model learned rule f: "joint relay-BP converged" gets the largest weight. That is no
 gain over rule f, and there is little room for one (a ceiling of 8 against 11). Without J (cross-
-validation on the p = 0.004 train files only), it ties TCBP-JOBS: 147 against 146 right.
+validation on the p = 0.004 train files only, `logs/cv_p0.004_without_J.log`), it ties TCBP-JOBS:
+147 of 180 right against 146 (held out, only the selector wrong 3, only TCBP-JOBS wrong 4).
 
 ### p = 0.003, the p = 0.004 model unchanged
 
@@ -158,7 +161,7 @@ disagreeing shots. Each is timed on its own machine (`evaluate.py` prints them; 
 | P2 | every shot | 189.5 ms | 135.3 ms |
 | T | every shot | unmeasured: batch mode on the server's A100, no time per shot | unmeasured |
 | R | the 3.6% disagreeing shots | 196.2 ms per shot of the file (5.3 s per disagreeing shot) | 166.4 ms |
-| the selector itself | the disagreeing shots | 0.1 ms per disagreeing shot (this PC) | 0.1 ms |
+| the selector itself | the disagreeing shots | 0.1 to 0.2 ms per disagreeing shot (this PC) | 0.1 ms |
 
 - **The row's time is unmeasured**, because TCBP-JOBS has no time per shot here. The known parts sum
   to 579 ms per shot on X and 437 ms on Z, on different machines.
@@ -191,7 +194,11 @@ python -m selector.evaluate --model selector/models/p0.005.json \
   another sha256. It fits nothing. `selector.fit` refuses any `test_*` or `go_*` file, or anything
   under `clean/`.
 - Give no joint file at p = 0.005. The model never chooses J, but rule f would then use J, and the
-  row f would no longer be the TCBP-JOBS row that was validated.
+  row f would no longer be the TCBP-JOBS row that was validated. `evaluate.py` does not enforce this.
+- Give chunk-mode candidate files (`*.chunks.npz` of `hierarchy.candidates`, where relay-BP decoded
+  every shot), as on every training and validation file. A session-mode file runs relay-BP only where
+  P1 and P2 differ, so the model would see shots without relay-BP's answer, which it never trained
+  on. `evaluate.py` does not check the mode.
 - **p = 0.004, optional and not a claimed row.** The selector equals rule f on every validation shot,
   so it claims nothing over rule f. As a check, the same command with `models/p0.004.json` (sha256
   `164990fdf389d0362218deb2aca6754f4e088dcc6fa4daf333f23292af9b5b31`) and, per basis, the

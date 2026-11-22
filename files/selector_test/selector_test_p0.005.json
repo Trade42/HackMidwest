@@ -1,0 +1,243 @@
+{
+ "model": "selector/models/p0.005.json",
+ "model_sha256": "696bf5449a5468177dc2c00664e8557e7d019419c858a44052eea05521698ce6",
+ "label": "test, p = 0.005",
+ "X": {
+  "basis": "X",
+  "p": 0.005,
+  "data_name": "test_X.npz",
+  "data_sha256": "1b13521cddb2bf5e5d4c7f1e85a8ecaaa3c72a0b99754a3f76b4a5a4a912fc8b",
+  "shots": 10000,
+  "member_files": [
+   "/home/blakew3/mlBranchMidwest/runs/test/cand_p0.005/test_X.chunks.npz",
+   "/home/blakew3/mlBranchMidwest/runs/test/tcbp_p0.005/test_X.tcbp.npz"
+  ],
+  "joint": false,
+  "choice_shots": 372,
+  "failures": {
+   "selector": 183,
+   "T": 186,
+   "f": 186,
+   "gw": 181,
+   "ac": 241,
+   "bw": 217,
+   "R": 419,
+   "P1": 303,
+   "P2": 298,
+   "oracle_R_P1_P2": 165,
+   "oracle_P1_P2_T": 128,
+   "oracle_P1_P2_T_R": 115
+  },
+  "paired_with_selector": {
+   "T": {
+    "both": 170,
+    "only_selector": 13,
+    "only_other": 16,
+    "p": 0.711071103811264
+   },
+   "f": {
+    "both": 170,
+    "only_selector": 13,
+    "only_other": 16,
+    "p": 0.711071103811264
+   },
+   "gw": {
+    "both": 173,
+    "only_selector": 10,
+    "only_other": 8,
+    "p": 0.8145294189453125
+   }
+  },
+  "time": {
+   "ms_per_shot_by_member": {
+    "P1": 134.61753427117364,
+    "P2": 136.68505977543535,
+    "T": 8.714083428238519,
+    "R": 171.83807009467856
+   },
+   "ms_per_shot": 451.85474756952607,
+   "unmeasured_members": []
+  }
+ },
+ "Z": {
+  "basis": "Z",
+  "p": 0.005,
+  "data_name": "test_Z.npz",
+  "data_sha256": "b86ae320d13fa555d8358fe399156d28d4e52b01fabf8eafa1b30e60bdcd0cef",
+  "shots": 10000,
+  "member_files": [
+   "/home/blakew3/mlBranchMidwest/runs/test/cand_p0.005/test_Z.chunks.npz",
+   "/home/blakew3/mlBranchMidwest/runs/test/tcbp_p0.005/test_Z.tcbp.npz"
+  ],
+  "joint": false,
+  "choice_shots": 363,
+  "failures": {
+   "selector": 174,
+   "T": 177,
+   "f": 177,
+   "gw": 176,
+   "ac": 231,
+   "bw": 203,
+   "R": 385,
+   "P1": 296,
+   "P2": 307,
+   "oracle_R_P1_P2": 168,
+   "oracle_P1_P2_T": 124,
+   "oracle_P1_P2_T_R": 113
+  },
+  "paired_with_selector": {
+   "T": {
+    "both": 163,
+    "only_selector": 11,
+    "only_other": 14,
+    "p": 0.6900379657745361
+   },
+   "f": {
+    "both": 163,
+    "only_selector": 11,
+    "only_other": 14,
+    "p": 0.6900379657745361
+   },
+   "gw": {
+    "both": 161,
+    "only_selector": 13,
+    "only_other": 15,
+    "p": 0.8505540192127228
+   }
+  },
+  "time": {
+   "ms_per_shot_by_member": {
+    "P1": 131.49476968015077,
+    "P2": 131.12410568959314,
+    "T": 8.213333925046028,
+    "R": 158.75156763670967
+   },
+   "ms_per_shot": 429.5837769314996,
+   "unmeasured_members": []
+  }
+ },
+ "pairs": {
+  "selector": {
+   "failures_X": 183,
+   "failures_Z": 174,
+   "failed_pairs": 353,
+   "per_cycle": 0.002990362167279881,
+   "error": 0.00015907077158128224
+  },
+  "T": {
+   "failures_X": 186,
+   "failures_Z": 177,
+   "failed_pairs": 360,
+   "per_cycle": 0.003050669254042293,
+   "error": 0.00016069025493181677
+  },
+  "f": {
+   "failures_X": 186,
+   "failures_Z": 177,
+   "failed_pairs": 360,
+   "per_cycle": 0.003050669254042293,
+   "error": 0.00016069025493181677
+  },
+  "gw": {
+   "failures_X": 181,
+   "failures_Z": 176,
+   "failed_pairs": 354,
+   "per_cycle": 0.0029989750090039236,
+   "error": 0.00015930301091282573
+  },
+  "ac": {
+   "failures_X": 241,
+   "failures_Z": 231,
+   "failed_pairs": 469,
+   "per_cycle": 0.0039949529454640365,
+   "error": 0.00018430598340812843
+  },
+  "bw": {
+   "failures_X": 217,
+   "failures_Z": 203,
+   "failed_pairs": 417,
+   "per_cycle": 0.003543240990221408,
+   "error": 0.00017338442183612024
+  },
+  "R": {
+   "failures_X": 419,
+   "failures_Z": 385,
+   "failed_pairs": 794,
+   "per_cycle": 0.006870427253422129,
+   "error": 0.00024337990324319048
+  },
+  "P1": {
+   "failures_X": 303,
+   "failures_Z": 296,
+   "failed_pairs": 595,
+   "per_cycle": 0.005098925308371194,
+   "error": 0.00020877520357398538
+  },
+  "P2": {
+   "failures_X": 298,
+   "failures_Z": 307,
+   "failed_pairs": 598,
+   "per_cycle": 0.005125375243451358,
+   "error": 0.00020932933743289528
+  },
+  "oracle_R_P1_P2": {
+   "failures_X": 165,
+   "failures_Z": 168,
+   "failed_pairs": 332,
+   "per_cycle": 0.0028096812825003648,
+   "error": 0.0001541227228402109
+  },
+  "oracle_P1_P2_T": {
+   "failures_X": 128,
+   "failures_Z": 124,
+   "failed_pairs": 251,
+   "per_cycle": 0.0021161226277518486,
+   "error": 0.00013352887390727375
+  },
+  "oracle_P1_P2_T_R": {
+   "failures_X": 115,
+   "failures_Z": 113,
+   "failed_pairs": 227,
+   "per_cycle": 0.001911638124337811,
+   "error": 0.0001268499437030446
+  }
+ },
+ "pairs_paired": {
+  "T": {
+   "both": 330,
+   "only_selector": 23,
+   "only_other": 30,
+   "p": 0.4101027163746913
+  },
+  "f": {
+   "both": 330,
+   "only_selector": 23,
+   "only_other": 30,
+   "p": 0.4101027163746913
+  },
+  "gw": {
+   "both": 331,
+   "only_selector": 22,
+   "only_other": 23,
+   "p": 1.0
+  },
+  "f_against_T": {
+   "both": 360,
+   "only_row": 0,
+   "only_T": 0,
+   "p": 1.0
+  },
+  "gw_against_T": {
+   "both": 310,
+   "only_row": 44,
+   "only_T": 50,
+   "p": 0.6062959376939658
+  },
+  "per_shot_X_and_Z_against_T": {
+   "both": 333,
+   "only_selector": 24,
+   "only_T": 30,
+   "p": 0.49661743531793345
+  }
+ }
+}

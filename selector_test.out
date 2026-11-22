@@ -1,1 +1,99 @@
 2026-11-22T12:15:41Z waiting for the test run's cand_p0.005 and tcbp_p0.005 steps
+696bf5449a5468177dc2c00664e8557e7d019419c858a44052eea05521698ce6  selector/models/p0.005.json
+2026-11-22T12:27:41Z START selector test p = 0.005
+selector model selector/models/p0.005.json  sha256 696bf5449a5468177dc2c00664e8557e7d019419c858a44052eea05521698ce6
+  fitted on: train_X.npz p = 0.005 (cfa08c9113b7...); train_X.npz p = 0.004 (98c0afeb2a0b...); train_Z.npz p = 0.004 (14dce11586fa...); lambda 0.01; pool T, P1, P2, R
+
+X memory, p = 0.005, 10000 shots of test_X.npz (data sha256 1b13521cddb2bf5e5d4c7f1e85a8ecaaa3c72a0b99754a3f76b4a5a4a912fc8b); test, p = 0.005
+  R    10000 shots  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.005/test_X.chunks.npz
+  P1   10000 shots  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.005/test_X.chunks.npz
+  P2   10000 shots  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.005/test_X.chunks.npz
+  T    10000 shots  from /home/blakew3/mlBranchMidwest/runs/test/tcbp_p0.005/test_X.tcbp.npz
+  J        0 shots  from no file
+  no J file: joint relay-BP was not run on these shots, so rule f is TCBP-JOBS's answer on every shot
+  choice shots (P1, P2, T not unanimous): 372 (3.72%); the selector chose among the pool T, P1, P2, R: 1024 distinct answers on them
+  row                                                                failures     rate  95% Wilson interval
+  the learned selector                                                    183   1.830%  [1.585%, 2.112%]
+  T: TCBP-JOBS alone                                                      186   1.860%  [1.613%, 2.144%]
+  f: J where it converged, else T (the frozen ensemble rule)              186   1.860%  [1.613%, 2.144%]
+  gw: the vote of J, T, P1, P2, R; a tie: that order                      181   1.810%  [1.567%, 2.090%]
+  ac: part 1's best rule without learning                                 241   2.410%  [2.127%, 2.729%]
+  bw: the lowest weight of P1, P2, T, R                                   217   2.170%  [1.902%, 2.474%]
+  R: relay-BP alone                                                       419   4.190%  [3.815%, 4.601%]
+  P1: PriorTilt, seed 1                                                   303   3.030%  [2.712%, 3.384%]
+  P2: PriorTilt, seed 1001                                                298   2.980%  [2.664%, 3.332%]
+  ORACLE, a ceiling (needs the truth): a perfect choice among R, P1, P2      165   1.650%  [1.418%, 1.919%]
+  ORACLE, a ceiling (needs the truth): a perfect choice among P1, P2, T      128   1.280%  [1.078%, 1.520%]
+  ORACLE, a ceiling (needs the truth): a perfect choice among P1, P2, T, R      115   1.150%  [0.959%, 1.379%]
+  paired with the selector on the same shots: both fail, only the selector fails, only the other fails, exact two-sided p
+    against T  :  170   13   16   p = 0.711
+    against f  :  170   13   16   p = 0.711
+    against gw :  173   10    8   p = 0.815
+  time per shot, combined offline (each member's decode calls, timed on its own machine):
+    P1  on every shot:    134.6 ms per shot of the file on average (4 process(es) on AMD EPYC-Milan Processor)
+    P2  on every shot:    136.7 ms per shot of the file on average (4 process(es) on AMD EPYC-Milan Processor)
+    T   on every shot:      8.7 ms per shot of the file on average (AMD EPYC-Milan Processor)
+    R   on 372 choice shots:    171.8 ms per shot of the file on average (4 process(es) on AMD EPYC-Milan Processor)
+    the row: 451.9 ms per shot, combined offline
+  the selector's own work (features and scores of 372 choice shots) took 15.9 ms on this machine in all
+
+Z memory, p = 0.005, 10000 shots of test_Z.npz (data sha256 b86ae320d13fa555d8358fe399156d28d4e52b01fabf8eafa1b30e60bdcd0cef); test, p = 0.005
+  R    10000 shots  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.005/test_Z.chunks.npz
+  P1   10000 shots  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.005/test_Z.chunks.npz
+  P2   10000 shots  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.005/test_Z.chunks.npz
+  T    10000 shots  from /home/blakew3/mlBranchMidwest/runs/test/tcbp_p0.005/test_Z.tcbp.npz
+  J        0 shots  from no file
+  no J file: joint relay-BP was not run on these shots, so rule f is TCBP-JOBS's answer on every shot
+  choice shots (P1, P2, T not unanimous): 363 (3.63%); the selector chose among the pool T, P1, P2, R: 1012 distinct answers on them
+  row                                                                failures     rate  95% Wilson interval
+  the learned selector                                                    174   1.740%  [1.502%, 2.015%]
+  T: TCBP-JOBS alone                                                      177   1.770%  [1.529%, 2.048%]
+  f: J where it converged, else T (the frozen ensemble rule)              177   1.770%  [1.529%, 2.048%]
+  gw: the vote of J, T, P1, P2, R; a tie: that order                      176   1.760%  [1.520%, 2.037%]
+  ac: part 1's best rule without learning                                 231   2.310%  [2.033%, 2.623%]
+  bw: the lowest weight of P1, P2, T, R                                   203   2.030%  [1.771%, 2.325%]
+  R: relay-BP alone                                                       385   3.850%  [3.490%, 4.245%]
+  P1: PriorTilt, seed 1                                                   296   2.960%  [2.645%, 3.311%]
+  P2: PriorTilt, seed 1001                                                307   3.070%  [2.750%, 3.427%]
+  ORACLE, a ceiling (needs the truth): a perfect choice among R, P1, P2      168   1.680%  [1.446%, 1.951%]
+  ORACLE, a ceiling (needs the truth): a perfect choice among P1, P2, T      124   1.240%  [1.041%, 1.476%]
+  ORACLE, a ceiling (needs the truth): a perfect choice among P1, P2, T, R      113   1.130%  [0.941%, 1.357%]
+  paired with the selector on the same shots: both fail, only the selector fails, only the other fails, exact two-sided p
+    against T  :  163   11   14   p = 0.69
+    against f  :  163   11   14   p = 0.69
+    against gw :  161   13   15   p = 0.851
+  time per shot, combined offline (each member's decode calls, timed on its own machine):
+    P1  on every shot:    131.5 ms per shot of the file on average (4 process(es) on AMD EPYC-Milan Processor)
+    P2  on every shot:    131.1 ms per shot of the file on average (4 process(es) on AMD EPYC-Milan Processor)
+    T   on every shot:      8.2 ms per shot of the file on average (AMD EPYC-Milan Processor)
+    R   on 363 choice shots:    158.8 ms per shot of the file on average (4 process(es) on AMD EPYC-Milan Processor)
+    the row: 429.6 ms per shot, combined offline
+  the selector's own work (features and scores of 363 choice shots) took 14.8 ms on this machine in all
+
+pairs at p = 0.005: shot k of X with shot k of Z, 10000 pairs; a pair fails when either shot fails
+  row                                 failures [X Z]  failed pairs  rate per cycle (the kit's)
+  selector                                 [183 174]           353  2.99e-03 +- 1.6e-04
+  T                                        [186 177]           360  3.05e-03 +- 1.6e-04
+  f                                        [186 177]           360  3.05e-03 +- 1.6e-04
+  gw                                       [181 176]           354  3.00e-03 +- 1.6e-04
+  ac                                       [241 231]           469  3.99e-03 +- 1.8e-04
+  bw                                       [217 203]           417  3.54e-03 +- 1.7e-04
+  R                                        [419 385]           794  6.87e-03 +- 2.4e-04
+  P1                                       [303 296]           595  5.10e-03 +- 2.1e-04
+  P2                                       [298 307]           598  5.13e-03 +- 2.1e-04
+  oracle_R_P1_P2  (a ceiling)              [165 168]           332  2.81e-03 +- 1.5e-04
+  oracle_P1_P2_T  (a ceiling)              [128 124]           251  2.12e-03 +- 1.3e-04
+  oracle_P1_P2_T_R  (a ceiling)            [115 113]           227  1.91e-03 +- 1.3e-04
+  paired on pairs with the selector: both fail, only the selector fails, only the other fails, exact two-sided p
+    against T  :  330   23   30   p = 0.41
+    against f  :  330   23   30   p = 0.41
+    against gw :  331   22   23   p = 1
+  the other rows against TCBP-JOBS alone, on pairs: both fail, only the row fails, only T fails, exact two-sided p
+    f   against T:  360    0    0   p = 1
+    gw  against T:  310   44   50   p = 0.606
+  per shot, X and Z shots together (20000 shots), the selector against T: 333 24 30   p = 0.497
+  pairs where both shots fail: the selector 4, T 3
+  fewer failed pairs than TCBP-JOBS alone, paired p < 0.05: NO (353 against 360, p = 0.41)
+
+wrote /home/blakew3/mlBranchMidwest/runs/selector_test/selector_test_p0.005.json and the per-shot /home/blakew3/mlBranchMidwest/runs/selector_test/selector_test_p0.005_X.npz, /home/blakew3/mlBranchMidwest/runs/selector_test/selector_test_p0.005_Z.npz
+2026-11-22T12:27:45Z END selector test p = 0.005 exit 0

@@ -201,20 +201,23 @@ against relay-BP's <!--f:t3_relay_bp_pairs-->5<!--/f-->, <!--f:t4_relay_bp_pairs
 puts every ratio beside its failures.
 
 **Does the network do more than break ties?**
-In one secondary result, yes. A second output of the network gives relay-BP its starting beliefs for each shot (`predecoder/`).
-The gate fixed in advance, on practice shots at p = 0.004, was not passed (<!--f:pregate_H-->14<!--/f--> against <!--f:pregate_fresh-->20<!--/f--> failures, exact
-p = <!--f:pregate_p-->0.24<!--/f-->). One run on the test shots at p = 0.005, chosen after that and on X memory only, gave <!--f:pre5X_H-->151<!--/f--> failures against
-<!--f:pre5X_fresh-->433<!--/f--> for relay-BP with the kit's beliefs (exact p = <!--f:pre5X_vs_fresh_p-->2e-62<!--/f-->) and against TCBP-JOBS's <!--f:pre5X_T-->186<!--/f--> (exact p = <!--f:pre5X_vs_T_p-->0.006<!--/f-->). It counts
-single shots, not the kit's pairs, and its times are not clean. Source: `report/tables/test_predecoder.md`.
+In later results, yes, and each is labelled. A second output of the network gives a decoder its starting beliefs for each
+shot. With relay-BP (the predecoder), the gate fixed in advance at p = 0.004 was not passed (<!--f:pregate_H-->14<!--/f--> against <!--f:pregate_fresh-->20<!--/f-->, exact
+p = <!--f:pregate_p-->0.24<!--/f-->); its test runs came after that, and at p = 0.005 it fails <!--f:pair_H-->281<!--/f--> pairs, a logical error rate of <!--f:pair_H_rate-->2.37e-03 ± 1.4e-04<!--/f--> per
+cycle, against TCBP-JOBS's <!--f:pair_T-->360<!--/f-->. With TCBP-JOBS (the TCBP version, designed after the test results were seen), <!--f:ptpair_TH-->132<!--/f--> pairs,
+<!--f:ptpair_TH_rate-->1.11e-03 ± 9.6e-05<!--/f--> per cycle. Neither replaces the frozen decoder. Source: `report/tables/master_comparison.md`.
 
 **Did anything tune on the test shots?**
-No. Rules, seeds and checkpoints were chosen on the train and validation files; our tools refuse files named `test_`
-unless told that the run is final. Every setting was frozen before the test files were opened; the frozen decoder and
-its ablation arms (the hand-written tie-breaks) then decoded them, and nothing was chosen from those runs.
+Not for the frozen decoder. Its rules, seeds and checkpoints were chosen on the train and validation files; our tools refuse
+files named `test_` unless told that the run is final. Every setting was frozen before the test files were opened, and
+nothing of it was chosen from those runs. Three later things were chosen or designed after test results were seen, and
+each is labelled so wherever it appears: the predecoder's fallback rule (post hoc on X), the operating rule (which method
+at which noise level), and the TCBP version. The ablations run after the test results changed no choice.
 
 **What does machine learning add, exactly?**
-Four things are learned: PriorTilt's 14 parameters (by its authors, IonQ), our neural tie-break, our loss-time tracker
-(a statistical model fitted on training shots), and the teammates' router. The honest account of ours:
+Four things are learned in the frozen submission: PriorTilt's 14 parameters (by its authors, IonQ), our neural tie-break, our
+loss-time tracker (a statistical model fitted on training shots), and the teammates' router. Later results add two more of
+ours, each labelled: the network's per-shot priors (the predecoder and the TCBP version) and the learned selector. The honest account of ours:
 - The neural tie-break was motivated by a measurement: among 16 relay-BP candidates the right answer is present on
   <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, but the classical score picks it on only <!--f:cand_lowest-->71<!--/f--> (`report/tables/background.md`).
   It clearly beats that classical score (on 80,000 fresh shots, <!--f:a80_a-->237<!--/f--> against <!--f:a80_aw-->298<!--/f--> failures); on the test shots it

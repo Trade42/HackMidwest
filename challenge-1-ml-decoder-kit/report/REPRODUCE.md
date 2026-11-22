@@ -123,7 +123,7 @@ per-shot files (`hierarchy/README.md` has the commands), and `report/data/test/e
   the same kind of machine. The times always depend on the machine.
 - A decoder keeps random state from shot to shot, so a row decodes its file in order, in one process.
 - **TCBP-JOBS** needs an NVIDIA GPU and `cudaq-qec`: `python -m hierarchy.tcbp_member --data data/p<p>/test_X.npz --out runs/tcbp_p<p> --final` (and the same for Z). **Not run here** (no GPU).
-- **The learned predecoder** (`report/tables/test_predecoder.md`, a secondary result, X memory only): `predecoder/README.md`,
+- **The learned predecoder** (`report/tables/test_predecoder.md`, a secondary result, one basis at a time, then a pair score): `predecoder/README.md`,
   "The one run on the held-out test shots", has its two commands (`predecoder.evaluate`, then `predecoder.compare --arms fresh head`)
   and `predecoder.secondary` for the rows beside TCBP-JOBS and relay-BP. It needs the head file and the final X network (both pinned
   by sha256 there). **Not run here** by this task: it ran on the team's PC, and `report/data/test/predecoder/` holds its summaries.

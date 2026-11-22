@@ -238,7 +238,7 @@ scored on the test shots among its pre-registered rules, and it is the closest o
 
 <!--f:swap_statement-->TCBP-JOBS in place of relay-BP in our hierarchy (run after the test results were seen, at the team's request; an ablation, not our decoder; the ensemble's rule d, scored offline on the test shots) is level with TCBP-JOBS alone at p = 0.004 (39 against 41 failed pairs; only the swap fails 10, only TCBP-JOBS 12, exact p = 0.83) and behind TCBP-JOBS alone at p = 0.005 (403 against 360 failed pairs; only the swap fails 112, only TCBP-JOBS 69, exact p = 0.002). Against our frozen decoder's offline decode of the same shots (rule a) it fails 39 against 50 pairs at p = 0.004 (exact p = 0.019) and 403 against 490 at p = 0.005 (exact p = 2e-14): TCBP-JOBS is the stronger third candidate, but where the two PriorTilt runs agree the swap keeps their answer. At p = 0.005 they agree on a wrong answer that TCBP-JOBS gets right on 36 X and 42 Z shots (and on a right answer where TCBP-JOBS is wrong on 31 and 26); where all three differ, the network's pick fails 19 X and 16 Z shots that TCBP-JOBS gets right (6 and 7 the other way). What beats TCBP-JOBS is the ensemble's rule f, which adds joint decoding: 16 against 41 failed pairs at p = 0.004.<!--/f-->
 
-### A learned predecoder for relay-BP (`predecoder/`): a secondary result, one basis only
+### A learned predecoder for relay-BP (`predecoder/`): a secondary result, one basis at a time, then a pair score
 
 Our network can also help relay-BP directly. A second output of the trained network, a "head" of 17,617 numbers
 trained on top of the frozen network (`predecoder/README.md`), reads each shot and says, for each of the <!--f:pre_columns-->8,784<!--/f--> faults relay-BP considers, how

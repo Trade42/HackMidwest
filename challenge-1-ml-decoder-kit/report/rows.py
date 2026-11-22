@@ -61,6 +61,7 @@ class TestRow:
     kind: str       # "evaluator": a row of evaluation.evaluate; "tcbp": hierarchy.tcbp_member files; "ensemble": hierarchy.ensemble
     name: str = ""  # for "evaluator": the decoder's name inside summary.json, when the folder holds several
     rule: str = ""  # for our plugin: the tie-break the row's own summary.json must record ("network" or "weight")
+    member: str = ""  # the row of hierarchy.ensemble's offline output that stands in when there is no evaluator row
 
 
 # The rows of the table on the test shots, in table order. Folder names are the server job's.
@@ -68,11 +69,22 @@ TEST_ROWS = [
     TestRow("bposd", "eval_p{p}_bposd", "evaluator"),
     TestRow("relay-bp", "eval_p{p}_relay-bp", "evaluator"),
     TestRow("router", "eval_p{p}_router", "evaluator"),
-    TestRow("priortilt", "eval_p{p}_priortilt", "evaluator"),
-    TestRow("hierarchy-weight", "eval_p{p}_hierarchy-weight", "evaluator", rule="weight"),
+    TestRow("priortilt", "eval_p{p}_priortilt", "evaluator", member="P1"),
+    TestRow("hierarchy-weight", "eval_p{p}_hierarchy-weight", "evaluator", rule="weight", member="aw"),
     TestRow("hierarchy", "eval_p{p}_hierarchy", "evaluator", rule="network"),
     TestRow("ensemble", "ensemble_p{p}", "ensemble"),
-    TestRow("tcbp", "tcbp_p{p}", "tcbp"),
+    TestRow("tcbp", "tcbp_p{p}", "tcbp", member="T"),
+]
+
+# The ladder "whose gain is whose", on the test shots, from hierarchy.ensemble's offline output: every rung
+# is scored on the same per-shot candidate files, so each step is a paired comparison with the rung before.
+# (key in the ensemble's files, name in the table, whose work the step is)
+LADDER = [
+    ("R", "relay-BP (kit baseline)", "the kit"),
+    ("P1", "PriorTilt, one run (seed A)", "IonQ"),
+    ("aw", "our hierarchy, lowest-weight tie-break (nothing learned by us)", "ours"),
+    ("a", "our hierarchy, neural tie-break", "ours"),
+    ("floor", "ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder)", "nobody: needs the truth"),
 ]
 
 # Further paired comparisons on the test shots, (row, against): who adds what, and where TCBP-JOBS stands.

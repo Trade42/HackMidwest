@@ -115,7 +115,11 @@ def clean_rows_log(path):
         if not found:
             continue
         when = datetime.strptime(found.group(1), "%Y-%m-%dT%H:%M:%SZ")
-        run = runs.setdefault((found.group(3), found.group(4)), {"start": None, "end": None, "exit": None})
+        run = runs.setdefault((found.group(3), found.group(4)), {"start": None, "end": None, "exit": None, "state": {}})
+        state = re.search(r"\[load (\S+), evaluators (\d+), joint (\d+), loss\.job (\d+), candidates (\d+), throttled so far (\S+) s\]\s*$", line)
+        if state:        # the machine at that moment: load, our processes by kind, seconds the CPU quota has throttled the notebook so far
+            run["state"][found.group(2)] = {"load": float(state.group(1)), "evaluators": int(state.group(2)), "joint": int(state.group(3)),
+                                            "loss_job": int(state.group(4)), "candidates": int(state.group(5)), "throttled_s": float(state.group(6))}
         if found.group(2) == "START":
             run["start"] = when
         else:
@@ -125,6 +129,37 @@ def clean_rows_log(path):
                                if other != key and run["start"] and r["start"]
                                and r["start"] < (run["end"] or datetime.max) and (r["end"] or datetime.max) > run["start"])
     return runs
+
+
+def cpu_monitor(path):
+    """The server's one-line-a-minute record: [(time, CPUs busy, seconds throttled in the record so far, {process kind: count})]."""
+    path = Path(path)
+    if not path.is_file():
+        return []
+    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    names = lines[0].lstrip("# ").replace("|", " ").split() if lines and lines[0].startswith("#") else []
+    rows = []
+    for line in lines[1:]:
+        cells = line.replace("|", " ").split()
+        if len(cells) != len(names):
+            continue
+        try:
+            record = dict(zip(names[1:], (float(cell) for cell in cells[1:])))
+            rows.append((datetime.strptime(cells[0], "%Y-%m-%dT%H:%M:%SZ"), record))
+        except ValueError:
+            continue
+    return rows
+
+
+def machine_during(monitor, start, end):
+    """What the one-line-a-minute record says about a row's run: mean and largest number of busy CPUs, and seconds throttled."""
+    inside = [record for when, record in monitor if start <= when <= end]
+    if len(inside) < 2:
+        return None
+    return {"minutes": len(inside), "cpus_mean": sum(record["cpus"] for record in inside) / len(inside),
+            "cpus_max": max(record["cpus"] for record in inside), "throttled_s": inside[-1]["thr_s"] - inside[0]["thr_s"],
+            "evaluators_max": int(max(record.get("evaluator", 0) for record in inside)),
+            "other_max": {kind: int(max(record.get(kind, 0) for record in inside)) for kind in ("joint", "loss_job", "candidates", "tcbp_member", "evaluate_stim")}}
 
 
 def runner_logs(paths):
@@ -188,6 +223,70 @@ def tcbp_member(folder, p):
             "timer": "the decode call alone (hierarchy.tcbp_member), not the evaluator's whole decode", "wall_seconds": None,
             "mode": str(loaded["X"].get("mode", "")), "peak_rss_mb": None,
             "source": str(folder.relative_to(DATA)) + "/test_{X,Z}.tcbp.npz", "per_shot_file": str(files["X"].relative_to(DATA))}
+
+
+def ensemble(folder, p):
+    """The members and the rules combined offline by hierarchy.ensemble on the test files: {key: row}, and the frozen rule.
+
+    A row is one member alone (R relay-BP, P1 and P2 PriorTilt under two seeds, T TCBP-JOBS), a rule
+    (a: the network tie-break, aw: the lowest-weight tie-break, b to g: rules with more members), or
+    an ORACLE. Its time is the sum of the decode calls it makes, each timed alone: not one decoder
+    timed in one process.
+    """
+    folder = Path(folder)
+    files = {basis: folder / f"test_{basis}.npz" for basis in "XZ"}
+    if not all(file.is_file() for file in files.values()):
+        return None
+    arrays, tables = {}, {}
+    for basis, file in files.items():
+        with np.load(file, allow_pickle=False) as data:
+            arrays[basis] = {key: data[key] for key in data.files}
+        record = file.with_suffix(".json")
+        tables[basis] = json.loads(record.read_text(encoding="utf-8")) if record.is_file() else {"rows": []}
+        if arrays[basis]["basis"].item() != basis or abs(float(arrays[basis]["p"]) - float(p)) > 1e-12:
+            raise Mismatch(f"{file}: not {basis} memory at p = {p}")
+    sha = {basis: str(arrays[basis]["data_sha256"]) for basis in "XZ"}
+    rows = {}
+    for name in arrays["X"]:
+        if not name.startswith("failed_") or name not in arrays["Z"]:
+            continue
+        key = name.removeprefix("failed_")
+        failed = {basis: arrays[basis][name].astype(bool) for basis in "XZ"}
+        pair = failed["X"] | failed["Z"]
+        listed = {basis: next((row for row in tables[basis]["rows"] if row["key"] == key), {}) for basis in "XZ"}
+        for basis in "XZ":
+            if "failures" in listed[basis] and listed[basis]["failures"] != int(failed[basis].sum()):
+                raise Mismatch(f"{files[basis]}: {key} has {int(failed[basis].sum())} failures in the per-shot file and {listed[basis]['failures']} in the .json")
+        times = [listed[basis].get("ms_per_shot") for basis in "XZ"]
+        rate, error = stats.per_cycle_rate(int(pair.sum()), len(pair))
+        later = {basis: arrays[basis].get(f"later_{key}") for basis in "XZ"}
+        rows[key] = {"name": key, "p": float(p), "shots": len(pair), "failures_X": int(failed["X"].sum()), "failures_Z": int(failed["Z"].sum()),
+                     "failures_pair": int(pair.sum()), "rate": rate, "error": error, "failed_pair": pair, "failed": failed, "seconds_pair": None,
+                     "mean_ms": sum(times) if all(time is not None for time in times) else None, "median_ms": None, "p99_ms": None,
+                     "later": later if all(value is not None for value in later.values()) else None,
+                     "test_sha256": sha, "site": "combined offline from per-shot files", "workers": 1,
+                     "device": "CPU and GPU" if key in ("T", "b", "bw", "c", "d", "e", "f", "g", "gw") else "CPU", "rule": None, "wall_seconds": None,
+                     "timer": "the sum of the decode calls the row makes, each timed alone", "peak_rss_mb": None, "setup_seconds": None,
+                     "description": listed["X"].get("row", key), "offline": True,
+                     "source": str(folder.relative_to(DATA)) + "/test_{X,Z}.npz", "per_shot_file": str(files["X"].relative_to(DATA))}
+    marked = {basis: tables[basis].get("marked_rule") or (str(arrays[basis]["rule"]) if "rule" in arrays[basis] and str(arrays[basis]["rule"]) else None) for basis in "XZ"}
+    if marked["X"] != marked["Z"]:
+        raise Mismatch(f"{folder}: the frozen rule is {marked['X']} for X memory and {marked['Z']} for Z memory")
+    return {"rows": rows, "rule": marked["X"], "members": {basis: tables[basis].get("members") for basis in "XZ"},
+            "network_ms": tables["X"].get("network_ms")}
+
+
+def tcbp_files(folder, names):
+    """TCBP-JOBS's per-shot answers (hierarchy.tcbp_member) for shot files, joined in the order given: failure mask and data sha256."""
+    failed, sha = [], []
+    for name in names:
+        file = Path(folder) / name
+        if not file.is_file():
+            return None
+        with np.load(file, allow_pickle=False) as data:
+            failed.append(data["failed_T"].astype(bool))
+            sha.append(str(data["data_sha256"]))
+    return {"failed": np.concatenate(failed), "data_sha256": sha}
 
 
 # ---------- loss ----------

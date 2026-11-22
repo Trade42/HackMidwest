@@ -57,9 +57,9 @@ Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 <!-- BEGIN table:test_sweep -->
 <!-- END table:test_sweep -->
 
-- *Pending.* Line 1: our decoder against relay-BP at each p, as a paired count on the same 10,000 pairs.
-- *Pending.* Line 2: where TCBP-JOBS stands. On its own shots it is more accurate than relay-BP at p = 0.004 and 0.005.
-- *Pending.* Line 3: at p = 0.003 every good decoder fails only a handful of pairs in 10,000, so the rows cannot be told apart there.
+- <!--f:framing-->not measured<!--/f-->
+- *Pending.* Our decoder against relay-BP at each p, as a paired count on the same 10,000 pairs.
+- *Pending.* Where TCBP-JOBS stands on the test shots. On the practice shots it is ahead of us (see the questions below).
 
 ## Slide 5. Time: *title pending the measured rows*
 
@@ -105,6 +105,7 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 ## Questions a judge will ask, with honest answers
 
 **Whose gain is whose?**
+On the test shots: <!--f:framing-->not measured<!--/f--> The table `report/tables/test_ladder.md` has every rung. On the practice shots:
 PriorTilt alone already beats relay-BP on the practice shots, and that part is IonQ's. Our hierarchy adds to it: on
 <!--f:expl_pairs-->25,000<!--/f--> practice pairs at p = 0.004, relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its seed, and
 the hierarchy with the classical tie-break <!--f:expl_pairs_W-->162<!--/f--> (only relay-BP fails <!--f:expl_pairs_W_only_relay-->111<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_W_only_ours-->28<!--/f-->). The neural tie-break adds a smaller step on top, measured on X memory
@@ -132,7 +133,8 @@ model, and the results are for X memory at p = 0.004 only.
 **Where does TCBP-JOBS stand against you?**
 Ahead, at p = 0.004 and 0.005, as measured so far. Its logged rate per cycle at p = 0.004, on its own sampled shots, is
 <!--f:tcbp_own4_rate-->3.42e-04<!--/f-->; on the practice pairs relay-BP is at <!--f:expl_rate_R-->8.20e-04<!--/f--> and our hierarchy with the classical tie-break at
-<!--f:expl_rate_W-->5.42e-04<!--/f-->. These are three different sets of shots, so this is an indication, not a paired count. *Pending: the same comparison on the saved test shots, pair by pair.* It needs a GPU;
+<!--f:expl_rate_W-->5.42e-04<!--/f-->. We also ran TCBP-JOBS on those same practice pairs: it fails <!--f:expl_pairs_T-->113<!--/f--> of <!--f:expl_pairs-->25,000<!--/f-->,
+our hierarchy <!--f:expl_pairs_W-->162<!--/f-->, relay-BP <!--f:expl_pairs_R-->245<!--/f-->. *Pending: the same comparison on the saved test shots, pair by pair.* It needs a GPU;
 our hierarchy runs on one CPU core.
 
 **Did anything tune on the test shots?**

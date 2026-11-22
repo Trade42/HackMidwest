@@ -27,7 +27,7 @@ import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import COMPARISONS, DECODERS, EARLIER_ROWS, LOSS_CONDITIONS, P_VALUES, REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256
+from report.rows import COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDITIONS, P_VALUES, REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256
 
 HERE = Path(__file__).resolve().parent
 # REPORT_OUT sends the tables elsewhere and leaves the documents alone: used by the tests only.
@@ -88,12 +88,21 @@ def write(name, text, records=None):
 # ---------- the rows on the test shots ----------
 
 def load_test_rows(data=DATA):
-    """{p: {decoder key: row or None}} for every registered row, checked against the test files' identity."""
+    """({p: {decoder key: row or None}}, unregistered folders, {p: the ensemble tool's offline output or None}).
+
+    Every row is checked against the test files' identity. A row without an evaluator run can be
+    stood in for by the offline combination of per-shot files (rows.py, `member`); it is then
+    marked as such, and its time is a sum of decode calls.
+    """
     log = loaders.clean_rows_log(data / "test" / "clean_rows.out")
     jobs = loaders.runner_logs(sorted((data / "test").glob("runner_*.out"))) if (data / "test").is_dir() else {}
-    measured = {}
+    monitor = loaders.cpu_monitor(data / "test" / "cpu_monitor.out")
+    measured, combined = {}, {}
     for p in P_VALUES:
         measured[p] = {}
+        combined[p] = loaders.ensemble(data / "test" / f"ensemble_p{p}", p)
+        if combined[p] and next(iter(combined[p]["rows"].values()))["test_sha256"] != TEST_SHA256[p]:
+            raise Mismatch(f"test/ensemble_p{p}: these are not the team's test shots for p = {p}")
         for spec in TEST_ROWS:
             folder = data / "test" / spec.folder.format(p=p)
             row = None
@@ -107,15 +116,19 @@ def load_test_rows(data=DATA):
                     raise Mismatch(f"{folder}: {len(found)} decoders in one folder; name the one meant in rows.py")
             elif spec.kind == "tcbp":
                 row = loaders.tcbp_member(folder, p)
-            elif spec.kind == "ensemble":
-                row = loaders.ensemble(folder, p) if hasattr(loaders, "ensemble") else None
+            elif spec.kind == "ensemble" and combined[p] and combined[p]["rule"] in combined[p]["rows"]:
+                row = dict(combined[p]["rows"][combined[p]["rule"]])
+                row["stand_in_note"] = f" (rule {combined[p]['rule']}, frozen on the training shots)"
+            if row is None and spec.member and combined[p] and spec.member in combined[p]["rows"]:
+                row = dict(combined[p]["rows"][spec.member])           # no evaluator row: the offline combination stands in
+                row["stand_in_note"] = " (from per-shot files, not a timed evaluator row)"
             if row is not None:
                 if abs(float(row["p"]) - float(p)) > 1e-12:
                     raise Mismatch(f"{folder}: the file says p = {row['p']}, the folder says {p}")
                 if row["test_sha256"] != TEST_SHA256[p]:
                     raise Mismatch(f"{folder}: these are not the team's test shots for p = {p} (sha256 {row['test_sha256']})")
-                row["label_note"] = ""
-                if spec.rule:                                   # our plugin: the tie-break its own summary records, per basis
+                row["label_note"] = row.pop("stand_in_note", "")
+                if spec.rule and not row.get("offline"):        # our plugin: the tie-break its own summary records, per basis
                     used = row.get("rule")
                     if not used:
                         raise Mismatch(f"{folder}: the summary records no tie-break rule, so the row cannot be labelled")
@@ -125,11 +138,12 @@ def load_test_rows(data=DATA):
                         raise Mismatch(f"{folder}: registered as the row with the network, but its summary records {used}")
                     if spec.rule == "network" and set(used.values()) != {"network"}:
                         row["label_note"] = " (" + ", ".join(f"{basis} memory: {'the network' if used[basis] == 'network' else 'lowest weight'}" for basis in "XZ") + ")"
-                run = log.get((p, spec.folder.format(p=p).removeprefix(f"eval_p{p}_")))
+                run = None if row.get("offline") else log.get((p, spec.folder.format(p=p).removeprefix(f"eval_p{p}_")))
+                row["during"] = loaders.machine_during(monitor, run["start"], run["end"]) if run and run["start"] and run["end"] else None
                 row["beside"] = run["beside"] if run else None
                 row["run"] = run
-                row["jobs_beside"] = (sorted(name for name, job in jobs.items() if job["start"] and job["start"] < (run["end"] or datetime.max)
-                                             and (job["end"] or datetime.max) > run["start"]) if run and run["start"] else None)
+                row["jobs_beside"] = (sorted(name for name, job in jobs.items() if job["start"] and run["start"] <= job["start"] < (run["end"] or datetime.max))
+                                      if run and run["start"] else None)
             measured[p][spec.decoder] = row
         reference = measured[p].get(REFERENCE)
         for key, row in measured[p].items():
@@ -139,13 +153,22 @@ def load_test_rows(data=DATA):
                                  and row["failed_pair"] is not None else None)
                 row["interval"] = stats.per_cycle_interval(row["failures_pair"], row["shots"])
     known = {spec.folder.format(p=p) for spec in TEST_ROWS for p in P_VALUES}
+    known |= {f"ensemble_p{p}" for p in P_VALUES}
     extra = sorted(path.name for path in (data / "test").glob("*") if path.is_dir() and path.name not in known) if (data / "test").is_dir() else []
-    return measured, extra
+    return measured, extra, combined
 
 
 def where_text(row):
+    if row.get("offline"):
+        return f"{row['site']} ({row['device']} decoders, ICRN server); its time is {row['timer']}"
     text = f"{row['device']}, {row['workers']} process, {row['site']}"
-    if row.get("beside") is not None:
+    if row.get("during"):
+        during = row["during"]
+        others = ", ".join(f"{kind.replace('_', ' ')} {count}" for kind, count in during["other_max"].items() if count)
+        text += (f"; while it ran: {during['cpus_mean']:.1f} CPUs busy on average (at most {during['cpus_max']:.1f}), up to {during['evaluators_max']} "
+                 f"evaluator rows at once" + (f", other work of ours at most: {others}" if others else "")
+                 + f", the CPU quota held the notebook back for {during['throttled_s']:,.0f} s in all")
+    elif row.get("beside") is not None:
         text += f"; {len(row['beside'])} other evaluator rows running beside it" if row["beside"] else "; no other evaluator row beside it"
     if row.get("jobs_beside"):
         text += "; server jobs started in that time: " + ", ".join(row["jobs_beside"])
@@ -175,7 +198,8 @@ def test_tables(measured):
             if row is None:
                 lines.append([decoder.label, decoder.whose] + [NOT_MEASURED] * 7)
             else:
-                times = " / ".join(ms(row[name]) for name in ("mean_ms", "median_ms", "p99_ms")) if row["mean_ms"] is not None else NOT_MEASURED
+                times = (NOT_MEASURED if row["mean_ms"] is None else f"{ms(row['mean_ms'])} / not timed per pair" if row["median_ms"] is None
+                         else " / ".join(ms(row[name]) for name in ("mean_ms", "median_ms", "p99_ms")))
                 lines.append([decoder.label + row["label_note"], decoder.whose, f"{row['failures_X']}, {row['failures_Z']}",
                               f"{row['failures_pair']} of {row['shots']:,}", rate_text(row["rate"], row["error"]),
                               interval_text(*row["interval"]), times, paired_text(row, key), where_text(row)])
@@ -231,6 +255,117 @@ def test_tables(measured):
                   + "\n\nEach cell: logical error rate per cycle ± the kit's error · failed pairs of 10,000 · mean time per pair. "
                     "Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.")
     return texts, sweep
+
+
+def pair_text(paired):
+    return f"{paired['both']} / {paired['row_only']} / {paired['reference_only']} (p = {stats.p_text(paired['p'])})"
+
+
+def ladder_tables(combined):
+    """Whose gain is whose, and the ablation of the learned tie-break: both from the offline combination on the test files."""
+    from scipy.stats import binomtest
+    lines, ablation, records = [], [], []
+    pooled = {"R": 0, "aw": 0, "a": 0, "floor": 0, "only_network": 0, "only_weight": 0, "levels": []}
+    for p in P_VALUES:
+        rows = dict(combined[p]["rows"]) if combined.get(p) else {}
+        if not all(key in rows for key in ("R", "P1", "aw")):
+            lines.append([p, "every rung"] + [NOT_MEASURED] * 6)
+            ablation.append([p, "pairs"] + [NOT_MEASURED] * 5)
+            for name in ("aw_pairs", "a_pairs", "only_network", "only_weight", "p"):
+                fact(f"abl{p[-1]}_{name}", None, "tables/test_ablation.md")
+            continue
+        if rows["aw"]["later"] and "oracle_R_P1_P2" in rows:   # a perfect tie-break: P1 where the two runs agree, else right if any of the three is
+            failed = {basis: np.where(rows["aw"]["later"][basis].astype(bool), rows["oracle_R_P1_P2"]["failed"][basis], rows["P1"]["failed"][basis]) for basis in "XZ"}
+            pair = failed["X"] | failed["Z"]
+            rate, error = stats.per_cycle_rate(int(pair.sum()), len(pair))
+            rows["floor"] = rows["aw"] | {"failed": failed, "failed_pair": pair, "failures_X": int(failed["X"].sum()), "failures_Z": int(failed["Z"].sum()),
+                                          "failures_pair": int(pair.sum()), "rate": rate, "error": error}
+        previous = None
+        for key, label, whose in LADDER:
+            row = rows.get(key)
+            if row is None:
+                lines.append([p, label, whose] + [NOT_MEASURED] * 5)
+                continue
+            lines.append([p, label, whose, f"{row['failures_X']}, {row['failures_Z']}", f"{row['failures_pair']} of {row['shots']:,}",
+                          rate_text(row["rate"], row["error"]),
+                          "the first rung" if previous is None else pair_text(stats.paired(previous["failed_pair"], row["failed_pair"])),
+                          "the reference" if key == "R" else pair_text(stats.paired(rows["R"]["failed_pair"], row["failed_pair"]))])
+            records.append({"p": p, "rung": key, "label": label, "built_by": whose, "failures_X": row["failures_X"], "failures_Z": row["failures_Z"],
+                            "failures_pair": row["failures_pair"], "pairs": row["shots"], "rate_per_cycle": row["rate"], "kit_error": row["error"]})
+            fact(f"lad{p[-1]}_{key}_pairs", row["failures_pair"], "tables/test_ladder.md")
+            fact(f"lad{p[-1]}_{key}_rate", stats.sci(row["rate"]), "tables/test_ladder.md")
+            previous = row
+        for key, label in (("T", "TCBP-JOBS (NVIDIA, GPU), for reference"),):
+            if key in rows:
+                row = rows[key]
+                lines.append([p, label, "NVIDIA; run by teammates", f"{row['failures_X']}, {row['failures_Z']}", f"{row['failures_pair']} of {row['shots']:,}",
+                              rate_text(row["rate"], row["error"]), "not a rung", pair_text(stats.paired(rows["R"]["failed_pair"], row["failed_pair"]))])
+                fact(f"lad{p[-1]}_{key}_pairs", row["failures_pair"], "tables/test_ladder.md")
+        if "a" in rows:
+            hard = {basis: int(rows["aw"]["later"][basis].sum()) for basis in "XZ"} if rows["aw"]["later"] else {"X": None, "Z": None}
+            for scope, mask in (("X memory, shots", lambda row: row["failed"]["X"]), ("Z memory, shots", lambda row: row["failed"]["Z"]),
+                                ("pairs (the kit's score)", lambda row: row["failed_pair"])):
+                paired = stats.paired(mask(rows["aw"]), mask(rows["a"]))
+                count = hard.get(scope[0]) if scope[0] in "XZ" and scope.startswith(("X", "Z")) else None
+                ablation.append([p, scope, "" if count is None else count, int(mask(rows["aw"]).sum()), int(mask(rows["a"]).sum()),
+                                 f"{paired['row_only']} / {paired['reference_only']}", stats.p_text(paired["p"])])
+            pooled["levels"].append(p)
+            pooled["only_network"] += paired["row_only"]
+            pooled["only_weight"] += paired["reference_only"]
+            for key in ("R", "aw", "a"):
+                pooled[key] += rows[key]["failures_pair"]
+            pooled["floor"] += rows["floor"]["failures_pair"] if "floor" in rows else 0
+            for name, value in (("aw_pairs", rows["aw"]["failures_pair"]), ("a_pairs", rows["a"]["failures_pair"]),
+                                ("only_network", paired["row_only"]), ("only_weight", paired["reference_only"]), ("p", stats.p_text(paired["p"]))):
+                fact(f"abl{p[-1]}_{name}", value, "tables/test_ablation.md")
+        else:
+            ablation.append([p, "pairs (the kit's score)"] + [NOT_MEASURED] * 5)
+            for name in ("aw_pairs", "a_pairs", "only_network", "only_weight", "p"):
+                fact(f"abl{p[-1]}_{name}", None, "tables/test_ablation.md")
+    source = "tables/test_ablation.md"
+    if pooled["levels"]:
+        discordant = pooled["only_network"] + pooled["only_weight"]
+        p_value = float(binomtest(pooled["only_network"], discordant).pvalue) if discordant else 1.0
+        levels = ", ".join(pooled["levels"])
+        counts = (f"{pooled['aw']} failed pairs with the lowest-weight tie-break, {pooled['a']} with the network; only the network rule fails "
+                  f"{pooled['only_network']} pairs, only the weight rule {pooled['only_weight']}, exact p = {stats.p_text(p_value)}")
+        ablation.append([levels + " together", "pairs (the kit's score)", "", pooled["aw"], pooled["a"],
+                         f"{pooled['only_network']} / {pooled['only_weight']}", stats.p_text(p_value)])
+        further = 1 - pooled["a"] / pooled["aw"] if pooled["aw"] else 0.0
+        gap = (pooled["aw"] - pooled["a"]) / (pooled["aw"] - pooled["floor"]) if pooled["aw"] > pooled["floor"] else 0.0
+        if pooled["a"] < pooled["aw"] and p_value < 0.05:
+            framing = (f"A classical hierarchy gets most of the improvement over relay-BP ({pooled['R']} to {pooled['aw']} failed pairs over p = {levels}); "
+                       f"the structure-aware network adds a further {further:.1%} ({counts}), closing {gap:.0%} of the gap to a perfect tie-breaker "
+                       f"({pooled['floor']} failed pairs).")
+        elif pooled["a"] < pooled["aw"]:
+            framing = (f"The hierarchy is the result ({pooled['R']} failed pairs for relay-BP, {pooled['aw']} for the hierarchy, over p = {levels}); "
+                       f"the network is a promising tie-breaker whose gain is not yet significant ({counts}).")
+        else:
+            framing = (f"The hierarchy is the result ({pooled['R']} failed pairs for relay-BP, {pooled['aw']} for the hierarchy, over p = {levels}); "
+                       f"the neural tie-break did not lower its failures on the test shots ({counts}).")
+        for name, value in (("levels", levels), ("R", pooled["R"]), ("aw", pooled["aw"]), ("a", pooled["a"]), ("floor", pooled["floor"]),
+                            ("only_network", pooled["only_network"]), ("only_weight", pooled["only_weight"]), ("p", stats.p_text(p_value)),
+                            ("further", f"{further:.1%}"), ("gap_closed", f"{gap:.0%}")):
+            fact(f"abl_pooled_{name}", value, source)
+        fact("framing", framing, source)
+    else:
+        for name in ("levels", "R", "aw", "a", "floor", "only_network", "only_weight", "p", "further", "gap_closed"):
+            fact(f"abl_pooled_{name}", None, source)
+        fact("framing", None, source)
+    ladder = write("test_ladder",
+                   "**Whose gain is whose, on the test shots.** Every rung is scored on the same per-shot answers (relay-BP and PriorTilt under two seeds "
+                   "on every shot, a fresh decoder per 500 shots), so each step is a paired comparison with the rung before it. These rows are combined "
+                   "offline from per-shot files; they are not the timed rows of the table above, and relay-BP's count here differs from its timed row by "
+                   "a few pairs because its random draws differ.\n\n"
+                   + markdown(["p", "Rung", "Whose work", "Failures X, Z", "Failed pairs", "Rate per cycle ± error",
+                               "Against the rung before: both fail / only this / only the one before (exact p)",
+                               "Against relay-BP: both fail / only this / only relay-BP (exact p)"], lines), records)
+    ablated = write("test_ablation",
+                    "**The ablation: what the learned part adds.** The same hierarchy on the same candidates, with the tie-break by lowest weight "
+                    "(nothing learned by us) and by the neural network. Only the shots where the two fast decodes disagree can differ.\n\n"
+                    + markdown(["p", "Counted over", "Shots where the two fast decodes disagree", "Failures, lowest-weight tie-break", "Failures, neural tie-break",
+                                "Only the network rule fails / only the weight rule fails", "Exact p"], ablation))
+    return ladder, ablated
 
 
 def comparisons_table(measured):
@@ -335,7 +470,7 @@ def exploration_table():
     if any(value is None for value in shots.values()):
         return write("exploration_p0.004", NOT_MEASURED), {}
     facts, lines, records = {}, [], []
-    tie_break_note = ""
+    tie_break_note, tcbp = "", {}
     rule = {basis: loaders.weight_rule(shots[basis]) for basis in "XZ"}
     network = {int(re.search(r"step(\d+)", file.name).group(1)): loaders.network_rule_table(file)
                for file in sorted(folder.glob("results_network_select_step*.txt"), key=lambda file: int(re.search(r"step(\d+)", file.name).group(1)))}
@@ -360,6 +495,11 @@ def exploration_table():
         facts[f"P1_{basis}"] = add(scope, "PriorTilt, seed A", s["failed_P1"].astype(bool), reference, s["seconds_P1"], "IonQ")
         facts[f"P2_{basis}"] = add(scope, "PriorTilt, seed B", s["failed_P2"].astype(bool), reference, s["seconds_P2"], "IonQ")
         facts[f"W_{basis}"] = add(scope, "our hierarchy, lowest-weight tie-break", failed, reference, seconds, "ours")
+        tcbp[basis] = loaders.tcbp_files(DATA / "exploration" / "tcbp_p0.004", [f"validation_{basis}.tcbp.npz", f"train_{basis}.tcbp.npz"])
+        if tcbp[basis] and tcbp[basis]["data_sha256"] != s["data_sha256"]:
+            raise Mismatch("exploration/tcbp_p0.004: TCBP-JOBS decoded other shot files than the candidates")
+        if tcbp[basis]:
+            facts[f"T_{basis}"] = add(scope, "TCBP-JOBS (NVIDIA, GPU; answers only, no time)", tcbp[basis]["failed"], reference, None, "NVIDIA; run by us")
         facts[f"disagree_{basis}"] = int((~agreed).sum())
         if basis == "X":
             recomputed = {}
@@ -397,22 +537,32 @@ def exploration_table():
     # pairs: shot k of X with shot k of Z, in the same file order (validation, then train)
     pair = {name: shots["X"][f"failed_{name}"].astype(bool) | shots["Z"][f"failed_{name}"].astype(bool) for name in ("R", "P1", "P2")}
     pair["W"] = rule["X"][0] | rule["Z"][0]
+    rungs = [("R", "relay-BP (kit baseline)", "the kit"), ("P1", "PriorTilt, seed A", "IonQ"), ("P2", "PriorTilt, seed B", "IonQ"),
+             ("W", "our hierarchy, lowest-weight tie-break", "ours")]
+    if all(tcbp.get(basis) for basis in "XZ"):
+        pair["T"] = tcbp["X"]["failed"] | tcbp["Z"]["failed"]
+        rungs.append(("T", "TCBP-JOBS (NVIDIA, GPU)", "NVIDIA; run by us"))
+        versus = stats.paired(pair["T"], pair["W"])
+        tcbp_note = (f"Our hierarchy (lowest-weight tie-break) against TCBP-JOBS on the same 25,000 pairs: both fail {versus['both']}, only ours fails "
+                     f"{versus['row_only']}, only TCBP-JOBS fails {versus['reference_only']} (exact p = {stats.p_text(versus['p'])}). "
+                     "**TCBP-JOBS fails fewer pairs than our hierarchy here.**" if int(pair["T"].sum()) < int(pair["W"].sum()) else "")
+    else:
+        tcbp_note = ""
     pair_lines = []
-    for name, label, whose in (("R", "relay-BP (kit baseline)", "the kit"), ("P1", "PriorTilt, seed A", "IonQ"), ("P2", "PriorTilt, seed B", "IonQ"),
-                               ("W", "our hierarchy, lowest-weight tie-break", "ours")):
+    for name, label, whose in rungs:
         count, total = int(pair[name].sum()), len(pair[name])
         rate, error = stats.per_cycle_rate(count, total)
         paired = stats.paired(pair["R"], pair[name]) if name != "R" else None
-        seconds = ((shots["X"][f"seconds_{name}"] + shots["Z"][f"seconds_{name}"]) if name != "W" else rule["X"][2] + rule["Z"][2])
+        seconds = (None if name == "T" else (shots["X"][f"seconds_{name}"] + shots["Z"][f"seconds_{name}"]) if name != "W" else rule["X"][2] + rule["Z"][2])
         pair_lines.append([label, whose, f"{count} of {total:,}", rate_text(rate, error), interval_text(*stats.per_cycle_interval(count, total)),
                            "the reference" if paired is None else f"{paired['both']} / {paired['row_only']} / {paired['reference_only']} (p = {stats.p_text(paired['p'])})",
-                           ms(float(seconds.mean()) * 1e3)])
+                           "no time: batch mode on a shared GPU" if seconds is None else ms(float(seconds.mean()) * 1e3)])
         facts[f"pairs_{name}"] = count
         facts[f"rate_{name}"] = rate
         records.append({"shots": "25,000 pairs", "row": label, "built_by": whose, "failures": count, "of": total, "rate_per_cycle": rate, "kit_error": error,
                         "both_fail": paired and paired["both"], "only_this_row": paired and paired["row_only"],
                         "only_relay_bp": paired and paired["reference_only"], "exact_p": paired and paired["p"],
-                        "mean_ms_per_pair": float(seconds.mean()) * 1e3})
+                        "mean_ms_per_pair": None if seconds is None else float(seconds.mean()) * 1e3})
     # where the failures are: the shots on which the two PriorTilt runs agree, and those on which they differ
     agreed = np.concatenate([rule[basis][1] for basis in "XZ"])
     first = np.concatenate([shots[basis]["failed_P1"].astype(bool) for basis in "XZ"])
@@ -430,9 +580,10 @@ def exploration_table():
     fact("expl_left", int(left.sum()), source)
     fact("expl_left_agree", int((left & agreed).sum()), source)
     fact("expl_pairs", f"{len(pair['R']):,}", source)
-    for name in ("R", "P1", "P2", "W"):
-        fact(f"expl_pairs_{name}", facts[f"pairs_{name}"], source)
-        fact(f"expl_rate_{name}", stats.sci(facts[f"rate_{name}"]), source)
+    for name in ("R", "P1", "P2", "W", "T"):
+        fact(f"expl_pairs_{name}", facts.get(f"pairs_{name}"), source)
+        fact(f"expl_rate_{name}", f"pairs_{name}" in facts and stats.sci(facts[f"rate_{name}"]) or None, source)
+    fact("expl_X_T", facts.get("T_X"), source)
     versus = stats.paired(pair["R"], pair["W"])
     fact("expl_pairs_W_only_relay", versus["reference_only"], source)
     fact("expl_pairs_W_only_ours", versus["row_only"], source)
@@ -455,6 +606,7 @@ def exploration_table():
             + "\n\nThe same decodes as pairs (shot k of X with shot k of Z), the kit's score; times per pair:\n\n"
             + markdown(["Decoder", "Built by", "Failed pairs", "Rate per cycle ± error", "95% interval",
                         "Against relay-BP: both fail / only this row / only relay-BP (exact p)", "Mean time per pair, ms"], pair_lines)
+            + ("\n\n" + tcbp_note if tcbp_note else "")
             + "\n\nWhere the failures are: the shots on which the two PriorTilt runs predict the same 12 bits (\"agree\"), and the others:\n\n"
             + markdown(["Set", "Shots", "The two runs agree", "They disagree", "Share in \"disagree\""], split_lines)
             + "\n\nSources: `report/data/exploration/priortilt/selector_*.npz` (per shot: relay-BP and PriorTilt under two seeds), and for the "
@@ -718,13 +870,14 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.parse_args(argv)
     try:
-        measured, extra = load_test_rows()
+        measured, extra, combined = load_test_rows()
         per_p, sweep = test_tables(measured)
+        ladder, ablated = ladder_tables(combined)
         earlier, cross_checks = earlier_table(measured)
         exploration, _ = exploration_table()
         tables = {f"test_p{p}": per_p[p] for p in P_VALUES} | {
             "test_sweep": sweep, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
-            "test_comparisons": comparisons_table(measured),
+            "test_comparisons": comparisons_table(measured), "test_ladder": ladder, "test_ablation": ablated,
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
             "resources": resources_table(measured)}
         tables["checks"] = checks_text(measured, extra, cross_checks)

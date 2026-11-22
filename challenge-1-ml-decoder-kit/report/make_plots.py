@@ -439,7 +439,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.parse_args(argv)
     try:
-        measured, _ = load_test_rows()
+        measured, _, _ = load_test_rows()
         names = [ler_vs_p(measured), time_vs_p(measured), ler_vs_time(measured), loss(), learning_curves(), where_failures()]
     except Mismatch as problem:
         print(f"STOPPED: {problem}", file=sys.stderr)

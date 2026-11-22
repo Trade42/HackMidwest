@@ -2,6 +2,31 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 
 | Name | Value | From |
 |---|---|---|
+| `abl3_a_pairs` | not measured | `tables/test_ablation.md` |
+| `abl3_aw_pairs` | not measured | `tables/test_ablation.md` |
+| `abl3_only_network` | not measured | `tables/test_ablation.md` |
+| `abl3_only_weight` | not measured | `tables/test_ablation.md` |
+| `abl3_p` | not measured | `tables/test_ablation.md` |
+| `abl4_a_pairs` | not measured | `tables/test_ablation.md` |
+| `abl4_aw_pairs` | not measured | `tables/test_ablation.md` |
+| `abl4_only_network` | not measured | `tables/test_ablation.md` |
+| `abl4_only_weight` | not measured | `tables/test_ablation.md` |
+| `abl4_p` | not measured | `tables/test_ablation.md` |
+| `abl5_a_pairs` | not measured | `tables/test_ablation.md` |
+| `abl5_aw_pairs` | not measured | `tables/test_ablation.md` |
+| `abl5_only_network` | not measured | `tables/test_ablation.md` |
+| `abl5_only_weight` | not measured | `tables/test_ablation.md` |
+| `abl5_p` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_R` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_a` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_aw` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_floor` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_further` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_gap_closed` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_levels` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_only_network` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_only_weight` | not measured | `tables/test_ablation.md` |
+| `abl_pooled_p` | not measured | `tables/test_ablation.md` |
 | `c3_ensemble_vs_hierarchy_both` | not measured | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_hierarchy_only_first` | not measured | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_hierarchy_only_second` | not measured | `tables/test_comparisons.md` |
@@ -135,6 +160,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_X_P1` | 102 | `tables/exploration_p0.004.md` |
 | `expl_X_P2` | 82 | `tables/exploration_p0.004.md` |
 | `expl_X_R` | 122 | `tables/exploration_p0.004.md` |
+| `expl_X_T` | 53 | `tables/exploration_p0.004.md` |
 | `expl_X_W` | 77 | `tables/exploration_p0.004.md` |
 | `expl_Z_P1` | 106 | `tables/exploration_p0.004.md` |
 | `expl_Z_P2` | 107 | `tables/exploration_p0.004.md` |
@@ -150,6 +176,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_pairs_P1` | 207 | `tables/exploration_p0.004.md` |
 | `expl_pairs_P2` | 188 | `tables/exploration_p0.004.md` |
 | `expl_pairs_R` | 245 | `tables/exploration_p0.004.md` |
+| `expl_pairs_T` | 113 | `tables/exploration_p0.004.md` |
 | `expl_pairs_W` | 162 | `tables/exploration_p0.004.md` |
 | `expl_pairs_W_fewer` | 33.9% | `tables/exploration_p0.004.md` |
 | `expl_pairs_W_only_ours` | 28 | `tables/exploration_p0.004.md` |
@@ -158,8 +185,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_P1` | 6.93e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_P2` | 6.29e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_R` | 8.20e-04 | `tables/exploration_p0.004.md` |
+| `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
+| `framing` | not measured | `tables/test_ablation.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
 | `loss_aware_ratio` | 11.5 | `tables/loss.md` |
 | `loss_aware_share` | 4.4% | `tables/loss.md` |
@@ -173,10 +202,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_X_wrong3` | 3.2% | `tables/networks.md` |
 | `net_X_wrong4` | 11.3% | `tables/networks.md` |
 | `net_X_wrong5` | 33.3% | `tables/networks.md` |
-| `net_Z_step` | 28,000 | `tables/networks.md` |
-| `net_Z_wrong3` | 2.7% | `tables/networks.md` |
-| `net_Z_wrong4` | 11.8% | `tables/networks.md` |
-| `net_Z_wrong5` | 34.3% | `tables/networks.md` |
+| `net_Z_step` | 32,000 | `tables/networks.md` |
+| `net_Z_wrong3` | 1.9% | `tables/networks.md` |
+| `net_Z_wrong4` | 10.0% | `tables/networks.md` |
+| `net_Z_wrong5` | 31.3% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
 | `t3_bposd_both` | not measured | `tables/test_p0.003.md` |
 | `t3_bposd_error` | not measured | `tables/test_p0.003.md` |

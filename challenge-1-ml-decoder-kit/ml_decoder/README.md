@@ -61,9 +61,12 @@ python ml_decoder/train_logical_cnn.py --p-train 0.0001 --p-report 0.0001 --widt
 # threshold sweep on kit shots. Pick the threshold on one seed, report on another
 python ml_decoder/ml_first.py --basis X --model model_X.pt --p 0.004 --shots 5000 --seed 1
 
-# paired evaluation with the repository's evaluator, on test shots that tuned nothing
-python make_dataset.py --basis X --p 0.004 --shots 10000 --seed 301 --out data/p0.004/test_X.npz
-python make_dataset.py --basis Z --p 0.004 --shots 10000 --seed 302 --out data/p0.004/test_Z.npz
+# paired evaluation with the repository's evaluator, on test shots that tuned nothing.
+# data/p0.004/test_{X,Z}.npz are the team's committed test files: use them as they are. Never write
+# make_dataset.py output over them: a Stim seed gives other shots on another machine, and the
+# paired comparisons need the committed files. To sample your own shots, write them elsewhere:
+#   python make_dataset.py --basis X --p 0.004 --shots 10000 --seed 301 --out runs/my_shots/test_X.npz
+#   python make_dataset.py --basis Z --p 0.004 --shots 10000 --seed 302 --out runs/my_shots/test_Z.npz
 python -m evaluation.evaluate --test-x data/p0.004/test_X.npz --test-z data/p0.004/test_Z.npz \
     --decoder ml_decoder.plugin:make_decoder --plugin-options ml_options.json --out results/ml_first_p0.004
 # ml_options.json: {"models": {"X": "model_X.pt", "Z": "model_Z.pt"}, "threshold": 6.0}

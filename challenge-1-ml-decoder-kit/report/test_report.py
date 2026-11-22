@@ -91,8 +91,28 @@ def stand_in(folder):
             (target / "summary.json").write_text(json.dumps(metadata))
             artifact = metadata["decoders"][0]["summary"]["artifacts"]
             shutil.copy(KIT / source / artifact, target / artifact)
-            log += [f"2026-11-22T08:00:00Z START p={p} {row} with 0 evaluator process(es) already running", f"2026-11-22T09:00:00Z END p={p} {row} exit 0: x"]
+            state = "[load 6.50, evaluators 5, joint 0, loss.job 0, candidates 0, throttled so far %s s]"
+            log += [f"2026-11-22T08:00:00Z START p={p} {row} " + state % "100.0", f"2026-11-22T09:00:00Z END p={p} {row} exit 0: x " + state % "160.5"]
     (data / "test" / "clean_rows.out").write_text("\n".join(log) + "\n")
+    (data / "test" / "cpu_monitor.out").write_text(
+        "# time_utc cpus thr_s thr_n | evaluator joint loss_job candidates tcbp_member evaluate_stim python_all | load_1m\n"
+        + "".join(f"2026-11-22T08:{minute:02d}:30Z 6.0 {100 + minute} 5 | 6 0 0 1 0 0 9 | 6.5\n" for minute in range(0, 60, 10)))
+    # the offline combination at p = 0.003: made-up rules on real per-shot outcomes, only to exercise the tables
+    relay, other = (np.load(KIT / folder / name) for folder, name in (
+        ("results/icrn/eval_p0.003", "02_relay-bp_shots.npz"), ("results/icrn/router_eval_p0.003_portable", "01_evaluation_router_make_tiered_decoder_shots.npz")))
+    target = data / "test" / "ensemble_p0.003"
+    target.mkdir()
+    for basis in "XZ":
+        r, first = relay[f"failed_{basis}"], other[f"failed_{basis}"]
+        later = (r != first) | (np.arange(len(r)) < 30)
+        weight = np.where(later, r, first)
+        network = weight.copy()
+        network[np.flatnonzero(weight)[:1]] = False
+        arrays = {"failed_R": r, "failed_P1": first, "failed_P2": first, "failed_aw": weight, "later_aw": later, "failed_a": network, "later_a": later,
+                  "failed_oracle_R_P1_P2": r & first}
+        np.savez(target / f"test_{basis}.npz", data_sha256=TEST_SHA256["0.003"][basis], basis=basis, p=0.003, rule="a", **arrays)
+        rows = [{"key": key.removeprefix("failed_"), "failures": int(value.sum()), "ms_per_shot": 40.0} for key, value in arrays.items() if key.startswith("failed_")]
+        (target / f"test_{basis}.json").write_text(json.dumps({"rows": rows, "marked_rule": "a"}))
     return data
 
 
@@ -109,6 +129,12 @@ def test_scripts_on_a_stand_in(tmp_path):
     assert "| relay-BP (kit baseline) | the kit | 2, 3 | 5 of 10,000 | 4.17e-05 ± 1.9e-05 |" in table
     assert "4 / 2 / 1 (p = 1.00)" in table                       # the router against relay-BP, as in the team's comparison.json
     assert "our hierarchy, neural tie-break | ours | not measured" in table
+    assert "PriorTilt, one run (from per-shot files, not a timed evaluator row)" in table      # the offline combination stands in
+    assert "6.0 CPUs busy on average" in table and "held the notebook back for 50 s" in table
+    ladder = (tmp_path / "tables" / "test_ladder.md").read_text()
+    assert "ORACLE: a perfect tie-break" in ladder and "| 0.004 | every rung | not measured" in ladder
+    facts = (tmp_path / "tables" / "facts.md").read_text()
+    assert "`framing` | The hierarchy is the result" in facts
     assert "not measured" in (tmp_path / "tables" / "test_p0.005.md").read_text()
     assert "the same outcome on every one of the 10,000 pairs" in (tmp_path / "tables" / "checks.md").read_text()
     done = run("report.make_plots", data, tmp_path)

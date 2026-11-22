@@ -104,8 +104,24 @@ the team's server; "where it ran" names the device and what ran beside it.
 
 ![Accuracy against time](figures/ler_vs_time.png)
 
-**What the numbers say.** *Pending: this paragraph is written when the rows have landed. It will state, per noise
-level, the paired count of our decoder against relay-BP, and where TCBP-JOBS stands against both.*
+**What the numbers say.** <!--f:framing-->not measured<!--/f-->
+
+*Pending: one paragraph per noise level when the timed rows have landed (our decoder against relay-BP, and where
+TCBP-JOBS stands against both).*
+
+### Whose gain is whose
+
+<!-- BEGIN table:test_ladder -->
+<!-- END table:test_ladder -->
+
+### The ablation: what the learned part adds
+
+<!-- BEGIN table:test_ablation -->
+<!-- END table:test_ablation -->
+
+The sentence under "What the numbers say" is chosen by this table: it credits the network with a gain only if the
+pooled exact test on the pairs that only one of the two rules fails is below 0.05. The network is never credited
+with the gain of the hierarchy itself, which needs no learning of ours.
 
 ### The full rows, per noise level
 
@@ -126,8 +142,10 @@ level, the paired count of our decoder against relay-BP, and where TCBP-JOBS sta
 ### TCBP-JOBS, the GPU reference
 
 TCBP-JOBS is NVIDIA's GPU decoder, which the teammates ran as an extra reference. **On its own sampled shots it is
-more accurate than relay-BP at p = 0.004 and 0.005**, and on the exploration shots our three-candidate hierarchy sits
-between the two (next table and the one after). Its row on the saved test shots is in the tables above when measured.
+more accurate than relay-BP at p = 0.004 and 0.005**. We also ran it on the exploration shots at p = 0.004, the same
+shots as our decoder: it fails <!--f:expl_pairs_T-->113<!--/f--> of <!--f:expl_pairs-->25,000<!--/f--> pairs there, our hierarchy with the lowest-weight
+tie-break <!--f:expl_pairs_W-->162<!--/f-->, relay-BP <!--f:expl_pairs_R-->245<!--/f--> (the exploration table below has the paired counts). **TCBP-JOBS is
+ahead of our three-candidate hierarchy.** Its row on the saved test shots is in the tables above when measured.
 
 <!-- BEGIN table:tcbp_own_shots -->
 <!-- END table:tcbp_own_shots -->

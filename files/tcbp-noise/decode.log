@@ -9,3 +9,6 @@ X_f0.8_seed4100_kitformat_p0.0326371.npz: 2000 shots, p=0.0326371 (the network's
   block 400-499 done, 182 s; failures so far m 6, g 238, h 54 of 500; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   block 500-599 done, 206 s; failures so far m 6, g 285, h 61 of 600; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   block 600-699 done, 230 s; failures so far m 9, g 327, h 68 of 700; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 700-799 done, 254 s; failures so far m 11, g 368, h 74 of 800; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 800-899 done, 278 s; failures so far m 12, g 419, h 87 of 900; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 900-999 done, 303 s; failures so far m 13, g 468, h 96 of 1000; GPU memory [Insufficient Permissions], [Insufficient Permissions]

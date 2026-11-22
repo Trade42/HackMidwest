@@ -1205,6 +1205,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `tcbp_fit3_s` | 54.5 and 54.8 | `data/tcbp_own_shots/tcbp-jobs_p0.003_shots10000_seed1_20261122_005215_437826+0000.log` |
 | `tcbp_fit4_s` | 120.2 and 121.6 | `data/tcbp_own_shots/tcbp-jobs_p0.004_shots10000_seed1_20261122_043426_147901+0000.log` |
 | `tcbp_fit5_s` | 119.3 and 121.2 | `data/tcbp_own_shots/tcbp-jobs_p0.005_shots10000_seed1_20261122_050203_539870+0000.log` |
+| `tcbp_fit_caveat` | A caveat on every comparison with TCBP-JOBS: it fits its model when it starts, and the fit varies from run to run. On the same 5,000 validation X shots at p = 0.005 (exploration shots), three fits with the kit's priors fail 91, 96 and 100 shots (batch and per-shot decoding give the same answers, so the spread is the fit's), about ±5% around their mean. A comparison with TCBP-JOBS's stored test file carries that spread; a fresh arm in the same run is the like-for-like control. | `data/exploration/tcbp_fits/validation_X_p0.005_fits.npz` |
 | `tcbp_own3_rate` | 4.17e-05 | `tables/tcbp_own_shots.md` |
 | `tcbp_own3_xz` | 2, 3 | `tables/tcbp_own_shots.md` |
 | `tcbp_own4_rate` | 3.42e-04 | `tables/tcbp_own_shots.md` |

@@ -703,6 +703,22 @@
   "path": "priortilt/results_p005main/selector_validation_X.npz",
   "sha256": "9df8bbe94276ffa24212bdf5acbcc11d638c865d0fc4a47b1d1adb6056323ad4"
  },
+ "exploration/tcbp_fits/validation_X_p0.005_fits.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 2065,
+  "commit": "38f8ff959d6794aa17a786badf5820094231b7ad",
+  "copied_utc": "2026-11-22 15:45",
+  "file": "exploration/tcbp_fits/validation_X_p0.005_fits.npz",
+  "from": "derived by `report/sync_data.py` from branch `server-logs` at commit `38f8ff959d67`: `files/tcbp_p0.005/validation_X.tcbp.npz` (sha256 `876c47c61ac6c171\u2026`, its `failed_T`); `files/predecoder-tcbp/validation_X_p0.005_fresh_per_shot.npz` (sha256 `22122c2bf2dd5e63\u2026`, its `failed_fresh`); `files/predecoder-tcbp/validation_X_p0.005_per_shot.npz` (sha256 `ffd738d2c97b2dc1\u2026`, its `failed_fresh`)",
+  "grows": false,
+  "path": "files/tcbp_p0.005/validation_X.tcbp.npz; files/predecoder-tcbp/validation_X_p0.005_fresh_per_shot.npz; files/predecoder-tcbp/validation_X_p0.005_per_shot.npz",
+  "sha256": "29c39aa60a73fcdd3d9ce196c824c70fa994ebbd19b7c1f68a011799d81843f5",
+  "source_sha256": {
+   "job1": "22122c2bf2dd5e630d35913079304f1c04b59f9017342fc20dbd0863d83fbd95",
+   "job3": "ffd738d2c97b2dc186baed11d1298d5881f2db987d18e4773072942855525893",
+   "stored": "876c47c61ac6c171bc03aeddb4c694b14a6488e6e23518a70278535dde5ba7f1"
+  }
+ },
  "exploration/tcbp_p0.004/train_X.tcbp.npz": {
   "branch": "origin/server-logs",
   "bytes": 249918,

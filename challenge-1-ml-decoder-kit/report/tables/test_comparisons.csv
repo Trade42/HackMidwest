@@ -1,3 +1,5 @@
 p,first,second,first_failed_pairs,second_failed_pairs,both_fail,only_first_fails,only_second_fails,exact_p
 0.003,router,relay-bp,6,5,4,2,1,1.0
+0.003,hierarchy,relay-bp,3,5,3,0,2,0.5
 0.004,router,relay-bp,87,83,51,36,32,0.716300760154337
+0.004,tcbp,relay-bp,41,83,27,14,56,4.3028401315359276e-07

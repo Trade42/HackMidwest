@@ -74,10 +74,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c3_hierarchy_vs_hierarchy_weight_only_first` | not measured | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_hierarchy_weight_only_second` | not measured | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_hierarchy_weight_p` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_relay_bp_both` | 3 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_relay_bp_only_first` | 0 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_relay_bp_only_second` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_relay_bp_p` | 0.50 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_tcbp_both` | not measured | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_tcbp_only_first` | not measured | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_tcbp_only_second` | not measured | `tables/test_comparisons.md` |
@@ -150,10 +150,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c4_router_vs_relay_bp_only_first` | 36 | `tables/test_comparisons.md` |
 | `c4_router_vs_relay_bp_only_second` | 32 | `tables/test_comparisons.md` |
 | `c4_router_vs_relay_bp_p` | 0.72 | `tables/test_comparisons.md` |
-| `c4_tcbp_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
-| `c4_tcbp_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c4_tcbp_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c4_tcbp_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
+| `c4_tcbp_vs_relay_bp_both` | 27 | `tables/test_comparisons.md` |
+| `c4_tcbp_vs_relay_bp_only_first` | 14 | `tables/test_comparisons.md` |
+| `c4_tcbp_vs_relay_bp_only_second` | 56 | `tables/test_comparisons.md` |
+| `c4_tcbp_vs_relay_bp_p` | 4e-07 | `tables/test_comparisons.md` |
 | `c5_ensemble_vs_hierarchy_both` | not measured | `tables/test_comparisons.md` |
 | `c5_ensemble_vs_hierarchy_only_first` | not measured | `tables/test_comparisons.md` |
 | `c5_ensemble_vs_hierarchy_only_second` | not measured | `tables/test_comparisons.md` |
@@ -298,7 +298,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
-| `findings` | Our decoder's rows on the test shots are not measured yet. TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000). | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
+| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row). TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000). | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
 | `framing` | not measured | `tables/test_ablation.md` |
 | `framing_slide` | pending: the ablation on the test shots has not landed. | `tables/test_ablation.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
@@ -356,7 +356,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_ensemble_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_ensemble_wall_hours` | not measured | `tables/test_p0.003.md` |
 | `t3_ensemble_xz` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_both` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_both` | 3 | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_both` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_error` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_mean_ms` | not measured | `tables/test_p0.003.md` |
@@ -370,14 +370,14 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_hierarchy_converged_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_wall_hours` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_xz` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_error` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_mean_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_median_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_only_relay` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_only_this` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_p99_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_pairs` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_error` | 1.4e-05 | `tables/test_p0.003.md` |
+| `t3_hierarchy_mean_ms` | 45.7 | `tables/test_p0.003.md` |
+| `t3_hierarchy_median_ms` | 14.2 | `tables/test_p0.003.md` |
+| `t3_hierarchy_only_relay` | 2 | `tables/test_p0.003.md` |
+| `t3_hierarchy_only_this` | 0 | `tables/test_p0.003.md` |
+| `t3_hierarchy_p99_ms` | 395 | `tables/test_p0.003.md` |
+| `t3_hierarchy_paired_p` | 0.50 | `tables/test_p0.003.md` |
+| `t3_hierarchy_pairs` | 3 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_both` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_error` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_mean_ms` | not measured | `tables/test_p0.003.md` |
@@ -391,9 +391,9 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_hierarchy_parallel_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_wall_hours` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_xz` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_rate` | 2.50e-05 | `tables/test_p0.003.md` |
 | `t3_hierarchy_time_ratio` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_wall_hours` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_wall_hours` | 0.1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_both` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_error` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_mean_ms` | not measured | `tables/test_p0.003.md` |
@@ -407,7 +407,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_hierarchy_weight_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_wall_hours` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_xz` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_xz` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_xz` | 1, 2 | `tables/test_p0.003.md` |
 | `t3_priortilt_both` | not measured | `tables/test_p0.003.md` |
 | `t3_priortilt_error` | not measured | `tables/test_p0.003.md` |
 | `t3_priortilt_mean_ms` | not measured | `tables/test_p0.003.md` |
@@ -577,19 +577,19 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t4_router_time_ratio` | 0.99 | `tables/test_p0.004.md` |
 | `t4_router_wall_hours` | 0.9 | `tables/test_p0.004.md` |
 | `t4_router_xz` | 42, 45 | `tables/test_p0.004.md` |
-| `t4_tcbp_both` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_error` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_mean_ms` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_median_ms` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_only_relay` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_only_this` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_p99_ms` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_paired_p` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_pairs` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_rate` | not measured | `tables/test_p0.004.md` |
+| `t4_tcbp_both` | 27 | `tables/test_p0.004.md` |
+| `t4_tcbp_error` | 5.3e-05 | `tables/test_p0.004.md` |
+| `t4_tcbp_mean_ms` | 7.8 | `tables/test_p0.004.md` |
+| `t4_tcbp_median_ms` | 5.8 | `tables/test_p0.004.md` |
+| `t4_tcbp_only_relay` | 56 | `tables/test_p0.004.md` |
+| `t4_tcbp_only_this` | 14 | `tables/test_p0.004.md` |
+| `t4_tcbp_p99_ms` | 35.3 | `tables/test_p0.004.md` |
+| `t4_tcbp_paired_p` | 4e-07 | `tables/test_p0.004.md` |
+| `t4_tcbp_pairs` | 41 | `tables/test_p0.004.md` |
+| `t4_tcbp_rate` | 3.42e-04 | `tables/test_p0.004.md` |
 | `t4_tcbp_time_ratio` | not measured | `tables/test_p0.004.md` |
 | `t4_tcbp_wall_hours` | not measured | `tables/test_p0.004.md` |
-| `t4_tcbp_xz` | not measured | `tables/test_p0.004.md` |
+| `t4_tcbp_xz` | 20, 21 | `tables/test_p0.004.md` |
 | `t5_bposd_both` | not measured | `tables/test_p0.005.md` |
 | `t5_bposd_error` | 4.6e-04 | `tables/test_p0.005.md` |
 | `t5_bposd_mean_ms` | 581 | `tables/test_p0.005.md` |

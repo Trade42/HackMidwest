@@ -261,8 +261,10 @@ def test_tables(measured):
             else:
                 timed = row["mean_ms"] is not None and row["median_ms"] is not None and not row.get("offline")
                 clean = row.get("time_clean", True)
-                ratio = row["mean_ms"] / base_ms if timed and clean and base_ms else None
+                same_timer = row["device"] == "CPU" or row["device"].startswith("CPU,")    # a GPU row times the decode call alone: no ratio with a CPU row
+                ratio = row["mean_ms"] / base_ms if timed and clean and base_ms and same_timer else None
                 ratio_text = ("time not clean" if timed and not clean
+                              else "not comparable: another device and timer" if timed and not same_timer
                               else "the reference" if key == REFERENCE and timed else f"{ratio:.2f}" if ratio is not None
                               else "relay-BP not measured yet" if timed and base is None
                               else "relay-BP's time not clean" if timed and base is not None and not base.get("time_clean", True)
@@ -305,7 +307,7 @@ def test_tables(measured):
             fact(f"{short}_paired_p", stats.p_text(paired["p"]) if paired else None, source)
             fact(f"{short}_wall_hours", row and row.get("wall_seconds") and f"{row['wall_seconds'] / 3600:.1f}", source)
             fact(f"{short}_time_ratio", f"{row['mean_ms'] / base_ms:.2f}" if row and base_ms and row["mean_ms"] is not None and not row.get("offline")
-                 and row.get("time_clean", True) else None, source)
+                 and row.get("time_clean", True) and row["device"] != "GPU" else None, source)
         note = (f"Test shots, p = {p}: `data/p{p}/test_X.npz` and `test_Z.npz` (10,000 shots per basis, Stim seeds 301 and 302; "
                 f"sha256 `{TEST_SHA256[p]['X'][:12]}…` and `{TEST_SHA256[p]['Z'][:12]}…`). Every measured row decoded these two files.")
         texts[p] = write(f"test_p{p}", note + "\n\n" + markdown(header, lines), [r for r in records if r["p"] == p])

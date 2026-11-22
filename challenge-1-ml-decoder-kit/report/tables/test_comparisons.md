@@ -10,7 +10,7 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | PriorTilt, one run | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured |
-| 0.003 | our hierarchy, neural tie-break | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
+| 0.003 | our hierarchy, neural tie-break | relay-BP (kit baseline) | 3 against 5 | 3 | 0 / 2 | 0.50 |
 | 0.003 | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |
 | 0.003 | our ensemble (combined offline) | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured |
 | 0.003 | our ensemble (combined offline) | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |
@@ -27,7 +27,7 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.004 | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |
 | 0.004 | our ensemble (combined offline) | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured |
 | 0.004 | our ensemble (combined offline) | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |
-| 0.004 | TCBP-JOBS (NVIDIA, GPU) | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
+| 0.004 | TCBP-JOBS (NVIDIA, GPU) | relay-BP (kit baseline) | 41 against 83 | 27 | 14 / 56 | 4e-07 |
 | 0.005 | relay-BP with a learned router | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.005 | PriorTilt, one run | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, lowest-weight tie-break | PriorTilt, one run | not measured | not measured | not measured | not measured |

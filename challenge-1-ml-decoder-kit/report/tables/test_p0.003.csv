@@ -5,7 +5,7 @@ p,decoder,label,built_by,measured,pairs,failures_X,failures_Z,failures_pair,rate
 0.003,priortilt,"PriorTilt, one run",IonQ (arXiv:2611.13373),False,,,,,,,,,,,,,,,,,,,,,,,,,,
 0.003,hierarchy-weight,"our hierarchy, lowest-weight tie-break",ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,
 0.003,hierarchy-converged,"our hierarchy, classical tie-break (lowest weight among the converged candidates)",ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,
-0.003,hierarchy,"our hierarchy, neural tie-break",ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,
+0.003,hierarchy,"our hierarchy, neural tie-break",ours,True,10000,1,2,3,2.50034381590325e-05,1.4436707608145305e-05,8.503080936694829e-06,7.350769233360754e-05,45.73510396284983,14.21343453694135,394.91960774874326,,True,0.0012578616352189817,3,0,2,0.5,CPU,1,"ICRN server (AMD EPYC-Milan, 12 CPUs by quota)",hierarchy p=0.004; hierarchy p=0.005; hierarchy-parallel p=0.003; hierarchy-parallel p=0.004; hierarchy-parallel p=0.005; relay-bp p=0.005; router p=0.005; tcbp_p0.003 p=0.003; tcbp_p0.004 p=0.004; tcbp_p0.005 p=0.005,780.69921875,test/eval_p0.003_hierarchy/summary.json,f7bc181399a0a8fd1324950c98a8419c0082d7c34940c03dfb34c9e2cefc1ff3,f5ac5b336f4155870fd8a6792ad61e21d5d76f04e05a9c09419879b6512e7f49
 0.003,hierarchy-parallel,"our hierarchy, neural tie-break, the two fast decodes side by side on two cores",ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,
 0.003,ensemble,our ensemble (combined offline),ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,
 0.003,tcbp,"TCBP-JOBS (NVIDIA, GPU)",NVIDIA; run by teammates,False,,,,,,,,,,,,,,,,,,,,,,,,,,

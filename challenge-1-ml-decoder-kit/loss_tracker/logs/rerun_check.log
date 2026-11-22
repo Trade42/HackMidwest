@@ -1,0 +1,6 @@
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 0..250 conditions ['tracker'] workers 2 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_order1_explain1.npz
+  100/250 shots, 94s, failures so far tracker=6
+  200/250 shots, 163s, failures so far tracker=9
+  250/250 shots, 193s, failures so far tracker=10
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/rerun/val_frozen_000000-000250_workers2.npz in 193s
+{"shots": true, "failed": true, "converged": true, "iterations": true, "wrong_mask": true, "shots_compared": 250}

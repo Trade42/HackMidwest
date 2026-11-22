@@ -5,7 +5,7 @@ model, the same Clifft simulation and the same map from a loss to the decoder's 
 numbers on shots that Clifft simulates. No file of the team's `data/` folder is involved.
 
 This file is written by `python -m loss_tracker.assemble` from `RESULTS.template.md`: every table below is a file
-of `results/`, copied in byte for byte. Edit the template, not this file.
+of `results/`, copied in unchanged except that its headings move down two levels. Edit the template, not this file.
 
 {{include results/summary.md shift 0}}
 
@@ -279,13 +279,16 @@ Training seed 7120, validation seed 7220, tables fitted on Z-memory shots (`tabl
 
 ## What is not tested, and limits
 
-- One point only: X memory, p = 0.004, s = 1e-3, perfect heralds, independent loss, no leakage (unless step 4
-  above lists more).
-- The emission tables are fitted at the same p and s as the test. Whether they carry over to another noise
-  strength is not measured (step 4 has what was measured for another loss rate, if anything).
-- The decoder is `loss-gates`' map with the tracker's posterior in place of the uniform guess. The map itself
-  (the Pauli envelope, the cap at 0.5) is `loss-gates`' and was not changed or re-tuned here.
-- The tracker's cost is measured in numpy on a laptop CPU, not in an implementation meant for speed.
+- **Decoding at one point only**: X memory, p = 0.004, s = 1e-3, perfect heralds, independent loss, no leakage.
+  The tracker's accuracy alone was also measured at s = 5e-4 and 2e-3 and in Z memory (step 4); decoding there
+  was not run.
+- **Not simulated**: other Pauli strengths p, correlated (pair) loss, imperfect heralds, leakage.
+- **The emission tables were fitted at the test's p.** They carry over between loss rates (step 4); whether they
+  carry over to another p is not known.
+- **The decoder's map is `loss-gates`' own**, not changed or re-tuned here: the Pauli envelope, the cap at 0.5,
+  and relay-BP at the kit's settings.
+- **The share of the oracle's gain is known only to about ±0.2** with 4,000 shots (0.58, 0.38–0.78 on the test).
+- **The cost** is measured in numpy on one thread of a laptop-class CPU, not in an implementation built for speed.
 
 ## Disclosures
 

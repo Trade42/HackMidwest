@@ -1,0 +1,87 @@
+{"file": "/home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/train_X_p0.004_s5e-4_seed7160.npz.tmp.npz", "sha256": "7a9bba703cd1ff7a1f397fc0164e13fad61d590a0ebd38499ebedf9ebc57b921", "basis": "X", "p": 0.004, "s": 0.0005, "shots": 20000, "seed": 7160, "chunk": 2000, "probes": true, "clifft": "0.13.0", "sample_seconds": 50.1, "threads": 4, "shots_per_second": 399.5, "lost_data_atoms_per_shot": 5.104, "shots_with_no_lost_data_atom": 126, "check_heralds_per_shot": 5.196, "detector_weight_per_shot": 309.09}
+{"file": "/home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s5e-4_seed7260.npz.tmp.npz", "sha256": "63d06b61cdc3ec9bd37dab3e4d6b405dd3fe9a5f446cc345c8fefa8674ae35e7", "basis": "X", "p": 0.004, "s": 0.0005, "shots": 4000, "seed": 7260, "chunk": 2000, "probes": true, "clifft": "0.13.0", "sample_seconds": 10.2, "threads": 4, "shots_per_second": 390.9, "lost_data_atoms_per_shot": 5.04, "shots_with_no_lost_data_atom": 29, "check_heralds_per_shot": 5.245, "detector_weight_per_shot": 307.93}
+7a9bba703cd1ff7a1f397fc0164e13fad61d590a0ebd38499ebedf9ebc57b921  /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/train_X_p0.004_s5e-4_seed7160.npz
+63d06b61cdc3ec9bd37dab3e4d6b405dd3fe9a5f446cc345c8fefa8674ae35e7  /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s5e-4_seed7260.npz
+{"out": "loss_tracker/tables/X_p0.004_s5e-4.npz", "train_file": "train_X_p0.004_s5e-4_seed7160.npz", "train_sha256": "7a9bba703cd1ff7a1f397fc0164e13fad61d590a0ebd38499ebedf9ebc57b921", "train_seed": 7160, "train_shots": 20000, "lost_data_atoms": 102072, "clean_triple_rounds_counted": 50639456, "of_them_in_lost_classes": 968315, "clean_pairs_of_rounds_counted": 44492307, "smallest_lost_table_counts": 353, "median_lost_table_counts": 4553}
+{"data": "val_X_p0.004_s5e-4_seed7260.npz", "data_sha256": "63d06b61cdc3ec9bd37dab3e4d6b405dd3fe9a5f446cc345c8fefa8674ae35e7", "data_seed": 7260, "basis": "X", "p": 0.004, "s": 0.0005, "shots": 4000, "tables": "loss_tracker/tables/X_p0.004_s5e-4.npz", "tables_sha256": "7abab148c768e34d04b66d83f57d759bb1b0783212ab1fc2d25f4753c71f32eb", "mode": "coupled", "sweeps": 1, "order": 1, "explain": true, "flagged_data_atoms": 20161, "out": "/home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_X_p0.004_s5e-4.npz", "seconds": 7.2, "ms_per_shot_one_process": 1.81}
+{"data": "val_X_p0.004_s5e-4_seed7260.npz", "data_sha256": "63d06b61cdc3ec9bd37dab3e4d6b405dd3fe9a5f446cc345c8fefa8674ae35e7", "data_seed": 7260, "basis": "X", "p": 0.004, "s": 0.0005, "shots": 4000, "tables": "loss_tracker/tables/X_p0.004_s1e-3.npz", "tables_sha256": "d915ce275e58caa08d4b8e569502c894fb18a2b0223b534344a8be1154c30597", "mode": "coupled", "sweeps": 1, "order": 1, "explain": true, "flagged_data_atoms": 20161, "out": "/home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_X_p0.004_s5e-4_tables1e-3.npz", "seconds": 7.3, "ms_per_shot_one_process": 1.84}
+Dataset val_X_p0.004_s5e-4_seed7260.npz (seed 7260), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| tracker | 20161 | 0.534 | 0.811 | 0.407 | -1.257 | +0.13 |
+| tables_of_1e-3 | 20161 | 0.537 | 0.813 | 0.406 | -1.254 | +0.12 |
+
+Kill line (version `tracker`): losses of rounds 1 to 9 within one round of the truth: 0.797 of 15104 (rounds 2 to 10: 0.790 of 15100). The line is 0.5.
+
+By true loss round (version `tracker`):
+
+| true round | atoms | most probable round is the true one | within one round (95% Wilson) | mean P(true round) | mean P(within one) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| 1 | 1723 | 0.663 | 0.850 (0.832–0.866) | 0.586 | 0.798 | +0.66 |
+| 2 | 1670 | 0.524 | 0.846 (0.828–0.863) | 0.417 | 0.813 | +0.51 |
+| 3 | 1746 | 0.505 | 0.824 (0.805–0.841) | 0.390 | 0.747 | +0.30 |
+| 4 | 1659 | 0.491 | 0.771 (0.750–0.791) | 0.367 | 0.698 | +0.36 |
+| 5 | 1664 | 0.502 | 0.781 (0.760–0.800) | 0.369 | 0.694 | +0.20 |
+| 6 | 1659 | 0.494 | 0.763 (0.741–0.782) | 0.366 | 0.684 | +0.20 |
+| 7 | 1647 | 0.500 | 0.789 (0.768–0.808) | 0.363 | 0.694 | +0.14 |
+| 8 | 1678 | 0.488 | 0.759 (0.738–0.779) | 0.359 | 0.683 | +0.12 |
+| 9 | 1658 | 0.484 | 0.789 (0.769–0.808) | 0.357 | 0.693 | -0.00 |
+| 10 | 1719 | 0.514 | 0.791 (0.771–0.809) | 0.373 | 0.707 | -0.13 |
+| 11 | 1698 | 0.518 | 0.899 (0.883–0.912) | 0.400 | 0.812 | -0.22 |
+| 12 | 1640 | 0.724 | 0.874 (0.857–0.890) | 0.530 | 0.762 | -0.60 |
+
+By what the atom shares (from the heralds alone):
+
+| group | share of the flagged atoms | atoms | true round | within one round | mean log P(true round) |
+|---|---|---|---|---|---|
+| shares no check with another flagged data atom | 0.473 | 9539 | 0.544 | 0.819 | -1.235 |
+| shares an X check only | 0.111 | 2246 | 0.540 | 0.816 | -1.233 |
+| shares a Z check only | 0.117 | 2359 | 0.530 | 0.808 | -1.288 |
+| shares X and Z checks | 0.298 | 6017 | 0.517 | 0.799 | -1.288 |
+| alone, and none of its 6 check atoms was ever flagged | 0.376 | 7583 | 0.553 | 0.824 | -1.223 |
+
+Reliability of the round posterior, every (atom, round) pair (expected calibration error 0.0030):
+
+| posterior between | pairs | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.00 and 0.02 | 149217 | 0.003 | 0.004 |
+| 0.02 and 0.05 | 22500 | 0.033 | 0.038 |
+| 0.05 and 0.10 | 17597 | 0.072 | 0.074 |
+| 0.10 and 0.20 | 17524 | 0.144 | 0.141 |
+| 0.20 and 0.30 | 11377 | 0.247 | 0.240 |
+| 0.30 and 0.40 | 7188 | 0.348 | 0.348 |
+| 0.40 and 0.50 | 5337 | 0.447 | 0.440 |
+| 0.50 and 0.60 | 4214 | 0.548 | 0.547 |
+| 0.60 and 0.70 | 3077 | 0.645 | 0.630 |
+| 0.70 and 0.80 | 1820 | 0.747 | 0.713 |
+| 0.80 and 0.90 | 1178 | 0.849 | 0.801 |
+| 0.90 and 1.00 | 903 | 0.944 | 0.927 |
+
+Reliability of the most probable round (expected calibration error 0.0143):
+
+| its posterior between | atoms | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.10 and 0.20 | 30 | 0.182 | 0.267 |
+| 0.20 and 0.30 | 934 | 0.266 | 0.227 |
+| 0.30 and 0.40 | 3230 | 0.355 | 0.345 |
+| 0.40 and 0.50 | 4775 | 0.449 | 0.442 |
+| 0.50 and 0.60 | 4214 | 0.548 | 0.547 |
+| 0.60 and 0.70 | 3077 | 0.645 | 0.630 |
+| 0.70 and 0.80 | 1820 | 0.747 | 0.713 |
+| 0.80 and 0.90 | 1178 | 0.849 | 0.801 |
+| 0.90 and 1.00 | 903 | 0.944 | 0.927 |
+
+Temperature on the evidence (1 = as fitted; the tracker alone, before any decoding):
+
+| temperature | mean log P(true round) | calibration error of the most probable round |
+|---|---|---|
+| 0.7 | -1.3617 | 0.1231 |
+| 0.85 | -1.2840 | 0.0637 |
+| 1.0 | -1.2568 | 0.0143 |
+| 1.25 | -1.2651 | 0.0554 |
+| 1.5 | -1.3020 | 0.1064 |
+| 2.0 | -1.3964 | 0.1805 |
+| 3.0 | -1.5681 | 0.2597 |
+
+For scale, the uniform guess: mean P(true round) 0.083, mean log P -2.485.

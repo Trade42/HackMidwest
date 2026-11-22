@@ -5,7 +5,7 @@ model, the same Clifft simulation and the same map from a loss to the decoder's 
 numbers on shots that Clifft simulates. No file of the team's `data/` folder is involved.
 
 This file is written by `python -m loss_tracker.assemble` from `RESULTS.template.md`: every table below is a file
-of `results/`, copied in byte for byte. Edit the template, not this file.
+of `results/`, copied in unchanged except that its headings move down two levels. Edit the template, not this file.
 
 ## Summary
 
@@ -18,6 +18,7 @@ of `results/`, copied in byte for byte. Edit the template, not this file.
 | Replication (server, seed 7310, 4,000 shots, secondary) | `starter` 146, `exact` 161, tracker 122, ORACLE 82: share 0.49 (0.25–0.70); 1.20 times fewer failures than `starter` (p = 0.026), 1.32 than `exact`. Pooled with the test (8,000 shots): share 0.54 (0.38–0.68); 1.26 times fewer than `starter` (1.15–1.38, p = 2.6e-6). |
 | Target of the brief | recover at least half of the oracle's gain: met on the point estimates (0.58; 0.54 pooled), not with confidence (the intervals reach 0.38). |
 | Kill line (step 2) | passed: 78% of the losses of rounds 1 to 9 are placed within one round (line: 50%). |
+| Step 4 | The tracking carries over to s = 5e-4 and 2e-3 (80% and 74% of the losses of rounds 1 to 9 within one round) and to Z memory (78%). Tables fitted at s = 1e-3 work as well at the other two rates. A learned tracker (a small GRU) does not beat the model (mean log P −1.390 against −1.325). Cost: 8 ms per shot on one CPU thread in numpy, about 3% of a relay-BP decode. |
 | New? | No paper we found reports a syndrome-derived loss-time estimate feeding a BP decoder (`reference/papers-loss-aware-decoding.md`, section 9). |
 
 ## What the tracker does, in plain words
@@ -732,7 +733,178 @@ Every condition on the same 8000 shots.
 
 ## Step 4
 
-**NOT MEASURED YET** (`results/step4.md`)
+Step 4 runs after the test, on lane D, in the brief's order (`runs/after_test.sh`): the learned tracker
+(`runs/learned.sh`), the tracker at s = 2e-3 and 5e-4 (`runs/extra.sh`), Z memory (`runs/extra.sh`), and the
+tracker's cost per shot (`runs/timing.sh`). Each measures the tracker against the probes of its own validation
+split (seeds 7240, 7260, 7220; training seeds 7140, 7160, 7120). None of them decodes.
+
+### A learned tracker
+
+`learned.py`: a bidirectional GRU (64 units, 34,950 weights) over the 13 detector rounds of one flagged atom. Its
+inputs are the 3 X-check and 3 Z-check detector bits, which of them are reliable, the heralds of its 6 check atoms
+and of the other-type check atoms next to it, its side, and how many other flagged data atoms sit on each of its
+checks. Its output is a softmax over the 72 loss slots. Trained on the training split (seed 7100, 200,376 lost
+atoms) with the probes' slot as the label: 20 epochs, Adam with a one-cycle schedule (peak 3e-3), batches of 512,
+seed 0, CPU, 4 threads. Model file `tables/learned_X_p0.004_s1e-3.pt`. Command `loss_tracker/runs/learned.sh`;
+log `logs/learned.log`; table `results/accuracy_val_learned.md` (validation split, seed 7200).
+
+Dataset val_X_p0.004_s1e-3_seed7200.npz (seed 7200), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| learned | 40164 | 0.482 | 0.774 | 0.353 | -1.390 | +0.12 |
+| order1_explain1 | 40164 | 0.509 | 0.793 | 0.379 | -1.325 | +0.17 |
+| order1_coupled2 | 40164 | 0.494 | 0.779 | 0.367 | -1.368 | +0.16 |
+| order1_drop | 40164 | 0.461 | 0.747 | 0.334 | -1.468 | +0.12 |
+| order1_naive | 40164 | 0.454 | 0.739 | 0.349 | -1.536 | +0.01 |
+
+
+What this says:
+
+- **The network does not beat the model of step 2**, so it does not earn its place and was not decoded. On
+  the 4,000 validation shots: exact round 48.2% against 50.9%; within one round 77.4% against 79.3%; mean log
+  P(true round) −1.390 against −1.325 for the frozen version. It is better than the versions that ignore or drop
+  shared checks (−1.536, −1.468) and below the coupled ones (−1.368, −1.325).
+- **Where it loses and where it wins.** On atoms that share no check with another flagged atom, the network is
+  slightly better than the model (mean log P −1.234 against −1.271; within one round 82.2% against 80.7%). So the
+  hand-built emission model leaves a little on the table, probably the link between an atom's X and Z triples,
+  which the model ignores (our reading; not tested). On atoms that share X and Z checks with other flagged atoms (54% of all), it
+  is clearly worse (−1.485 against −1.362). It sees only how many other flagged atoms sit on each check, not when
+  they were lost, and the model's coupling of the atoms is worth more than the network's flexibility.
+- A next step would combine the two: the network's per-atom evidence inside the model's coupling. It is not
+  built here.
+- Training took 547 s on 4 CPU threads (20 epochs; the mean cross-entropy over the 72 slots fell from 3.95 to
+  2.84 nats).
+
+### Other loss rates: s = 2e-3 (about today's hardware) and s = 5e-4
+
+`loss_tracker/runs/extra.sh`: a training split (20,000 shots) and a validation split (4,000 shots) at the new
+rate, the tables fitted on that training split, the frozen tracker version run on the validation split (`tracker`),
+and the same shots with the tables fitted at s = 1e-3 (`tables_of_1e-3`). Logs `logs/extra_X_s2e-3.log`,
+`logs/extra_X_s5e-4.log`.
+
+s = 2e-3 (training seed 7140, validation seed 7240):
+
+Dataset val_X_p0.004_s2e-3_seed7240.npz (seed 7240), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| tracker | 77414 | 0.462 | 0.754 | 0.334 | -1.446 | +0.24 |
+| tables_of_1e-3 | 77414 | 0.461 | 0.753 | 0.336 | -1.446 | +0.23 |
+
+Kill line (version `tracker`): losses of rounds 1 to 9 within one round of the truth: 0.740 of 59133 (rounds 2 to 10: 0.730 of 58534). The line is 0.5.
+
+By true loss round (version `tracker`):
+
+| true round | atoms | most probable round is the true one | within one round (95% Wilson) | mean P(true round) | mean P(within one) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| 1 | 6797 | 0.610 | 0.808 (0.798–0.817) | 0.520 | 0.744 | +0.90 |
+| 2 | 6758 | 0.466 | 0.808 (0.798–0.817) | 0.362 | 0.761 | +0.71 |
+| 3 | 6668 | 0.450 | 0.757 (0.746–0.767) | 0.330 | 0.676 | +0.59 |
+| 4 | 6669 | 0.431 | 0.728 (0.717–0.739) | 0.310 | 0.634 | +0.53 |
+| 5 | 6670 | 0.423 | 0.719 (0.708–0.729) | 0.298 | 0.616 | +0.48 |
+| 6 | 6498 | 0.426 | 0.716 (0.705–0.727) | 0.290 | 0.605 | +0.34 |
+| 7 | 6384 | 0.413 | 0.701 (0.690–0.712) | 0.286 | 0.598 | +0.25 |
+| 8 | 6320 | 0.406 | 0.706 (0.694–0.717) | 0.280 | 0.598 | +0.16 |
+| 9 | 6369 | 0.411 | 0.708 (0.696–0.719) | 0.281 | 0.608 | +0.05 |
+| 10 | 6198 | 0.418 | 0.726 (0.714–0.737) | 0.291 | 0.638 | -0.15 |
+| 11 | 6093 | 0.417 | 0.844 (0.835–0.853) | 0.315 | 0.731 | -0.41 |
+| 12 | 5990 | 0.673 | 0.828 (0.818–0.837) | 0.436 | 0.668 | -0.79 |
+
+s = 5e-4 (training seed 7160, validation seed 7260):
+
+Dataset val_X_p0.004_s5e-4_seed7260.npz (seed 7260), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| tracker | 20161 | 0.534 | 0.811 | 0.407 | -1.257 | +0.13 |
+| tables_of_1e-3 | 20161 | 0.537 | 0.813 | 0.406 | -1.254 | +0.12 |
+
+Kill line (version `tracker`): losses of rounds 1 to 9 within one round of the truth: 0.797 of 15104 (rounds 2 to 10: 0.790 of 15100). The line is 0.5.
+
+By true loss round (version `tracker`):
+
+| true round | atoms | most probable round is the true one | within one round (95% Wilson) | mean P(true round) | mean P(within one) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| 1 | 1723 | 0.663 | 0.850 (0.832–0.866) | 0.586 | 0.798 | +0.66 |
+| 2 | 1670 | 0.524 | 0.846 (0.828–0.863) | 0.417 | 0.813 | +0.51 |
+| 3 | 1746 | 0.505 | 0.824 (0.805–0.841) | 0.390 | 0.747 | +0.30 |
+| 4 | 1659 | 0.491 | 0.771 (0.750–0.791) | 0.367 | 0.698 | +0.36 |
+| 5 | 1664 | 0.502 | 0.781 (0.760–0.800) | 0.369 | 0.694 | +0.20 |
+| 6 | 1659 | 0.494 | 0.763 (0.741–0.782) | 0.366 | 0.684 | +0.20 |
+| 7 | 1647 | 0.500 | 0.789 (0.768–0.808) | 0.363 | 0.694 | +0.14 |
+| 8 | 1678 | 0.488 | 0.759 (0.738–0.779) | 0.359 | 0.683 | +0.12 |
+| 9 | 1658 | 0.484 | 0.789 (0.769–0.808) | 0.357 | 0.693 | -0.00 |
+| 10 | 1719 | 0.514 | 0.791 (0.771–0.809) | 0.373 | 0.707 | -0.13 |
+| 11 | 1698 | 0.518 | 0.899 (0.883–0.912) | 0.400 | 0.812 | -0.22 |
+| 12 | 1640 | 0.724 | 0.874 (0.857–0.890) | 0.530 | 0.762 | -0.60 |
+
+### Z memory (s = 1e-3)
+
+Training seed 7120, validation seed 7220, tables fitted on Z-memory shots (`tables/Z_p0.004_s1e-3.npz`). Log
+`logs/extra_Z_s1e-3.log`.
+
+Dataset val_Z_p0.004_s1e-3_seed7220.npz (seed 7220), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| tracker | 39908 | 0.507 | 0.795 | 0.379 | -1.317 | +0.18 |
+
+Kill line (version `tracker`): losses of rounds 1 to 9 within one round of the truth: 0.779 of 30247 (rounds 2 to 10: 0.773 of 29991). The line is 0.5.
+
+By true loss round (version `tracker`):
+
+| true round | atoms | most probable round is the true one | within one round (95% Wilson) | mean P(true round) | mean P(within one) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| 1 | 3511 | 0.638 | 0.830 (0.817–0.842) | 0.548 | 0.779 | +0.76 |
+| 2 | 3380 | 0.507 | 0.837 (0.824–0.849) | 0.401 | 0.801 | +0.55 |
+| 3 | 3380 | 0.483 | 0.793 (0.780–0.807) | 0.366 | 0.719 | +0.45 |
+| 4 | 3326 | 0.481 | 0.763 (0.749–0.778) | 0.353 | 0.680 | +0.37 |
+| 5 | 3298 | 0.480 | 0.772 (0.757–0.786) | 0.344 | 0.674 | +0.31 |
+| 6 | 3458 | 0.453 | 0.743 (0.729–0.758) | 0.329 | 0.653 | +0.30 |
+| 7 | 3302 | 0.470 | 0.752 (0.737–0.766) | 0.331 | 0.652 | +0.14 |
+| 8 | 3343 | 0.448 | 0.752 (0.737–0.766) | 0.324 | 0.655 | +0.11 |
+| 9 | 3249 | 0.469 | 0.770 (0.756–0.785) | 0.337 | 0.671 | +0.09 |
+| 10 | 3255 | 0.453 | 0.776 (0.762–0.790) | 0.333 | 0.692 | -0.10 |
+| 11 | 3197 | 0.472 | 0.884 (0.873–0.895) | 0.365 | 0.787 | -0.28 |
+| 12 | 3209 | 0.737 | 0.871 (0.859–0.882) | 0.509 | 0.738 | -0.60 |
+
+
+### The tracker's cost per shot
+
+`loss_tracker/runs/timing.sh`: one process pinned to CPU 0 under the lane-D lock, numpy on one thread, the first
+300 validation shots. Log `logs/timing.log`.
+
+300 shots of val_X_p0.004_s1e-3_seed7200.npz (9.9 flagged data atoms per shot), one process, numpy.
+
+| tracker version | one shot at a time: mean ms | median ms | 99th percentile ms | batches of 100: ms per shot |
+|---|---|---|---|---|
+| order1_explain1 (the frozen tracker of step 3) | 8.13 | 7.89 | 13.91 | 4.44 |
+| order1_explain2 | 9.70 | 9.47 | 14.27 | 5.51 |
+| order1_coupled2 | 18.84 | 18.27 | 31.73 | 11.40 |
+| order1_coupled0 | 6.57 | 6.45 | 9.29 | 3.39 |
+| order0_coupled2 (independent rounds) | 4.24 | 4.05 | 6.97 | 1.44 |
+
+What step 4 says:
+
+- **The tracker carries to other loss rates and to Z memory.** Within one round of the truth, for the losses of
+  rounds 1 to 9 (kill line 50%):
+  - X memory: 79.7% at s = 5e-4 (5 lost atoms per shot), 77.9% at s = 1e-3 (10), 74.0% at s = 2e-3 (19);
+  - Z memory at s = 1e-3: 77.9%.
+  Over all atoms the exact round is found for 53%, 51% and 46% at the three loss rates in X, and 51% in Z. At
+  s = 2e-3, 82% of the lost atoms share X and Z checks with another lost atom (54% at 1e-3), which costs a few
+  points. The shape by round is the same everywhere: best at both ends, hardest in the middle.
+- **The tables carry over between loss rates.** Tables fitted at s = 1e-3 track the s = 2e-3 and s = 5e-4 shots as
+  well as tables fitted at those rates (mean log P −1.446 against −1.446, and −1.254 against −1.257). So the
+  tracker does not need refitting when the loss rate changes by a factor of 2. Whether it carries to another
+  Pauli strength p was not measured.
+- **These are tracking numbers only.** No decoding was run at the other loss rates or in Z memory.
+- **The learned tracker does not beat the model** (above), so it was not decoded.
+- **Cost:** the frozen tracker takes 8.1 ms per shot (99th percentile 13.9 ms), one shot at a time, in numpy on
+  one CPU thread of this laptop-class CPU, and 4.4 ms per shot in batches of 100 (table above). The timer wraps
+  the features and the posteriors of all the shot's flagged atoms (about 10). For comparison, the flag-aware
+  relay-BP decode takes a median of 248 ms per shot on one CPU (`loss/RESULTS.md`, L4), so the tracker adds about
+  3%. The tracker's priors also cut the mean relay-BP iterations, from 2,599 to 2,141 on the test.
 
 ## What this says
 
@@ -764,13 +936,16 @@ Only what the numbers support:
 
 ## What is not tested, and limits
 
-- One point only: X memory, p = 0.004, s = 1e-3, perfect heralds, independent loss, no leakage (unless step 4
-  above lists more).
-- The emission tables are fitted at the same p and s as the test. Whether they carry over to another noise
-  strength is not measured (step 4 has what was measured for another loss rate, if anything).
-- The decoder is `loss-gates`' map with the tracker's posterior in place of the uniform guess. The map itself
-  (the Pauli envelope, the cap at 0.5) is `loss-gates`' and was not changed or re-tuned here.
-- The tracker's cost is measured in numpy on a laptop CPU, not in an implementation meant for speed.
+- **Decoding at one point only**: X memory, p = 0.004, s = 1e-3, perfect heralds, independent loss, no leakage.
+  The tracker's accuracy alone was also measured at s = 5e-4 and 2e-3 and in Z memory (step 4); decoding there
+  was not run.
+- **Not simulated**: other Pauli strengths p, correlated (pair) loss, imperfect heralds, leakage.
+- **The emission tables were fitted at the test's p.** They carry over between loss rates (step 4); whether they
+  carry over to another p is not known.
+- **The decoder's map is `loss-gates`' own**, not changed or re-tuned here: the Pauli envelope, the cap at 0.5,
+  and relay-BP at the kit's settings.
+- **The share of the oracle's gain is known only to about ±0.2** with 4,000 shots (0.58, 0.38–0.78 on the test).
+- **The cost** is measured in numpy on one thread of a laptop-class CPU, not in an implementation built for speed.
 
 ## Disclosures
 
@@ -795,3 +970,10 @@ Only what the numbers support:
 - **Clifft and relay-BP gave the same results on the team's server**: the smoke job (`runs/smoke_job.sh`, seed
   9100, 200 shots, 40 decoded) printed the same dataset sha256 (`d69bc151…`), the same failures and the same
   mean iterations on both machines.
+- **Two step-4 runs were repeated.** The first rerun check failed to write its file (a missing folder), and the
+  first timing run timed the 2-sweep explain version under the frozen version's label. Both scripts were fixed
+  and run again; the committed logs and tables are from the second runs.
+- **The decoder variants were not re-chosen after the tracker version changed**, as rule 1 said. The test
+  decoded both versions (147 frozen, 144 secondary; p = 0.82).
+- The session that did this work started on Claude Fable 5.2 and continued on Claude Opus 5.5 from about
+  07:40 UTC (during the test decoding). Nothing in the code or the selection was changed at that point.

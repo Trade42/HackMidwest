@@ -19,3 +19,10 @@
 - **Clifft and relay-BP gave the same results on the team's server**: the smoke job (`runs/smoke_job.sh`, seed
   9100, 200 shots, 40 decoded) printed the same dataset sha256 (`d69bc151…`), the same failures and the same
   mean iterations on both machines.
+- **Two step-4 runs were repeated.** The first rerun check failed to write its file (a missing folder), and the
+  first timing run timed the 2-sweep explain version under the frozen version's label. Both scripts were fixed
+  and run again; the committed logs and tables are from the second runs.
+- **The decoder variants were not re-chosen after the tracker version changed**, as rule 1 said. The test
+  decoded both versions (147 frozen, 144 secondary; p = 0.82).
+- The session that did this work started on Claude Fable 5.2 and continued on Claude Opus 5.5 from about
+  07:40 UTC (during the test decoding). Nothing in the code or the selection was changed at that point.

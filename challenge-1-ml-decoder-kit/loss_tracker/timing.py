@@ -32,9 +32,10 @@ def main():
     tracker = Tracker(Tables.load(a.tables))
     tracker.tables.fire_table()
     rows = []
-    for name, kw in (("explain, 2 sweeps (the tracker of step 3)", dict(explain=True, sweeps=2)),
-                     ("coupled, 2 sweeps", dict(sweeps=2)), ("coupled, no sweep", dict(sweeps=0)),
-                     ("independent rounds, coupled, 2 sweeps", dict(sweeps=2, order=0))):
+    for name, kw in (("order1_explain1 (the frozen tracker of step 3)", dict(explain=True, sweeps=1)),
+                     ("order1_explain2", dict(explain=True, sweeps=2)),
+                     ("order1_coupled2", dict(sweeps=2)), ("order1_coupled0", dict(sweeps=0)),
+                     ("order0_coupled2 (independent rounds)", dict(sweeps=2, order=0))):
         tracker.loglik(features(tracker.geo, detectors[:2], heralds[:2]), **kw)          # warm up
         single = []
         for k in range(a.shots):

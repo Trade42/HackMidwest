@@ -1,0 +1,24 @@
+finalized /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/oracle-starter/001500-002000.npz
+finalized /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/aware/000000-000250.npz
+keep /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-3_seed2400.npz
+keep /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s5e-4_seed2200.npz
+keep /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-4_seed2100.npz
+keep /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/blind/000000-000050.npz
+keep /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/blind/000050-000100.npz
+keep /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/blind/000100-000150.npz
+keep /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/aware/000000-000250.npz
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-3_seed2400.npz shots 250..500 conditions ['starter', 'starter@0.5/stop1'] workers 4
+  50/250 shots, 197s, failures so far starter=13 starter@0.5/stop1=13
+  100/250 shots, 369s, failures so far starter=26 starter@0.5/stop1=26
+  150/250 shots, 531s, failures so far starter=41 starter@0.5/stop1=41
+  200/250 shots, 724s, failures so far starter=57 starter@0.5/stop1=59
+  250/250 shots, 902s, failures so far starter=70 starter@0.5/stop1=74
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/aware/000250-000500.npz.tmp.npz in 902s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-3_seed2400.npz shots 500..750 conditions ['starter', 'starter@0.5/stop1'] workers 4
+  50/250 shots, 173s, failures so far starter=11 starter@0.5/stop1=13
+  100/250 shots, 294s, failures so far starter=20 starter@0.5/stop1=22
+  150/250 shots, 465s, failures so far starter=31 starter@0.5/stop1=35
+  200/250 shots, 591s, failures so far starter=43 starter@0.5/stop1=46
+  250/250 shots, 715s, failures so far starter=54 starter@0.5/stop1=58
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/aware/000500-000750.npz.tmp.npz in 715s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s5e-4_seed2200.npz shots 0..100 conditions ['blind'] workers 4

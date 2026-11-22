@@ -79,8 +79,9 @@ class Problem:
 
     def __init__(self, trunk_config, levels, device):
         code, basis, rounds = trunk_config["code"], trunk_config["basis"], trunk_config["rounds"]
-        if trunk_config["logicals"] != "kit":
-            raise SystemExit("the head needs a trunk trained on the kit's observables (logicals=kit)")
+        # The trunk may predict the kit's observables or lighter ones (logicals=light, used for Z memory):
+        # the head never reads that readout, only the trunk's vectors. The sampler here always labels with
+        # the kit's observables (DemSampler's default), which is what the column map checks against.
         self.levels = sorted(set(levels))
         self.sampler = DemSampler(code, basis, rounds, "all", self.levels, device)
         self.map = column_map(code, basis, rounds, self.levels[0], self.sampler)

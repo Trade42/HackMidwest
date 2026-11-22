@@ -371,3 +371,23 @@ def test_candidate_counts(tmp_path):
     assert c["failures"] == {"R": 2, "P1": 2, "P2": 2, "T": 2, "H": 1}
     assert c["disagree"] == 2 and c["all_members_fail"] == 1 and c["head_right_where_all_members_fail"] == 1
     assert c["oracle_with_head"] == 0 and c["members_agree_but_wrong"] == 1 and c["head_right_there"] == 1
+
+
+def test_a_head_trains_on_a_z_trunk_with_light_logicals(tmp_path):
+    """Z memory: the trunk predicts light logical operators; the head and its labels use the kit's columns."""
+    from neural import train as neural_train
+    from neural.model import CascadeDecoder
+    from predecoder import train
+    from predecoder.train import load_head
+
+    torch.manual_seed(7)
+    model = CascadeDecoder(code="gross", basis="Z", detectors="all", width=8, depth=1, logicals="light")
+    trunk = tmp_path / "z_trunk.pt"
+    torch.save({"config": neural_train.DEFAULTS | model.config | {"seed": 7}, "step": 0, "ema_model": model.state_dict(),
+                "commit": "made by test_predecoder"}, trunk)
+    train.main(["--trunk", str(trunk), "--out", str(tmp_path / "run"), "--steps", "2", "--batch", "2", "--report-every", "2",
+                "--report-shots", "4", "--project", "4", "--hidden", "4", "--shape-width", "2", "--device", "cpu",
+                "--threads", "2", "--warmup-steps", "1"])
+    _, head, saved = load_head(tmp_path / "run" / "head.pt", "cpu", str(trunk))
+    assert head.config["basis"] == "Z" and head.num_columns == kit_problem("Z", 0.004).H.shape[1]
+    assert saved["history"][0]["rows"][0]["log_loss_head"] == pytest.approx(saved["history"][0]["rows"][0]["log_loss_kit"])

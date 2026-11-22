@@ -1,0 +1,92 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/pred-tcbp-zlowp-f648204/challenge-1-ml-decoder-kit/data/p0.004/test_Z.npz",
+  "sha256": "b61c1325de8852385d19ee5ce4eb41ea939b668f83fb3e994ce0f590218b3d56",
+  "basis": "Z",
+  "p": 0.004,
+  "seed": 302,
+  "shots": 10000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 10000,
+ "decoder": "tcbp-jobs",
+ "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
+ "preset": "tcbp-jobs",
+ "overrides": {},
+ "head_priors": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "prior_cap": 0.5,
+ "capped_this_run": {
+  "shots": 849,
+  "columns": 894
+ },
+ "logits": {
+  "data": {
+   "path": "/home/sal/hackMidwest/worktrees/tcbp-zlowp/challenge-1-ml-decoder-kit/data/p0.004/test_Z.npz",
+   "sha256": "b61c1325de8852385d19ee5ce4eb41ea939b668f83fb3e994ce0f590218b3d56",
+   "basis": "Z",
+   "p": 0.004,
+   "seed": 302,
+   "shots": 10000,
+   "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+  },
+  "shots": 10000,
+  "columns": 8784,
+  "model": {
+   "head": "/home/sal/hackMidwest/orchestration/scratch/tcbp-zlowp/model/head.pt",
+   "head_sha256": "083147d2ea941fbae1bc0c3096e06d3bb3a07ca46fd9360fd9304226e5825a61",
+   "head_step": 20000,
+   "trunk": "/home/sal/hackMidwest/orchestration/scratch/tcbp-zlowp/model/cascade_Z_s1_final_step100000.pt",
+   "trunk_sha256": "fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700",
+   "trunk_step": 100000,
+   "head_commit": "ee359d7f2dfe0bda4057c7f434b0cf9f02d051fe",
+   "device": "cpu",
+   "torch": "2.15.0+cpu",
+   "torch_threads": 16,
+   "precision": "float32",
+   "gpu": null
+  },
+  "seconds_batched_total": 335.02777647972107,
+  "per_shot_seconds": {
+   "what": "network + head, one shot at a time, on the device named",
+   "shots": 200,
+   "mean": 0.025025082984939218,
+   "median": 0.021933847572654486,
+   "p99": 0.07419611877761781
+  },
+  "batch_one_against_batched_largest_logit_gap": 0.0,
+  "mean_probability_sum_per_shot": 46.925780078125,
+  "kit_prior_sum": 47.311063309491075
+ },
+ "arms": {
+  "head": {
+   "shots": 10000,
+   "failures": 6,
+   "share": 0.0006,
+   "wilson95": [
+    0.00027501347471946616,
+    0.0013085241039605853
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 6102,
+   "build_ms_mean": 40.99245122915599,
+   "decode_ms_mean": 1.597815929958597,
+   "build_decode_ms_mean": 42.59026715911459,
+   "build_decode_ms_median": 42.467342980671674,
+   "build_decode_ms_p99": 49.472197629511356
+  }
+ },
+ "model_seconds": 54.49098988901824,
+ "machine": {
+  "node": "jupyter-blakew3",
+  "processor": "x86_64",
+  "cpus": 24,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "omp_threads": "1"
+ },
+ "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process, shots one at a time; the network and head are not included (predecoder.evaluate)",
+ "seconds": 541.5613512992859
+}

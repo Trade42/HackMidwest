@@ -14,17 +14,21 @@ set -uo pipefail
 export PYTHONDONTWRITEBYTECODE=1
 S=/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise
 PY="$S/venv/bin/python"
-case "${LANE:-B}" in
-  B) LOCK=/home/sal/hackMidwest/dq/run/sim-b.lock; CPUS=8-11 ;;
-  C) LOCK=/home/sal/hackMidwest/dq/run/sim.lock; CPUS=12-15 ;;
-  *) echo "LANE must be B or C"; return 1 ;;
-esac
+# lane: set LOCK and CPUS from LANE (B or C) at the time of the call
+lane() {
+  case "${LANE:-B}" in
+    B) LOCK=/home/sal/hackMidwest/dq/run/sim-b.lock; CPUS=8-11 ;;
+    C) LOCK=/home/sal/hackMidwest/dq/run/sim.lock; CPUS=12-15 ;;
+    *) echo "LANE must be B or C"; return 1 ;;
+  esac
+}
 OUT=${OUT:-$S/runs/X_seed4100}      # every row of question 1 (X memory), so one summary holds them all
 SEED=${SEED:-4100}                   # test shots
 TRAIN_SEED=${TRAIN_SEED:-5100}       # train shots of the fitted generic p: never the test seed
 LOGS=neutral_atom_noise/logs
 
 hold() {
+  lane || return 1
   local budget=${BUDGET:-12}
   if [ -n "${UNTIL:-}" ]; then          # UNTIL=HH:MM (UTC): end the hold by then (parts start up to 3 minutes before)
     local left=$(( ($(date -u -d "$UNTIL" +%s) - $(date -u +%s)) / 60 - 3 ))
@@ -77,6 +81,7 @@ q2_blind()    { OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.4 --de
 # The pipeline on the kit's own noise at p = 0.004: this folder's sampler and decode loop, with the kit's priors.
 # The kit's README has relay-BP at 45 and BP-OSD at 253 failures of 10,000 X shots.
 reference() {
+  lane || return 1
   mkdir -p "$LOGS"
   {
     echo "=== $(date -u +%FT%TZ) reference: lane ${LANE:-B}, head $(git rev-parse --short HEAD)"
@@ -93,6 +98,7 @@ reference() {
 
 # Question 2: our loss loop against loss/'s own job on the kit's noise, 100 shots (the orchestrator's condition).
 loss_check() {
+  lane || return 1
   mkdir -p "$LOGS"
   {
     echo "=== $(date -u +%FT%TZ) loss_check: lane ${LANE:-B}, head $(git rev-parse --short HEAD)"
@@ -100,4 +106,19 @@ loss_check() {
       --seed 5300 --workers 4 --out "$S/runs/loss_check"
     echo "=== $(date -u +%FT%TZ) loss_check exit code $?"
   } 2>&1 | tee -a "$LOGS/loss_check.log"
+}
+
+# From 2026-11-22 ~10:10 UTC lane B is ours alone (dq-orch-4): the question-1 streams back to back, each to the end.
+lane_b_alone() {
+  REPEAT=1 q1_matched
+  REPEAT=1 q1_fit_bposd
+  REPEAT=1 q1_matched_relay
+  REPEAT=1 q1_generic_relay
+}
+# Lane C after dq-hierarchy's ablation logits: the rest of BP-OSD's generic rows, the 100-shot loss check, question 2.
+lane_c() {
+  LANE=C REPEAT=1 q1_generic_bposd
+  LANE=C loss_check
+  LANE=C REPEAT=1 q2_starter
+  LANE=C REPEAT=1 q2_blind
 }

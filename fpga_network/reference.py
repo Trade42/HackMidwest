@@ -171,14 +171,14 @@ def forward_int(q, shots, dump=None):
                                  fa[s_next], fa[s_next], w[s_next]))
     r, depth = q["readout"], len(q["blocks"])
     h = x * r["in_scale"] + r["in_shift"]
-    h = silu(q, "r.in", requant(h, r["in_scale_frac"] + fa[f"s{depth}"], fa["r.in"], w["r.in"]))
+    h = keep("r.in_s", silu(q, "r.in", requant(h, r["in_scale_frac"] + fa[f"s{depth}"], fa["r.in"], w["r.in"])))
     sums = np.stack([h[:, :-1].sum(axis=1), h[:, 1:].sum(axis=1)], axis=1)
-    sums = requant(sums, fa["r.in_s"], fa["r.sum"], w["r.sum"])
+    sums = keep("r.sum", requant(sums, fa["r.in_s"], fa["r.sum"], w["r.sum"]))
     same, after = messages(sums, g["readout"], r["r.W"])
-    data = requant(same[:, 0] + after[:, 1] + per_target(r["r.b"]), r["r.W.frac"], fa["r.data"], w["r.data"])
-    pooled = requant(np.einsum("oq,nqc->noc", r["r.pool"], data), r["r.pool.frac"][:, None], fa["r.pool"], w["r.pool"])
+    data = keep("r.data", requant(same[:, 0] + after[:, 1] + per_target(r["r.b"]), r["r.W.frac"], fa["r.data"], w["r.data"]))
+    pooled = keep("r.pool", requant(np.einsum("oq,nqc->noc", r["r.pool"], data), r["r.pool.frac"][:, None], fa["r.pool"], w["r.pool"]))
     h = pooled @ r["h0_W"].T + r["h0_b"]
-    h = silu(q, "h", requant(h, r["h0_W.frac"], fa["h"], w["h"]))
+    h = keep("h_s", silu(q, "h", requant(h, r["h0_W.frac"], fa["h"], w["h"])))
     logits = keep("logits", (h @ r["h2_W"].T + r["h2_b"])[..., 0])
     return logits, int(r["h2_W.frac"][0])
 

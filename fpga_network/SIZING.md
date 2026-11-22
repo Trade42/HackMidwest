@@ -39,6 +39,19 @@ Memory at b bits per number: weights x b, and the activations x b. One block RAM
 | 4 | 3.57 | 1.42 | 4.99 |
 | 8, with the residual stream at 16 (see WIDTHS.md: the stream needs 16 bits) | 7.15 | 4.76 | 11.91 |
 
+SiLU tables (fixed_point.py: one entry per possible input): 33 tables in the blocks and the readout, plus one in the head, which widths.py keeps at 16 bits.
+
+| bits per value | body tables, Mb | the head's table (16 bits), Mb |
+|---:|---:|---:|
+| 16 | 34.603 | 1.049 |
+| 12 | 1.622 | 1.049 |
+| 10 | 0.338 | 1.049 |
+| 8 | 0.068 | 1.049 |
+| 6 | 0.013 | 1.049 |
+| 4 | 0.002 | 1.049 |
+
+At 16 bits a table is large (65,536 entries); a hardware design would then approximate SiLU in pieces. That was not done here: the tables are exact.
+
 | chip | LUTs | DSP slices | block RAM, Mb | holds at 8 bits | holds at 4 bits | time per shot at 100 MHz, every DSP busy |
 |---|---:|---:|---:|---|---|---:|
 | XC7S50 (Urbana's chip) | 32,600 | 120 | 2.76 | neither | the activations | 41.1 ms |

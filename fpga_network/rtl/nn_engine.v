@@ -13,7 +13,10 @@
 //   HOP_DC  data qubits -> checks: target (round r, check t) reads cycle r ("same", if r < T_src) and cycle r - 1
 //           ("after", if r >= 1); a missing input counts as zero; the first, middle and last rounds have own biases
 //   AFFINE  per channel o, for every value: f(a[o] * in[e] + c[o]): the normalisation before a SiLU
+//   TSUM    out[s, t, c] = sum over T rounds from s of in[r, t, c], rescaled and saturated: the readout's time sums
 // The two target blocks of a collecting step (X/Z checks, left/right data qubits) have their own weights and biases.
+// Flags: bit 0 SiLU table, bit 1 residual sum, bit 2 strided input (LINEAR: in[k * stride + p]), bit 3 transposed
+// output (LINEAR: out[(g*N + l) * P + p]), bit 4 raw output: the 48-bit sum as three 16-bit words (the final logits).
 //
 // Every memory is outside this module (ports), so that synthesis counts the engine. A memory's address is a register
 // of this module and its data is valid in the next clock, as a block RAM's registered address gives.
@@ -50,7 +53,7 @@ module nn_engine #(
     output reg  [TA-1:0]        t_addr,  input wire signed [VW-1:0]  t_data,
     output reg  [GA-1:0]        g_addr,  input wire [7:0]            g_data
 );
-    localparam [3:0] LINEAR = 0, HOP_CD = 1, HOP_DC = 2, AFFINE = 3;
+    localparam [3:0] LINEAR = 0, HOP_CD = 1, HOP_DC = 2, AFFINE = 3, TSUM = 4;
 
     // ---------------------------------------------------------------- the rounding rule, as in reference.requant
     function signed [AW-1:0] rescale(input signed [AW-1:0] v, input signed [7:0] s);
@@ -77,6 +80,9 @@ module nn_engine #(
     wire [3:0]  kind      = f[0][3:0];
     wire        use_silu  = f[1][0];
     wire        residual  = f[1][1];
+    wire        strided   = f[1][2];
+    wire        transpose = f[1][3];
+    wire        raw       = f[1][4];
     wire [31:0] P         = f[2];         // positions (LINEAR, AFFINE); HOP: T * NODES
     wire [31:0] K         = f[3];         // inputs per output (AFFINE: channels)
     wire [31:0] G         = f[4];         // groups of N output channels (LINEAR)
@@ -87,11 +93,12 @@ module nn_engine #(
     wire signed [7:0] res_shift = f[14][7:0];
     wire [4:0]  res_bits  = f[14][12:8];
     wire [7:0]  T         = f[15][7:0], NODES = f[15][15:8], C_IN = f[15][23:16], T_SRC = f[15][31:24];
-    wire [31:0] g_base    = f[16], chan_base = f[17];
+    wire [31:0] g_base    = f[16], chan_base = f[17], stride = f[18];
 
     // ---------------------------------------------------------------- state
-    localparam [4:0] IDLE = 0, DESC0 = 1, DESC1 = 2, DESC2 = 3, POS0 = 4, POS1 = 5, ACC = 6, DRAIN = 7,
-                     WR0 = 8, WR1 = 9, WR2 = 10, NEXT = 11, AF0 = 12, AF1 = 13, AF2 = 14, AF3 = 15, FINISH = 16;
+    localparam [4:0] IDLE = 0, DESC2 = 3, POS0 = 4, POS1 = 5, ACC = 6, DRAIN = 7, DESC0 = 1,
+                     WR0 = 8, WR1 = 9, WR2 = 10, NEXT = 11, AF0 = 12, AF2 = 14, AF3 = 15, FINISH = 16,
+                     WR3 = 17, WR4 = 18, TS0 = 19, TSA = 20, TSB = 21, TSW = 22;
     reg [4:0]  state;
     reg [DA-1:0] layer;
     reg [31:0] p, g, e, o;                 // position, group; element and its channel (AFFINE)
@@ -123,7 +130,14 @@ module nn_engine #(
         end
     endfunction
 
-    reg signed [AW-1:0] old_q, sum;
+    reg signed [AW-1:0] old_q, sum, tsum;
+    reg        tsv;
+    reg [7:0]  r, sl;                       // TSUM: round inside the sum, and which sum
+    reg [31:0] rest;                        // TSUM: node * CH + channel
+    reg signed [AW-1:0] raw_acc;
+    // where lane `lane` of this position and group goes (and where its old residual value is)
+    wire [31:0] pos_off = (kind == LINEAR) ? (transpose ? (g * N + lane) * P + p : p * C_out + g * N + lane)
+                                           : (tau * NODES + t) * C_out + g * N + lane;
     integer l;
     always @(posedge clk) begin
         b_we <= 1'b0;
@@ -135,13 +149,15 @@ module nn_engine #(
             // ---- stage 2 of the accumulate pipeline: the reads of stage 1 have arrived; every lane adds its product
             if (v1 && !z1) for (l = 0; l < N; l = l + 1)
                 acc[l] <= acc[l] + $signed(w_data[l*WW +: WW]) * a_data;
+            if (tsv) tsum <= tsum + a_data;
+            tsv <= (state == TSA);
             // ---- stage 1: the neighbour is known; read the input value and the lanes' weights
             if (v0) begin
                 if (kind == LINEAR)
-                    a_addr <= in_base + p * K + k0;
+                    a_addr <= strided ? in_base + k0 * stride + p : in_base + p * K + k0;
                 else
                     a_addr <= in_base + (srct0 * NODES + g_data) * C_IN + i0;
-                w_addr <= w_base + ((kind == LINEAR) ? g : {31'b0, blk}) * K + k0;
+                w_addr <= w_base + ((kind == LINEAR) ? g : {31'b0, blk} * G + g) * K + k0;
             end
             v1 <= v0; z1 <= z0;
 
@@ -151,14 +167,16 @@ module nn_engine #(
             DESC2: begin
                 for (l = 0; l < 20; l = l + 1) f[l] <= d_data[l*32 +: 32];
                 p <= 0; g <= 0; e <= 0; o <= 0; tau <= 0; t <= 0;
-                state <= (d_data[3:0] == AFFINE) ? AF0 : POS0;
+                state <= (d_data[3:0] == AFFINE) ? AF0 : (d_data[3:0] == TSUM) ? TS0 : POS0;
+                sl <= 0; rest <= 0;
             end
 
             // ---- one position (and one group of N channels): biases and shifts first
             POS0: begin
                 if (kind == LINEAR)      begin bias_addr <= b_base + g; s_addr <= s_base + g; end
-                else if (kind == HOP_CD) begin bias_addr <= b_base + blk; s_addr <= s_base; end
-                else                     begin bias_addr <= b_base + ((tau == 0) ? 0 : (tau == T - 1) ? 4 : 2) + blk; s_addr <= s_base; end
+                else if (kind == HOP_CD) begin bias_addr <= b_base + {31'b0, blk} * G + g; s_addr <= s_base + g; end
+                else                     begin bias_addr <= b_base + (((tau == 0) ? 0 : (tau == T - 1) ? 4 : 2) + blk) * G + g;
+                                               s_addr <= s_base + g; end
                 state <= POS1;
             end
             POS1: begin                                              // the reads arrive next clock
@@ -201,31 +219,56 @@ module nn_engine #(
             WR1: begin
                 rq <= saturate(rescale(sel, sel_sh), residual ? res_bits : sat_bits);
                 t_addr <= t_base + table_index(saturate(rescale(sel, sel_sh), sat_bits), sat_bits);
-                b_addr <= res_base + ((kind == LINEAR) ? p * C_out + g * N : (tau * NODES + t) * N) + lane;
+                b_addr <= res_base + pos_off;
                 state <= WR2;
             end
             WR2: begin                                                 // the table and the old stream arrive now
-                b_addr  <= out_base + ((kind == LINEAR) ? p * C_out + g * N : (tau * NODES + t) * N) + lane;
                 old_q = saturate(rescale($signed(b_data), res_shift), res_bits);    // sign-extended to AW bits
                 sum   = rq;
                 sum   = sum + old_q;
-                b_wdata <= use_silu ? t_data : residual ? saturate(sum, res_bits) : rq;
-                b_we    <= 1'b1;
+                if (raw) begin
+                    b_addr <= out_base + pos_off * 3; b_wdata <= sel[15:0]; b_we <= 1'b1; state <= WR3;
+                end else begin
+                    b_addr  <= out_base + pos_off;
+                    b_wdata <= use_silu ? t_data : residual ? saturate(sum, res_bits) : rq;
+                    b_we    <= 1'b1;
+                    if (lane == N - 1) state <= NEXT;
+                    else begin lane <= lane + 1'b1; state <= WR0; end
+                end
+            end
+            WR3: begin b_addr <= out_base + pos_off * 3 + 1; b_wdata <= sel[31:16]; b_we <= 1'b1; state <= WR4; end
+            WR4: begin
+                b_addr <= out_base + pos_off * 3 + 2; b_wdata <= sel[47:32]; b_we <= 1'b1;
                 if (lane == N - 1) state <= NEXT;
                 else begin lane <= lane + 1'b1; state <= WR0; end
             end
             NEXT: begin
-                if (kind == LINEAR) begin
-                    if (g == G - 1) begin
-                        g <= 0;
+                if (g != G - 1) begin g <= g + 1; state <= POS0; end
+                else begin
+                    g <= 0;
+                    if (kind == LINEAR) begin
                         if (p == P - 1) state <= FINISH; else begin p <= p + 1; state <= POS0; end
-                    end else begin g <= g + 1; state <= POS0; end
-                end else begin
-                    if (t == NODES - 1) begin
+                    end else if (t == NODES - 1) begin
                         t <= 0;
                         if (tau == T - 1) state <= FINISH; else begin tau <= tau + 1'b1; state <= POS0; end
                     end else begin t <= t + 1'b1; state <= POS0; end
                 end
+            end
+
+            // ---- TSUM: out[(sl * NODES * CH) + rest] = sum over r < T of in[((sl + r) * NODES * CH) + rest]
+            TS0: begin tsum <= 0; r <= 0; state <= TSA; end
+            TSA: begin                                                 // one read per clock; the sum follows one clock later
+                a_addr <= in_base + (sl + r) * NODES * K + rest;
+                if (r == T - 1) state <= TSB; else r <= r + 1'b1;
+            end
+            TSB: state <= TSW;
+            TSW: begin
+                b_addr <= out_base + sl * NODES * K + rest;
+                b_wdata <= saturate(rescale(tsum, res_shift), sat_bits); b_we <= 1'b1;
+                if (rest == NODES * K - 1) begin
+                    rest <= 0;
+                    if (sl == P - 1) state <= FINISH; else begin sl <= sl + 1'b1; state <= TS0; end
+                end else begin rest <= rest + 1; state <= TS0; end
             end
 
             // ---- AFFINE: one value at a time

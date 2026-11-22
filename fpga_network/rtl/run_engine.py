@@ -41,105 +41,182 @@ def word(values, bits):
 def desc(**f):
     fields = [0] * 20
     names = ["kind", "flags", "P", "K", "G", "C_out", "in_base", "out_base", "res_base", "w_base", "b_base", "s_base",
-             "t_base", "sat_bits", "res", "shape", "g_base", "chan_base"]
+             "t_base", "sat_bits", "res", "shape", "g_base", "chan_base", "stride"]
     for key, v in f.items():
         fields[names.index(key)] = int(v) & 0xFFFFFFFF
     return word(fields, 32)
 
 
-def build(q, dump, k, test):
-    """The memories and layer table of block k (or of its "down" step alone)."""
+LINEAR_T = 4   # flags: 1 SiLU, 2 residual, 4 strided input, 8 transposed output, 16 raw output
+TSUM = 4
+S_EVEN, S_ODD = 0x00000, 0xC0000            # the residual stream alternates between two regions
+R_BASE = {"r.in_s": 0x40000, "r.sum": 0x80000, "r.data": 0x90000, "r.pool": 0xA0000, "h_s": 0xA2000, "logits": 0xA4000}
+
+
+class Memories:
+    """The engine's memories as lists of hex words, and the layer table."""
+
+    def __init__(self, q):
+        self.q = q
+        self.W, self.B, self.S, self.C, self.T, self.D = [], [], [], [], [], []
+        self.G = [int(v) for v in np.concatenate([q["graph"]["to_data"].ravel(), q["graph"]["to_checks"].ravel(),
+                                                   q["graph"]["readout"].ravel()])]
+        self.g = {"to_data": 0, "to_checks": q["graph"]["to_data"].size,
+                  "readout": q["graph"]["to_data"].size + q["graph"]["to_checks"].size}
+
+    def table(self, name):
+        tab, lo = self.q["tables"][name]
+        base = len(self.T)
+        self.T.extend(int(v) & 0xFFFF for v in tab)
+        return base
+
+    def linear_weights(self, W):
+        """W [c_out, K] -> groups of N lanes, K words each."""
+        base = len(self.W)
+        c_out = W.shape[0]
+        Wp = np.zeros((((c_out + N - 1) // N) * N, W.shape[1]), np.int64)
+        Wp[:c_out] = W
+        for g in range(len(Wp) // N):
+            self.W += [word(Wp[g * N:(g + 1) * N, kk], WW) for kk in range(W.shape[1])]
+        return base
+
+    def hop_weights(self, W):
+        """W [2 blocks, 2 c, 6 c_in] -> for block, group of N lanes: K = 2 * 6 c_in words (h, slot, i)."""
+        base = len(self.W)
+        c = W.shape[1] // 2
+        for blk in range(2):
+            for g in range(c // N):
+                for h in range(2):
+                    for j in range(W.shape[2]):
+                        self.W.append(word(W[blk, h * c + g * N:h * c + (g + 1) * N, j], WW))
+        return base
+
+    def words(self, key, rows, bits):
+        base = len(getattr(self, key))
+        getattr(self, key).extend(word(r, bits) for r in rows)
+        return base
+
+    def lanes(self, v):
+        """[c] -> rows of N lanes (the last padded with zeros)."""
+        v = np.asarray(v, np.int64)
+        pad = np.zeros(((len(v) + N - 1) // N) * N, np.int64)
+        pad[:len(v)] = v
+        return pad.reshape(-1, N)
+
+    def affine(self, scale, shift, frac):
+        base = len(self.C)
+        for o in range(len(scale)):
+            v = (int(scale[o]) & 0xFFFF) | ((int(shift[o]) & ((1 << AW) - 1)) << WW) | ((int(frac[o]) & 0xFF) << (WW + AW))
+            self.C.append(f"{v:0{(WW + AW + 8) // 4}x}")
+        return base
+
+
+def block_layers(m, k):
+    """Block k as five layer descriptions: normalisation + SiLU, down, checks -> data, data -> checks, up + residual."""
+    q = m.q
     b, fa, w = q["blocks"][k], q["fa"], q["width"]
     p = f"b{k}."
     s_in, s_out = f"s{k}", f"s{k + 1}"
+    base_in, base_out = (S_EVEN, S_ODD) if k % 2 == 0 else (S_ODD, S_EVEN)
     R, C = q["rounds"], q["checks"]
-    mem = {"W": [], "B": [], "S": [], "C": [], "T": [], "G": [], "D": []}
-
-    def table(name):
-        tab, lo = q["tables"][name]
-        base = len(mem["T"])
-        mem["T"].extend(int(v) & 0xFFFF for v in tab)
-        return base
-    # weights, as wide words
-    w_down = len(mem["W"])
-    mem["W"] += [word(b["down_W"][:, kk], WW) for kk in range(b["down_W"].shape[1])]
-    def hop_words(W):
-        c = W.shape[1] // 2
-        out = []
-        for blk in range(2):
-            for h in range(2):
-                for j in range(W.shape[2]):
-                    out.append(word(W[blk, h * c:(h + 1) * c, j], WW))
-        return out
-    w_cd = len(mem["W"]); mem["W"] += hop_words(b["cd_W"])
-    w_dc = len(mem["W"]); mem["W"] += hop_words(b["dc_W"])
-    w_up = len(mem["W"])
-    for g in range(b["up_W"].shape[0] // N):
-        mem["W"] += [word(b["up_W"][g * N:(g + 1) * N, kk], WW) for kk in range(b["up_W"].shape[1])]
-    # biases and shifts
-    b_down = len(mem["B"]); mem["B"].append(word(b["down_b"], AW))
-    b_cd = len(mem["B"]); mem["B"] += [word(b["cd_b"][blk], AW) for blk in range(2)]
-    b_dc = len(mem["B"]); mem["B"] += [word(b[key][blk], AW) for key in ("dc_b_first", "dc_b_mid", "dc_b_last") for blk in range(2)]
-    b_up = len(mem["B"]); mem["B"] += [word(b["up_b"][g * N:(g + 1) * N], AW) for g in range(b["up_W"].shape[0] // N)]
-    s_down = len(mem["S"]); mem["S"].append(word(b["down_frac"] - fa[p + "c"], 8))
-    s_cd = len(mem["S"]); mem["S"].append(word(b["cd_frac"] - fa[p + "d"], 8))
-    s_dc = len(mem["S"]); mem["S"].append(word(b["dc_frac"] - fa[p + "o"], 8))
-    s_up = len(mem["S"]); mem["S"] += [word(b["up_frac"][g * N:(g + 1) * N] - fa[s_out], 8) for g in range(b["up_W"].shape[0] // N)]
-    # the normalisation's per-channel a, c and shift: {shift, c, a}
-    shifts = b["in_scale_frac"] + fa[s_in] - fa[p + "in"]
-    for o in range(len(b["in_scale"])):
-        v = (int(b["in_scale"][o]) & 0xFFFF) | ((int(b["in_shift"][o]) & ((1 << AW) - 1)) << WW) | ((int(shifts[o]) & 0xFF) << (WW + AW))
-        mem["C"].append(f"{v:0{(WW + AW + 8) // 4}x}")
-    mem["G"] = [int(v) for v in np.concatenate([q["graph"]["to_data"].ravel(), q["graph"]["to_checks"].ravel()])]
-    g_cd, g_dc = 0, q["graph"]["to_data"].size
-    t_in, t_c, t_d, t_o = table(p + "in"), table(p + "c"), table(p + "d"), table(p + "o")
-
+    c_in = b["down_W"].shape[0]
     P = R * C
-    layers, a_in, check = [], {}, []
+    L = []
+    L.append(desc(kind=AFFINE, flags=1, P=P, K=b["in_scale"].size, in_base=base_in, out_base=BASE["in_s"],
+                  t_base=m.table(p + "in"), sat_bits=w[p + "in"],
+                  chan_base=m.affine(b["in_scale"], b["in_shift"], b["in_scale_frac"] + fa[s_in] - fa[p + "in"])))
+    L.append(desc(kind=LINEAR, flags=1, P=P, K=b["down_W"].shape[1], G=1, C_out=N, in_base=BASE["in_s"],
+                  out_base=BASE["c_s"], w_base=m.linear_weights(b["down_W"]), b_base=m.words("B", m.lanes(b["down_b"]), AW),
+                  s_base=m.words("S", m.lanes(b["down_frac"] - fa[p + "c"]), 8), t_base=m.table(p + "c"), sat_bits=w[p + "c"]))
+    L.append(desc(kind=HOP_CD, flags=1, P=(R - 1) * C, K=12 * c_in, G=1, C_out=N, in_base=BASE["c_s"], out_base=BASE["d_s"],
+                  w_base=m.hop_weights(b["cd_W"]), b_base=m.words("B", [b["cd_b"][blk] for blk in range(2)], AW),
+                  s_base=m.words("S", m.lanes(b["cd_frac"] - fa[p + "d"]), 8), t_base=m.table(p + "d"), sat_bits=w[p + "d"],
+                  shape=(R - 1) | (C << 8) | (c_in << 16) | (R << 24), g_base=m.g["to_data"]))
+    L.append(desc(kind=HOP_DC, flags=1, P=R * C, K=12 * c_in, G=1, C_out=N, in_base=BASE["d_s"], out_base=BASE["o_s"],
+                  w_base=m.hop_weights(b["dc_W"]),
+                  b_base=m.words("B", [b[key][blk] for key in ("dc_b_first", "dc_b_mid", "dc_b_last") for blk in range(2)], AW),
+                  s_base=m.words("S", m.lanes(b["dc_frac"] - fa[p + "o"]), 8), t_base=m.table(p + "o"), sat_bits=w[p + "o"],
+                  shape=R | (C << 8) | (c_in << 16) | ((R - 1) << 24), g_base=m.g["to_checks"]))
+    L.append(desc(kind=LINEAR, flags=2, P=P, K=b["up_W"].shape[1], G=b["up_W"].shape[0] // N, C_out=b["up_W"].shape[0],
+                  in_base=BASE["o_s"], out_base=base_out, res_base=base_in, w_base=m.linear_weights(b["up_W"]),
+                  b_base=m.words("B", m.lanes(b["up_b"]), AW), s_base=m.words("S", m.lanes(b["up_frac"] - fa[s_out]), 8),
+                  sat_bits=w[s_out], res=((fa[s_in] - fa[s_out]) & 0xFF) | (w[s_out] << 8)))
+    return L, base_in, base_out
+
+
+def readout_layers(m, base_in):
+    """The readout: normalisation + SiLU, the time sums, checks -> data qubits, the pooling, the head."""
+    q = m.q
+    r, fa, w = q["readout"], q["fa"], q["width"]
+    R, C = q["rounds"], q["checks"]
+    width = r["in_scale"].size
+    depth = len(q["blocks"])
+    L = []
+    L.append(desc(kind=AFFINE, flags=1, P=R * C, K=width, in_base=base_in, out_base=R_BASE["r.in_s"],
+                  t_base=m.table("r.in"), sat_bits=w["r.in"],
+                  chan_base=m.affine(r["in_scale"], r["in_shift"], r["in_scale_frac"] + fa[f"s{depth}"] - fa["r.in"])))
+    L.append(desc(kind=TSUM, P=2, K=width, in_base=R_BASE["r.in_s"], out_base=R_BASE["r.sum"], sat_bits=w["r.sum"],
+                  res=(fa["r.in_s"] - fa["r.sum"]) & 0xFF, shape=(R - 1) | (C << 8)))
+    G = width // N
+    L.append(desc(kind=HOP_CD, flags=0, P=C, K=12 * width, G=G, C_out=width, in_base=R_BASE["r.sum"], out_base=R_BASE["r.data"],
+                  w_base=m.hop_weights(r["r.W"]),
+                  b_base=m.words("B", [row for blk in range(2) for row in m.lanes(r["r.b"][blk])], AW),
+                  s_base=m.words("S", m.lanes(r["r.W.frac"] - fa["r.data"]), 8), sat_bits=w["r.data"],
+                  shape=1 | (C << 8) | (width << 16) | (2 << 24), g_base=m.g["readout"]))
+    n_obs = r["r.pool"].shape[0]
+    L.append(desc(kind=LINEAR, flags=4 | 8, P=width, K=C, G=1, C_out=N, in_base=R_BASE["r.data"], out_base=R_BASE["r.pool"],
+                  w_base=m.linear_weights(r["r.pool"]), b_base=m.words("B", m.lanes(np.zeros(n_obs, np.int64)), AW),
+                  s_base=m.words("S", m.lanes(r["r.pool.frac"] - fa["r.pool"]), 8), sat_bits=w["r.pool"], stride=width))
+    L.append(desc(kind=LINEAR, flags=1, P=n_obs, K=width, G=r["h0_W"].shape[0] // N, C_out=r["h0_W"].shape[0],
+                  in_base=R_BASE["r.pool"], out_base=R_BASE["h_s"], w_base=m.linear_weights(r["h0_W"]),
+                  b_base=m.words("B", m.lanes(r["h0_b"]), AW), s_base=m.words("S", m.lanes(r["h0_W.frac"] - fa["h"]), 8),
+                  t_base=m.table("h"), sat_bits=w["h"]))
+    L.append(desc(kind=LINEAR, flags=16, P=n_obs, K=r["h2_W"].shape[1], G=1, C_out=N, in_base=R_BASE["h_s"],
+                  out_base=R_BASE["logits"], w_base=m.linear_weights(r["h2_W"]), b_base=m.words("B", m.lanes(r["h2_b"]), AW),
+                  s_base=m.words("S", m.lanes([0]), 8), sat_bits=16))
+    return L
+
+
+def build(q, dump, k, test):
+    """(memories, initial activation regions, [(tensor name, base address)] to compare) of a test."""
+    m = Memories(q)
     if test == "down":
-        a_in[BASE["in_s"]] = dump[p + "in_s"]
-        check = [(p + "c_s", BASE["c_s"])]
-    else:
-        a_in[BASE["s"]] = dump[s_in] if k > 0 else dump["s0"]
-        check = [(p + "in_s", BASE["in_s"]), (p + "c_s", BASE["c_s"]), (p + "d_s", BASE["d_s"]), (p + "o_s", BASE["o_s"]),
-                 (s_out, BASE["s_next"])]
-        layers.append(desc(kind=AFFINE, flags=1, P=P, K=b["in_scale"].size, in_base=BASE["s"], out_base=BASE["in_s"],
-                           t_base=t_in, sat_bits=w[p + "in"], chan_base=0))
-    layers.append(desc(kind=LINEAR, flags=1, P=P, K=b["down_W"].shape[1], G=1, C_out=N, in_base=BASE["in_s"],
-                       out_base=BASE["c_s"], w_base=w_down, b_base=b_down, s_base=s_down, t_base=t_c, sat_bits=w[p + "c"]))
-    if test != "down":
-        c_in = b["down_W"].shape[0]
-        layers.append(desc(kind=HOP_CD, flags=1, P=(R - 1) * C, K=12 * c_in, G=1, C_out=N, in_base=BASE["c_s"],
-                           out_base=BASE["d_s"], w_base=w_cd, b_base=b_cd, s_base=s_cd, t_base=t_d, sat_bits=w[p + "d"],
-                           shape=(R - 1) | (C << 8) | (c_in << 16) | (R << 24), g_base=g_cd))
-        layers.append(desc(kind=HOP_DC, flags=1, P=R * C, K=12 * c_in, G=1, C_out=N, in_base=BASE["d_s"],
-                           out_base=BASE["o_s"], w_base=w_dc, b_base=b_dc, s_base=s_dc, t_base=t_o, sat_bits=w[p + "o"],
-                           shape=R | (C << 8) | (c_in << 16) | ((R - 1) << 24), g_base=g_dc))
-        G_up = b["up_W"].shape[0] // N
-        res = (fa[s_in] - fa[s_out]) & 0xFF | (w[s_out] << 8)
-        layers.append(desc(kind=LINEAR, flags=2, P=P, K=b["up_W"].shape[1], G=G_up, C_out=b["up_W"].shape[0],
-                           in_base=BASE["o_s"], out_base=BASE["s_next"], res_base=BASE["s"], w_base=w_up, b_base=b_up,
-                           s_base=s_up, t_base=0, sat_bits=w[s_out], res=res))
-    mem["D"] = layers
-    return mem, a_in, check
+        L, base_in, _ = block_layers(m, k)
+        m.D = [L[1]]
+        return m, {BASE["in_s"]: dump[f"b{k}.in_s"]}, [(f"b{k}.c_s", BASE["c_s"])]
+    if test == "block":
+        L, base_in, base_out = block_layers(m, k)
+        m.D = L
+        p = f"b{k}."
+        return m, {base_in: dump[f"s{k}"]}, [(p + "in_s", BASE["in_s"]), (p + "c_s", BASE["c_s"]), (p + "d_s", BASE["d_s"]),
+                                            (p + "o_s", BASE["o_s"]), (f"s{k + 1}", base_out)]
+    for kk in range(len(q["blocks"])):
+        L, base_in, base_out = block_layers(m, kk)
+        m.D += L
+    m.D += readout_layers(m, base_out)
+    depth = len(q["blocks"])
+    return m, {S_EVEN: dump["s0"]}, [(f"s{depth}", base_out), ("r.in_s", R_BASE["r.in_s"]), ("r.sum", R_BASE["r.sum"]),
+                                     ("r.data", R_BASE["r.data"]), ("r.pool", R_BASE["r.pool"]), ("h_s", R_BASE["h_s"]),
+                                     ("logits", R_BASE["logits"])]
 
 
-def write(work, mem, a_in, check):
+def write(work, m, a_in, check):
     work.mkdir(parents=True, exist_ok=True)
-    (work / "desc.hex").write_text("\n".join(mem["D"]) + "\n")
+    (work / "desc.hex").write_text("\n".join(m.D) + "\n")
     lines = []
     for base, tensor in a_in.items():
         lines.append(f"@{base:x}")
         lines += [f"{int(v) & 0xFFFF:04x}" for v in tensor.ravel()]
     (work / "a_in.hex").write_text("\n".join(lines) + "\n")
     for name, key in (("w", "W"), ("bias", "B"), ("shift", "S"), ("chan", "C")):
-        (work / f"{name}.hex").write_text("\n".join(mem[key]) + "\n")
-    (work / "table.hex").write_text("\n".join(f"{v:04x}" for v in mem["T"]) + "\n")
-    (work / "graph.hex").write_text("\n".join(f"{v:02x}" for v in mem["G"]) + "\n")
-    lo = min(base for _, base in check)
-    hi = max(base + 0x40000 for _, base in check)
-    hi = min(hi, (1 << 20) - 1)
-    (work / "tb_params.vh").write_text(f"localparam integer N_LAYERS = {len(mem['D'])};\n"
+        (work / f"{name}.hex").write_text("\n".join(getattr(m, key)) + "\n")
+    (work / "table.hex").write_text("\n".join(f"{v:04x}" for v in m.T) + "\n")
+    (work / "graph.hex").write_text("\n".join(f"{v:02x}" for v in m.G) + "\n")
+    assert len(m.W) <= 1 << 15 and len(m.B) <= 1 << 8 and len(m.S) <= 1 << 8 and len(m.C) <= 1 << 11 and len(m.T) <= 1 << 22
+    assert len(m.D) <= 64
+    lo = 0
+    hi = (1 << 20) - 1
+    (work / "tb_params.vh").write_text(f"localparam integer N_LAYERS = {len(m.D)};\n"
                                        f"localparam integer OUT_LO = {lo};\nlocalparam integer OUT_HI = {hi};\n")
     return lo
 
@@ -149,7 +226,7 @@ def main():
     parser.add_argument("--checkpoint", required=True)
     parser.add_argument("--calibration", required=True)
     parser.add_argument("--run", default="w16")
-    parser.add_argument("--test", choices=["down", "block"], default="down")
+    parser.add_argument("--test", choices=["down", "block", "net"], default="down")
     parser.add_argument("--block", type=int, default=0)
     parser.add_argument("--shot", type=int, default=0)
     parser.add_argument("--work", required=True)
@@ -169,6 +246,8 @@ def main():
     mem, a_in, check = build(q, dump, args.block, args.test)
     work = Path(args.work)
     lo = write(work, mem, a_in, check)
+    if "logits" in dump:
+        dump["logits_raw"] = dump["logits"]
     obj = work / "obj"
     if not (obj / "Vtb_engine").exists():
         subprocess.run(["verilator", "--binary", "--timing", "-Wno-fatal", "-Wno-WIDTH", "--top-module", "tb_engine",
@@ -189,12 +268,20 @@ def main():
           f"{saved['step']}, shot {args.shot} of {widths.DATA.name}; simulated with Verilator:")
     for name, base in check:
         want = dump[name].ravel()
-        have = got[base - lo:base - lo + len(want)]
+        if name == "logits":                # lane 0 of each of the 12 positions, as three 16-bit words of a 48-bit number
+            words = got[base - lo:base - lo + 12 * N * 3].reshape(12, N, 3)[:, 0] & 0xFFFF
+            have = words[:, 0] | (words[:, 1] << 16) | (words[:, 2] << 32)
+            have = np.where(have >= 1 << 47, have - (1 << 48), have)
+        elif name == "r.pool":              # transposed: observable-major, 32 lanes of which 12 are observables
+            n_obs = dump[name].shape[1]
+            have = got[base - lo:base - lo + n_obs * dump[name].shape[2]]
+        else:
+            have = got[base - lo:base - lo + len(want)]
         diff = int((have != want).sum())
         ok &= diff == 0
         print(f"  {name:8s} {len(want):7d} values: {'equal to the reference' if diff == 0 else f'{diff} DIFFER'}"
               + ("" if diff == 0 else f" (first at {int(np.flatnonzero(have != want)[0])}: engine {int(have[np.flatnonzero(have != want)[0]])}, reference {int(want[np.flatnonzero(have != want)[0]])})"))
-    print(f"{'PASS' if ok else 'FAIL'}: {len(mem['D'])} layers in {clocks:,} clocks of the engine ({N} multiply-add lanes)")
+    print(f"{'PASS' if ok else 'FAIL'}: {len(mem.D)} layers in {clocks:,} clocks of the engine ({N} multiply-add lanes)")
     sys.exit(0 if ok else 1)
 
 

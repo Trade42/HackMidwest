@@ -4,7 +4,7 @@
 module tb_engine;
     `include "tb_params.vh"                 // N_LAYERS, OUT_LO, OUT_HI, from run_engine.py
     localparam integer N = 32, VW = 16, WW = 16, AW = 48;
-    localparam integer AA = 20, WA = 13, BA = 8, CA = 10, TA = 19, GA = 11, DA = 6, DW = 640;
+    localparam integer AA = 20, WA = 15, BA = 8, CA = 11, TA = 22, GA = 12, DA = 6, DW = 640;
 
     reg clk = 1'b0, rst = 1'b1, start = 1'b0;
     always #5 clk = ~clk;

@@ -150,6 +150,16 @@ def main():
     out(f"| 8, with the residual stream at 16 (see WIDTHS.md: the stream needs 16 bits) | {total_w * 8 / 1e6:.2f} | "
         f"{mixed / 1e6:.2f} | {(total_w * 8 + mixed) / 1e6:.2f} |")
     out("")
+    n_tables = 4 * c["depth"] + 1           # every SiLU of the blocks and of the readout; the head has one more
+    out(f"SiLU tables (fixed_point.py: one entry per possible input): {n_tables} tables in the blocks and the readout, "
+        f"plus one in the head, which widths.py keeps at 16 bits.\n")
+    out("| bits per value | body tables, Mb | the head's table (16 bits), Mb |")
+    out("|---:|---:|---:|")
+    for b in (16, 12, 10, 8, 6, 4):
+        out(f"| {b} | {n_tables * 2 ** b * b / 1e6:.3f} | {2 ** 16 * 16 / 1e6:.3f} |")
+    out("")
+    out("At 16 bits a table is large (65,536 entries); a hardware design would then approximate SiLU in pieces. That was "
+        "not done here: the tables are exact.\n")
     out("| chip | LUTs | DSP slices | block RAM, Mb | holds at 8 bits | holds at 4 bits | time per shot at 100 MHz, every DSP busy |")
     out("|---|---:|---:|---:|---|---|---:|")
     for name, (cells, slices, dsp, bram) in CHIPS.items():

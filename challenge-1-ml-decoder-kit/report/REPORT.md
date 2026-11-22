@@ -456,7 +456,7 @@ record of them (`report/data/background/plain_cnn_runs/`).
   results of `loss/` and `loss_tracker/` were decoded with the kit's relay-BP. The TCBP version was then tried with
   atom loss on the neutral-atom model (`neutral_atom_noise/RESULTS.md`, section "Exploration: the TCBP pipeline
   with atom loss"): the loss flags help TCBP-JOBS as much as they help relay-BP, and the kit-trained head with the
-  flags stays behind matched priors with the flags. Its network was never retrained with loss; that is the next step.
+  flags is behind matched priors with the flags (significantly at the stronger of the two loss levels, not at the weaker). Its network was never retrained with loss; that is the next step.
 - **A dependency with a licence.** PriorTilt is CC BY-NC-SA 4.0 (non-commercial); none of its code is in this
   repository.
 - **Work outside this submission.** One further study lives on a branch that is not merged, so no number from it is

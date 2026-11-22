@@ -3,3 +3,4 @@ checkout: 372d050 predecoder: the fit's control row runs without a head; on the 
 validation_X.npz: 5000 shots, p=0.005, arms ['fresh']; head priors {'mode': 'linear', 'alpha': 1.0, 'eps': 1e-06}; 50 tasks to run in 6 processes (24 CPUs here, jupyter-blakew3)
   10 of 50 tasks done (fresh from shot 800), 198 s
   20 of 50 tasks done (fresh from shot 1900), 329 s
+  30 of 50 tasks done (fresh from shot 3000), 444 s

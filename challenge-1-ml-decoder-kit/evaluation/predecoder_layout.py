@@ -20,6 +20,34 @@ def matrix_identity(H, L, priors):
     return digest.hexdigest()
 
 
+def matrix_semantic_identity(H, L, priors):
+    """Portable fingerprint of ordered binary mechanisms and 14-digit priors.
+
+    The original matrix_identity remains an exact byte fingerprint. Sparse index
+    widths and sub-1e-14 floating-point differences can vary across platforms
+    without changing the decoder problem at the precision recorded here.
+    Column order is preserved because a router correction uses mechanism indices.
+    """
+    digest = hashlib.sha256(b"gross-csc-priors-round14-v1\0")
+    for matrix in (H, L):
+        canonical = matrix.tocsc(copy=True)
+        canonical.sum_duplicates()
+        canonical.sort_indices()
+        if not np.isin(canonical.data, (0, 1)).all():
+            raise ValueError("matrix fingerprint needs binary H and L entries")
+        for value in (np.asarray(canonical.shape, dtype="<i8"),
+                      np.asarray(canonical.indptr, dtype="<i8"),
+                      np.asarray(canonical.indices, dtype="<i8"),
+                      np.asarray(canonical.data, dtype=np.uint8)):
+            digest.update(value.tobytes())
+    probabilities = np.asarray(priors, dtype=np.float64)
+    if probabilities.ndim != 1 or not np.isfinite(probabilities).all() or not np.logical_and(
+            probabilities >= 0, probabilities <= 1).all():
+        raise ValueError("matrix fingerprint needs finite probability priors")
+    digest.update(np.round(probabilities, 14).astype("<f8").tobytes())
+    return digest.hexdigest()
+
+
 class GrossLayout:
     syndrome_shape = (13, 12, 6)
     fault_shape = (122, 12, 6)

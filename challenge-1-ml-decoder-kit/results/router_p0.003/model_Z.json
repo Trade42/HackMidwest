@@ -116,5 +116,6 @@
     "wrong_detection_fraction": 1.0
   },
   "selection_rule": "largest validation risk threshold with at most max_missed_wrong hard candidate errors accepted",
-  "max_missed_wrong": 0
+  "max_missed_wrong": 0,
+  "matrix_semantic_sha256": "3522ceead9b20b224dca538742ded7f353b30b0fdee256b09ea0a84374cdc100"
 }

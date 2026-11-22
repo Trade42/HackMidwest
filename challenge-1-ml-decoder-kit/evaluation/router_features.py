@@ -9,7 +9,7 @@ import numpy as np
 
 from evaluation.adapters import _prediction
 from evaluation.data import load_dataset
-from evaluation.predecoder_layout import matrix_identity
+from evaluation.predecoder_layout import matrix_identity, matrix_semantic_identity
 from evaluation.router import FEATURE_NAMES, candidate_features, first_leg_converged
 
 
@@ -78,7 +78,9 @@ def main():
         raise FileExistsError(f"{output}: output already exists")
     result = generate(data, H, L, priors, committer)
     metadata = {"split": args.split, "basis": args.basis, "p": data.p, "dataset": data.identity(),
-                "matrix_sha256": matrix_identity(H, L, priors), "feature_names": list(FEATURE_NAMES),
+                "matrix_sha256": matrix_identity(H, L, priors),
+                "matrix_semantic_sha256": matrix_semantic_identity(H, L, priors),
+                "feature_names": list(FEATURE_NAMES),
                 "commit_manifest_sha256": commit_hash,
                 "setup_seconds": result.pop("setup_seconds"),
                 "label": "wrong = any(first_candidate_observables != truth); truth used only after decoding"}

@@ -46,3 +46,4 @@
 2026-11-22T12:08:44Z END joint_p0.003 exit 0: wall time of this run: 22 s [CPUs in use 6.2, tokens 9, throttled so far 4844.9 s, load 10.44]
 2026-11-22T12:08:50Z START eval_p0.005_priortilt: weight 1, pid 303815; before it: tokens 9, CPUs in use 6.4, throttled so far 4844.9 s
 2026-11-22T12:09:10Z END ensemble_p0.003 exit 0: ensemble of p = 0.003: exit 0 [CPUs in use 7.1, tokens 6, throttled so far 4844.9 s, load 9.75]
+2026-11-22T12:24:02Z START joint_p0.004: weight 4, pid 316703; before it: tokens 6, CPUs in use 6.1, throttled so far 4844.9 s

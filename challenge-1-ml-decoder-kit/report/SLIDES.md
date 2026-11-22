@@ -52,7 +52,7 @@ Source: `report/tables/where_failures.md`. The design was chosen on practice sho
 - As a tie-break it clearly beats the plain lowest-weight rule (on <!--f:a80_shots-->80,000<!--/f--> fresh shots: <!--f:a80_a-->237<!--/f--> against <!--f:a80_aw-->298<!--/f--> failures,
   test p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f-->). Against the best hand-written rule there is no significant difference: <!--f:a80_a-->237<!--/f--> against <!--f:a80_ac-->253<!--/f-->
   there (test p = <!--f:a80_a_vs_ac_p-->0.12<!--/f-->), and <!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs on the test shots (test p = <!--f:abl_pooled_p-->0.15<!--/f-->; one offline decode of all three
-  p, which is why it is not the sum of slide 4's timed counts).
+  p, which is why it is not the sum of slide 4's timed counts). <!--f:abl_timed_slide-->In the timed rows at p = 0.003 and 0.004 the network is ahead (47 against 56 failed pairs, test p = 0.11): not significant either way.<!--/f-->
 - <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
 
 Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.

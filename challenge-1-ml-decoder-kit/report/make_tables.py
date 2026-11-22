@@ -142,7 +142,7 @@ def load_test_rows(data=DATA):
     stood in for by the offline combination of per-shot files (rows.py, `member`); it is then
     marked as such, and its time is a sum of decode calls.
     """
-    log = loaders.clean_rows_log(data / "test" / "clean_rows.out", data / "test" / "test_rows.out")
+    log = loaders.clean_rows_log(data / "test" / "clean_rows.out", data / "test" / "test_rows.out", data / "test" / "clean_retime.out")
     jobs = loaders.runner_logs(sorted((data / "test").glob("runner_*.out"))) if (data / "test").is_dir() else {}
     monitor = loaders.cpu_monitor(data / "test" / "cpu_monitor.out")
     quota = loaders.cpu_quota(data / "test" / "cpu_monitor.out")
@@ -1538,6 +1538,36 @@ def findings(measured):
         fact(f"findings{p[-1]}", text and (text[0].upper() + text[1:] + "."), f"tables/test_p{p}.md")
 
 
+def timed_ablation(measured):
+    """The ablation again on the timed rows where both arms were timed: the network against the best hand-written tie-break."""
+    levels, network, classical, only_network, only_classical = [], 0, 0, 0, 0
+    for p in P_VALUES:
+        ours, arm = measured[p].get("hierarchy"), measured[p].get("hierarchy-converged")
+        if ours is None or arm is None or ours.get("offline") or arm.get("offline") or ours["failed_pair"] is None:
+            continue
+        paired = stats.paired(arm["failed_pair"], ours["failed_pair"])
+        levels.append(p)
+        network += ours["failures_pair"]; classical += arm["failures_pair"]
+        only_network += paired["row_only"]; only_classical += paired["reference_only"]
+    if levels:
+        from scipy.stats import binomtest
+        discordant = only_network + only_classical
+        p_value = float(binomtest(only_network, discordant).pvalue) if discordant else 1.0
+        missing = [p for p in P_VALUES if p not in levels]
+        text = (f"In the timed rows, where both tie-breaks have one (p = {', '.join(levels)}), the network fails {network} pairs and the best "
+                f"hand-written rule {classical} (only the network rule fails {only_network}, only the hand-written rule {only_classical}, exact p = "
+                f"{stats.p_text(p_value)}, " + ("a significant difference" if p_value < 0.05 else "not a significant difference") + ")"
+                + (f"; at p = {', '.join(missing)} the hand-written rule has no timed row" if missing else "")
+                + ". The timed and the offline decodes draw other random numbers, so they need not agree on which rule is ahead.")
+    else:
+        text = "The hand-written tie-break has no timed row on the test shots."
+    fact("abl_timed", text, "tables/test_comparisons.md")
+    direction = "ahead" if levels and network < classical else "behind" if levels and network > classical else "level"
+    fact("abl_timed_slide", levels and (f"In the timed rows at p = {' and '.join(levels)} the network is {direction} ({network} against {classical} failed "
+                                        f"pairs, test p = {stats.p_text(p_value)}): " + ("a significant difference." if p_value < 0.05
+                                        else "not significant either way.")), "tables/test_comparisons.md")
+
+
 def ensemble_statement(measured, combined):
     """Our ensemble against TCBP-JOBS on the same test pairs, with what its gain rests on (joint decoding of the disputed shots)."""
     clauses, short = [], []
@@ -1735,6 +1765,7 @@ def main(argv=None):
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)
         ensemble_statement(measured, combined)
+        timed_ablation(measured)
         findings(measured)
         slide_facts(measured)
         refresh_top_readme(readme_section(measured))

@@ -17,7 +17,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.004 | relay-BP with a learned router | 87 of 10,000 | 315 | 0.99 | 15.0 | 6,865 | CPU, 1 core |
 | 0.004 | PriorTilt, one run | 74 of 10,000 | 87.3 | 0.27 | 34.2 | 884 | CPU, 1 core |
 | 0.004 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 57 of 10,000 | not timed in one process |  |  |  |  |
-| 0.004 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 53 of 10,000 | not timed in one process |  |  |  |  |
+| 0.004 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 52 of 10,000 | 218 | 0.68 | 83.4 | 2,090 | CPU, 1 core |
 | 0.004 | our hierarchy, neural tie-break | 44 of 10,000 | 216 | 0.68 | 83.1 | 2,064 | CPU, 1 core |
 | 0.004 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 44 of 10,000 | 150 | 0.47 | 55.5 | 1,292 | CPU, 2 cores |
 | 0.004 | our ensemble (combined offline) (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere joint decoding where it converged, else TCBP-JOBS; joint decoding ran on 93 of the 93 disputed shots) | 16 of 10,000 | not timed in one process |  |  |  |  |

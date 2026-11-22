@@ -111,7 +111,7 @@ per-shot files" is combined offline from saved answers and has no time measured 
 | relay-BP with a learned router | 5.00e-05 ± 2.0e-05 · 6 pairs · 42.5 ms | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | 6.99e-03 ± 2.5e-04 · 807 pairs · 1,928 ms |
 | PriorTilt, one run | 3.33e-05 ± 1.7e-05 · 4 pairs · 22.7 ms | 6.19e-04 ± 7.2e-05 · 74 pairs · 87.3 ms | 5.15e-03 ± 2.1e-04 · 601 pairs · 264 ms |
 | our hierarchy, lowest-weight tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · offline, no time | 4.76e-04 ± 6.3e-05 · 57 pairs · offline, no time | 4.50e-03 ± 2.0e-04 · 527 pairs · offline, no time |
-| our hierarchy, classical tie-break (lowest weight among the converged candidates) | 3.33e-05 ± 1.7e-05 · 4 pairs · 46.3 ms | 4.43e-04 ± 6.1e-05 · 53 pairs · offline, no time | 3.99e-03 ± 1.8e-04 · 469 pairs · offline, no time |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | 3.33e-05 ± 1.7e-05 · 4 pairs · 46.3 ms | 4.34e-04 ± 6.0e-05 · 52 pairs · 218 ms | 3.99e-03 ± 1.8e-04 · 469 pairs · offline, no time |
 | our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · 45.7 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 216 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 825 ms |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 2.50e-05 ± 1.4e-05 · 3 pairs · 28.9 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 150 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 608 ms |
 | our ensemble (combined offline) | 1.67e-05 ± 1.2e-05 · 2 pairs · offline, no time | 1.33e-04 ± 3.3e-05 · 16 pairs · offline, no time | 3.05e-03 ± 1.6e-04 · 360 pairs · offline, no time; fails exactly TCBP-JOBS's shots |
@@ -170,6 +170,8 @@ The exact tests, the intervals, the median and 99th-percentile times and what ra
 | 0.005 | pairs (the kit's score) |  | 469 | 490 | 78 / 57 | 0.085 |
 | 0.003, 0.004, 0.005 together | pairs (the kit's score) |  | 525 | 544 | 87 / 68 | 0.15 |
 <!-- END table:test_ablation -->
+
+<!--f:abl_timed-->In the timed rows, where both tie-breaks have one (p = 0.003, 0.004), the network fails 47 pairs and the best hand-written rule 56 (only the network rule fails 8, only the hand-written rule 17, exact p = 0.11, not a significant difference); at p = 0.005 the hand-written rule has no timed row. The timed and the offline decodes draw other random numbers, so they need not agree on which rule is ahead.<!--/f-->
 
 The sentence under "What the numbers say" is chosen by this table: it credits the network with a gain only if the
 pooled exact test on the pairs that only one of the two rules fails is below 0.05. The network is never credited
@@ -291,7 +293,7 @@ What each decoder needed for its row on the test shots. Memory is the peak resid
 | relay-BP with a learned router | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.0 / 0.0 / 0.0 | a logistic model decides when relay-BP's first answer is enough |
 | PriorTilt, one run | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.1 / 0.1 / 0.1 | 14 parameters, fitted by its authors |
 | our hierarchy, lowest-weight tie-break | CPU, 1 process, 1 thread | not measured / not measured / not measured | not measured / not measured / not measured | nothing of ours (PriorTilt's parameters are its authors') |
-| our hierarchy, classical tie-break (lowest weight among the converged candidates) | CPU, 1 process, 1 thread | 284 / not measured / not measured | 0.2 / not measured / not measured | nothing of ours (PriorTilt's parameters are its authors') |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | CPU, 1 process, 1 thread | 284 / 284 / not measured | 0.2 / 0.1 / not measured | nothing of ours (PriorTilt's parameters are its authors') |
 | our hierarchy, neural tie-break | CPU, 1 process, 1 thread | 781 / 782 / 788 | 5.1 / 4.9 / 5.2 | a neural network picks among the candidates where the fast decodes disagree |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | CPU, 1 process, 1 thread | 778 / 778 / 784 | 11.3 / 10.5 / 9.7 | the same decoder as the row above, with the same answers on every shot (checked); only the wall time differs |
 | our ensemble (combined offline) | CPU and GPU, 1 process, 1 thread | not measured / not measured / not measured | not measured / not measured / not measured | only the rules that use the network have a learned part: see the rule named in the row |

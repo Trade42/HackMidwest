@@ -51,6 +51,7 @@ SOURCES = [
     ("exploration/ensemble/", "origin/server-logs", "files/ens_p*/validation_*.npz", False),
     ("exploration/ensemble/", "origin/server-logs", "files/ens_p*/validation_*.json", False),
     ("test/clean_rows.out", "origin/server-logs", "clean_rows.out", True),
+    ("test/clean_retime.out", "origin/server-logs", "clean_retime.out", True),   # the p = 0.003 baselines decoded again in a quiet window
     ("test/runner_cpu.out", "origin/server-logs", "runner_cpu.out", True),
     ("test/runner_gpu.out", "origin/server-logs", "runner_gpu.out", True),
     ("test/runner_ctl.out", "origin/server-logs", "runner_ctl.out", True),

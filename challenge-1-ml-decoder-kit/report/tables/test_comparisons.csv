@@ -18,9 +18,9 @@ p,first,second,first_failed_pairs,second_failed_pairs,both_fail,only_first_fails
 0.004,hierarchy-weight,priortilt,57,74,43,14,31,0.016094360031274842
 0.004,hierarchy-weight,relay-bp,57,83,37,20,46,0.0018582303075658085
 0.004,hierarchy,priortilt,44,74,39,5,35,1.382612026645802e-06
-0.004,hierarchy,hierarchy-converged,44,53,34,10,19,0.13604594767093658
-0.004,hierarchy-converged,priortilt,53,74,42,11,32,0.001913961001264397
-0.004,hierarchy-converged,relay-bp,53,83,34,19,49,0.00035795527161316536
+0.004,hierarchy,hierarchy-converged,44,52,36,8,16,0.15158963203430176
+0.004,hierarchy-converged,priortilt,52,74,44,8,30,0.0004719867429230362
+0.004,hierarchy-converged,relay-bp,52,83,34,18,49,0.0001942977864148144
 0.004,hierarchy,hierarchy-weight,44,57,34,10,23,0.03508203336969018
 0.004,hierarchy,relay-bp,44,83,29,15,54,2.612848003590018e-06
 0.004,hierarchy,tcbp,44,41,24,20,17,0.7428293587290682

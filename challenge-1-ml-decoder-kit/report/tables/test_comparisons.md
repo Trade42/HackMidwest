@@ -21,9 +21,9 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | PriorTilt, one run | 57 against 74 | 43 | 14 / 31 | 0.016 |
 | 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | relay-BP (kit baseline) | 57 against 83 | 37 | 20 / 46 | 0.002 |
 | 0.004 | both timed | our hierarchy, neural tie-break | PriorTilt, one run | 44 against 74 | 39 | 5 / 35 | 1e-06 |
-| 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 44 against 53 | 34 | 10 / 19 | 0.14 |
-| 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | PriorTilt, one run | 53 against 74 | 42 | 11 / 32 | 0.002 |
-| 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | relay-BP (kit baseline) | 53 against 83 | 34 | 19 / 49 | 4e-04 |
+| 0.004 | both timed | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 44 against 52 | 36 | 8 / 16 | 0.15 |
+| 0.004 | both timed | our hierarchy, classical tie-break (lowest weight among the converged candidates) | PriorTilt, one run | 52 against 74 | 44 | 8 / 30 | 5e-04 |
+| 0.004 | both timed | our hierarchy, classical tie-break (lowest weight among the converged candidates) | relay-BP (kit baseline) | 52 against 83 | 34 | 18 / 49 | 2e-04 |
 | 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 44 against 57 | 34 | 10 / 23 | 0.035 |
 | 0.004 | both timed | our hierarchy, neural tie-break | relay-BP (kit baseline) | 44 against 83 | 29 | 15 / 54 | 3e-06 |
 | 0.004 | both timed | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | 44 against 41 | 24 | 20 / 17 | 0.74 |

@@ -52,6 +52,8 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `abl_pooled_only_weight` | 68 | `tables/test_ablation.md` |
 | `abl_pooled_p` | 0.15 | `tables/test_ablation.md` |
 | `abl_pooled_priortilt_share` | 63% | `tables/test_ablation.md` |
+| `abl_timed` | In the timed rows, where both tie-breaks have one (p = 0.003, 0.004), the network fails 47 pairs and the best hand-written rule 56 (only the network rule fails 8, only the hand-written rule 17, exact p = 0.11, not a significant difference); at p = 0.005 the hand-written rule has no timed row. The timed and the offline decodes draw other random numbers, so they need not agree on which rule is ahead. | `tables/test_comparisons.md` |
+| `abl_timed_slide` | In the timed rows at p = 0.003 and 0.004 the network is ahead (47 against 56 failed pairs, test p = 0.11): not significant either way. | `tables/test_comparisons.md` |
 | `abl_verdict` | no better than | `tables/test_ablation.md` |
 | `c3_ensemble_vs_hierarchy_both` | 2 | `tables/test_comparisons.md` |
 | `c3_ensemble_vs_hierarchy_only_first` | 0 | `tables/test_comparisons.md` |
@@ -117,18 +119,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c4_ensemble_vs_tcbp_only_first` | 1 | `tables/test_comparisons.md` |
 | `c4_ensemble_vs_tcbp_only_second` | 26 | `tables/test_comparisons.md` |
 | `c4_ensemble_vs_tcbp_p` | 4e-07 | `tables/test_comparisons.md` |
-| `c4_hierarchy_converged_vs_priortilt_both` | 42 | `tables/test_comparisons.md` |
-| `c4_hierarchy_converged_vs_priortilt_only_first` | 11 | `tables/test_comparisons.md` |
-| `c4_hierarchy_converged_vs_priortilt_only_second` | 32 | `tables/test_comparisons.md` |
-| `c4_hierarchy_converged_vs_priortilt_p` | 0.002 | `tables/test_comparisons.md` |
+| `c4_hierarchy_converged_vs_priortilt_both` | 44 | `tables/test_comparisons.md` |
+| `c4_hierarchy_converged_vs_priortilt_only_first` | 8 | `tables/test_comparisons.md` |
+| `c4_hierarchy_converged_vs_priortilt_only_second` | 30 | `tables/test_comparisons.md` |
+| `c4_hierarchy_converged_vs_priortilt_p` | 5e-04 | `tables/test_comparisons.md` |
 | `c4_hierarchy_converged_vs_relay_bp_both` | 34 | `tables/test_comparisons.md` |
-| `c4_hierarchy_converged_vs_relay_bp_only_first` | 19 | `tables/test_comparisons.md` |
+| `c4_hierarchy_converged_vs_relay_bp_only_first` | 18 | `tables/test_comparisons.md` |
 | `c4_hierarchy_converged_vs_relay_bp_only_second` | 49 | `tables/test_comparisons.md` |
-| `c4_hierarchy_converged_vs_relay_bp_p` | 4e-04 | `tables/test_comparisons.md` |
-| `c4_hierarchy_vs_hierarchy_converged_both` | 34 | `tables/test_comparisons.md` |
-| `c4_hierarchy_vs_hierarchy_converged_only_first` | 10 | `tables/test_comparisons.md` |
-| `c4_hierarchy_vs_hierarchy_converged_only_second` | 19 | `tables/test_comparisons.md` |
-| `c4_hierarchy_vs_hierarchy_converged_p` | 0.14 | `tables/test_comparisons.md` |
+| `c4_hierarchy_converged_vs_relay_bp_p` | 2e-04 | `tables/test_comparisons.md` |
+| `c4_hierarchy_vs_hierarchy_converged_both` | 36 | `tables/test_comparisons.md` |
+| `c4_hierarchy_vs_hierarchy_converged_only_first` | 8 | `tables/test_comparisons.md` |
+| `c4_hierarchy_vs_hierarchy_converged_only_second` | 16 | `tables/test_comparisons.md` |
+| `c4_hierarchy_vs_hierarchy_converged_p` | 0.15 | `tables/test_comparisons.md` |
 | `c4_hierarchy_vs_hierarchy_weight_both` | 34 | `tables/test_comparisons.md` |
 | `c4_hierarchy_vs_hierarchy_weight_only_first` | 10 | `tables/test_comparisons.md` |
 | `c4_hierarchy_vs_hierarchy_weight_only_second` | 23 | `tables/test_comparisons.md` |
@@ -566,18 +568,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t4_ensemble_xz` | 8, 8 | `tables/test_p0.004.md` |
 | `t4_hierarchy_both` | 29 | `tables/test_p0.004.md` |
 | `t4_hierarchy_converged_both` | 34 | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_error` | 6.1e-05 | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_mean_ms` | 208 | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_median_ms` | not measured | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_error` | 6.0e-05 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_mean_ms` | 218 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_median_ms` | 83.4 | `tables/test_p0.004.md` |
 | `t4_hierarchy_converged_only_relay` | 49 | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_only_this` | 19 | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_p99_ms` | not measured | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_paired_p` | 4e-04 | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_pairs` | 53 | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_rate` | 4.43e-04 | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_time_ratio` | not measured | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_wall_hours` | not measured | `tables/test_p0.004.md` |
-| `t4_hierarchy_converged_xz` | 24, 29 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_only_this` | 18 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_p99_ms` | 2,090 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_paired_p` | 2e-04 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_pairs` | 52 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_rate` | 4.34e-04 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_time_ratio` | 0.68 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_wall_hours` | 0.6 | `tables/test_p0.004.md` |
+| `t4_hierarchy_converged_xz` | 25, 27 | `tables/test_p0.004.md` |
 | `t4_hierarchy_error` | 5.5e-05 | `tables/test_p0.004.md` |
 | `t4_hierarchy_mean_ms` | 216 | `tables/test_p0.004.md` |
 | `t4_hierarchy_median_ms` | 83.1 | `tables/test_p0.004.md` |

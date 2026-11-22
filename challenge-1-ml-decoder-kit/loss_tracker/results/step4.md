@@ -17,4 +17,4 @@ What step 4 says:
   one CPU thread of this laptop-class CPU, and 4.4 ms per shot in batches of 100 (table above). The timer wraps
   the features and the posteriors of all the shot's flagged atoms (about 10). For comparison, the flag-aware
   relay-BP decode takes a median of 248 ms per shot on one CPU (`loss/RESULTS.md`, L4), so the tracker adds about
-  3%. The tracker's priors also cut the mean relay-BP iterations, from 2,599 to 2,141 on the test.
+  3% of the median decode, and 0.5% of the mean (1,785 ms). The tracker's priors also cut the mean relay-BP iterations, from 2,599 to 2,141 on the test.

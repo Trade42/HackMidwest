@@ -38,6 +38,23 @@ uniform guess. Nothing else in the decoder changes.
 | What is NOT modelled | Correlations between the X triple and the Z triple of an atom. The exact time course of a hook error (the triple is set aside for two rounds instead). Three-way effects between lost atoms: the other atoms on a check are treated as independent. |
 | Use in the decoder | The posterior over the slot is summed to the 12 rounds and spread over the 6 slots of each round as the ORACLE `oracle-round` does; then `loss.lossmap`'s `data_activation` and the rest of the condition `exact`, unchanged (`priors.py`). Relay-BP at the kit's settings, a fresh decoder with seed 1 per shot and condition, as in `loss/decode.py`. |
 
+## Environment
+
+From `challenge-1-ml-decoder-kit/`, Python 3.12:
+
+```sh
+python3.12 -m venv <venv>
+<venv>/bin/pip install -r loss/requirements.txt pytest              # the kit's decoders and Clifft 0.13.0
+<venv>/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu   # only for learned.py (step 4)
+export PYTHONDONTWRITEBYTECODE=1
+```
+
+The run scripts in `runs/` read their settings from `runs/common.sh`: `S` (the folder for datasets, posteriors and
+per-shot parts) and `V` (the venv) default to this team's PC and can be set on the command line
+(`S=<folder> V=<venv> loss_tracker/runs/<script>.sh`); `lane` wraps a heavy command in the PC's CPU lock, and
+`LANE` chooses which. `python -m loss_tracker.job` is the portable route: it samples, tracks and decodes with one
+command and no lock.
+
 ## Splits
 
 | Split | Seed | Shots | sha256 of the file | Lost data atoms per shot | Used for |
@@ -61,8 +78,9 @@ validation shots each:
 The replication's split (seed 7310, 4,000 shots) was sampled on the team's server: sha256
 `07c2f43737bdd07f612669432094b7bd2614fc13614ccabff640c28f4dd29c2e`.
 
-The truth (the status probes) is read in five places only: `fit.py` and `learned.py train` (training shots),
-`signal.py` (training shots), `accuracy.py` (scoring), and the ORACLE rows and the scoring in `decode.py`.
+The truth (the status probes) is read in six places only: `fit.py` and `learned.py train` (training shots),
+`signal.py` (training shots), `accuracy.py` (scoring), the ORACLE rows and the scoring in `decode.py`, and
+`diagnose.py` (scoring after the decode).
 
 ## Step 1: the signal
 

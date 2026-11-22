@@ -714,6 +714,182 @@
   "path": "loss_tracker/results/accuracy_val_learned.md",
   "sha256": "2f227f53e3a9ce26098a6109738bb4146e622bff36276d477fe131dc4dd22032"
  },
+ "loss/tracker/parts/test/000000-000500.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 39266,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test/000000-000500.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/000000-000500.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test/000000-000500.npz",
+  "sha256": "eb07d9a4d33365468940b6baff283decb54f7de88fc6530c73e0c418e2178147"
+ },
+ "loss/tracker/parts/test/000500-001000.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 38905,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test/000500-001000.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/000500-001000.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test/000500-001000.npz",
+  "sha256": "1a7ee51432ad86ef3abe147a548caa96c3ebb6ad4bdf2aef7510155dd0df4717"
+ },
+ "loss/tracker/parts/test/001000-001500.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 38750,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test/001000-001500.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/001000-001500.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test/001000-001500.npz",
+  "sha256": "7c8cdfbc36d0d3215c70592f2ab9fb468dc1352dcc6323fa040ea63b7768052c"
+ },
+ "loss/tracker/parts/test/001500-002000.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 39087,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test/001500-002000.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/001500-002000.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test/001500-002000.npz",
+  "sha256": "cdf0b45564c8d04c0a8c748e72d449157d5af767872298f19d6819ea17f04921"
+ },
+ "loss/tracker/parts/test/002000-002500.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 39432,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test/002000-002500.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/002000-002500.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test/002000-002500.npz",
+  "sha256": "f70a4d2573216827a39c4ef5ac6222564e280fbb37386037120b86c4cb9d26b3"
+ },
+ "loss/tracker/parts/test/002500-003000.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 38675,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test/002500-003000.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/002500-003000.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test/002500-003000.npz",
+  "sha256": "90f5b4c6d57a0394c213f9a0ec27e94378afea869ea736eb25b64ea05b2d4ea0"
+ },
+ "loss/tracker/parts/test/003000-003500.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 38949,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test/003000-003500.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/003000-003500.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test/003000-003500.npz",
+  "sha256": "0efd040383432d0231d3c767e51a61107d393b55eef89f6186680e9ed251817b"
+ },
+ "loss/tracker/parts/test/003500-004000.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 39005,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test/003500-004000.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/003500-004000.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test/003500-004000.npz",
+  "sha256": "c1980d4f341c72d3e6219110eba2c0d04a41e580f9d170b6035b54994fa03528"
+ },
+ "loss/tracker/parts/test_coupled2/000000-000500.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 11871,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test_coupled2/000000-000500.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/000000-000500.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test_coupled2/000000-000500.npz",
+  "sha256": "842c2dc44e8334b4b9d1b9601c88767062bd7fc5336989415aac9668023cd274"
+ },
+ "loss/tracker/parts/test_coupled2/000500-001000.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 11886,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test_coupled2/000500-001000.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/000500-001000.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test_coupled2/000500-001000.npz",
+  "sha256": "05845daee808b830e76c648a094b109760bc66d5a105d2617161870b0ef5a8aa"
+ },
+ "loss/tracker/parts/test_coupled2/001000-001500.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 11886,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test_coupled2/001000-001500.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/001000-001500.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test_coupled2/001000-001500.npz",
+  "sha256": "2f5db388898c1257d0bc8930f16dc470bce391a0536fed4ec390f1396314b3d1"
+ },
+ "loss/tracker/parts/test_coupled2/001500-002000.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 11813,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test_coupled2/001500-002000.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/001500-002000.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test_coupled2/001500-002000.npz",
+  "sha256": "f37ed2f10eb8cc6ba5627481e59d881c78b543597d7cdd6b04b2d50fb1e4a9fe"
+ },
+ "loss/tracker/parts/test_coupled2/002000-002500.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 11875,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test_coupled2/002000-002500.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/002000-002500.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test_coupled2/002000-002500.npz",
+  "sha256": "51d80d10d2bb1b37e5b1fa1cc92d50602e40dd5e9c3d7bfdc60b342c9dcda231"
+ },
+ "loss/tracker/parts/test_coupled2/002500-003000.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 11908,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test_coupled2/002500-003000.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/002500-003000.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test_coupled2/002500-003000.npz",
+  "sha256": "2bbcfdd0df711bc4bb4a144fe4c649c08d97e79c7dcd992d206785ca5e3bd0d6"
+ },
+ "loss/tracker/parts/test_coupled2/003000-003500.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 12026,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test_coupled2/003000-003500.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/003000-003500.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test_coupled2/003000-003500.npz",
+  "sha256": "ee3507b1f37b087d49678b682ed8c9dad5080c61de80b06353c7df4286a585c3"
+ },
+ "loss/tracker/parts/test_coupled2/003500-004000.npz": {
+  "branch": "file:/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts",
+  "bytes": 12053,
+  "commit": "not in git",
+  "copied_utc": "2026-11-22 10:42",
+  "file": "loss/tracker/parts/test_coupled2/003500-004000.npz",
+  "from": "the loss-tracker task's working folder on the team's PC, `/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/003500-004000.npz` (not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)",
+  "grows": false,
+  "path": "test_coupled2/003500-004000.npz",
+  "sha256": "f341d6486d6b4635aeef6ce3f0d40d77cca22bcb493f1bc6976609c86b6ab640"
+ },
  "loss/tracker/pooled_7300_7310.json": {
   "branch": "tree",
   "bytes": 9052,
@@ -838,13 +1014,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "6a8e6be343ea8c8db6966c05f810d51b072bdc0b",
-  "copied_utc": "2026-11-22 10:38",
+  "commit": "ee3d85e3d22b99b96d74be505da420d35107730a",
+  "copied_utc": "2026-11-22 10:42",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `6a8e6be343ea`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `ee3d85e3d22b`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "92ab29ba87a03d9bf184d85898fc48d90ca9c202d404fcaad81babe09e577c7e"
+  "sha256": "6add208985f049b046a88ad2a7790513d89c8ef071c7a82f12a6882b7bbaaa34"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -1046,14 +1222,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 13120,
-  "commit": "6a8e6be343ea8c8db6966c05f810d51b072bdc0b",
-  "copied_utc": "2026-11-22 10:38",
+  "bytes": 13232,
+  "commit": "ee3d85e3d22b99b96d74be505da420d35107730a",
+  "copied_utc": "2026-11-22 10:42",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `6a8e6be343ea`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `ee3d85e3d22b`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "23a4faffc9cf0e154bc13ececb8b3b6cec8fdf2d1e6ab417a0ba6a44cc1ca9af"
+  "sha256": "81647ecc961c9478629761657ccf3b0ad50e6f2c9f0d23b80fefc72ee45330d0"
  },
  "test/eval_p0.003_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",

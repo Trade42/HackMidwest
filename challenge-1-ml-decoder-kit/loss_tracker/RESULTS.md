@@ -18,7 +18,7 @@ of `results/`, copied in unchanged except that its headings move down two levels
 | Replication (server, seed 7310, 4,000 shots, secondary) | `starter` 146, `exact` 161, tracker 122, ORACLE 82: share 0.49 (0.25–0.70); 1.20 times fewer failures than `starter` (p = 0.026), 1.32 than `exact`. Pooled with the test (8,000 shots): share 0.54 (0.38–0.68); 1.26 times fewer than `starter` (1.15–1.38, p = 2.6e-6). |
 | Target of the brief | recover at least half of the oracle's gain: met on the point estimates (0.58; 0.54 pooled), not with confidence (the intervals reach 0.38). |
 | Kill line (step 2) | passed: 78% of the losses of rounds 1 to 9 are placed within one round (line: 50%). |
-| Step 4 | The tracking carries over to s = 5e-4 and 2e-3 (80% and 74% of the losses of rounds 1 to 9 within one round) and to Z memory (78%). Tables fitted at s = 1e-3 work as well at the other two rates. A learned tracker (a small GRU) does not beat the model (mean log P −1.390 against −1.325). Cost: 8 ms per shot on one CPU thread in numpy, about 3% of a relay-BP decode. |
+| Step 4 | The tracking carries over to s = 5e-4 and 2e-3 (80% and 74% of the losses of rounds 1 to 9 within one round) and to Z memory (78%). Tables fitted at s = 1e-3 work as well at the other two rates. A learned tracker (a small GRU) does not beat the model (mean log P −1.390 against −1.325). Cost: 8 ms per shot on one CPU thread in numpy, about 3% of the median relay-BP decode (0.5% of the mean). |
 | New? | No paper we found reports a syndrome-derived loss-time estimate feeding a BP decoder (`reference/papers-loss-aware-decoding.md`, section 9). |
 
 ## What the tracker does, in plain words
@@ -50,6 +50,23 @@ uniform guess. Nothing else in the decoder changes.
 | What is NOT modelled | Correlations between the X triple and the Z triple of an atom. The exact time course of a hook error (the triple is set aside for two rounds instead). Three-way effects between lost atoms: the other atoms on a check are treated as independent. |
 | Use in the decoder | The posterior over the slot is summed to the 12 rounds and spread over the 6 slots of each round as the ORACLE `oracle-round` does; then `loss.lossmap`'s `data_activation` and the rest of the condition `exact`, unchanged (`priors.py`). Relay-BP at the kit's settings, a fresh decoder with seed 1 per shot and condition, as in `loss/decode.py`. |
 
+## Environment
+
+From `challenge-1-ml-decoder-kit/`, Python 3.12:
+
+```sh
+python3.12 -m venv <venv>
+<venv>/bin/pip install -r loss/requirements.txt pytest              # the kit's decoders and Clifft 0.13.0
+<venv>/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu   # only for learned.py (step 4)
+export PYTHONDONTWRITEBYTECODE=1
+```
+
+The run scripts in `runs/` read their settings from `runs/common.sh`: `S` (the folder for datasets, posteriors and
+per-shot parts) and `V` (the venv) default to this team's PC and can be set on the command line
+(`S=<folder> V=<venv> loss_tracker/runs/<script>.sh`); `lane` wraps a heavy command in the PC's CPU lock, and
+`LANE` chooses which. `python -m loss_tracker.job` is the portable route: it samples, tracks and decodes with one
+command and no lock.
+
 ## Splits
 
 | Split | Seed | Shots | sha256 of the file | Lost data atoms per shot | Used for |
@@ -73,8 +90,9 @@ validation shots each:
 The replication's split (seed 7310, 4,000 shots) was sampled on the team's server: sha256
 `07c2f43737bdd07f612669432094b7bd2614fc13614ccabff640c28f4dd29c2e`.
 
-The truth (the status probes) is read in five places only: `fit.py` and `learned.py train` (training shots),
-`signal.py` (training shots), `accuracy.py` (scoring), and the ORACLE rows and the scoring in `decode.py`.
+The truth (the status probes) is read in six places only: `fit.py` and `learned.py train` (training shots),
+`signal.py` (training shots), `accuracy.py` (scoring), the ORACLE rows and the scoring in `decode.py`, and
+`diagnose.py` (scoring after the decode).
 
 ## Step 1: the signal
 
@@ -920,7 +938,7 @@ What step 4 says:
   one CPU thread of this laptop-class CPU, and 4.4 ms per shot in batches of 100 (table above). The timer wraps
   the features and the posteriors of all the shot's flagged atoms (about 10). For comparison, the flag-aware
   relay-BP decode takes a median of 248 ms per shot on one CPU (`loss/RESULTS.md`, L4), so the tracker adds about
-  3%. The tracker's priors also cut the mean relay-BP iterations, from 2,599 to 2,141 on the test.
+  3% of the median decode, and 0.5% of the mean (1,785 ms). The tracker's priors also cut the mean relay-BP iterations, from 2,599 to 2,141 on the test.
 
 ## What this says
 

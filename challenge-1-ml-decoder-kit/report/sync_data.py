@@ -27,7 +27,8 @@ KIT = Path(__file__).resolve().parent.parent
 DATA = Path(__file__).resolve().parent / "data"
 RECORD = DATA / "sources.json"
 
-NETWORK_STEP = 120000   # the newest snapshot of the X network whose logits are copied; older copies are removed by hand
+NETWORK_STEP = 120000
+TRACKER_PARTS = "/home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts"   # copied once; the copies under data/ are the record   # the newest snapshot of the X network whose logits are copied; older copies are removed by hand
 
 # (destination under report/data/, where from, path or pattern there, grows?)
 # "tree" is the working tree of this branch, relative to challenge-1-ml-decoder-kit/.
@@ -94,6 +95,9 @@ SOURCES = [
     ("loss/tracker/", "tree", "loss_tracker/results/accuracy_test.*", False),
     ("loss/tracker/", "tree", "loss_tracker/results/test_secondary.*", False),
     ("loss/tracker/", "tree", "loss_tracker/results/timing.*", False),
+    # the tracker's per-shot results on its test split (seed 7300), kept until now only in its task's working folder on the team's PC
+    ("loss/tracker/parts/test/", f"file:{TRACKER_PARTS}", "test/*.npz", False),
+    ("loss/tracker/parts/test_coupled2/", f"file:{TRACKER_PARTS}", "test_coupled2/*.npz", False),
     ("loss/tracker/", "tree", "loss_tracker/results/accuracy_val_learned.*", False),
     ("loss/server/L1_s2e-4_seed5100/tables.md", "origin/server-logs", "files/loss/L1_s2e-4_seed5100/tables.md", False),
     ("loss/server/L1_s5e-4_seed5200/tables.md", "origin/server-logs", "files/loss/L1_s5e-4_seed5200/tables.md", False),
@@ -145,7 +149,10 @@ def expand(where, pattern):
         return [(pattern, Path(pattern).name)]
     prefix = pattern[: pattern.index("*")]
     folder = prefix.rsplit("/", 1)[0] if "/" in prefix else ""
-    if where == "tree":
+    if where.startswith("file:"):
+        base = Path(where.removeprefix("file:"))
+        listed = [str(path.relative_to(base)) for path in sorted((base / folder).rglob("*")) if path.is_file()] if (base / folder).is_dir() else []
+    elif where == "tree":
         listed = [str(path.relative_to(KIT)) for path in sorted((KIT / folder).rglob("*")) if path.is_file()]
     else:
         try:
@@ -161,6 +168,9 @@ def expand(where, pattern):
 
 def read_source(where, path):
     """(bytes, the commit the copy is taken from) or None if the file is not there yet."""
+    if where.startswith("file:"):
+        file = Path(where.removeprefix("file:")) / path
+        return (file.read_bytes(), "not in git") if file.is_file() else None
     if where == "tree":
         file = KIT / path
         if not file.is_file():
@@ -175,6 +185,9 @@ def read_source(where, path):
 
 
 def describe(where, path, commit):
+    if where.startswith("file:"):
+        return (f"the loss-tracker task's working folder on the team's PC, `{where.removeprefix('file:')}/{path}` "
+                "(not in git elsewhere; the test run of `loss_tracker/` at commit 0e71370, Clifft seed 7300)")
     if where == "tree":
         return f"this branch, `challenge-1-ml-decoder-kit/{path}` (last changed in commit `{commit[:12]}`)"
     return f"branch `{where.split('@')[0].removeprefix('origin/')}` at commit `{commit[:12]}`, `{path}`"

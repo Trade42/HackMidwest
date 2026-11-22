@@ -927,6 +927,7 @@ def exploration_p5_table():
 def loss_table():
     pc, server = loaders.loss_pc(DATA / "loss" / "pc"), loaders.loss_server(DATA / "loss" / "server")
     tracked, shares = loaders.loss_tracker(DATA / "loss" / "tracker")
+    tracker_parts_check(tracked)
     tracker_facts(tracked, shares)
     server = server | tracked
     lines, records = [], []
@@ -1112,6 +1113,38 @@ def background_table():
     return write("background", text)
 
 
+def tracker_parts_check(tracked):
+    """The tracker's headline recomputed from its per-shot test parts (seed 7300): each condition's failures and the paired counts."""
+    folder = DATA / "loss" / "tracker" / "parts" / "test"
+    parts = sorted(folder.glob("*.npz")) if folder.is_dir() else []
+    if not parts:
+        return None
+    failed, conditions, shots = [], None, []
+    for file in parts:
+        with np.load(file, allow_pickle=False) as data:
+            names = [str(name) for name in data["conditions"]]
+            if conditions is not None and names != conditions:
+                raise Mismatch(f"{file}: another list of conditions than the other parts")
+            conditions = names
+            failed.append(data["failed"].astype(bool))
+            shots.append(data["shots"])
+    failed, shots = np.concatenate(failed), np.concatenate(shots)
+    if len(np.unique(shots)) != len(shots):
+        raise Mismatch("loss/tracker/parts/test: a shot appears twice")
+    counts = {name: int(failed[:, index].sum()) for index, name in enumerate(conditions)}
+    for name, count in counts.items():
+        row = tracked.get((0.001, 7300, name))
+        if row is not None and (row["failures"], row["shots"]) != (count, len(shots)):
+            raise Mismatch(f"loss/tracker/parts/test: {name} fails {count} of {len(shots)} in the parts and {row['failures']} of {row['shots']} in test.json")
+    versus = stats.paired(failed[:, conditions.index("exact")], failed[:, conditions.index("tracker")])
+    row = tracked.get((0.001, 7300, "tracker"))
+    theirs = row and row["paired_by_reference"].get("exact")
+    if theirs and (theirs["reference_only"], theirs["row_only"]) != (versus["reference_only"], versus["row_only"]):
+        raise Mismatch("loss/tracker/parts/test: the paired counts of the tracker against exact differ from test.json")
+    fact("trk_parts", f"recomputed from its per-shot test results ({len(parts)} files in `report/data/loss/tracker/parts/test/`)", "data/loss/tracker/parts/test/")
+    return counts
+
+
 def tracker_facts(tracked, shares):
     """The loss-time tracker's numbers for the prose: its test split first, the replication and the pooled share beside it."""
     source = "data/loss/tracker/test.json"
@@ -1162,6 +1195,8 @@ def tracker_facts(tracked, shares):
                     f"beforehand), relay-BP given the tracker's estimate fails {value('trk_tracker')}, against {value('trk_exact')} for the flag-aware "
                     f"decoder that does not know the loss time, with exact location weights ({value('trk_vs_exact')}), and {value('trk_oracle_round')} for the ORACLE. "
                     f"So the tracker recovers {value('trk_gain')} of the oracle's gain.")
+        if value("trk_parts") != NOT_MEASURED:
+            sentence += f" Each of these counts is {value('trk_parts')}."
         if value("trk_gain_replication") != NOT_MEASURED:
             sentence += f" A replication on the team's server, on other shots, gives {value('trk_gain_replication')}"
             sentence += f"; both together, {value('trk_gain_pooled')}." if value("trk_gain_pooled") != NOT_MEASURED else "."

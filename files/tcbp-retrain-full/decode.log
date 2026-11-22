@@ -4,3 +4,5 @@ plan /home/blakew3/mlBranchMidwest/runs/tcbp-retrain-full/in/plan.json: tasks [(
   model fitted in 61.2 s (one model, shared by every task); GPU memory [Insufficient Permissions], [Insufficient Permissions]
   f0.8-seed4800 block 0-99 done, 97 s; failures so far m 0, g 40, h 19, hm 7, r 3 of 100
   f0.8-seed4100 block 0-99 done, 123 s; failures so far m 0, h 9, hm 2, r 2 of 100
+  f0.8-seed4800 block 100-199 done, 160 s; failures so far m 1, g 78, h 34, hm 11, r 5 of 200
+  f0.8-seed4100 block 100-199 done, 183 s; failures so far m 2, h 20, hm 5, r 5 of 200

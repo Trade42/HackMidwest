@@ -1,0 +1,113 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/pred-tcbp-e6c2a5a/challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz",
+  "sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d",
+  "basis": "X",
+  "p": 0.004,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 5000,
+ "decoder": "tcbp-jobs",
+ "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
+ "preset": "tcbp-jobs",
+ "overrides": {},
+ "head_priors": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "prior_cap": 0.5,
+ "capped_this_run": {
+  "shots": 1383,
+  "columns": 1659
+ },
+ "logits": {
+  "data": {
+   "path": "/home/sal/hackMidwest/worktrees/predecoder/challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz",
+   "sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d",
+   "basis": "X",
+   "p": 0.004,
+   "seed": 201,
+   "shots": 5000,
+   "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+  },
+  "shots": 5000,
+  "columns": 8784,
+  "model": {
+   "head": "/home/sal/hackMidwest/orchestration/scratch/predecoder/head/predecoder_X_s1/head.pt",
+   "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+   "head_step": 30000,
+   "trunk": "/home/sal/hackMidwest/orchestration/scratch/predecoder/ckpt/cascade_X_s1_final_step120000.pt",
+   "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+   "trunk_step": 120000,
+   "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+   "device": "cpu",
+   "torch": "2.15.0+cpu",
+   "torch_threads": 4
+  },
+  "seconds_batched_total": 554.448303937912,
+  "per_shot_seconds": {
+   "what": "network + head, one shot at a time, on the device named",
+   "shots": 200,
+   "mean": 0.1701123877754435,
+   "median": 0.08110241149552166,
+   "p99": 1.4662615228304627
+  },
+  "batch_one_against_batched_largest_logit_gap": 0.0,
+  "mean_probability_sum_per_shot": 47.0205078125,
+  "kit_prior_sum": 47.313677694781205
+ },
+ "arms": {
+  "head": {
+   "shots": 5000,
+   "failures": 4,
+   "share": 0.0008,
+   "wilson95": [
+    0.00031114697394172197,
+    0.00205532666008572
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 2878,
+   "build_ms_mean": 42.64870122959837,
+   "decode_ms_mean": 5.394847961189225,
+   "build_decode_ms_mean": 48.0435491907876,
+   "build_decode_ms_median": 44.71170948818326,
+   "build_decode_ms_p99": 65.69136779755355
+  },
+  "fresh": {
+   "shots": 5000,
+   "failures": 16,
+   "share": 0.0032,
+   "wilson95": [
+    0.001970727814507735,
+    0.005192060850125345
+   ],
+   "not_reproduced": 0,
+   "flag_not_converged": 4500,
+   "build_ms_mean": 42.092319440259594,
+   "decode_ms_mean": 8.607703029573894,
+   "build_decode_ms_mean": 50.7000224698335,
+   "build_decode_ms_median": 45.80508603248745,
+   "build_decode_ms_p99": 85.98445602227004
+  },
+  "batch": {
+   "failures": 16,
+   "shots": 5000,
+   "what": "one decoder built once with the kit's priors, this run's model, decode_batch",
+   "bits_differ_from_fresh": 0,
+   "faults_differ_from_fresh": 0
+  }
+ },
+ "model_seconds": 69.43728838290554,
+ "machine": {
+  "node": "jupyter-blakew3",
+  "processor": "x86_64",
+  "cpus": 24,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "omp_threads": "1"
+ },
+ "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process, shots one at a time; the network and head are not included (predecoder.evaluate)",
+ "seconds": 652.0603384971619
+}

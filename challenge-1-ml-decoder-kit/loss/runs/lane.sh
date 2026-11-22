@@ -22,9 +22,10 @@ lanes() {
   sleep 5
 }
 
-# LANE=AD (default): each part takes lanes A+D if A is free, else D alone (see lanes).
+# LANE=D (default since 2026-11-22 05:10 UTC, when the orchestrator gave lane A back to the others): lane D only.
+# LANE=AD: each part takes lanes A+D if A is free, else D alone (see lanes).
 # LANE=A: each part takes lane A alone (4 workers, cores 4-7), for a second stream beside a lane-D stream.
-LANE=${LANE:-AD}
+LANE=${LANE:-D}
 
 # part OUT DATA CONDITIONS START STOP   decode one part unless it exists or another stream has claimed it
 part() {
@@ -35,6 +36,9 @@ part() {
   local cmd="\"$PY\" -m loss.decode --data \"$data\" --conditions \"$conds\" --start $start --stop $stop --workers \$WORKERS --out \"$out.tmp.npz\""
   if [ "$LANE" = A ]; then
     flock "$RUN/sim-a.lock" env WORKERS=4 nice -n 15 taskset -c 4-7 bash -c "$cmd"
+    sleep 5
+  elif [ "$LANE" = D ]; then
+    flock "$RUN/sim-d.lock" env WORKERS=4 nice -n 15 taskset -c 0-3 bash -c "$cmd"
     sleep 5
   else
     lanes bash -c "$cmd"

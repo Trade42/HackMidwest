@@ -54,3 +54,5 @@
 2026-11-22T12:29:02Z START eval_p0.004_hierarchy-converged: weight 1, pid 321226; before it: tokens 8, CPUs in use 9.2, throttled so far 4844.9 s
 2026-11-22T12:32:20Z END eval_p0.003_priortilt exit 0: row p=0.003 priortilt exit 0: hierarchy.priortilt_plugin:make_decoder,2,2,4,3.3339446006586115e-05,1.6670973765342545e-05,22.669894187385218 [CPUs in use 9.1, tokens 9, throttled so far 4845.0 s, load 13.14]
 2026-11-22T12:32:43Z START eval_p0.003_hierarchy-converged: weight 1, pid 324594; before it: tokens 8, CPUs in use 9.3, throttled so far 4845.0 s
+2026-11-22T12:33:54Z END joint_p0.004 exit 0: wall time of this run: 583 s [CPUs in use 6.5, tokens 9, throttled so far 4845.0 s, load 12.28]
+2026-11-22T12:34:24Z END ensemble_p0.004 exit 0: ensemble of p = 0.004: exit 0 [CPUs in use 6.1, tokens 5, throttled so far 4845.0 s, load 11.88]

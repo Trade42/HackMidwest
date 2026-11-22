@@ -1,0 +1,20 @@
+new run | seed 1 | trunk /home/sal/hackMidwest/orchestration/scratch/tcbp-retrain/art/trunk_X.pt (sha256 d8d1c70f55223330..., step 120000, X memory, width 128, depth 8, reads all detectors)
+problem: 35064 mechanisms of the full model onto 8784 columns of the kit's basis problem (936 detectors); merged priors equal the kit's to 4.9e-17
+noise: the neutral-atom-shaped model at factors [0.8] (the levels below are factors, not p); the head's base prior is the model's matched vector, sums 87.41, sha256 {'0.8': '181d3c74ffe422d23864d5c7b45a2b68ec209adebe494c21259554e6178d4b7e'}; merged mechanism priors equal it to 4.9e-17
+head: 17617 parameters, 122 column shapes | batch 8, training p [0.8], pos-weight 1, peak lr 0.001, trunk frozen
+commit e6c2a5a06e0534cd212568e948e3de8b84aaa94f | torch 2.15.0+cpu | device cpu, trunk mixed precision off | start-up 9 s
+step 0 of 40 | no training yet | head learning rate 1.00e-04
+  held-out error-model shots (not Stim shots), 40 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.043407  kit priors 0.043407  (+0.0% of the kit's)  | fired per shot 87.6, of them above 0.5 0.0; not fired but above 0.5 0.00 | calibration error 5.57e-05
+    calibration: [0,0.001) n=210240 q=0.0001 fired=0.0001 | [0.001,0.003) n=31680 q=0.0018 fired=0.0019 | [0.003,0.01) n=2880 q=0.0078 fired=0.0059 | [0.01,0.03) n=72000 q=0.0188 fired=0.0189 | [0.03,0.1) n=34560 q=0.0591 fired=0.0592
+step 20 of 40 | mean training loss 0.043332 | head learning rate 5.85e-04
+  held-out error-model shots (not Stim shots), 40 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.042006  kit priors 0.043407  (+3.2% of the kit's)  | fired per shot 87.6, of them above 0.5 0.0; not fired but above 0.5 0.00 | calibration error 1.00e-03
+    calibration: [0,0.001) n=210240 q=0.0001 fired=0.0001 | [0.001,0.003) n=31680 q=0.0016 fired=0.0019 | [0.003,0.01) n=2880 q=0.0068 fired=0.0059 | [0.01,0.03) n=72000 q=0.0171 fired=0.0189 | [0.03,0.1) n=34560 q=0.0532 fired=0.0592
+speed: 27 shots/s, 0.293 s per step, report 1.3 s
+step 40 of 40 | mean training loss 0.039610 | head learning rate 1.01e-04
+  held-out error-model shots (not Stim shots), 40 per p; log-loss = mean cross-entropy per column
+  p=0.8  log-loss head 0.038922  kit priors 0.043407  (+10.3% of the kit's)  | fired per shot 87.6, of them above 0.5 0.0; not fired but above 0.5 0.00 | calibration error 3.66e-03
+    calibration: [0,0.001) n=212359 q=0.0001 fired=0.0001 | [0.001,0.003) n=29561 q=0.0013 fired=0.0020 | [0.003,0.01) n=14555 q=0.0085 fired=0.0012 | [0.01,0.03) n=60595 q=0.0140 fired=0.0212 | [0.03,0.1) n=34290 q=0.0410 fired=0.0619
+speed: 25 shots/s, 0.323 s per step, report 1.3 s
+checkpoint: /home/sal/hackMidwest/orchestration/scratch/tcbp-retrain/smoke_cpu_na0.8/head.pt at step 40 (sha256 0410a5ef9cef4f8dea7834b416634020b526f836b057acf0cd85617eca70d910)

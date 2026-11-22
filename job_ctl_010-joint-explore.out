@@ -1,2 +1,7 @@
 waiting for the selection lists and for the loss job's processes to end
 Sun Nov 22 06:33:06 UTC 2026
+Sun Nov 22 06:40:46 UTC 2026
+checkout: 3d4e5db server-jobs: gpu 020 (a third lane, the selection lists, the Z logits), ctl 010 (joint decoding on the disagreement shots), cpu 030 rewritten
+256 shot(s) to decode on 9 process(es); 0 kept from an earlier run
+validation_X.npz shot 961: right, converged, 1822 iterations, 6 s
+validation_X.npz shot 1307: right, converged, 7967 iterations, 29 s

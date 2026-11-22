@@ -1,0 +1,5 @@
+TH alone (the TCBP version)                             fast 0.000  fail   33 (both 33, only rule 0, only TH 0, p 1)  mean 51.1 ms  p99 63.1 ms  gate PASS
+F alone (TCBP-JOBS, kit priors, built once)             fast 1.000  fail  100 (both 25, only rule 75, only TH 8, p 9.1e-15)  mean 12.8 ms  p99 45.3 ms  gate fail
+C1: F agrees with P2 on the 12 bits -> F, else TH       fast 0.970  fail   48 (both 29, only rule 19, only TH 4, p 0.0026)  mean 191.8 ms  p99 2714.2 ms  gate fail
+C2: syndrome weight <= 115 -> F, else TH                fast 0.039  fail   33 (both 33, only rule 0, only TH 0, p 1)  mean 49.3 ms  p99 63.1 ms  gate PASS
+chosen: C2: syndrome weight <= 115 -> F, else TH

@@ -45,6 +45,9 @@ as Markdown and as CSV.
 <!-- BEGIN table:exploration_p0.005 -->
 <!-- END table:exploration_p0.005 -->
 
+<!-- BEGIN table:exploration_ensemble -->
+<!-- END table:exploration_ensemble -->
+
 ## F. Atom loss
 
 <!-- BEGIN table:loss -->

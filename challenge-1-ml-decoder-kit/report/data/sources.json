@@ -142,6 +142,94 @@
   "path": "cascade_X_s1/eval/step70000_validation_X_p0.004.npz",
   "sha256": "7ea02242967489a604a69a3378e155715fec868e60e04c16c869c35134138b5b"
  },
+ "exploration/ensemble/ens_p0.003/validation_X.json": {
+  "branch": "origin/server-logs",
+  "bytes": 10082,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "exploration/ensemble/ens_p0.003/validation_X.json",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `files/ens_p0.003/validation_X.json`",
+  "grows": false,
+  "path": "files/ens_p0.003/validation_X.json",
+  "sha256": "423a7444c8d0cda7b7072baf1299f93dac83d0f76d90ba3d87c8154e87f14b36"
+ },
+ "exploration/ensemble/ens_p0.003/validation_X.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 64926,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "exploration/ensemble/ens_p0.003/validation_X.npz",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `files/ens_p0.003/validation_X.npz`",
+  "grows": false,
+  "path": "files/ens_p0.003/validation_X.npz",
+  "sha256": "8a9ccca1883ac77d625d0ac723a499b943e77200813599cd5fe1e6b1cf2e931e"
+ },
+ "exploration/ensemble/ens_p0.003/validation_Z.json": {
+  "branch": "origin/server-logs",
+  "bytes": 10049,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "exploration/ensemble/ens_p0.003/validation_Z.json",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `files/ens_p0.003/validation_Z.json`",
+  "grows": false,
+  "path": "files/ens_p0.003/validation_Z.json",
+  "sha256": "5b421a3b8d7f1118f4a911f30005bcea6f99a50ed582a94bc3c964581e2b53d4"
+ },
+ "exploration/ensemble/ens_p0.003/validation_Z.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 64788,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "exploration/ensemble/ens_p0.003/validation_Z.npz",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `files/ens_p0.003/validation_Z.npz`",
+  "grows": false,
+  "path": "files/ens_p0.003/validation_Z.npz",
+  "sha256": "ec7774d24debce57af86fc73e49592248fd249824b725e0dd3d85122c5660983"
+ },
+ "exploration/ensemble/ens_p0.005/validation_X.json": {
+  "branch": "origin/server-logs",
+  "bytes": 10468,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "exploration/ensemble/ens_p0.005/validation_X.json",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `files/ens_p0.005/validation_X.json`",
+  "grows": false,
+  "path": "files/ens_p0.005/validation_X.json",
+  "sha256": "c8c573b2818390b89b0fa9f9fcad41482c2e14975d4d9f7723e4ce7e6ce42fdd"
+ },
+ "exploration/ensemble/ens_p0.005/validation_X.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 68864,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "exploration/ensemble/ens_p0.005/validation_X.npz",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `files/ens_p0.005/validation_X.npz`",
+  "grows": false,
+  "path": "files/ens_p0.005/validation_X.npz",
+  "sha256": "93dac41c1318ca1c0ca48d310aef189125c332ee146a74f6b797aaf121af3a9d"
+ },
+ "exploration/ensemble/ens_p0.005/validation_Z.json": {
+  "branch": "origin/server-logs",
+  "bytes": 10577,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "exploration/ensemble/ens_p0.005/validation_Z.json",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `files/ens_p0.005/validation_Z.json`",
+  "grows": false,
+  "path": "files/ens_p0.005/validation_Z.json",
+  "sha256": "58c60ca16612b5394182b7b60dbc69b0d5d32dffa471b398a8712d6076368068"
+ },
+ "exploration/ensemble/ens_p0.005/validation_Z.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 68837,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "exploration/ensemble/ens_p0.005/validation_Z.npz",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `files/ens_p0.005/validation_Z.npz`",
+  "grows": false,
+  "path": "files/ens_p0.005/validation_Z.npz",
+  "sha256": "a4ce6456914ad51f558df66f258d98c9e256b633d546af0e02840598da506cda"
+ },
  "exploration/priortilt/results_8b.txt": {
   "branch": "origin/laptop-artifacts",
   "bytes": 3885,
@@ -450,6 +538,17 @@
   "path": "files/loss/L3_s1e-3_seed5300/tables.md",
   "sha256": "858fcd37d31f27bfb42e0eec29c31c480cdf36997e96d49f92f83a5e9410de71"
  },
+ "loss/server/L3_s1e-3_seed5300_jobD/tables.md": {
+  "branch": "origin/server-logs",
+  "bytes": 3193,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "loss/server/L3_s1e-3_seed5300_jobD/tables.md",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `files/loss/L3_s1e-3_seed5300/tables.md`",
+  "grows": false,
+  "path": "files/loss/L3_s1e-3_seed5300/tables.md",
+  "sha256": "d8895f39eb8c947abe4625d8640d41067e31f36415b77a064b342177e7a55fb8"
+ },
  "machines/cascade_X_s1_SHA256SUMS": {
   "branch": "origin/laptop-artifacts",
   "bytes": 540,
@@ -463,14 +562,14 @@
  },
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
-  "bytes": 2702,
-  "commit": "abbad14cfc1b48f9153dee72c1274ff322fd5bb8",
-  "copied_utc": "2026-11-22 07:07",
+  "bytes": 2610,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `abbad14cfc1b`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "bcfbf19ea44dd0be9a99163f95da88e1f7e3596733ab8987d1410d0b99190b7d"
+  "sha256": "bec12dd57bf900b06398312c62bf5767e78b04dbe410bcff7d6c96cf44682342"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -485,14 +584,14 @@
  },
  "networks/cascade_Z_s1.train.log": {
   "branch": "origin/server-logs",
-  "bytes": 15751,
-  "commit": "abbad14cfc1b48f9153dee72c1274ff322fd5bb8",
-  "copied_utc": "2026-11-22 07:07",
+  "bytes": 18801,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
   "file": "networks/cascade_Z_s1.train.log",
-  "from": "branch `server-logs` at commit `abbad14cfc1b`, `cascade_Z_s1.train.log`",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `cascade_Z_s1.train.log`",
   "grows": true,
   "path": "cascade_Z_s1.train.log",
-  "sha256": "8a5e15d6273ba43fb3c16d32f5ed2236369bdc0c26432ffdfd354cee444e5f0e"
+  "sha256": "cb2c07d33420fd3e87ae0485d5cbc98b3a4d9ecbf06feb67990b21bf2f3bea2f"
  },
  "tcbp_own_shots/tcbp-jobs_p0.003_shots10000_seed1_20261122_005215_437826+0000.log": {
   "branch": "tree",
@@ -659,48 +758,59 @@
   "path": "results/mac/router_eval_p0.004/summary.json",
   "sha256": "fddefd21a061cfe5a84f971afcf4ddcbdbc1f3a3897f19c997883de504575559"
  },
+ "test/clean_rows.out": {
+  "branch": "origin/server-logs",
+  "bytes": 782,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
+  "file": "test/clean_rows.out",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `clean_rows.out`",
+  "grows": true,
+  "path": "clean_rows.out",
+  "sha256": "0307a35e23962eca43ec084674f962c20e621fb95ee74bc47b4dbe7ac886e71c"
+ },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 1301,
-  "commit": "abbad14cfc1b48f9153dee72c1274ff322fd5bb8",
-  "copied_utc": "2026-11-22 07:07",
+  "bytes": 2467,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `abbad14cfc1b`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "68ee0d65e36c00bde017b29d4667e82126f7da0494c632a72dbc036e5a225fa0"
+  "sha256": "6c2cd9e30ce1f8adb09f678242d9d7ba7ee881daddad7dd0e0dfe8fcce146231"
  },
  "test/runner_cpu.out": {
   "branch": "origin/server-logs",
-  "bytes": 171,
-  "commit": "798b5c7d847554e4301d3e0345c372a2ccf3e93f",
-  "copied_utc": "2026-11-22 06:49",
+  "bytes": 397,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
   "file": "test/runner_cpu.out",
-  "from": "branch `server-logs` at commit `798b5c7d8475`, `runner_cpu.out`",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `runner_cpu.out`",
   "grows": true,
   "path": "runner_cpu.out",
-  "sha256": "2553431926e019fdbd1fe72210b840288c949ea1ffcd15369a03fe20674ee4aa"
+  "sha256": "ad7664a6cf3f43109a08ff2327494741b0ce0bef2a6ad20a21deb565413414b5"
  },
  "test/runner_ctl.out": {
   "branch": "origin/server-logs",
-  "bytes": 307,
-  "commit": "abbad14cfc1b48f9153dee72c1274ff322fd5bb8",
-  "copied_utc": "2026-11-22 07:07",
+  "bytes": 518,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
   "file": "test/runner_ctl.out",
-  "from": "branch `server-logs` at commit `abbad14cfc1b`, `runner_ctl.out`",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `runner_ctl.out`",
   "grows": true,
   "path": "runner_ctl.out",
-  "sha256": "abd4425a3449a96e008bcdd1afa27ddd3b50b446e7a1ce7724cbcff066c7475a"
+  "sha256": "3fc5ded845a665759c2962d98284b8051be7d3c052758ea73bd08a835445ca4b"
  },
  "test/runner_gpu.out": {
   "branch": "origin/server-logs",
-  "bytes": 423,
-  "commit": "abbad14cfc1b48f9153dee72c1274ff322fd5bb8",
-  "copied_utc": "2026-11-22 07:07",
+  "bytes": 490,
+  "commit": "3ede138a26bf1058340c9075d30e673b0bb9bed4",
+  "copied_utc": "2026-11-22 07:28",
   "file": "test/runner_gpu.out",
-  "from": "branch `server-logs` at commit `abbad14cfc1b`, `runner_gpu.out`",
+  "from": "branch `server-logs` at commit `3ede138a26bf`, `runner_gpu.out`",
   "grows": true,
   "path": "runner_gpu.out",
-  "sha256": "f3652db4979b70fd703a4d5a42e5d4eb5665df232ae0ecb32cc01a1de16c6c01"
+  "sha256": "10ce7dfd13cb6d9768ce89d6c951d2bd9ddf4c49e4a6e67e382ffa3799b57ada"
  }
 }

@@ -42,6 +42,10 @@ SOURCES = [
     ("test/", "origin/server-logs", "files/clean/ensemble_p*/test_*.npz", False),
     ("test/", "origin/server-logs", "files/clean/ensemble_p*/test_*.json", False),
     ("test/cpu_monitor.out", "origin/server-logs", "cpu_monitor.out", True),
+    ("test/test_rows.out", "origin/server-logs", "test_rows.out", True),
+    # the ensemble on exploration shots (validation files): the members' answers combined offline, and TCBP-JOBS's answers
+    ("exploration/ensemble/", "origin/server-logs", "files/ens_p*/validation_*.npz", False),
+    ("exploration/ensemble/", "origin/server-logs", "files/ens_p*/validation_*.json", False),
     ("test/clean_rows.out", "origin/server-logs", "clean_rows.out", True),
     ("test/runner_cpu.out", "origin/server-logs", "runner_cpu.out", True),
     ("test/runner_gpu.out", "origin/server-logs", "runner_gpu.out", True),
@@ -80,7 +84,11 @@ SOURCES = [
     ("loss/pc/", "tree", "loss/results/L1_X_p0.004_s*.json", False),
     ("loss/pc/", "tree", "loss/results/L3_*.json", False),
     ("loss/pc/", "tree", "loss/results/L4_timing.json", False),
-    ("loss/server/", "origin/server-logs", "files/loss/*/tables.md", False),
+    ("loss/server/L1_s2e-4_seed5100/tables.md", "origin/server-logs", "files/loss/L1_s2e-4_seed5100/tables.md", False),
+    ("loss/server/L1_s5e-4_seed5200/tables.md", "origin/server-logs", "files/loss/L1_s5e-4_seed5200/tables.md", False),
+    # two jobs wrote tables.md of the same folder: job A's tables (the oracles) are pinned at the commit that held them, job D's (the pieces of the map) are the file now
+    ("loss/server/L3_s1e-3_seed5300/tables.md", "origin/server-logs@e08c3c3c9390e542cfe435e68b1750f5210bac50", "files/loss/L3_s1e-3_seed5300/tables.md", False),
+    ("loss/server/L3_s1e-3_seed5300_jobD/tables.md", "origin/server-logs", "files/loss/L3_s1e-3_seed5300/tables.md", False),
     # the machines: what the server printed about itself
     ("machines/server_nvidia-smi.txt", "origin/server-logs", "nvidia-smi.txt", True),
     ("machines/cascade_X_s1_SHA256SUMS", "origin/laptop-artifacts", "cascade_X_s1/SHA256SUMS", True),
@@ -121,7 +129,7 @@ def expand(where, pattern):
         listed = [str(path.relative_to(KIT)) for path in sorted((KIT / folder).rglob("*")) if path.is_file()]
     else:
         try:
-            listed = git("ls-tree", "-r", "--full-tree", "--name-only", where, *([folder] if folder else [])).splitlines()
+            listed = git("ls-tree", "-r", "--full-tree", "--name-only", where.split("@")[-1], *([folder] if folder else [])).splitlines()
         except RuntimeError:
             return []
     found = []
@@ -140,7 +148,7 @@ def read_source(where, path):
         commit = git("log", "-1", "--format=%H", "--", path).strip() or "uncommitted"
         return file.read_bytes(), commit
     try:
-        commit = git("rev-parse", where).strip()
+        commit = git("rev-parse", where.split("@")[-1]).strip()     # "branch@commit" pins a source at one commit of its branch
         return git("show", f"{commit}:{path}", binary=True), commit
     except RuntimeError:
         return None
@@ -149,7 +157,7 @@ def read_source(where, path):
 def describe(where, path, commit):
     if where == "tree":
         return f"this branch, `challenge-1-ml-decoder-kit/{path}` (last changed in commit `{commit[:12]}`)"
-    return f"branch `{where.removeprefix('origin/')}` at commit `{commit[:12]}`, `{path}`"
+    return f"branch `{where.split('@')[0].removeprefix('origin/')}` at commit `{commit[:12]}`, `{path}`"
 
 
 def write_sources_md(records):

@@ -103,7 +103,7 @@ def stand_in(folder):
             artifact = metadata["decoders"][0]["summary"]["artifacts"]
             shutil.copy(KIT / source / artifact, target / artifact)
             state = "[load 6.50, evaluators 5, joint 0, loss.job 0, candidates 0, throttled so far %s s]"
-            log += [f"2026-11-22T08:00:00Z START p={p} {row} " + state % "100.0", f"2026-11-22T09:00:00Z END p={p} {row} exit 0: x " + state % "160.5"]
+            log += [f"2026-11-22T08:00:00Z START p={p} {row} " + state % "100.0", f"2026-11-22T09:00:00Z END p={p} {row} exit 0: x " + state % "161.0"]
     (data / "test" / "clean_rows.out").write_text("\n".join(log) + "\n")
     (data / "test" / "cpu_monitor.out").write_text(
         "# time_utc cpus thr_s thr_n | evaluator joint loss_job candidates tcbp_member evaluate_stim python_all | load_1m\n"
@@ -141,7 +141,7 @@ def test_scripts_on_a_stand_in(tmp_path):
     assert "4 / 2 / 1 (p = 1.00)" in table                       # the router against relay-BP, as in the team's comparison.json
     assert "our hierarchy, neural tie-break | ours | not measured" in table
     assert "PriorTilt, one run (from per-shot files, not a timed evaluator row)" in table      # the offline combination stands in
-    assert "6.0 CPUs busy on average" in table and "held the notebook back for 50 s" in table
+    assert "6.0 CPUs busy on average" in table and "held the notebook back for 61 s" in table
     ladder = (tmp_path / "tables" / "test_ladder.md").read_text()
     assert "ORACLE: a perfect tie-break" in ladder and "| 0.004 | every rung | not measured" in ladder
     facts = (tmp_path / "tables" / "facts.md").read_text()

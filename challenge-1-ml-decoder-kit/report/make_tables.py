@@ -95,7 +95,7 @@ def load_test_rows(data=DATA):
     stood in for by the offline combination of per-shot files (rows.py, `member`); it is then
     marked as such, and its time is a sum of decode calls.
     """
-    log = loaders.clean_rows_log(data / "test" / "clean_rows.out")
+    log = loaders.clean_rows_log(data / "test" / "clean_rows.out", data / "test" / "test_rows.out")
     jobs = loaders.runner_logs(sorted((data / "test").glob("runner_*.out"))) if (data / "test").is_dir() else {}
     monitor = loaders.cpu_monitor(data / "test" / "cpu_monitor.out")
     measured, combined = {}, {}
@@ -142,6 +142,8 @@ def load_test_rows(data=DATA):
                         row["label_note"] = " (" + ", ".join(f"{basis} memory: {'the network' if used[basis] == 'network' else 'lowest weight'}" for basis in "XZ") + ")"
                 run = None if row.get("offline") else log.get((p, spec.folder.format(p=p).removeprefix(f"eval_p{p}_")))
                 row["during"] = loaders.machine_during(monitor, run["start"], run["end"]) if run and run["start"] and run["end"] else None
+                if row["during"] and {"START", "END"} <= set(run["state"]):     # the job's own lines give the seconds throttled during the row exactly
+                    row["during"]["throttled_s"] = run["state"]["END"]["throttled_s"] - run["state"]["START"]["throttled_s"]
                 row["beside"] = run["beside"] if run else None
                 row["run"] = run
                 row["jobs_beside"] = (sorted(name for name, job in jobs.items() if job["start"] and run["start"] <= job["start"] < (run["end"] or datetime.max))
@@ -681,6 +683,41 @@ def failure_split_table(combined):
                  + markdown(["Shots", "Set", "Shots in the set", "The two runs agree", "They disagree", "Share in \"disagree\""], lines))
 
 
+def exploration_ensemble_table():
+    """The ensemble on exploration shots: the members' saved answers on the team's validation files, combined offline by hierarchy.ensemble."""
+    lines, records = [], []
+    for folder in sorted((DATA / "exploration" / "ensemble").glob("ens_p*")):
+        p = folder.name.removeprefix("ens_p")
+        found = loaders.ensemble(folder, p, split="validation")
+        if not found:
+            continue
+        rows = found["rows"]
+        order = [key for key in ("R", "P1", "P2", "T", "J") if key in rows] + sorted(key for key in rows if key not in ("R", "P1", "P2", "T", "J") and not key.startswith("oracle"))
+        order += sorted(key for key in rows if key.startswith("oracle"))
+        for key in order:
+            row = rows[key]
+            text = row["description"] if row["description"] != key else {"R": "R alone", "P1": "P1 alone", "P2": "P2 alone", "T": "T alone"}.get(key, key)
+            marked = " **(the rule chosen on the training shots)**" if key == found["rule"] else ""
+            cells = [pair_text(stats.paired(rows[other]["failed_pair"], row["failed_pair"])) if other in rows and other != key else "" for other in ("R", "T")]
+            lines.append([p, text + marked, f"{row['failures_X']}, {row['failures_Z']}", f"{row['failures_pair']} of {row['shots']:,}",
+                          rate_text(row["rate"], row["error"]), cells[0], cells[1]])
+            records.append({"p": p, "key": key, "row": text, "failures_X": row["failures_X"], "failures_Z": row["failures_Z"],
+                            "failures_pair": row["failures_pair"], "pairs": row["shots"], "rate_per_cycle": row["rate"]})
+            fact(f"ens{p[-1]}_{key}_pairs", row["failures_pair"], "tables/exploration_ensemble.md")
+        fact(f"ens{p[-1]}_shots", f"{next(iter(rows.values()))['shots']:,}", "tables/exploration_ensemble.md")
+    if not lines:
+        return write("exploration_ensemble", NOT_MEASURED)
+    return write("exploration_ensemble",
+                 "**Exploration shots, not test shots**: the team's validation files (5,000 shots per basis), each member's saved answers combined offline by "
+                 "`hierarchy.ensemble`. Members: R relay-BP, P1 and P2 PriorTilt under two seeds, T TCBP-JOBS (GPU), J joint relay-BP on the shots where "
+                 "P1, P2 and T are not unanimous. A rule that names \"the network\" uses the learned tie-break; the others need no learning of ours. "
+                 "An ORACLE is given the truth: a ceiling, not a decoder. A pair is shot k of X with shot k of Z.\n\n"
+                 + markdown(["p", "Row", "Failures X, Z", "Failed pairs", "Rate per cycle ± error",
+                             "Against relay-BP alone: both fail / only this / only relay-BP (exact p)",
+                             "Against TCBP-JOBS alone: both fail / only this / only TCBP-JOBS (exact p)"], lines)
+                 + "\n\nSource: `report/data/exploration/ensemble/ens_p<p>/validation_{X,Z}.npz` and `.json`.", records)
+
+
 def exploration_p5_table():
     """p = 0.005 on exploration shots: the team's validation_X file, the first look at the hierarchy at that noise."""
     shots = loaders.selector_files(DATA / "exploration" / "priortilt_p0.005", ["selector_validation_X.npz"])
@@ -834,6 +871,17 @@ def background_table():
             add(f"Under loss (X memory, p = 0.004, s = 0.001, 4,000 shots): {words}",
                 f"{row['failures']} failures against the flag-aware decoder's {base['failures']} (only flag-aware fails {versus['reference_only']}, "
                 f"only this one {versus['row_only']}, p = {stats.p_text(versus['p'])}): {verdict}", row["source"])
+    server = loaders.loss_server(DATA / "loss" / "server")
+    for key, words in (("starter-nofinal", "without the final-readout flip of a flagged data atom"),
+                       ("starter-nohook", "without the columns for a flagged check atom of the other basis"),
+                       ("starter-ratebase", "without trusting \"no flag\" (every unflagged atom also gets loss priors)")):
+        row, reference = server.get((0.001, 5300, key)), server.get((0.001, 5300, "starter"))
+        versus = row and row["paired_by_reference"].get("starter")
+        if row and versus:
+            add(f"Under loss, a piece of the flag-aware rule left out: {words} (X memory, p = 0.004, s = 0.001, {versus['shots']:,} shots)",
+                f"{row['failures']} of {row['shots']:,} failures; on the same shots only flag-aware fails {versus['reference_only']}, only this one "
+                f"{versus['row_only']} (p = {stats.p_text(versus['p'])}); flag-aware ÷ this = {versus['ratio']:.2f} ({versus['ratio95'][0]:.2f} to {versus['ratio95'][1]:.2f})",
+                row["source"])
     tables = {int(re.search(r"step(\d+)", path.name).group(1)): loaders.network_rule_table(path)
               for path in (DATA / "exploration" / "priortilt").glob("results_network_select_step*.txt")}
     if tables:
@@ -1043,6 +1091,7 @@ def main(argv=None):
             "test_sweep": sweep, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
             "test_comparisons": comparisons_table(measured), "test_ladder": ladder, "test_ablation": ablated,
             "where_failures": failure_split_table(combined), "exploration_p0.005": exploration_p5_table(),
+            "exploration_ensemble": exploration_ensemble_table(),
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
             "resources": resources_table(measured)}
         tables["checks"] = checks_text(measured, extra, cross_checks)

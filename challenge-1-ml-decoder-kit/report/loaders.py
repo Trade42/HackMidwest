@@ -100,17 +100,15 @@ def evaluator_rows(folder):
     return rows
 
 
-def clean_rows_log(path):
-    """The server job's START and END lines: {(p, row name): start, end, exit code, rows beside it}.
+def clean_rows_log(*paths):
+    """The server jobs' START and END lines: {(p, row name): start, end, exit code, rows beside it}.
 
     "beside" lists the other evaluator rows whose run overlapped this one, so that every latency
     can say what else was running on the machine.
     """
-    path = Path(path)
-    if not path.is_file():
-        return {}
     runs = {}
-    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+    lines = [line for path in paths if Path(path).is_file() for line in Path(path).read_text(encoding="utf-8", errors="replace").splitlines()]
+    for line in lines:
         found = re.match(r"(\S+Z) (START|END) p=(\S+) (\S+)(?: exit (\d+))?", line)
         if not found:
             continue
@@ -157,7 +155,7 @@ def machine_during(monitor, start, end):
     if len(inside) < 2:
         return None
     return {"minutes": len(inside), "cpus_mean": sum(record["cpus"] for record in inside) / len(inside),
-            "cpus_max": max(record["cpus"] for record in inside), "throttled_s": inside[-1]["thr_s"] - inside[0]["thr_s"],
+            "cpus_max": max(record["cpus"] for record in inside), "throttled_s": sum(record["thr_s"] for record in inside),   # thr_s: seconds throttled in that minute
             "evaluators_max": int(max(record.get("evaluator", 0) for record in inside)),
             "other_max": {kind: int(max(record.get(kind, 0) for record in inside)) for kind in ("joint", "loss_job", "candidates", "tcbp_member", "evaluate_stim")}}
 
@@ -225,7 +223,7 @@ def tcbp_member(folder, p):
             "source": str(folder.relative_to(DATA)) + "/test_{X,Z}.tcbp.npz", "per_shot_file": str(files["X"].relative_to(DATA))}
 
 
-def ensemble(folder, p):
+def ensemble(folder, p, split="test"):
     """The members and the rules combined offline by hierarchy.ensemble on the test files: {key: row}, and the frozen rule.
 
     A row is one member alone (R relay-BP, P1 and P2 PriorTilt under two seeds, T TCBP-JOBS), a rule
@@ -234,7 +232,7 @@ def ensemble(folder, p):
     timed in one process.
     """
     folder = Path(folder)
-    files = {basis: folder / f"test_{basis}.npz" for basis in "XZ"}
+    files = {basis: folder / f"{split}_{basis}.npz" for basis in "XZ"}
     if not all(file.is_file() for file in files.values()):
         return None
     arrays, tables = {}, {}
@@ -268,7 +266,7 @@ def ensemble(folder, p):
                      "device": "CPU and GPU" if key in ("T", "b", "bw", "c", "d", "e", "f", "g", "gw") else "CPU", "rule": None, "wall_seconds": None,
                      "timer": "the sum of the decode calls the row makes, each timed alone", "peak_rss_mb": None, "setup_seconds": None,
                      "description": listed["X"].get("row", key), "offline": True,
-                     "source": str(folder.relative_to(DATA)) + "/test_{X,Z}.npz", "per_shot_file": str(files["X"].relative_to(DATA))}
+                     "source": str(folder.relative_to(DATA)) + f"/{split}_" + "{X,Z}.npz", "per_shot_file": str(files["X"].relative_to(DATA))}
     marked = {basis: tables[basis].get("marked_rule") or (str(arrays[basis]["rule"]) if "rule" in arrays[basis] and str(arrays[basis]["rule"]) else None) for basis in "XZ"}
     if marked["X"] != marked["Z"]:
         raise Mismatch(f"{folder}: the frozen rule is {marked['X']} for X memory and {marked['Z']} for Z memory")

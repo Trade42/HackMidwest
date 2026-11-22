@@ -1,0 +1,27 @@
+p,key,row,failures_X,failures_Z,failures_pair,pairs,rate_per_cycle
+0.003,R,R alone,2,2,4,5000,6.669112361223917e-05
+0.003,P1,P1 alone,2,2,4,5000,6.669112361223917e-05
+0.003,P2,P2 alone,3,2,5,5000,8.337155219761971e-05
+0.003,T,T alone,0,1,1,5000,1.6668194639635203e-05
+0.003,ac,"ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2",2,2,4,5000,6.669112361223917e-05
+0.003,aw,"aw: P1 where P1 = P2; else the lowest weight of R, P1, P2",2,2,4,5000,6.669112361223917e-05
+0.003,bw,"bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R",0,0,0,5000,0.0
+0.003,f,"f: P1 where P1 = P2 = T; else J where it converged, else T",1,0,1,5000,1.6668194639635203e-05
+0.003,gw,"gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order",1,0,1,5000,1.6668194639635203e-05
+0.003,oracle_P1_P2_T,"ORACLE (needs the truth): a perfect choice among P1, P2, T",0,0,0,5000,0.0
+0.003,oracle_P1_P2_T_R,"ORACLE (needs the truth): a perfect choice among P1, P2, T, R",0,0,0,5000,0.0
+0.003,oracle_P1_P2_T_R_J,"ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J",0,0,0,5000,0.0
+0.003,oracle_R_P1_P2,"ORACLE (needs the truth): a perfect choice among R, P1, P2",1,1,2,5000,3.3339446006586115e-05
+0.005,R,R alone,194,189,373,5000,0.006439940995979998
+0.005,P1,P1 alone,137,144,276,5000,0.0047206570163056405
+0.005,P2,P2 alone,152,145,289,5000,0.004949188267599158
+0.005,T,T alone,91,97,187,5000,0.003171403950113727
+0.005,ac,"ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2",108,104,207,5000,0.003517249291047242
+0.005,aw,"aw: P1 where P1 = P2; else the lowest weight of R, P1, P2",129,118,241,5000,0.004108233881310985
+0.005,bw,"bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R",107,113,218,5000,0.003708028503587424
+0.005,f,"f: P1 where P1 = P2 = T; else J where it converged, else T",91,97,187,5000,0.003171403950113727
+0.005,gw,"gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order",90,92,179,5000,0.0030334345627647252
+0.005,oracle_P1_P2_T,"ORACLE (needs the truth): a perfect choice among P1, P2, T",53,63,116,5000,0.001954201073267048
+0.005,oracle_P1_P2_T_R,"ORACLE (needs the truth): a perfect choice among P1, P2, T, R",50,55,105,5000,0.0017670732553261015
+0.005,oracle_P1_P2_T_R_J,"ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J",50,55,105,5000,0.0017670732553261015
+0.005,oracle_R_P1_P2,"ORACLE (needs the truth): a perfect choice among R, P1, P2",75,82,155,5000,0.0026207819963802725

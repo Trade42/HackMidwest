@@ -265,7 +265,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--check", action="store_true", help="copy nothing; verify every recorded file's sha256")
     parser.add_argument("--accept-change", nargs="*", default=[], help="files under report/data/ whose source may have changed")
-    parser.add_argument("--only", nargs="*", default=None, help="copy only the sources whose destination under report/data/ starts with one of these")
+    parser.add_argument("--only", nargs="*", default=None, help="copy only the files whose name under report/data/ starts with one of these")
     args = parser.parse_args(argv)
     records = json.loads(RECORD.read_text()) if RECORD.exists() else {}
 
@@ -282,7 +282,7 @@ def main(argv=None):
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
     copied, changed, waiting, stopped = [], [], [], []
     for destination, where, pattern, grows in SOURCES:
-        if args.only is not None and not destination.startswith(tuple(args.only)):
+        if args.only is not None and not any(destination.startswith(only) or only.startswith(destination) for only in args.only):
             continue
         matches = expand(where, pattern)
         if not matches:
@@ -290,6 +290,8 @@ def main(argv=None):
             continue
         for path, tail in matches:
             name = destination + tail if destination.endswith("/") else destination
+            if args.only is not None and not name.startswith(tuple(args.only)):
+                continue
             got = read_source(where, path)
             if got is None:
                 waiting.append(f"{where}: {path}")

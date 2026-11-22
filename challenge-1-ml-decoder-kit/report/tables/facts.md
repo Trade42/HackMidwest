@@ -340,6 +340,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `fb5Z_back` | not measured | `tables/test_predecoder.md` |
 | `fb5Z_back_H` | not measured | `tables/test_predecoder.md` |
 | `fb5Z_back_T` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_clause` | Its clean test will be the Z test file at p = 0.005, registered to be opened only after the rule was frozen (`predecoder/logs/fallback_rule_frozen.md`); that run has not landed yet. | `tables/test_predecoder.md` |
 | `fb5Z_conv_H` | not measured | `tables/test_predecoder.md` |
 | `fb5Z_conv_T` | not measured | `tables/test_predecoder.md` |
 | `fb5Z_conv_shots` | not measured | `tables/test_predecoder.md` |
@@ -545,6 +546,23 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pre5X_vs_fresh_only_H` | 26 | `tables/test_predecoder.md` |
 | `pre5X_vs_fresh_only_other` | 308 | `tables/test_predecoder.md` |
 | `pre5X_vs_fresh_p` | 2e-62 | `tables/test_predecoder.md` |
+| `pre5Z_H` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_R` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_T` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_it_H` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_it_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_it_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_vs_R_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_vs_R_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_vs_R_p` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_vs_T_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_vs_T_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_vs_T_p` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_vs_fresh_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_vs_fresh_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_vs_fresh_p` | not measured | `tables/test_predecoder.md` |
 | `pre_columns` | 8,784 | `tables/test_predecoder.md` |
 | `pregate_H` | 14 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `pregate_fresh` | 20 | `data/exploration/predecoder/compare_validation_X_summary.json` |

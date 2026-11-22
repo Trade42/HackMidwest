@@ -15,12 +15,12 @@
 |---|---|---|---|
 | 0.003 | the two PriorTilt runs agree: rule d keeps their answer | 0 / 0 | 0 / 1 |
 | 0.003 | all three differ: rule d takes the network's pick among P1, P2, T and R | 0 / 0 | 0 / 0 |
-| 0.003 | exactly two of the three agree: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
+| 0.003 | the two PriorTilt runs disagree and TCBP-JOBS sides with one of them: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
 | 0.004 | the two PriorTilt runs agree: rule d keeps their answer | 4 / 6 | 4 / 4 |
 | 0.004 | all three differ: rule d takes the network's pick among P1, P2, T and R | 1 / 0 | 1 / 2 |
-| 0.004 | exactly two of the three agree: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
+| 0.004 | the two PriorTilt runs disagree and TCBP-JOBS sides with one of them: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
 | 0.005 | the two PriorTilt runs agree: rule d keeps their answer | 36 / 31 | 42 / 26 |
 | 0.005 | all three differ: rule d takes the network's pick among P1, P2, T and R | 19 / 6 | 16 / 7 |
-| 0.005 | exactly two of the three agree: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
+| 0.005 | the two PriorTilt runs disagree and TCBP-JOBS sides with one of them: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
 
 Source: `report/data/test/ensemble_p<p>/test_{X,Z}.npz` and `.json`.

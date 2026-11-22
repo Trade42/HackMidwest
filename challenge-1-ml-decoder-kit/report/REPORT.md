@@ -263,8 +263,7 @@ believes, instead of choosing among finished answers. The head is ours; relay-BP
   <!--f:fbval_T-->91<!--/f--> (only the rule <!--f:fbval_only_rule-->12<!--/f-->, only TCBP-JOBS <!--f:fbval_only_T-->53<!--/f-->, exact p = <!--f:fbval_p-->3e-07<!--/f-->). On the same test X shots as above it fails
   <!--f:fb5X_rule-->107<!--/f--> against TCBP-JOBS's <!--f:fb5X_T-->186<!--/f--> (only the rule <!--f:fb5X_vs_T_only_rule-->16<!--/f-->, only TCBP-JOBS <!--f:fb5X_vs_T_only_T-->95<!--/f-->, exact p = <!--f:fb5X_vs_T_p-->8e-15<!--/f-->) and the head's priors alone <!--f:fb5X_H-->151<!--/f-->, and it
   falls back on <!--f:fb5X_back-->90<!--/f--> shots. Why it works: on the <!--f:fb5X_conv_shots-->9,910<!--/f--> shots where that relay-BP converged, H fails <!--f:fb5X_conv_H-->63<!--/f--> and
-  TCBP-JOBS <!--f:fb5X_conv_T-->142<!--/f-->; on the <!--f:fb5X_back-->90<!--/f--> where it did not, H fails <!--f:fb5X_back_H-->88<!--/f--> and TCBP-JOBS <!--f:fb5X_back_T-->44<!--/f-->. Its clean test is the Z
-  test file at p = 0.005, which was opened only after the rule was frozen: <!--f:fb5Z_rule-->not measured<!--/f--> yet.
+  TCBP-JOBS <!--f:fb5X_conv_T-->142<!--/f-->; on the <!--f:fb5X_back-->90<!--/f--> where it did not, H fails <!--f:fb5X_back_H-->88<!--/f--> and TCBP-JOBS <!--f:fb5X_back_T-->44<!--/f-->. <!--f:fb5Z_clause-->Its clean test will be the Z test file at p = 0.005, registered to be opened only after the rule was frozen (`predecoder/logs/fallback_rule_frozen.md`); that run has not landed yet.<!--/f-->
 - **What it does not show.** It covers one noise level and one basis, so it is not the kit's score, which counts
   pairs. Its times come from a shared 12-worker pool on the team's PC and are not clean, so the table gives
   iterations instead. `APPENDIX.md` K has the table.

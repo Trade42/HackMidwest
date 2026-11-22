@@ -535,13 +535,13 @@ The rows themselves are in A (`test_p<p>.md`, `test_time.md`), each labelled; th
 |---|---|---|---|
 | 0.003 | the two PriorTilt runs agree: rule d keeps their answer | 0 / 0 | 0 / 1 |
 | 0.003 | all three differ: rule d takes the network's pick among P1, P2, T and R | 0 / 0 | 0 / 0 |
-| 0.003 | exactly two of the three agree: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
+| 0.003 | the two PriorTilt runs disagree and TCBP-JOBS sides with one of them: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
 | 0.004 | the two PriorTilt runs agree: rule d keeps their answer | 4 / 6 | 4 / 4 |
 | 0.004 | all three differ: rule d takes the network's pick among P1, P2, T and R | 1 / 0 | 1 / 2 |
-| 0.004 | exactly two of the three agree: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
+| 0.004 | the two PriorTilt runs disagree and TCBP-JOBS sides with one of them: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
 | 0.005 | the two PriorTilt runs agree: rule d keeps their answer | 36 / 31 | 42 / 26 |
 | 0.005 | all three differ: rule d takes the network's pick among P1, P2, T and R | 19 / 6 | 16 / 7 |
-| 0.005 | exactly two of the three agree: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
+| 0.005 | the two PriorTilt runs disagree and TCBP-JOBS sides with one of them: rule d's answer is TCBP-JOBS's (checked on every shot) | 0 / 0 | 0 / 0 |
 
 Source: `report/data/test/ensemble_p<p>/test_{X,Z}.npz` and `.json`.
 <!-- END table:test_after_swap -->
@@ -557,8 +557,9 @@ Source: `report/data/test/ensemble_p<p>/test_{X,Z}.npz` and `.json`.
 | 0.005 | X | relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit) | 433 of 10,000 | 4.33% (3.95% to 4.75%) | 125 / 26 / 308 (p = 2e-62) | 2,436; 258 not converged |
 | 0.005 | X | TCBP-JOBS (NVIDIA, GPU; its row of this report) | 186 of 10,000 | 1.86% (1.61% to 2.14%) | 90 / 61 / 96 (p = 0.006) |  |
 | 0.005 | X | relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report) | 432 of 10,000 | 4.32% (3.94% to 4.74%) | 124 / 27 / 308 (p = 1e-61) |  |
-| 0.004 | X | relay-BP with the head's priors (H) | not measured | not measured | not measured | not measured |
-| 0.003 | X | relay-BP with the head's priors (H) | not measured | not measured | not measured | not measured |
+| 0.004 | X | relay-BP with the head's priors (H) [run after the p = 0.005 X test result (the registered extension)] | not measured | not measured | not measured | not measured |
+| 0.003 | X | relay-BP with the head's priors (H) [run after the p = 0.005 X test result (the registered extension)] | not measured | not measured | not measured | not measured |
+| 0.005 | Z | relay-BP with the head's priors (H) [run after the p = 0.005 X test result (the registered extension)] | not measured | not measured | not measured | not measured |
 
 Source: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.json` (copied from `predecoder/logs/`).
 

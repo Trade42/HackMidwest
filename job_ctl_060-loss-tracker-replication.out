@@ -126,3 +126,4 @@ wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/parts/002500-
 decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 3000..3500 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
   100/500 shots, 47s, failures so far starter=2 exact=3 tracker=1 oracle-round=2
   200/500 shots, 130s, failures so far starter=9 exact=10 tracker=8 oracle-round=5
+  300/500 shots, 192s, failures so far starter=12 exact=14 tracker=11 oracle-round=8

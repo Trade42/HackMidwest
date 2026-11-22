@@ -95,6 +95,17 @@ def _train_point(train, base, multiplier, decoder, flags, args, out, deadline):
             "unconverged": int((~row["converged"]).sum()), "mean_iterations": float(row["iterations"].mean())}
 
 
+def save_fit(fit_path, shots_name, key, entry):
+    """Add one entry to fit.json. The file is read again just before writing, so that two jobs on one folder
+    (one per lane) keep each other's entries. Returns the whole file's content."""
+    fit = json.loads(fit_path.read_text()) if fit_path.exists() else {}
+    fit.setdefault(shots_name, {})[key] = entry
+    partial = fit_path.with_suffix(".partial.json")
+    partial.write_text(json.dumps(fit, indent=1))
+    partial.replace(fit_path)
+    return fit
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--basis", choices=["X", "Z"], default="X")
@@ -135,8 +146,7 @@ def main():
                     flags = flags or None
                     if priors == "generic-fit":
                         entry = fit_generic(factor, decoder, flags, args, out, deadline)
-                        fit.setdefault(test.name, {})[decoder + ("/" + flags if flags else "")] = entry
-                        fit_path.write_text(json.dumps(fit, indent=1))
+                        fit = save_fit(fit_path, test.name, decoder + ("/" + flags if flags else ""), entry)
                         print(json.dumps({"fit": test.name, "decoder": decoder, "flags": flags, **entry}), flush=True)
                         priors = "generic-2q" if entry["multiplier"] == 1 else entry["priors"]
                     decode_all(test, min(args.first or args.shots, args.shots), decoder, priors, flags, args,

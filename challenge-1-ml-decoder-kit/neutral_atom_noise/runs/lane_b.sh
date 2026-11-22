@@ -19,7 +19,8 @@ lane() {
   case "${LANE:-B}" in
     B) LOCK=/home/sal/hackMidwest/dq/run/sim-b.lock; CPUS=8-11 ;;
     C) LOCK=/home/sal/hackMidwest/dq/run/sim.lock; CPUS=12-15 ;;
-    *) echo "LANE must be B or C"; return 1 ;;
+    D) LOCK=/home/sal/hackMidwest/dq/run/sim-d.lock; CPUS=0-3 ;;
+    *) echo "LANE must be B, C or D"; return 1 ;;
   esac
 }
 OUT=${OUT:-$S/runs/X_seed4100}      # every row of question 1 (X memory), so one summary holds them all
@@ -67,8 +68,13 @@ q1_generic_bposd()  { stream q1_generic_bposd --factors 0.8,0.9,0.7 --decoders b
 q1_generic_relay()  { stream q1_generic_relay --factors 0.9 --decoders relay --rows generic-2q --first 250 &&
                       stream q1_generic_relay --factors 0.8 --decoders relay --rows generic-2q --first 500; }
 q1_fit_bposd()      { stream q1_fit_bposd --factors 0.8 --decoders bposd --rows generic-fit; }
+q1_fit_bposd_09()   { stream q1_fit_bposd --factors 0.9 --decoders bposd --rows generic-fit --train-seed 5101 \
+                        --grid 1.96,2.744,3.8416 --first 625; }
+# widen relay-BP's matched rows at 0.9 to 2,000 shots and at 1 as far as time allows (FIRST)
+q1_widen_relay()    { stream q1_matched_relay --factors 0.9 --decoders relay --rows matched &&
+                      stream q1_matched_relay --factors 1 --decoders relay --rows matched --first "${FIRST:-750}"; }
 q1_fit_relay()      { stream q1_fit_relay --factors 0.8 --decoders relay --rows generic-fit --first 500 --train-first 100 \
-                        --grid 0.5,0.7,1,1.4; }
+                        --grid 1,1.96,3.8416; }
 
 # Question 2 (loss), X memory at factor 0.4 (atom loss 1e-3 per atom per CX, the rate loss/ studied most), its own
 # folder and seeds. Flag-aware (loss/'s `starter`, the published recipe) with matched and with generic Pauli priors;
@@ -78,6 +84,9 @@ LOSS_OUT=$S/runs/X_loss_seed6100
 q2_starter()  { OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.4 --decoders relay --rows starter/matched &&
                 OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.4 --decoders relay --rows starter/generic-2q --first "${FIRST:-1000}"; }
 q2_blind()    { OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.4 --decoders relay --rows blind/matched --first "${FIRST:-150}"; }
+# factor 0.6 with loss: where flag-aware decoding fails often enough to compare matched with generic Pauli priors
+q2_06()       { OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.6 --decoders relay --rows starter/matched --first 1000 &&
+                OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.6 --decoders relay --rows starter/generic-2q --first 150; }
 
 # The pipeline on the kit's own noise at p = 0.004: this folder's sampler and decode loop, with the kit's priors.
 # The kit's README has relay-BP at 45 and BP-OSD at 253 failures of 10,000 X shots.
@@ -95,6 +104,24 @@ reference() {
     "$PY" -m neutral_atom_noise.summarize --results "$S/runs/reference/results" --out "$S/runs/reference"
     echo "=== $(date -u +%FT%TZ) reference done"
   } 2>&1 | tee -a "$LOGS/reference.log"
+}
+
+# Checks of the pipeline (advisor, 10:50 UTC): relay-BP on a second seed of the kit's own noise at p = 0.004, and
+# BP-OSD on the first reference file with inflated priors (p = 0.011), to see whether BP-OSD prefers a larger p on
+# any noise or only on the neutral-atom shape.
+checks() {
+  lane || return 1
+  mkdir -p "$LOGS"
+  {
+    echo "=== $(date -u +%FT%TZ) checks: lane ${LANE:-B}, head $(git rev-parse --short HEAD)"
+    "$PY" -m neutral_atom_noise.make_shots --basis X --uniform-p 0.004 --shots 2000 --seed 4101 --out "$S/runs/reference/shots"
+    flock "$LOCK" nice -n 15 taskset -c "$CPUS" "$PY" -m neutral_atom_noise.run --decoder relay --priors uniform:0.004 \
+      --shots "$S/runs/reference/shots/X_p0.004_seed4101.npz" --workers 4 --out "$S/runs/reference/results"
+    flock "$LOCK" nice -n 15 taskset -c "$CPUS" "$PY" -m neutral_atom_noise.run --decoder bposd --priors uniform:0.011 \
+      --shots "$S/runs/reference/shots/X_p0.004_seed4100.npz" --workers 4 --out "$S/runs/reference/results"
+    "$PY" -m neutral_atom_noise.summarize --results "$S/runs/reference/results" --out "$S/runs/reference"
+    echo "=== $(date -u +%FT%TZ) checks done"
+  } 2>&1 | tee -a "$LOGS/checks.log"
 }
 
 # Question 2: our loss loop against loss/'s own job on the kit's noise, 100 shots (the orchestrator's condition).
@@ -125,4 +152,13 @@ lane_c() {
   LANE=C loss_check
   LANE=C REPEAT=1 q2_starter
   LANE=C REPEAT=1 q2_blind
+}
+
+# Lane D, ours from 10:50 UTC (dq-orch-4): the pipeline checks, relay-BP's matched rows widened, question 2 at
+# factor 0.6, BP-OSD's fitted generic p at factor 0.9.
+lane_d() {
+  LANE=D checks
+  LANE=D REPEAT=1 q1_widen_relay
+  LANE=D REPEAT=1 q2_06
+  LANE=D REPEAT=1 q1_fit_bposd_09
 }

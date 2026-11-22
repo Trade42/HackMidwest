@@ -1,0 +1,379 @@
+{
+  "cycles": 12,
+  "p": 0.003,
+  "circuits": {
+    "X": {
+      "path": "/home/blakew3/mlBranchMidwest/test-frozen-dry/challenge-1-ml-decoder-kit/circuits/gross_X_r12_p0.001.stim",
+      "sha256": "d5e86451e36a799eceeb805aeea00bc9bce79c0d883ed454e4e2b3f44f5c5e4c"
+    },
+    "Z": {
+      "path": "/home/blakew3/mlBranchMidwest/test-frozen-dry/challenge-1-ml-decoder-kit/circuits/gross_Z_r12_p0.001.stim",
+      "sha256": "4ea8774901c63a476f4337d5d9b6c54c08eefd22f24036198f8333750f16c300"
+    }
+  },
+  "plugin_options": {
+    "rule": {
+      "X": "network",
+      "Z": "converged"
+    },
+    "seeds": [
+      1,
+      1001
+    ],
+    "checkpoints": {
+      "X": "/home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/x_final.pt",
+      "Z": "/home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/z_final.pt"
+    },
+    "device": "cpu",
+    "torch_threads": 1,
+    "parallel": true
+  },
+  "datasets": {
+    "test": {
+      "X": {
+        "path": "/home/blakew3/mlBranchMidwest/test-frozen-dry/challenge-1-ml-decoder-kit/data/p0.003/validation_X.npz",
+        "sha256": "455311ff7f2c7fa8359af83c09e96d75eb791dd0105bebb66ff56bd016aaa4e8",
+        "basis": "X",
+        "p": 0.003,
+        "seed": 201,
+        "shots": 5000,
+        "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+      },
+      "Z": {
+        "path": "/home/blakew3/mlBranchMidwest/test-frozen-dry/challenge-1-ml-decoder-kit/data/p0.003/validation_Z.npz",
+        "sha256": "31dc5131fb8f010ba8e6f1dab6cbd185b4d4cf27df727489e88c3a5ec58ad86b",
+        "basis": "Z",
+        "p": 0.003,
+        "seed": 202,
+        "shots": 5000,
+        "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+      }
+    }
+  },
+  "package_versions": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "matplotlib": "3.11.2"
+  },
+  "machine": {
+    "system": "Linux",
+    "release": "6.8.0-149-generic",
+    "machine": "x86_64",
+    "processor": "",
+    "python": "3.12.16",
+    "cpu_count": 24,
+    "workers": 1,
+    "thread_environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": "1",
+      "RAYON_NUM_THREADS": null
+    },
+    "native_decoder_threads": "not exposed by the installed decoder API",
+    "resource_note": "ru_maxrss is peak memory of this parent process only; it excludes other workers"
+  },
+  "randomness": {
+    "dataset_seeds": {
+      "test": {
+        "X": 201,
+        "Z": 202
+      }
+    },
+    "relay_bp_seed": 0,
+    "relay_bp_seed_source": "installed API default; kit factory leaves it unset",
+    "bposd_seed": null,
+    "bposd_seed_note": "kit factory does not set a seed",
+    "decoder_order": [
+      "hierarchy.plugin:make_decoder"
+    ]
+  },
+  "outcome_policy": "Every returned prediction is scored, including unconverged results; exceptions fail the run.",
+  "timing": "Existing seconds fields preserve the kit decoder-call timer for baselines. Separate total_seconds fields time before_shot plus the complete decode_shot call for every decoder, including projection, router, and fallback work; one-time construction is separate. Batch throughput uses complete evaluation wall time.",
+  "decoders": [
+    {
+      "name": "hierarchy.plugin:make_decoder",
+      "configuration": {
+        "X": {
+          "decoder": "hierarchy: PriorTilt under two seeds; where their predictions differ, relay-BP joins and the rule chooses",
+          "rule": "network",
+          "rule_asked": "network",
+          "rule_note": null,
+          "constant": null,
+          "seeds": [
+            1,
+            1001
+          ],
+          "tie_order": [
+            "R",
+            "P1",
+            "P2"
+          ],
+          "decoders": {
+            "R": {
+              "decoder": "relay-BP (the kit's decoders.relay_decoder, called through decode_detailed)",
+              "settings": {
+                "alpha": 1.0,
+                "gamma0": 0.15,
+                "pre_iter": 80,
+                "num_sets": 300,
+                "set_max_iter": 60,
+                "gamma_dist_interval": [
+                  -0.22628432386414646,
+                  0.6216020925981884
+                ],
+                "stop_nconv": 5
+              },
+              "changes_to_the_kit": {},
+              "relay_bp": "0.2.2"
+            },
+            "P1": {
+              "decoder": "PriorTilt, three-phase mode, f64 messages (priortilt_rs.PriorTiltDecoder on the kit's H and priors)",
+              "code": "BB144",
+              "p_tuned": 0.003,
+              "initial_iters": 60,
+              "round_len": 6,
+              "max_rounds": 3000,
+              "ends": [
+                120,
+                1000
+              ],
+              "prob_positive": [
+                0.196,
+                0.118,
+                0.1396
+              ],
+              "pos_coef": [
+                0.5,
+                0.5,
+                0.2
+              ],
+              "neg_coef": [
+                0.392,
+                0.56,
+                1.75
+              ],
+              "threshold_factor": [
+                1.4,
+                1.4,
+                2.1755
+              ],
+              "priortilt_commit": "8eefd37d694b5942fe60ec6d5c82ce97f3d2a450",
+              "params_sha256": "4c6f12b3dd6a985faec397b4d7e0a3ec055e2173f207403b5e6d68fc4e39308b",
+              "priortilt_rs": "1.0.0",
+              "seed": 1
+            },
+            "P2": {
+              "decoder": "PriorTilt, three-phase mode, f64 messages (priortilt_rs.PriorTiltDecoder on the kit's H and priors)",
+              "code": "BB144",
+              "p_tuned": 0.003,
+              "initial_iters": 60,
+              "round_len": 6,
+              "max_rounds": 3000,
+              "ends": [
+                120,
+                1000
+              ],
+              "prob_positive": [
+                0.196,
+                0.118,
+                0.1396
+              ],
+              "pos_coef": [
+                0.5,
+                0.5,
+                0.2
+              ],
+              "neg_coef": [
+                0.392,
+                0.56,
+                1.75
+              ],
+              "threshold_factor": [
+                1.4,
+                1.4,
+                2.1755
+              ],
+              "priortilt_commit": "8eefd37d694b5942fe60ec6d5c82ce97f3d2a450",
+              "params_sha256": "4c6f12b3dd6a985faec397b4d7e0a3ec055e2173f207403b5e6d68fc4e39308b",
+              "priortilt_rs": "1.0.0",
+              "seed": 1001
+            }
+          },
+          "network": {
+            "checkpoint": "/home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/x_final.pt",
+            "sha256": "ec72edf4492e5ad37179f876070388a8173b4612559e85e55f2a553df2e9a606",
+            "step": 80000,
+            "commit": "7ff6a68b95916773a67d209959c92b04c2254cd1",
+            "training_seed": 1,
+            "reads_detectors": "all",
+            "logical_operators": "kit",
+            "width": 128,
+            "depth": 8,
+            "device": "cpu",
+            "torch": "2.15.0+cu132",
+            "torch_threads": 1
+          },
+          "problem_sha256": "bcc4e9be676aae6e1a0cb251fa70af45208ce49ce32b1c4fe7a4f9f01f22dc28",
+          "parallel": "P1 and P2 of a shot run side by side on two cores: the times are wall time",
+          "state": "decoders are built once and keep their state: relay-BP sees only the shots where P1 and P2 differ"
+        },
+        "Z": {
+          "decoder": "hierarchy: PriorTilt under two seeds; where their predictions differ, relay-BP joins and the rule chooses",
+          "rule": "converged",
+          "rule_asked": "converged",
+          "rule_note": null,
+          "constant": null,
+          "seeds": [
+            1,
+            1001
+          ],
+          "tie_order": [
+            "R",
+            "P1",
+            "P2"
+          ],
+          "decoders": {
+            "R": {
+              "decoder": "relay-BP (the kit's decoders.relay_decoder, called through decode_detailed)",
+              "settings": {
+                "alpha": 1.0,
+                "gamma0": 0.15,
+                "pre_iter": 80,
+                "num_sets": 300,
+                "set_max_iter": 60,
+                "gamma_dist_interval": [
+                  -0.22628432386414646,
+                  0.6216020925981884
+                ],
+                "stop_nconv": 5
+              },
+              "changes_to_the_kit": {},
+              "relay_bp": "0.2.2"
+            },
+            "P1": {
+              "decoder": "PriorTilt, three-phase mode, f64 messages (priortilt_rs.PriorTiltDecoder on the kit's H and priors)",
+              "code": "BB144",
+              "p_tuned": 0.003,
+              "initial_iters": 60,
+              "round_len": 6,
+              "max_rounds": 3000,
+              "ends": [
+                120,
+                1000
+              ],
+              "prob_positive": [
+                0.196,
+                0.118,
+                0.1396
+              ],
+              "pos_coef": [
+                0.5,
+                0.5,
+                0.2
+              ],
+              "neg_coef": [
+                0.392,
+                0.56,
+                1.75
+              ],
+              "threshold_factor": [
+                1.4,
+                1.4,
+                2.1755
+              ],
+              "priortilt_commit": "8eefd37d694b5942fe60ec6d5c82ce97f3d2a450",
+              "params_sha256": "4c6f12b3dd6a985faec397b4d7e0a3ec055e2173f207403b5e6d68fc4e39308b",
+              "priortilt_rs": "1.0.0",
+              "seed": 1
+            },
+            "P2": {
+              "decoder": "PriorTilt, three-phase mode, f64 messages (priortilt_rs.PriorTiltDecoder on the kit's H and priors)",
+              "code": "BB144",
+              "p_tuned": 0.003,
+              "initial_iters": 60,
+              "round_len": 6,
+              "max_rounds": 3000,
+              "ends": [
+                120,
+                1000
+              ],
+              "prob_positive": [
+                0.196,
+                0.118,
+                0.1396
+              ],
+              "pos_coef": [
+                0.5,
+                0.5,
+                0.2
+              ],
+              "neg_coef": [
+                0.392,
+                0.56,
+                1.75
+              ],
+              "threshold_factor": [
+                1.4,
+                1.4,
+                2.1755
+              ],
+              "priortilt_commit": "8eefd37d694b5942fe60ec6d5c82ce97f3d2a450",
+              "params_sha256": "4c6f12b3dd6a985faec397b4d7e0a3ec055e2173f207403b5e6d68fc4e39308b",
+              "priortilt_rs": "1.0.0",
+              "seed": 1001
+            }
+          },
+          "network": null,
+          "problem_sha256": "51433d82d8d623f321c6e267939d6ef56da58838e513becda350cbe5bf730fdc",
+          "parallel": "P1 and P2 of a shot run side by side on two cores: the times are wall time",
+          "state": "decoders are built once and keep their state: relay-BP sees only the shots where P1 and P2 differ"
+        }
+      },
+      "setup_seconds_by_basis": {
+        "X": 9.572595432051457,
+        "Z": 2.518501505954191
+      },
+      "peak_parent_rss_bytes_before": 176582656,
+      "peak_parent_rss_bytes_after": 750145536,
+      "shot_metrics": "01_hierarchy_plugin_make_decoder_metrics.json",
+      "summary": {
+        "decoder": "hierarchy.plugin:make_decoder",
+        "p": 0.003,
+        "cycles": 12,
+        "shots_X": 5000,
+        "shots_Z": 5000,
+        "paired_shots": 5000,
+        "failures_X": 2,
+        "failures_Z": 4,
+        "failures_pair": 6,
+        "per_cycle_rate": 0.00010005504220356176,
+        "standard_error": 4.08544384649101e-05,
+        "mean_pair_ms": 30.31776173207909,
+        "median_pair_ms": 7.4254044448025525,
+        "p99_pair_ms": 259.1464474378159,
+        "mean_pair_kit_ms": null,
+        "mean_pair_total_ms": 30.31776173207909,
+        "median_pair_total_ms": 7.4254044448025525,
+        "p99_pair_total_ms": 259.1464474378159,
+        "setup_seconds": 12.091096938005649,
+        "before_shot_seconds": 0.0,
+        "decode_loop_seconds": 152.09434113500174,
+        "evaluation_wall_seconds": 167.3361960640177,
+        "batch_throughput_pairs_per_second": 29.879966902600994,
+        "converged_fraction": 1.0,
+        "first_leg_converged_fraction": null,
+        "fallback_fraction": 0.0004,
+        "mean_iterations": 196.1327,
+        "threshold": null,
+        "threshold_X": null,
+        "threshold_Z": null,
+        "artifacts": "01_hierarchy_plugin_make_decoder_shots.npz"
+      }
+    }
+  ]
+}

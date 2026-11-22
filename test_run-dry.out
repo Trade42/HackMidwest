@@ -43,3 +43,8 @@ oracle_P1_P2_T_R_J                [0 0]             0  0.00e+00 +- 0.0e+00
 PREFLIGHT PASSED in 80 s: the plugin, candidates, evaluate_stim, tcbp_member (STAND-IN ONLY), joint_member and ensemble all ran on 16 validation shots per basis
   mean time per shot on this machine: sequential 94.7 ms, side by side 68.1 ms (wall time, two cores)
 RESULT: the side-by-side mode gives the sequential answers on every shot
+2026-11-22T08:43:41Z rehearsal on validation shots, p = 0.003, hierarchy: hierarchy.plugin:make_decoder,2,4,6,0.00010005504220356176,4.08544384649101e-05,47.9943794220686
+2026-11-22T08:43:41Z rehearsal on validation shots, p = 0.003, hierarchy-parallel: hierarchy.plugin:make_decoder,2,4,6,0.00010005504220356176,4.08544384649101e-05,30.31776173207909
+2026-11-22T08:43:41Z rehearsal on validation shots, p = 0.003, priortilt: hierarchy.priortilt_plugin:make_decoder,2,2,4,6.669112361223917e-05,3.3350567904766315e-05,23.24324532528408
+2026-11-22T08:43:46Z 3. PREFLIGHT AND REHEARSAL PASSED. [CPUs in use 5.3, tokens 0, throttled so far 4836.3 s, load 11.14]
+2026-11-22T08:43:46Z DRY RUN END: stages 0 to 3 passed; no test file was opened

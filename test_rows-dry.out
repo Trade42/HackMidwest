@@ -1,0 +1,17 @@
+2026-11-22T08:43:46Z GO: the preflight and the rehearsal passed; frozen fd3aed3c0d1f2e9e8bd181bd22c9853a19e2dfc5; options {
+  "rule": {
+    "X": "network",
+    "Z": "converged"
+  },
+  "seeds": [
+    1,
+    1001
+  ],
+  "checkpoints": {
+    "X": "/home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/x_final.pt",
+    "Z": "/home/blakew3/mlBranchMidwest/runs/test-dry/ckpt/z_final.pt"
+  },
+  "device": "cpu",
+  "torch_threads": 1
+}
+2026-11-22T08:43:46Z DRY RUN END

@@ -1,1 +1,20 @@
 Sun Nov 22 18:34:53 UTC 2026
+plan.json: OK
+seed4800/priors_generic.npy: OK
+seed4800/priors_matched.npy: OK
+seed4800/transfer.json: OK
+seed4800/X_f0.8_seed4800_kitformat_p0.0326371.npz: OK
+seed4800/X_f0.8_seed4800.npz: OK
+head_X.pt: OK
+head_X_na0.8.pt: OK
+trunk_X.pt: OK
+seed4800/X_f0.8_seed4800.npz: OK
+seed4800/X_f0.8_seed4800_kitformat_p0.0326371.npz: OK
+seed4800/priors_generic.npy: OK
+seed4800/priors_matched.npy: OK
+predecoder/logs/fit_tcbp_X_p0.005.json: OK
+PYT=/home/blakew3/.conda/envs/cascade/bin/python
+Sun Nov 22 18:36:07 UTC 2026
+name, memory.used [MiB], utilization.gpu [%]
+NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
+evaluate kit exit 0

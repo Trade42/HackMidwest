@@ -1,1 +1,7 @@
 waited 0 s
+logits_validation_X_p0.004.tar.gz: OK
+INNER_SHA256SUMS_validation_p0.004: OK
+logits.npy: OK
+b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d  data/p0.004/validation_X.npz
+7697010678a369c77949a6a4233a3087824fa4d2753bcadc4869f2eaee91b0d8  predecoder/logs/fit_tcbp_X_p0.005.json
+Sun Nov 22 18:35:58 UTC 2026

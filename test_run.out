@@ -2,3 +2,6 @@
 2026-11-22T09:42:09Z 0. frozen checkout: fd3aed3 integration: merge hierarchy at 45b50a92; hierarchy/ and neural/ equal 921f2e8f8e05eff4ca3f60b565e48bbc08d42628; the evaluator, the kit and the shot files equal the baseline rows' checkout
 2026-11-22T09:42:16Z 1. X checkpoint: sha256 d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933
 2026-11-22T09:42:16Z 1. waiting for the Z training to end (it is stopped at 2026-11-22 10:20:00 UTC if it still runs); process 51025: python -m neural.train --out /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1 --resume /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1/checkpoint.pt --steps 100000 --lr-decay-steps 100000 
+2026-11-22T10:05:12Z the Z training has ended at: step 100000 of 100000 | training noise p=0.0055 | mean train
+-rw-rw-r--+ 1 nobody nogroup 14695308 2026-11-22T10:04:40 /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1/checkpoint.pt
+2026-11-22T10:05:12Z 1. Z checkpoint: sha256 fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700

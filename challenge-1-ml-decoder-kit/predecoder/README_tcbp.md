@@ -568,7 +568,9 @@ the same first 1,000 validation shots; network + build + decode, without the fre
 - The old path, measured the same way: eager network 8.3 + dense build 41.2 + decode 2.7 = about 52 ms.
 - Every answer is the same on those 1,000 shots.
 - Freeing the decoder adds 4.6 ms per shot, before the next shot can start.
-- The registered "about 56 ms" (9.4 + 42.6 + 3.8) is another measurement: jobs 4 and 5, other shots and other runs. `fast_network.py` has no test of its own:
+- The registered "about 56 ms" (9.4 + 42.6 + 3.8) is another measurement: jobs 4 and 5, other shots and other runs.
+
+`fast_network.py` has no test of its own:
 its CPU arms ran on 5 shots on luminaty, and the graph arm needs a GPU.
 
 ## What was not done, and what is not tested

@@ -103,17 +103,17 @@ The learned predecoder's time per X shot, measured cleanly on exploration shots:
 exploration shots never share one.
 
 <!-- BEGIN table:predecoder_latency -->
-**Exploration shots, not test shots: the predecoder's time per X shot.** The team's server, one process and one thread (server job cpu/050), the first 1,000 X shots of `data/p0.005/validation_X.npz` (so no test file was decoded twice); the head and the final X network pinned by sha256 as in the test run. Per X shot, not per pair.
+**Exploration shots, not test shots: the predecoder's time per X shot.** The team's server, one process and one thread (server jobs cpu/050 and cpu/060), the first 1,000 X shots of `data/p<p>/validation_X.npz` (so no test file was decoded twice); the head and the final X network pinned by sha256 as in the test run. Per X shot, not per pair; ms: mean / median / 99th percentile.
 
-| Part | Mean, ms per X shot | Median | 99th percentile |
-|---|---|---|---|
-| the network and the head, on the CPU | 26.8 | 26.7 | 28.0 |
-| relay-BP with the head's priors, built and run per shot | 185 | 30.1 | 5,467 |
-| the two together (the predecoder's whole decode of an X shot) | 212 |  |  |
+| p | The network and the head, on the CPU | Relay-BP with the head's priors, built and run per shot | Relay-BP converged (mean ms) | The two together, mean ms per X shot |
+|---|---|---|---|---|
+| 0.003 | 26.4 / 26.3 / 27.5 | 26.5 / 19.0 / 56.7 | 999 of 1,000 (21.0 ms); not converged 1 (5,515 ms) | 52.9 |
+| 0.004 | 26.7 / 26.6 / 27.3 | 67.3 / 23.1 / 631 | 997 of 1,000 (51.0 ms); not converged 3 (5,512 ms) | 94.0 |
+| 0.005 | 26.8 / 26.7 / 28.0 | 185 / 30.1 / 5,467 | 992 of 1,000 (142 ms); not converged 8 (5,544 ms) | 212 |
 
-Relay-BP converged on 992 of the 1,000 shots (142 ms on those) and not on 8 (5,544 ms on those). For scale only, other shots and so no paired comparison: on the test X shots at p = 0.005, relay-BP's timed row takes 760 ms per X shot (its 1,471 ms per pair is an X shot plus a Z shot) and TCBP-JOBS 8.7 ms per X shot (a GPU decode call alone, not comparable with a CPU time).
+For scale only, other shots and so no paired comparison, on the test X shots: p = 0.003: relay-BP's timed row 44.3 ms per X shot (its 85.3 ms per pair is an X shot plus a Z shot), TCBP-JOBS 2.0 ms per X shot; p = 0.004: relay-BP's timed row 156 ms per X shot (its 319 ms per pair is an X shot plus a Z shot), TCBP-JOBS 3.9 ms per X shot; p = 0.005: relay-BP's timed row 760 ms per X shot (its 1,471 ms per pair is an X shot plus a Z shot), TCBP-JOBS 8.7 ms per X shot (TCBP-JOBS: a GPU decode call alone, not comparable with a CPU time).
 
-Source: `report/data/exploration/predecoder/latency_validation_X_p0.005/` (`summary.json`, `per_shot.npz`, `latency.txt`) and `job_cpu_050-predecoder-latency.out`.
+Source: `report/data/exploration/predecoder/latency_validation_X_p<p>/` (`summary.json`, `per_shot.npz`, `latency.txt`) and the jobs' printouts `job_cpu_050-predecoder-latency.out`, `job_cpu_060-predecoder-latency-p0.003-p0.004.out`.
 <!-- END table:predecoder_latency -->
 
 <!-- BEGIN table:time_split -->
@@ -564,6 +564,28 @@ Source: `report/data/test/ensemble_p<p>/test_{X,Z}.npz` and `.json`.
 <!-- END table:test_after_swap -->
 
 ## K. The learned predecoder on the test shots (`predecoder/`): secondary, one basis at a time
+
+<!-- BEGIN table:operating_rule -->
+**Which method at which noise level: an operating rule chosen after the test results were seen, from the measured rows; not a frozen decoder.** X memory only: failures of the 10,000 X test shots at each p, and the mean time per X shot. Our pipeline's time is the X half of its timed rows' own per-shot times on the test shots; the predecoder's is its clean one-thread sample on 1,000 validation X shots (exploration shots); each row says which. Unpaired, so a difference of a few shots is within the noise.
+
+| p | Method | X test failures | Mean time per X shot, ms | Where the time comes from |
+|---|---|---|---|---|
+| 0.003 | our pipeline (the hierarchy with the network), one core | 1 of 10,000 | 23.7 | test shots, its timed row |
+| 0.003 | our pipeline, its two fast decodes on two cores | 1 of 10,000 | 15.0 | test shots, its timed row |
+| 0.003 | the predecoder (network and head, then relay-BP with the head's priors) | 2 of 10,000 | 52.9 | validation sample (exploration shots) |
+| 0.003 | the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after the first test result: post hoc at p = 0.005 and 0.004) | 1 of 10,000 | 52.9 | validation sample, plus TCBP-JOBS's GPU decode on the 0.1% of shots that fall back |
+| 0.003 | TCBP-JOBS alone (NVIDIA, GPU), for reference | 1 of 10,000 | 2.0 | test shots; a GPU decode call alone |
+| 0.004 | our pipeline (the hierarchy with the network), one core | 18 of 10,000 | 104 | test shots, its timed row |
+| 0.004 | our pipeline, its two fast decodes on two cores | 18 of 10,000 | 71.7 | test shots, its timed row |
+| 0.004 | the predecoder (network and head, then relay-BP with the head's priors) | 15 of 10,000 | 94.0 | validation sample (exploration shots) |
+| 0.004 | the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after the first test result: post hoc at p = 0.005 and 0.004) | 10 of 10,000 | 94.0 | validation sample, plus TCBP-JOBS's GPU decode on the 0.3% of shots that fall back |
+| 0.004 | TCBP-JOBS alone (NVIDIA, GPU), for reference | 20 of 10,000 | 3.9 | test shots; a GPU decode call alone |
+| 0.005 | our pipeline (the hierarchy with the network), one core | 245 of 10,000 | 420 | test shots, its timed row |
+| 0.005 | our pipeline, its two fast decodes on two cores | 245 of 10,000 | 310 | test shots, its timed row |
+| 0.005 | the predecoder (network and head, then relay-BP with the head's priors) | 151 of 10,000 | 212 | validation sample (exploration shots) |
+| 0.005 | the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after the first test result: post hoc at p = 0.005 and 0.004) | 107 of 10,000 | 212 | validation sample, plus TCBP-JOBS's GPU decode on the 0.8% of shots that fall back |
+| 0.005 | TCBP-JOBS alone (NVIDIA, GPU), for reference | 186 of 10,000 | 8.7 | test shots; a GPU decode call alone |
+<!-- END table:operating_rule -->
 
 <!-- BEGIN table:test_predecoder -->
 **The learned predecoder on the test shots: secondary (chosen after the declared gate at p = 0.004 failed), one basis at a time, accuracy only, not a pair score; its times are not clean (a shared 12-worker pool on the team's PC), so iterations are shown instead.** Relay-BP at the kit's settings, given for each shot the priors that a second output (a "head") of our trained network computes from that shot's detectors; truth enters only the scoring. Per noise level and basis: the saved test file of that basis alone, so a row counts shots, not pairs, and cannot sit in the pair-scored tables. H against the others: both fail / only H fails / only the other fails (exact p), on the same shots. Counts from the run's own files (`predecoder.compare`, `predecoder.secondary`); TCBP-JOBS's and relay-BP's totals are checked against their rows in this report.

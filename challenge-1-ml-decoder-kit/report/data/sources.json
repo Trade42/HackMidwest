@@ -307,6 +307,127 @@
   "path": "job_cpu_050-predecoder-latency.out",
   "sha256": "33ffeb32cab26b8ca94f2691f8630a5245ca12b2f6b67ee8c997dd1876bd3661"
  },
+ "exploration/predecoder/job_cpu_060-predecoder-latency-p0.003-p0.004.out": {
+  "branch": "origin/server-logs",
+  "bytes": 873,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/job_cpu_060-predecoder-latency-p0.003-p0.004.out",
+  "from": "branch `server-logs` at commit `918502f9940d`, `job_cpu_060-predecoder-latency-p0.003-p0.004.out`",
+  "grows": false,
+  "path": "job_cpu_060-predecoder-latency-p0.003-p0.004.out",
+  "sha256": "8cbc2645b178301c129c83f4fd477ac9744e6e0b3c8331eb48ea31da5a3f7bbb"
+ },
+ "exploration/predecoder/latency_validation_X_p0.003/compare.log": {
+  "branch": "origin/server-logs",
+  "bytes": 565,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.003/compare.log",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.003/compare.log`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.003/compare.log",
+  "sha256": "cd7f9fa143336eaa7feba1a5039f8b283a476b52d5df92347d166a20d7d80640"
+ },
+ "exploration/predecoder/latency_validation_X_p0.003/evaluate.log": {
+  "branch": "origin/server-logs",
+  "bytes": 414,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.003/evaluate.log",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.003/evaluate.log`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.003/evaluate.log",
+  "sha256": "4e86a63c5442653d25411338a66509b133f951853e8d7deb33d3af0022482927"
+ },
+ "exploration/predecoder/latency_validation_X_p0.003/latency.txt": {
+  "branch": "origin/server-logs",
+  "bytes": 186,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.003/latency.txt",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.003/latency.txt`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.003/latency.txt",
+  "sha256": "02b14d8e157241895843e9afc1fda0280c290b1df14d9c0ca5e8a4c04e1b16a0"
+ },
+ "exploration/predecoder/latency_validation_X_p0.003/per_shot.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 18888,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.003/per_shot.npz",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.003/per_shot.npz`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.003/per_shot.npz",
+  "sha256": "2051d5d0b8708ed63f38c1f035d162677102f20492eeb64cfc68d5787791af5c"
+ },
+ "exploration/predecoder/latency_validation_X_p0.003/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 2634,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.003/summary.json",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.003/summary.json`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.003/summary.json",
+  "sha256": "089352e68289ad34a5387530805cae86988ac86ce9a3d5e82adffbce8ecf6c03"
+ },
+ "exploration/predecoder/latency_validation_X_p0.004/compare.log": {
+  "branch": "origin/server-logs",
+  "bytes": 565,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.004/compare.log",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.004/compare.log`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.004/compare.log",
+  "sha256": "b6c5f3807f4a0d51841e4be4b72e0d2a5220c88fc34bad7b5b26a2beebd05698"
+ },
+ "exploration/predecoder/latency_validation_X_p0.004/evaluate.log": {
+  "branch": "origin/server-logs",
+  "bytes": 414,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.004/evaluate.log",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.004/evaluate.log`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.004/evaluate.log",
+  "sha256": "7ead38d616a305ddf2e56a0fa065a04ce5a07c65a3e379ac83dc7a95289104b0"
+ },
+ "exploration/predecoder/latency_validation_X_p0.004/latency.txt": {
+  "branch": "origin/server-logs",
+  "bytes": 186,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.004/latency.txt",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.004/latency.txt`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.004/latency.txt",
+  "sha256": "e9e5968fd630f426dfe5f6377994f17473b27ab836a305d677c6dcf07366947d"
+ },
+ "exploration/predecoder/latency_validation_X_p0.004/per_shot.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 19246,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.004/per_shot.npz",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.004/per_shot.npz`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.004/per_shot.npz",
+  "sha256": "5e6de622b109c40721def54b0f1cdafb59d6d3625d223ac7914ad8c99f03c000"
+ },
+ "exploration/predecoder/latency_validation_X_p0.004/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 2637,
+  "commit": "918502f9940de57f939c5717a8e4125e470192b0",
+  "copied_utc": "2026-11-22 15:22",
+  "file": "exploration/predecoder/latency_validation_X_p0.004/summary.json",
+  "from": "branch `server-logs` at commit `918502f9940d`, `files/predecoder/latency_validation_X_p0.004/summary.json`",
+  "grows": false,
+  "path": "files/predecoder/latency_validation_X_p0.004/summary.json",
+  "sha256": "cf732b40fdbf2535b9c71b7c0716807de5e0b19ce434a0b2977bf0aacb9dc5e6"
+ },
  "exploration/predecoder/latency_validation_X_p0.005/compare.log": {
   "branch": "origin/server-logs",
   "bytes": 566,

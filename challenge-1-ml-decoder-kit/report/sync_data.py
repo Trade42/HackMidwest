@@ -142,6 +142,9 @@ SOURCES = [
     # the predecoder's clean latency: the team's server, one process, one thread, the first 1,000 shots of VALIDATION_X at p = 0.005 (server job cpu/050)
     ("exploration/predecoder/latency_validation_X_p0.005/", "origin/server-logs", "files/predecoder/latency_validation_X_p0.005/*", False),
     ("exploration/predecoder/job_cpu_050-predecoder-latency.out", "origin/server-logs", "job_cpu_050-predecoder-latency.out", False),
+    ("exploration/predecoder/latency_validation_X_p0.004/", "origin/server-logs", "files/predecoder/latency_validation_X_p0.004/*", False),
+    ("exploration/predecoder/latency_validation_X_p0.003/", "origin/server-logs", "files/predecoder/latency_validation_X_p0.003/*", False),
+    ("exploration/predecoder/job_cpu_060-predecoder-latency-p0.003-p0.004.out", "origin/server-logs", "job_cpu_060-predecoder-latency-p0.003-p0.004.out", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.log", False),
 ]

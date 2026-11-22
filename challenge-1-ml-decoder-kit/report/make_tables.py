@@ -27,7 +27,7 @@ import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, EXTENSION, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
+from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, EXTENSION, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, OPERATING_PAIRED, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
                          REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256)
 
 HERE = Path(__file__).resolve().parent
@@ -2123,60 +2123,136 @@ def predecoder_table(measured):
                  records)
 
 
+def per_x_shot(row):
+    """A timed evaluator row's mean time per X shot, in seconds, from its own per-shot file (the X half of each pair), or None."""
+    if row is None or row.get("offline") or not row.get("per_shot_file"):
+        return None
+    with np.load(DATA / row["per_shot_file"], allow_pickle=False) as file:
+        return float(file["seconds_total_X"].mean()) if "seconds_total_X" in file.files else None
+
+
 def predecoder_latency_table(measured):
-    """The predecoder's time per X shot, measured cleanly on exploration shots (the first 1,000 of validation_X at p = 0.005, one process,
+    """The predecoder's time per X shot, measured cleanly on exploration shots (the first 1,000 of validation_X at each p, one process,
     one thread on the team's server), with the test rows' times per X shot beside it for scale, labelled: other shots, so not paired."""
-    folder = DATA / "exploration" / "predecoder" / "latency_validation_X_p0.005"
     source = "tables/predecoder_latency.md"
-    names = ("lat_net_mean", "lat_net_median", "lat_net_p99", "lat_bp_mean", "lat_bp_median", "lat_bp_p99", "lat_conv", "lat_shots", "lat_conv_ms",
-             "lat_unconv", "lat_unconv_ms", "lat_total", "lat_relay_x", "lat_tcbp_x", "lat_relay_pair", "lat_unconv_share")
-    if not (folder / "summary.json").is_file() or not (folder / "per_shot.npz").is_file():
+    names = ("net_mean", "net_median", "net_p99", "bp_mean", "bp_median", "bp_p99", "conv", "shots", "conv_ms", "unconv", "unconv_ms", "total",
+             "relay_x", "tcbp_x", "relay_pair", "unconv_share")
+    rows, notes, jobs = [], [], []
+    for p in P_VALUES:
+        folder = DATA / "exploration" / "predecoder" / f"latency_validation_X_p{p}"
+        n = f"lat{p[-1]}"
+        if not (folder / "summary.json").is_file() or not (folder / "per_shot.npz").is_file():
+            rows.append([p] + [NOT_MEASURED] * 4)
+            for name in names:
+                fact(f"{n}_{name}", None, source)
+            continue
+        summary = json.loads((folder / "summary.json").read_text(encoding="utf-8"))
+        if summary["data"]["basis"] != "X" or abs(summary["data"]["p"] - float(p)) > 1e-12 or summary["data"]["seed"] != 201:
+            raise Mismatch(f"exploration/predecoder/latency_validation_X_p{p}: not the validation X file at p = {p}")
+        with np.load(folder / "per_shot.npz", allow_pickle=False) as file:
+            seconds = file["seconds_build_head"] + file["seconds_decode_head"]
+            converged = file["converged_head"].astype(bool)
+        head = summary["arms"]["head"]
+        if abs(seconds.mean() - (head["build_seconds_mean"] + head["decode_seconds_mean"])) > 1e-9 or len(seconds) != summary["shots"]:
+            raise Mismatch(f"exploration/predecoder/latency_validation_X_p{p}: the per-shot times do not give the summary's mean")
+        network = summary["logits"]["per_shot_seconds"]
+        if summary["logits"]["model"]["torch_threads"] != 1 or summary["workers"] != 1:
+            raise Mismatch(f"exploration/predecoder/latency_validation_X_p{p}: not one process and one thread")
+        ms_ = lambda value: ms(value * 1e3)
+        relay, tcbp = measured[p].get(REFERENCE), measured[p].get("tcbp")
+        relay_x = per_x_shot(relay)
+        tcbp_x = None
+        if tcbp is not None and (DATA / "test" / f"tcbp_p{p}" / "test_X.tcbp.npz").is_file():
+            with np.load(DATA / "test" / f"tcbp_p{p}" / "test_X.tcbp.npz", allow_pickle=False) as file:
+                tcbp_x = float(file["seconds_T"].astype(float).mean())
+        values = {"net_mean": ms_(network["mean"]), "net_median": ms_(network["median"]), "net_p99": ms_(network["p99"]),
+                  "bp_mean": ms_(seconds.mean()), "bp_median": ms_(float(np.median(seconds))), "bp_p99": ms_(float(np.percentile(seconds, 99))),
+                  "conv": f"{int(converged.sum()):,}", "shots": f"{len(seconds):,}", "conv_ms": ms_(seconds[converged].mean()),
+                  "unconv": int((~converged).sum()), "unconv_ms": ms_(seconds[~converged].mean()) if (~converged).any() else None,
+                  "total": ms_(network["mean"] + seconds.mean()), "relay_x": relay_x and ms_(relay_x), "tcbp_x": tcbp_x and ms_(tcbp_x),
+                  "relay_pair": relay and ms(relay["mean_ms"]), "unconv_share": f"{(~converged).mean():.1%}",
+                  "total_s": network["mean"] + seconds.mean(), "unconv_frac": float((~converged).mean()), "tcbp_x_s": tcbp_x}
         for name in names:
-            fact(name, None, source)
-        return write("predecoder_latency", NOT_MEASURED)
-    summary = json.loads((folder / "summary.json").read_text(encoding="utf-8"))
-    if summary["data"]["basis"] != "X" or abs(summary["data"]["p"] - 0.005) > 1e-12 or summary["data"]["seed"] != 201:
-        raise Mismatch("exploration/predecoder/latency_validation_X_p0.005: not the validation X file at p = 0.005")
-    with np.load(folder / "per_shot.npz", allow_pickle=False) as file:
-        seconds = file["seconds_build_head"] + file["seconds_decode_head"]
-        converged = file["converged_head"].astype(bool)
-    head = summary["arms"]["head"]
-    if abs(seconds.mean() - (head["build_seconds_mean"] + head["decode_seconds_mean"])) > 1e-9 or len(seconds) != summary["shots"]:
-        raise Mismatch("exploration/predecoder/latency_validation_X_p0.005: the per-shot times do not give the summary's mean")
-    network = summary["logits"]["per_shot_seconds"]
-    if summary["logits"]["model"]["torch_threads"] != 1 or summary["workers"] != 1:
-        raise Mismatch("exploration/predecoder/latency_validation_X_p0.005: not one process and one thread")
-    ms_ = lambda value: ms(value * 1e3)
-    relay, tcbp = measured["0.005"].get(REFERENCE), measured["0.005"].get("tcbp")
-    relay_x = tcbp_x = None
-    if relay is not None and relay.get("per_shot_file"):
-        with np.load(DATA / relay["per_shot_file"], allow_pickle=False) as file:
-            relay_x = float(file["seconds_total_X"].mean())
-    if tcbp is not None and (DATA / "test" / "tcbp_p0.005" / "test_X.tcbp.npz").is_file():
-        with np.load(DATA / "test" / "tcbp_p0.005" / "test_X.tcbp.npz", allow_pickle=False) as file:
-            tcbp_x = float(file["seconds_T"].astype(float).mean())
-    values = {"lat_net_mean": ms_(network["mean"]), "lat_net_median": ms_(network["median"]), "lat_net_p99": ms_(network["p99"]),
-              "lat_bp_mean": ms_(seconds.mean()), "lat_bp_median": ms_(float(np.median(seconds))), "lat_bp_p99": ms_(float(np.percentile(seconds, 99))),
-              "lat_conv": f"{int(converged.sum()):,}", "lat_shots": f"{len(seconds):,}", "lat_conv_ms": ms_(seconds[converged].mean()),
-              "lat_unconv": int((~converged).sum()), "lat_unconv_ms": ms_(seconds[~converged].mean()) if (~converged).any() else None,
-              "lat_total": ms_(network["mean"] + seconds.mean()), "lat_relay_x": relay_x and ms_(relay_x), "lat_tcbp_x": tcbp_x and ms_(tcbp_x),
-              "lat_relay_pair": relay and ms(relay["mean_ms"]), "lat_unconv_share": f"{(~converged).mean():.1%}"}
-    for name in names:
-        fact(name, values[name], source)
-    rows = [["the network and the head, on the CPU", values["lat_net_mean"], values["lat_net_median"], values["lat_net_p99"]],
-            ["relay-BP with the head's priors, built and run per shot", values["lat_bp_mean"], values["lat_bp_median"], values["lat_bp_p99"]],
-            [f"the two together (the predecoder's whole decode of an X shot)", values["lat_total"], "", ""]]
+            fact(f"{n}_{name}", values[name], source)
+        LATENCY[p] = values
+        rows.append([p, f"{values['net_mean']} / {values['net_median']} / {values['net_p99']}", f"{values['bp_mean']} / {values['bp_median']} / {values['bp_p99']}",
+                     f"{values['conv']} of {values['shots']} ({values['conv_ms']} ms); not converged {values['unconv']}"
+                     + (f" ({values['unconv_ms']} ms)" if values["unconv_ms"] else ""), values["total"]])
+        notes.append(f"p = {p}: relay-BP's timed row {values['relay_x']} ms per X shot (its {values['relay_pair']} ms per pair is an X shot plus a Z shot), "
+                     f"TCBP-JOBS {values['tcbp_x']} ms per X shot")
+    for name in names:                  # the names the prose quotes for p = 0.005
+        fact(f"lat_{name}", FACTS[f"lat5_{name}"][0] if FACTS[f"lat5_{name}"][0] != NOT_MEASURED else None, source)
     return write("predecoder_latency",
                  "**Exploration shots, not test shots: the predecoder's time per X shot.** The team's server, one process and one thread "
-                 f"(server job cpu/050), the first {values['lat_shots']} X shots of `data/p0.005/validation_X.npz` (so no test file was decoded "
-                 "twice); the head and the final X network pinned by sha256 as in the test run. Per X shot, not per pair.\n\n"
-                 + markdown(["Part", "Mean, ms per X shot", "Median", "99th percentile"], rows)
-                 + f"\n\nRelay-BP converged on {values['lat_conv']} of the {values['lat_shots']} shots ({values['lat_conv_ms']} ms on those) and not on "
-                 f"{values['lat_unconv']} ({values['lat_unconv_ms']} ms on those). For scale only, other shots and so no paired comparison: on the test X "
-                 f"shots at p = 0.005, relay-BP's timed row takes {values['lat_relay_x']} ms per X shot (its {values['lat_relay_pair']} ms per pair is an X "
-                 f"shot plus a Z shot) and TCBP-JOBS {values['lat_tcbp_x']} ms per X shot (a GPU decode call alone, not comparable with a CPU time).\n\n"
-                 "Source: `report/data/exploration/predecoder/latency_validation_X_p0.005/` (`summary.json`, `per_shot.npz`, `latency.txt`) and "
-                 "`job_cpu_050-predecoder-latency.out`.")
+                 "(server jobs cpu/050 and cpu/060), the first 1,000 X shots of `data/p<p>/validation_X.npz` (so no test file was decoded twice); "
+                 "the head and the final X network pinned by sha256 as in the test run. Per X shot, not per pair; ms: mean / median / 99th percentile.\n\n"
+                 + markdown(["p", "The network and the head, on the CPU", "Relay-BP with the head's priors, built and run per shot", "Relay-BP converged (mean ms)",
+                             "The two together, mean ms per X shot"], rows)
+                 + "\n\nFor scale only, other shots and so no paired comparison, on the test X shots: " + "; ".join(notes)
+                 + " (TCBP-JOBS: a GPU decode call alone, not comparable with a CPU time).\n\n"
+                 "Source: `report/data/exploration/predecoder/latency_validation_X_p<p>/` (`summary.json`, `per_shot.npz`, `latency.txt`) and the jobs' "
+                 "printouts `job_cpu_050-predecoder-latency.out`, `job_cpu_060-predecoder-latency-p0.003-p0.004.out`.")
+
+
+OPERATING = "an operating rule chosen after the test results were seen, from the measured rows; not a frozen decoder"
+LATENCY = {}   # p -> the predecoder's latency values, raw (seconds and fractions), from predecoder_latency_table
+
+
+def operating_rule_table(measured):
+    """Sal's request (15:15 UTC): which method at which noise level, per X shot. X test failures from the test rows; times per X shot from the
+    timed rows' own per-shot files (our pipeline) and from the predecoder's clean sample on exploration shots. Unpaired counts."""
+    source = "tables/operating_rule.md"
+    lines, choice = [], []
+    for p in P_VALUES:
+        n = p[-1]
+        ours, two, tcbp = measured[p].get("hierarchy"), measured[p].get("hierarchy-parallel"), measured[p].get("tcbp")
+        lat, lat_ok = (lambda name: LATENCY[p][name]), p in LATENCY
+        options = []
+        if ours is not None and per_x_shot(ours) is not None:
+            options.append(("our pipeline (the hierarchy with the network), one core", ours["failures_X"], per_x_shot(ours), "test shots, its timed row"))
+        if two is not None and per_x_shot(two) is not None:
+            options.append(("our pipeline, its two fast decodes on two cores", two["failures_X"], per_x_shot(two), "test shots, its timed row"))
+        if FACTS[f"pre{n}X_H"][0] != NOT_MEASURED and lat_ok:
+            options.append(("the predecoder (network and head, then relay-BP with the head's priors)", int(FACTS[f"pre{n}X_H"][0]), lat("total_s"),
+                            "validation sample (exploration shots)"))
+        if FACTS[f"fb{n}X_rule"][0] != NOT_MEASURED and lat_ok:
+            extra = lat("unconv_frac") * (lat("tcbp_x_s") or 0)
+            options.append(("the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after "
+                             "the first test result: post hoc at p = 0.005 and 0.004)", int(FACTS[f"fb{n}X_rule"][0]),
+                            lat("total_s") + extra, f"validation sample, plus TCBP-JOBS's GPU decode on the {lat('unconv_share')} of shots that fall back"))
+        for label, failures, seconds, where in options:
+            lines.append([p, label, f"{failures} of 10,000", ms(seconds * 1e3), where])
+        if tcbp is not None:
+            lines.append([p, "TCBP-JOBS alone (NVIDIA, GPU), for reference", f"{tcbp['failures_X']} of 10,000",
+                          ms(lat("tcbp_x_s") * 1e3) if lat_ok and lat("tcbp_x_s") is not None else "", "test shots; a GPU decode call alone"])
+        one_core = [option for option in options if "two cores" not in option[0]]
+        if one_core:
+            fewest = min(option[1] for option in one_core)
+            best = min((option for option in one_core if option[1] == fewest), key=lambda option: option[2])
+            tied = [option[0] for option in one_core if option[1] == fewest and option is not best]
+            name = best[0].split(" (")[0]
+            pipeline = next((option for option in one_core if option[0].startswith("our pipeline")), None)
+            if pipeline is not None and best is not pipeline and p in OPERATING_PAIRED:
+                choice.append(f"at p = {p}, {name} ({best[1]} X failures against our pipeline's {pipeline[1]}, {OPERATING_PAIRED[p]}, at "
+                              f"{ms(best[2] * 1e3)} against {ms(pipeline[2] * 1e3)} ms per X shot)")
+            else:
+                choice.append(f"at p = {p}, {name} ({best[1]} X failure{'' if best[1] == 1 else 's'}, {ms(best[2] * 1e3)} ms per X shot"
+                              + (f"; level on failures with {', '.join(t.split(' (')[0] for t in tied)}, and faster" if tied else "") + ")")
+            fact(f"op{n}_choice", name, source)
+        else:
+            fact(f"op{n}_choice", None, source)
+    statement = ("Which method at which noise level (" + OPERATING + "): " + "; ".join(choice) + ". The counts are of 10,000 X test shots and are not "
+                 "paired here (the predecoder's per-shot answers are not in the repository; the two verdicts against our pipeline are the review's paired "
+                 "count on that file), so a difference of a few shots is within the noise; the times "
+                 "come from other runs on other shots and are a guide, not a paired measurement; the fallback needs a GPU for TCBP-JOBS; the fallback rule "
+                 "was designed after the first test result, so its counts at p = 0.005 and 0.004 are post hoc, not held out.") if choice else None
+    fact("op_statement", statement, source)
+    return write("operating_rule",
+                 f"**Which method at which noise level: {OPERATING}.** X memory only: failures of the 10,000 X test shots at each p, and the mean time "
+                 "per X shot. Our pipeline's time is the X half of its timed rows' own per-shot times on the test shots; the predecoder's is its clean "
+                 "one-thread sample on 1,000 validation X shots (exploration shots); each row says which. Unpaired, so a difference of a few shots is "
+                 "within the noise.\n\n"
+                 + markdown(["p", "Method", "X test failures", "Mean time per X shot, ms", "Where the time comes from"], lines))
 
 
 def ours_at(measured, p):
@@ -2344,6 +2420,7 @@ def main(argv=None):
         tables["test_predecoder"] = predecoder_table(measured)
         tables["test_network_timed"] = network_timed_table(measured)
         tables["predecoder_latency"] = predecoder_latency_table(measured)
+        tables["operating_rule"] = operating_rule_table(measured)
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)

@@ -270,7 +270,7 @@ believes, instead of choosing among finished answers. The head is ours; relay-BP
   one process and one thread on the team's server; per X shot, not per pair). The network and head take <!--f:lat_net_mean-->26.8<!--/f--> ms (median
   <!--f:lat_net_median-->26.7<!--/f-->, 99th percentile <!--f:lat_net_p99-->28.0<!--/f-->). Relay-BP with the head's priors, built and run per shot, takes <!--f:lat_bp_mean-->185<!--/f--> ms (median <!--f:lat_bp_median-->30.1<!--/f-->,
   99th percentile <!--f:lat_bp_p99-->5,467<!--/f-->): <!--f:lat_conv_ms-->142<!--/f--> ms on the <!--f:lat_conv-->992<!--/f--> shots where it converged and <!--f:lat_unconv_ms-->5,544<!--/f--> ms on the <!--f:lat_unconv-->8<!--/f--> where it did not.
-  That is about <!--f:lat_total-->212<!--/f--> ms per X shot in all. For scale only (other shots, so not a paired comparison): on the test X shots at
+  That is about <!--f:lat_total-->212<!--/f--> ms per X shot in all. At p = 0.004 and 0.003 the same measurement gives <!--f:lat4_total-->94.0<!--/f--> and <!--f:lat3_total-->52.9<!--/f--> ms per X shot. For scale only (other shots, so not a paired comparison): on the test X shots at
   p = 0.005, relay-BP's timed row takes <!--f:lat_relay_x-->760<!--/f--> ms per X shot (its <!--f:lat_relay_pair-->1,471<!--/f--> ms per pair is an X shot plus a Z shot),
   and TCBP-JOBS takes <!--f:lat_tcbp_x-->8.7<!--/f--> ms per X shot as a GPU decode call. The fallback rule adds TCBP-JOBS's decode only on the
   shots where relay-BP did not converge (<!--f:lat_unconv_share-->0.8%<!--/f--> of this sample), and those shots have already paid relay-BP's full capped
@@ -278,6 +278,36 @@ believes, instead of choosing among finished answers. The head is ours; relay-BP
 - **What it does not show.** The held-out run covers one noise level and one basis, so it is not the kit's score, which counts
   pairs. The test run's own times come from a shared 12-worker pool on the team's PC and are not clean, so its table gives
   iterations instead; the clean time is the one above, on exploration shots. `APPENDIX.md` K has the table.
+
+### Which method at which noise level: an operating rule chosen after the test results were seen
+
+Sal asked which method to use at each noise level. The table answers from the rows measured above. It is **an operating
+rule chosen after the test results were seen, from the measured rows; not a frozen decoder.** It covers X memory only,
+because the predecoder has X rows at every p.
+
+<!-- BEGIN table:operating_rule -->
+**Which method at which noise level: an operating rule chosen after the test results were seen, from the measured rows; not a frozen decoder.** X memory only: failures of the 10,000 X test shots at each p, and the mean time per X shot. Our pipeline's time is the X half of its timed rows' own per-shot times on the test shots; the predecoder's is its clean one-thread sample on 1,000 validation X shots (exploration shots); each row says which. Unpaired, so a difference of a few shots is within the noise.
+
+| p | Method | X test failures | Mean time per X shot, ms | Where the time comes from |
+|---|---|---|---|---|
+| 0.003 | our pipeline (the hierarchy with the network), one core | 1 of 10,000 | 23.7 | test shots, its timed row |
+| 0.003 | our pipeline, its two fast decodes on two cores | 1 of 10,000 | 15.0 | test shots, its timed row |
+| 0.003 | the predecoder (network and head, then relay-BP with the head's priors) | 2 of 10,000 | 52.9 | validation sample (exploration shots) |
+| 0.003 | the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after the first test result: post hoc at p = 0.005 and 0.004) | 1 of 10,000 | 52.9 | validation sample, plus TCBP-JOBS's GPU decode on the 0.1% of shots that fall back |
+| 0.003 | TCBP-JOBS alone (NVIDIA, GPU), for reference | 1 of 10,000 | 2.0 | test shots; a GPU decode call alone |
+| 0.004 | our pipeline (the hierarchy with the network), one core | 18 of 10,000 | 104 | test shots, its timed row |
+| 0.004 | our pipeline, its two fast decodes on two cores | 18 of 10,000 | 71.7 | test shots, its timed row |
+| 0.004 | the predecoder (network and head, then relay-BP with the head's priors) | 15 of 10,000 | 94.0 | validation sample (exploration shots) |
+| 0.004 | the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after the first test result: post hoc at p = 0.005 and 0.004) | 10 of 10,000 | 94.0 | validation sample, plus TCBP-JOBS's GPU decode on the 0.3% of shots that fall back |
+| 0.004 | TCBP-JOBS alone (NVIDIA, GPU), for reference | 20 of 10,000 | 3.9 | test shots; a GPU decode call alone |
+| 0.005 | our pipeline (the hierarchy with the network), one core | 245 of 10,000 | 420 | test shots, its timed row |
+| 0.005 | our pipeline, its two fast decodes on two cores | 245 of 10,000 | 310 | test shots, its timed row |
+| 0.005 | the predecoder (network and head, then relay-BP with the head's priors) | 151 of 10,000 | 212 | validation sample (exploration shots) |
+| 0.005 | the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after the first test result: post hoc at p = 0.005 and 0.004) | 107 of 10,000 | 212 | validation sample, plus TCBP-JOBS's GPU decode on the 0.8% of shots that fall back |
+| 0.005 | TCBP-JOBS alone (NVIDIA, GPU), for reference | 186 of 10,000 | 8.7 | test shots; a GPU decode call alone |
+<!-- END table:operating_rule -->
+
+<!--f:op_statement-->Which method at which noise level (an operating rule chosen after the test results were seen, from the measured rows; not a frozen decoder): at p = 0.003, our pipeline (1 X failure, 23.7 ms per X shot; level on failures with the predecoder with the fallback, and faster); at p = 0.004, the predecoder with the fallback (10 X failures against our pipeline's 18, not a significant difference, at 94.0 against 104 ms per X shot); at p = 0.005, the predecoder with the fallback (107 X failures against our pipeline's 245, a significant difference, at 212 against 420 ms per X shot). The counts are of 10,000 X test shots and are not paired here (the predecoder's per-shot answers are not in the repository; the two verdicts against our pipeline are the review's paired count on that file), so a difference of a few shots is within the noise; the times come from other runs on other shots and are a guide, not a paired measurement; the fallback needs a GPU for TCBP-JOBS; the fallback rule was designed after the first test result, so its counts at p = 0.005 and 0.004 are post hoc, not held out.<!--/f-->
 
 ### On the exploration shots (not test shots)
 

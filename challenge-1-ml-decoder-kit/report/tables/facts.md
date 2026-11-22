@@ -696,6 +696,8 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `ptheld_TH` | 48 | `tables/predecoder_tcbp.md` |
 | `ptheld_ms_TH` | 46.2 | `tables/predecoder_tcbp.md` |
 | `ptheld_ms_rule` | 33.5 | `tables/predecoder_tcbp.md` |
+| `ptheld_p99_TH` | 67.6 | `tables/predecoder_tcbp.md` |
+| `ptheld_p99_rule` | 68.2 | `tables/predecoder_tcbp.md` |
 | `ptheld_rule` | 48 | `tables/predecoder_tcbp.md` |
 | `ptheld_seed` | 2026112251 | `tables/predecoder_tcbp.md` |
 | `ptheld_share` | 35.3% | `tables/predecoder_tcbp.md` |

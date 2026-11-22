@@ -84,3 +84,4 @@ For scale, the uniform guess: mean P(true round) 0.083, mean log P -2.485.
 decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 0..500 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
   100/500 shots, 73s, failures so far starter=3 exact=3 tracker=4 oracle-round=1
   200/500 shots, 168s, failures so far starter=8 exact=8 tracker=8 oracle-round=5
+  300/500 shots, 229s, failures so far starter=12 exact=14 tracker=10 oracle-round=6

@@ -116,7 +116,7 @@ per-shot files" is combined offline from saved answers and has no time measured 
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 2.50e-05 ± 1.4e-05 · 3 pairs · 28.9 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 150 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 608 ms |
 | our ensemble (combined offline) | 1.67e-05 ± 1.2e-05 · 2 pairs · offline, no time | 1.33e-04 ± 3.3e-05 · 16 pairs · offline, no time | 3.05e-03 ± 1.6e-04 · 360 pairs · offline, no time; fails exactly TCBP-JOBS's shots |
 | TCBP-JOBS (NVIDIA, GPU) | 2.50e-05 ± 1.4e-05 · 3 pairs · 3.9 ms | 3.42e-04 ± 5.3e-05 · 41 pairs · 7.8 ms | 3.05e-03 ± 1.6e-04 · 360 pairs · 16.9 ms |
-| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores | 3.33e-05 ± 1.7e-05 · 4 pairs · 29.0 ms · **run after the test results were seen (an ablation)** | 4.34e-04 ± 6.0e-05 · 52 pairs · 150 ms · **run after the test results were seen (an ablation)** | not measured |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores | 3.33e-05 ± 1.7e-05 · 4 pairs · 29.0 ms · **run after the test results were seen (an ablation)** | 4.34e-04 ± 6.0e-05 · 52 pairs · 150 ms · **run after the test results were seen (an ablation)** | 4.10e-03 ± 1.9e-04 · 481 pairs · 604 ms · **run after the test results were seen (an ablation)** |
 
 Each cell: logical error rate per cycle ± the kit's error · failed pairs of 10,000 · mean time per pair. "Offline" marks a row combined from saved per-shot answers, with no time measured in one process. A cell marked "run after the test results were seen (an ablation)" is a row the team asked for after the test results were seen: an ablation, not our decoder. Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.
 <!-- END table:test_sweep -->
@@ -214,7 +214,7 @@ test run, among its pre-registered arms. Every other row here ran after the test
 | 0.004 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] (each gives its one-core row's answers on every shot) | 44 against 52 | 36 | 8 / 16 | 0.15 | 150 against 150 |
 | 0.005 | 1 core | the best hand-written rule (lowest weight among the converged candidates) | not measured (only offline) |  |  |  |  |
 | 0.005 | 1 core | plain lowest weight | not measured (only offline) |  |  |  |  |
-| 0.005 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) | not measured |  |  |  |  |
+| 0.005 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] | 479 against 481 | 414 | 65 / 67 | 0.93 | 608 against 604 |
 | 0.003, 0.004 together | 1 core | the best hand-written rule (lowest weight among the converged candidates) | 47 against 56 |  | 8 / 17 | 0.11 |  |
 | 0.003, 0.004 together | 1 core | plain lowest weight | 47 against 64 |  | 5 / 22 | 0.002 |  |
 <!-- END table:test_network_timed -->
@@ -421,7 +421,7 @@ What each decoder needed for its row on the test shots. Memory is the peak resid
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | CPU, 1 process, 1 thread | 778 / 778 / 784 | 11.3 / 10.5 / 9.7 | the same decoder as the row above, with the same answers on every shot (checked); only the wall time differs |
 | our ensemble (combined offline) | CPU and GPU, 1 process, 1 thread | not measured / not measured / not measured | not measured / not measured / not measured | only the rules that use the network have a learned part: see the rule named in the row |
 | TCBP-JOBS (NVIDIA, GPU) | GPU, 1 process, 1 thread | not measured / not measured / not measured | not measured / not measured / not measured | a model it fits at start-up, per memory basis |
-| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores (at p = 0.003, 0.004: run after the test results were seen, at the team's request; an ablation, not our decoder) | CPU, 1 process, 1 thread | 283 / 284 / not measured | 5.1 / 5.6 / not measured | nothing of ours (PriorTilt's parameters are its authors') |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores (at p = 0.003, 0.004, 0.005: run after the test results were seen, at the team's request; an ablation, not our decoder) | CPU, 1 process, 1 thread | 283 / 284 / 284 | 5.1 / 5.6 / 5.2 | nothing of ours (PriorTilt's parameters are its authors') |
 <!-- END table:resources -->
 
 - **Our decoder needs no GPU.** PriorTilt and relay-BP run on one CPU core; the network is called on the hard shots

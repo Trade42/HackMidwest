@@ -1,0 +1,11 @@
+# The two scheme choices of widths.py (head and residual stream at 16 bits), checked on shots that chose nothing:
+# train_X.npz shots 1000-1009 (the network never trains on saved files; ranges from train shots 0-11, the smoke calibration).
+# Step 70,000, luminaty, 2026-11-22T08:30Z. Run inline with fpga_network/fixed_point.py (FixedNet with per-tensor widths).
+train_X shots 1000-1009 (calibration: train shots 0-11), step 70,000:
+ weights 8, values 24, head 8 : median |logit change| 1.1178, largest 4.813, answers changed 2/10
+ weights 8, values 24, head 16: median |logit change| 0.0410, largest 0.685, answers changed 0/10
+ weights 16, values 8, stream 8, head 16: median |logit change| 2.2843, largest 8.288, answers changed 3/10
+ weights 16, values 8, stream 16, head 16: median |logit change| 3.9351, largest 12.675, answers changed 10/10
+one group at 8 bits, everything else at 16 (weights 16), train_X shots 1000-1009:
+ the stream s0-s8: median |logit change| 6.1419, largest 12.597, answers changed 10/10
+ every value but the stream and head: median |logit change| 3.9351, largest 12.675, answers changed 10/10

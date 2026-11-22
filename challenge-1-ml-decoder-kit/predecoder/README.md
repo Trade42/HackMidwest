@@ -36,6 +36,12 @@ should find the answer sooner and fail less.
   iterations. On the same shots TCBP-JOBS fails 186 (61 against 96, p = 0.0065; chosen after
   the p = 0.004 gate failed, X only, accuracy only, not a pair score).
 
+- **The kit's pair score at p = 0.005, on the held-out test shots** (the registered extension
+  that followed, with a Z head trained the same way): relay-BP with the network's per-shot priors
+  fails **281** of 10,000 pairs, against **360** for TCBP-JOBS (only ours 114, only TCBP-JOBS 193,
+  p = 8e-6) and 845 for relay-BP. Handing the shots where our relay-BP does not converge to
+  TCBP-JOBS (a rule designed after the first test result) gives **206**.
+
 Details, commands and logs for every number are under "Numbers".
 
 | file | what it does |
@@ -576,6 +582,56 @@ At p = 0.004 the head's priors cut relay-BP's failures 2.6 times on the test sho
 where the 5,000 validation shots had not shown it (14 against 20, p = 0.24); against TCBP-JOBS the
 difference is not significant. At p = 0.003 all decoders fail almost never and none differs.
 
+### Z memory, and the kit's pair score at p = 0.005 (the registered extension)
+
+**The Z head** was trained on the laptop's GPU from `ee359d7f` (14:25:51 to 14:51:08 UTC) on the
+final Z network (`cascade_Z_s1_final_step100000.pt`, sha256 `fad24e80...`, light logical operators),
+with the X head's recipe: seed 1, 20,000 steps, batch 64, p = 0.003, 0.004, 0.005
+(`logs/train_gpu_predecoder_Z_s1.log`). The head: `predecoder_Z_s1/head.pt` on `laptop-artifacts`
+at `a2c3d5d`, sha256 `083147d2...`. Held-out error-model shots: log-loss 87.5% below the kit's
+priors at p = 0.004; on this PC's CPU (`logs/calibration_Z_p0.004_1000_s77.log`; its header says
+"X memory" from a fixed label, corrected later in `calibration.py`; the run used the Z network)
+0.0041 against the kit's 0.0314 and BP's own 0.0338; where BP's first leg fails it finds 42.0 of
+52.3 fired faults with 5.7 false (BP: 39.4 and 12.5).
+
+**Its knobs**, by X's procedure (`logs/z_plan_declared.md`): the fresh arm on train_Z p = 0.004
+fails 95 of 20,000 (`logs/fresh_train_Z_p0.004.log`); the fit on those 95 and 2,000 right shots
+(weight 9.9525) chose log-odds, alpha 0.2, eps 1e-4, the same as X, inside its grid: 29 of the 95
+left wrong, 1 of the 2,000 broken, mean iterations 593 to 182 (`logs/fit_Z_p0.004.log`,
+`logs/fit_Z_p0.004.json`, sha256 `35bc0be9...`).
+
+**Validation first** (validation_Z p = 0.005, 5,000 shots; `logs/validation_Z_p0.005.log`): the
+head's priors 74 failures against the kit's 206 (only head 15, only fresh 147, p = 2.1e-28).
+
+**The Z test** (test_Z p = 0.005, 10,000 shots, sha256 `b86ae320...`; one run from the detached
+checkout at `87b484a6` with the frozen knobs, the head arm first; `logs/test_run_p0.005_Z_head_arm.log`):
+relay-BP with the head's priors fails **132** (0.0132 [0.0111, 0.0156]); TCBP-JOBS 177 on the same
+shots; the frozen fallback rule 100 (it falls back on 73 shots; against T 76 / 24 / 101,
+p = 2.0e-12; `logs/fallback_test_Z_p0.005.log`).
+
+**The kit's score: pairs of an X and a Z shot** (shot k of each; a pair fails when either fails;
+`python -m predecoder.pair`, `logs/pair_test_p0.005.log`; every file checked against its test
+file; TCBP-JOBS and relay-BP from the team's files named above):
+
+| on the 10,000 test pairs at p = 0.005 | X failures | Z failures | failed pairs | 95% interval | per cycle |
+|---|---|---|---|---|---|
+| **the fallback rule** (H; TCBP-JOBS where H does not converge) | 107 | 100 | **206** | [0.0180, 0.0236] | 1.73e-3 +- 1.2e-4 |
+| **H: relay-BP with the head's priors** | 151 | 132 | **281** | [0.0250, 0.0315] | 2.37e-3 +- 1.4e-4 |
+| TCBP-JOBS | 186 | 177 | 360 | [0.0325, 0.0398] | 3.05e-3 +- 1.6e-4 |
+| relay-BP (the team evaluator's row) | 432 | 427 | 845 | [0.0792, 0.0901] | 7.33e-3 +- 2.5e-4 |
+
+Paired on the pairs: H against TCBP-JOBS, both fail 167, only H 114, only TCBP-JOBS 193, exact
+two-sided p = 7.6e-6; the rule against TCBP-JOBS 167 / 39 / 193, p = 1.1e-25; H against relay-BP
+242 / 39 / 603; the rule against relay-BP 179 / 27 / 666.
+
+How to read it: on the kit's own score at p = 0.005, relay-BP with the network's per-shot priors
+fails 22% fewer pairs than TCBP-JOBS and 67% fewer than relay-BP, and the fallback rule 43% fewer
+than TCBP-JOBS. H is the registered extension (every knob fitted on train, Z checked on validation
+first); the rule was designed after the first test result (its text frozen at 14:32:15 UTC, before
+test_Z was opened at 15:44). One test run per file. These are p = 0.005 only: at p = 0.004 the X
+shots show H at 15 against TCBP-JOBS's 20, not a significant difference, and no Z test at 0.004 or
+0.003 was run.
+
 ### Latency, clean: one process, one thread (the team's server)
 
 Run by the orchestrator as server job cpu/050 at predecoder `e96cc020` (head `38ab667e...`, trunk
@@ -642,13 +698,14 @@ Not tested, or not done:
 - **The held-out test files:** X at p = 0.005 once, on Sal's yes, after the declared gate at p = 0.004
   failed (above); then, under the registered extension written after that result
   (`logs/extension_registered_spec.md`), X at p = 0.004 once (`logs/test_run_p0.004_X.log`) and X at
-  p = 0.003 once (`logs/test_run_p0.003_X.log`), and Z at p = 0.005 (below). The head, its knobs and
+  p = 0.003 once (`logs/test_run_p0.003_X.log`), and Z at p = 0.005 once (`logs/test_run_p0.005_Z_head_arm.log`,
+  then its fresh arm). The head, its knobs and
   relay-BP were not changed after any result. The fallback rule was designed after the first test
   result and is labelled so wherever it appears.
-- **Z memory: a head is being trained** (from `ee359d7f`, which lets a head train on a Z network
-  with light logical operators: the head never reads the network's logical readout, and its
-  labels come from the kit's own observables). Until its results are in this file, the plugin
-  decodes Z with the kit's relay-BP unless it is given a Z head.
+- **Z memory has a head** (above; from `ee359d7f`, which lets a head train on a Z network with light
+  logical operators). The plugin takes it as `{"heads": {"X": ..., "Z": ...}}`; without a Z head it
+  decodes Z with the kit's relay-BP. The pair score above was computed from `compare.py`'s per-shot
+  files, not through the team's evaluator.
 - The GPU path of `train.py` has no test here (this PC has no GPU); it ran on the laptop.
 - BP-OSD with the head's priors (the brief's optional variant) was not tried.
 - The head as a member of `hierarchy/`'s ensemble is only a diagnostic table above; no rule

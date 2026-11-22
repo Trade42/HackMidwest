@@ -8,8 +8,19 @@ this fault happened in this shot. Those numbers replace the fixed priors for tha
 and relay-BP then decodes as usual. If the network is right about where the faults are, BP
 should find the answer sooner and fail less.
 
-Status: built and tested on this PC; the head's training runs on a GPU (commands below).
-The measurement is not in yet; every number that is in is listed under "Numbers".
+**The result, in short** (X memory, p = 0.004, the 5,000 shots of `data/p0.004/validation_X.npz`):
+
+- The head learned what it was meant to: on held-out shots its probabilities are calibrated,
+  87% better in log-loss than the kit's fixed priors, and better than BP's own beliefs.
+- With those priors, relay-BP failed 14 shots where the same relay-BP with the kit's priors
+  failed 20. That is **not a significant gain** (6 against 12 shots that only one of them got
+  wrong, p = 0.24): **the kill line we fixed in advance is not passed**, so this is a measured
+  negative result, and the held-out test shots were not used.
+- What it does do, clearly: relay-BP needs **2.9 times fewer iterations** (189 against 554 on
+  average; fewer on 4,758 of the 5,000 shots), the shots whose first leg fails fall from 691 to
+  163, and the slowest 1% of shots take 2.1 s instead of 10.5 s.
+
+Details, commands and logs for every number are under "Numbers".
 
 | file | what it does |
 |------|--------------|
@@ -294,3 +305,73 @@ mean 0.054 and fired 0.054; the full tables are in the log), it agrees with the 
 reports (0.0038 here against 0.0041 there, on other shots), and on the shots where BP struggles
 it knows clearly more than BP does: more of the fired faults, and fewer than half the false ones.
 Kill line 1 (beat the kit's log-loss clearly, calibrated) is passed.
+
+### The measurement on the validation shots (kill line 2: NOT PASSED)
+
+`data/p0.004/validation_X.npz` (5,000 Stim shots, seed 201). The knobs are the ones fitted on
+train shots and frozen before this run (`logs/fit_X_p0.004.json`: log-odds mix, alpha 0.2,
+eps 1e-4). This PC, lane A, 4 processes on 2 physical cores with both threads busy (times
+inflated); the network and head were run one shot at a time on 4 CPU threads in
+`predecoder.evaluate` (`logs/evaluate_head_final_p0.004.log`: 170 ms mean, 81 ms median; on the
+laptop's GPU the same step takes 22 ms). Logs: `logs/compare_validation_X_head.log` (the head
+arm's run), `logs/compare_validation_X_all_arms.log` (all three arms with the shot-by-shot
+iteration counts), `logs/compare_validation_X_summary.json`.
+
+    python -m predecoder.compare --data data/p0.004/validation_X.npz --logits <logits of validation_X> \
+        --settings predecoder/logs/fit_X_p0.004.json --arms kit fresh head --kit-chunk 500 --workers 4 --out <folder>
+
+| arm | failures | share, 95% interval | unconverged | hard shots | mean iterations | p99 iterations | build + decode, mean | p99 | with network and head, mean |
+|---|---|---|---|---|---|---|---|---|---|
+| kit's priors, built once | 31 | 0.0062 [0.0044, 0.0088] | 17 | 691 | 565 | 13,982 | 538 ms | 12.8 s | (no network) |
+| kit's priors, built per shot ("fresh") | 20 | 0.0040 [0.0026, 0.0062] | 11 | 691 | 554 | 13,940 | 442 ms | 10.5 s | (no network) |
+| **the head's priors, built per shot** | **14** | 0.0028 [0.0017, 0.0047] | 8 | 163 | 189 | 2,012 | 189 ms | 2.1 s | 359 ms |
+
+| pair (same shots) | both fail | only the first | only the second | exact two-sided p | fewer iterations: first / second / equal |
+|---|---|---|---|---|---|
+| head against fresh (**the kill line**) | 8 | 6 | 12 | **0.238** | 4,758 / 228 / 14 |
+| head against kit | 11 | 3 | 20 | 0.0005 | 4,694 / 286 / 20 |
+| fresh against kit | 15 | 5 | 16 | 0.027 | 2,533 / 2,415 / 52 |
+
+How to read it:
+
+- **The kill line is not passed.** It compares the head's priors with the kit's priors in the
+  same per-shot decoder, so that only the priors differ, and it needs p < 0.05. 14 against 20
+  could be chance (p = 0.24).
+- Head against the kit's decoder built once looks significant (3 against 20), but that is not
+  the comparison we fixed in advance, and the "fresh" against "kit" line shows why: the two
+  differ only in relay-BP's random draws, and that alone gave 5 against 16 here. A single seed
+  of relay-BP carries that much noise, so the honest bar is the per-shot decoder.
+- The work is a clear effect, not noise: the head's priors need fewer iterations on 4,758 of
+  5,000 shots, the hard shots fall by a factor 4.2, and the slow tail shrinks five times. In
+  time per shot this PC's busy CPU eats most of that in the network (170 ms mean), so the
+  latency gain is for a GPU (22 ms per shot for the network and head there) and is stated here
+  only in iterations, which do not depend on the machine.
+- On the train subsets the same knobs left 21 of 89 failures wrong while breaking none of
+  2,000 right shots (`logs/fit_X_p0.004.log`). That pointed to a larger gain than validation
+  shows (14 of 20, not about 5 of 20). Validation holds only 20 failures, too few to tell the
+  two apart, and nothing was tuned on validation to close the gap.
+- One wrinkle of the fit: the first grid (alpha 0.3 to 0.7) chose its edge, 0.3, by 1 broken
+  right shot against 4 for the others (each counts 10 times). That difference is itself mostly
+  chance. The rule then extended the grid to 0.1 and 0.2 on train shots and chose 0.2, which
+  broke none (`logs/fit_X_p0.004_grid1.log`, `logs/fit_X_p0.004.log`).
+
+### Beside the hierarchy's members (a diagnostic on the same validation shots, not a decoder)
+
+`python -m predecoder.candidate` (`logs/candidate_validation_X.log`) puts H, relay-BP with the
+head's priors, beside the members of `hierarchy/`, read from their files: R (relay-BP) and P1,
+P2 (PriorTilt, seeds 1 and 1001) from the laptop's `priortilt/results_8b/selector_validation_X.npz`,
+and T (TCBP-JOBS) from the server's `files/tcbp_p0.004/validation_X.tcbp.npz`.
+
+| | R | P1 | P2 | T | H |
+|---|---|---|---|---|---|
+| failures of 5,000 | 31 | 26 | 18 | 16 | 14 |
+| H against it: only H, only it, p | 3, 20, 0.0005 | 7, 19, 0.029 | 6, 10, 0.45 | 7, 9, 0.80 | |
+| right on the 27 shots where P1, P2 and T do not all agree | 12 | 5 | 13 | 15 | 21 |
+
+- R, P1, P2 and T all fail 9 shots; H is right on 3 of them. A perfect choice among the members
+  would fail 9 shots; with H among them, 6.
+- P1, P2 and T agree on a wrong answer on 4 shots; H is right on 2 of them.
+- H is as good as the best single member (TCBP-JOBS) on these shots, and better than PriorTilt
+  under one seed and than relay-BP, but none of that was the pre-registered question, and the
+  member counts here come from other runs on the same file. It suggests H as a member of the
+  ensemble; that is not built here (`hierarchy/` is not ours to change).

@@ -21,6 +21,8 @@ import json
 
 import numpy as np
 
+from predecoder.decode import paired
+
 
 def load(path, names):
     with np.load(path, allow_pickle=False) as file:
@@ -54,13 +56,19 @@ def main(argv=None):
     print(f"R, P1, P2 and T all fail {int(none_right.sum())} shots; H is right on {int(rescued.sum())} of them")
     print(f"the best possible choice: over R, P1, P2, T fails {int(none_right.sum())}; with H as well "
           f"{int((none_right & ~right['H']).sum())}")
+    paired_counts = {}
+    for name in others:
+        both, only_h, only_other, p_value = paired(~right["H"], ~right[name])
+        paired_counts[name] = {"both": both, "only_H": only_h, f"only_{name}": only_other, "p": p_value}
+        print(f"paired H against {name}: both fail {both}, only H {only_h}, only {name} {only_other}, exact two-sided p = {p_value:.3g}")
     agree_wrong = ~disagree & ~right["P1"]
     print(f"P1 = P2 = T but wrong on {int(agree_wrong.sum())} shots; H is right on {int((agree_wrong & right['H']).sum())} of them")
     summary = {"shots": shots, "failures": {name: int((~ok).sum()) for name, ok in right.items()},
                "disagree": int(disagree.sum()), "right_where_disagree": {name: int(ok[disagree].sum()) for name, ok in right.items()},
                "all_members_fail": int(none_right.sum()), "head_right_where_all_members_fail": int(rescued.sum()),
                "oracle_without_head": int(none_right.sum()), "oracle_with_head": int((none_right & ~right["H"]).sum()),
-               "members_agree_but_wrong": int(agree_wrong.sum()), "head_right_there": int((agree_wrong & right["H"]).sum())}
+               "members_agree_but_wrong": int(agree_wrong.sum()), "head_right_there": int((agree_wrong & right["H"]).sum()),
+               "paired": paired_counts}
     if args.out:
         with open(args.out, "w") as file:
             json.dump(summary, file, indent=1)

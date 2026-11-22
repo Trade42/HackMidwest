@@ -186,7 +186,11 @@ def main(argv=None):
     for a, b in (("head", "fresh"), ("head", "kit"), ("fresh", "kit")):
         if a in results and b in results:
             both, only_a, only_b, p_value = paired(per_shot[f"failed_{a}"], per_shot[f"failed_{b}"])
-            pairs[f"{a}_vs_{b}"] = {"both": both, f"only_{a}": only_a, f"only_{b}": only_b, "p": p_value}
+            ia, ib = per_shot[f"iterations_{a}"], per_shot[f"iterations_{b}"]
+            pairs[f"{a}_vs_{b}"] = {"both": both, f"only_{a}": only_a, f"only_{b}": only_b, "p": p_value,
+                                    f"fewer_iterations_{a}": int((ia < ib).sum()), f"fewer_iterations_{b}": int((ib < ia).sum()),
+                                    "same_iterations": int((ia == ib).sum()),
+                                    f"iterations_p99_{a}": float(np.percentile(ia, 99)), f"iterations_p99_{b}": float(np.percentile(ib, 99))}
 
     print(f"relay-BP at the kit's settings; {time.time() - start:.0f} s. Time per shot: build + decode in these worker "
           f"processes" + (f", plus the network and head ({network * 1e3:.1f} ms mean, {meta['model']['device']}, "
@@ -201,6 +205,9 @@ def main(argv=None):
         a, b = name.split("_vs_")
         print(f"paired {a} against {b}: both fail {pair['both']}, only {a} {pair[f'only_{a}']}, only {b} {pair[f'only_{b}']}, "
               f"exact two-sided p = {pair['p']:.3g}")
+        print(f"  iterations, shot by shot: {a} fewer on {pair[f'fewer_iterations_{a}']}, {b} fewer on "
+              f"{pair[f'fewer_iterations_{b}']}, the same on {pair['same_iterations']}; p99 {pair[f'iterations_p99_{a}']:.0f} "
+              f"against {pair[f'iterations_p99_{b}']:.0f}")
     if "head_vs_fresh" in pairs:
         pair = pairs["head_vs_fresh"]
         passed = pair["only_head"] < pair["only_fresh"] and pair["p"] < 0.05

@@ -1,0 +1,9 @@
+5000 shots; failures: R 31, P1 26, P2 18, T 16, H 14
+P1, P2 and T do not all agree on 27 shots; right there: R 12, P1 5, P2 13, T 15, H 21
+R, P1, P2 and T all fail 9 shots; H is right on 3 of them
+the best possible choice: over R, P1, P2, T fails 9; with H as well 6
+paired H against R: both fail 11, only H 3, only R 20, exact two-sided p = 0.000488
+paired H against P1: both fail 7, only H 7, only P1 19, exact two-sided p = 0.029
+paired H against P2: both fail 8, only H 6, only P2 10, exact two-sided p = 0.454
+paired H against T: both fail 7, only H 7, only T 9, exact two-sided p = 0.804
+P1 = P2 = T but wrong on 4 shots; H is right on 2 of them

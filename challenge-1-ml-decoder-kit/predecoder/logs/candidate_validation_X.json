@@ -1,0 +1,50 @@
+{
+ "shots": 5000,
+ "failures": {
+  "R": 31,
+  "P1": 26,
+  "P2": 18,
+  "T": 16,
+  "H": 14
+ },
+ "disagree": 27,
+ "right_where_disagree": {
+  "R": 12,
+  "P1": 5,
+  "P2": 13,
+  "T": 15,
+  "H": 21
+ },
+ "all_members_fail": 9,
+ "head_right_where_all_members_fail": 3,
+ "oracle_without_head": 9,
+ "oracle_with_head": 6,
+ "members_agree_but_wrong": 4,
+ "head_right_there": 2,
+ "paired": {
+  "R": {
+   "both": 11,
+   "only_H": 3,
+   "only_R": 20,
+   "p": 0.00048828125
+  },
+  "P1": {
+   "both": 7,
+   "only_H": 7,
+   "only_P1": 19,
+   "p": 0.028959274291992188
+  },
+  "P2": {
+   "both": 8,
+   "only_H": 6,
+   "only_P2": 10,
+   "p": 0.454498291015625
+  },
+  "T": {
+   "both": 7,
+   "only_H": 7,
+   "only_T": 9,
+   "p": 0.803619384765625
+  }
+ }
+}

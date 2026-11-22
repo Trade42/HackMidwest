@@ -1,0 +1,13 @@
+validation_X.npz: 5000 shots, p=0.004, arms ['kit', 'fresh', 'head']; head priors {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}; 0 tasks to run in 4 processes (16 CPUs here, luminaty)
+relay-BP at the kit's settings; 2 s. Time per shot: build + decode in these worker processes, plus the network and head (170.1 ms mean, cpu, from predecoder.evaluate)
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+kit           31    0.0062 [0.0044, 0.0088]          17    691       565      0.0     538.5    538.5   12777
+fresh         20    0.0040 [0.0026, 0.0062]          11    691       554     10.9     430.8    441.6   10541
+head          14    0.0028 [0.0017, 0.0047]           8    163       189     12.9     176.1    359.2    2121
+paired head against fresh: both fail 8, only head 6, only fresh 12, exact two-sided p = 0.238
+  iterations, shot by shot: head fewer on 4758, fresh fewer on 228, the same on 14; p99 2012 against 13940
+paired head against kit: both fail 11, only head 3, only kit 20, exact two-sided p = 0.000488
+  iterations, shot by shot: head fewer on 4694, kit fewer on 286, the same on 20; p99 2012 against 13982
+paired fresh against kit: both fail 15, only fresh 5, only kit 16, exact two-sided p = 0.0266
+  iterations, shot by shot: fresh fewer on 2533, kit fewer on 2415, the same on 52; p99 13940 against 13982
+kill line (head against fresh: fewer failures, paired, p < 0.05): NOT PASSED

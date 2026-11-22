@@ -558,20 +558,59 @@ plan was registered before any of its numbers existed (`logs/extension_registere
 copied from the orchestrator's log; `logs/z_plan_declared.md`; `logs/fallback_rule_frozen.md`).
 Every test file is decoded once.
 
+### X at p = 0.004 and p = 0.003 on the held-out test shots (the registered extension)
+
+The same frozen head, trunk and knobs as the p = 0.005 test run, from `1bf0e7b`, the network on this
+PC's CPU in 32-bit floats; one run per file (`logs/test-run-x.3lanes.sh.txt` for p = 0.004 on lanes A,
+B and C with 12 processes; `logs/test-run-x.sh.txt` for p = 0.003 on lanes A and C with 8). Declared
+pair: head against fresh. Secondaries (accuracy only, X only, not a pair score): TCBP-JOBS and the team
+evaluator's relay-bp row, from the files the orchestrator named on `origin/server-logs` at `99a93336`
+(each checked against the test file: sha256, truth, stored failures; `logs/test_run_p0.00{4,3}_X_secondary.log`).
+
+| test_X, 10,000 shots | H (head's priors) | fresh (kit's priors) | H against fresh: both, only H, only fresh, p | T, TCBP-JOBS | H against T | R, evaluator's relay-bp | H against R | mean iterations, H / fresh |
+|---|---|---|---|---|---|---|---|---|
+| p = 0.004 (sha256 `53a7cee3...`; `logs/test_run_p0.004_X.log`) | **15** | 39 | 12, 3, 27, **p = 8.4e-6** | 20 | 8, 7, 12, p = 0.36 | 36 | 10, 5, 26, p = 1.9e-4 | 167 / 514 |
+| p = 0.003 (sha256 `f7bc1813...`; `logs/test_run_p0.003_X.log`) | **2** | 7 | 1, 1, 6, p = 0.125 | 1 | 1, 1, 0, p = 1 | 2 | 1, 1, 1, p = 1 | 61 / 144 |
+
+At p = 0.004 the head's priors cut relay-BP's failures 2.6 times on the test shots, significantly,
+where the 5,000 validation shots had not shown it (14 against 20, p = 0.24); against TCBP-JOBS the
+difference is not significant. At p = 0.003 all decoders fail almost never and none differs.
+
+### Latency, clean: one process, one thread (the team's server)
+
+Run by the orchestrator as server job cpu/050 at predecoder `e96cc020` (head `38ab667e...`, trunk
+`d8d1c70f...`), with `OMP_NUM_THREADS=1` and one worker, on the first 1,000 shots of
+`data/p0.005/validation_X.npz` (a validation sample: no test shot decoded twice); files on
+`origin/server-logs` under `files/predecoder/latency_validation_X_p0.005/`:
+
+| per X shot, p = 0.005 | mean | median | p99 |
+|---|---|---|---|
+| network + head (batch one, CPU, 32-bit) | 26.8 ms | 26.7 ms | 28.0 ms |
+| relay-BP with the head's priors (build + decode) | 184.8 ms | 30.1 ms | 5,467 ms |
+
+992 of the 1,000 shots converge (141.6 ms mean on those); the 8 that do not run to relay-BP's cap
+and take 5,544 ms mean. Those are the shots the fallback rule hands to TCBP-JOBS, so under the rule
+they cost the capped relay-BP plus TCBP-JOBS.
+
 ### The fallback to TCBP-JOBS (Sal's idea, designed after the first test result)
 
 **The rule:** relay-BP with the head's priors (H) where that relay-BP converges; on the shots
 where it does not, TCBP-JOBS's answer (T). It has no knob. Unconverged shots announce
-themselves (relay-BP found no correction that explains the syndrome), and they held 88 of H's
-151 test failures at p = 0.005 (`python -m predecoder.fallback`).
+themselves (relay-BP found no correction that explains the syndrome): at p = 0.005, 88 of H's
+151 test failures were among the 90 unconverged shots (`python -m predecoder.fallback`).
 
 | shots (p = 0.005, X memory) | H | T, TCBP-JOBS | **the rule** | falls back on | the rule against T: both, only the rule, only T, p |
 |---|---|---|---|---|---|
 | validation_X, 5,000 (scored first; `logs/fallback_validation_X_p0.005.log`) | 79 | 91 | **50** | 44 | 38, 12, 53, p = 2.8e-7 |
 | test_X, 10,000 (post hoc; `logs/fallback_test_X_p0.005.log`) | 151 | 186 | **107** | 90 | 91, 16, 95, p = 7.5e-15 |
+| test_X p = 0.004, 10,000 (the registered extension; `logs/fallback_test_X_p0.004.log`) | 15 | 20 | **10** | 12 | 8, 2, 12, p = 0.013 |
+| test_X p = 0.003, 10,000 (the registered extension; `logs/fallback_test_X_p0.003.log`) | 2 | 1 | **1** | 1 | 1, 0, 0, p = 1 |
 
-The rule's text was frozen after its validation number and before any other test file of the
-extension was opened. On the test shots it cuts TCBP-JOBS's failures by 42%, and H's by 29%
+The rule's text was frozen (14:32:15 UTC) after its validation number and before it was applied
+to any test file. test_X at p = 0.004 had been opened by `predecoder.evaluate` about 25 s before
+the freeze (its run started 14:31:33; no result of it existed before 14:54), so for p = 0.004 the
+rule was frozen before it was applied, not before the file was opened; test_X at p = 0.003
+(opened 14:55:52) and test_Z (later) were opened after the freeze. On the test shots it cuts TCBP-JOBS's failures by 42%, and H's by 29%
 (1 shot only the rule gets wrong, 45 only H). The TCBP-JOBS files are the team's (validation:
 `files/tcbp_p0.005/validation_X.tcbp.npz` on `origin/server-logs`, sha256 `876c47c6...`; test:
 the file named above). Costs: the rule runs TCBP-JOBS on the 0.9% of shots that fall back, on a
@@ -600,9 +639,12 @@ tests were added, each of which passes on its own):
 
 Not tested, or not done:
 
-- **The held-out test files were used once**, at p = 0.005 for X memory, on Sal's yes, after the
-  declared gate at p = 0.004 failed (above). No other test file was decoded, and nothing was
-  changed after the result.
+- **The held-out test files:** X at p = 0.005 once, on Sal's yes, after the declared gate at p = 0.004
+  failed (above); then, under the registered extension written after that result
+  (`logs/extension_registered_spec.md`), X at p = 0.004 once (`logs/test_run_p0.004_X.log`) and X at
+  p = 0.003 once (`logs/test_run_p0.003_X.log`), and Z at p = 0.005 (below). The head, its knobs and
+  relay-BP were not changed after any result. The fallback rule was designed after the first test
+  result and is labelled so wherever it appears.
 - **Z memory: a head is being trained** (from `ee359d7f`, which lets a head train on a Z network
   with light logical operators: the head never reads the network's logical readout, and its
   labels come from the kit's own observables). Until its results are in this file, the plugin

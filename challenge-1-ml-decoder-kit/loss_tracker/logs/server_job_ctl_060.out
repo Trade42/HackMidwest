@@ -1,0 +1,314 @@
+Sun Nov 22 07:40:18 UTC 2026
+checkout: 650f7ae server-jobs: ctl 060, the loss tracker's replication on a second seed
+{"dataset": "/home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz", "sha256": "07c2f43737bdd07f612669432094b7bd2614fc13614ccabff640c28f4dd29c2e", "basis": "X", "p": 0.004, "s": 0.001, "shots": 4000, "seed": 7310, "lost_data_atoms_per_shot": 10.076, "check_heralds_per_shot": 10.337, "sample_seconds": 6.5}
+{"data": "data.npz", "data_sha256": "07c2f43737bdd07f612669432094b7bd2614fc13614ccabff640c28f4dd29c2e", "data_seed": 7310, "basis": "X", "p": 0.004, "s": 0.001, "shots": 4000, "tables": "loss_tracker/tables/X_p0.004_s1e-3.npz", "tables_sha256": "d915ce275e58caa08d4b8e569502c894fb18a2b0223b534344a8be1154c30597", "mode": "coupled", "sweeps": 1, "order": 1, "explain": true, "flagged_data_atoms": 40303, "out": "/home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz.tmp.npz", "seconds": 10.4, "ms_per_shot_one_process": 2.61}
+Dataset data.npz (seed 7310), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| tracker | 40303 | 0.508 | 0.793 | 0.380 | -1.316 | +0.15 |
+
+Kill line (version `tracker`): losses of rounds 1 to 9 within one round of the truth: 0.779 of 30611 (rounds 2 to 10: 0.772 of 30346). The line is 0.5.
+
+By true loss round (version `tracker`):
+
+| true round | atoms | most probable round is the true one | within one round (95% Wilson) | mean P(true round) | mean P(within one) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| 1 | 3474 | 0.632 | 0.831 (0.819–0.843) | 0.553 | 0.779 | +0.75 |
+| 2 | 3454 | 0.510 | 0.844 (0.831–0.856) | 0.405 | 0.807 | +0.56 |
+| 3 | 3480 | 0.488 | 0.784 (0.771–0.798) | 0.364 | 0.714 | +0.45 |
+| 4 | 3481 | 0.465 | 0.772 (0.758–0.786) | 0.347 | 0.682 | +0.36 |
+| 5 | 3419 | 0.474 | 0.764 (0.750–0.778) | 0.344 | 0.673 | +0.27 |
+| 6 | 3384 | 0.477 | 0.762 (0.747–0.776) | 0.337 | 0.658 | +0.20 |
+| 7 | 3365 | 0.464 | 0.748 (0.733–0.762) | 0.333 | 0.654 | +0.15 |
+| 8 | 3217 | 0.457 | 0.755 (0.740–0.770) | 0.329 | 0.657 | +0.07 |
+| 9 | 3337 | 0.457 | 0.742 (0.727–0.757) | 0.327 | 0.658 | -0.02 |
+| 10 | 3209 | 0.470 | 0.777 (0.762–0.791) | 0.346 | 0.694 | -0.13 |
+| 11 | 3190 | 0.479 | 0.871 (0.859–0.882) | 0.366 | 0.777 | -0.33 |
+| 12 | 3293 | 0.723 | 0.870 (0.858–0.881) | 0.508 | 0.740 | -0.62 |
+
+By what the atom shares (from the heralds alone):
+
+| group | share of the flagged atoms | atoms | true round | within one round | mean log P(true round) |
+|---|---|---|---|---|---|
+| shares no check with another flagged data atom | 0.218 | 8767 | 0.531 | 0.813 | -1.242 |
+| shares an X check only | 0.120 | 4841 | 0.506 | 0.793 | -1.329 |
+| shares a Z check only | 0.123 | 4938 | 0.526 | 0.799 | -1.290 |
+| shares X and Z checks | 0.540 | 21757 | 0.496 | 0.784 | -1.348 |
+| alone, and none of its 6 check atoms was ever flagged | 0.143 | 5757 | 0.546 | 0.825 | -1.204 |
+
+Reliability of the round posterior, every (atom, round) pair (expected calibration error 0.0024):
+
+| posterior between | pairs | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.00 and 0.02 | 286756 | 0.003 | 0.004 |
+| 0.02 and 0.05 | 48259 | 0.033 | 0.036 |
+| 0.05 and 0.10 | 38895 | 0.072 | 0.075 |
+| 0.10 and 0.20 | 38870 | 0.144 | 0.142 |
+| 0.20 and 0.30 | 24544 | 0.246 | 0.248 |
+| 0.30 and 0.40 | 15539 | 0.348 | 0.345 |
+| 0.40 and 0.50 | 11043 | 0.447 | 0.437 |
+| 0.50 and 0.60 | 8072 | 0.547 | 0.537 |
+| 0.60 and 0.70 | 5455 | 0.646 | 0.630 |
+| 0.70 and 0.80 | 2999 | 0.744 | 0.725 |
+| 0.80 and 0.90 | 1871 | 0.850 | 0.800 |
+| 0.90 and 1.00 | 1333 | 0.945 | 0.917 |
+
+Reliability of the most probable round (expected calibration error 0.0131):
+
+| its posterior between | atoms | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.10 and 0.20 | 134 | 0.184 | 0.134 |
+| 0.20 and 0.30 | 2731 | 0.265 | 0.267 |
+| 0.30 and 0.40 | 7739 | 0.355 | 0.350 |
+| 0.40 and 0.50 | 9969 | 0.449 | 0.438 |
+| 0.50 and 0.60 | 8072 | 0.547 | 0.537 |
+| 0.60 and 0.70 | 5455 | 0.646 | 0.630 |
+| 0.70 and 0.80 | 2999 | 0.744 | 0.725 |
+| 0.80 and 0.90 | 1871 | 0.850 | 0.800 |
+| 0.90 and 1.00 | 1333 | 0.945 | 0.917 |
+
+Temperature on the evidence (1 = as fitted; the tracker alone, before any decoding):
+
+| temperature | mean log P(true round) | calibration error of the most probable round |
+|---|---|---|
+| 0.7 | -1.4119 | 0.1219 |
+| 0.85 | -1.3394 | 0.0624 |
+| 1.0 | -1.3155 | 0.0131 |
+| 1.25 | -1.3262 | 0.0528 |
+| 1.5 | -1.3632 | 0.1030 |
+| 2.0 | -1.4554 | 0.1707 |
+| 3.0 | -1.6221 | 0.2446 |
+
+For scale, the uniform guess: mean P(true round) 0.083, mean log P -2.485.
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 0..500 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
+  100/500 shots, 73s, failures so far starter=3 exact=3 tracker=4 oracle-round=1
+  200/500 shots, 168s, failures so far starter=8 exact=8 tracker=8 oracle-round=5
+  300/500 shots, 229s, failures so far starter=12 exact=14 tracker=10 oracle-round=6
+  400/500 shots, 280s, failures so far starter=15 exact=18 tracker=14 oracle-round=8
+  500/500 shots, 359s, failures so far starter=21 exact=24 tracker=18 oracle-round=13
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/parts/000000-000500.npz.tmp.npz in 359s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 500..1000 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
+  100/500 shots, 68s, failures so far starter=3 exact=3 tracker=2 oracle-round=2
+  200/500 shots, 135s, failures so far starter=6 exact=8 tracker=4 oracle-round=3
+  300/500 shots, 189s, failures so far starter=9 exact=12 tracker=7 oracle-round=4
+  400/500 shots, 264s, failures so far starter=13 exact=16 tracker=9 oracle-round=5
+  500/500 shots, 337s, failures so far starter=15 exact=20 tracker=9 oracle-round=5
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/parts/000500-001000.npz.tmp.npz in 337s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 1000..1500 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
+  100/500 shots, 67s, failures so far starter=6 exact=4 tracker=4 oracle-round=1
+  200/500 shots, 135s, failures so far starter=11 exact=9 tracker=10 oracle-round=4
+  300/500 shots, 209s, failures so far starter=16 exact=14 tracker=15 oracle-round=7
+  400/500 shots, 258s, failures so far starter=19 exact=16 tracker=15 oracle-round=7
+  500/500 shots, 346s, failures so far starter=24 exact=20 tracker=21 oracle-round=12
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/parts/001000-001500.npz.tmp.npz in 346s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 1500..2000 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
+  100/500 shots, 62s, failures so far starter=3 exact=4 tracker=3 oracle-round=1
+  200/500 shots, 118s, failures so far starter=6 exact=7 tracker=5 oracle-round=3
+  300/500 shots, 181s, failures so far starter=9 exact=9 tracker=9 oracle-round=5
+  400/500 shots, 244s, failures so far starter=13 exact=13 tracker=11 oracle-round=7
+  500/500 shots, 308s, failures so far starter=14 exact=17 tracker=11 oracle-round=8
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/parts/001500-002000.npz.tmp.npz in 308s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 2000..2500 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
+  100/500 shots, 57s, failures so far starter=2 exact=4 tracker=2 oracle-round=3
+  200/500 shots, 125s, failures so far starter=3 exact=8 tracker=5 oracle-round=4
+  300/500 shots, 204s, failures so far starter=9 exact=14 tracker=8 oracle-round=6
+  400/500 shots, 301s, failures so far starter=14 exact=20 tracker=13 oracle-round=9
+  500/500 shots, 365s, failures so far starter=16 exact=23 tracker=16 oracle-round=10
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/parts/002000-002500.npz.tmp.npz in 365s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 2500..3000 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
+  100/500 shots, 76s, failures so far starter=2 exact=3 tracker=2 oracle-round=0
+  200/500 shots, 140s, failures so far starter=4 exact=9 tracker=4 oracle-round=1
+  300/500 shots, 202s, failures so far starter=6 exact=11 tracker=6 oracle-round=1
+  400/500 shots, 249s, failures so far starter=10 exact=14 tracker=12 oracle-round=5
+  500/500 shots, 327s, failures so far starter=18 exact=19 tracker=15 oracle-round=9
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/parts/002500-003000.npz.tmp.npz in 327s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 3000..3500 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
+  100/500 shots, 47s, failures so far starter=2 exact=3 tracker=1 oracle-round=2
+  200/500 shots, 130s, failures so far starter=9 exact=10 tracker=8 oracle-round=5
+  300/500 shots, 192s, failures so far starter=12 exact=14 tracker=11 oracle-round=8
+  400/500 shots, 262s, failures so far starter=15 exact=15 tracker=12 oracle-round=11
+  500/500 shots, 343s, failures so far starter=20 exact=20 tracker=16 oracle-round=15
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/parts/003000-003500.npz.tmp.npz in 343s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/data.npz shots 3500..4000 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/post.npz
+  100/500 shots, 98s, failures so far starter=5 exact=7 tracker=5 oracle-round=2
+  200/500 shots, 162s, failures so far starter=8 exact=11 tracker=8 oracle-round=3
+  300/500 shots, 215s, failures so far starter=13 exact=13 tracker=8 oracle-round=4
+  400/500 shots, 297s, failures so far starter=17 exact=15 tracker=11 oracle-round=7
+  500/500 shots, 382s, failures so far starter=18 exact=18 tracker=16 oracle-round=10
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310/parts/003500-004000.npz.tmp.npz in 382s
+## X memory, p = 0.004, s = 0.001, seed 7310
+Every condition on the same 4000 shots.
+
+### reference exact
+
+| condition | failures / shots | fail fraction (95% Wilson) | per cycle | unconverged (of them right) | mean iterations | paired shots: exact fails, cond fails | exact-only / cond-only (sign test) | exact ÷ cond (95% bootstrap) |
+|---|---|---|---|---|---|---|---|---|
+| starter | 146 / 4000 | 0.0365 (0.0311–0.0428) | 3.09e-03 | 98 (2) | 2289 | 4000: 161, 146 | 56 / 41 (p=0.15) | 1.10 (0.97–1.25) |
+| exact | 161 / 4000 | 0.0403 (0.0346–0.0468) | 3.42e-03 | 116 (2) | 2528 | reference |  |  |
+| tracker | 122 / 4000 | 0.0305 (0.0256–0.0363) | 2.58e-03 | 84 (1) | 2057 | 4000: 161, 122 | 80 / 41 (p=0.0005) | 1.32 (1.13–1.54) |
+| oracle-round | 82 / 4000 | 0.0205 (0.0165–0.0254) | 1.72e-03 | 53 (1) | 1595 | 4000: 161, 82 | 100 / 21 (p=1.6e-13) | 1.96 (1.64–2.40) |
+
+
+### reference starter
+
+| condition | failures / shots | fail fraction (95% Wilson) | per cycle | unconverged (of them right) | mean iterations | paired shots: starter fails, cond fails | starter-only / cond-only (sign test) | starter ÷ cond (95% bootstrap) |
+|---|---|---|---|---|---|---|---|---|
+| starter | 146 / 4000 | 0.0365 (0.0311–0.0428) | 3.09e-03 | 98 (2) | 2289 | reference |  |  |
+| exact | 161 / 4000 | 0.0403 (0.0346–0.0468) | 3.42e-03 | 116 (2) | 2528 | 4000: 146, 161 | 41 / 56 (p=0.15) | 0.91 (0.80–1.03) |
+| tracker | 122 / 4000 | 0.0305 (0.0256–0.0363) | 2.58e-03 | 84 (1) | 2057 | 4000: 146, 122 | 66 / 42 (p=0.026) | 1.20 (1.03–1.40) |
+| oracle-round | 82 / 4000 | 0.0205 (0.0165–0.0254) | 1.72e-03 | 53 (1) | 1595 | 4000: 146, 82 | 84 / 20 (p=1.6e-10) | 1.78 (1.49–2.15) |
+
+
+### The share of the oracle's gain
+
+| condition | reference | failures: reference, condition, ORACLE | share of the gain recovered (95% bootstrap) |
+|---|---|---|---|
+| tracker | exact | 161, 122, 82 | 0.49 (0.25–0.70) |
+| tracker | starter | 146, 122, 82 | 0.38 (0.07–0.63) |
+job done in 2815s
+job 1 (the frozen tracker, seed 7310): exit 0
+Sun Nov 22 08:27:15 UTC 2026
+{"dataset": "/home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz", "sha256": "07c2f43737bdd07f612669432094b7bd2614fc13614ccabff640c28f4dd29c2e", "basis": "X", "p": 0.004, "s": 0.001, "shots": 4000, "seed": 7310, "lost_data_atoms_per_shot": 10.076, "check_heralds_per_shot": 10.337, "sample_seconds": 6.5}
+{"data": "data.npz", "data_sha256": "07c2f43737bdd07f612669432094b7bd2614fc13614ccabff640c28f4dd29c2e", "data_seed": 7310, "basis": "X", "p": 0.004, "s": 0.001, "shots": 4000, "tables": "loss_tracker/tables/X_p0.004_s1e-3.npz", "tables_sha256": "d915ce275e58caa08d4b8e569502c894fb18a2b0223b534344a8be1154c30597", "mode": "coupled", "sweeps": 2, "order": 1, "explain": false, "flagged_data_atoms": 40303, "out": "/home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz.tmp.npz", "seconds": 16.5, "ms_per_shot_one_process": 4.12}
+Dataset data.npz (seed 7310), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| tracker | 40303 | 0.492 | 0.780 | 0.368 | -1.361 | +0.16 |
+
+Kill line (version `tracker`): losses of rounds 1 to 9 within one round of the truth: 0.767 of 30611 (rounds 2 to 10: 0.757 of 30346). The line is 0.5.
+
+By true loss round (version `tracker`):
+
+| true round | atoms | most probable round is the true one | within one round (95% Wilson) | mean P(true round) | mean P(within one) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| 1 | 3474 | 0.631 | 0.833 (0.820–0.845) | 0.554 | 0.779 | +0.76 |
+| 2 | 3454 | 0.508 | 0.842 (0.829–0.853) | 0.403 | 0.803 | +0.58 |
+| 3 | 3480 | 0.479 | 0.777 (0.763–0.790) | 0.359 | 0.706 | +0.51 |
+| 4 | 3481 | 0.458 | 0.763 (0.749–0.777) | 0.338 | 0.670 | +0.40 |
+| 5 | 3419 | 0.459 | 0.757 (0.742–0.771) | 0.331 | 0.659 | +0.31 |
+| 6 | 3384 | 0.452 | 0.742 (0.727–0.757) | 0.321 | 0.639 | +0.25 |
+| 7 | 3365 | 0.441 | 0.732 (0.716–0.746) | 0.317 | 0.635 | +0.20 |
+| 8 | 3217 | 0.433 | 0.732 (0.716–0.747) | 0.312 | 0.636 | +0.09 |
+| 9 | 3337 | 0.434 | 0.722 (0.706–0.737) | 0.309 | 0.637 | -0.02 |
+| 10 | 3209 | 0.443 | 0.747 (0.732–0.762) | 0.328 | 0.675 | -0.17 |
+| 11 | 3190 | 0.464 | 0.856 (0.844–0.868) | 0.351 | 0.761 | -0.39 |
+| 12 | 3293 | 0.696 | 0.855 (0.842–0.866) | 0.480 | 0.715 | -0.69 |
+
+By what the atom shares (from the heralds alone):
+
+| group | share of the flagged atoms | atoms | true round | within one round | mean log P(true round) |
+|---|---|---|---|---|---|
+| shares no check with another flagged data atom | 0.218 | 8767 | 0.531 | 0.813 | -1.242 |
+| shares an X check only | 0.120 | 4841 | 0.495 | 0.787 | -1.353 |
+| shares a Z check only | 0.123 | 4938 | 0.514 | 0.791 | -1.312 |
+| shares X and Z checks | 0.540 | 21757 | 0.471 | 0.762 | -1.421 |
+| alone, and none of its 6 check atoms was ever flagged | 0.143 | 5757 | 0.546 | 0.825 | -1.204 |
+
+Reliability of the round posterior, every (atom, round) pair (expected calibration error 0.0028):
+
+| posterior between | pairs | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.00 and 0.02 | 280423 | 0.003 | 0.004 |
+| 0.02 and 0.05 | 50462 | 0.033 | 0.038 |
+| 0.05 and 0.10 | 40883 | 0.072 | 0.074 |
+| 0.10 and 0.20 | 41177 | 0.144 | 0.144 |
+| 0.20 and 0.30 | 25281 | 0.246 | 0.243 |
+| 0.30 and 0.40 | 15857 | 0.347 | 0.342 |
+| 0.40 and 0.50 | 11148 | 0.447 | 0.440 |
+| 0.50 and 0.60 | 7594 | 0.547 | 0.525 |
+| 0.60 and 0.70 | 5171 | 0.646 | 0.635 |
+| 0.70 and 0.80 | 2643 | 0.745 | 0.712 |
+| 0.80 and 0.90 | 1711 | 0.850 | 0.800 |
+| 0.90 and 1.00 | 1286 | 0.947 | 0.913 |
+
+Reliability of the most probable round (expected calibration error 0.0166):
+
+| its posterior between | atoms | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.10 and 0.20 | 233 | 0.179 | 0.163 |
+| 0.20 and 0.30 | 3340 | 0.263 | 0.255 |
+| 0.30 and 0.40 | 8228 | 0.354 | 0.340 |
+| 0.40 and 0.50 | 10097 | 0.449 | 0.441 |
+| 0.50 and 0.60 | 7594 | 0.547 | 0.525 |
+| 0.60 and 0.70 | 5171 | 0.646 | 0.635 |
+| 0.70 and 0.80 | 2643 | 0.745 | 0.712 |
+| 0.80 and 0.90 | 1711 | 0.850 | 0.800 |
+| 0.90 and 1.00 | 1286 | 0.947 | 0.913 |
+
+Temperature on the evidence (1 = as fitted; the tracker alone, before any decoding):
+
+| temperature | mean log P(true round) | calibration error of the most probable round |
+|---|---|---|
+| 0.7 | -1.4605 | 0.1236 |
+| 0.85 | -1.3863 | 0.0661 |
+| 1.0 | -1.3607 | 0.0166 |
+| 1.25 | -1.3687 | 0.0488 |
+| 1.5 | -1.4032 | 0.0972 |
+| 2.0 | -1.4916 | 0.1640 |
+| 3.0 | -1.6530 | 0.2359 |
+
+For scale, the uniform guess: mean P(true round) 0.083, mean log P -2.485.
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 0..500 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
+  100/500 shots, 22s, failures so far tracker=2
+  200/500 shots, 49s, failures so far tracker=5
+  300/500 shots, 62s, failures so far tracker=8
+  400/500 shots, 77s, failures so far tracker=11
+  500/500 shots, 95s, failures so far tracker=16
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/000000-000500.npz.tmp.npz in 95s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 500..1000 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
+  100/500 shots, 20s, failures so far tracker=3
+  200/500 shots, 39s, failures so far tracker=6
+  300/500 shots, 51s, failures so far tracker=9
+  400/500 shots, 69s, failures so far tracker=9
+  500/500 shots, 86s, failures so far tracker=12
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/000500-001000.npz.tmp.npz in 86s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 1000..1500 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
+  100/500 shots, 21s, failures so far tracker=6
+  200/500 shots, 38s, failures so far tracker=12
+  300/500 shots, 58s, failures so far tracker=16
+  400/500 shots, 69s, failures so far tracker=16
+  500/500 shots, 91s, failures so far tracker=22
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/001000-001500.npz.tmp.npz in 91s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 1500..2000 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
+  100/500 shots, 20s, failures so far tracker=4
+  200/500 shots, 32s, failures so far tracker=6
+  300/500 shots, 46s, failures so far tracker=9
+  400/500 shots, 60s, failures so far tracker=11
+  500/500 shots, 74s, failures so far tracker=12
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/001500-002000.npz.tmp.npz in 74s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 2000..2500 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
+  100/500 shots, 18s, failures so far tracker=3
+  200/500 shots, 35s, failures so far tracker=4
+  300/500 shots, 57s, failures so far tracker=5
+  400/500 shots, 80s, failures so far tracker=8
+  500/500 shots, 94s, failures so far tracker=11
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/002000-002500.npz.tmp.npz in 95s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 2500..3000 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
+  100/500 shots, 23s, failures so far tracker=1
+  200/500 shots, 40s, failures so far tracker=2
+  300/500 shots, 54s, failures so far tracker=3
+  400/500 shots, 66s, failures so far tracker=8
+  500/500 shots, 86s, failures so far tracker=12
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/002500-003000.npz.tmp.npz in 86s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 3000..3500 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
+  100/500 shots, 14s, failures so far tracker=2
+  200/500 shots, 35s, failures so far tracker=7
+  300/500 shots, 48s, failures so far tracker=10
+  400/500 shots, 66s, failures so far tracker=13
+  500/500 shots, 86s, failures so far tracker=16
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/003000-003500.npz.tmp.npz in 86s
+decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 3500..4000 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
+  100/500 shots, 28s, failures so far tracker=4
+  200/500 shots, 44s, failures so far tracker=8
+  300/500 shots, 57s, failures so far tracker=9
+  400/500 shots, 77s, failures so far tracker=11
+  500/500 shots, 98s, failures so far tracker=12
+wrote /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/parts/003500-004000.npz.tmp.npz in 98s
+## X memory, p = 0.004, s = 0.001, seed 7310
+Every condition on the same 4000 shots.
+
+job done in 764s
+job 2 (the earlier tracker version, the same shots): exit 0
+Sun Nov 22 08:40:01 UTC 2026

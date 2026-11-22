@@ -1,0 +1,57 @@
+{"data": "test_X_p0.004_s1e-3_seed7300.npz", "data_sha256": "4ee65bb56e69fcb51fd638b17f3c766178dece67c4a990fe0e93ec80f1225583", "data_seed": 7300, "basis": "X", "p": 0.004, "s": 0.001, "shots": 4000, "tables": "loss_tracker/tables/X_p0.004_s1e-3.npz", "tables_sha256": "d915ce275e58caa08d4b8e569502c894fb18a2b0223b534344a8be1154c30597", "mode": "coupled", "sweeps": 2, "order": 1, "explain": false, "flagged_data_atoms": 39909, "out": "/home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_coupled2.npz.tmp.npz", "seconds": 26.0, "ms_per_shot_one_process": 6.51}
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 0..500 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_coupled2.npz
+  100/500 shots, 55s, failures so far tracker=4
+  200/500 shots, 94s, failures so far tracker=7
+  300/500 shots, 129s, failures so far tracker=10
+  400/500 shots, 171s, failures so far tracker=12
+  500/500 shots, 209s, failures so far tracker=15
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/000000-000500.npz.tmp.npz in 209s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 500..1000 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_coupled2.npz
+  100/500 shots, 66s, failures so far tracker=3
+  200/500 shots, 115s, failures so far tracker=6
+  300/500 shots, 168s, failures so far tracker=11
+  400/500 shots, 210s, failures so far tracker=16
+  500/500 shots, 246s, failures so far tracker=21
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/000500-001000.npz.tmp.npz in 246s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 1000..1500 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_coupled2.npz
+  100/500 shots, 54s, failures so far tracker=2
+  200/500 shots, 90s, failures so far tracker=4
+  300/500 shots, 135s, failures so far tracker=9
+  400/500 shots, 179s, failures so far tracker=12
+  500/500 shots, 238s, failures so far tracker=17
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/001000-001500.npz.tmp.npz in 238s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 1500..2000 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_coupled2.npz
+  100/500 shots, 59s, failures so far tracker=3
+  200/500 shots, 116s, failures so far tracker=7
+  300/500 shots, 154s, failures so far tracker=10
+  400/500 shots, 187s, failures so far tracker=12
+  500/500 shots, 224s, failures so far tracker=17
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/001500-002000.npz.tmp.npz in 224s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 2000..2500 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_coupled2.npz
+  100/500 shots, 41s, failures so far tracker=2
+  200/500 shots, 85s, failures so far tracker=4
+  300/500 shots, 132s, failures so far tracker=7
+  400/500 shots, 186s, failures so far tracker=13
+  500/500 shots, 242s, failures so far tracker=20
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/002000-002500.npz.tmp.npz in 242s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 2500..3000 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_coupled2.npz
+  100/500 shots, 70s, failures so far tracker=2
+  200/500 shots, 109s, failures so far tracker=5
+  300/500 shots, 135s, failures so far tracker=8
+  400/500 shots, 178s, failures so far tracker=9
+  500/500 shots, 250s, failures so far tracker=15
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/002500-003000.npz.tmp.npz in 250s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 3000..3500 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_coupled2.npz
+  100/500 shots, 58s, failures so far tracker=0
+  200/500 shots, 104s, failures so far tracker=5
+  300/500 shots, 168s, failures so far tracker=14
+  400/500 shots, 218s, failures so far tracker=19
+  500/500 shots, 259s, failures so far tracker=24
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/003000-003500.npz.tmp.npz in 259s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 3500..4000 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_coupled2.npz
+  100/500 shots, 52s, failures so far tracker=4
+  200/500 shots, 91s, failures so far tracker=5
+  300/500 shots, 153s, failures so far tracker=8
+  400/500 shots, 206s, failures so far tracker=12
+  500/500 shots, 252s, failures so far tracker=15
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test_coupled2/003500-004000.npz.tmp.npz in 252s

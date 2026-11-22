@@ -1,0 +1,10 @@
+2026-11-22T06:03:45Z START cpu/000-sync-and-uptime at 3d82169
+2026-11-22T06:03:51Z END cpu/000-sync-and-uptime exit 0
+2026-11-22T06:10:14Z START cpu/010-loss-D at 5a4fe7c
+2026-11-22T07:24:18Z END cpu/010-loss-D exit 0
+2026-11-22T07:24:52Z START cpu/020-baseline-rows at 472b18f
+2026-11-22T07:26:20Z END cpu/020-baseline-rows exit 0
+2026-11-22T07:26:53Z START cpu/030-candidates-explore at 472b18f
+2026-11-22T07:28:16Z END cpu/030-candidates-explore exit 0
+2026-11-22T12:14:42Z START cpu/040-retime-p0.003-baselines at 8552db3
+2026-11-22T12:14:46Z END cpu/040-retime-p0.003-baselines exit 0

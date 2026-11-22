@@ -1,0 +1,6 @@
+﻿p=0.005 X / gen_X_seed9205: 20000 shots
+  relay-BP  failures  883  logical error 4.415% [95% Wilson 4.139%, 4.709%]  time/shot mean 937.0 ms, median 145.9, p99 7259 ms  iterations mean 2394, median 374, p99 18080  unconverged 524  side-by-side processes 1-5
+  PriorTilt failures  612  logical error 3.060% [95% Wilson 2.830%, 3.308%]  time/shot mean 200.9 ms, median 90.0, p99 2843 ms  iterations mean 1130, median 509, p99 16012  unconverged 173  side-by-side processes 2-5
+  paired table (rows relay-BP, columns PriorTilt): both fail 443, relay-BP only 440, PriorTilt only 169, both right 18948
+  McNemar exact (two-sided binomial on 609 discordant shots): p = 8.7e-29
+  data sha256: ['45a9761e688088c0e502e80a5569258985242e40231eea7f474f7887188213eb']

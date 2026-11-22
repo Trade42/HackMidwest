@@ -1,0 +1,77 @@
+2026-11-22T09:40:41Z TEST RUN DRIVER START: frozen fd3aed3c0d1f2e9e8bd181bd22c9853a19e2dfc5, rule f, X checkpoint 2f752e9367f80e1180711ded6b6ca854a5c0c147:cascade_X_s1/checkpoint_final_step120000.pt
+2026-11-22T09:42:09Z 0. frozen checkout: fd3aed3 integration: merge hierarchy at 45b50a92; hierarchy/ and neural/ equal 921f2e8f8e05eff4ca3f60b565e48bbc08d42628; the evaluator, the kit and the shot files equal the baseline rows' checkout
+2026-11-22T09:42:16Z 1. X checkpoint: sha256 d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933
+2026-11-22T09:42:16Z 1. waiting for the Z training to end (it is stopped at 2026-11-22 10:20:00 UTC if it still runs); process 51025: python -m neural.train --out /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1 --resume /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1/checkpoint.pt --steps 100000 --lr-decay-steps 100000 
+2026-11-22T10:05:12Z the Z training has ended at: step 100000 of 100000 | training noise p=0.0055 | mean train
+-rw-rw-r--+ 1 nobody nogroup 14695308 2026-11-22T10:04:40 /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1/checkpoint.pt
+2026-11-22T10:05:12Z 1. Z checkpoint: sha256 fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700
+checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt: step 120000, commit 7ff6a68b95916773a67d209959c92b04c2254cd1, training seed 1, reads detectors=all, logical operators: kit
+X memory: failures 790 of 20000 (always-0 would fail 19990)
+checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt: step 120000, commit 7ff6a68b95916773a67d209959c92b04c2254cd1, training seed 1, reads detectors=all, logical operators: kit
+X memory: failures 237 of 5000 (always-0 would fail 5000)
+checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt: step 100000, commit db2de883f97771dab1140ac4956cad8c06f05aac, training seed 1, reads detectors=all, logical operators: light
+Z memory: failures 868 of 20000 (always-0 would fail 19993)
+checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt: step 100000, commit db2de883f97771dab1140ac4956cad8c06f05aac, training seed 1, reads detectors=all, logical operators: light
+Z memory: failures 209 of 5000 (always-0 would fail 4997)
+X checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt, sha256 d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933
+PLUGIN_RULE X network    (network 60 failures, converged 67, on 25000 shots; logits of checkpoint step 120000)
+Z checkpoint /home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt, sha256 fad24e80ec4e2c5ea7b54717c6b309b244d90ee9fb50a60128da997840230700
+PLUGIN_RULE Z network    (network 68 failures, converged 73, on 25000 shots; logits of checkpoint step 100000)
+wrote /home/blakew3/mlBranchMidwest/runs/test/hierarchy_options.json: {"rule": {"X": "network", "Z": "network"}, "seeds": [1, 1001], "checkpoints": {"X": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt", "Z": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt"}, "device": "cpu", "torch_threads": 1}
+2026-11-22T10:06:41Z 2. the plugin's options: {
+  "rule": {
+    "X": "network",
+    "Z": "network"
+  },
+  "seeds": [
+    1,
+    1001
+  ],
+  "checkpoints": {
+    "X": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt",
+    "Z": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt"
+  },
+  "device": "cpu",
+  "torch_threads": 1
+}
+options ok: /home/blakew3/mlBranchMidwest/runs/test/hierarchy_options.json {'X': 'network', 'Z': 'network'} sequential
+options ok: /home/blakew3/mlBranchMidwest/runs/test/hierarchy_options_parallel.json {'X': 'network', 'Z': 'network'} side by side
+oracle_P1_P2_T_R_J                [0 0]             0  0.00e+00 +- 0.0e+00
+
+PREFLIGHT PASSED in 159 s: the plugin, candidates, evaluate_stim, tcbp_member, joint_member and ensemble all ran on 16 validation shots per basis
+oracle_P1_P2_T_R_J                [0 0]             0  0.00e+00 +- 0.0e+00
+
+PREFLIGHT PASSED in 71 s: the plugin, candidates, evaluate_stim, tcbp_member (STAND-IN ONLY), joint_member and ensemble all ran on 16 validation shots per basis
+  mean time per shot on this machine: sequential 95.8 ms, side by side 66.0 ms (wall time, two cores)
+RESULT: the side-by-side mode gives the sequential answers on every shot
+2026-11-22T10:23:37Z rehearsal on validation shots, p = 0.003, hierarchy: hierarchy.plugin:make_decoder,2,3,5,8.337155219761971e-05,3.729098696714228e-05,47.381145592662506
+2026-11-22T10:23:37Z rehearsal on validation shots, p = 0.003, hierarchy-parallel: hierarchy.plugin:make_decoder,2,3,5,8.337155219761971e-05,3.729098696714228e-05,30.846292575728146
+2026-11-22T10:23:37Z rehearsal on validation shots, p = 0.003, priortilt: hierarchy.priortilt_plugin:make_decoder,2,2,4,6.669112361223917e-05,3.3350567904766315e-05,22.989065239275806
+2026-11-22T10:23:42Z 3. PREFLIGHT AND REHEARSAL PASSED. [CPUs in use 2.2, tokens 0, throttled so far 4837.8 s, load 5.33]
+2026-11-22T13:05:38Z TEST RUN END. Exit codes:
+  eval_p0.005_hierarchy: 0
+  eval_p0.005_hierarchy-parallel: 0
+  eval_p0.005_priortilt: 0
+  cand_p0.005: 0
+  tcbp_p0.005: 0
+  net_p0.005: 0
+  ensemble_p0.005: 0
+  eval_p0.004_hierarchy: 0
+  eval_p0.004_hierarchy-parallel: 0
+  eval_p0.004_priortilt: 0
+  cand_p0.004: 0
+  tcbp_p0.004: 0
+  net_p0.004: 0
+  ensemble_p0.004: 0
+  eval_p0.003_hierarchy: 0
+  eval_p0.003_hierarchy-parallel: 0
+  eval_p0.003_priortilt: 0
+  cand_p0.003: 0
+  tcbp_p0.003: 0
+  net_p0.003: 0
+  ensemble_p0.003: 0
+  eval_p0.004_hierarchy-converged: 0
+  eval_p0.003_hierarchy-converged: 0
+  joint_p0.003: 0
+  joint_p0.004: 0
+2026-11-22T13:05:43Z [CPUs in use 0.5, tokens 0, throttled so far 4845.0 s, load 2.64]

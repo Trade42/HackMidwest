@@ -1,0 +1,2 @@
+{"out": "loss_tracker/tables/X_p0.004_s1e-3.npz", "train_file": "train_X_p0.004_s1e-3_seed7100.npz", "train_sha256": "5d32f279bbfd4619bc2b45f9483d1344f44c4ef02476628db88162367751563e", "train_seed": 7100, "train_shots": 20000, "lost_data_atoms": 200376, "clean_triple_rounds_counted": 38038500, "of_them_in_lost_classes": 1315055, "clean_pairs_of_rounds_counted": 31921528, "smallest_lost_table_counts": 411, "median_lost_table_counts": 6274}
+d915ce275e58caa08d4b8e569502c894fb18a2b0223b534344a8be1154c30597  loss_tracker/tables/X_p0.004_s1e-3.npz

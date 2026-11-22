@@ -1,0 +1,20 @@
+## Our part: a hierarchical decoder with a learned tie-breaker, and a study of atom loss
+
+Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural
+network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`), though on the test shots that network is no better than the best hand-written tie-break, so the gain over relay-BP is PriorTilt's and the hierarchy's. On the test shots our decoder fails fewer pairs than relay-BP at p = 0.004 and 0.005, and as many within the error at p = 0.003; it is level with TCBP-JOBS at p = 0.003 and 0.004, and behind it at p = 0.005; our ensemble rule, frozen beforehand and combined offline from the saved answers of NVIDIA's, IonQ's and the kit's decoders, with no time measured as one decoder, fails 2 pairs against TCBP-JOBS's 3 at p = 0.003 (only the ensemble 0, only TCBP-JOBS 1, exact p = 1.00; joint decoding on 5 disputed shots, about 5 s each), fails 16 pairs against TCBP-JOBS's 41 at p = 0.004 (only the ensemble 1, only TCBP-JOBS 26, exact p = 4e-07; joint decoding on 93 disputed shots, about 24 s each), and equals TCBP-JOBS at p = 0.005 (joint decoding not run).
+Under atom loss (our own simplified model), relay-BP with the loss flags fails 4.4% of shots where a loss-blind one
+fails 57.7%; our loss-time tracker, which estimates from the syndrome when each atom was lost, recovers 58% (38% to 78%) of what knowing the true loss time would add (`loss/`, `loss_tracker/`).
+
+| Decoder | p = 0.003 | p = 0.004 | p = 0.005 |
+|---|---|---|---|
+| BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05, 131 ms | 4.02e-03 ± 1.8e-04, 302 ms | 2.30e-02 ± 4.6e-04, 581 ms |
+| relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05, 85.3 ms | 6.94e-04 ± 7.6e-05, 319 ms | 7.33e-03 ± 2.5e-04, 1,471 ms |
+| PriorTilt, one run | 3.33e-05 ± 1.7e-05, 22.7 ms | 6.19e-04 ± 7.2e-05, 87.3 ms | 5.15e-03 ± 2.1e-04, 264 ms |
+| our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05, 45.7 ms | 3.67e-04 ± 5.5e-05, 216 ms | 4.08e-03 ± 1.9e-04, 825 ms |
+| TCBP-JOBS (NVIDIA, GPU) | 2.50e-05 ± 1.4e-05, 3.9 ms | 3.42e-04 ± 5.3e-05, 7.8 ms | 3.05e-03 ± 1.6e-04, 16.9 ms |
+
+Test shots (10,000 pairs per p): logical error rate per cycle ± the kit's error, mean time per pair (CPU rows: the whole decode of a pair in one process; TCBP-JOBS: a GPU decode call alone, not comparable with the CPU rows). Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, exact p = 1e-11). TCBP-JOBS against relay-BP's timed row: 3 against 5 at p = 0.003 (exact p = 0.62), 41 against 83 at p = 0.004 (exact p = 4e-07), 360 against 845 at p = 0.005 (exact p = 1e-101).
+
+![Logical error rate per cycle against p](challenge-1-ml-decoder-kit/report/figures/ler_vs_p.png)
+
+Write-up, with every table made by a script from committed files: [report/REPORT.md](challenge-1-ml-decoder-kit/report/REPORT.md). Everything we built and why: [information.md](information.md).

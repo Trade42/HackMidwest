@@ -1,0 +1,36 @@
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 0..500 conditions ['exact', 'oracle-round'] workers 4
+  50/500 shots, 73s, failures so far exact=3 oracle-round=2
+  100/500 shots, 134s, failures so far exact=7 oracle-round=5
+  150/500 shots, 173s, failures so far exact=9 oracle-round=6
+  200/500 shots, 230s, failures so far exact=12 oracle-round=7
+  250/500 shots, 276s, failures so far exact=14 oracle-round=8
+  300/500 shots, 320s, failures so far exact=17 oracle-round=8
+  350/500 shots, 354s, failures so far exact=19 oracle-round=9
+  400/500 shots, 393s, failures so far exact=22 oracle-round=10
+  450/500 shots, 439s, failures so far exact=25 oracle-round=11
+  500/500 shots, 479s, failures so far exact=26 oracle-round=11
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/references/000000-000500.npz.tmp.npz in 479s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 500..1000 conditions ['exact', 'oracle-round'] workers 4
+  50/500 shots, 51s, failures so far exact=2 oracle-round=1
+  100/500 shots, 111s, failures so far exact=7 oracle-round=2
+  150/500 shots, 152s, failures so far exact=10 oracle-round=3
+  200/500 shots, 194s, failures so far exact=11 oracle-round=4
+  250/500 shots, 234s, failures so far exact=13 oracle-round=4
+  300/500 shots, 287s, failures so far exact=16 oracle-round=4
+  350/500 shots, 320s, failures so far exact=17 oracle-round=4
+  400/500 shots, 390s, failures so far exact=20 oracle-round=6
+  450/500 shots, 408s, failures so far exact=23 oracle-round=9
+  500/500 shots, 465s, failures so far exact=26 oracle-round=10
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/references/000500-001000.npz.tmp.npz in 465s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 1000..1500 conditions ['exact', 'oracle-round'] workers 4
+  50/500 shots, 38s, failures so far exact=1 oracle-round=1
+  100/500 shots, 63s, failures so far exact=4 oracle-round=4
+  150/500 shots, 84s, failures so far exact=7 oracle-round=5
+  200/500 shots, 112s, failures so far exact=7 oracle-round=5
+  250/500 shots, 139s, failures so far exact=10 oracle-round=7
+  300/500 shots, 157s, failures so far exact=11 oracle-round=7
+  350/500 shots, 170s, failures so far exact=11 oracle-round=7
+  400/500 shots, 194s, failures so far exact=11 oracle-round=7
+  450/500 shots, 217s, failures so far exact=13 oracle-round=9
+  500/500 shots, 259s, failures so far exact=17 oracle-round=10
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/references/001000-001500.npz.tmp.npz in 259s

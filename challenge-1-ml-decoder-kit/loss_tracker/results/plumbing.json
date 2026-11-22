@@ -1,0 +1,10 @@
+{
+ "shots_compared": 500,
+ "my_failures": 12,
+ "their_failures": 12,
+ "shots_with_equal_failed": 500,
+ "shots_with_equal_converged": 500,
+ "shots_with_equal_iterations": 500,
+ "shots_with_equal_wrong_mask": 500,
+ "passed": true
+}

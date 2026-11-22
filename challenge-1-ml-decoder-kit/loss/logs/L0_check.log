@@ -1,0 +1,101 @@
+{
+ "dataset": {
+  "basis": "X",
+  "p": 0.004,
+  "s": 0.0,
+  "shots": 10000,
+  "seed": 1000,
+  "chunk": 2000,
+  "probes": true,
+  "clifft": "0.13.0"
+ },
+ "stim_seed": 1000,
+ "shots": 10000,
+ "mean_detector_weight": {
+  "clifft": 232.7754,
+  "stim": 233.0142,
+  "z": -0.5983362394006018
+ },
+ "max_abs_detector_z": 3.6426794493817005,
+ "detectors": 1728,
+ "detectors_with_abs_z_over_4": 0,
+ "observable_flip_rate": {
+  "clifft": [
+   0.4947,
+   0.5065,
+   0.4993,
+   0.4974,
+   0.4993,
+   0.5034,
+   0.4971,
+   0.4976,
+   0.5019,
+   0.5007,
+   0.5059,
+   0.4927
+  ],
+  "stim": [
+   0.5011,
+   0.4938,
+   0.4958,
+   0.4936,
+   0.5005,
+   0.5,
+   0.4912,
+   0.4996,
+   0.4942,
+   0.4977,
+   0.4929,
+   0.4961
+  ]
+ },
+ "relay_bp_on_clifft": {
+  "failures": 64,
+  "shots": 10000,
+  "fail_fraction": 0.0064,
+  "wilson95": [
+   0.005015442791426394,
+   0.008163640406083566
+  ],
+  "unconverged": 27,
+  "mean_iterations": 541.6084
+ },
+ "references": {
+  "kit README, relay-BP X": {
+   "failures": 45,
+   "shots": 10000,
+   "wilson95": [
+    0.003364971283927114,
+    0.006015571107414427
+   ],
+   "z_vs_clifft": 1.8248494505226
+  },
+  "baselines.log (teammate), relay-BP X": {
+   "failures": 51,
+   "shots": 10000,
+   "wilson95": [
+    0.003881311075248742,
+    0.006698770518040723
+   ],
+   "z_vs_clifft": 1.2157565898999452
+  },
+  "relay-BP authors, X": {
+   "failures": 53,
+   "shots": 10000,
+   "wilson95": [
+    0.004054522879255925,
+    0.006925405114682846
+   ],
+   "z_vs_clifft": 1.0199380544682637
+  },
+  "the three pooled": {
+   "failures": 149,
+   "shots": 30000,
+   "wilson95": [
+    0.004232079337497021,
+    0.005828014443992729
+   ],
+   "z_vs_clifft": 1.7056009341372653
+  }
+ }
+}

@@ -1,0 +1,74 @@
+{
+ "dataset": {
+  "file": "/home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz",
+  "sha256": "378ee22c9cdf1f25ac44a72f68931f925c67e529ecb65485326afe44b4c3d532",
+  "basis": "X",
+  "p": 0.004,
+  "s": 0.001,
+  "shots": 20000,
+  "seed": 2300,
+  "chunk": 2000,
+  "probes": true,
+  "clifft": "0.13.0",
+  "lost_data_atoms_per_shot": 9.9891,
+  "check_heralds_per_shot": 10.35905
+ },
+ "reference": "starter",
+ "rows": [
+  {
+   "condition": "starter",
+   "shots": 4000,
+   "failures": 176,
+   "fail_fraction": 0.044,
+   "wilson95": [
+    0.03806966233588606,
+    0.05080534995811242
+   ],
+   "per_cycle": 0.0037427588466381057,
+   "per_cycle95": [
+    0.0032292119274580644,
+    0.004335689534886944
+   ],
+   "unconverged": 108,
+   "unconverged_but_right": 3,
+   "mean_iterations": 2338.5925,
+   "mean_decode_ms": 2159.0058061293093,
+   "median_decode_ms": 327.40071788430214,
+   "mean_build_ms": 13.752446053782478,
+   "mean_prior_ms": 0.7912869361462072
+  },
+  {
+   "condition": "exact",
+   "shots": 4000,
+   "failures": 189,
+   "fail_fraction": 0.04725,
+   "wilson95": [
+    0.04109801020318361,
+    0.05427076570933352
+   ],
+   "per_cycle": 0.0040254377191455415,
+   "per_cycle95": [
+    0.0034910927275427772,
+    0.004639120266802466
+   ],
+   "unconverged": 140,
+   "unconverged_but_right": 4,
+   "mean_iterations": 2609.22275,
+   "mean_decode_ms": 2398.4933233893244,
+   "median_decode_ms": 353.5512210801244,
+   "mean_build_ms": 13.486503571271896,
+   "mean_prior_ms": 1.1334419598570094,
+   "paired_shots": 4000,
+   "ref_failures": 176,
+   "cond_failures": 189,
+   "ref_only": 46,
+   "cond_only": 59,
+   "sign_test_p": 0.24143171756517745,
+   "ratio_ref_over_cond": 0.9312169312169312,
+   "ratio95": [
+    0.8341232227488151,
+    1.0416666666666667
+   ]
+  }
+ ]
+}

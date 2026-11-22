@@ -1,0 +1,9 @@
+# What hierarchy/ needs beyond ../requirements.txt.
+torch          # only for the plugin's "network" rule; the CPU build is enough
+pytest         # only for the tests
+# PriorTilt is not on PyPI, and its licence (CC BY-NC-SA 4.0) keeps its code out of this
+# repository. Clone it, pin the commit, build its Rust core from the clone, and name the clone:
+#   git clone https://github.com/ionq-publications/PriorTiltDecoder.git <clone>
+#   git -C <clone> checkout 8eefd37d694b5942fe60ec6d5c82ce97f3d2a450
+#   pip install <clone>/decoder          # the module priortilt_rs; needs a Rust toolchain, like relay-bp
+#   export PRIORTILT_REPO=<clone>        # the tuned schedule is read from <clone>/priortilt/params.py

@@ -1,0 +1,8 @@
+G1 run: {'host': 'luminaty', 'cpu': 'AMD Ryzen 7 7730U with Radeon Graphics', 'logical_cpus': 16, 'affinity': [0, 1, 2, 3, 8, 9, 10, 11, 12, 13, 14, 15], 'processes': 2, 'python': '3.12.15', 'numpy': '2.5.5', 'stim': '1.16.0', 'ldpc': '2.4.1', 'relay_bp': '0.2.2', 'nice': 15}
+dataset validation_X.npz p=0.004 X seed 201 shots 5000 sha256 b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d
+4 tasks, 0 already done, 4 to run on 2 processes
+[    132 s] 1/4 g1_kit p=0.004 X validation_X.npz shots 0..499:  131.0 s, mean iterations   674.4, failures 4
+[    138 s] 2/4 g1_leg1 p=0.004 X validation_X.npz shots 0..499:    6.0 s, mean iterations    31.3, failures 69
+[    144 s] 3/4 g1_leg1 p=0.004 X validation_X.npz shots 500..999:    5.5 s, mean iterations    28.8, failures 50
+[    147 s] 4/4 g1_kit p=0.004 X validation_X.npz shots 500..999:  146.3 s, mean iterations   748.6, failures 5
+G1 run done

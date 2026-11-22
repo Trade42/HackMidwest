@@ -1,0 +1,64 @@
+2026-11-22T10:23:42Z GO: the preflight and the rehearsal passed; frozen fd3aed3c0d1f2e9e8bd181bd22c9853a19e2dfc5; options {
+  "rule": {
+    "X": "network",
+    "Z": "network"
+  },
+  "seeds": [
+    1,
+    1001
+  ],
+  "checkpoints": {
+    "X": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt",
+    "Z": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt"
+  },
+  "device": "cpu",
+  "torch_threads": 1
+}
+2026-11-22T10:23:48Z START tcbp_p0.005 (serial mode). GPU processes: none: the GPU is idle [CPUs in use 2.3, tokens 1, throttled so far 4837.8 s, load 5.22]
+2026-11-22T10:23:59Z START eval_p0.005_hierarchy: weight 1, pid 213306; before it: tokens 1, CPUs in use 2.6, throttled so far 4837.8 s
+2026-11-22T10:24:39Z START eval_p0.004_hierarchy: weight 1, pid 213718; before it: tokens 2, CPUs in use 4.1, throttled so far 4837.8 s
+2026-11-22T10:25:19Z START eval_p0.003_hierarchy: weight 1, pid 214383; before it: tokens 3, CPUs in use 5.1, throttled so far 4837.8 s
+2026-11-22T10:25:59Z START eval_p0.005_hierarchy-parallel: weight 2, pid 215142; before it: tokens 4, CPUs in use 6.3, throttled so far 4837.8 s
+2026-11-22T10:26:39Z START eval_p0.004_hierarchy-parallel: weight 2, pid 215572; before it: tokens 6, CPUs in use 7.4, throttled so far 4837.8 s
+2026-11-22T10:28:48Z END tcbp_p0.005 exit 0:   failures 186 of 10000  1.860%  95% Wilson interval [1.613%, 2.144%]; the correction does not reproduce the syndrome on 0 shots   failures 177 of 10000  1.770%  95% Wilson interval [1.529%, 2.048%]; the correction does  [CPUs in use 8.3, tokens 8, throttled so far 4838.0 s, load 12.55]
+2026-11-22T10:28:54Z START tcbp_p0.004 (serial mode). GPU processes: none: the GPU is idle [CPUs in use 8.1, tokens 8, throttled so far 4838.0 s, load 12.27]
+2026-11-22T10:32:20Z END tcbp_p0.004 exit 0:   failures 20 of 10000  0.200%  95% Wilson interval [0.130%, 0.309%]; the correction does not reproduce the syndrome on 0 shots   failures 21 of 10000  0.210%  95% Wilson interval [0.137%, 0.321%]; the correction does no [CPUs in use 8.1, tokens 8, throttled so far 4838.0 s, load 12.52]
+2026-11-22T10:32:20Z START eval_p0.003_hierarchy-parallel: weight 2, pid 220548; before it: tokens 8, CPUs in use 8.6, throttled so far 4838.0 s
+2026-11-22T10:32:26Z START tcbp_p0.003 (serial mode). GPU processes: none: the GPU is idle [CPUs in use 8.6, tokens 10, throttled so far 4838.0 s, load 12.66]
+2026-11-22T10:33:16Z END eval_p0.003_hierarchy exit 0: row p=0.003 hierarchy exit 0: hierarchy.plugin:make_decoder,1,2,3,2.50034381590325e-05,1.4436707608145305e-05,45.73510396284983 [CPUs in use 9.7, tokens 10, throttled so far 4838.4 s, load 13.45]
+2026-11-22T10:35:12Z END tcbp_p0.003 exit 0:   failures 1 of 10000  0.010%  95% Wilson interval [0.002%, 0.057%]; the correction does not reproduce the syndrome on 0 shots   failures 2 of 10000  0.020%  95% Wilson interval [0.005%, 0.073%]; the correction does not  [CPUs in use 8.9, tokens 9, throttled so far 4839.0 s, load 14.15]
+2026-11-22T10:35:12Z START net_p0.005
+2026-11-22T10:35:43Z END net_p0.005 exit 0: X memory: failures 1885 of 10000 (always-0 would fail 9999) Z memory: failures 1810 of 10000 (always-0 would fail 9999) 
+2026-11-22T10:35:43Z START net_p0.004
+2026-11-22T10:36:14Z END net_p0.004 exit 0: X memory: failures 420 of 10000 (always-0 would fail 9993) Z memory: failures 434 of 10000 (always-0 would fail 9998) 
+2026-11-22T10:36:14Z START net_p0.003
+2026-11-22T10:36:45Z END net_p0.003 exit 0: X memory: failures 64 of 10000 (always-0 would fail 9996) Z memory: failures 59 of 10000 (always-0 would fail 9992) 
+2026-11-22T10:37:01Z START cand_p0.004: weight 2, pid 224632; before it: tokens 8, CPUs in use 8.5, throttled so far 4839.1 s
+2026-11-22T10:37:35Z END eval_p0.003_hierarchy-parallel exit 0: row p=0.003 hierarchy-parallel exit 0: hierarchy.plugin:make_decoder,1,2,3,2.50034381590325e-05,1.4436707608145305e-05,28.89913244624622 [CPUs in use 9.2, tokens 10, throttled so far 4839.1 s, load 15.19]
+2026-11-22T10:38:11Z START cand_p0.003: weight 1, pid 225750; before it: tokens 8, CPUs in use 8.8, throttled so far 4839.1 s
+2026-11-22T10:52:06Z END eval_p0.004_hierarchy-parallel exit 0: row p=0.004 hierarchy-parallel exit 0: hierarchy.plugin:make_decoder,18,26,44,0.00036740819646374767,5.53956189182081e-05,150.26713411582168 [CPUs in use 9.1, tokens 9, throttled so far 4840.7 s, load 15.00]
+2026-11-22T10:59:59Z END cand_p0.003 exit 0: wall time of this run: 1297 s [CPUs in use 7.9, tokens 7, throttled so far 4840.7 s, load 10.79]
+2026-11-22T11:01:02Z END eval_p0.004_hierarchy exit 0: row p=0.004 hierarchy exit 0: hierarchy.plugin:make_decoder,18,26,44,0.00036740819646374767,5.53956189182081e-05,216.4562748659635 [CPUs in use 6.7, tokens 6, throttled so far 4840.7 s, load 10.29]
+2026-11-22T11:01:24Z START cand_p0.005: weight 4, pid 245830; before it: tokens 5, CPUs in use 6.5, throttled so far 4840.7 s
+2026-11-22T11:19:03Z END cand_p0.004 exit 0: wall time of this run: 2512 s [CPUs in use 8.7, tokens 9, throttled so far 4844.7 s, load 12.33]
+2026-11-22T12:07:39Z END eval_p0.005_hierarchy-parallel exit 0: row p=0.005 hierarchy-parallel exit 0: hierarchy.plugin:make_decoder,245,238,479,0.004082079544122319,0.00018634410396356493,607.7329459226225 [CPUs in use 6.1, tokens 7, throttled so far 4844.9 s, load 10.55]
+2026-11-22T12:08:10Z START joint_p0.003: weight 4, pid 302948; before it: tokens 5, CPUs in use 6.1, throttled so far 4844.9 s
+2026-11-22T12:08:44Z END joint_p0.003 exit 0: wall time of this run: 22 s [CPUs in use 6.2, tokens 9, throttled so far 4844.9 s, load 10.44]
+2026-11-22T12:08:50Z START eval_p0.005_priortilt: weight 1, pid 303815; before it: tokens 9, CPUs in use 6.4, throttled so far 4844.9 s
+2026-11-22T12:09:10Z END ensemble_p0.003 exit 0: ensemble of p = 0.003: exit 0 [CPUs in use 7.1, tokens 6, throttled so far 4844.9 s, load 9.75]
+2026-11-22T12:24:02Z START joint_p0.004: weight 4, pid 316703; before it: tokens 6, CPUs in use 6.1, throttled so far 4844.9 s
+2026-11-22T12:27:17Z END cand_p0.005 exit 0: wall time of this run: 5143 s [CPUs in use 7.1, tokens 10, throttled so far 4844.9 s, load 11.89]
+2026-11-22T12:27:42Z START eval_p0.004_priortilt: weight 1, pid 319947; before it: tokens 6, CPUs in use 7.4, throttled so far 4844.9 s
+2026-11-22T12:27:42Z END ensemble_p0.005 exit 0: ensemble of p = 0.005: exit 0 [CPUs in use 7.2, tokens 7, throttled so far 4844.9 s, load 10.91]
+2026-11-22T12:28:22Z START eval_p0.003_priortilt: weight 1, pid 320650; before it: tokens 7, CPUs in use 8.1, throttled so far 4844.9 s
+2026-11-22T12:29:02Z START eval_p0.004_hierarchy-converged: weight 1, pid 321226; before it: tokens 8, CPUs in use 9.2, throttled so far 4844.9 s
+2026-11-22T12:32:20Z END eval_p0.003_priortilt exit 0: row p=0.003 priortilt exit 0: hierarchy.priortilt_plugin:make_decoder,2,2,4,3.3339446006586115e-05,1.6670973765342545e-05,22.669894187385218 [CPUs in use 9.1, tokens 9, throttled so far 4845.0 s, load 13.14]
+2026-11-22T12:32:43Z START eval_p0.003_hierarchy-converged: weight 1, pid 324594; before it: tokens 8, CPUs in use 9.3, throttled so far 4845.0 s
+2026-11-22T12:33:54Z END joint_p0.004 exit 0: wall time of this run: 583 s [CPUs in use 6.5, tokens 9, throttled so far 4845.0 s, load 12.28]
+2026-11-22T12:34:24Z END ensemble_p0.004 exit 0: ensemble of p = 0.004: exit 0 [CPUs in use 6.1, tokens 5, throttled so far 4845.0 s, load 11.88]
+2026-11-22T12:40:40Z END eval_p0.003_hierarchy-converged exit 0: row p=0.003 hierarchy-converged exit 0: hierarchy.plugin:make_decoder,2,2,4,3.3339446006586115e-05,1.6670973765342545e-05,46.25268501288956 [CPUs in use 5.3, tokens 5, throttled so far 4845.0 s, load 7.96]
+2026-11-22T12:41:45Z END eval_p0.005_hierarchy exit 0: row p=0.005 hierarchy exit 0: hierarchy.plugin:make_decoder,245,238,479,0.004082079544122319,0.00018634410396356493,824.5790748695493 [CPUs in use 4.3, tokens 4, throttled so far 4845.0 s, load 7.84]
+2026-11-22T12:42:26Z END eval_p0.004_priortilt exit 0: row p=0.004 priortilt exit 0: hierarchy.priortilt_plugin:make_decoder,35,39,74,0.0006187681363896136,7.193671407657032e-05,87.34766586812911 [CPUs in use 3.1, tokens 3, throttled so far 4845.0 s, load 7.96]
+2026-11-22T12:52:57Z END eval_p0.005_priortilt exit 0: row p=0.005 priortilt exit 0: hierarchy.priortilt_plugin:make_decoder,303,307,601,0.0051518329160300524,0.00020988230851526346,263.5825260659214 [CPUs in use 1.1, tokens 2, throttled so far 4845.0 s, load 7.00]
+2026-11-22T13:05:39Z END eval_p0.004_hierarchy-converged exit 0: row p=0.004 hierarchy-converged exit 0: hierarchy.plugin:make_decoder,25,27,52,0.00043436955529130294,6.0243168789386736e-05,218.29208202710143 [CPUs in use 0.1, tokens 1, throttled so far 4845.0 s, load 2.43]
+2026-11-22T13:05:43Z TEST RUN END

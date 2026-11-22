@@ -1,0 +1,114 @@
+{
+ "shots": 1500,
+ "conditions": [
+  "exact",
+  "tracker",
+  "oracle-round"
+ ],
+ "tables": {
+  "exact": [
+   {
+    "condition": "exact",
+    "shots": 1500,
+    "failures": 69,
+    "fail_fraction": 0.046,
+    "wilson95": [
+     0.036508722390357275,
+     0.057810700740064676
+    ],
+    "per_cycle": 0.003916610622698213,
+    "per_cycle95": [
+     0.0030945223970413327,
+     0.004950130020545562
+    ],
+    "unconverged": 40,
+    "unconverged_but_right": 0,
+    "mean_iterations": 2560.398,
+    "mean_decode_ms": 1908.5580924634512,
+    "median_decode_ms": 278.85864092968404,
+    "mean_build_ms": 10.744156858262917,
+    "mean_prior_ms": 0.7518765085066358
+   },
+   {
+    "condition": "tracker",
+    "shots": 1500,
+    "failures": 51,
+    "fail_fraction": 0.034,
+    "wilson95": [
+     0.025953769469057364,
+     0.044426959999613644
+    ],
+    "per_cycle": 0.0028784696366042084,
+    "per_cycle95": [
+     0.0021889766764898733,
+     0.0037798447153903902
+    ],
+    "unconverged": 33,
+    "unconverged_but_right": 1,
+    "mean_iterations": 2012.354,
+    "mean_decode_ms": 1899.284925533769,
+    "median_decode_ms": 300.70962896570563,
+    "mean_build_ms": 13.79662607765446,
+    "mean_prior_ms": 1.2615146230285366,
+    "paired_shots": 1500,
+    "ref_failures": 69,
+    "cond_failures": 51,
+    "ref_only": 29,
+    "cond_only": 11,
+    "sign_test_p": 0.006426576095691416,
+    "ratio_ref_over_cond": 1.3529411764705883,
+    "ratio95": [
+     1.1,
+     1.6666666666666667
+    ]
+   },
+   {
+    "condition": "oracle-round",
+    "shots": 1500,
+    "failures": 31,
+    "fail_fraction": 0.020666666666666667,
+    "wilson95": [
+     0.014597274127174951,
+     0.02918490682843941
+    ],
+    "per_cycle": 0.001738754188777114,
+    "per_cycle95": [
+     0.0012246547156034016,
+     0.002465227831123795
+    ],
+    "unconverged": 14,
+    "unconverged_but_right": 0,
+    "mean_iterations": 1528.2046666666668,
+    "mean_decode_ms": 1141.5360816561927,
+    "median_decode_ms": 186.8712129071355,
+    "mean_build_ms": 10.670248885949453,
+    "mean_prior_ms": 0.7976183497036496,
+    "paired_shots": 1500,
+    "ref_failures": 69,
+    "cond_failures": 31,
+    "ref_only": 43,
+    "cond_only": 5,
+    "sign_test_p": 1.3680484300948592e-08,
+    "ratio_ref_over_cond": 2.225806451612903,
+    "ratio95": [
+     1.6923076923076923,
+     3.0869565217391304
+    ]
+   }
+  ]
+ },
+ "gain_share": [
+  {
+   "condition": "tracker",
+   "reference": "exact",
+   "ref_failures": 69,
+   "cond_failures": 51,
+   "oracle_failures": 31,
+   "share": 0.47368421052631576,
+   "share95": [
+    0.1794871794871795,
+    0.7142857142857143
+   ]
+  }
+ ]
+}

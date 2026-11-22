@@ -1,0 +1,186 @@
+{
+  "classification": "held_out_paired_saved_shots",
+  "note": "Percent reductions use the same saved test shots. Negative values mean the candidate is worse. Separate runs may still experience system-load drift.",
+  "p": 0.003,
+  "cycles": 12,
+  "paired_shots": 10000,
+  "test_datasets": {
+    "X": {
+      "path": "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/data/p0.003/test_X.npz",
+      "sha256": "f7bc181399a0a8fd1324950c98a8419c0082d7c34940c03dfb34c9e2cefc1ff3",
+      "basis": "X",
+      "p": 0.003,
+      "seed": 301,
+      "shots": 10000,
+      "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+    },
+    "Z": {
+      "path": "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/data/p0.003/test_Z.npz",
+      "sha256": "f5ac5b336f4155870fd8a6792ad61e21d5d76f04e05a9c09419879b6512e7f49",
+      "basis": "Z",
+      "p": 0.003,
+      "seed": 302,
+      "shots": 10000,
+      "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+    }
+  },
+  "machine": {
+    "system": "Linux",
+    "release": "6.8.0-149-generic",
+    "machine": "x86_64",
+    "processor": "",
+    "python": "3.12.16",
+    "cpu_count": 24,
+    "workers": 1,
+    "thread_environment": {
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "MKL_NUM_THREADS": null,
+      "VECLIB_MAXIMUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": null,
+      "RAYON_NUM_THREADS": null
+    },
+    "native_decoder_threads": "not exposed by the installed decoder API",
+    "resource_note": "ru_maxrss is peak memory of this parent process only; it excludes other workers"
+  },
+  "package_versions": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "matplotlib": "3.11.2"
+  },
+  "reference": {
+    "decoder": "relay-bp",
+    "failures_pair": 5,
+    "per_cycle_rate": 4.167621832917856e-05,
+    "standard_error": 1.8639694121413974e-05,
+    "mean_total_pair_ms": 85.6875398133765,
+    "p99_total_pair_ms": 555.823113468944,
+    "configuration": {
+      "X": {
+        "alpha": 1.0,
+        "gamma0": 0.15,
+        "pre_iter": 80,
+        "num_sets": 300,
+        "set_max_iter": 60,
+        "gamma_dist_interval": [
+          -0.22628432386414646,
+          0.6216020925981884
+        ],
+        "stop_nconv": 5
+      },
+      "Z": {
+        "alpha": 1.0,
+        "gamma0": 0.15,
+        "pre_iter": 80,
+        "num_sets": 300,
+        "set_max_iter": 60,
+        "gamma_dist_interval": [
+          -0.22628432386414646,
+          0.6216020925981884
+        ],
+        "stop_nconv": 5
+      }
+    },
+    "summary_path": "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/results/icrn/eval_p0.003/summary.json",
+    "summary_sha256": "8b87fdee68f8d5a73c3aafece7d7639994bb9f4c3e4383a502fa133ddb2d1207",
+    "artifact_sha256": "d7b7010fce6ae5eb7246830048d3f3bab0346d7260bca4d1193e21705b3e58ed"
+  },
+  "candidate": {
+    "decoder": "evaluation.router:make_tiered_decoder",
+    "failures_pair": 6,
+    "per_cycle_rate": 5.001375527313723e-05,
+    "standard_error": 2.0419813083538685e-05,
+    "mean_total_pair_ms": 47.19642623496475,
+    "p99_total_pair_ms": 698.1620313227189,
+    "configuration": {
+      "X": {
+        "first_solution": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 1
+        },
+        "fallback": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 5
+        },
+        "router_sha256": "df9d59dfcad6bf17f760f8a0f03bd425ecadd2fb9583f69d3902f8c44bff5d5a",
+        "risk_threshold": 0.001217934842878629,
+        "routing_rule": "risk > threshold"
+      },
+      "Z": {
+        "first_solution": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 1
+        },
+        "fallback": {
+          "alpha": 1.0,
+          "gamma0": 0.15,
+          "pre_iter": 80,
+          "num_sets": 300,
+          "set_max_iter": 60,
+          "gamma_dist_interval": [
+            -0.22628432386414646,
+            0.6216020925981884
+          ],
+          "stop_nconv": 5
+        },
+        "router_sha256": "a96ae2c532bd3fa384563ece415ee493f775597a90f4eb0a5d360748f0381553",
+        "risk_threshold": 0.0006755862047272881,
+        "routing_rule": "risk > threshold"
+      }
+    },
+    "summary_path": "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/results/icrn/router_eval_p0.003_portable/summary.json",
+    "summary_sha256": "5033f015228aa979e780a90be7fcc3eeae3ddb89a19785285bf4531517a11778",
+    "artifact_sha256": "ab583ee1c0416146f1b21d6950a5e42b3bed73ba7b01bbb2627f3e8dbf1a713a"
+  },
+  "per_cycle_rate_reduction_percent": -20.00550260607823,
+  "mean_total_latency_reduction_percent": 44.92031590852488,
+  "p99_total_latency_reduction_percent": -25.60867196857366,
+  "paired_failures": {
+    "both_fail": 4,
+    "reference_only_fail": 1,
+    "candidate_only_fail": 2,
+    "neither_fail": 9993,
+    "exact_discordant_sign_test_p": 1.0,
+    "per_cycle_rate_reduction_bootstrap_95pct": [
+      -200.02750576922548,
+      40.00550155116409
+    ],
+    "bootstrap_defined_fraction": 0.9915
+  },
+  "mean_total_latency_reduction_bootstrap_95pct": [
+    39.49574282292161,
+    50.22336867027667
+  ],
+  "bootstrap": {
+    "repetitions": 2000,
+    "seed": 0,
+    "method": "resample paired shots; failure counts use equivalent multinomial outcomes"
+  }
+}

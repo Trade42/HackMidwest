@@ -1,0 +1,42 @@
+﻿basis X (validation_X + train_X): 25000 shots
+  a. P1 against P2: both fail 56, P1 only 46, P2 only 26, both right 24872 (McNemar exact p = 0.0245)
+     patterns (ok = right, x = wrong): R ok P1 ok P2 ok: 24816; R ok P1 ok P2 x: 15; R ok P1 x P2 ok: 32; R ok P1 x P2 x: 15; R x P1 ok P2 ok: 56; R x P1 ok P2 x: 11; R x P1 x P2 ok: 14; R x P1 x P2 x: 41
+  b. predictions not all equal: 165 shots (0.660%); failing shots inside that set: R 103 of 122, P1 83 of 102, P2 63 of 82
+  c. rule: failures, logical error, mean time per shot (sum of the decoders it runs)
+     R alone                                     122  0.488%   166.7 ms
+     P1 alone                                    102  0.408%    52.0 ms
+     P2 alone                                     82  0.328%    52.4 ms
+     lowest weight of R, P1, P2                   99  0.396%   271.1 ms
+     majority (ties: lowest weight)               73  0.292%   271.1 ms
+     P1 unless P1 != P2, then lowest weight       77  0.308%   118.0 ms
+     extra: lowest weight among converged         68  0.272%   271.1 ms
+     P1 unless P1 != P2, then lowest weight among converged   67  0.268%   118.0 ms
+  unconverged: R 57, P1 29, P2 18 | data sha256 b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d, 98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc
+basis Z (validation_Z + train_Z): 25000 shots
+  a. P1 against P2: both fail 64, P1 only 42, P2 only 43, both right 24851 (McNemar exact p = 1)
+     patterns (ok = right, x = wrong): R ok P1 ok P2 ok: 24805; R ok P1 ok P2 x: 29; R ok P1 x P2 ok: 28; R ok P1 x P2 x: 15; R x P1 ok P2 ok: 46; R x P1 ok P2 x: 14; R x P1 x P2 ok: 14; R x P1 x P2 x: 49
+  b. predictions not all equal: 174 shots (0.696%); failing shots inside that set: R 102 of 123, P1 85 of 106, P2 86 of 107
+  c. rule: failures, logical error, mean time per shot (sum of the decoders it runs)
+     R alone                                     123  0.492%   170.9 ms
+     P1 alone                                    106  0.424%    55.6 ms
+     P2 alone                                    107  0.428%    57.1 ms
+     lowest weight of R, P1, P2                  107  0.428%   283.6 ms
+     majority (ties: lowest weight)               85  0.340%   283.6 ms
+     P1 unless P1 != P2, then lowest weight       85  0.340%   130.6 ms
+     extra: lowest weight among converged         81  0.324%   283.6 ms
+     P1 unless P1 != P2, then lowest weight among converged   73  0.292%   130.6 ms
+  unconverged: R 45, P1 29, P2 37 | data sha256 843c4daf24e2b56c5988670550bbcdbac8f50b18dbb9d24beb64969146cb8e20, 14dce11586fa51256f476224d0fe3965e0562f2d8f68cba6192883a65fb6b24a
+pooled (validation_X + train_X + validation_Z + train_Z): 50000 shots
+  a. P1 against P2: both fail 120, P1 only 88, P2 only 69, both right 49723 (McNemar exact p = 0.151)
+     patterns (ok = right, x = wrong): R ok P1 ok P2 ok: 49621; R ok P1 ok P2 x: 44; R ok P1 x P2 ok: 60; R ok P1 x P2 x: 30; R x P1 ok P2 ok: 102; R x P1 ok P2 x: 25; R x P1 x P2 ok: 28; R x P1 x P2 x: 90
+  b. predictions not all equal: 339 shots (0.678%); failing shots inside that set: R 205 of 245, P1 168 of 208, P2 149 of 189
+  c. rule: failures, logical error, mean time per shot (sum of the decoders it runs)
+     R alone                                     245  0.490%   168.8 ms
+     P1 alone                                    208  0.416%    53.8 ms
+     P2 alone                                    189  0.378%    54.7 ms
+     lowest weight of R, P1, P2                  206  0.412%   277.4 ms
+     majority (ties: lowest weight)              158  0.316%   277.4 ms
+     P1 unless P1 != P2, then lowest weight      162  0.324%   124.3 ms
+     extra: lowest weight among converged        149  0.298%   277.4 ms
+     P1 unless P1 != P2, then lowest weight among converged  140  0.280%   124.3 ms
+  unconverged: R 102, P1 58, P2 55 | data sha256 all

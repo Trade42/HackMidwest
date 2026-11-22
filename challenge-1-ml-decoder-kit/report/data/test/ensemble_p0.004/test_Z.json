@@ -1,0 +1,603 @@
+{
+  "data_sha256": "b61c1325de8852385d19ee5ce4eb41ea939b668f83fb3e994ce0f590218b3d56",
+  "data_name": "test_Z.npz",
+  "basis": "Z",
+  "p": 0.004,
+  "shots": 10000,
+  "ablation": {
+    "a_against_aw": {
+      "failures_with_the_network": 25,
+      "failures_without": 31,
+      "both_fail": 22,
+      "only_the_network_rule_fails": 3,
+      "only_the_rule_without_fails": 9,
+      "p": 0.14599609375
+    },
+    "a_against_ac": {
+      "failures_with_the_network": 25,
+      "failures_without": 29,
+      "both_fail": 22,
+      "only_the_network_rule_fails": 3,
+      "only_the_rule_without_fails": 7,
+      "p": 0.34375
+    },
+    "b_against_bw": {
+      "failures_with_the_network": 17,
+      "failures_without": 24,
+      "both_fail": 12,
+      "only_the_network_rule_fails": 5,
+      "only_the_rule_without_fails": 12,
+      "p": 0.143463134765625
+    },
+    "h_against_f": {
+      "failures_with_the_network": 8,
+      "failures_without": 8,
+      "both_fail": 8,
+      "only_the_network_rule_fails": 0,
+      "only_the_rule_without_fails": 0,
+      "p": 1.0
+    },
+    "g_against_gw": {
+      "failures_with_the_network": 12,
+      "failures_without": 9,
+      "both_fail": 9,
+      "only_the_network_rule_fails": 3,
+      "only_the_rule_without_fails": 0,
+      "p": 0.25
+    }
+  },
+  "members": {
+    "R": {
+      "file": "/home/blakew3/mlBranchMidwest/runs/test/cand_p0.004/test_Z.chunks.npz",
+      "shots": 10000,
+      "times_from": "2 process(es) on AMD EPYC-Milan Processor"
+    },
+    "P1": {
+      "file": "/home/blakew3/mlBranchMidwest/runs/test/cand_p0.004/test_Z.chunks.npz",
+      "shots": 10000,
+      "times_from": "2 process(es) on AMD EPYC-Milan Processor"
+    },
+    "P2": {
+      "file": "/home/blakew3/mlBranchMidwest/runs/test/cand_p0.004/test_Z.chunks.npz",
+      "shots": 10000,
+      "times_from": "2 process(es) on AMD EPYC-Milan Processor"
+    },
+    "T": {
+      "file": "/home/blakew3/mlBranchMidwest/runs/test/tcbp_p0.004/test_Z.tcbp.npz",
+      "shots": 10000,
+      "times_from": "AMD EPYC-Milan Processor"
+    },
+    "J": {
+      "file": "/home/blakew3/mlBranchMidwest/runs/test/joint_p0.004/test_Z.joint.npz",
+      "shots": 44,
+      "times_from": "4 process(es) on AMD EPYC-Milan Processor"
+    }
+  },
+  "network_ms": 8.43985857674852,
+  "not_unanimous": 44,
+  "rows": [
+    {
+      "key": "R",
+      "kind": "member",
+      "row": "R alone",
+      "note": "",
+      "shots": 10000,
+      "failures": 48,
+      "wilson_95": [
+        0.0036224922258585365,
+        0.006357819766456965
+      ],
+      "ms_per_shot": 162.7805424308637,
+      "later_stage_shots": null,
+      "against_T": {
+        "both": 12,
+        "row_only": 36,
+        "reference_only": 9,
+        "p": 6.57466324582856e-05
+      }
+    },
+    {
+      "key": "P1",
+      "kind": "member",
+      "row": "P1 alone",
+      "note": "",
+      "shots": 10000,
+      "failures": 34,
+      "wilson_95": [
+        0.0024341818099404278,
+        0.004747205377829924
+      ],
+      "ms_per_shot": 45.82019975276199,
+      "later_stage_shots": null,
+      "against_R": {
+        "both": 26,
+        "row_only": 8,
+        "reference_only": 22,
+        "p": 0.016124801710247997
+      },
+      "against_T": {
+        "both": 13,
+        "row_only": 21,
+        "reference_only": 8,
+        "p": 0.0241195447742939
+      }
+    },
+    {
+      "key": "P2",
+      "kind": "member",
+      "row": "P2 alone",
+      "note": "",
+      "shots": 10000,
+      "failures": 33,
+      "wilson_95": [
+        0.0023508234033863653,
+        0.004630640584059333
+      ],
+      "ms_per_shot": 44.90634795789374,
+      "later_stage_shots": null,
+      "against_R": {
+        "both": 19,
+        "row_only": 14,
+        "reference_only": 29,
+        "p": 0.03153949735315109
+      },
+      "against_T": {
+        "both": 15,
+        "row_only": 18,
+        "reference_only": 6,
+        "p": 0.022655844688415527
+      }
+    },
+    {
+      "key": "T",
+      "kind": "member",
+      "row": "T alone",
+      "note": "",
+      "shots": 10000,
+      "failures": 21,
+      "wilson_95": [
+        0.001373991700452651,
+        0.0032083938830972042
+      ],
+      "ms_per_shot": 3.940454619296361,
+      "later_stage_shots": null,
+      "against_R": {
+        "both": 12,
+        "row_only": 9,
+        "reference_only": 36,
+        "p": 6.57466324582856e-05
+      }
+    },
+    {
+      "key": "J",
+      "kind": "member",
+      "row": "J alone (on the shots it decoded)",
+      "note": "",
+      "shots": 44,
+      "failures": 4,
+      "wilson_95": [
+        0.035922192977593276,
+        0.21159239286889966
+      ],
+      "ms_per_shot": 25149.735722119327,
+      "later_stage_shots": null
+    },
+    {
+      "key": "a",
+      "kind": "rule",
+      "row": "a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)",
+      "note": "",
+      "shots": 10000,
+      "failures": 25,
+      "wilson_95": [
+        0.0016939976060208126,
+        0.003688080778827657
+      ],
+      "ms_per_shot": 106.30373368094489,
+      "later_stage_shots": 36,
+      "against_R": {
+        "both": 21,
+        "row_only": 4,
+        "reference_only": 27,
+        "p": 3.39532271027565e-05
+      },
+      "against_T": {
+        "both": 12,
+        "row_only": 13,
+        "reference_only": 9,
+        "p": 0.5234670639038086
+      }
+    },
+    {
+      "key": "aw",
+      "kind": "rule",
+      "row": "aw: P1 where P1 = P2; else the lowest weight of R, P1, P2",
+      "note": "",
+      "shots": 10000,
+      "failures": 31,
+      "wilson_95": [
+        0.0021848645185329188,
+        0.004396753068263472
+      ],
+      "ms_per_shot": 106.27335019006858,
+      "later_stage_shots": 36,
+      "against_R": {
+        "both": 24,
+        "row_only": 7,
+        "reference_only": 24,
+        "p": 0.003326892852783203
+      },
+      "against_T": {
+        "both": 16,
+        "row_only": 15,
+        "reference_only": 5,
+        "p": 0.04138946533203125
+      }
+    },
+    {
+      "key": "ac",
+      "kind": "rule",
+      "row": "ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2",
+      "note": "",
+      "shots": 10000,
+      "failures": 29,
+      "wilson_95": [
+        0.0020199966278591753,
+        0.004161774558287908
+      ],
+      "ms_per_shot": 106.27335019006858,
+      "later_stage_shots": 36,
+      "against_R": {
+        "both": 22,
+        "row_only": 7,
+        "reference_only": 26,
+        "p": 0.0013187271542847157
+      },
+      "against_T": {
+        "both": 16,
+        "row_only": 13,
+        "reference_only": 5,
+        "p": 0.09625244140625
+      }
+    },
+    {
+      "key": "b",
+      "kind": "rule",
+      "row": "b: P1 where P1 = P2 = T; else the network among P1, P2, T, R",
+      "note": "",
+      "shots": 10000,
+      "failures": 17,
+      "wilson_95": [
+        0.0010617073572484384,
+        0.0027209854250028025
+      ],
+      "ms_per_shot": 114.06219789550127,
+      "later_stage_shots": 44,
+      "against_R": {
+        "both": 14,
+        "row_only": 3,
+        "reference_only": 34,
+        "p": 1.233129296451807e-07
+      },
+      "against_T": {
+        "both": 12,
+        "row_only": 5,
+        "reference_only": 9,
+        "p": 0.4239501953125
+      }
+    },
+    {
+      "key": "bw",
+      "kind": "rule",
+      "row": "bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R",
+      "note": "",
+      "shots": 10000,
+      "failures": 24,
+      "wilson_95": [
+        0.0016133788044076203,
+        0.0035687763801161955
+      ],
+      "ms_per_shot": 114.02506251776357,
+      "later_stage_shots": 44,
+      "against_R": {
+        "both": 16,
+        "row_only": 8,
+        "reference_only": 32,
+        "p": 0.0001821658297558315
+      },
+      "against_T": {
+        "both": 20,
+        "row_only": 4,
+        "reference_only": 1,
+        "p": 0.375
+      }
+    },
+    {
+      "key": "c",
+      "kind": "rule",
+      "row": "c: as b, with J among the candidates where it exists",
+      "note": "J exists on 44 of the 44 later-stage shots",
+      "shots": 10000,
+      "failures": 17,
+      "wilson_95": [
+        0.0010617073572484384,
+        0.0027209854250028025
+      ],
+      "ms_per_shot": 224.72103507282637,
+      "later_stage_shots": 44,
+      "against_R": {
+        "both": 13,
+        "row_only": 4,
+        "reference_only": 35,
+        "p": 3.353161446284503e-07
+      },
+      "against_T": {
+        "both": 11,
+        "row_only": 6,
+        "reference_only": 10,
+        "p": 0.454498291015625
+      }
+    },
+    {
+      "key": "d",
+      "kind": "rule",
+      "row": "d: majority of P1, P2, T; all differ: the network among P1, P2, T, R",
+      "note": "",
+      "shots": 10000,
+      "failures": 20,
+      "wilson_95": [
+        0.0012951117081714102,
+        0.003087350675053792
+      ],
+      "ms_per_shot": 102.43772545922664,
+      "later_stage_shots": 15,
+      "against_R": {
+        "both": 14,
+        "row_only": 6,
+        "reference_only": 34,
+        "p": 8.364584573428147e-06
+      },
+      "against_T": {
+        "both": 15,
+        "row_only": 5,
+        "reference_only": 6,
+        "p": 1.0
+      }
+    },
+    {
+      "key": "e",
+      "kind": "rule",
+      "row": "e: as d, with J among the candidates where it exists",
+      "note": "J exists on 15 of the 15 later-stage shots",
+      "shots": 10000,
+      "failures": 19,
+      "wilson_95": [
+        0.0012167441554196236,
+        0.002965795027480924
+      ],
+      "ms_per_shot": 151.12500857623644,
+      "later_stage_shots": 15,
+      "against_R": {
+        "both": 13,
+        "row_only": 6,
+        "reference_only": 35,
+        "p": 4.873598300036974e-06
+      },
+      "against_T": {
+        "both": 14,
+        "row_only": 5,
+        "reference_only": 7,
+        "p": 0.7744140625
+      }
+    },
+    {
+      "key": "f",
+      "kind": "rule",
+      "row": "f: P1 where P1 = P2 = T; else J where it converged, else T",
+      "note": "J exists on 44 of the 44 later-stage shots",
+      "shots": 10000,
+      "failures": 8,
+      "wilson_95": [
+        0.00040543371780303724,
+        0.0015779502615263213
+      ],
+      "ms_per_shot": 205.32583950727712,
+      "later_stage_shots": 44,
+      "against_R": {
+        "both": 6,
+        "row_only": 2,
+        "reference_only": 42,
+        "p": 1.1266365618212149e-10
+      },
+      "against_T": {
+        "both": 7,
+        "row_only": 1,
+        "reference_only": 14,
+        "p": 0.0009765625
+      }
+    },
+    {
+      "key": "h",
+      "kind": "rule",
+      "row": "h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R",
+      "note": "J exists on 44 of the 44 later-stage shots",
+      "shots": 10000,
+      "failures": 8,
+      "wilson_95": [
+        0.00040543371780303724,
+        0.0015779502615263213
+      ],
+      "ms_per_shot": 224.72103507282637,
+      "later_stage_shots": 44,
+      "against_R": {
+        "both": 6,
+        "row_only": 2,
+        "reference_only": 42,
+        "p": 1.1266365618212149e-10
+      },
+      "against_T": {
+        "both": 7,
+        "row_only": 1,
+        "reference_only": 14,
+        "p": 0.0009765625
+      }
+    },
+    {
+      "key": "g",
+      "kind": "rule",
+      "row": "g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network",
+      "note": "J exists on 44 of the 44 later-stage shots",
+      "shots": 10000,
+      "failures": 12,
+      "wilson_95": [
+        0.0006866043158218146,
+        0.0020964724648061582
+      ],
+      "ms_per_shot": 224.72103507282637,
+      "later_stage_shots": 44,
+      "against_R": {
+        "both": 11,
+        "row_only": 1,
+        "reference_only": 37,
+        "p": 2.837623469531536e-10
+      },
+      "against_T": {
+        "both": 10,
+        "row_only": 2,
+        "reference_only": 11,
+        "p": 0.0224609375
+      }
+    },
+    {
+      "key": "gw",
+      "kind": "rule",
+      "row": "gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order",
+      "note": "J exists on 44 of the 44 later-stage shots",
+      "shots": 10000,
+      "failures": 9,
+      "wilson_95": [
+        0.0004735770582653053,
+        0.001709730121388707
+      ],
+      "ms_per_shot": 224.68389969508863,
+      "later_stage_shots": 44,
+      "against_R": {
+        "both": 8,
+        "row_only": 1,
+        "reference_only": 40,
+        "p": 3.8198777474462986e-11
+      },
+      "against_T": {
+        "both": 7,
+        "row_only": 2,
+        "reference_only": 14,
+        "p": 0.004180908203125
+      }
+    },
+    {
+      "key": "oracle_R_P1_P2",
+      "kind": "oracle",
+      "row": "ORACLE (needs the truth): a perfect choice among R, P1, P2",
+      "note": "",
+      "shots": 10000,
+      "failures": 19,
+      "wilson_95": [
+        0.0012167441554196236,
+        0.002965795027480924
+      ],
+      "ms_per_shot": null,
+      "later_stage_shots": null,
+      "against_R": {
+        "both": 19,
+        "row_only": 0,
+        "reference_only": 29,
+        "p": 3.725290298461914e-09
+      },
+      "against_T": {
+        "both": 10,
+        "row_only": 9,
+        "reference_only": 11,
+        "p": 0.8238029479980469
+      }
+    },
+    {
+      "key": "oracle_P1_P2_T",
+      "kind": "oracle",
+      "row": "ORACLE (needs the truth): a perfect choice among P1, P2, T",
+      "note": "",
+      "shots": 10000,
+      "failures": 11,
+      "wilson_95": [
+        0.000614350651484294,
+        0.0019688029288190256
+      ],
+      "ms_per_shot": null,
+      "later_stage_shots": null,
+      "against_R": {
+        "both": 10,
+        "row_only": 1,
+        "reference_only": 38,
+        "p": 1.4551915228366852e-10
+      },
+      "against_T": {
+        "both": 11,
+        "row_only": 0,
+        "reference_only": 10,
+        "p": 0.001953125
+      }
+    },
+    {
+      "key": "oracle_P1_P2_T_R",
+      "kind": "oracle",
+      "row": "ORACLE (needs the truth): a perfect choice among P1, P2, T, R",
+      "note": "",
+      "shots": 10000,
+      "failures": 10,
+      "wilson_95": [
+        0.0005432859839604467,
+        0.0018399443960182191
+      ],
+      "ms_per_shot": null,
+      "later_stage_shots": null,
+      "against_R": {
+        "both": 10,
+        "row_only": 0,
+        "reference_only": 38,
+        "p": 7.275957614183426e-12
+      },
+      "against_T": {
+        "both": 10,
+        "row_only": 0,
+        "reference_only": 11,
+        "p": 0.0009765625
+      }
+    },
+    {
+      "key": "oracle_P1_P2_T_R_J",
+      "kind": "oracle",
+      "row": "ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J",
+      "note": "",
+      "shots": 10000,
+      "failures": 6,
+      "wilson_95": [
+        0.00027501347471946605,
+        0.0013085241039605853
+      ],
+      "ms_per_shot": null,
+      "later_stage_shots": null,
+      "against_R": {
+        "both": 6,
+        "row_only": 0,
+        "reference_only": 42,
+        "p": 4.547473508864641e-13
+      },
+      "against_T": {
+        "both": 6,
+        "row_only": 0,
+        "reference_only": 15,
+        "p": 6.103515625e-05
+      }
+    }
+  ],
+  "marked_rule": "f"
+}

@@ -1,0 +1,40 @@
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 0..500 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_order1_coupled2.npz
+  100/500 shots, 45s, failures so far tracker=4
+  200/500 shots, 76s, failures so far tracker=6
+  300/500 shots, 107s, failures so far tracker=7
+  400/500 shots, 131s, failures so far tracker=12
+  500/500 shots, 161s, failures so far tracker=15
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/soft/000000-000500.npz.tmp.npz in 161s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 500..1000 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_order1_coupled2.npz
+  100/500 shots, 44s, failures so far tracker=4
+  200/500 shots, 69s, failures so far tracker=6
+  300/500 shots, 91s, failures so far tracker=10
+  400/500 shots, 128s, failures so far tracker=14
+  500/500 shots, 168s, failures so far tracker=18
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/soft/000500-001000.npz.tmp.npz in 168s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 1000..1500 conditions ['tracker'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_order1_coupled2.npz
+  100/500 shots, 36s, failures so far tracker=3
+  200/500 shots, 65s, failures so far tracker=6
+  300/500 shots, 84s, failures so far tracker=7
+  400/500 shots, 104s, failures so far tracker=7
+  500/500 shots, 134s, failures so far tracker=12
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/soft/001000-001500.npz.tmp.npz in 134s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 0..500 conditions ['tracker-T2', 'tracker-T0.5', 'tracker-hard0.6', 'tracker-slot'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_order1_coupled2.npz
+  100/500 shots, 147s, failures so far tracker-T2=5 tracker-T0.5=5 tracker-hard0.6=5 tracker-slot=4
+  200/500 shots, 265s, failures so far tracker-T2=8 tracker-T0.5=10 tracker-hard0.6=7 tracker-slot=5
+  300/500 shots, 380s, failures so far tracker-T2=10 tracker-T0.5=11 tracker-hard0.6=9 tracker-slot=6
+  400/500 shots, 495s, failures so far tracker-T2=14 tracker-T0.5=14 tracker-hard0.6=14 tracker-slot=10
+  500/500 shots, 648s, failures so far tracker-T2=17 tracker-T0.5=20 tracker-hard0.6=17 tracker-slot=14
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/variants/000000-000500.npz.tmp.npz in 648s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 500..1000 conditions ['tracker-T2', 'tracker-T0.5', 'tracker-hard0.6', 'tracker-slot'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_order1_coupled2.npz
+  100/500 shots, 251s, failures so far tracker-T2=8 tracker-T0.5=6 tracker-hard0.6=5 tracker-slot=4
+  200/500 shots, 442s, failures so far tracker-T2=12 tracker-T0.5=9 tracker-hard0.6=10 tracker-slot=8
+  300/500 shots, 613s, failures so far tracker-T2=13 tracker-T0.5=13 tracker-hard0.6=13 tracker-slot=9
+  400/500 shots, 858s, failures so far tracker-T2=15 tracker-T0.5=16 tracker-hard0.6=15 tracker-slot=13
+  500/500 shots, 1136s, failures so far tracker-T2=20 tracker-T0.5=21 tracker-hard0.6=22 tracker-slot=19
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/variants/000500-001000.npz.tmp.npz in 1136s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 1250..1500 conditions ['tracker-T2', 'tracker-T0.5', 'tracker-hard0.6', 'tracker-slot'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_order1_coupled2.npz
+  100/250 shots, 116s, failures so far tracker-T2=0 tracker-T0.5=0 tracker-hard0.6=1 tracker-slot=0
+  200/250 shots, 272s, failures so far tracker-T2=2 tracker-T0.5=2 tracker-hard0.6=3 tracker-slot=2
+  250/250 shots, 438s, failures so far tracker-T2=4 tracker-T0.5=3 tracker-hard0.6=4 tracker-slot=4
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/variants/001250-001500.npz.tmp.npz in 438s

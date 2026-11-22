@@ -1,0 +1,173 @@
+{
+ "dataset": {
+  "file": "/home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz",
+  "sha256": "378ee22c9cdf1f25ac44a72f68931f925c67e529ecb65485326afe44b4c3d532",
+  "basis": "X",
+  "p": 0.004,
+  "s": 0.001,
+  "shots": 20000,
+  "seed": 2300,
+  "chunk": 2000,
+  "probes": true,
+  "clifft": "0.13.0",
+  "lost_data_atoms_per_shot": 9.9891,
+  "check_heralds_per_shot": 10.35905
+ },
+ "reference": "starter",
+ "rows": [
+  {
+   "condition": "starter",
+   "shots": 4000,
+   "failures": 176,
+   "fail_fraction": 0.044,
+   "wilson95": [
+    0.03806966233588606,
+    0.05080534995811242
+   ],
+   "per_cycle": 0.0037427588466381057,
+   "per_cycle95": [
+    0.0032292119274580644,
+    0.004335689534886944
+   ],
+   "unconverged": 108,
+   "unconverged_but_right": 3,
+   "mean_iterations": 2338.5925,
+   "mean_decode_ms": 2159.0058061293093,
+   "median_decode_ms": 327.40071788430214,
+   "mean_build_ms": 13.752446053782478,
+   "mean_prior_ms": 0.7912869361462072
+  },
+  {
+   "condition": "starter-oracle-round",
+   "shots": 2000,
+   "failures": 53,
+   "fail_fraction": 0.0265,
+   "wilson95": [
+    0.020316920372522668,
+    0.03449852343140893
+   ],
+   "per_cycle": 0.0022356184550962332,
+   "per_cycle95": [
+    0.0017090502204054614,
+    0.002921361809046452
+   ],
+   "unconverged": 31,
+   "unconverged_but_right": 1,
+   "mean_iterations": 1809.89,
+   "mean_decode_ms": 1707.254583642818,
+   "median_decode_ms": 263.7183933984488,
+   "mean_build_ms": 13.821960729081184,
+   "mean_prior_ms": 1.3640291253104806,
+   "paired_shots": 2000,
+   "ref_failures": 81,
+   "cond_failures": 53,
+   "ref_only": 42,
+   "cond_only": 14,
+   "sign_test_p": 0.00023444586091919684,
+   "ratio_ref_over_cond": 1.528301886792453,
+   "ratio95": [
+    1.2241379310344827,
+    1.9736842105263157
+   ]
+  },
+  {
+   "condition": "oracle-round",
+   "shots": 4000,
+   "failures": 107,
+   "fail_fraction": 0.02675,
+   "wilson95": [
+    0.02218561713525085,
+    0.03222249595276402
+   ],
+   "per_cycle": 0.002256973570661347,
+   "per_cycle95": [
+    0.0018678716467444012,
+    0.0027257009561924006
+   ],
+   "unconverged": 63,
+   "unconverged_but_right": 1,
+   "mean_iterations": 1654.9305,
+   "mean_decode_ms": 1521.2765194391832,
+   "median_decode_ms": 239.8430216126144,
+   "mean_build_ms": 13.640038462239318,
+   "mean_prior_ms": 1.2347686268622056,
+   "paired_shots": 4000,
+   "ref_failures": 176,
+   "cond_failures": 107,
+   "ref_only": 94,
+   "cond_only": 25,
+   "sign_test_p": 1.3416994462479385e-10,
+   "ratio_ref_over_cond": 1.644859813084112,
+   "ratio95": [
+    1.4193548387096775,
+    1.9361702127659575
+   ]
+  },
+  {
+   "condition": "exact",
+   "shots": 4000,
+   "failures": 189,
+   "fail_fraction": 0.04725,
+   "wilson95": [
+    0.04109801020318361,
+    0.05427076570933352
+   ],
+   "per_cycle": 0.0040254377191455415,
+   "per_cycle95": [
+    0.0034910927275427772,
+    0.004639120266802466
+   ],
+   "unconverged": 140,
+   "unconverged_but_right": 4,
+   "mean_iterations": 2609.22275,
+   "mean_decode_ms": 2398.4933233893244,
+   "median_decode_ms": 353.5512210801244,
+   "mean_build_ms": 13.486503571271896,
+   "mean_prior_ms": 1.1334419598570094,
+   "paired_shots": 4000,
+   "ref_failures": 176,
+   "cond_failures": 189,
+   "ref_only": 46,
+   "cond_only": 59,
+   "sign_test_p": 0.24143171756517745,
+   "ratio_ref_over_cond": 0.9312169312169312,
+   "ratio95": [
+    0.8341232227488151,
+    1.0416666666666667
+   ]
+  },
+  {
+   "condition": "starter@0.5/stop1",
+   "shots": 4000,
+   "failures": 200,
+   "fail_fraction": 0.05,
+   "wilson95": [
+    0.043667138293704756,
+    0.05719636068063586
+   ],
+   "per_cycle": 0.004265318777560645,
+   "per_cycle95": [
+    0.0037138569135298782,
+    0.004896078923225078
+   ],
+   "unconverged": 108,
+   "unconverged_but_right": 3,
+   "mean_iterations": 1025.9675,
+   "mean_decode_ms": 937.911535670748,
+   "median_decode_ms": 38.58169401064515,
+   "mean_build_ms": 13.55115321627818,
+   "mean_prior_ms": 0.7759300150210038,
+   "paired_shots": 4000,
+   "ref_failures": 176,
+   "cond_failures": 200,
+   "ref_only": 10,
+   "cond_only": 34,
+   "sign_test_p": 0.00038813090293388086,
+   "ratio_ref_over_cond": 0.88,
+   "ratio95": [
+    0.8203883495145631,
+    0.946078431372549
+   ]
+  }
+ ]
+}

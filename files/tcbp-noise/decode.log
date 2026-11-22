@@ -20,3 +20,6 @@ X_f0.8_seed4100_kitformat_p0.0326371.npz: 2000 shots, p=0.0326371 (the network's
   block 1500-1599 done, 476 s; failures so far m 19, g 773, h 166 of 1600; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   block 1600-1699 done, 500 s; failures so far m 19, g 821, h 176 of 1700; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   block 1700-1799 done, 524 s; failures so far m 19, g 861, h 186 of 1800; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1800-1899 done, 548 s; failures so far m 21, g 911, h 197 of 1900; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  block 1900-1999 done, 572 s; failures so far m 25, g 957, h 209 of 2000; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out-6569bd7/decode/per_shot.npz: 2000 shots scored; 572 s

@@ -1,3 +1,6 @@
 frozen checkout: /home/blakew3/mlBranchMidwest/clean-base at 472b18f server-jobs: ctl 040, the ensemble's exploration tables at p = 0.003 and 0.005 (validation files)
 Sun Nov 22 07:25:50 UTC 2026
 rows started in the background, pid 89090
+2026-11-22T07:25:50Z START p=0.005 relay-bp [load 6.38, evaluators 0, joint 0, loss.job 0, candidates 0, throttled so far 4578.0 s]
+2026-11-22T07:26:00Z START p=0.004 relay-bp [load 5.94, evaluators 1, joint 0, loss.job 0, candidates 0, throttled so far 4578.0 s]
+2026-11-22T07:26:10Z START p=0.005 bposd [load 6.09, evaluators 2, joint 0, loss.job 0, candidates 0, throttled so far 4578.0 s]

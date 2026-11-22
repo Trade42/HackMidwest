@@ -332,7 +332,9 @@ this run existed. The logits' sha256s were added in `f6482040` before the files 
 - **Knobs:** X's frozen file `76970106...`, unchanged.
 - **Arm:** the head arm only, once per file, `--final`.
 - **Server:** job cpu/110 (integration `2e9590f9`), checkout `f6482040`, A100, 1 process, 1 CPU thread, p = 0.004 and
-  then 0.003. It ran beside the speed job ctl/160 on the GPU slice.
+  then 0.003. It ran beside the speed job ctl/170 (tcbp-speed job 2) on the GPU slice. Correction: this line first
+  said ctl/160. The runner dates show cpu/110 ran 18:08:29 to 18:27:25 UTC, ctl/170 18:19:49 to 18:26:48, and ctl/160
+  18:00:52 to 18:05:24, before cpu/110 began.
 - **Inputs:** every input was checked by sha256 on the server, and every decoded row's logits hash equals luminaty's
   file on 10,000 of 10,000 shots at both p.
 - **Logs:** `logs/tcbp_test_Z_p0.00{4,3}_{decode.log,summary.json,score.log,score.json}` and

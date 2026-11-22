@@ -9,3 +9,25 @@ train_X_T_failed/logits.npy: OK
 train_X_T_right/logits.npy: OK
 logits.npy: OK
 Sun Nov 22 15:00:22 UTC 2026
+fit exit 1
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/blakew3/mlBranchMidwest/pred-tcbp-abb0560/challenge-1-ml-decoder-kit/predecoder/tcbp.py", line 521, in <module>
+    main()
+  File "/home/blakew3/mlBranchMidwest/pred-tcbp-abb0560/challenge-1-ml-decoder-kit/predecoder/tcbp.py", line 517, in main
+    {"decode": decode_command, "fit": fit_command, "probe": probe, "score": score_command}[args.command](args)
+  File "/home/blakew3/mlBranchMidwest/pred-tcbp-abb0560/challenge-1-ml-decoder-kit/predecoder/tcbp.py", line 372, in fit_command
+    rows, hashes = decode_shots(builder, problem, np.ascontiguousarray(data.basis_input[:shots], dtype=np.uint8),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/blakew3/mlBranchMidwest/pred-tcbp-abb0560/challenge-1-ml-decoder-kit/predecoder/tcbp.py", line 153, in decode_shots
+    error, flag, build, decode = decode_one(builder, priors, syndromes[k])
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/blakew3/mlBranchMidwest/pred-tcbp-abb0560/challenge-1-ml-decoder-kit/predecoder/tcbp.py", line 119, in decode_one
+    decoder = builder.build(priors)
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/blakew3/mlBranchMidwest/pred-tcbp-abb0560/challenge-1-ml-decoder-kit/predecoder/tcbp.py", line 111, in build
+    return self.qec.get_decoder("nv-qldpc-decoder", self.dense, error_rate_vec=np.asarray(priors, float), **self.options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: ERROR: osd_method=4 (JOBS) requires every error rate to be at most 0.5 (column 2652 has prior LLR -0.215245).
+Sun Nov 22 15:08:22 UTC 2026

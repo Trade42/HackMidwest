@@ -238,3 +238,34 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/data.npz shots 
 wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/parts/blind/000500-001000.npz.tmp.npz in 36s
 decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/data.npz shots 1000..1500 conditions ['blind'] workers 10
   50/500 shots, 7s, failures so far blind=0
+  100/500 shots, 12s, failures so far blind=0
+  150/500 shots, 15s, failures so far blind=3
+  200/500 shots, 19s, failures so far blind=8
+  250/500 shots, 23s, failures so far blind=8
+  300/500 shots, 25s, failures so far blind=11
+  350/500 shots, 27s, failures so far blind=12
+  400/500 shots, 31s, failures so far blind=13
+  450/500 shots, 34s, failures so far blind=15
+  500/500 shots, 41s, failures so far blind=19
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/parts/blind/001000-001500.npz.tmp.npz in 41s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/data.npz shots 1500..2000 conditions ['blind'] workers 10
+  50/500 shots, 8s, failures so far blind=0
+  100/500 shots, 9s, failures so far blind=0
+  150/500 shots, 12s, failures so far blind=2
+  200/500 shots, 16s, failures so far blind=4
+  250/500 shots, 17s, failures so far blind=4
+  300/500 shots, 19s, failures so far blind=6
+  350/500 shots, 22s, failures so far blind=6
+  400/500 shots, 24s, failures so far blind=9
+  450/500 shots, 29s, failures so far blind=11
+  500/500 shots, 35s, failures so far blind=14
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/parts/blind/001500-002000.npz.tmp.npz in 35s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/data.npz shots 2000..2500 conditions ['blind'] workers 10
+  50/500 shots, 7s, failures so far blind=1
+  100/500 shots, 10s, failures so far blind=1
+  150/500 shots, 14s, failures so far blind=3
+  200/500 shots, 17s, failures so far blind=4
+  250/500 shots, 19s, failures so far blind=4
+  300/500 shots, 22s, failures so far blind=5
+  350/500 shots, 24s, failures so far blind=5
+  400/500 shots, 27s, failures so far blind=6

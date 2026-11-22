@@ -13,5 +13,5 @@ while true; do
   date -u > updated.txt
   git add *.train.log *.out files nvidia-smi.txt updated.txt sync.sh 2>/dev/null
   git commit -q -m "logs $(date -u +%H:%M)" && git push -q origin server-logs
-  sleep 300
+  sleep 60
 done

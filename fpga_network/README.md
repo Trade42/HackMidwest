@@ -12,11 +12,13 @@ FPGA.** A time for the network is the tie-breaker's time on the shots that need 
 
 ## The three sentences
 
-1. The network does not fit inside the Urbana's chip: its weights need 7.15 Mb at 8 bits against the chip's 2.76 Mb of
-   block RAM, so on that board they would stream from its 128 MB DDR3 memory; only the largest Artix-7 (XC7A200T)
-   of the chips compared would hold weights and working values on the chip.
-2. In fixed point the network's answers survive: at 16 bits it changes PENDING of 5,000 validation answers, and at
-   PENDING bits, with the running sum and the small head kept at 16 bits, PENDING (simulated in software).
+1. The network does not fit inside the Urbana's chip: its weights need 10.7 Mb at 12 bits (7.15 Mb at 8) against the
+   chip's 2.76 Mb of block RAM, so on that board they and the working values would live in its 128 MB DDR3 memory;
+   of the 7-series chips compared, only the largest Artix-7 (XC7A200T) would hold it all, and only at 8 bits.
+2. Its numbers can be made small without changing what it does for us: with 12-bit weights and values (the running
+   sum and the small head kept at 16 bits) it gets as many of 5,000 validation shots wrong as at 16 bits (239; the
+   float network 237) and changes none of the 99 tie-break choices it makes in our decoder; 8 bits changes 7 of them
+   (simulated in software, on the final checkpoint).
 3. We built a 32-unit engine that walks the network layer by layer; in simulation it reproduces our integer reference
    bit for bit on whole shots, needs 22.7 million clocks per shot (0.23 s at an assumed 100 MHz, for the tie-breaker's
    rare shots only), and synthesises to 8,463 LUTs, 2,809 flip-flops and 73 DSP slices of the XC7S50, without its
@@ -26,28 +28,36 @@ FPGA.** A time for the network is the tie-breaker's time on the shots that need 
 
 ### 1. What it needs (`SIZING.md`, from `sizing.py`)
 
-Counted from the step-70,000 checkpoint: 893,697 weights; **493.5 million multiply-adds per shot** (PyTorch's counter
+Counted from the final checkpoint (step 120,000; the counts are those of the architecture): 893,697 weights; **493.5 million multiply-adds per shot** (PyTorch's counter
 finds 533.8 million, because the model computes and discards some products at the first and last rounds); the largest
-set of values kept at once is 354,816 numbers. Against the chips (AMD's DS180): at 8 bits the weights need 7.15 Mb and
-the XC7S50 has 2.76 Mb of block RAM. **Estimated** lower bound on time: multiply-adds / (DSP slices x 100 MHz) = 41 ms
+set of values kept at once is 354,816 numbers. Against the chips (AMD's DS180): the weights need 10.72 Mb at 12 bits and
+7.15 Mb at 8, one shot's values 5.22 or 4.76 Mb (the residual stream at 16 bits), and the XC7S50 has 2.76 Mb of block
+RAM. At 12 bits no chip compared holds both; at 8 bits only the XC7A200T (13.46 Mb). **Estimated** lower bound on time: multiply-adds / (DSP slices x 100 MHz) = 41 ms
 per shot on the XC7S50's 120 DSP slices, 6.7 ms on an XC7A200T's 740. Reading the weights from the Urbana's DDR3 once
 per shot: about 0.42 ms at the memory's peak rate (**estimated**).
 
 ### 2. Smaller numbers (`WIDTHS.md`, from `widths.py`)
 
-The final table (`WIDTHS.md`) is PENDING. A first table on the step-70,000 checkpoint (`WIDTHS_step70000.md`;
-1,000 validation shots per width, 500 for the narrowest, plus 75 tie-break shots of `train_X.npz`; **simulated** in
-software) says:
+On the final checkpoint (step 120,000), the team's `data/p0.004/validation_X.npz` (5,000 Stim shots, seed 201) and
+99 tie-break shots (24 of that file and 75 of `train_X.npz`), **simulated** in software (`WIDTHS.md` has the table
+and its reading; `WIDTHS_step70000.md` a first table on step 70,000):
 
-- **The float network here equals the laptop's**: 526 of 5,000 validation shots wrong, as on the laptop's GPU and in
-  `SCORES.md`; largest logit difference 0.0011, no bit of different sign.
-- **16 bits** changes 2 of 1,000 answers, and the largest float |logit| among the flipped bits is 0.011: rounding at
-  the decision boundary, not an error. It changes none of the 79 tie-break choices.
-- **12 bits** changes 16 answers, the network alone fails as often (110 against 110), and no tie-break choice changes.
-- **8 bits** (weights and values; stream and head at 16) with percentile ranges changes 79 answers and the network alone
-  fails 127 times against 110, but only 2 of 79 tie-break choices change and the tie-break fails as often as before.
-- **With ranges from the largest value seen, 10 bits and below break** (10 bits: 30% of shots wrong; 6 and 4 bits:
-  nearly every shot). Percentile ranges at those widths are in the final table.
+| weights and values (stream and head 16) | network wrong alone, of 5,000 | answers changed | tie-break choices changed, of 99 |
+|---|---:|---:|---:|
+| float (as `neural.evaluate_stim` runs it; equals the laptop's GPU run: 237) | 237 | | |
+| 16 bits | 239 | 14 | 0 |
+| **12 bits** (percentile ranges) | 239 | 58 | **0** |
+| 10 bits (percentile ranges) | 238 | 95 | 1 (no tie-break failure more) |
+| 8 bits (percentile ranges) | 239 | 208 | 7 (one tie-break failure more, on train shots) |
+| 6 and 4 bits | 412 and 500, of 500 | | |
+
+- **The smallest width that changes nothing that matters is 12 bits.** With none of 99 choices changed, the true
+  share is below 3.7% (95% Wilson interval).
+- At 16 bits, 12 of the 14 changed answers are bits within 0.08 of zero; the other two are shots where the float
+  network itself swings by 3 to 6 under a nudge of the size of the rounding (`logs/w16_changes_final.log`): the
+  network's sensitivity, not an error. This stays inside the brief's limit of a few shots in a thousand.
+- Ranges must let the rarest values saturate: set by the largest value seen, 10 bits already breaks the network
+  (42% of shots wrong); set by the 99.99th percentile, it works.
 
 How the fixed-point network is made (`fixed_point.py`): every batch normalisation that follows a linear step is folded
 into it (the folded network gives the model's logits to within 4.5e-5); the two that act on the residual stream stay
@@ -110,7 +120,7 @@ save most of the 17%; using all 120 DSP slices as lanes would move the time towa
 - No FPGA ran any of this; there is no bitstream and no timing result (no placement and routing).
 - The memories were not built: the engine reads them as ports. On the Urbana the weights would have to stream from DDR3
   (`SIZING.md`); no memory controller exists here.
-- Only one checkpoint was used for the hardware tests (step 70,000); the width table is PENDING for the final one.
+- The engine's tests ran mostly on the step-70,000 checkpoint, and on the final one for shot 3714 at 12 and 16 bits.
 - The SiLU tables are exact tables; at 16 bits one has 65,536 entries (1 Mb). A real design would approximate SiLU.
 
 ## Commands

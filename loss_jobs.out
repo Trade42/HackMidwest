@@ -957,3 +957,25 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 
   450/500 shots, 27s, failures so far starter=3 starter@0.5/stop1=3
   500/500 shots, 32s, failures so far starter=5 starter@0.5/stop1=5
 wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/parts/starter+startercap0.5_stop1/006000-006500.npz.tmp.npz in 32s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 6500..7000 conditions ['starter', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 6s, failures so far starter=0 starter@0.5/stop1=0
+  100/500 shots, 8s, failures so far starter=0 starter@0.5/stop1=0
+  150/500 shots, 12s, failures so far starter=0 starter@0.5/stop1=1
+  200/500 shots, 13s, failures so far starter=0 starter@0.5/stop1=1
+  250/500 shots, 16s, failures so far starter=2 starter@0.5/stop1=2
+  300/500 shots, 19s, failures so far starter=2 starter@0.5/stop1=2
+  350/500 shots, 21s, failures so far starter=3 starter@0.5/stop1=3
+  400/500 shots, 23s, failures so far starter=3 starter@0.5/stop1=3
+  450/500 shots, 24s, failures so far starter=3 starter@0.5/stop1=3
+  500/500 shots, 32s, failures so far starter=4 starter@0.5/stop1=4
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/parts/starter+startercap0.5_stop1/006500-007000.npz.tmp.npz in 32s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 7000..7500 conditions ['starter', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 8s, failures so far starter=0 starter@0.5/stop1=0
+  100/500 shots, 9s, failures so far starter=0 starter@0.5/stop1=0
+  150/500 shots, 11s, failures so far starter=0 starter@0.5/stop1=2
+  200/500 shots, 12s, failures so far starter=0 starter@0.5/stop1=2
+  250/500 shots, 16s, failures so far starter=0 starter@0.5/stop1=2
+  300/500 shots, 19s, failures so far starter=0 starter@0.5/stop1=3
+  350/500 shots, 22s, failures so far starter=0 starter@0.5/stop1=3
+  400/500 shots, 24s, failures so far starter=1 starter@0.5/stop1=3
+  450/500 shots, 26s, failures so far starter=4 starter@0.5/stop1=6

@@ -141,7 +141,8 @@ def test_scripts_on_a_stand_in(tmp_path):
     assert "4 / 2 / 1 (p = 1.00)" in table                       # the router against relay-BP, as in the team's comparison.json
     assert "our hierarchy, neural tie-break | ours | not measured" in table
     assert "PriorTilt, one run (from per-shot files, not a timed evaluator row)" in table      # the offline combination stands in
-    assert "6.0 CPUs busy on average" in table and "held the notebook back for 61 s" in table
+    assert "6.0 CPUs busy on average" in table and "held the notebook back for 61 s of the row's 3,600 s (1.7%)" in table
+    assert "time not clean" not in table
     ladder = (tmp_path / "tables" / "test_ladder.md").read_text()
     assert "ORACLE: a perfect tie-break" in ladder and "| 0.004 | every rung | not measured" in ladder
     facts = (tmp_path / "tables" / "facts.md").read_text()

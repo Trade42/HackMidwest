@@ -1,10 +1,10 @@
-Times on the test shots, each beside the row's failures, so that a time is never read without its accuracy. "Mean time ÷ relay-BP's" below 1 means faster than relay-BP on average. One process per row on the team's server; a row on two cores or on a GPU says so.
+Times on the test shots, each beside the row's failures, so that a time is never read without its accuracy. "Mean time ÷ relay-BP's" below 1 means faster than relay-BP on average. One process per row on the team's server; a row on two cores or on a GPU says so. A time is marked "not clean" when the server's CPU quota throttled it for more than 5% of the row's wall time; it is then given no ratio and is not drawn in the time figures.
 
 | p | Decoder | Failed pairs | Mean time per pair, ms | Mean time ÷ relay-BP's | Median, ms | 99th percentile, ms | Runs on |
 |---|---|---|---|---|---|---|---|
 | 0.003 | BP-OSD (kit baseline) | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | relay-BP (kit baseline) | not measured | not measured | not measured | not measured | not measured | not measured |
-| 0.003 | relay-BP with a learned router | 6 of 10,000 | 42.5 | relay-BP not measured yet | 9.5 | 627 | CPU, 1 core |
+| 0.003 | relay-BP with a learned router | 6 of 10,000 | 42.5 (not clean) | time not clean | 9.5 | 627 | CPU, 1 core |
 | 0.003 | PriorTilt, one run | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured | not measured | not measured |

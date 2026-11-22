@@ -352,7 +352,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_relay_bp_xz` | not measured | `tables/test_p0.003.md` |
 | `t3_router_both` | not measured | `tables/test_p0.003.md` |
 | `t3_router_error` | 2.0e-05 | `tables/test_p0.003.md` |
-| `t3_router_mean_ms` | 42.5 | `tables/test_p0.003.md` |
+| `t3_router_mean_ms` | 42.5 (not clean) | `tables/test_p0.003.md` |
 | `t3_router_median_ms` | 9.5 | `tables/test_p0.003.md` |
 | `t3_router_only_relay` | not measured | `tables/test_p0.003.md` |
 | `t3_router_only_this` | not measured | `tables/test_p0.003.md` |

@@ -154,6 +154,11 @@ def missing_note(measured, own):
     return " ".join(parts)
 
 
+def unclean_note(measured):
+    rows = [f"{DECODERS[key].short} at p = {p}" for p in P_VALUES for key, row in measured[p].items() if row and not row.get("time_clean", True)]
+    return (" Not drawn, the time not clean (the server throttled the row): " + "; ".join(rows) + ".") if rows else ""
+
+
 DODGE = {key: (index - (len(DECODERS) - 1) / 2) * 0.000016 for index, key in enumerate(DECODERS)}
 
 
@@ -220,7 +225,7 @@ def time_vs_p(measured):
     labels, values, lines = [], [], series(measured)
     for key, points in lines.items():
         decoder = DECODERS[key]
-        points = [(p, row) for p, row in points if row["mean_ms"] is not None and not row.get("offline")]   # only rows timed in one process
+        points = [(p, row) for p, row in points if row["mean_ms"] is not None and not row.get("offline") and row.get("time_clean", True)]   # timed in one process, not throttled
         if not points:
             continue
         hollow = key == "hierarchy-weight"
@@ -248,7 +253,7 @@ def time_vs_p(measured):
     axes.set_ylabel("mean time per pair")
     p_axis(axes)
     end_labels(axes, labels)
-    note = missing_note(measured, own)
+    note = missing_note(measured, own) + unclean_note(measured)
     if not lines["tcbp"]:
         note += (" TCBP-JOBS: only its p = 0.003 time on its own shots is usable; at p = 0.004 and 0.005 its GPU was shared with a training of ours."
                  if own else " TCBP-JOBS has no usable time yet.")
@@ -264,7 +269,7 @@ def ler_vs_time(measured):
     labels, xs_all, ys_all = [], [], []
     for key, points in series(measured).items():
         decoder = DECODERS[key]
-        points = [(p, row) for p, row in points if row["mean_ms"] is not None and row["rate"] > 0 and not row.get("offline")]
+        points = [(p, row) for p, row in points if row["mean_ms"] is not None and row["rate"] > 0 and not row.get("offline") and row.get("time_clean", True)]
         if not points:
             continue
         hollow = key == "hierarchy-weight"
@@ -294,7 +299,7 @@ def ler_vs_time(measured):
     axes.set_xlabel("mean time per pair")
     axes.set_ylabel("logical error rate per cycle")
     end_labels(axes, labels)
-    footnote(figure, (missing_note(measured, {}) + " CPU rows: one process each on the server; a GPU row is marked. "
+    footnote(figure, (missing_note(measured, {}) + unclean_note(measured) + " CPU rows: one process each on the server; a GPU row is marked. "
                       "Rows combined offline from per-shot files have no time measured in one process and are not drawn.").strip())
     return save(figure, "ler_vs_time")
 

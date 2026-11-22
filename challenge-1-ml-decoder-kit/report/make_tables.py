@@ -35,6 +35,9 @@ HERE = Path(__file__).resolve().parent
 TABLES = Path(os.environ.get("REPORT_OUT") or HERE) / "tables"
 DOCUMENTS = [] if os.environ.get("REPORT_OUT") else [HERE / "REPORT.md", HERE / "APPENDIX.md", HERE / "SLIDES.md", HERE / "REPRODUCE.md"]
 NOT_MEASURED = "not measured"
+# A timed row's time is "not clean" when the notebook's CPU quota throttled it for more than this share of the row's
+# own wall time (the job's START and END lines give the throttled seconds; the counts are not affected, only the time).
+THROTTLE_LIMIT = 0.05
 
 # Single numbers that the prose of REPORT.md and SLIDES.md quotes. A document writes
 # <!--f:name-->value<!--/f--> and this script puts the current value between the two comments,
@@ -144,6 +147,11 @@ def load_test_rows(data=DATA):
                 row["during"] = loaders.machine_during(monitor, run["start"], run["end"]) if run and run["start"] and run["end"] else None
                 if row["during"] and {"START", "END"} <= set(run["state"]):     # the job's own lines give the seconds throttled during the row exactly
                     row["during"]["throttled_s"] = run["state"]["END"]["throttled_s"] - run["state"]["START"]["throttled_s"]
+                if row["during"] and run["end"] and run["start"]:
+                    wall = (run["end"] - run["start"]).total_seconds()
+                    row["during"]["wall_s"] = wall
+                    row["throttle_share"] = row["during"]["throttled_s"] / wall if wall else None
+                row["time_clean"] = not (row.get("throttle_share") is not None and row["throttle_share"] > THROTTLE_LIMIT)
                 row["beside"] = run["beside"] if run else None
                 row["run"] = run
                 row["jobs_beside"] = (sorted(name for name, job in jobs.items() if job["start"] and run["start"] <= job["start"] < (run["end"] or datetime.max))
@@ -171,7 +179,10 @@ def where_text(row):
         others = ", ".join(f"{kind.replace('_', ' ')} {count}" for kind, count in during["other_max"].items() if count)
         text += (f"; while it ran: {during['cpus_mean']:.1f} CPUs busy on average (at most {during['cpus_max']:.1f}), up to {during['evaluators_max']} "
                  f"evaluator rows at once" + (f", other work of ours at most: {others}" if others else "")
-                 + f", the CPU quota held the notebook back for {during['throttled_s']:,.0f} s in all")
+                 + f", the CPU quota held the notebook back for {during['throttled_s']:,.0f} s"
+                 + (f" of the row's {during['wall_s']:,.0f} s ({during['throttled_s'] / during['wall_s']:.1%})" if during.get("wall_s") else " in all"))
+        if not row.get("time_clean", True):
+            text += f"; **time not clean** (throttled more than {THROTTLE_LIMIT:.0%} of its wall time): the counts stand, the time does not"
     elif row.get("beside") is not None:
         text += f"; {len(row['beside'])} other evaluator rows running beside it" if row["beside"] else "; no other evaluator row beside it"
     if row.get("jobs_beside"):
@@ -199,7 +210,7 @@ def test_tables(measured):
     for p in P_VALUES:
         lines = []
         base = measured[p].get(REFERENCE)
-        base_ms = base["mean_ms"] if base and not base.get("offline") else None
+        base_ms = base["mean_ms"] if base and not base.get("offline") and base.get("time_clean", True) else None
         for key, row in measured[p].items():
             decoder = DECODERS[key]
             record = {"p": p, "decoder": key, "label": decoder.label, "built_by": decoder.whose, "measured": row is not None}
@@ -208,16 +219,20 @@ def test_tables(measured):
                 time_lines.append([p, decoder.label] + [NOT_MEASURED] * 6)
             else:
                 timed = row["mean_ms"] is not None and row["median_ms"] is not None and not row.get("offline")
-                ratio = row["mean_ms"] / base_ms if timed and base_ms else None
-                ratio_text = ("the reference" if key == REFERENCE and timed else f"{ratio:.2f}" if ratio is not None
-                              else "relay-BP not measured yet" if timed and base is None else NOT_MEASURED if timed else "not timed in one process")
+                clean = row.get("time_clean", True)
+                ratio = row["mean_ms"] / base_ms if timed and clean and base_ms else None
+                ratio_text = ("time not clean" if timed and not clean
+                              else "the reference" if key == REFERENCE and timed else f"{ratio:.2f}" if ratio is not None
+                              else "relay-BP not measured yet" if timed and base is None
+                              else "relay-BP's time not clean" if timed and base is not None and not base.get("time_clean", True)
+                              else NOT_MEASURED if timed else "not timed in one process")
                 times = (NOT_MEASURED if row["mean_ms"] is None else f"{ms(row['mean_ms'])} / not timed per pair" if row["median_ms"] is None
-                         else " / ".join(ms(row[name]) for name in ("mean_ms", "median_ms", "p99_ms")))
+                         else " / ".join(ms(row[name]) for name in ("mean_ms", "median_ms", "p99_ms")) + ("" if clean else " (not clean)"))
                 lines.append([decoder.label + row["label_note"], decoder.whose, f"{row['failures_X']}, {row['failures_Z']}",
                               f"{row['failures_pair']} of {row['shots']:,}", rate_text(row["rate"], row["error"]),
                               interval_text(*row["interval"]), times, ratio_text, paired_text(row, key, base), where_text(row)])
                 time_lines.append([p, decoder.label + row["label_note"], f"{row['failures_pair']} of {row['shots']:,}",
-                                   "not timed in one process" if not timed else ms(row["mean_ms"]), ratio_text if timed else "",
+                                   "not timed in one process" if not timed else ms(row["mean_ms"]) + ("" if clean else " (not clean)"), ratio_text if timed else "",
                                    ms(row["median_ms"]) if timed else "", ms(row["p99_ms"]) if timed else "",
                                    "" if not timed else f"{row['device']}, {row.get('cores', 1)} core" + ("s" if row.get("cores", 1) > 1 else "")])
                 paired = row.get("paired") or {}
@@ -225,7 +240,8 @@ def test_tables(measured):
                            "failures_pair": row["failures_pair"], "rate_per_cycle": row["rate"], "kit_error": row["error"],
                            "wilson95_low": row["interval"][0], "wilson95_high": row["interval"][1],
                            "mean_ms_per_pair": row["mean_ms"], "median_ms_per_pair": row["median_ms"], "p99_ms_per_pair": row["p99_ms"],
-                           "mean_time_over_relay_bp": ratio, "both_fail": paired.get("both"), "only_this_row_fails": paired.get("row_only"),
+                           "mean_time_over_relay_bp": ratio, "time_clean": clean if row is not None else None,
+                           "throttled_share_of_wall_time": row.get("throttle_share"), "both_fail": paired.get("both"), "only_this_row_fails": paired.get("row_only"),
                            "only_relay_bp_fails": paired.get("reference_only"), "exact_p": paired.get("p"),
                            "device": row["device"], "processes": row["workers"], "machine": row["site"],
                            "rows_beside": "; ".join(row["beside"]) if row.get("beside") else "",
@@ -239,7 +255,7 @@ def test_tables(measured):
             fact(f"{short}_xz", row and f"{row['failures_X']}, {row['failures_Z']}", source)
             fact(f"{short}_rate", row and stats.sci(row["rate"]), source)
             fact(f"{short}_error", row and stats.sci(row["error"], 1), source)
-            fact(f"{short}_mean_ms", row and row["mean_ms"] is not None and ms(row["mean_ms"]) or None, source)
+            fact(f"{short}_mean_ms", row and row["mean_ms"] is not None and (ms(row["mean_ms"]) + ("" if row.get("time_clean", True) else " (not clean)")) or None, source)
             fact(f"{short}_median_ms", row and row["median_ms"] is not None and ms(row["median_ms"]) or None, source)
             fact(f"{short}_p99_ms", row and row["p99_ms"] is not None and ms(row["p99_ms"]) or None, source)
             fact(f"{short}_both", paired.get("both"), source)
@@ -247,14 +263,16 @@ def test_tables(measured):
             fact(f"{short}_only_relay", paired.get("reference_only"), source)
             fact(f"{short}_paired_p", stats.p_text(paired["p"]) if paired else None, source)
             fact(f"{short}_wall_hours", row and row.get("wall_seconds") and f"{row['wall_seconds'] / 3600:.1f}", source)
-            fact(f"{short}_time_ratio", f"{row['mean_ms'] / base_ms:.2f}" if row and base_ms and row["mean_ms"] is not None and not row.get("offline") else None, source)
+            fact(f"{short}_time_ratio", f"{row['mean_ms'] / base_ms:.2f}" if row and base_ms and row["mean_ms"] is not None and not row.get("offline")
+                 and row.get("time_clean", True) else None, source)
         note = (f"Test shots, p = {p}: `data/p{p}/test_X.npz` and `test_Z.npz` (10,000 shots per basis, Stim seeds 301 and 302; "
                 f"sha256 `{TEST_SHA256[p]['X'][:12]}…` and `{TEST_SHA256[p]['Z'][:12]}…`). Every measured row decoded these two files.")
         texts[p] = write(f"test_p{p}", note + "\n\n" + markdown(header, lines), [r for r in records if r["p"] == p])
     write("test_all", "\n\n".join(texts[p] for p in P_VALUES), records)
     texts["time"] = write("test_time", "Times on the test shots, each beside the row's failures, so that a time is never read without its accuracy. "
                           "\"Mean time ÷ relay-BP's\" below 1 means faster than relay-BP on average. One process per row on the team's server; "
-                          "a row on two cores or on a GPU says so.\n\n"
+                          "a row on two cores or on a GPU says so. A time is marked \"not clean\" when the server's CPU quota throttled it for more than "
+                          f"{THROTTLE_LIMIT:.0%} of the row's wall time; it is then given no ratio and is not drawn in the time figures.\n\n"
                           + markdown(["p", "Decoder", "Failed pairs", "Mean time per pair, ms", "Mean time ÷ relay-BP's", "Median, ms", "99th percentile, ms", "Runs on"],
                                      time_lines))
 

@@ -1,0 +1,29 @@
+test run at commit 61d4e925f97b600579c2705f648ca2e1163f0091, stream of lane B, shots 2000 to 3999, started Sun Nov 22 07:36:11 AM UTC 2026
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 2000..2500 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_explain1.npz
+  100/500 shots, 213s, failures so far starter=6 exact=4 tracker=1 oracle-round=1
+  200/500 shots, 440s, failures so far starter=8 exact=11 tracker=4 oracle-round=3
+  300/500 shots, 696s, failures so far starter=12 exact=16 tracker=7 oracle-round=6
+  400/500 shots, 990s, failures so far starter=19 exact=24 tracker=14 oracle-round=10
+  500/500 shots, 1273s, failures so far starter=27 exact=34 tracker=21 oracle-round=17
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/002000-002500.npz.tmp.npz in 1273s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 2500..3000 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_explain1.npz
+  100/500 shots, 244s, failures so far starter=5 exact=5 tracker=2 oracle-round=1
+  200/500 shots, 412s, failures so far starter=8 exact=9 tracker=4 oracle-round=3
+  300/500 shots, 550s, failures so far starter=10 exact=12 tracker=7 oracle-round=6
+  400/500 shots, 713s, failures so far starter=12 exact=13 tracker=9 oracle-round=8
+  500/500 shots, 985s, failures so far starter=19 exact=19 tracker=15 oracle-round=12
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/002500-003000.npz.tmp.npz in 986s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 3000..3500 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_explain1.npz
+  100/500 shots, 195s, failures so far starter=6 exact=2 tracker=1 oracle-round=3
+  200/500 shots, 437s, failures so far starter=12 exact=7 tracker=6 oracle-round=10
+  300/500 shots, 704s, failures so far starter=18 exact=14 tracker=12 oracle-round=14
+  400/500 shots, 920s, failures so far starter=26 exact=23 tracker=16 oracle-round=18
+  500/500 shots, 1151s, failures so far starter=32 exact=29 tracker=19 oracle-round=19
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/003000-003500.npz.tmp.npz in 1151s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/test_X_p0.004_s1e-3_seed7300.npz shots 3500..4000 conditions ['starter', 'exact', 'tracker', 'oracle-round'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/test_order1_explain1.npz
+  100/500 shots, 240s, failures so far starter=2 exact=4 tracker=3 oracle-round=1
+  200/500 shots, 412s, failures so far starter=4 exact=5 tracker=6 oracle-round=1
+  300/500 shots, 658s, failures so far starter=11 exact=12 tracker=9 oracle-round=3
+  400/500 shots, 864s, failures so far starter=14 exact=15 tracker=11 oracle-round=5
+  500/500 shots, 1022s, failures so far starter=17 exact=19 tracker=14 oracle-round=7
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/test/003500-004000.npz.tmp.npz in 1022s

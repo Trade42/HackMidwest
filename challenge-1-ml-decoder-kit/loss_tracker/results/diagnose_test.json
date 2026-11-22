@@ -1,0 +1,61 @@
+{
+ "shots": 4000,
+ "rows": [
+  {
+   "group": "all shots",
+   "shots": 4000,
+   "lost_per_shot": 9.97725,
+   "mean_p_true": 0.3846384965942233,
+   "median_min_p_true": 0.04811513775894961,
+   "far_atoms_per_shot": 2.013
+  },
+  {
+   "group": "no decoder fails",
+   "shots": 3760,
+   "lost_per_shot": 9.86781914893617,
+   "mean_p_true": 0.3857392942805067,
+   "median_min_p_true": 0.0489840186603933,
+   "far_atoms_per_shot": 1.9678191489361703
+  },
+  {
+   "group": "exact fails, the tracker and the ORACLE do not (the tracker's gain)",
+   "shots": 65,
+   "lost_per_shot": 12.615384615384615,
+   "mean_p_true": 0.38022356992072753,
+   "median_min_p_true": 0.040579657755379785,
+   "far_atoms_per_shot": 2.8461538461538463
+  },
+  {
+   "group": "exact and the tracker fail, the ORACLE does not (the gain left)",
+   "shots": 38,
+   "lost_per_shot": 12.31578947368421,
+   "mean_p_true": 0.3626947418290768,
+   "median_min_p_true": 0.04171247588950973,
+   "far_atoms_per_shot": 3.0
+  },
+  {
+   "group": "the tracker fails, exact and the ORACLE do not",
+   "shots": 25,
+   "lost_per_shot": 10.84,
+   "mean_p_true": 0.35249416347727996,
+   "median_min_p_true": 0.04332706822135875,
+   "far_atoms_per_shot": 2.68
+  },
+  {
+   "group": "all three fail",
+   "shots": 77,
+   "lost_per_shot": 11.363636363636363,
+   "mean_p_true": 0.36946049828515987,
+   "median_min_p_true": 0.03371148438124939,
+   "far_atoms_per_shot": 2.4935064935064934
+  },
+  {
+   "group": "the ORACLE fails, the tracker does not",
+   "shots": 28,
+   "lost_per_shot": 10.785714285714286,
+   "mean_p_true": 0.3618422359293733,
+   "median_min_p_true": 0.054536035808841296,
+   "far_atoms_per_shot": 2.7857142857142856
+  }
+ ]
+}

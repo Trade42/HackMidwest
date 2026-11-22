@@ -7,7 +7,7 @@ numbers on shots that Clifft simulates. No file of the team's `data/` folder is 
 This file is written by `python -m loss_tracker.assemble` from `RESULTS.template.md`: every table below is a file
 of `results/`, copied in byte for byte. Edit the template, not this file.
 
-{{include results/summary.md}}
+{{include results/summary.md shift 0}}
 
 ## What the tracker does, in plain words
 
@@ -73,14 +73,17 @@ What this says:
   checks (three CX in a row) the triple fires together: none 0.34, all three 0.34. For a left atom's X checks
   (CX positions 1, 5, 6) and a right atom's Z checks (1, 2, 6) the detector that is apart from the other two in
   the cycle fires on its own: four patterns at 0.20 each.
-- **The rounds of a lost atom are not independent.** That lone detector repeats, one round later, what its two
-  partners showed: they agree 77.5% of the time (0.5 = unrelated; the rest is noise). The check that comes first
-  in a cycle measures the same broken operator as the last two of the cycle before, with no check of the other
-  type in between. So a lost atom makes one fresh random bit per check type and round, not two. Present atoms
-  show no such relation (0.015 at most).
+- **The rounds of a lost atom are not independent.** In those two cases the lone detector and the pair are tied
+  across rounds. For a left atom's X checks, the lone first detector repeats, one round later, what the pair
+  showed; for a right atom's Z checks, the pair repeats what the lone last detector showed a round earlier. They
+  agree 77.5% of the time (0.5 = unrelated; the rest is noise). The checks that meet the atom at the end of one
+  cycle and at the start of the next have no check of the other type between them, so they see the same broken
+  state. So a lost atom makes one fresh random bit per check type and round, not two. Present atoms show no such
+  relation (0.015 at most).
 - **A flagged check atom** makes its own two detectors fair coins (0.50 in rounds c and c + 1). On the data
-  atoms next to it, the triple of the OTHER check type fires together more often (all three: 0.8% → 1.8% and
-  1.5% → 5.6%): the hook error. That is the pattern a loss makes, so the tracker sets those two rounds aside.
+  atoms next to it, the triple of the OTHER check type fires together more often (all three: 0.8–1.5% → 1.8–5.6%;
+  exactly two: 5% → 10–13%): the hook error. That is the pattern a loss makes, so the tracker sets those two
+  rounds aside.
 - **A check that another lost atom has left is a fair coin** for this atom (0.500), unrelated to the other two
   bits of the triple (largest difference 0.002). So summing that bit out of the tables is exact.
 
@@ -117,15 +120,17 @@ What this says:
 - **Each piece of the model is worth something** (mean log P of the true round; uniform guess −2.485):
   independent rounds, ignoring the other atoms −1.676; conditioning on the round before −1.536; coupling the
   atoms −1.368; explaining shared bits −1.325. For atoms that share X and Z checks with other flagged atoms
-  (54% of them) explaining moves the score from −1.430 to −1.361, most of the way to atoms that share nothing
+  (54% of them) explaining moves the score from −1.430 to −1.362, most of the way to atoms that share nothing
   (−1.271).
 - **The posterior is calibrated**: expected calibration error 0.003 over all (atom, round) pairs; where it says
   0.9 to 1.0 it is right 92% of the time. Temperature 1 gives the best log score, so no temperature is needed
   for calibration. (Whether relay-BP wants a different temperature is a separate question, step 3.)
-- Rerunning `track_val.sh` gave bit-identical outputs for the five versions that had been written before
-  (checked array by array), with 4 processes instead of 1.
+- **Reruns give the same tables.** Rerunning `track_val.sh` (4 tracker runs side by side instead of one at a time)
+  gave bit-identical outputs for the five versions written before, array by array. A second run of
+  `step1_step2.sh` after the test (`logs/step1_step2.log`) rewrote `signal_train` and both `accuracy_val` tables
+  byte for byte the same (git shows no change).
 
-{{include results/choice_rules.md}}
+{{include results/choice_rules.md shift 0}}
 
 ## Step 3: the decoder
 
@@ -173,6 +178,16 @@ and B where A did not converge); they are extra rows, not the frozen decoder.
 
 {{include results/test_notes.md}}
 
+The frozen tracker against the probes of the test split (`loss_tracker/runs/diagnose.sh`, `python -m
+loss_tracker.accuracy`; scoring only, after the decoding; the full tables are in `results/accuracy_test.md`):
+
+{{include results/accuracy_test.md from 3 to 7}}
+
+Where the tracker loses against the ORACLE, shot by shot (`loss_tracker/runs/diagnose.sh`, `python -m
+loss_tracker.diagnose`; `results/diagnose_test.md`, and `results/diagnose_val.md` for the validation shots):
+
+{{include results/diagnose_test.md}}
+
 #### A secondary row: the tracker version before the frozen one
 
 `order1_coupled2` (shared bits dropped instead of explained) had fewer failures on the validation shots than the
@@ -188,9 +203,26 @@ The same job on a second seed (7310), sampled and decoded on the team's server b
 (`python -m loss_tracker.job --seed 7310 --shots 4000 --workers 4 --mode coupled --sweeps 1 --order 1 --explain
 --out ... --tables loss_tracker/tables/X_p0.004_s1e-3.npz --conditions starter,exact,tracker,oracle-round`, ctl job
 060 of the orchestrator, from `integration` at `650f7ae`). Its printout is `job_ctl_060-loss-tracker-replication.out`
-on the branch `server-logs`; its tables are copied here (`results/replication_seed7310*`).
+on the branch `server-logs` (commit `d13f0df`), copied to `logs/server_job_ctl_060.out`. Its files were copied back and
+its tables rebuilt here from its per-shot parts, with the same rows as the test's (`loss_tracker/runs/replication.sh`;
+log `logs/replication.log`). The rebuilt rows equal the server's own `tables.md`
+(`results/replication_seed7310_server_tables.md`). The dataset's sha256 on the server is `07c2f437…`. Machine: the
+team's server, 4 worker processes.
 
-{{include results/replication.md}}
+{{include results/replication_seed7310.md}}
+
+The tracker alone on the replication's probes (`results/replication_seed7310_accuracy.md`):
+
+{{include results/replication_seed7310_accuracy.md from 3 to 7}}
+
+The secondary row on the replication shots (the earlier tracker version, `rep_seed7310_coupled2`):
+
+{{include results/replication_seed7310_secondary.md from 26 to 35}}
+
+Pooled with the test (8,000 shots: the test's shots 0–3,999, the replication's numbered 4,000–7,999;
+`python -m loss_tracker.pool`):
+
+{{include results/pooled_7300_7310.md}}
 
 ## Step 4
 

@@ -3,6 +3,7 @@
 # of done-when 4, then step 4 in the brief's order (the learned tracker; s = 2e-3 and 5e-4; Z memory; the cost).
 set -uo pipefail
 loss_tracker/runs/test_summary.sh > loss_tracker/logs/test_summary.log 2>&1
+loss_tracker/runs/diagnose.sh > loss_tracker/logs/diagnose.log 2>&1
 loss_tracker/runs/step1_step2.sh > loss_tracker/logs/step1_step2.log 2>&1    # a second run of steps 1 and 2: same tables?
 loss_tracker/runs/test_secondary.sh > loss_tracker/logs/test_secondary.log 2>&1
 loss_tracker/runs/test_summary.sh secondary > loss_tracker/logs/test_summary_secondary.log 2>&1

@@ -529,6 +529,32 @@ slow there, and by the relay-BP authors' data worse than separate decoding), so 
 returns T's answer on every shot there: the ensemble's row at p = 0.005 equals TCBP-JOBS
 alone, and claims nothing.
 
+### The other two noise levels, validation shots only
+
+Rule f was frozen on the p = 0.004 training shots. These rows apply it, unchanged, to the
+validation files of the other two levels (the server; printouts `ens_explore_p0.003.out` and
+`ens_explore_p0.005.out` on `server-logs`; candidates from `candidates.py` there and, for
+p = 0.005 X, from the laptop; TCBP-JOBS in batch mode).
+
+| validation, 5,000 shots per basis | p = 0.003: failures [X Z] | p = 0.005: failures [X Z] | p = 0.005: failed pairs, per cycle |
+|---|---|---|---|
+| R: relay-BP alone | [2 2] | [194 189] | 373, 6.4e-3 |
+| P1: PriorTilt once | [2 2] | [137 144] | 276, 4.7e-3 |
+| T: TCBP-JOBS alone | [0 1] | [91 97] | 187, 3.2e-3 |
+| ac: part 1, best rule without learning | [2 2] | [108 104] | 207, 3.5e-3 |
+| f: the frozen rule | [1 0] | [91 97]: T alone, as no J was run | 187, 3.2e-3 |
+| ORACLE among P1, P2, T, R (needs the truth) | [0 0] | [50 55] | |
+| shots where P1, P2, T are not unanimous | 4 and 4 | 185 and 179 (3.6%) | |
+
+- **p = 0.003 says nothing either way**: every decoder fails 0 to 3 times in 5,000 shots.
+  Joint relay-BP ran on the 8 listed shots (2 to 11 s each on average). On X it was wrong on
+  one of them while converged, where TCBP-JOBS was right; on Z it fixed TCBP-JOBS's one
+  failure. Rule f and TCBP-JOBS each have 1 failed pair of 5,000.
+- **p = 0.005**: part 1's hierarchy without learning is well below relay-BP (207 failed pairs
+  against 373) and above TCBP-JOBS (187). Rule f without J is TCBP-JOBS. A perfect choice
+  among P1, P2, T and R would reach 105 failures against 188, so there is room; joint
+  decoding on the 364 listed shots was not run.
+
 ### The ensemble's numbers at p = 0.004 (exploration shots)
 
 The members' files, all made from the committed `data/p0.004/` files (sha256 above):
@@ -640,7 +666,10 @@ sha256 of the inputs that are not listed above:
 
 ## The run on the held-out shots: frozen commit and exact commands
 
-**Frozen commit: `FROZEN_SHA`** (the code; this README names it from the commit after).
+**Frozen commit: `921f2e8f8e05eff4ca3f60b565e48bbc08d42628`** (the code; this README names it from the
+commit after, which changes only this file). At that commit, on a clean tree, on this PC:
+`pytest -p no:cacheprovider test_kit.py evaluation neural hierarchy` gave 136 passed, and the
+preflight passed with a stand-in for TCBP-JOBS.
 What is frozen: the plugin and its rule procedure; the ensemble rule f; the reference rows
 relay-BP, PriorTilt once and TCBP-JOBS alone; the ablation rows aw and ac; the commands below.
 Nothing below was run on a `test_*` or `go_*` file by this task.
@@ -727,7 +756,7 @@ relay-BP only where the seeds differ. Both are stated with their rows.
 python -m pytest -p no:cacheprovider hierarchy
 ```
 
-31 tests, under two minutes on one CPU core that is not shared. Part 1: the rules against
+32 tests; 47 s on this PC's lane A (two shared cores). Part 1: the rules against
 hand-made cases; `select.py` on five hand-made shots whose outcome under every rule is known,
 on a session-mode file, with a fitted constant (and the warning when it is fitted on the
 scored shots) and with logits of other shots (refused); the refusal of `test_*` and `go_*`

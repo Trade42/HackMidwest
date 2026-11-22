@@ -26,6 +26,9 @@ the later stage: a rule runs them only on the shots it does not accept at once.
   c    as b, with J among the candidates on the shots where J exists
   d    the majority of P1, P2, T; if all three differ, the network picks among P1, P2, T, R
   e    as d, with J among the candidates on the shots where J exists
+  f    P1 where P1 = P2 = T; else J's answer where J converged, and T's answer where it did not   (no learning)
+  g    P1 where P1 = P2 = T; else the answer that most of J, T, P1, P2, R give; a tie goes to the network
+  gw   the same, with a tie going to the first of J, T, P1, P2, R that is in it                    (no learning)
 
 "The network picks" is part 1's score: the candidate whose 12 bits the network finds most
 likely (rules.network_score), among the candidates that decoded the shot. No rule has a fitted
@@ -42,6 +45,20 @@ Choosing a rule: score the training file with --save, then score the validation 
 --chosen-on <the training .json>. The rule with the fewest failures on the training shots
 (ties: the earlier rule in the list above) is marked in the validation table. A .json of the
 same data file is refused: no rule is chosen on the shots it is reported on.
+
+--rule <key> marks a rule that was frozen earlier, for example for the test files.
+
+--save <file>.json writes the numbers of the report, and <file>.npz beside it with the per-shot
+results: failed_<key>, and for the rules predicted_<key> and later_<key>; for the marked rule
+also failed, predicted and later, with its key in `rule`.
+
+The kit's score is per pair: shot k of X memory with shot k of Z memory, and the pair fails
+when either fails. With the saved .npz of an X file and of a Z file,
+
+  python -m hierarchy.ensemble --pair out/test_X.npz out/test_Z.npz
+
+prints, per row, the failures [X Z], the failed pairs and the rate per cycle as the kit
+computes it (decoders.per_cycle_rate, 12 cycles).
 
 --write-selection <file> lists the shots where the always-on members are not unanimous: the
 shots for hierarchy.joint_member.
@@ -66,6 +83,9 @@ RULES = [
     ("c", "as b, with J among the candidates where it exists", ALWAYS_ON, False, ("P1", "P2", "T", "R", "J"), "network"),
     ("d", "majority of P1, P2, T; all differ: the network among P1, P2, T, R", ALWAYS_ON, True, ("P1", "P2", "T", "R"), "network"),
     ("e", "as d, with J among the candidates where it exists", ALWAYS_ON, True, ("P1", "P2", "T", "R", "J"), "network"),
+    ("f", "P1 where P1 = P2 = T; else J where it converged, else T", ALWAYS_ON, False, ("J", "T"), "joint"),
+    ("g", "P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network", ALWAYS_ON, False, ("J", "T", "P1", "P2", "R"), "votes+network"),
+    ("gw", "P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order", ALWAYS_ON, False, ("J", "T", "P1", "P2", "R"), "votes"),
 ]
 ORACLES = [("R", "P1", "P2"), ("P1", "P2", "T"), ("P1", "P2", "T", "R"), ("P1", "P2", "T", "R", "J")]
 
@@ -77,6 +97,7 @@ class Member:
     covers: np.ndarray      # [shots] bool: the member decoded this shot
     seconds: np.ndarray     # [shots]; NaN where the file holds no time
     weight: np.ndarray      # [shots]; NaN where the file holds no weight
+    converged: np.ndarray   # [shots] bool: the correction reproduces the syndrome (True where the file does not say)
     source: str
     times_from: str
 
@@ -131,9 +152,10 @@ def load_members(paths):
                 raise SystemExit(f"member {name} is in two files: {members[name].source} and {path}")
             covers = np.zeros(count, bool)
             covers[rows] = arrays[f"ran_{name}"] if f"ran_{name}" in arrays else True
-            member = Member(name, np.zeros((count, 12), np.uint8), covers, np.full(count, np.nan), np.full(count, np.nan), path, times_from)
+            member = Member(name, np.zeros((count, 12), np.uint8), covers, np.full(count, np.nan), np.full(count, np.nan),
+                            np.ones(count, bool), path, times_from)
             member.predicted[rows] = arrays[f"predicted_{name}"]
-            for field in ("seconds", "weight"):
+            for field in ("seconds", "weight", "converged"):
                 if f"{field}_{name}" in arrays:
                     getattr(member, field)[rows] = arrays[f"{field}_{name}"]
             members[name] = member
@@ -166,20 +188,30 @@ def same(first, second):
 def later_stage_pick(pool, scorer, network):
     """Index [shots] into pool of the candidate the scorer prefers among those that decoded the shot (the first on a tie)."""
     predicted = np.stack([member.predicted for member in pool])
-    if scorer == "network":
+    covers = np.stack([member.covers for member in pool])
+    order = -np.arange(len(pool), dtype=float)[:, None] * np.ones(covers.shape[1])      # earlier in the pool is better
+    by_network = None
+    if "network" in scorer:
         own = bits_for_network(predicted, network.logits > 0, network.answer, network.model_from_kit)
-        score = network_score(own, network.logits)
-    else:
+        by_network = network_score(own, network.logits)
+    if scorer == "network":
+        score = by_network
+    elif scorer == "weight":
         score = -np.stack([member.weight for member in pool])
-    score = np.where(np.stack([member.covers for member in pool]), score, -np.inf)
-    return score.argmax(axis=0)
+    elif scorer == "joint":               # J where it decoded the shot and converged; otherwise T
+        score = np.stack([member.converged * 2.0 if member.name == "J" else np.full(covers.shape[1], float(member.name == "T"))
+                          for member in pool])
+    else:                                 # votes: how many candidates that decoded the shot give this same answer
+        votes = sum((covers[other] & (predicted == predicted[other][None]).all(axis=-1)) for other in range(len(pool))).astype(float)
+        score = votes * 1e6 + (by_network if scorer == "votes+network" else order)
+    return np.where(covers, score, -np.inf).argmax(axis=0)
 
 
 def apply(rule, members, network):
     """One rule on every shot: (answer [shots, 12], later [shots] bool, time [shots] in seconds or None, note)."""
     _, _, accept, majority, pool_names, scorer = rule
     missing = [name for name in accept if name not in members] + ([] if any(name in members for name in pool_names) else ["a candidate"])
-    if scorer == "network" and network is None:
+    if "network" in scorer and network is None:
         return None, None, None, "not measured: no logits"
     if missing or ("J" in pool_names and "J" not in members):
         return None, None, None, "not measured: no file for " + ", ".join(missing or ["J"])
@@ -202,7 +234,7 @@ def apply(rule, members, network):
     # Time: the always-on members on every shot; on the later-stage shots also the other candidates that decoded the shot.
     seconds = sum(members[name].seconds for name in accept)
     extra = sum(np.where(member.covers, member.seconds, 0.0) for member in pool if member.name not in accept)
-    if scorer == "network":
+    if "network" in scorer:
         extra = extra + (np.nan if network.ms is None else network.ms / 1e3)
     seconds = seconds + np.where(later, extra, 0.0)
     return answer, later, (None if np.isnan(seconds).any() else seconds), ""
@@ -221,7 +253,8 @@ def score(members, shots, network):
         answer, later, seconds, note = apply(rule, members, network)
         row = {"key": rule[0], "kind": "rule", "name": f"{rule[0]}: {rule[1]}", "note": note, "shots": len(truth), "whole": True}
         if answer is not None:
-            row |= {"failed": (answer != truth).any(axis=1), "later": later, "ms": None if seconds is None else float(seconds.mean() * 1e3)}
+            row |= {"failed": (answer != truth).any(axis=1), "later": later, "predicted": answer,
+                    "ms": None if seconds is None else float(seconds.mean() * 1e3)}
             if "J" in rule[4]:
                 row["note"] = f"J exists on {int((later & members['J'].covers).sum())} of the {int(later.sum())} later-stage shots"
         rows.append(row)
@@ -263,7 +296,7 @@ def report(members, shots, network, rows, chosen=None, out=print):
         low, high = wilson_interval(failures, row["shots"])
         later = f"{int(row['later'].sum())} ({row['later'].mean():.2%})" if "later" in row else ""
         time = f"{row['ms']:8.1f}" if row.get("ms") is not None else f"{'':8s}"
-        mark = "   <- chosen on the training shots" if chosen and row["key"] == chosen else ""
+        mark = f"   <- {chosen[1]}" if chosen and row["key"] == chosen[0] else ""
         out(f"{row['name']:78s} {failures:8d} {row['shots']:6d}  {failures / max(row['shots'], 1):7.3%}  [{low:.3%}, {high:.3%}]{'':3s} "
             f"{later:>16s}  {time}{mark}" + (f"   ({row['note']})" if row.get("note") else ""))
     out("ms/shot: the sum of the decode calls a row makes, averaged over all shots; empty where a file holds no time per shot.")
@@ -300,6 +333,49 @@ def numbers(members, shots, network, rows):
             "network_ms": None if network is None else network.ms, "not_unanimous": int((~unanimous(members)).sum()), "rows": table}
 
 
+def per_shot(shots, rows, chosen):
+    """The per-shot results of every measured row, for the .npz beside the saved numbers."""
+    arrays = {"data_sha256": shots.data_sha256, "basis": shots.basis or "", "p": np.nan if shots.p is None else shots.p,
+              "rule": chosen[0] if chosen else ""}
+    for row in rows:
+        if "failed" in row and row["whole"]:
+            arrays[f"failed_{row['key']}"] = row["failed"]
+            for field in ("predicted", "later"):
+                if field in row:
+                    arrays[f"{field}_{row['key']}"] = row[field]
+            if chosen and row["key"] == chosen[0]:
+                arrays |= {"failed": row["failed"], "predicted": row["predicted"], "later": row["later"]}
+    return arrays
+
+
+def pair_table(x_path, z_path, cycles=12, out=print):
+    """The kit's score per pair for every row both saved files hold: shot k of X with shot k of Z."""
+    from decoders import per_cycle_rate
+
+    with np.load(x_path, allow_pickle=False) as file:
+        x = {key: file[key] for key in file.files}
+    with np.load(z_path, allow_pickle=False) as file:
+        z = {key: file[key] for key in file.files}
+    if str(x["basis"]) != "X" or str(z["basis"]) != "Z" or float(x["p"]) != float(z["p"]):
+        raise SystemExit("--pair takes the saved .npz of an X file and of a Z file at the same p, in that order")
+    keys = [key[len("failed_"):] for key in x if key.startswith("failed_") and key in z]
+    shots = len(x[f"failed_{keys[0]}"])
+    if any(len(z[f"failed_{key}"]) != shots for key in keys):
+        raise SystemExit("the two files hold different numbers of shots: no pairs")
+    out(f"p = {float(x['p']):g}, {shots} pairs: shot k of X (data sha256 {x['data_sha256']}) with shot k of Z ({z['data_sha256']})")
+    out(f"{'row':22s} {'failures [X Z]':>16s} {'failed pairs':>13s}  {'rate per cycle':>15s}")
+    table = {}
+    for key in keys:
+        pair = x[f"failed_{key}"] | z[f"failed_{key}"]
+        rate, error = per_cycle_rate(pair, cycles)
+        mark = "   <- the marked rule" if key == str(x["rule"]) == str(z["rule"]) else ""
+        out(f"{key:22s} {'[%d %d]' % (x[f'failed_{key}'].sum(), z[f'failed_{key}'].sum()):>16s} {int(pair.sum()):13d}  "
+            f"{rate:.2e} +- {error:.1e}{mark}")
+        table[key] = {"failures_X": int(x[f"failed_{key}"].sum()), "failures_Z": int(z[f"failed_{key}"].sum()),
+                      "failed_pairs": int(pair.sum()), "per_cycle": float(rate), "standard_error": float(error)}
+    return table
+
+
 def choose_rule(paths, shots):
     """The rule with the fewest failures on the training shots of the given .json files (ties: the earlier rule)."""
     records = [json.loads(Path(path).read_text(encoding="utf-8")) for path in paths]
@@ -320,7 +396,9 @@ def choose_rule(paths, shots):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--members", nargs="+", required=True, help="per-shot files of candidates, tcbp_member, joint_member for ONE data file")
+    parser.add_argument("--members", nargs="+", help="per-shot files of candidates, tcbp_member, joint_member for ONE data file")
+    parser.add_argument("--pair", nargs=2, metavar=("X.npz", "Z.npz"), help="instead of --members: the kit's pair score from two saved .npz files")
+    parser.add_argument("--rule", choices=[rule[0] for rule in RULES], help="mark this rule, frozen earlier on other shots")
     parser.add_argument("--logits", help="the .npz of neural.evaluate_stim --save on the same shots")
     parser.add_argument("--network-ms", type=float, help="the network's time per call, where the .json beside the logits is missing")
     parser.add_argument("--chosen-on", nargs="+", help="the --save .json of OTHER shots (training files): marks the rule they choose")
@@ -328,19 +406,28 @@ def main(argv=None):
     parser.add_argument("--write-selection", help="write the shots where the always-on members are not unanimous, for joint_member")
     args = parser.parse_args(argv)
 
+    if args.pair:
+        return pair_table(*args.pair)
+    if not args.members:
+        raise SystemExit("give --members (to score one data file) or --pair (two saved .npz files)")
+    if args.rule and args.chosen_on:
+        raise SystemExit("--rule marks a rule frozen earlier; --chosen-on chooses one now. Give one of them.")
     members, shots = load_members(args.members)
     if "P1" not in members or "P2" not in members:
         raise SystemExit("the ensemble needs P1 and P2 (a file of hierarchy.candidates) among --members")
     network = load_network(args.logits, shots, args.network_ms) if args.logits else None
-    chosen = None
+    chosen = (args.rule, "the frozen rule") if args.rule else None
     if args.chosen_on:
-        chosen, line = choose_rule(args.chosen_on, shots)
+        key, line = choose_rule(args.chosen_on, shots)
+        chosen = (key, "chosen on the training shots")
         print(line)
     rows = score(members, shots, network)
     report(members, shots, network, rows, chosen)
     if args.save:
         Path(args.save).parent.mkdir(parents=True, exist_ok=True)
-        Path(args.save).write_text(json.dumps(numbers(members, shots, network, rows) | {"chosen_rule": chosen}, indent=2) + "\n", encoding="utf-8")
+        Path(args.save).write_text(json.dumps(numbers(members, shots, network, rows) | {"marked_rule": chosen and chosen[0]}, indent=2) + "\n",
+                                   encoding="utf-8")
+        np.savez_compressed(Path(args.save).with_suffix(".npz"), **per_shot(shots, rows, chosen))
     if args.write_selection:
         listed = np.flatnonzero(~unanimous(members))
         Path(args.write_selection).parent.mkdir(parents=True, exist_ok=True)

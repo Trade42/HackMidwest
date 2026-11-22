@@ -13,6 +13,8 @@ What one shot costs, in order, all inside decode_shot (the evaluator's timer wra
   4. otherwise relay-BP at the kit's settings  -> R
   5. the rule chooses among R, P1 and P2:
        "weight"   the lowest weight (the sum of log((1 - prior) / prior) over a correction's faults)
+       "converged"  the lowest weight among the candidates that converged (among all three if
+                  none did): the best rule without learning on the exploration shots
        "network"  the candidate the neural network finds most likely: the largest sum over the
                   12 bits of log sigmoid(logit) for a predicted 1 and log sigmoid(-logit) for a
                   predicted 0. With a constant C, the score is that sum minus weight / C.
@@ -27,7 +29,7 @@ in those operators (rules.bits_for_network), so the rule is the same for both ki
 
 Options (a JSON object; every key is optional):
 
-  rule            "network" (default) or "weight"
+  rule            "network" (default), "weight" or "converged"
   checkpoints     {"X": <checkpoint of neural.train>, "Z": <...>}. A basis without a checkpoint
                   uses the "weight" rule, and the session's recorded settings say so.
   seeds           PriorTilt's two seeds, default [1, 1001]
@@ -51,7 +53,7 @@ from hierarchy.stages import DEFAULT_SEEDS, Hierarchy, decoder_settings, problem
 
 OPTIONS = {"rule", "checkpoints", "seeds", "constant", "device", "torch_threads", "priortilt_repo",
            "priortilt_max_rounds", "relay_sets"}
-RULES = ("network", "weight")
+RULES = ("network", "weight", "converged")
 
 
 class Network:
@@ -166,13 +168,14 @@ class HierarchySession:
             in_its_bits = bits_for_network(predicted, (logits > 0)[None], network_answer[None], self.network.model_from_kit)
             choice = int(most_likely(in_its_bits, logits[None], weight, self.constant)[0])
         else:
-            choice = int(lowest_weight(weight)[0])
+            converged = np.array([[candidate.converged] for candidate in candidates]) if self.rule == "converged" else None
+            choice = int(lowest_weight(weight, converged)[0])
         return ShotResult(candidates[choice].predicted, self._metrics(self.rule, candidates[choice], candidates, extra))
 
     @staticmethod
     def _metrics(stage, winner, candidates, extra=None):
         """What happened on one shot. The evaluator averages converged, iterations and fallback_used."""
-        metrics = {"stage": stage,                       # which stage answered: "agree", "weight" or "network"
+        metrics = {"stage": stage,                       # which stage answered: "agree", or the rule's name
                    "agreed": stage == "agree",           # P1 and P2 predicted the same bits
                    "fallback_used": stage != "agree",    # relay-BP and the rule ran
                    "winner": winner.name,

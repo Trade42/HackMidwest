@@ -21,12 +21,14 @@ the later stage: a rule runs them only on the shots it does not accept at once.
 
   a    P1 where P1 = P2; else the network picks among R, P1, P2            (part 1's rule)
   aw   the same with the lowest weight in place of the network             (part 1's rule without learning)
+  ac   the same with the lowest weight among the converged candidates      (the best rule without learning for these three)
   b    P1 where P1 = P2 = T; else the network picks among P1, P2, T, R
   bw   the same with the lowest weight in place of the network             (no learning)
   c    as b, with J among the candidates on the shots where J exists
   d    the majority of P1, P2, T; if all three differ, the network picks among P1, P2, T, R
   e    as d, with J among the candidates on the shots where J exists
   f    P1 where P1 = P2 = T; else J's answer where J converged, and T's answer where it did not   (no learning)
+  h    as f, but where J did not converge the network picks among T, P1, P2, R
   g    P1 where P1 = P2 = T; else the answer that most of J, T, P1, P2, R give; a tie goes to the network
   gw   the same, with a tie going to the first of J, T, P1, P2, R that is in it                    (no learning)
 
@@ -38,6 +40,9 @@ some members: the floor of any rule over them).
 For every rule: the failures with a 95% Wilson interval, on how many shots the later stage
 runs, the mean time per shot as the sum of the stages it runs (if the files hold times),
 and the paired comparison with relay-BP alone and with TCBP-JOBS alone on the same shots.
+The network's own increment is printed as a paired comparison too: each rule with the network
+against the same rule with a choice that is not learned (a against aw and ac, b against bw,
+h against f, g against gw).
 These rows are combined offline from per-shot files. They are not one decoder timed in one
 process, as part 1's row from the team's evaluator is.
 
@@ -78,15 +83,19 @@ ALWAYS_ON = ("P1", "P2", "T")
 RULES = [
     ("a", "P1 where P1 = P2; else the network among R, P1, P2 (part 1)", ("P1", "P2"), False, ("R", "P1", "P2"), "network"),
     ("aw", "P1 where P1 = P2; else the lowest weight of R, P1, P2", ("P1", "P2"), False, ("R", "P1", "P2"), "weight"),
+    ("ac", "P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2", ("P1", "P2"), False, ("R", "P1", "P2"), "converged"),
     ("b", "P1 where P1 = P2 = T; else the network among P1, P2, T, R", ALWAYS_ON, False, ("P1", "P2", "T", "R"), "network"),
     ("bw", "P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R", ALWAYS_ON, False, ("P1", "P2", "T", "R"), "weight"),
     ("c", "as b, with J among the candidates where it exists", ALWAYS_ON, False, ("P1", "P2", "T", "R", "J"), "network"),
     ("d", "majority of P1, P2, T; all differ: the network among P1, P2, T, R", ALWAYS_ON, True, ("P1", "P2", "T", "R"), "network"),
     ("e", "as d, with J among the candidates where it exists", ALWAYS_ON, True, ("P1", "P2", "T", "R", "J"), "network"),
     ("f", "P1 where P1 = P2 = T; else J where it converged, else T", ALWAYS_ON, False, ("J", "T"), "joint"),
+    ("h", "P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R", ALWAYS_ON, False, ("J", "T", "P1", "P2", "R"), "joint+network"),
     ("g", "P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network", ALWAYS_ON, False, ("J", "T", "P1", "P2", "R"), "votes+network"),
     ("gw", "P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order", ALWAYS_ON, False, ("J", "T", "P1", "P2", "R"), "votes"),
 ]
+# The network's own increment: a rule with the network, and the same rule with a choice that is not learned.
+ABLATIONS = [("a", "aw"), ("a", "ac"), ("b", "bw"), ("h", "f"), ("g", "gw")]
 ORACLES = [("R", "P1", "P2"), ("P1", "P2", "T"), ("P1", "P2", "T", "R"), ("P1", "P2", "T", "R", "J")]
 
 
@@ -196,11 +205,17 @@ def later_stage_pick(pool, scorer, network):
         by_network = network_score(own, network.logits)
     if scorer == "network":
         score = by_network
-    elif scorer == "weight":
+    elif scorer in ("weight", "converged"):
         score = -np.stack([member.weight for member in pool])
+        if scorer == "converged":         # among the candidates that converged; among all if none did
+            good = covers & np.stack([member.converged for member in pool])
+            score = np.where(good | ~good.any(axis=0), score, -np.inf)
     elif scorer == "joint":               # J where it decoded the shot and converged; otherwise T
         score = np.stack([member.converged * 2.0 if member.name == "J" else np.full(covers.shape[1], float(member.name == "T"))
                           for member in pool])
+    elif scorer == "joint+network":       # J where it decoded the shot and converged; otherwise the network among the others
+        score = np.stack([np.where(member.converged, np.inf, -np.inf) if member.name == "J" else by_network[index]
+                          for index, member in enumerate(pool)])
     else:                                 # votes: how many candidates that decoded the shot give this same answer
         votes = sum((covers[other] & (predicted == predicted[other][None]).all(axis=-1)) for other in range(len(pool))).astype(float)
         score = votes * 1e6 + (by_network if scorer == "votes+network" else order)
@@ -226,7 +241,7 @@ def apply(rule, members, network):
         answer[pair] = second.predicted[pair]
         later = ~(same(first, second) | same(first, third) | same(second, third))
     pool = [members[name] for name in pool_names if name in members]
-    if scorer == "weight" and any(np.isnan(member.weight[member.covers]).any() for member in pool):
+    if scorer in ("weight", "converged") and any(np.isnan(member.weight[member.covers]).any() for member in pool):
         return None, None, None, "not measured: a candidate has no weight"
     pick = later_stage_pick(pool, scorer, network)
     chosen = np.stack([member.predicted for member in pool])[pick, np.arange(len(pick))]
@@ -310,6 +325,28 @@ def report(members, shots, network, rows, chosen=None, out=print):
                 if "failed" in row and row["whole"] and row["key"] != reference:
                     both, only_row, only_reference, p_value = paired_test(row["failed"], by_key[reference]["failed"])
                     out(f"{row['name']:78s} {both:5d} {only_row:5d} {only_reference:5d}   p = {p_value:.3g}")
+    pairs = ablation(rows)
+    if pairs:
+        out("")
+        out("the network's own increment: a rule with the network against the same rule without learning, on the same candidates")
+        for name, counts in pairs.items():
+            learned, plain = name.split("_against_")
+            out(f"  {learned} against {plain}: failures {counts['failures_with_the_network']} against {counts['failures_without']}; "
+                f"both fail {counts['both_fail']}, only {learned} fails {counts['only_the_network_rule_fails']}, "
+                f"only {plain} fails {counts['only_the_rule_without_fails']}; exact two-sided p = {counts['p']:.3g}")
+
+
+def ablation(rows):
+    """Per pair of rules that differ only in the learned choice: the paired counts, network rule against the other."""
+    by_key = {row["key"]: row for row in rows}
+    result = {}
+    for learned, plain in ABLATIONS:
+        if "failed" in by_key.get(learned, {}) and "failed" in by_key.get(plain, {}):
+            both, only_learned, only_plain, p_value = paired_test(by_key[learned]["failed"], by_key[plain]["failed"])
+            result[f"{learned}_against_{plain}"] = {
+                "failures_with_the_network": int(by_key[learned]["failed"].sum()), "failures_without": int(by_key[plain]["failed"].sum()),
+                "both_fail": both, "only_the_network_rule_fails": only_learned, "only_the_rule_without_fails": only_plain, "p": p_value}
+    return result
 
 
 def numbers(members, shots, network, rows):
@@ -327,7 +364,7 @@ def numbers(members, shots, network, rows):
                     both, only_row, only_reference, p_value = paired_test(row["failed"], by_key[reference]["failed"])
                     entry[f"against_{reference}"] = {"both": both, "row_only": only_row, "reference_only": only_reference, "p": p_value}
         table.append(entry)
-    return {"data_sha256": shots.data_sha256, "basis": shots.basis, "p": shots.p, "shots": len(shots.truth),
+    return {"data_sha256": shots.data_sha256, "basis": shots.basis, "p": shots.p, "shots": len(shots.truth), "ablation": ablation(rows),
             "members": {member.name: {"file": member.source, "shots": int(member.covers.sum()), "times_from": member.times_from}
                         for member in members.values()},
             "network_ms": None if network is None else network.ms, "not_unanimous": int((~unanimous(members)).sum()), "rows": table}

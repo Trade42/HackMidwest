@@ -1,0 +1,12 @@
+  95% upper bound on the added-failure rate among fast shots, C7 F correction weight <= 48: 0.00464 (TH's failure rate 0.0066)
+  95% upper bound on the added-failure rate among fast shots, C8 upward prior move <= 225.298: 0.00255 (TH's failure rate 0.0066)
+  95% upper bound on the added-failure rate among fast shots, C9 head entropy (bits) <= 69.1465: 0.00169 (TH's failure rate 0.0066)
+t* carried from p = 0.004, unchanged, on these shots:
+  C2 syndrome weight         t 127: fast 0.141, added 3, fixed 1
+  C3 total prior move        t 19671.5: fast 0.049, added 35, fixed 1
+  C4 largest prior move      t 4.82549: fast 0.218, added 14, fixed 2
+  C5 columns moved > 1       t 7455: fast 0.042, added 44, fixed 1
+  C6 F decode time (ms)      t 3.44795: fast 0.220, added 0, fixed 0
+  C7 F correction weight     t 47: fast 0.099, added 0, fixed 0
+  C8 upward prior move       t 215.663: fast 0.172, added 0, fixed 0
+  C9 head entropy (bits)     t 49.7746: fast 0.097, added 0, fixed 0

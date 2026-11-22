@@ -342,7 +342,14 @@ def test_command_runs_twice_the_same_and_resumes(tmp_path):
     train.main(["--out", str(tmp_path / "b"), "--steps", "6", *options])
     assert log_lines(tmp_path / "a")[:-1] == log_lines(tmp_path / "b")[:-1]       # the last line names the folder
 
-    train.main(["--out", str(tmp_path / "c"), "--steps", "3", *options])
+    # A run that checkpoints by the clock after every step, is stopped by a STOP file, and is resumed twice.
+    (tmp_path / "c").mkdir()
+    (tmp_path / "c" / "STOP").touch()
+    clock = ["--checkpoint-minutes", "0"]
+    train.main(["--out", str(tmp_path / "c"), "--steps", "6", *clock, *options])
+    stopped = torch.load(tmp_path / "c" / "checkpoint.pt", weights_only=True)
+    assert stopped["step"] == 1 and not (tmp_path / "c" / "STOP").exists()
+    train.main(["--out", str(tmp_path / "c"), "--resume", str(tmp_path / "c" / "checkpoint.pt"), "--steps", "3", *clock])
     train.main(["--out", str(tmp_path / "c"), "--resume", str(tmp_path / "c" / "checkpoint.pt"), "--steps", "6"])
     assert log_lines(tmp_path / "a")[-5:-1] == log_lines(tmp_path / "c")[-5:-1]   # the report of step 6
     assert log_lines(tmp_path / "a")[-5].startswith("step 6 of 6")

@@ -13,8 +13,10 @@ The recipe of arXiv:2604.08358 at a small scale:
   on a GPU, gradient clipping, a warm-up and a cosine decay of the learning rate to one tenth.
 The paper's optimizers (Muon and Lion) are replaced by AdamW.
 
-checkpoint.pt is rewritten at every report. A copy checkpoint_step<N>.pt is kept every
-`--snapshot-every` steps: the decoders along the climb, for a later comparison at each noise.
+checkpoint.pt is rewritten at every report, and every `--checkpoint-minutes` in between. A copy
+checkpoint_step<N>.pt is kept every `--snapshot-every` steps: the decoders along the climb,
+for a later comparison at each noise. To stop a run cleanly, create an empty file named STOP
+in `--out`: the run prints a report, writes the checkpoint, removes the file and ends.
 
 Every schedule counts steps, never seconds, and the shots of step s depend only on `--seed`
 and s. A resumed run therefore continues exactly where the first one stopped.
@@ -140,6 +142,7 @@ def save_checkpoint(run, path):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     state = {"config": run.config, "step": run.step, "history": run.history,
+             "loss_sum": run.loss_sum, "loss_steps": run.loss_steps,
              "model": run.model.state_dict(), "ema_model": run.ema_model.state_dict(),
              "optimizer": run.optimizer.state_dict(), "scaler": run.scaler.state_dict(),
              "commit": git_commit(), "torch": str(torch.__version__)}
@@ -157,6 +160,7 @@ def load_checkpoint(path, device, changes=None):
     run.optimizer.load_state_dict(state["optimizer"])
     run.scaler.load_state_dict(state["scaler"])
     run.step, run.history = state["step"], state["history"]
+    run.loss_sum, run.loss_steps = state.get("loss_sum", 0.0), state.get("loss_steps", 0)
     return run
 
 
@@ -259,7 +263,8 @@ def report(run, say):
     loss_text = "no training yet" if loss is None else f"mean training loss {loss:.4f}"
     say(f"step {run.step} of {config['steps']} | training noise p={noise_at(last, config):g} | "
         f"{loss_text} | learning rate {learning_rate_at(last, config):.2e}")
-    say(f"  averaged weights on {config['report_shots']} error-model shots per p (not Stim shots):")
+    say(f"  averaged weights on {config['report_shots']} error-model shots per p (not Stim shots); "
+        f"95% interval of a share: +-{1.96 * math.sqrt(0.25 / config['report_shots']):.3f} or less")
     for row in rows:
         say(f"  p={row['p']:g}  shots wrong {row['shots_wrong']:.4f} (always-0 {row['shots_wrong_zero']:.4f})  "
             f"bits right {row['bits_right']:.4f} (always-0 {row['bits_right_zero']:.4f})")
@@ -276,6 +281,8 @@ def parse_args(argv=None):
     add("--resume", help="a checkpoint to continue; the run's settings come from it")
     add("--device", default="auto", help="auto, cpu or cuda")
     add("--max-hours", type=float, help="stop after this time, with a report and a checkpoint")
+    add("--checkpoint-minutes", type=float, default=10.0,
+        help="also write the checkpoint when this many minutes have passed since the last one (default 10)")
     add("--threads", type=int, help="CPU threads for torch (default: torch's own choice)")
     add("--tiny", action="store_true", help=f"a small model for CPU tests: {TINY}")
     add("--code", help="gross, bb72, bb90 or bb108 (default gross)")
@@ -353,22 +360,31 @@ def main(argv=None):
     if run.step == 0:
         report(run, say)
 
+    stop_file, checkpoint, saved = out / "STOP", out / "checkpoint.pt", time.perf_counter()
     while run.step < config["steps"]:
-        tick, first = time.perf_counter(), run.step
-        out_of_time = False
-        while run.step < config["steps"] and (run.step == first or run.step % config["report_every"]) and not out_of_time:
+        tick, first, stop = time.perf_counter(), run.step, None
+        while run.step < config["steps"] and (run.step == first or run.step % config["report_every"]) and not stop:
             train_step(run)
-            out_of_time = args.max_hours is not None and time.perf_counter() - started > args.max_hours * 3600
+            now = time.perf_counter()
+            if args.max_hours is not None and now - started > args.max_hours * 3600:
+                stop = "--max-hours"
+            elif stop_file.exists():
+                stop = f"the file {stop_file}"
+            elif now - saved > args.checkpoint_minutes * 60 and run.step % config["report_every"]:
+                save_checkpoint(run, checkpoint)      # by the clock, without a report
+                saved = time.perf_counter()
         trained = time.perf_counter() - tick
         report(run, say)
-        save_checkpoint(run, out / "checkpoint.pt")
+        save_checkpoint(run, checkpoint)
+        saved = time.perf_counter()
         if run.step // config["snapshot_every"] > first // config["snapshot_every"]:
-            shutil.copyfile(out / "checkpoint.pt", out / f"checkpoint_step{run.step}.pt")
+            shutil.copyfile(checkpoint, out / f"checkpoint_step{run.step}.pt")
         memory = f", peak GPU memory {torch.cuda.max_memory_allocated() / 2 ** 30:.2f} GB" if run.device.type == "cuda" else ""
         say(f"speed: {(run.step - first) * config['batch'] / trained:.0f} shots/s in training, "
             f"{trained / (run.step - first):.3f} s per step, report {time.perf_counter() - tick - trained:.1f} s{memory}")
-        if out_of_time:
-            say(f"speed: stopped by --max-hours at step {run.step}; continue with --resume {out / 'checkpoint.pt'}")
+        if stop:
+            stop_file.unlink(missing_ok=True)
+            say(f"speed: stopped by {stop} at step {run.step}; continue with --resume {checkpoint}")
             break
     say(f"checkpoint: {out / 'checkpoint.pt'} at step {run.step}")
 

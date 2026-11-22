@@ -1,0 +1,53 @@
+# fpga_board at 134de6e, its two testbenches exactly as its README runs them (the .vvp files go to a scratch folder instead of /tmp). luminaty, 2026-11-22T07:24Z
+# Icarus Verilog version 14.0 (devel) (s20260301-1253-gc20d73fe3-dirty)
+$ iverilog -g2012 -s tb_core -Igenerated -o <scratch>/router_core.vvp tb/tb_core.sv rtl/router_core.sv && vvp <scratch>/router_core.vvp
+PASS core: 5000 saved validation shots, score and verdict
+tb/tb_core.sv:44: $finish called at 250050000 (1ps)
+
+real	0m5.180s
+user	0m4.689s
+sys	0m0.029s
+
+$ iverilog -g2012 -s tb_uart -Igenerated -o <scratch>/router_uart.vvp tb/tb_uart.sv rtl/router_top.sv rtl/router_frontend.sv rtl/router_core.sv rtl/uart_rx.sv rtl/uart_tx.sv && vvp <scratch>/router_uart.vvp
+PASS UART: 32 original saved shots, byte-exact replies
+tb/tb_uart.sv:70: $finish called at 3419360000 (1ps)
+
+real	0m51.349s
+user	0m49.104s
+sys	0m0.037s
+
+# The same two testbenches under Verilator: Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod)
+$ verilator --binary --timing -Wno-fatal --top-module tb_core -Igenerated --Mdir <scratch>/vl_core tb/tb_core.sv rtl/router_core.sv && <scratch>/vl_core/Vtb_core
+      1 %Warning-WIDTHEXPAND: rtl/router_core.sv:42:49: Operator ADD expects 43 bits on the RHS, but RHS's ARRAYSEL generates 41 bits.
+      1 %Warning-WIDTHEXPAND: rtl/router_core.sv:45:59: Operator ADD expects 56 bits on the RHS, but RHS's ARRAYSEL generates 43 bits.
+      1 %Warning-WIDTHTRUNC: tb/tb_core.sv:21:13: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'handle' generates 32 bits.
+PASS core: 5000 saved validation shots, score and verdict
+- tb/tb_core.sv:44: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.055 devel
+- Verilator: $finish at 250us; walltime 0.089 s; speed 2.820 ms/s
+- Verilator: cpu 0.080 s on 1 threads; allocated 4 MB
+
+real	0m0.094s
+user	0m0.080s
+sys	0m0.005s
+
+$ verilator --binary --timing -Wno-fatal --top-module tb_uart -Igenerated --Mdir <scratch>/vl_uart tb/tb_uart.sv rtl/router_top.sv rtl/router_frontend.sv rtl/router_core.sv rtl/uart_rx.sv rtl/uart_tx.sv && <scratch>/vl_uart/Vtb_uart
+      1 %Warning-WIDTHEXPAND: rtl/router_core.sv:42:49: Operator ADD expects 43 bits on the RHS, but RHS's ARRAYSEL generates 41 bits.
+      1 %Warning-WIDTHEXPAND: rtl/router_core.sv:45:59: Operator ADD expects 56 bits on the RHS, but RHS's ARRAYSEL generates 43 bits.
+      1 %Warning-WIDTHEXPAND: rtl/router_frontend.sv:31:48: Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's FUNCREF 'ones8' generates 4 bits.
+      1 %Warning-WIDTHEXPAND: rtl/router_frontend.sv:33:78: Operator ADD expects 16 bits on the RHS, but RHS's FUNCREF 'ones8' generates 4 bits.
+      1 %Warning-WIDTHTRUNC: rtl/uart_rx.sv:23:48: Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's DIVS generates 32 bits.
+      1 %Warning-WIDTHTRUNC: rtl/uart_rx.sv:27:19: Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's SUB generates 32 bits.
+      1 %Warning-WIDTHTRUNC: rtl/uart_tx.sv:21:89: Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's SUB generates 32 bits.
+      1 %Warning-WIDTHTRUNC: rtl/uart_tx.sv:26:23: Operator ASSIGNDLY expects 16 bits on the Assign RHS, but Assign RHS's SUB generates 32 bits.
+      1 %Warning-WIDTHTRUNC: tb/tb_uart.sv:45:13: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'handle' generates 32 bits.
+PASS UART: 32 original saved shots, byte-exact replies
+- tb/tb_uart.sv:70: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.055 devel
+- Verilator: $finish at 3ms; walltime 0.592 s; speed 5.778 ms/s
+- Verilator: cpu 0.573 s on 1 threads; allocated 4 MB
+
+real	0m0.597s
+user	0m0.576s
+sys	0m0.001s
+

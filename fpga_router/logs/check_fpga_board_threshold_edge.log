@@ -1,0 +1,18 @@
+# from fpga_board/ at 134de6e, luminaty, 2026-11-22T07:29Z, Python 3.12.15, numpy 2.5.5, scipy 1.18.1
+$ python ../fpga_router/check_fpga_board/threshold_edge.py <scratch> ../challenge-1-ml-decoder-kit
+X p=0.003: board != numpy rule on []; board != exporter's float on []. Lowest-risk wrong hard shot 2648: risk - threshold = 2.17e-19; fixed score - THRESH = 2905 -> board escalates it. Wrong hard shots 1: accepted by the board 0, by the software 0
+Z p=0.003: board != numpy rule on [4358]; board != exporter's float on [4358]. Lowest-risk wrong hard shot 4358: risk - threshold = 1.08e-19; fixed score - THRESH = -3793 -> board ACCEPTS this wrong candidate. Wrong hard shots 6: accepted by the board 1, by the software 0
+X p=0.004: board != numpy rule on []; board != exporter's float on []. Lowest-risk wrong hard shot 1691: risk - threshold = 4.34e-18; fixed score - THRESH = 155 -> board escalates it. Wrong hard shots 36: accepted by the board 0, by the software 0
+Z p=0.004: board != numpy rule on []; board != exporter's float on []. Lowest-risk wrong hard shot 2458: risk - threshold = 8.67e-19; fixed score - THRESH = 4211 -> board escalates it. Wrong hard shots 29: accepted by the board 0, by the software 0
+X p=0.005: board != numpy rule on []; board != exporter's float on []. Lowest-risk wrong hard shot 247: risk - threshold = 3.47e-18; fixed score - THRESH = 7392 -> board escalates it. Wrong hard shots 248: accepted by the board 0, by the software 0
+Z p=0.005: board != numpy rule on []; board != exporter's float on [4964]. Lowest-risk wrong hard shot 4964: risk - threshold = 1.73e-18; fixed score - THRESH = 1840 -> board escalates it. Wrong hard shots 240: accepted by the board 0, by the software 0
+
+The proposed fix: THRESH = (lowest fixed score among the hard shots the software rule escalates) - 1,
+which uses the frozen rule's verdicts on the validation shots, not the labels. It restores parity if no shot
+that the software accepts scores at or above that value.
+  X p=0.003: THRESH -3517647 -> -3514743 (a change of 2904 in units of 2^-19); highest score among the accepted hard shots is 62985 below it; board != software rule on 0 shots
+  Z p=0.003: THRESH -7653823 -> -7657617 (a change of -3794 in units of 2^-20); highest score among the accepted hard shots is 66865 below it; board != software rule on 0 shots
+  X p=0.004: THRESH -5721342 -> -5721188 (a change of 154 in units of 2^-20); highest score among the accepted hard shots is 32557 below it; board != software rule on 0 shots
+  Z p=0.004: THRESH -5193683 -> -5189473 (a change of 4210 in units of 2^-20); highest score among the accepted hard shots is 14604 below it; board != software rule on 0 shots
+  X p=0.005: THRESH -4238512 -> -4231121 (a change of 7391 in units of 2^-20); highest score among the accepted hard shots is 7434 below it; board != software rule on 0 shots
+  Z p=0.005: THRESH -4375415 -> -4373576 (a change of 1839 in units of 2^-20); highest score among the accepted hard shots is 96185 below it; board != software rule on 0 shots

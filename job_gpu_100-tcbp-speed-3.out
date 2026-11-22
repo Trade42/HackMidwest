@@ -10,3 +10,20 @@ PYT=/home/blakew3/.conda/envs/cascade/bin/python
 Sun Nov 22 18:29:34 UTC 2026
 GPU 0: NVIDIA A100-SXM4-80GB (UUID: GPU-438f01eb-c6d1-c950-6a50-daa2f9c0bdc2)
   MIG 2g.20gb     Device  0: (UUID: MIG-b8335f1f-c00b-5a22-8a6e-e63d2468741e)
+a network exit 0
+Sun Nov 22 18:30:27 UTC 2026
+eager      8.29 ms mean (median 8.26, p99 8.77) per shot; {'product': 'sparse'}; against eager {'largest_gap_float32': 0.0, 'rows_differ_float32': 0, 'rows_differ_float16': 0, 'entries_differ_float16': 0}
+cached     8.22 ms mean (median 8.15, p99 9.09) per shot; {'product': 'sparse'}; against eager {'largest_gap_float32': 0.0, 'rows_differ_float32': 0, 'rows_differ_float16': 0, 'entries_differ_float16': 0}
+dense      8.37 ms mean (median 8.29, p99 9.34) per shot; {'product': 'dense'}; against eager {'largest_gap_float32': 5.7220458984375e-06, 'rows_differ_float32': 1000, 'rows_differ_float16': 145, 'entries_differ_float16': 155}
+graph      1.73 ms mean (median 1.73, p99 1.79) per shot; {'product': 'sparse'}; against eager {'largest_gap_float32': 0.0, 'rows_differ_float32': 0, 'rows_differ_float16': 0, 'entries_differ_float16': 0}
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job3/net/summary.json
+a compile exit 0
+Sun Nov 22 18:31:15 UTC 2026
+/home/blakew3/.conda/envs/cascade/lib/python3.12/site-packages/triton/knobs.py:504: UserWarning: TRITON_DEFAULT_FP_FUSION is unset: defaulting to FP fusion ENABLED for backward compatibility in Triton 3.9. The default will change to DISABLED in Triton 3.10; set TRITON_DEFAULT_FP_FUSION=1 to keep fusion enabled or =0 to adopt the new default early and silence this warning.
+  warn_once(FP_FUSION_DEFAULT_WARNING)
+compile    1.74 ms mean (median 1.73, p99 1.91) per shot; {'product': 'dense', 'compile_and_warm_seconds': 25.081153313978575}; against eager {'largest_gap_float32': 0.007818222045898438, 'rows_differ_float32': 1000, 'rows_differ_float16': 831, 'entries_differ_float16': 1816}
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job3/net_compile/summary.json
+b probe exit 0
+DecoderResult: ['converged', 'opt_results', 'result']
+plugin: {'path': '/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/lib/decoder-plugins/libcudaq-qec-nv-qldpc-decoder.so', 'exported': {'set_priors': False, 'nvqldpc_set_priors': False, 'nvqldpc_update_priors': False, 'nvqldpc_set_error_rates': False, 'nvqldpc_update_error_rates': False, 'update_error_rates': False, 'set_error_rates': False}, 'strings': {'set_priors': True, 'the JOBS column costs are fixed at construction': True}}
+candidate methods on a built Decoder: none

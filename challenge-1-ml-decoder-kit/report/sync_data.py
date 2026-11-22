@@ -139,6 +139,8 @@ SOURCES = [
     ("test/predecoder/", "tree", "predecoder/logs/fallback_test_*.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/fallback_test_*.log", False),
     ("exploration/predecoder/", "tree", "predecoder/logs/fallback_validation_*.json", False),
+    ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.json", False),
+    ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.log", False),
 ]
 
 

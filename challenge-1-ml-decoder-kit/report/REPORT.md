@@ -257,7 +257,7 @@ believes, instead of choosing among finished answers. The head is ours; relay-BP
   failures, with <!--f:pre5X_it_ratio-->3.4<!--/f--> times fewer BP iterations. On the same X shots, TCBP-JOBS fails <!--f:pre5X_T-->186<!--/f--> (only the
   head's <!--f:pre5X_vs_T_only_H-->61<!--/f--> against <!--f:pre5X_vs_T_only_other-->96<!--/f-->, exact p = <!--f:pre5X_vs_T_p-->0.006<!--/f-->), and relay-BP's timed row fails <!--f:pre5X_R-->432<!--/f-->.
 - **The registered extension, run after the p = 0.005 X test result** (`predecoder/logs/extension_registered_spec.md`,
-  written before any of its numbers existed). <!--f:pre_extension-->The registered extension (X at p = 0.004 and 0.003, Z at p = 0.005) has not landed yet.<!--/f-->
+  written before any of its numbers existed). <!--f:pre_extension-->The registered extension (X at p = 0.004 and 0.003, Z at p = 0.005) has not landed yet.<!--/f--> <!--f:pre_pair-->The pair score at p = 0.005 has not landed yet.<!--/f-->
 - **Not held out: a fallback rule designed after that result.** The rule is simple: take relay-BP with the head's
   priors where that relay-BP converged (its own success flag, no truth), else take TCBP-JOBS. It was Sal's idea,
   prompted by these same test shots, so **its X number is post hoc, not held out**. It was frozen on the validation
@@ -266,7 +266,7 @@ believes, instead of choosing among finished answers. The head is ours; relay-BP
   <!--f:fb5X_rule-->107<!--/f--> against TCBP-JOBS's <!--f:fb5X_T-->186<!--/f--> (only the rule <!--f:fb5X_vs_T_only_rule-->16<!--/f-->, only TCBP-JOBS <!--f:fb5X_vs_T_only_T-->95<!--/f-->, exact p = <!--f:fb5X_vs_T_p-->8e-15<!--/f-->) and the head's priors alone <!--f:fb5X_H-->151<!--/f-->, and it
   falls back on <!--f:fb5X_back-->90<!--/f--> shots. Why it works: on the <!--f:fb5X_conv_shots-->9,910<!--/f--> shots where that relay-BP converged, relay-BP with the head's priors fails <!--f:fb5X_conv_H-->63<!--/f--> and
   TCBP-JOBS <!--f:fb5X_conv_T-->142<!--/f-->; on the <!--f:fb5X_back-->90<!--/f--> where it did not, it fails <!--f:fb5X_back_H-->88<!--/f--> and TCBP-JOBS <!--f:fb5X_back_T-->44<!--/f-->. <!--f:fb5Z_clause-->Its clean test will be the Z test file at p = 0.005, registered to be opened only after the rule was frozen (`predecoder/logs/fallback_rule_frozen.md`); that run has not landed yet.<!--/f-->
-- **What it does not show.** It covers one noise level and one basis, so it is not the kit's score, which counts
+- **What it does not show.** The held-out run covers one noise level and one basis, so it is not the kit's score, which counts
   pairs. Its times come from a shared 12-worker pool on the team's PC and are not clean, so the table gives
   iterations instead. `APPENDIX.md` K has the table.
 

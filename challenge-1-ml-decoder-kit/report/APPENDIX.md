@@ -568,7 +568,17 @@ Source: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.j
 | p | Basis | What this number is | Shots that fall back to TCBP-JOBS | The rule fails (share, 95% interval) | H fails | TCBP-JOBS fails | Rule against TCBP-JOBS: both / only the rule / only TCBP-JOBS (exact p) | Rule against H: both / only the rule / only H (exact p) |
 |---|---|---|---|---|---|---|---|---|
 | 0.005 | X | post hoc: the rule was prompted by these same test shots, so this number is not held out | 90 of 10,000 | 107 (1.07%, 0.89% to 1.29%) | 151 | 186 | 91 / 16 / 95 (p = 8e-15) | 106 / 1 / 45 (p = 1e-12) |
-| 0.005 | Z | its clean test: the rule was frozen before the Z test file was opened | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
+| 0.005 | Z | its clean test, run after the p = 0.005 X test result (the registered extension); the rule was frozen before the Z test file was opened | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
+| 0.004 | X | post hoc: the rule was designed after the first test result, and frozen before it was applied here; run after the p = 0.005 X test result (the registered extension) | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
+| 0.003 | X | post hoc: the rule was designed after the first test result, and frozen before it was applied here; run after the p = 0.005 X test result (the registered extension) | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
 
 Source: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`).
+
+**The pair score at p = 0.005: run after the p = 0.005 X test result (the registered extension); the fallback rule's half on X is post hoc.** The kit's score: a pair of an X shot and a Z shot fails when either fails. Not a held-out result, and not in the pair-scored tables of our decoder. TCBP-JOBS's and relay-BP's counts are checked against their rows in this report.
+
+| Decoder | Failures X, Z | Failed pairs | Rate per cycle ± error | Against TCBP-JOBS: both / only this / only TCBP-JOBS (exact p) | Against relay-BP's timed row: both / only this / only relay-BP (exact p) |
+|---|---|---|---|---|---|
+| relay-BP with the head's priors in both bases, H: run after the p = 0.005 X test result (the registered extension) | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
+
+Source: `report/data/test/predecoder/pair_test_p0.005.{json,log}` (`predecoder.pair`).
 <!-- END table:test_predecoder -->

@@ -1,0 +1,591 @@
+{
+  "corpus": "/home/brandon/HackMidwest/quantum_token_corpus/short",
+  "full": true,
+  "word_range": [
+    9,
+    15
+  ],
+  "split_sizes": {
+    "train": 1080,
+    "validation": 216,
+    "test": 216,
+    "test_ood": 144
+  },
+  "sha256": {
+    "train": "b201bb80045fb06e612b53b5c2d4ca7232bc6fa545addb59a2d09cca0fd10fc7",
+    "validation": "30cd6dcea900e6b966fb69a5844cbc6684cafb057db4933677c3b0ed3f0769e2",
+    "test": "7fb7820c8f58da9673eeb3c91e431a236567067fb241df72f0e62266b7ae7905",
+    "test_ood": "799c01d228583114183633ba370585b3f24136d239990aedd35e620029a5d9e2"
+  },
+  "versions": {
+    "python": "3.12.12",
+    "numpy": "2.5.5",
+    "pennylane": "0.45.1",
+    "scikit_learn": "1.9.1"
+  },
+  "protocol": {
+    "C_grid": [
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "selection": "validation accuracy; smallest C breaks ties",
+    "classifier_scaling": "StandardScaler fitted on training features only",
+    "shots": null,
+    "device": "default.qubit",
+    "repeats": 2,
+    "batch_size": 16,
+    "entangling_topology": "complete",
+    "encoding": "Explicit lexical cues; filler zero; no SVD/PCA or angle rescaling",
+    "limitation": "Controlled grammar; candidate_0 precedes candidate_1; not general NLP"
+  },
+  "layouts": {
+    "word_positions": {
+      "qubits": 15,
+      "unique_training_inputs": 32,
+      "encode_seconds_all_splits": 0.018450958999892464,
+      "seen_training_input_fraction": {
+        "validation": 1.0,
+        "test": 1.0,
+        "test_ood": 0.6944444444444444
+      }
+    },
+    "meaning_cues": {
+      "qubits": 5,
+      "unique_training_inputs": 12,
+      "encode_seconds_all_splits": 0.01846152999860351,
+      "seen_training_input_fraction": {
+        "validation": 1.0,
+        "test": 1.0,
+        "test_ood": 1.0
+      }
+    }
+  },
+  "models": [
+    {
+      "layout": "word_positions",
+      "method": "rbf",
+      "selected_C": 10.0,
+      "resources": null,
+      "fit_and_selection_seconds": 0.22850493600344635,
+      "feature_seconds": {
+        "train": 4.979992809239775e-07,
+        "validation": 3.989989636465907e-07,
+        "test": 1.095999323297292e-06,
+        "test_ood": 1.095999323297292e-06
+      },
+      "unique_circuits": {},
+      "scores": {
+        "train": {
+          "accuracy": 1.0,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.018293908000487136
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.002484124001057353
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.003595144000428263
+        },
+        "test_ood": {
+          "accuracy": 0.8472222222222222,
+          "n": 144,
+          "tier_1": 0.8333333333333334,
+          "tier_2": 0.7083333333333334,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0011517780003487132
+        }
+      }
+    },
+    {
+      "layout": "word_positions",
+      "method": "poly3",
+      "selected_C": 10.0,
+      "resources": null,
+      "fit_and_selection_seconds": 0.15753201299958164,
+      "feature_seconds": {
+        "train": 5.969995982013643e-07,
+        "validation": 2.990018401760608e-07,
+        "test": 5.969995982013643e-07,
+        "test_ood": 7.969974831212312e-07
+      },
+      "unique_circuits": {},
+      "scores": {
+        "train": {
+          "accuracy": 0.9962962962962963,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 0.9888888888888889,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.008947450998675777
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0016307049991155509
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0019405219973123167
+        },
+        "test_ood": {
+          "accuracy": 0.8611111111111112,
+          "n": 144,
+          "tier_1": 0.8333333333333334,
+          "tier_2": 0.75,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0008611919984105043
+        }
+      }
+    },
+    {
+      "layout": "word_positions",
+      "method": "classical_interactions",
+      "selected_C": 10.0,
+      "resources": null,
+      "fit_and_selection_seconds": 0.07379845600007684,
+      "feature_seconds": {
+        "train": 0.0003622350013756659,
+        "validation": 0.00015954300033627078,
+        "test": 0.00011220799933653325,
+        "test_ood": 0.0001006480015348643
+      },
+      "unique_circuits": {},
+      "scores": {
+        "train": {
+          "accuracy": 0.9962962962962963,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 0.9888888888888889,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.009202160999848275
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0022837239994260017
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0021256760010146536
+        },
+        "test_ood": {
+          "accuracy": 0.8472222222222222,
+          "n": 144,
+          "tier_1": 0.8333333333333334,
+          "tier_2": 0.7083333333333334,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0014688699993712362
+        }
+      }
+    },
+    {
+      "layout": "word_positions",
+      "method": "iqp_no_entanglement",
+      "selected_C": 10.0,
+      "resources": {
+        "qubits": 15,
+        "gates": 75,
+        "depth": 5,
+        "readout_features": 30,
+        "shots": null
+      },
+      "fit_and_selection_seconds": 0.05401332700057537,
+      "feature_seconds": {
+        "train": 1.5654752699992969,
+        "validation": 1.5136789179996413,
+        "test": 1.403114878001361,
+        "test_ood": 1.5206637199989927
+      },
+      "unique_circuits": {
+        "train": 32,
+        "validation": 26,
+        "test": 28,
+        "test_ood": 36
+      },
+      "scores": {
+        "train": {
+          "accuracy": 1.0,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.004636256002413575
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0016378559994336683
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0012503620018833317
+        },
+        "test_ood": {
+          "accuracy": 0.8472222222222222,
+          "n": 144,
+          "tier_1": 0.7916666666666666,
+          "tier_2": 0.75,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0010996389974025078
+        }
+      }
+    },
+    {
+      "layout": "word_positions",
+      "method": "iqp_entangling",
+      "selected_C": 10.0,
+      "resources": {
+        "qubits": 15,
+        "gates": 285,
+        "depth": 47,
+        "readout_features": 30,
+        "shots": null
+      },
+      "fit_and_selection_seconds": 0.05081358899769839,
+      "feature_seconds": {
+        "train": 6.876949353001692,
+        "validation": 5.925559283001348,
+        "test": 5.94541533300071,
+        "test_ood": 7.940078604999144
+      },
+      "unique_circuits": {
+        "train": 32,
+        "validation": 26,
+        "test": 28,
+        "test_ood": 36
+      },
+      "scores": {
+        "train": {
+          "accuracy": 0.9962962962962963,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 0.9888888888888889,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.005678587000147672
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.001560151002195198
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0015789839999342803
+        },
+        "test_ood": {
+          "accuracy": 0.8611111111111112,
+          "n": 144,
+          "tier_1": 0.8333333333333334,
+          "tier_2": 0.75,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0012810970001737587
+        }
+      }
+    },
+    {
+      "layout": "meaning_cues",
+      "method": "rbf",
+      "selected_C": 1.0,
+      "resources": null,
+      "fit_and_selection_seconds": 0.08220728300148039,
+      "feature_seconds": {
+        "train": 5.990004865452647e-07,
+        "validation": 1.9999788491986692e-07,
+        "test": 1.69699706020765e-06,
+        "test_ood": 4.989997250959277e-07
+      },
+      "unique_circuits": {},
+      "scores": {
+        "train": {
+          "accuracy": 1.0,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.01520988300035242
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0035357919987291098
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.001750879000610439
+        },
+        "test_ood": {
+          "accuracy": 1.0,
+          "n": 144,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0008097179998003412
+        }
+      }
+    },
+    {
+      "layout": "meaning_cues",
+      "method": "poly3",
+      "selected_C": 1.0,
+      "resources": null,
+      "fit_and_selection_seconds": 0.04168864899838809,
+      "feature_seconds": {
+        "train": 6.980008038226515e-07,
+        "validation": 2.989982021972537e-07,
+        "test": 8.980023267213255e-07,
+        "test_ood": 6.990012479946017e-07
+      },
+      "unique_circuits": {},
+      "scores": {
+        "train": {
+          "accuracy": 1.0,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.002315476001967909
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.000662505000946112
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0006061160020180978
+        },
+        "test_ood": {
+          "accuracy": 1.0,
+          "n": 144,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.00048145999971893616
+        }
+      }
+    },
+    {
+      "layout": "meaning_cues",
+      "method": "classical_interactions",
+      "selected_C": 1.0,
+      "resources": null,
+      "fit_and_selection_seconds": 0.0728056519983511,
+      "feature_seconds": {
+        "train": 0.00015579599858028814,
+        "validation": 3.732799814315513e-05,
+        "test": 5.728799806092866e-05,
+        "test_ood": 5.090099875815213e-05
+      },
+      "unique_circuits": {},
+      "scores": {
+        "train": {
+          "accuracy": 1.0,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.01776189599695499
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.003355543001816841
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0034682230034377426
+        },
+        "test_ood": {
+          "accuracy": 1.0,
+          "n": 144,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0018657549990166444
+        }
+      }
+    },
+    {
+      "layout": "meaning_cues",
+      "method": "iqp_no_entanglement",
+      "selected_C": 1.0,
+      "resources": {
+        "qubits": 5,
+        "gates": 25,
+        "depth": 5,
+        "readout_features": 10,
+        "shots": null
+      },
+      "fit_and_selection_seconds": 0.07738660299946787,
+      "feature_seconds": {
+        "train": 0.00564576900069369,
+        "validation": 0.0049820659987744875,
+        "test": 0.004901323998637963,
+        "test_ood": 0.00479223700313014
+      },
+      "unique_circuits": {
+        "train": 12,
+        "validation": 12,
+        "test": 12,
+        "test_ood": 12
+      },
+      "scores": {
+        "train": {
+          "accuracy": 1.0,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.01449238499844796
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.002151595999748679
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.0018229390007036272
+        },
+        "test_ood": {
+          "accuracy": 1.0,
+          "n": 144,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.003015507998497924
+        }
+      }
+    },
+    {
+      "layout": "meaning_cues",
+      "method": "iqp_entangling",
+      "selected_C": 0.1,
+      "resources": {
+        "qubits": 5,
+        "gates": 45,
+        "depth": 17,
+        "readout_features": 10,
+        "shots": null
+      },
+      "fit_and_selection_seconds": 0.049934337999729905,
+      "feature_seconds": {
+        "train": 0.008551692000764888,
+        "validation": 0.007766924998577451,
+        "test": 0.00813121300234343,
+        "test_ood": 0.008034303002204979
+      },
+      "unique_circuits": {
+        "train": 12,
+        "validation": 12,
+        "test": 12,
+        "test_ood": 12
+      },
+      "scores": {
+        "train": {
+          "accuracy": 1.0,
+          "n": 1080,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.03614238500085776
+        },
+        "validation": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.008763977002672618
+        },
+        "test": {
+          "accuracy": 1.0,
+          "n": 216,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.004283132002456114
+        },
+        "test_ood": {
+          "accuracy": 1.0,
+          "n": 144,
+          "tier_1": 1.0,
+          "tier_2": 1.0,
+          "tier_3": 1.0,
+          "svm_prediction_seconds": 0.00679931499689701
+        }
+      }
+    }
+  ]
+}

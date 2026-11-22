@@ -1,0 +1,4 @@
+name,family,seed,classifier,n_train,validation_accuracy,train_accuracy,fit_and_tune_seconds,parameters,convergence_warnings,features_kept
+raw_mlp_lbfgs,raw,101,mlp_lbfgs,64,0.5625,1.0,10.426599053000245,"{""hidden_layer_sizes"": [32, 16], ""alpha"": 0.1}",1,8
+raw_mlp_lbfgs,raw,102,mlp_lbfgs,64,0.703125,1.0,14.406341567999334,"{""hidden_layer_sizes"": [32, 16], ""alpha"": 0.01}",0,8
+raw_mlp_lbfgs,raw,103,mlp_lbfgs,64,0.7421875,1.0,12.71638047200031,"{""hidden_layer_sizes"": [32, 16], ""alpha"": 0.01}",0,8

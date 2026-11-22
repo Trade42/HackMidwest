@@ -1,0 +1,73 @@
+id,tier,sentence,candidate_0,candidate_1,label,referent,scenario_id
+T1-T1-B04-C2-00113,1,Red toolkit won't fit inside blue drawer; it's too large.,red toolkit,blue drawer,0,red toolkit,T1-B04-C2
+T1-T1-B00-C2-00019,1,Red trophy won't fit into blue suitcase; it's too large.,red trophy,blue suitcase,0,red trophy,T1-B00-C2
+T1-T1-B00-C2-00021,1,Red trophy won't fit inside blue suitcase; it's too small.,red trophy,blue suitcase,1,blue suitcase,T1-B00-C2
+T1-T1-B08-C2-00216,1,Red lunchbox cannot fit into blue backpack; it's too small.,red lunchbox,blue backpack,1,blue backpack,T1-B08-C2
+T1-T1-B06-C2-00167,1,Silver sample vial won't fit into gold holder; it's too small.,silver sample vial,gold holder,1,gold holder,T1-B06-C2
+T1-T1-B04-C2-00120,1,Red toolkit cannot fit into blue drawer; it's too small.,red toolkit,blue drawer,1,blue drawer,T1-B04-C2
+T1-T1-B20-C2-00502,1,Red keychain cannot fit inside blue pocket; it's too small.,red keychain,blue pocket,1,blue pocket,T1-B20-C2
+T1-T1-B06-C2-00165,1,Silver sample vial won't fit inside gold holder; it's too small.,silver sample vial,gold holder,1,gold holder,T1-B06-C2
+T1-T1-B06-C2-00163,1,Silver sample vial won't fit into gold holder; it's too large.,silver sample vial,gold holder,0,silver sample vial,T1-B06-C2
+T1-T1-B03-C2-00092,1,Green cushion cannot fit into yellow storage box; it's too large.,green cushion,yellow storage box,0,green cushion,T1-B03-C2
+T1-T1-B14-C2-00353,1,Red laptop won't fit inside blue bag; it's too large.,red laptop,blue bag,0,red laptop,T1-B14-C2
+T1-T1-B07-C2-00189,1,Red notebook won't fit inside blue pouch; it's too small.,red notebook,blue pouch,1,blue pouch,T1-B07-C2
+T1-T1-B04-C2-00116,1,Red toolkit cannot fit into blue drawer; it's too large.,red toolkit,blue drawer,0,red toolkit,T1-B04-C2
+T1-T1-B17-C2-00430,1,Silver soap bar cannot fit inside gold tin; it's too small.,silver soap bar,gold tin,1,gold tin,T1-B17-C2
+T1-T1-B17-C2-00432,1,Silver soap bar cannot fit into gold tin; it's too small.,silver soap bar,gold tin,1,gold tin,T1-B17-C2
+T1-T1-B07-C2-00188,1,Red notebook cannot fit into blue pouch; it's too large.,red notebook,blue pouch,0,red notebook,T1-B07-C2
+T1-T1-B20-C2-00499,1,Red keychain won't fit into blue pocket; it's too large.,red keychain,blue pocket,0,red keychain,T1-B20-C2
+T1-T1-B00-C2-00024,1,Red trophy cannot fit into blue suitcase; it's too small.,red trophy,blue suitcase,1,blue suitcase,T1-B00-C2
+T1-T1-B17-C2-00425,1,Silver soap bar won't fit inside gold tin; it's too large.,silver soap bar,gold tin,0,silver soap bar,T1-B17-C2
+T1-T1-B04-C2-00114,1,Red toolkit cannot fit inside blue drawer; it's too large.,red toolkit,blue drawer,0,red toolkit,T1-B04-C2
+T1-T1-B17-C2-00429,1,Silver soap bar won't fit inside gold tin; it's too small.,silver soap bar,gold tin,1,gold tin,T1-B17-C2
+T1-T1-B04-C2-00119,1,Red toolkit won't fit into blue drawer; it's too small.,red toolkit,blue drawer,1,blue drawer,T1-B04-C2
+T1-T1-B03-C2-00093,1,Green cushion won't fit inside yellow storage box; it's too small.,green cushion,yellow storage box,1,yellow storage box,T1-B03-C2
+T1-T1-B08-C2-00211,1,Red lunchbox won't fit into blue backpack; it's too large.,red lunchbox,blue backpack,0,red lunchbox,T1-B08-C2
+T1-T1-B07-C2-00192,1,Red notebook cannot fit into blue pouch; it's too small.,red notebook,blue pouch,1,blue pouch,T1-B07-C2
+T1-T1-B00-C2-00022,1,Red trophy cannot fit inside blue suitcase; it's too small.,red trophy,blue suitcase,1,blue suitcase,T1-B00-C2
+T1-T1-B04-C2-00118,1,Red toolkit cannot fit inside blue drawer; it's too small.,red toolkit,blue drawer,1,blue drawer,T1-B04-C2
+T1-T1-B17-C2-00428,1,Silver soap bar cannot fit into gold tin; it's too large.,silver soap bar,gold tin,0,silver soap bar,T1-B17-C2
+T1-T1-B07-C2-00190,1,Red notebook cannot fit inside blue pouch; it's too small.,red notebook,blue pouch,1,blue pouch,T1-B07-C2
+T1-T1-B08-C2-00215,1,Red lunchbox won't fit into blue backpack; it's too small.,red lunchbox,blue backpack,1,blue backpack,T1-B08-C2
+T1-T1-B03-C2-00090,1,Green cushion cannot fit inside yellow storage box; it's too large.,green cushion,yellow storage box,0,green cushion,T1-B03-C2
+T1-T1-B20-C2-00504,1,Red keychain cannot fit into blue pocket; it's too small.,red keychain,blue pocket,1,blue pocket,T1-B20-C2
+T1-T1-B14-C2-00355,1,Red laptop won't fit into blue bag; it's too large.,red laptop,blue bag,0,red laptop,T1-B14-C2
+T1-T1-B03-C2-00089,1,Green cushion won't fit inside yellow storage box; it's too large.,green cushion,yellow storage box,0,green cushion,T1-B03-C2
+T1-T1-B14-C2-00354,1,Red laptop cannot fit inside blue bag; it's too large.,red laptop,blue bag,0,red laptop,T1-B14-C2
+T1-T1-B14-C2-00358,1,Red laptop cannot fit inside blue bag; it's too small.,red laptop,blue bag,1,blue bag,T1-B14-C2
+T1-T1-B06-C2-00166,1,Silver sample vial cannot fit inside gold holder; it's too small.,silver sample vial,gold holder,1,gold holder,T1-B06-C2
+T1-T1-B20-C2-00503,1,Red keychain won't fit into blue pocket; it's too small.,red keychain,blue pocket,1,blue pocket,T1-B20-C2
+T1-T1-B00-C2-00017,1,Red trophy won't fit inside blue suitcase; it's too large.,red trophy,blue suitcase,0,red trophy,T1-B00-C2
+T1-T1-B06-C2-00164,1,Silver sample vial cannot fit into gold holder; it's too large.,silver sample vial,gold holder,0,silver sample vial,T1-B06-C2
+T1-T1-B06-C2-00162,1,Silver sample vial cannot fit inside gold holder; it's too large.,silver sample vial,gold holder,0,silver sample vial,T1-B06-C2
+T1-T1-B14-C2-00356,1,Red laptop cannot fit into blue bag; it's too large.,red laptop,blue bag,0,red laptop,T1-B14-C2
+T1-T1-B14-C2-00357,1,Red laptop won't fit inside blue bag; it's too small.,red laptop,blue bag,1,blue bag,T1-B14-C2
+T1-T1-B04-C2-00115,1,Red toolkit won't fit into blue drawer; it's too large.,red toolkit,blue drawer,0,red toolkit,T1-B04-C2
+T1-T1-B07-C2-00185,1,Red notebook won't fit inside blue pouch; it's too large.,red notebook,blue pouch,0,red notebook,T1-B07-C2
+T1-T1-B00-C2-00018,1,Red trophy cannot fit inside blue suitcase; it's too large.,red trophy,blue suitcase,0,red trophy,T1-B00-C2
+T1-T1-B00-C2-00023,1,Red trophy won't fit into blue suitcase; it's too small.,red trophy,blue suitcase,1,blue suitcase,T1-B00-C2
+T1-T1-B20-C2-00497,1,Red keychain won't fit inside blue pocket; it's too large.,red keychain,blue pocket,0,red keychain,T1-B20-C2
+T1-T1-B04-C2-00117,1,Red toolkit won't fit inside blue drawer; it's too small.,red toolkit,blue drawer,1,blue drawer,T1-B04-C2
+T1-T1-B03-C2-00095,1,Green cushion won't fit into yellow storage box; it's too small.,green cushion,yellow storage box,1,yellow storage box,T1-B03-C2
+T1-T1-B17-C2-00431,1,Silver soap bar won't fit into gold tin; it's too small.,silver soap bar,gold tin,1,gold tin,T1-B17-C2
+T1-T1-B20-C2-00501,1,Red keychain won't fit inside blue pocket; it's too small.,red keychain,blue pocket,1,blue pocket,T1-B20-C2
+T1-T1-B03-C2-00094,1,Green cushion cannot fit inside yellow storage box; it's too small.,green cushion,yellow storage box,1,yellow storage box,T1-B03-C2
+T1-T1-B07-C2-00186,1,Red notebook cannot fit inside blue pouch; it's too large.,red notebook,blue pouch,0,red notebook,T1-B07-C2
+T1-T1-B20-C2-00500,1,Red keychain cannot fit into blue pocket; it's too large.,red keychain,blue pocket,0,red keychain,T1-B20-C2
+T1-T1-B07-C2-00187,1,Red notebook won't fit into blue pouch; it's too large.,red notebook,blue pouch,0,red notebook,T1-B07-C2
+T1-T1-B00-C2-00020,1,Red trophy cannot fit into blue suitcase; it's too large.,red trophy,blue suitcase,0,red trophy,T1-B00-C2
+T1-T1-B08-C2-00212,1,Red lunchbox cannot fit into blue backpack; it's too large.,red lunchbox,blue backpack,0,red lunchbox,T1-B08-C2
+T1-T1-B08-C2-00210,1,Red lunchbox cannot fit inside blue backpack; it's too large.,red lunchbox,blue backpack,0,red lunchbox,T1-B08-C2
+T1-T1-B03-C2-00096,1,Green cushion cannot fit into yellow storage box; it's too small.,green cushion,yellow storage box,1,yellow storage box,T1-B03-C2
+T1-T1-B17-C2-00426,1,Silver soap bar cannot fit inside gold tin; it's too large.,silver soap bar,gold tin,0,silver soap bar,T1-B17-C2
+T1-T1-B08-C2-00214,1,Red lunchbox cannot fit inside blue backpack; it's too small.,red lunchbox,blue backpack,1,blue backpack,T1-B08-C2
+T1-T1-B17-C2-00427,1,Silver soap bar won't fit into gold tin; it's too large.,silver soap bar,gold tin,0,silver soap bar,T1-B17-C2
+T1-T1-B07-C2-00191,1,Red notebook won't fit into blue pouch; it's too small.,red notebook,blue pouch,1,blue pouch,T1-B07-C2
+T1-T1-B20-C2-00498,1,Red keychain cannot fit inside blue pocket; it's too large.,red keychain,blue pocket,0,red keychain,T1-B20-C2
+T1-T1-B14-C2-00359,1,Red laptop won't fit into blue bag; it's too small.,red laptop,blue bag,1,blue bag,T1-B14-C2
+T1-T1-B06-C2-00168,1,Silver sample vial cannot fit into gold holder; it's too small.,silver sample vial,gold holder,1,gold holder,T1-B06-C2
+T1-T1-B03-C2-00091,1,Green cushion won't fit into yellow storage box; it's too large.,green cushion,yellow storage box,0,green cushion,T1-B03-C2
+T1-T1-B14-C2-00360,1,Red laptop cannot fit into blue bag; it's too small.,red laptop,blue bag,1,blue bag,T1-B14-C2
+T1-T1-B08-C2-00209,1,Red lunchbox won't fit inside blue backpack; it's too large.,red lunchbox,blue backpack,0,red lunchbox,T1-B08-C2
+T1-T1-B06-C2-00161,1,Silver sample vial won't fit inside gold holder; it's too large.,silver sample vial,gold holder,0,silver sample vial,T1-B06-C2
+T1-T1-B08-C2-00213,1,Red lunchbox won't fit inside blue backpack; it's too small.,red lunchbox,blue backpack,1,blue backpack,T1-B08-C2

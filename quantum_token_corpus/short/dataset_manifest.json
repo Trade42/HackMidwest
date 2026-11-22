@@ -1,0 +1,37 @@
+{
+  "seed": 241121,
+  "primary_input_columns": [
+    "sentence",
+    "candidate_0",
+    "candidate_1"
+  ],
+  "target_column": "label",
+  "label_mapping": "0 = candidate_0; 1 = candidate_1",
+  "counts": {
+    "train": {
+      "1": 360,
+      "2": 360,
+      "3": 360
+    },
+    "validation": {
+      "1": 72,
+      "2": 72,
+      "3": 72
+    },
+    "test": {
+      "1": 72,
+      "2": 72,
+      "3": 72
+    },
+    "test_ood": {
+      "1": 48,
+      "2": 48,
+      "3": 48
+    }
+  },
+  "notes": "Only input columns are model inputs. Never train on referent, scenario_id, tier, or metadata_all.csv. Training and eval scenario IDs do not overlap.",
+  "edition": "short-v1",
+  "max_words": 15,
+  "word_count": "Alphabetic words; contractions count as one; punctuation excluded.",
+  "source": "Parent corpus; IDs, labels, candidate order and splits preserved."
+}

@@ -1,0 +1,30 @@
+{
+  "iqp_entangling": {
+    "qubits": 8,
+    "repeats": 2,
+    "logical_zz_gates": 56,
+    "compiled_two_qubit_gates": 112,
+    "compiled_gates": 208,
+    "compiled_depth": 68,
+    "readout_features": 36,
+    "measurement_settings": 1,
+    "basis": "Hadamard/RZ/CNOT",
+    "connectivity": "all-to-all; no routing",
+    "execution": "classical exact statevector simulator",
+    "hardware_runtime": null
+  },
+  "iqp_plain": {
+    "qubits": 8,
+    "repeats": 2,
+    "logical_zz_gates": 0,
+    "compiled_two_qubit_gates": 0,
+    "compiled_gates": 40,
+    "compiled_depth": 5,
+    "readout_features": 36,
+    "measurement_settings": 1,
+    "basis": "Hadamard/RZ/CNOT",
+    "connectivity": "all-to-all; no routing",
+    "execution": "classical exact statevector simulator",
+    "hardware_runtime": null
+  }
+}

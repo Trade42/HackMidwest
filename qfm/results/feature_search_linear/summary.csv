@@ -1,0 +1,5 @@
+name,family,classifier,validation_mean,validation_std,feature_seconds,cache_hit,n_features,n_rows
+quantum_probs_r2_s0.4,quantum_probs,linear,0.765625,0.06810779599282303,1.1067945600007079,False,264,896
+classical_probs_s0.7,product_probs,linear,0.7630208333333334,0.09892406204803426,0.007346474998485064,True,264,896
+classical_cubic,cubic,linear,0.7213541666666666,0.07216878364870323,0.0056587159997434355,True,164,896
+quantum_r2_s0.7,quantum,linear,0.5807291666666666,0.016263015620829165,1.7301869910006644,True,44,896

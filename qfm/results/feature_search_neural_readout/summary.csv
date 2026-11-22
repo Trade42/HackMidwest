@@ -1,0 +1,3 @@
+name,family,classifier,validation_mean,validation_std,feature_seconds,cache_hit,n_features,n_rows
+quantum_r2_s0.55,quantum,mlp_lbfgs,0.7890625,0.09210801658243434,1.7985395039977448,True,44,896
+classical_product_s0.55,product,mlp_lbfgs,0.765625,0.09375,0.00046998700054246,True,44,896

@@ -1,0 +1,73 @@
+id,tier,sentence,candidate_0,candidate_1,label,referent,scenario_id
+T2-T2-B07-C2-00743,2,Red cover sheet won't cover blue panel; it's too small.,red cover sheet,blue panel,0,red cover sheet,T2-B07-C2
+T2-T2-B20-C2-01050,2,Red cloth cover cannot fit on blue bench; it's too large.,red cloth cover,blue bench,0,red cloth cover,T2-B20-C2
+T2-T2-B00-C2-00575,2,Red rug won't cover blue floor; it's too small.,red rug,blue floor,0,red rug,T2-B00-C2
+T2-T2-B06-C2-00720,2,Silver canvas sheet cannot cover gold frame; it's too small.,silver canvas sheet,gold frame,0,silver canvas sheet,T2-B06-C2
+T2-T2-B03-C2-00647,2,Green poster won't cover yellow noticeboard; it's too small.,green poster,yellow noticeboard,0,green poster,T2-B03-C2
+T2-T2-B14-C2-00907,2,Red wrapping sheet won't fit on blue package; it's too small.,red wrapping sheet,blue package,1,blue package,T2-B14-C2
+T2-T2-B04-C2-00666,2,Red screen protector cannot fit on blue display; it's too large.,red screen protector,blue display,0,red screen protector,T2-B04-C2
+T2-T2-B04-C2-00671,2,Red screen protector won't cover blue display; it's too small.,red screen protector,blue display,0,red screen protector,T2-B04-C2
+T2-T2-B20-C2-01056,2,Red cloth cover cannot cover blue bench; it's too small.,red cloth cover,blue bench,0,red cloth cover,T2-B20-C2
+T2-T2-B08-C2-00764,2,Red tarp cannot fit on blue platform; it's too small.,red tarp,blue platform,1,blue platform,T2-B08-C2
+T2-T2-B00-C2-00571,2,Red rug won't fit on blue floor; it's too small.,red rug,blue floor,1,blue floor,T2-B00-C2
+T2-T2-B14-C2-00909,2,Red wrapping sheet won't cover blue package; it's too large.,red wrapping sheet,blue package,1,blue package,T2-B14-C2
+T2-T2-B07-C2-00741,2,Red cover sheet won't cover blue panel; it's too large.,red cover sheet,blue panel,1,blue panel,T2-B07-C2
+T2-T2-B00-C2-00576,2,Red rug cannot cover blue floor; it's too small.,red rug,blue floor,0,red rug,T2-B00-C2
+T2-T2-B17-C2-00983,2,Silver plastic liner won't cover gold tray; it's too small.,silver plastic liner,gold tray,0,silver plastic liner,T2-B17-C2
+T2-T2-B04-C2-00668,2,Red screen protector cannot fit on blue display; it's too small.,red screen protector,blue display,1,blue display,T2-B04-C2
+T2-T2-B14-C2-00908,2,Red wrapping sheet cannot fit on blue package; it's too small.,red wrapping sheet,blue package,1,blue package,T2-B14-C2
+T2-T2-B17-C2-00979,2,Silver plastic liner won't fit on gold tray; it's too small.,silver plastic liner,gold tray,1,gold tray,T2-B17-C2
+T2-T2-B20-C2-01052,2,Red cloth cover cannot fit on blue bench; it's too small.,red cloth cover,blue bench,1,blue bench,T2-B20-C2
+T2-T2-B03-C2-00645,2,Green poster won't cover yellow noticeboard; it's too large.,green poster,yellow noticeboard,1,yellow noticeboard,T2-B03-C2
+T2-T2-B07-C2-00742,2,Red cover sheet cannot cover blue panel; it's too large.,red cover sheet,blue panel,1,blue panel,T2-B07-C2
+T2-T2-B06-C2-00714,2,Silver canvas sheet cannot fit on gold frame; it's too large.,silver canvas sheet,gold frame,0,silver canvas sheet,T2-B06-C2
+T2-T2-B07-C2-00737,2,Red cover sheet won't fit on blue panel; it's too large.,red cover sheet,blue panel,0,red cover sheet,T2-B07-C2
+T2-T2-B08-C2-00763,2,Red tarp won't fit on blue platform; it's too small.,red tarp,blue platform,1,blue platform,T2-B08-C2
+T2-T2-B08-C2-00767,2,Red tarp won't cover blue platform; it's too small.,red tarp,blue platform,0,red tarp,T2-B08-C2
+T2-T2-B00-C2-00573,2,Red rug won't cover blue floor; it's too large.,red rug,blue floor,1,blue floor,T2-B00-C2
+T2-T2-B04-C2-00669,2,Red screen protector won't cover blue display; it's too large.,red screen protector,blue display,1,blue display,T2-B04-C2
+T2-T2-B17-C2-00981,2,Silver plastic liner won't cover gold tray; it's too large.,silver plastic liner,gold tray,1,gold tray,T2-B17-C2
+T2-T2-B03-C2-00643,2,Green poster won't fit on yellow noticeboard; it's too small.,green poster,yellow noticeboard,1,yellow noticeboard,T2-B03-C2
+T2-T2-B14-C2-00910,2,Red wrapping sheet cannot cover blue package; it's too large.,red wrapping sheet,blue package,1,blue package,T2-B14-C2
+T2-T2-B00-C2-00569,2,Red rug won't fit on blue floor; it's too large.,red rug,blue floor,0,red rug,T2-B00-C2
+T2-T2-B14-C2-00905,2,Red wrapping sheet won't fit on blue package; it's too large.,red wrapping sheet,blue package,0,red wrapping sheet,T2-B14-C2
+T2-T2-B04-C2-00665,2,Red screen protector won't fit on blue display; it's too large.,red screen protector,blue display,0,red screen protector,T2-B04-C2
+T2-T2-B14-C2-00911,2,Red wrapping sheet won't cover blue package; it's too small.,red wrapping sheet,blue package,0,red wrapping sheet,T2-B14-C2
+T2-T2-B17-C2-00980,2,Silver plastic liner cannot fit on gold tray; it's too small.,silver plastic liner,gold tray,1,gold tray,T2-B17-C2
+T2-T2-B14-C2-00912,2,Red wrapping sheet cannot cover blue package; it's too small.,red wrapping sheet,blue package,0,red wrapping sheet,T2-B14-C2
+T2-T2-B06-C2-00718,2,Silver canvas sheet cannot cover gold frame; it's too large.,silver canvas sheet,gold frame,1,gold frame,T2-B06-C2
+T2-T2-B08-C2-00765,2,Red tarp won't cover blue platform; it's too large.,red tarp,blue platform,1,blue platform,T2-B08-C2
+T2-T2-B06-C2-00719,2,Silver canvas sheet won't cover gold frame; it's too small.,silver canvas sheet,gold frame,0,silver canvas sheet,T2-B06-C2
+T2-T2-B06-C2-00715,2,Silver canvas sheet won't fit on gold frame; it's too small.,silver canvas sheet,gold frame,1,gold frame,T2-B06-C2
+T2-T2-B06-C2-00713,2,Silver canvas sheet won't fit on gold frame; it's too large.,silver canvas sheet,gold frame,0,silver canvas sheet,T2-B06-C2
+T2-T2-B04-C2-00667,2,Red screen protector won't fit on blue display; it's too small.,red screen protector,blue display,1,blue display,T2-B04-C2
+T2-T2-B08-C2-00766,2,Red tarp cannot cover blue platform; it's too large.,red tarp,blue platform,1,blue platform,T2-B08-C2
+T2-T2-B20-C2-01049,2,Red cloth cover won't fit on blue bench; it's too large.,red cloth cover,blue bench,0,red cloth cover,T2-B20-C2
+T2-T2-B08-C2-00761,2,Red tarp won't fit on blue platform; it's too large.,red tarp,blue platform,0,red tarp,T2-B08-C2
+T2-T2-B07-C2-00740,2,Red cover sheet cannot fit on blue panel; it's too small.,red cover sheet,blue panel,1,blue panel,T2-B07-C2
+T2-T2-B17-C2-00977,2,Silver plastic liner won't fit on gold tray; it's too large.,silver plastic liner,gold tray,0,silver plastic liner,T2-B17-C2
+T2-T2-B07-C2-00738,2,Red cover sheet cannot fit on blue panel; it's too large.,red cover sheet,blue panel,0,red cover sheet,T2-B07-C2
+T2-T2-B03-C2-00641,2,Green poster won't fit on yellow noticeboard; it's too large.,green poster,yellow noticeboard,0,green poster,T2-B03-C2
+T2-T2-B14-C2-00906,2,Red wrapping sheet cannot fit on blue package; it's too large.,red wrapping sheet,blue package,0,red wrapping sheet,T2-B14-C2
+T2-T2-B03-C2-00648,2,Green poster cannot cover yellow noticeboard; it's too small.,green poster,yellow noticeboard,0,green poster,T2-B03-C2
+T2-T2-B04-C2-00670,2,Red screen protector cannot cover blue display; it's too large.,red screen protector,blue display,1,blue display,T2-B04-C2
+T2-T2-B00-C2-00572,2,Red rug cannot fit on blue floor; it's too small.,red rug,blue floor,1,blue floor,T2-B00-C2
+T2-T2-B20-C2-01055,2,Red cloth cover won't cover blue bench; it's too small.,red cloth cover,blue bench,0,red cloth cover,T2-B20-C2
+T2-T2-B03-C2-00642,2,Green poster cannot fit on yellow noticeboard; it's too large.,green poster,yellow noticeboard,0,green poster,T2-B03-C2
+T2-T2-B06-C2-00716,2,Silver canvas sheet cannot fit on gold frame; it's too small.,silver canvas sheet,gold frame,1,gold frame,T2-B06-C2
+T2-T2-B20-C2-01054,2,Red cloth cover cannot cover blue bench; it's too large.,red cloth cover,blue bench,1,blue bench,T2-B20-C2
+T2-T2-B03-C2-00646,2,Green poster cannot cover yellow noticeboard; it's too large.,green poster,yellow noticeboard,1,yellow noticeboard,T2-B03-C2
+T2-T2-B03-C2-00644,2,Green poster cannot fit on yellow noticeboard; it's too small.,green poster,yellow noticeboard,1,yellow noticeboard,T2-B03-C2
+T2-T2-B07-C2-00744,2,Red cover sheet cannot cover blue panel; it's too small.,red cover sheet,blue panel,0,red cover sheet,T2-B07-C2
+T2-T2-B20-C2-01051,2,Red cloth cover won't fit on blue bench; it's too small.,red cloth cover,blue bench,1,blue bench,T2-B20-C2
+T2-T2-B04-C2-00672,2,Red screen protector cannot cover blue display; it's too small.,red screen protector,blue display,0,red screen protector,T2-B04-C2
+T2-T2-B08-C2-00762,2,Red tarp cannot fit on blue platform; it's too large.,red tarp,blue platform,0,red tarp,T2-B08-C2
+T2-T2-B07-C2-00739,2,Red cover sheet won't fit on blue panel; it's too small.,red cover sheet,blue panel,1,blue panel,T2-B07-C2
+T2-T2-B17-C2-00978,2,Silver plastic liner cannot fit on gold tray; it's too large.,silver plastic liner,gold tray,0,silver plastic liner,T2-B17-C2
+T2-T2-B00-C2-00574,2,Red rug cannot cover blue floor; it's too large.,red rug,blue floor,1,blue floor,T2-B00-C2
+T2-T2-B17-C2-00982,2,Silver plastic liner cannot cover gold tray; it's too large.,silver plastic liner,gold tray,1,gold tray,T2-B17-C2
+T2-T2-B06-C2-00717,2,Silver canvas sheet won't cover gold frame; it's too large.,silver canvas sheet,gold frame,1,gold frame,T2-B06-C2
+T2-T2-B17-C2-00984,2,Silver plastic liner cannot cover gold tray; it's too small.,silver plastic liner,gold tray,0,silver plastic liner,T2-B17-C2
+T2-T2-B00-C2-00570,2,Red rug cannot fit on blue floor; it's too large.,red rug,blue floor,0,red rug,T2-B00-C2
+T2-T2-B20-C2-01053,2,Red cloth cover won't cover blue bench; it's too large.,red cloth cover,blue bench,1,blue bench,T2-B20-C2
+T2-T2-B08-C2-00768,2,Red tarp cannot cover blue platform; it's too small.,red tarp,blue platform,0,red tarp,T2-B08-C2

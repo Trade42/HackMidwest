@@ -1,0 +1,73 @@
+id,tier,sentence,candidate_0,candidate_1,label,referent,scenario_id
+T2-T2-B16-C2-00954,2,Green mat cannot fit on yellow shelf; it's too large.,green mat,yellow shelf,0,green mat,T2-B16-C2
+T2-T2-B09-C2-00792,2,Green fabric sheet cannot cover yellow workbench; it's too small.,green fabric sheet,yellow workbench,0,green fabric sheet,T2-B09-C2
+T2-T2-B16-C2-00953,2,Green mat won't fit on yellow shelf; it's too large.,green mat,yellow shelf,0,green mat,T2-B16-C2
+T3-T3-B11-C2-01389,3,"Red pipe begins at higher pressure than blue pipe. Settings unchanged; select it, now lower.",red pipe,blue pipe,1,blue pipe,T3-B11-C2
+T1-T1-B09-C2-00240,1,Green bottle cannot fit into yellow cooler; it's too small.,green bottle,yellow cooler,1,yellow cooler,T1-B09-C2
+T3-T3-B11-C2-01392,3,"Red pipe begins at higher pressure than blue pipe. Settings swapped; select it, now higher.",red pipe,blue pipe,1,blue pipe,T3-B11-C2
+T3-T3-B09-C2-01342,3,"Green tank was at higher pressure than yellow tank. Settings unchanged; examine it, now higher.",green tank,yellow tank,0,green tank,T3-B09-C2
+T2-T2-B22-C2-01098,2,Silver vinyl wrap cannot fit on gold door; it's too large.,silver vinyl wrap,gold door,0,silver vinyl wrap,T2-B22-C2
+T1-T1-B05-C2-00141,1,Green package won't fit inside yellow crate; it's too small.,green package,yellow crate,1,yellow crate,T1-B05-C2
+T3-T3-B11-C2-01387,3,"Red pipe begins at lower pressure than blue pipe. Settings swapped; select it, now lower.",red pipe,blue pipe,1,blue pipe,T3-B11-C2
+T2-T2-B09-C2-00785,2,Green fabric sheet won't fit on yellow workbench; it's too large.,green fabric sheet,yellow workbench,0,green fabric sheet,T2-B09-C2
+T3-T3-B11-C2-01391,3,"Red pipe begins at higher pressure than blue pipe. Settings swapped; select it, now lower.",red pipe,blue pipe,0,red pipe,T3-B11-C2
+T3-T3-B11-C2-01386,3,"Red pipe begins at lower pressure than blue pipe. Settings unchanged; select it, now higher.",red pipe,blue pipe,1,blue pipe,T3-B11-C2
+T1-T1-B09-C2-00234,1,Green bottle cannot fit inside yellow cooler; it's too large.,green bottle,yellow cooler,0,green bottle,T1-B09-C2
+T3-T3-B11-C2-01388,3,"Red pipe begins at lower pressure than blue pipe. Settings swapped; select it, now higher.",red pipe,blue pipe,0,red pipe,T3-B11-C2
+T1-T1-B18-C2-00454,1,Green book cannot fit inside yellow box; it's too small.,green book,yellow box,1,yellow box,T1-B18-C2
+T3-T3-B05-C2-01241,3,"Green tank begins cooler than yellow tank. Settings unchanged; select it, now cooler.",green tank,yellow tank,0,green tank,T3-B05-C2
+T1-T1-B09-C2-00237,1,Green bottle won't fit inside yellow cooler; it's too small.,green bottle,yellow cooler,1,yellow cooler,T1-B09-C2
+T1-T1-B09-C2-00238,1,Green bottle cannot fit inside yellow cooler; it's too small.,green bottle,yellow cooler,1,yellow cooler,T1-B09-C2
+T3-T3-B05-C2-01243,3,"Green tank begins cooler than yellow tank. Settings swapped; select it, now cooler.",green tank,yellow tank,1,yellow tank,T3-B05-C2
+T3-T3-B11-C2-01385,3,"Red pipe begins at lower pressure than blue pipe. Settings unchanged; select it, now lower.",red pipe,blue pipe,0,red pipe,T3-B11-C2
+T1-T1-B18-C2-00449,1,Green book won't fit inside yellow box; it's too large.,green book,yellow box,0,green book,T1-B18-C2
+T1-T1-B18-C2-00455,1,Green book won't fit into yellow box; it's too small.,green book,yellow box,1,yellow box,T1-B18-C2
+T2-T2-B16-C2-00956,2,Green mat cannot fit on yellow shelf; it's too small.,green mat,yellow shelf,1,yellow shelf,T2-B16-C2
+T1-T1-B18-C2-00456,1,Green book cannot fit into yellow box; it's too small.,green book,yellow box,1,yellow box,T1-B18-C2
+T2-T2-B22-C2-01099,2,Silver vinyl wrap won't fit on gold door; it's too small.,silver vinyl wrap,gold door,1,gold door,T2-B22-C2
+T3-T3-B05-C2-01242,3,"Green tank begins cooler than yellow tank. Settings unchanged; select it, now warmer.",green tank,yellow tank,1,yellow tank,T3-B05-C2
+T1-T1-B09-C2-00239,1,Green bottle won't fit into yellow cooler; it's too small.,green bottle,yellow cooler,1,yellow cooler,T1-B09-C2
+T2-T2-B22-C2-01101,2,Silver vinyl wrap won't cover gold door; it's too large.,silver vinyl wrap,gold door,1,gold door,T2-B22-C2
+T1-T1-B05-C2-00142,1,Green package cannot fit inside yellow crate; it's too small.,green package,yellow crate,1,yellow crate,T1-B05-C2
+T3-T3-B09-C2-01344,3,"Green tank was at higher pressure than yellow tank. Settings swapped; examine it, now higher.",green tank,yellow tank,1,yellow tank,T3-B09-C2
+T2-T2-B22-C2-01097,2,Silver vinyl wrap won't fit on gold door; it's too large.,silver vinyl wrap,gold door,0,silver vinyl wrap,T2-B22-C2
+T1-T1-B05-C2-00143,1,Green package won't fit into yellow crate; it's too small.,green package,yellow crate,1,yellow crate,T1-B05-C2
+T3-T3-B09-C2-01341,3,"Green tank was at higher pressure than yellow tank. Settings unchanged; examine it, now lower.",green tank,yellow tank,1,yellow tank,T3-B09-C2
+T2-T2-B09-C2-00787,2,Green fabric sheet won't fit on yellow workbench; it's too small.,green fabric sheet,yellow workbench,1,yellow workbench,T2-B09-C2
+T1-T1-B05-C2-00137,1,Green package won't fit inside yellow crate; it's too large.,green package,yellow crate,0,green package,T1-B05-C2
+T1-T1-B05-C2-00140,1,Green package cannot fit into yellow crate; it's too large.,green package,yellow crate,0,green package,T1-B05-C2
+T3-T3-B09-C2-01343,3,"Green tank was at higher pressure than yellow tank. Settings swapped; examine it, now lower.",green tank,yellow tank,0,green tank,T3-B09-C2
+T2-T2-B16-C2-00958,2,Green mat cannot cover yellow shelf; it's too large.,green mat,yellow shelf,1,yellow shelf,T2-B16-C2
+T1-T1-B05-C2-00144,1,Green package cannot fit into yellow crate; it's too small.,green package,yellow crate,1,yellow crate,T1-B05-C2
+T2-T2-B09-C2-00786,2,Green fabric sheet cannot fit on yellow workbench; it's too large.,green fabric sheet,yellow workbench,0,green fabric sheet,T2-B09-C2
+T2-T2-B09-C2-00790,2,Green fabric sheet cannot cover yellow workbench; it's too large.,green fabric sheet,yellow workbench,1,yellow workbench,T2-B09-C2
+T1-T1-B09-C2-00235,1,Green bottle won't fit into yellow cooler; it's too large.,green bottle,yellow cooler,0,green bottle,T1-B09-C2
+T3-T3-B09-C2-01338,3,"Green tank was at lower pressure than yellow tank. Settings unchanged; examine it, now higher.",green tank,yellow tank,1,yellow tank,T3-B09-C2
+T3-T3-B05-C2-01246,3,"Green tank begins warmer than yellow tank. Settings unchanged; select it, now warmer.",green tank,yellow tank,0,green tank,T3-B05-C2
+T2-T2-B16-C2-00960,2,Green mat cannot cover yellow shelf; it's too small.,green mat,yellow shelf,0,green mat,T2-B16-C2
+T1-T1-B18-C2-00452,1,Green book cannot fit into yellow box; it's too large.,green book,yellow box,0,green book,T1-B18-C2
+T3-T3-B05-C2-01248,3,"Green tank begins warmer than yellow tank. Settings swapped; select it, now warmer.",green tank,yellow tank,1,yellow tank,T3-B05-C2
+T3-T3-B09-C2-01339,3,"Green tank was at lower pressure than yellow tank. Settings swapped; examine it, now lower.",green tank,yellow tank,1,yellow tank,T3-B09-C2
+T2-T2-B22-C2-01100,2,Silver vinyl wrap cannot fit on gold door; it's too small.,silver vinyl wrap,gold door,1,gold door,T2-B22-C2
+T1-T1-B09-C2-00233,1,Green bottle won't fit inside yellow cooler; it's too large.,green bottle,yellow cooler,0,green bottle,T1-B09-C2
+T3-T3-B09-C2-01340,3,"Green tank was at lower pressure than yellow tank. Settings swapped; examine it, now higher.",green tank,yellow tank,0,green tank,T3-B09-C2
+T1-T1-B18-C2-00453,1,Green book won't fit inside yellow box; it's too small.,green book,yellow box,1,yellow box,T1-B18-C2
+T2-T2-B09-C2-00789,2,Green fabric sheet won't cover yellow workbench; it's too large.,green fabric sheet,yellow workbench,1,yellow workbench,T2-B09-C2
+T3-T3-B05-C2-01247,3,"Green tank begins warmer than yellow tank. Settings swapped; select it, now cooler.",green tank,yellow tank,0,green tank,T3-B05-C2
+T3-T3-B05-C2-01244,3,"Green tank begins cooler than yellow tank. Settings swapped; select it, now warmer.",green tank,yellow tank,0,green tank,T3-B05-C2
+T2-T2-B22-C2-01103,2,Silver vinyl wrap won't cover gold door; it's too small.,silver vinyl wrap,gold door,0,silver vinyl wrap,T2-B22-C2
+T2-T2-B09-C2-00791,2,Green fabric sheet won't cover yellow workbench; it's too small.,green fabric sheet,yellow workbench,0,green fabric sheet,T2-B09-C2
+T2-T2-B16-C2-00959,2,Green mat won't cover yellow shelf; it's too small.,green mat,yellow shelf,0,green mat,T2-B16-C2
+T2-T2-B22-C2-01104,2,Silver vinyl wrap cannot cover gold door; it's too small.,silver vinyl wrap,gold door,0,silver vinyl wrap,T2-B22-C2
+T3-T3-B05-C2-01245,3,"Green tank begins warmer than yellow tank. Settings unchanged; select it, now cooler.",green tank,yellow tank,1,yellow tank,T3-B05-C2
+T2-T2-B22-C2-01102,2,Silver vinyl wrap cannot cover gold door; it's too large.,silver vinyl wrap,gold door,1,gold door,T2-B22-C2
+T2-T2-B09-C2-00788,2,Green fabric sheet cannot fit on yellow workbench; it's too small.,green fabric sheet,yellow workbench,1,yellow workbench,T2-B09-C2
+T2-T2-B16-C2-00957,2,Green mat won't cover yellow shelf; it's too large.,green mat,yellow shelf,1,yellow shelf,T2-B16-C2
+T3-T3-B11-C2-01390,3,"Red pipe begins at higher pressure than blue pipe. Settings unchanged; select it, now higher.",red pipe,blue pipe,0,red pipe,T3-B11-C2
+T1-T1-B18-C2-00451,1,Green book won't fit into yellow box; it's too large.,green book,yellow box,0,green book,T1-B18-C2
+T2-T2-B16-C2-00955,2,Green mat won't fit on yellow shelf; it's too small.,green mat,yellow shelf,1,yellow shelf,T2-B16-C2
+T1-T1-B05-C2-00139,1,Green package won't fit into yellow crate; it's too large.,green package,yellow crate,0,green package,T1-B05-C2
+T3-T3-B09-C2-01337,3,"Green tank was at lower pressure than yellow tank. Settings unchanged; examine it, now lower.",green tank,yellow tank,0,green tank,T3-B09-C2
+T1-T1-B09-C2-00236,1,Green bottle cannot fit into yellow cooler; it's too large.,green bottle,yellow cooler,0,green bottle,T1-B09-C2
+T1-T1-B18-C2-00450,1,Green book cannot fit inside yellow box; it's too large.,green book,yellow box,0,green book,T1-B18-C2
+T1-T1-B05-C2-00138,1,Green package cannot fit inside yellow crate; it's too large.,green package,yellow crate,0,green package,T1-B05-C2

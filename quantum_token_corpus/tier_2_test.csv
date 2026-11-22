@@ -1,0 +1,73 @@
+id,tier,sentence,candidate_0,candidate_1,label,referent,scenario_id
+T2-T2-B11-C2-00838,2,The red awning failed to cover the blue patio since it was too large.,red awning,blue patio,1,blue patio,T2-B11-C2
+T2-T2-B22-C2-01099,2,The silver vinyl wrap could not fit on the gold door because it was too small.,silver vinyl wrap,gold door,1,gold door,T2-B22-C2
+T2-T2-B09-C2-00789,2,The green fabric sheet could not cover the yellow workbench because it was too large.,green fabric sheet,yellow workbench,1,yellow workbench,T2-B09-C2
+T2-T2-B22-C2-01100,2,The silver vinyl wrap failed to fit on the gold door since it was too small.,silver vinyl wrap,gold door,1,gold door,T2-B22-C2
+T2-T2-B05-C2-00693,2,The green protective film could not cover the yellow window because it was too large.,green protective film,yellow window,1,yellow window,T2-B05-C2
+T2-T2-B18-C2-01007,2,The green insulation sheet could not cover the yellow wall because it was too small.,green insulation sheet,yellow wall,0,green insulation sheet,T2-B18-C2
+T2-T2-B22-C2-01102,2,The silver vinyl wrap failed to cover the gold door since it was too large.,silver vinyl wrap,gold door,1,gold door,T2-B22-C2
+T2-T2-B16-C2-00954,2,The green mat failed to fit on the yellow shelf since it was too large.,green mat,yellow shelf,0,green mat,T2-B16-C2
+T2-T2-B18-C2-01001,2,The green insulation sheet could not fit on the yellow wall because it was too large.,green insulation sheet,yellow wall,0,green insulation sheet,T2-B18-C2
+T2-T2-B21-C2-01080,2,The green paper overlay failed to cover the yellow diagram since it was too small.,green paper overlay,yellow diagram,0,green paper overlay,T2-B21-C2
+T2-T2-B22-C2-01101,2,The silver vinyl wrap could not cover the gold door because it was too large.,silver vinyl wrap,gold door,1,gold door,T2-B22-C2
+T2-T2-B18-C2-01002,2,The green insulation sheet failed to fit on the yellow wall since it was too large.,green insulation sheet,yellow wall,0,green insulation sheet,T2-B18-C2
+T2-T2-B02-C2-00624,2,The red tablecloth failed to cover the blue table since it was too small.,red tablecloth,blue table,0,red tablecloth,T2-B02-C2
+T2-T2-B16-C2-00958,2,The green mat failed to cover the yellow shelf since it was too large.,green mat,yellow shelf,1,yellow shelf,T2-B16-C2
+T2-T2-B18-C2-01006,2,The green insulation sheet failed to cover the yellow wall since it was too large.,green insulation sheet,yellow wall,1,yellow wall,T2-B18-C2
+T2-T2-B21-C2-01078,2,The green paper overlay failed to cover the yellow diagram since it was too large.,green paper overlay,yellow diagram,1,yellow diagram,T2-B21-C2
+T2-T2-B13-C2-00881,2,The silver sticker could not fit on the gold label area because it was too large.,silver sticker,gold label area,0,silver sticker,T2-B13-C2
+T2-T2-B13-C2-00885,2,The silver sticker could not cover the gold label area because it was too large.,silver sticker,gold label area,1,gold label area,T2-B13-C2
+T2-T2-B02-C2-00617,2,The red tablecloth could not fit on the blue table because it was too large.,red tablecloth,blue table,0,red tablecloth,T2-B02-C2
+T2-T2-B13-C2-00886,2,The silver sticker failed to cover the gold label area since it was too large.,silver sticker,gold label area,1,gold label area,T2-B13-C2
+T2-T2-B13-C2-00887,2,The silver sticker could not cover the gold label area because it was too small.,silver sticker,gold label area,0,silver sticker,T2-B13-C2
+T2-T2-B18-C2-01003,2,The green insulation sheet could not fit on the yellow wall because it was too small.,green insulation sheet,yellow wall,1,yellow wall,T2-B18-C2
+T2-T2-B11-C2-00835,2,The red awning could not fit on the blue patio because it was too small.,red awning,blue patio,1,blue patio,T2-B11-C2
+T2-T2-B21-C2-01073,2,The green paper overlay could not fit on the yellow diagram because it was too large.,green paper overlay,yellow diagram,0,green paper overlay,T2-B21-C2
+T2-T2-B05-C2-00696,2,The green protective film failed to cover the yellow window since it was too small.,green protective film,yellow window,0,green protective film,T2-B05-C2
+T2-T2-B05-C2-00691,2,The green protective film could not fit on the yellow window because it was too small.,green protective film,yellow window,1,yellow window,T2-B05-C2
+T2-T2-B11-C2-00836,2,The red awning failed to fit on the blue patio since it was too small.,red awning,blue patio,1,blue patio,T2-B11-C2
+T2-T2-B22-C2-01097,2,The silver vinyl wrap could not fit on the gold door because it was too large.,silver vinyl wrap,gold door,0,silver vinyl wrap,T2-B22-C2
+T2-T2-B02-C2-00621,2,The red tablecloth could not cover the blue table because it was too large.,red tablecloth,blue table,1,blue table,T2-B02-C2
+T2-T2-B13-C2-00883,2,The silver sticker could not fit on the gold label area because it was too small.,silver sticker,gold label area,1,gold label area,T2-B13-C2
+T2-T2-B09-C2-00791,2,The green fabric sheet could not cover the yellow workbench because it was too small.,green fabric sheet,yellow workbench,0,green fabric sheet,T2-B09-C2
+T2-T2-B13-C2-00884,2,The silver sticker failed to fit on the gold label area since it was too small.,silver sticker,gold label area,1,gold label area,T2-B13-C2
+T2-T2-B22-C2-01103,2,The silver vinyl wrap could not cover the gold door because it was too small.,silver vinyl wrap,gold door,0,silver vinyl wrap,T2-B22-C2
+T2-T2-B09-C2-00788,2,The green fabric sheet failed to fit on the yellow workbench since it was too small.,green fabric sheet,yellow workbench,1,yellow workbench,T2-B09-C2
+T2-T2-B21-C2-01079,2,The green paper overlay could not cover the yellow diagram because it was too small.,green paper overlay,yellow diagram,0,green paper overlay,T2-B21-C2
+T2-T2-B16-C2-00956,2,The green mat failed to fit on the yellow shelf since it was too small.,green mat,yellow shelf,1,yellow shelf,T2-B16-C2
+T2-T2-B16-C2-00955,2,The green mat could not fit on the yellow shelf because it was too small.,green mat,yellow shelf,1,yellow shelf,T2-B16-C2
+T2-T2-B02-C2-00622,2,The red tablecloth failed to cover the blue table since it was too large.,red tablecloth,blue table,1,blue table,T2-B02-C2
+T2-T2-B16-C2-00960,2,The green mat failed to cover the yellow shelf since it was too small.,green mat,yellow shelf,0,green mat,T2-B16-C2
+T2-T2-B05-C2-00689,2,The green protective film could not fit on the yellow window because it was too large.,green protective film,yellow window,0,green protective film,T2-B05-C2
+T2-T2-B22-C2-01098,2,The silver vinyl wrap failed to fit on the gold door since it was too large.,silver vinyl wrap,gold door,0,silver vinyl wrap,T2-B22-C2
+T2-T2-B21-C2-01076,2,The green paper overlay failed to fit on the yellow diagram since it was too small.,green paper overlay,yellow diagram,1,yellow diagram,T2-B21-C2
+T2-T2-B09-C2-00792,2,The green fabric sheet failed to cover the yellow workbench since it was too small.,green fabric sheet,yellow workbench,0,green fabric sheet,T2-B09-C2
+T2-T2-B05-C2-00695,2,The green protective film could not cover the yellow window because it was too small.,green protective film,yellow window,0,green protective film,T2-B05-C2
+T2-T2-B02-C2-00618,2,The red tablecloth failed to fit on the blue table since it was too large.,red tablecloth,blue table,0,red tablecloth,T2-B02-C2
+T2-T2-B09-C2-00786,2,The green fabric sheet failed to fit on the yellow workbench since it was too large.,green fabric sheet,yellow workbench,0,green fabric sheet,T2-B09-C2
+T2-T2-B11-C2-00839,2,The red awning could not cover the blue patio because it was too small.,red awning,blue patio,0,red awning,T2-B11-C2
+T2-T2-B18-C2-01008,2,The green insulation sheet failed to cover the yellow wall since it was too small.,green insulation sheet,yellow wall,0,green insulation sheet,T2-B18-C2
+T2-T2-B18-C2-01004,2,The green insulation sheet failed to fit on the yellow wall since it was too small.,green insulation sheet,yellow wall,1,yellow wall,T2-B18-C2
+T2-T2-B05-C2-00694,2,The green protective film failed to cover the yellow window since it was too large.,green protective film,yellow window,1,yellow window,T2-B05-C2
+T2-T2-B11-C2-00840,2,The red awning failed to cover the blue patio since it was too small.,red awning,blue patio,0,red awning,T2-B11-C2
+T2-T2-B11-C2-00833,2,The red awning could not fit on the blue patio because it was too large.,red awning,blue patio,0,red awning,T2-B11-C2
+T2-T2-B16-C2-00959,2,The green mat could not cover the yellow shelf because it was too small.,green mat,yellow shelf,0,green mat,T2-B16-C2
+T2-T2-B05-C2-00690,2,The green protective film failed to fit on the yellow window since it was too large.,green protective film,yellow window,0,green protective film,T2-B05-C2
+T2-T2-B02-C2-00619,2,The red tablecloth could not fit on the blue table because it was too small.,red tablecloth,blue table,1,blue table,T2-B02-C2
+T2-T2-B09-C2-00785,2,The green fabric sheet could not fit on the yellow workbench because it was too large.,green fabric sheet,yellow workbench,0,green fabric sheet,T2-B09-C2
+T2-T2-B05-C2-00692,2,The green protective film failed to fit on the yellow window since it was too small.,green protective film,yellow window,1,yellow window,T2-B05-C2
+T2-T2-B16-C2-00953,2,The green mat could not fit on the yellow shelf because it was too large.,green mat,yellow shelf,0,green mat,T2-B16-C2
+T2-T2-B21-C2-01074,2,The green paper overlay failed to fit on the yellow diagram since it was too large.,green paper overlay,yellow diagram,0,green paper overlay,T2-B21-C2
+T2-T2-B21-C2-01077,2,The green paper overlay could not cover the yellow diagram because it was too large.,green paper overlay,yellow diagram,1,yellow diagram,T2-B21-C2
+T2-T2-B16-C2-00957,2,The green mat could not cover the yellow shelf because it was too large.,green mat,yellow shelf,1,yellow shelf,T2-B16-C2
+T2-T2-B02-C2-00620,2,The red tablecloth failed to fit on the blue table since it was too small.,red tablecloth,blue table,1,blue table,T2-B02-C2
+T2-T2-B09-C2-00790,2,The green fabric sheet failed to cover the yellow workbench since it was too large.,green fabric sheet,yellow workbench,1,yellow workbench,T2-B09-C2
+T2-T2-B02-C2-00623,2,The red tablecloth could not cover the blue table because it was too small.,red tablecloth,blue table,0,red tablecloth,T2-B02-C2
+T2-T2-B09-C2-00787,2,The green fabric sheet could not fit on the yellow workbench because it was too small.,green fabric sheet,yellow workbench,1,yellow workbench,T2-B09-C2
+T2-T2-B22-C2-01104,2,The silver vinyl wrap failed to cover the gold door since it was too small.,silver vinyl wrap,gold door,0,silver vinyl wrap,T2-B22-C2
+T2-T2-B11-C2-00837,2,The red awning could not cover the blue patio because it was too large.,red awning,blue patio,1,blue patio,T2-B11-C2
+T2-T2-B13-C2-00882,2,The silver sticker failed to fit on the gold label area since it was too large.,silver sticker,gold label area,0,silver sticker,T2-B13-C2
+T2-T2-B21-C2-01075,2,The green paper overlay could not fit on the yellow diagram because it was too small.,green paper overlay,yellow diagram,1,yellow diagram,T2-B21-C2
+T2-T2-B11-C2-00834,2,The red awning failed to fit on the blue patio since it was too large.,red awning,blue patio,0,red awning,T2-B11-C2
+T2-T2-B13-C2-00888,2,The silver sticker failed to cover the gold label area since it was too small.,silver sticker,gold label area,0,silver sticker,T2-B13-C2
+T2-T2-B18-C2-01005,2,The green insulation sheet could not cover the yellow wall because it was too large.,green insulation sheet,yellow wall,1,yellow wall,T2-B18-C2

@@ -1,0 +1,145 @@
+id,tier,sentence,candidate_0,candidate_1,label,referent,scenario_id
+T1-T1-B04-C1-00105,1,The green toolkit did not fit inside the yellow drawer because it was too large.,green toolkit,yellow drawer,0,green toolkit,T1-B04-C1
+T1-T1-B05-C0-00126,1,The red package could not fit into the blue crate because it was too small.,red package,blue crate,1,blue crate,T1-B05-C0
+T2-T2-B18-C1-00993,2,The silver insulation sheet could not fit on the gold wall because it was too large.,silver insulation sheet,gold wall,0,silver insulation sheet,T2-B18-C1
+T3-T3-B19-C1-01575,3,"At first, the green buzzer was louder than the yellow buzzer. During adjustment, their volume settings were exchanged. Later, the technician examined it because it was the quieter one.",green buzzer,yellow buzzer,0,green buzzer,T3-B19-C1
+T3-T3-B18-C1-01547,3,"Before the test, the silver alarm was quieter than the gold alarm. The team then exchanged their volume settings. In the final check, the engineer selected it because it was the quieter one.",silver alarm,gold alarm,1,gold alarm,T3-B18-C1
+T1-T1-B09-C0-00220,1,The red bottle was unable to fit into the blue cooler because it was too large.,red bottle,blue cooler,0,red bottle,T1-B09-C0
+T2-T2-B07-C0-00722,2,The silver cover sheet failed to fit on the gold panel since it was too large.,silver cover sheet,gold panel,0,silver cover sheet,T2-B07-C0
+T3-T3-B19-C1-01573,3,"At first, the green buzzer was louder than the yellow buzzer. During adjustment, their volume settings were left unchanged. Later, the technician examined it because it was the quieter one.",green buzzer,yellow buzzer,1,yellow buzzer,T3-B19-C1
+T3-T3-B19-C1-01571,3,"At first, the green buzzer was quieter than the yellow buzzer. During adjustment, their volume settings were exchanged. Later, the technician examined it because it was the quieter one.",green buzzer,yellow buzzer,1,yellow buzzer,T3-B19-C1
+T1-T1-B04-C0-00104,1,The silver toolkit was unable to fit into the gold drawer because it was too small.,silver toolkit,gold drawer,1,gold drawer,T1-B04-C0
+T3-T3-B18-C1-01548,3,"Before the test, the silver alarm was quieter than the gold alarm. The team then exchanged their volume settings. In the final check, the engineer selected it because it was the louder one.",silver alarm,gold alarm,0,silver alarm,T3-B18-C1
+T2-T2-B12-C0-00842,2,The red shade cloth failed to fit on the blue deck since it was too large.,red shade cloth,blue deck,0,red shade cloth,T2-B12-C0
+T1-T1-B13-C0-00314,1,The red phone could not fit into the blue case because it was too large.,red phone,blue case,0,red phone,T1-B13-C0
+T2-T2-B22-C1-01096,2,The red vinyl wrap failed to cover the blue door since it was too small.,red vinyl wrap,blue door,0,red vinyl wrap,T2-B22-C1
+T2-T2-B22-C1-01095,2,The red vinyl wrap could not cover the blue door because it was too small.,red vinyl wrap,blue door,0,red vinyl wrap,T2-B22-C1
+T3-T3-B05-C1-01234,3,"Initially, the silver tank was cooler than the gold tank. During calibration, their temperatures were left unchanged. Afterward, the researcher inspected it because it was the warmer one.",silver tank,gold tank,1,gold tank,T3-B05-C1
+T1-T1-B04-C0-00097,1,The silver toolkit did not fit inside the gold drawer because it was too large.,silver toolkit,gold drawer,0,silver toolkit,T1-B04-C0
+T3-T3-B17-C0-01516,3,"At first, the red speaker was quieter than the blue speaker. During adjustment, their volume settings were exchanged. Later, the technician examined it because it was the louder one.",red speaker,blue speaker,0,red speaker,T3-B17-C0
+T3-T3-B11-C1-01378,3,"Initially, the silver pipe was under lower pressure than the gold pipe. During calibration, their pressure settings were left unchanged. Afterward, the researcher inspected it because it was under higher pressure.",silver pipe,gold pipe,1,gold pipe,T3-B11-C1
+T2-T2-B22-C1-01090,2,The red vinyl wrap failed to fit on the blue door since it was too large.,red vinyl wrap,blue door,0,red vinyl wrap,T2-B22-C1
+T1-T1-B19-C0-00459,1,The red camera would not fit inside the blue carrying case since it was too large.,red camera,blue carrying case,0,red camera,T1-B19-C0
+T2-T2-B14-C1-00900,2,The silver wrapping sheet failed to fit on the gold package since it was too small.,silver wrapping sheet,gold package,1,gold package,T2-B14-C1
+T3-T3-B15-C1-01476,3,"Before the test, the silver conveyor was slower than the gold conveyor. The team then exchanged their speed settings. In the final check, the engineer selected it because it was the faster one.",silver conveyor,gold conveyor,0,silver conveyor,T3-B15-C1
+T1-T1-B04-C0-00098,1,The silver toolkit could not fit into the gold drawer because it was too large.,silver toolkit,gold drawer,0,silver toolkit,T1-B04-C0
+T1-T1-B13-C0-00319,1,The red phone would not fit inside the blue case since it was too small.,red phone,blue case,1,blue case,T1-B13-C0
+T1-T1-B04-C1-00111,1,The green toolkit would not fit inside the yellow drawer since it was too small.,green toolkit,yellow drawer,1,yellow drawer,T1-B04-C1
+T2-T2-B14-C1-00901,2,The silver wrapping sheet could not cover the gold package because it was too large.,silver wrapping sheet,gold package,1,gold package,T2-B14-C1
+T2-T2-B08-C1-00758,2,The silver tarp failed to cover the gold platform since it was too large.,silver tarp,gold platform,1,gold platform,T2-B08-C1
+T3-T3-B15-C1-01473,3,"Before the test, the silver conveyor was slower than the gold conveyor. The team then left their speed settings unchanged. In the final check, the engineer selected it because it was the slower one.",silver conveyor,gold conveyor,0,silver conveyor,T3-B15-C1
+T3-T3-B15-C1-01480,3,"Before the test, the silver conveyor was faster than the gold conveyor. The team then exchanged their speed settings. In the final check, the engineer selected it because it was the faster one.",silver conveyor,gold conveyor,1,gold conveyor,T3-B15-C1
+T2-T2-B22-C1-01089,2,The red vinyl wrap could not fit on the blue door because it was too large.,red vinyl wrap,blue door,0,red vinyl wrap,T2-B22-C1
+T1-T1-B04-C1-00108,1,The green toolkit was unable to fit into the yellow drawer because it was too large.,green toolkit,yellow drawer,0,green toolkit,T1-B04-C1
+T3-T3-B17-C0-01515,3,"At first, the red speaker was quieter than the blue speaker. During adjustment, their volume settings were exchanged. Later, the technician examined it because it was the quieter one.",red speaker,blue speaker,1,blue speaker,T3-B17-C0
+T3-T3-B11-C1-01379,3,"Initially, the silver pipe was under lower pressure than the gold pipe. During calibration, their pressure settings were exchanged. Afterward, the researcher inspected it because it was under lower pressure.",silver pipe,gold pipe,1,gold pipe,T3-B11-C1
+T2-T2-B08-C1-00757,2,The silver tarp could not cover the gold platform because it was too large.,silver tarp,gold platform,1,gold platform,T2-B08-C1
+T1-T1-B13-C0-00313,1,The red phone did not fit inside the blue case because it was too large.,red phone,blue case,0,red phone,T1-B13-C0
+T2-T2-B18-C1-00996,2,The silver insulation sheet failed to fit on the gold wall since it was too small.,silver insulation sheet,gold wall,1,gold wall,T2-B18-C1
+T2-T2-B18-C1-00999,2,The silver insulation sheet could not cover the gold wall because it was too small.,silver insulation sheet,gold wall,0,silver insulation sheet,T2-B18-C1
+T3-T3-B17-C0-01519,3,"At first, the red speaker was louder than the blue speaker. During adjustment, their volume settings were exchanged. Later, the technician examined it because it was the quieter one.",red speaker,blue speaker,0,red speaker,T3-B17-C0
+T1-T1-B05-C0-00128,1,The red package was unable to fit into the blue crate because it was too small.,red package,blue crate,1,blue crate,T1-B05-C0
+T1-T1-B13-C0-00316,1,The red phone was unable to fit into the blue case because it was too large.,red phone,blue case,0,red phone,T1-B13-C0
+T2-T2-B12-C0-00844,2,The red shade cloth failed to fit on the blue deck since it was too small.,red shade cloth,blue deck,1,blue deck,T2-B12-C0
+T3-T3-B11-C1-01377,3,"Initially, the silver pipe was under lower pressure than the gold pipe. During calibration, their pressure settings were left unchanged. Afterward, the researcher inspected it because it was under lower pressure.",silver pipe,gold pipe,0,silver pipe,T3-B11-C1
+T3-T3-B17-C0-01517,3,"At first, the red speaker was louder than the blue speaker. During adjustment, their volume settings were left unchanged. Later, the technician examined it because it was the quieter one.",red speaker,blue speaker,1,blue speaker,T3-B17-C0
+T3-T3-B15-C1-01474,3,"Before the test, the silver conveyor was slower than the gold conveyor. The team then left their speed settings unchanged. In the final check, the engineer selected it because it was the faster one.",silver conveyor,gold conveyor,1,gold conveyor,T3-B15-C1
+T2-T2-B08-C1-00753,2,The silver tarp could not fit on the gold platform because it was too large.,silver tarp,gold platform,0,silver tarp,T2-B08-C1
+T2-T2-B14-C1-00897,2,The silver wrapping sheet could not fit on the gold package because it was too large.,silver wrapping sheet,gold package,0,silver wrapping sheet,T2-B14-C1
+T2-T2-B18-C1-01000,2,The silver insulation sheet failed to cover the gold wall since it was too small.,silver insulation sheet,gold wall,0,silver insulation sheet,T2-B18-C1
+T1-T1-B13-C0-00317,1,The red phone did not fit inside the blue case because it was too small.,red phone,blue case,1,blue case,T1-B13-C0
+T1-T1-B04-C0-00101,1,The silver toolkit did not fit inside the gold drawer because it was too small.,silver toolkit,gold drawer,1,gold drawer,T1-B04-C0
+T3-T3-B15-C1-01475,3,"Before the test, the silver conveyor was slower than the gold conveyor. The team then exchanged their speed settings. In the final check, the engineer selected it because it was the slower one.",silver conveyor,gold conveyor,1,gold conveyor,T3-B15-C1
+T2-T2-B12-C0-00847,2,The red shade cloth could not cover the blue deck because it was too small.,red shade cloth,blue deck,0,red shade cloth,T2-B12-C0
+T1-T1-B04-C0-00103,1,The silver toolkit would not fit inside the gold drawer since it was too small.,silver toolkit,gold drawer,1,gold drawer,T1-B04-C0
+T1-T1-B09-C0-00224,1,The red bottle was unable to fit into the blue cooler because it was too small.,red bottle,blue cooler,1,blue cooler,T1-B09-C0
+T3-T3-B05-C1-01236,3,"Initially, the silver tank was cooler than the gold tank. During calibration, their temperatures were exchanged. Afterward, the researcher inspected it because it was the warmer one.",silver tank,gold tank,0,silver tank,T3-B05-C1
+T2-T2-B14-C1-00899,2,The silver wrapping sheet could not fit on the gold package because it was too small.,silver wrapping sheet,gold package,1,gold package,T2-B14-C1
+T3-T3-B05-C1-01240,3,"Initially, the silver tank was warmer than the gold tank. During calibration, their temperatures were exchanged. Afterward, the researcher inspected it because it was the warmer one.",silver tank,gold tank,1,gold tank,T3-B05-C1
+T2-T2-B07-C0-00721,2,The silver cover sheet could not fit on the gold panel because it was too large.,silver cover sheet,gold panel,0,silver cover sheet,T2-B07-C0
+T3-T3-B05-C1-01235,3,"Initially, the silver tank was cooler than the gold tank. During calibration, their temperatures were exchanged. Afterward, the researcher inspected it because it was the cooler one.",silver tank,gold tank,1,gold tank,T3-B05-C1
+T2-T2-B18-C1-00997,2,The silver insulation sheet could not cover the gold wall because it was too large.,silver insulation sheet,gold wall,1,gold wall,T2-B18-C1
+T1-T1-B04-C1-00110,1,The green toolkit could not fit into the yellow drawer because it was too small.,green toolkit,yellow drawer,1,yellow drawer,T1-B04-C1
+T3-T3-B18-C1-01546,3,"Before the test, the silver alarm was quieter than the gold alarm. The team then left their volume settings unchanged. In the final check, the engineer selected it because it was the louder one.",silver alarm,gold alarm,1,gold alarm,T3-B18-C1
+T2-T2-B14-C1-00904,2,The silver wrapping sheet failed to cover the gold package since it was too small.,silver wrapping sheet,gold package,0,silver wrapping sheet,T2-B14-C1
+T1-T1-B19-C0-00463,1,The red camera would not fit inside the blue carrying case since it was too small.,red camera,blue carrying case,1,blue carrying case,T1-B19-C0
+T3-T3-B18-C1-01549,3,"Before the test, the silver alarm was louder than the gold alarm. The team then left their volume settings unchanged. In the final check, the engineer selected it because it was the quieter one.",silver alarm,gold alarm,1,gold alarm,T3-B18-C1
+T3-T3-B15-C1-01479,3,"Before the test, the silver conveyor was faster than the gold conveyor. The team then exchanged their speed settings. In the final check, the engineer selected it because it was the slower one.",silver conveyor,gold conveyor,0,silver conveyor,T3-B15-C1
+T1-T1-B04-C0-00102,1,The silver toolkit could not fit into the gold drawer because it was too small.,silver toolkit,gold drawer,1,gold drawer,T1-B04-C0
+T3-T3-B05-C1-01239,3,"Initially, the silver tank was warmer than the gold tank. During calibration, their temperatures were exchanged. Afterward, the researcher inspected it because it was the cooler one.",silver tank,gold tank,0,silver tank,T3-B05-C1
+T1-T1-B19-C0-00464,1,The red camera was unable to fit into the blue carrying case because it was too small.,red camera,blue carrying case,1,blue carrying case,T1-B19-C0
+T3-T3-B17-C0-01513,3,"At first, the red speaker was quieter than the blue speaker. During adjustment, their volume settings were left unchanged. Later, the technician examined it because it was the quieter one.",red speaker,blue speaker,0,red speaker,T3-B17-C0
+T3-T3-B15-C1-01477,3,"Before the test, the silver conveyor was faster than the gold conveyor. The team then left their speed settings unchanged. In the final check, the engineer selected it because it was the slower one.",silver conveyor,gold conveyor,1,gold conveyor,T3-B15-C1
+T1-T1-B13-C0-00318,1,The red phone could not fit into the blue case because it was too small.,red phone,blue case,1,blue case,T1-B13-C0
+T1-T1-B19-C0-00461,1,The red camera did not fit inside the blue carrying case because it was too small.,red camera,blue carrying case,1,blue carrying case,T1-B19-C0
+T3-T3-B15-C1-01478,3,"Before the test, the silver conveyor was faster than the gold conveyor. The team then left their speed settings unchanged. In the final check, the engineer selected it because it was the faster one.",silver conveyor,gold conveyor,0,silver conveyor,T3-B15-C1
+T2-T2-B22-C1-01092,2,The red vinyl wrap failed to fit on the blue door since it was too small.,red vinyl wrap,blue door,1,blue door,T2-B22-C1
+T1-T1-B04-C0-00100,1,The silver toolkit was unable to fit into the gold drawer because it was too large.,silver toolkit,gold drawer,0,silver toolkit,T1-B04-C0
+T1-T1-B04-C1-00112,1,The green toolkit was unable to fit into the yellow drawer because it was too small.,green toolkit,yellow drawer,1,yellow drawer,T1-B04-C1
+T1-T1-B13-C0-00320,1,The red phone was unable to fit into the blue case because it was too small.,red phone,blue case,1,blue case,T1-B13-C0
+T3-T3-B05-C1-01238,3,"Initially, the silver tank was warmer than the gold tank. During calibration, their temperatures were left unchanged. Afterward, the researcher inspected it because it was the warmer one.",silver tank,gold tank,0,silver tank,T3-B05-C1
+T2-T2-B08-C1-00754,2,The silver tarp failed to fit on the gold platform since it was too large.,silver tarp,gold platform,0,silver tarp,T2-B08-C1
+T2-T2-B18-C1-00995,2,The silver insulation sheet could not fit on the gold wall because it was too small.,silver insulation sheet,gold wall,1,gold wall,T2-B18-C1
+T2-T2-B12-C0-00845,2,The red shade cloth could not cover the blue deck because it was too large.,red shade cloth,blue deck,1,blue deck,T2-B12-C0
+T2-T2-B14-C1-00903,2,The silver wrapping sheet could not cover the gold package because it was too small.,silver wrapping sheet,gold package,0,silver wrapping sheet,T2-B14-C1
+T1-T1-B09-C0-00223,1,The red bottle would not fit inside the blue cooler since it was too small.,red bottle,blue cooler,1,blue cooler,T1-B09-C0
+T2-T2-B22-C1-01091,2,The red vinyl wrap could not fit on the blue door because it was too small.,red vinyl wrap,blue door,1,blue door,T2-B22-C1
+T1-T1-B09-C0-00217,1,The red bottle did not fit inside the blue cooler because it was too large.,red bottle,blue cooler,0,red bottle,T1-B09-C0
+T2-T2-B08-C1-00755,2,The silver tarp could not fit on the gold platform because it was too small.,silver tarp,gold platform,1,gold platform,T2-B08-C1
+T3-T3-B11-C1-01383,3,"Initially, the silver pipe was under higher pressure than the gold pipe. During calibration, their pressure settings were exchanged. Afterward, the researcher inspected it because it was under lower pressure.",silver pipe,gold pipe,0,silver pipe,T3-B11-C1
+T3-T3-B17-C0-01520,3,"At first, the red speaker was louder than the blue speaker. During adjustment, their volume settings were exchanged. Later, the technician examined it because it was the louder one.",red speaker,blue speaker,1,blue speaker,T3-B17-C0
+T1-T1-B05-C0-00121,1,The red package did not fit inside the blue crate because it was too large.,red package,blue crate,0,red package,T1-B05-C0
+T1-T1-B09-C0-00222,1,The red bottle could not fit into the blue cooler because it was too small.,red bottle,blue cooler,1,blue cooler,T1-B09-C0
+T1-T1-B19-C0-00462,1,The red camera could not fit into the blue carrying case because it was too small.,red camera,blue carrying case,1,blue carrying case,T1-B19-C0
+T3-T3-B18-C1-01551,3,"Before the test, the silver alarm was louder than the gold alarm. The team then exchanged their volume settings. In the final check, the engineer selected it because it was the quieter one.",silver alarm,gold alarm,0,silver alarm,T3-B18-C1
+T1-T1-B05-C0-00123,1,The red package would not fit inside the blue crate since it was too large.,red package,blue crate,0,red package,T1-B05-C0
+T3-T3-B17-C0-01514,3,"At first, the red speaker was quieter than the blue speaker. During adjustment, their volume settings were left unchanged. Later, the technician examined it because it was the louder one.",red speaker,blue speaker,1,blue speaker,T3-B17-C0
+T1-T1-B09-C0-00219,1,The red bottle would not fit inside the blue cooler since it was too large.,red bottle,blue cooler,0,red bottle,T1-B09-C0
+T1-T1-B05-C0-00124,1,The red package was unable to fit into the blue crate because it was too large.,red package,blue crate,0,red package,T1-B05-C0
+T2-T2-B08-C1-00756,2,The silver tarp failed to fit on the gold platform since it was too small.,silver tarp,gold platform,1,gold platform,T2-B08-C1
+T1-T1-B13-C0-00315,1,The red phone would not fit inside the blue case since it was too large.,red phone,blue case,0,red phone,T1-B13-C0
+T1-T1-B04-C1-00106,1,The green toolkit could not fit into the yellow drawer because it was too large.,green toolkit,yellow drawer,0,green toolkit,T1-B04-C1
+T3-T3-B19-C1-01574,3,"At first, the green buzzer was louder than the yellow buzzer. During adjustment, their volume settings were left unchanged. Later, the technician examined it because it was the louder one.",green buzzer,yellow buzzer,0,green buzzer,T3-B19-C1
+T1-T1-B19-C0-00460,1,The red camera was unable to fit into the blue carrying case because it was too large.,red camera,blue carrying case,0,red camera,T1-B19-C0
+T3-T3-B11-C1-01381,3,"Initially, the silver pipe was under higher pressure than the gold pipe. During calibration, their pressure settings were left unchanged. Afterward, the researcher inspected it because it was under lower pressure.",silver pipe,gold pipe,1,gold pipe,T3-B11-C1
+T2-T2-B14-C1-00902,2,The silver wrapping sheet failed to cover the gold package since it was too large.,silver wrapping sheet,gold package,1,gold package,T2-B14-C1
+T1-T1-B05-C0-00127,1,The red package would not fit inside the blue crate since it was too small.,red package,blue crate,1,blue crate,T1-B05-C0
+T2-T2-B18-C1-00998,2,The silver insulation sheet failed to cover the gold wall since it was too large.,silver insulation sheet,gold wall,1,gold wall,T2-B18-C1
+T2-T2-B07-C0-00725,2,The silver cover sheet could not cover the gold panel because it was too large.,silver cover sheet,gold panel,1,gold panel,T2-B07-C0
+T2-T2-B12-C0-00846,2,The red shade cloth failed to cover the blue deck since it was too large.,red shade cloth,blue deck,1,blue deck,T2-B12-C0
+T2-T2-B07-C0-00724,2,The silver cover sheet failed to fit on the gold panel since it was too small.,silver cover sheet,gold panel,1,gold panel,T2-B07-C0
+T1-T1-B04-C1-00109,1,The green toolkit did not fit inside the yellow drawer because it was too small.,green toolkit,yellow drawer,1,yellow drawer,T1-B04-C1
+T3-T3-B05-C1-01233,3,"Initially, the silver tank was cooler than the gold tank. During calibration, their temperatures were left unchanged. Afterward, the researcher inspected it because it was the cooler one.",silver tank,gold tank,0,silver tank,T3-B05-C1
+T3-T3-B11-C1-01384,3,"Initially, the silver pipe was under higher pressure than the gold pipe. During calibration, their pressure settings were exchanged. Afterward, the researcher inspected it because it was under higher pressure.",silver pipe,gold pipe,1,gold pipe,T3-B11-C1
+T2-T2-B12-C0-00841,2,The red shade cloth could not fit on the blue deck because it was too large.,red shade cloth,blue deck,0,red shade cloth,T2-B12-C0
+T1-T1-B04-C1-00107,1,The green toolkit would not fit inside the yellow drawer since it was too large.,green toolkit,yellow drawer,0,green toolkit,T1-B04-C1
+T3-T3-B11-C1-01380,3,"Initially, the silver pipe was under lower pressure than the gold pipe. During calibration, their pressure settings were exchanged. Afterward, the researcher inspected it because it was under higher pressure.",silver pipe,gold pipe,0,silver pipe,T3-B11-C1
+T1-T1-B19-C0-00457,1,The red camera did not fit inside the blue carrying case because it was too large.,red camera,blue carrying case,0,red camera,T1-B19-C0
+T2-T2-B14-C1-00898,2,The silver wrapping sheet failed to fit on the gold package since it was too large.,silver wrapping sheet,gold package,0,silver wrapping sheet,T2-B14-C1
+T1-T1-B09-C0-00221,1,The red bottle did not fit inside the blue cooler because it was too small.,red bottle,blue cooler,1,blue cooler,T1-B09-C0
+T1-T1-B04-C0-00099,1,The silver toolkit would not fit inside the gold drawer since it was too large.,silver toolkit,gold drawer,0,silver toolkit,T1-B04-C0
+T1-T1-B19-C0-00458,1,The red camera could not fit into the blue carrying case because it was too large.,red camera,blue carrying case,0,red camera,T1-B19-C0
+T3-T3-B19-C1-01572,3,"At first, the green buzzer was quieter than the yellow buzzer. During adjustment, their volume settings were exchanged. Later, the technician examined it because it was the louder one.",green buzzer,yellow buzzer,0,green buzzer,T3-B19-C1
+T2-T2-B12-C0-00848,2,The red shade cloth failed to cover the blue deck since it was too small.,red shade cloth,blue deck,0,red shade cloth,T2-B12-C0
+T2-T2-B12-C0-00843,2,The red shade cloth could not fit on the blue deck because it was too small.,red shade cloth,blue deck,1,blue deck,T2-B12-C0
+T3-T3-B19-C1-01570,3,"At first, the green buzzer was quieter than the yellow buzzer. During adjustment, their volume settings were left unchanged. Later, the technician examined it because it was the louder one.",green buzzer,yellow buzzer,1,yellow buzzer,T3-B19-C1
+T3-T3-B18-C1-01550,3,"Before the test, the silver alarm was louder than the gold alarm. The team then left their volume settings unchanged. In the final check, the engineer selected it because it was the louder one.",silver alarm,gold alarm,0,silver alarm,T3-B18-C1
+T3-T3-B19-C1-01576,3,"At first, the green buzzer was louder than the yellow buzzer. During adjustment, their volume settings were exchanged. Later, the technician examined it because it was the louder one.",green buzzer,yellow buzzer,1,yellow buzzer,T3-B19-C1
+T2-T2-B22-C1-01093,2,The red vinyl wrap could not cover the blue door because it was too large.,red vinyl wrap,blue door,1,blue door,T2-B22-C1
+T3-T3-B18-C1-01545,3,"Before the test, the silver alarm was quieter than the gold alarm. The team then left their volume settings unchanged. In the final check, the engineer selected it because it was the quieter one.",silver alarm,gold alarm,0,silver alarm,T3-B18-C1
+T3-T3-B18-C1-01552,3,"Before the test, the silver alarm was louder than the gold alarm. The team then exchanged their volume settings. In the final check, the engineer selected it because it was the louder one.",silver alarm,gold alarm,1,gold alarm,T3-B18-C1
+T1-T1-B05-C0-00125,1,The red package did not fit inside the blue crate because it was too small.,red package,blue crate,1,blue crate,T1-B05-C0
+T2-T2-B07-C0-00726,2,The silver cover sheet failed to cover the gold panel since it was too large.,silver cover sheet,gold panel,1,gold panel,T2-B07-C0
+T3-T3-B11-C1-01382,3,"Initially, the silver pipe was under higher pressure than the gold pipe. During calibration, their pressure settings were left unchanged. Afterward, the researcher inspected it because it was under higher pressure.",silver pipe,gold pipe,0,silver pipe,T3-B11-C1
+T2-T2-B18-C1-00994,2,The silver insulation sheet failed to fit on the gold wall since it was too large.,silver insulation sheet,gold wall,0,silver insulation sheet,T2-B18-C1
+T2-T2-B07-C0-00723,2,The silver cover sheet could not fit on the gold panel because it was too small.,silver cover sheet,gold panel,1,gold panel,T2-B07-C0
+T1-T1-B09-C0-00218,1,The red bottle could not fit into the blue cooler because it was too large.,red bottle,blue cooler,0,red bottle,T1-B09-C0
+T2-T2-B08-C1-00760,2,The silver tarp failed to cover the gold platform since it was too small.,silver tarp,gold platform,0,silver tarp,T2-B08-C1
+T3-T3-B19-C1-01569,3,"At first, the green buzzer was quieter than the yellow buzzer. During adjustment, their volume settings were left unchanged. Later, the technician examined it because it was the quieter one.",green buzzer,yellow buzzer,0,green buzzer,T3-B19-C1
+T2-T2-B22-C1-01094,2,The red vinyl wrap failed to cover the blue door since it was too large.,red vinyl wrap,blue door,1,blue door,T2-B22-C1
+T2-T2-B07-C0-00727,2,The silver cover sheet could not cover the gold panel because it was too small.,silver cover sheet,gold panel,0,silver cover sheet,T2-B07-C0
+T3-T3-B05-C1-01237,3,"Initially, the silver tank was warmer than the gold tank. During calibration, their temperatures were left unchanged. Afterward, the researcher inspected it because it was the cooler one.",silver tank,gold tank,1,gold tank,T3-B05-C1
+T2-T2-B07-C0-00728,2,The silver cover sheet failed to cover the gold panel since it was too small.,silver cover sheet,gold panel,0,silver cover sheet,T2-B07-C0
+T1-T1-B05-C0-00122,1,The red package could not fit into the blue crate because it was too large.,red package,blue crate,0,red package,T1-B05-C0
+T3-T3-B17-C0-01518,3,"At first, the red speaker was louder than the blue speaker. During adjustment, their volume settings were left unchanged. Later, the technician examined it because it was the louder one.",red speaker,blue speaker,0,red speaker,T3-B17-C0
+T2-T2-B08-C1-00759,2,The silver tarp could not cover the gold platform because it was too small.,silver tarp,gold platform,0,silver tarp,T2-B08-C1

@@ -1,0 +1,49 @@
+id,tier,sentence,candidate_0,candidate_1,label,referent,scenario_id
+T1-T1-B19-C2-00480,1,The silver camera remained outside the gold carrying case since it was too small.,silver camera,gold carrying case,1,gold carrying case,T1-B19-C2
+T1-T1-B10-C2-00262,1,"The silver painting would not go into the gold frame, as it was too small.",silver painting,gold frame,1,gold frame,T1-B10-C2
+T1-T1-B15-C2-00378,1,"The green file folder would not go into the yellow cabinet, as it was too large.",green file folder,yellow cabinet,0,green file folder,T1-B15-C2
+T1-T1-B01-C2-00045,1,"The red parcel could not be placed inside the blue locker, since it was too small.",red parcel,blue locker,1,blue locker,T1-B01-C2
+T1-T1-B12-C2-00310,1,"The silver tablet would not go into the gold sleeve, as it was too small.",silver tablet,gold sleeve,1,gold sleeve,T1-B12-C2
+T1-T1-B12-C2-00308,1,The silver tablet remained outside the gold sleeve since it was too large.,silver tablet,gold sleeve,0,silver tablet,T1-B12-C2
+T1-T1-B01-C1-00037,1,"The green parcel could not be placed inside the yellow locker, since it was too small.",green parcel,yellow locker,1,yellow locker,T1-B01-C1
+T1-T1-B01-C2-00042,1,"The red parcel would not go into the blue locker, as it was too large.",red parcel,blue locker,0,red parcel,T1-B01-C2
+T1-T1-B01-C1-00039,1,The green parcel could not be stored in the yellow locker because it was too small.,green parcel,yellow locker,1,yellow locker,T1-B01-C1
+T1-T1-B01-C1-00035,1,The green parcel could not be stored in the yellow locker because it was too large.,green parcel,yellow locker,0,green parcel,T1-B01-C1
+T1-T1-B19-C2-00478,1,"The silver camera would not go into the gold carrying case, as it was too small.",silver camera,gold carrying case,1,gold carrying case,T1-B19-C2
+T1-T1-B19-C2-00476,1,The silver camera remained outside the gold carrying case since it was too large.,silver camera,gold carrying case,0,silver camera,T1-B19-C2
+T1-T1-B12-C2-00307,1,The silver tablet could not be stored in the gold sleeve because it was too large.,silver tablet,gold sleeve,0,silver tablet,T1-B12-C2
+T1-T1-B10-C2-00260,1,The silver painting remained outside the gold frame since it was too large.,silver painting,gold frame,0,silver painting,T1-B10-C2
+T1-T1-B15-C2-00384,1,The green file folder remained outside the yellow cabinet since it was too small.,green file folder,yellow cabinet,1,yellow cabinet,T1-B15-C2
+T1-T1-B19-C2-00474,1,"The silver camera would not go into the gold carrying case, as it was too large.",silver camera,gold carrying case,0,silver camera,T1-B19-C2
+T1-T1-B10-C2-00259,1,The silver painting could not be stored in the gold frame because it was too large.,silver painting,gold frame,0,silver painting,T1-B10-C2
+T1-T1-B19-C2-00473,1,"The silver camera could not be placed inside the gold carrying case, since it was too large.",silver camera,gold carrying case,0,silver camera,T1-B19-C2
+T1-T1-B10-C2-00261,1,"The silver painting could not be placed inside the gold frame, since it was too small.",silver painting,gold frame,1,gold frame,T1-B10-C2
+T1-T1-B10-C2-00264,1,The silver painting remained outside the gold frame since it was too small.,silver painting,gold frame,1,gold frame,T1-B10-C2
+T1-T1-B15-C2-00381,1,"The green file folder could not be placed inside the yellow cabinet, since it was too small.",green file folder,yellow cabinet,1,yellow cabinet,T1-B15-C2
+T1-T1-B01-C2-00041,1,"The red parcel could not be placed inside the blue locker, since it was too large.",red parcel,blue locker,0,red parcel,T1-B01-C2
+T1-T1-B01-C2-00044,1,The red parcel remained outside the blue locker since it was too large.,red parcel,blue locker,0,red parcel,T1-B01-C2
+T1-T1-B12-C2-00312,1,The silver tablet remained outside the gold sleeve since it was too small.,silver tablet,gold sleeve,1,gold sleeve,T1-B12-C2
+T1-T1-B15-C2-00379,1,The green file folder could not be stored in the yellow cabinet because it was too large.,green file folder,yellow cabinet,0,green file folder,T1-B15-C2
+T1-T1-B19-C2-00475,1,The silver camera could not be stored in the gold carrying case because it was too large.,silver camera,gold carrying case,0,silver camera,T1-B19-C2
+T1-T1-B19-C2-00477,1,"The silver camera could not be placed inside the gold carrying case, since it was too small.",silver camera,gold carrying case,1,gold carrying case,T1-B19-C2
+T1-T1-B12-C2-00311,1,The silver tablet could not be stored in the gold sleeve because it was too small.,silver tablet,gold sleeve,1,gold sleeve,T1-B12-C2
+T1-T1-B01-C1-00036,1,The green parcel remained outside the yellow locker since it was too large.,green parcel,yellow locker,0,green parcel,T1-B01-C1
+T1-T1-B01-C2-00047,1,The red parcel could not be stored in the blue locker because it was too small.,red parcel,blue locker,1,blue locker,T1-B01-C2
+T1-T1-B15-C2-00377,1,"The green file folder could not be placed inside the yellow cabinet, since it was too large.",green file folder,yellow cabinet,0,green file folder,T1-B15-C2
+T1-T1-B10-C2-00257,1,"The silver painting could not be placed inside the gold frame, since it was too large.",silver painting,gold frame,0,silver painting,T1-B10-C2
+T1-T1-B01-C1-00033,1,"The green parcel could not be placed inside the yellow locker, since it was too large.",green parcel,yellow locker,0,green parcel,T1-B01-C1
+T1-T1-B01-C1-00040,1,The green parcel remained outside the yellow locker since it was too small.,green parcel,yellow locker,1,yellow locker,T1-B01-C1
+T1-T1-B15-C2-00383,1,The green file folder could not be stored in the yellow cabinet because it was too small.,green file folder,yellow cabinet,1,yellow cabinet,T1-B15-C2
+T1-T1-B15-C2-00382,1,"The green file folder would not go into the yellow cabinet, as it was too small.",green file folder,yellow cabinet,1,yellow cabinet,T1-B15-C2
+T1-T1-B01-C2-00048,1,The red parcel remained outside the blue locker since it was too small.,red parcel,blue locker,1,blue locker,T1-B01-C2
+T1-T1-B01-C1-00038,1,"The green parcel would not go into the yellow locker, as it was too small.",green parcel,yellow locker,1,yellow locker,T1-B01-C1
+T1-T1-B12-C2-00309,1,"The silver tablet could not be placed inside the gold sleeve, since it was too small.",silver tablet,gold sleeve,1,gold sleeve,T1-B12-C2
+T1-T1-B01-C2-00046,1,"The red parcel would not go into the blue locker, as it was too small.",red parcel,blue locker,1,blue locker,T1-B01-C2
+T1-T1-B15-C2-00380,1,The green file folder remained outside the yellow cabinet since it was too large.,green file folder,yellow cabinet,0,green file folder,T1-B15-C2
+T1-T1-B10-C2-00258,1,"The silver painting would not go into the gold frame, as it was too large.",silver painting,gold frame,0,silver painting,T1-B10-C2
+T1-T1-B19-C2-00479,1,The silver camera could not be stored in the gold carrying case because it was too small.,silver camera,gold carrying case,1,gold carrying case,T1-B19-C2
+T1-T1-B12-C2-00306,1,"The silver tablet would not go into the gold sleeve, as it was too large.",silver tablet,gold sleeve,0,silver tablet,T1-B12-C2
+T1-T1-B12-C2-00305,1,"The silver tablet could not be placed inside the gold sleeve, since it was too large.",silver tablet,gold sleeve,0,silver tablet,T1-B12-C2
+T1-T1-B01-C1-00034,1,"The green parcel would not go into the yellow locker, as it was too large.",green parcel,yellow locker,0,green parcel,T1-B01-C1
+T1-T1-B10-C2-00263,1,The silver painting could not be stored in the gold frame because it was too small.,silver painting,gold frame,1,gold frame,T1-B10-C2
+T1-T1-B01-C2-00043,1,The red parcel could not be stored in the blue locker because it was too large.,red parcel,blue locker,0,red parcel,T1-B01-C2

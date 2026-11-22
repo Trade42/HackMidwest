@@ -1,0 +1,5 @@
+pennylane==0.45.*
+torch==2.15.0+cpu
+transformers==4.57.6
+sentencepiece>=0.2
+sacremoses>=0.1

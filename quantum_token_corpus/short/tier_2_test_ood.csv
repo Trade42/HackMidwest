@@ -1,0 +1,49 @@
+id,tier,sentence,candidate_0,candidate_1,label,referent,scenario_id
+T2-T2-B10-C2-00809,2,Silver carpet fails to fit on gold landing; it's too large.,silver carpet,gold landing,0,silver carpet,T2-B10-C2
+T2-T2-B01-C2-00594,2,Red blanket failed to fit on blue bed; it's too large.,red blanket,blue bed,0,red blanket,T2-B01-C2
+T2-T2-B10-C2-00815,2,Silver carpet fails to cover gold landing; it's too small.,silver carpet,gold landing,0,silver carpet,T2-B10-C2
+T2-T2-B15-C2-00929,2,Green roof membrane fails to fit on yellow roof; it's too large.,green roof membrane,yellow roof,0,green roof membrane,T2-B15-C2
+T2-T2-B01-C1-00592,2,Green blanket failed to cover yellow bed; it's too small.,green blanket,yellow bed,0,green blanket,T2-B01-C1
+T2-T2-B15-C2-00931,2,Green roof membrane fails to fit on yellow roof; it's too small.,green roof membrane,yellow roof,1,yellow roof,T2-B15-C2
+T2-T2-B10-C2-00811,2,Silver carpet fails to fit on gold landing; it's too small.,silver carpet,gold landing,1,gold landing,T2-B10-C2
+T2-T2-B12-C2-00864,2,Silver shade cloth failed to cover gold deck; it's too small.,silver shade cloth,gold deck,0,silver shade cloth,T2-B12-C2
+T2-T2-B10-C2-00810,2,Silver carpet failed to fit on gold landing; it's too large.,silver carpet,gold landing,0,silver carpet,T2-B10-C2
+T2-T2-B12-C2-00863,2,Silver shade cloth fails to cover gold deck; it's too small.,silver shade cloth,gold deck,0,silver shade cloth,T2-B12-C2
+T2-T2-B19-C2-01031,2,Silver floor tile fails to cover gold floor section; it's too small.,silver floor tile,gold floor section,0,silver floor tile,T2-B19-C2
+T2-T2-B01-C2-00599,2,Red blanket fails to cover blue bed; it's too small.,red blanket,blue bed,0,red blanket,T2-B01-C2
+T2-T2-B01-C1-00585,2,Green blanket fails to fit on yellow bed; it's too large.,green blanket,yellow bed,0,green blanket,T2-B01-C1
+T2-T2-B19-C2-01026,2,Silver floor tile failed to fit on gold floor section; it's too large.,silver floor tile,gold floor section,0,silver floor tile,T2-B19-C2
+T2-T2-B01-C1-00590,2,Green blanket failed to cover yellow bed; it's too large.,green blanket,yellow bed,1,yellow bed,T2-B01-C1
+T2-T2-B12-C2-00859,2,Silver shade cloth fails to fit on gold deck; it's too small.,silver shade cloth,gold deck,1,gold deck,T2-B12-C2
+T2-T2-B19-C2-01029,2,Silver floor tile fails to cover gold floor section; it's too large.,silver floor tile,gold floor section,1,gold floor section,T2-B19-C2
+T2-T2-B01-C2-00600,2,Red blanket failed to cover blue bed; it's too small.,red blanket,blue bed,0,red blanket,T2-B01-C2
+T2-T2-B19-C2-01028,2,Silver floor tile failed to fit on gold floor section; it's too small.,silver floor tile,gold floor section,1,gold floor section,T2-B19-C2
+T2-T2-B01-C1-00588,2,Green blanket failed to fit on yellow bed; it's too small.,green blanket,yellow bed,1,yellow bed,T2-B01-C1
+T2-T2-B19-C2-01027,2,Silver floor tile fails to fit on gold floor section; it's too small.,silver floor tile,gold floor section,1,gold floor section,T2-B19-C2
+T2-T2-B12-C2-00862,2,Silver shade cloth failed to cover gold deck; it's too large.,silver shade cloth,gold deck,1,gold deck,T2-B12-C2
+T2-T2-B01-C1-00591,2,Green blanket fails to cover yellow bed; it's too small.,green blanket,yellow bed,0,green blanket,T2-B01-C1
+T2-T2-B15-C2-00932,2,Green roof membrane failed to fit on yellow roof; it's too small.,green roof membrane,yellow roof,1,yellow roof,T2-B15-C2
+T2-T2-B12-C2-00861,2,Silver shade cloth fails to cover gold deck; it's too large.,silver shade cloth,gold deck,1,gold deck,T2-B12-C2
+T2-T2-B01-C1-00587,2,Green blanket fails to fit on yellow bed; it's too small.,green blanket,yellow bed,1,yellow bed,T2-B01-C1
+T2-T2-B15-C2-00935,2,Green roof membrane fails to cover yellow roof; it's too small.,green roof membrane,yellow roof,0,green roof membrane,T2-B15-C2
+T2-T2-B15-C2-00934,2,Green roof membrane failed to cover yellow roof; it's too large.,green roof membrane,yellow roof,1,yellow roof,T2-B15-C2
+T2-T2-B12-C2-00860,2,Silver shade cloth failed to fit on gold deck; it's too small.,silver shade cloth,gold deck,1,gold deck,T2-B12-C2
+T2-T2-B01-C2-00596,2,Red blanket failed to fit on blue bed; it's too small.,red blanket,blue bed,1,blue bed,T2-B01-C2
+T2-T2-B01-C2-00598,2,Red blanket failed to cover blue bed; it's too large.,red blanket,blue bed,1,blue bed,T2-B01-C2
+T2-T2-B01-C2-00593,2,Red blanket fails to fit on blue bed; it's too large.,red blanket,blue bed,0,red blanket,T2-B01-C2
+T2-T2-B01-C2-00595,2,Red blanket fails to fit on blue bed; it's too small.,red blanket,blue bed,1,blue bed,T2-B01-C2
+T2-T2-B10-C2-00814,2,Silver carpet failed to cover gold landing; it's too large.,silver carpet,gold landing,1,gold landing,T2-B10-C2
+T2-T2-B19-C2-01030,2,Silver floor tile failed to cover gold floor section; it's too large.,silver floor tile,gold floor section,1,gold floor section,T2-B19-C2
+T2-T2-B15-C2-00933,2,Green roof membrane fails to cover yellow roof; it's too large.,green roof membrane,yellow roof,1,yellow roof,T2-B15-C2
+T2-T2-B01-C1-00586,2,Green blanket failed to fit on yellow bed; it's too large.,green blanket,yellow bed,0,green blanket,T2-B01-C1
+T2-T2-B10-C2-00816,2,Silver carpet failed to cover gold landing; it's too small.,silver carpet,gold landing,0,silver carpet,T2-B10-C2
+T2-T2-B12-C2-00857,2,Silver shade cloth fails to fit on gold deck; it's too large.,silver shade cloth,gold deck,0,silver shade cloth,T2-B12-C2
+T2-T2-B01-C2-00597,2,Red blanket fails to cover blue bed; it's too large.,red blanket,blue bed,1,blue bed,T2-B01-C2
+T2-T2-B10-C2-00812,2,Silver carpet failed to fit on gold landing; it's too small.,silver carpet,gold landing,1,gold landing,T2-B10-C2
+T2-T2-B15-C2-00930,2,Green roof membrane failed to fit on yellow roof; it's too large.,green roof membrane,yellow roof,0,green roof membrane,T2-B15-C2
+T2-T2-B01-C1-00589,2,Green blanket fails to cover yellow bed; it's too large.,green blanket,yellow bed,1,yellow bed,T2-B01-C1
+T2-T2-B15-C2-00936,2,Green roof membrane failed to cover yellow roof; it's too small.,green roof membrane,yellow roof,0,green roof membrane,T2-B15-C2
+T2-T2-B10-C2-00813,2,Silver carpet fails to cover gold landing; it's too large.,silver carpet,gold landing,1,gold landing,T2-B10-C2
+T2-T2-B12-C2-00858,2,Silver shade cloth failed to fit on gold deck; it's too large.,silver shade cloth,gold deck,0,silver shade cloth,T2-B12-C2
+T2-T2-B19-C2-01032,2,Silver floor tile failed to cover gold floor section; it's too small.,silver floor tile,gold floor section,0,silver floor tile,T2-B19-C2
+T2-T2-B19-C2-01025,2,Silver floor tile fails to fit on gold floor section; it's too large.,silver floor tile,gold floor section,0,silver floor tile,T2-B19-C2

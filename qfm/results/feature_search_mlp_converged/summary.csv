@@ -1,0 +1,2 @@
+name,family,classifier,validation_mean,validation_std,feature_seconds,cache_hit,n_features,n_rows
+raw_mlp_lbfgs,raw,mlp_lbfgs,0.7942708333333334,0.059668954361404174,0.00024205299996538088,False,8,896

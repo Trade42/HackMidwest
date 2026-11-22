@@ -1,0 +1,20 @@
+{
+  "specification": {
+    "model_id": "distilbert/distilbert-base-uncased",
+    "revision": "12040accade4e8a0f71eabdb258fecc2e7e948be",
+    "pooling": "sentence-pair-candidates-masked-mean-v1",
+    "max_length": 128,
+    "device": "cpu",
+    "dtype": "float32"
+  },
+  "input_fingerprint": "815bc6582245d6eafc2e474cd1240b565ec672a56fcae35a8f7a30a1c382d0a3",
+  "embedding_width": 768,
+  "examples": 1656,
+  "longest_tokens": 38,
+  "generation_seconds": 43.859808707999036,
+  "cache_hit": false,
+  "current_seconds": 43.859808707999036,
+  "frozen": true,
+  "training": false,
+  "requires_grad": false
+}

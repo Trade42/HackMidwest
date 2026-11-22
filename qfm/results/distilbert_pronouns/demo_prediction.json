@@ -1,0 +1,71 @@
+{
+  "input": {
+    "sentence": "The trophy cannot fit inside the suitcase; it is too large.",
+    "candidate_0": "trophy",
+    "candidate_1": "suitcase"
+  },
+  "predictions": [
+    {
+      "model": "iqp_entangling",
+      "candidate_index": 0,
+      "candidate": "trophy",
+      "feature_seconds": 0.028159142999356845,
+      "head_seconds": 0.0041400800000701565
+    },
+    {
+      "model": "iqp_plain",
+      "candidate_index": 0,
+      "candidate": "trophy",
+      "feature_seconds": 0.014650741999503225,
+      "head_seconds": 0.003702181998960441
+    },
+    {
+      "model": "rbf",
+      "candidate_index": 0,
+      "candidate": "trophy",
+      "feature_seconds": 0.0,
+      "head_seconds": 0.004141665001952788
+    },
+    {
+      "model": "polynomial",
+      "candidate_index": 0,
+      "candidate": "trophy",
+      "feature_seconds": 0.0,
+      "head_seconds": 0.0036893050018989015
+    },
+    {
+      "model": "mlp",
+      "candidate_index": 0,
+      "candidate": "trophy",
+      "feature_seconds": 0.0,
+      "head_seconds": 0.004089960999408504
+    },
+    {
+      "model": "full_rbf",
+      "candidate_index": 0,
+      "candidate": "trophy",
+      "feature_seconds": 0.0,
+      "head_seconds": 0.003483578999293968
+    },
+    {
+      "model": "fourier",
+      "candidate_index": 0,
+      "candidate": "trophy",
+      "feature_seconds": 0.00025178400028380565,
+      "head_seconds": 0.004088277000846574
+    },
+    {
+      "model": "surrogate",
+      "candidate_index": 0,
+      "candidate": "trophy",
+      "feature_seconds": 0.004456544000277063,
+      "head_seconds": 0.003705647999595385
+    }
+  ],
+  "checkpoint_load_seconds": 3.6725215039987233,
+  "encoder_seconds": 0.056636532997799804,
+  "pca_seconds": 0.01852021800004877,
+  "model_artifact": "models/n256_seed301.joblib",
+  "quantum_execution": "Exact CPU simulator; no hardware timing",
+  "preprocessing": "Frozen DistilBERT and saved training-only PCA/scaler"
+}

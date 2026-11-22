@@ -1,0 +1,361 @@
+id,tier,sentence,candidate_0,candidate_1,label,referent,scenario_id
+T1-T1-B09-C0-00217,1,The red bottle did not fit inside the blue cooler because it was too large.,red bottle,blue cooler,0,red bottle,T1-B09-C0
+T1-T1-B22-C0-00535,1,The green sculpture would not fit inside the yellow display case since it was too small.,green sculpture,yellow display case,1,yellow display case,T1-B22-C0
+T1-T1-B05-C0-00125,1,The red package did not fit inside the blue crate because it was too small.,red package,blue crate,1,blue crate,T1-B05-C0
+T1-T1-B22-C1-00544,1,The red sculpture was unable to fit into the blue display case because it was too small.,red sculpture,blue display case,1,blue display case,T1-B22-C1
+T1-T1-B22-C0-00533,1,The green sculpture did not fit inside the yellow display case because it was too small.,green sculpture,yellow display case,1,yellow display case,T1-B22-C0
+T1-T1-B03-C0-00077,1,The silver cushion did not fit inside the gold storage box because it was too small.,silver cushion,gold storage box,1,gold storage box,T1-B03-C0
+T1-T1-B13-C0-00319,1,The red phone would not fit inside the blue case since it was too small.,red phone,blue case,1,blue case,T1-B13-C0
+T1-T1-B08-C0-00194,1,The green lunchbox could not fit into the yellow backpack because it was too large.,green lunchbox,yellow backpack,0,green lunchbox,T1-B08-C0
+T1-T1-B05-C1-00129,1,The silver package did not fit inside the gold crate because it was too large.,silver package,gold crate,0,silver package,T1-B05-C1
+T1-T1-B19-C0-00464,1,The red camera was unable to fit into the blue carrying case because it was too small.,red camera,blue carrying case,1,blue carrying case,T1-B19-C0
+T1-T1-B21-C1-00513,1,The red canister did not fit inside the blue cubby because it was too large.,red canister,blue cubby,0,red canister,T1-B21-C1
+T1-T1-B07-C0-00176,1,The silver notebook was unable to fit into the gold pouch because it was too small.,silver notebook,gold pouch,1,gold pouch,T1-B07-C0
+T1-T1-B01-C0-00032,1,The silver parcel was unable to fit into the gold locker because it was too small.,silver parcel,gold locker,1,gold locker,T1-B01-C0
+T1-T1-B03-C0-00076,1,The silver cushion was unable to fit into the gold storage box because it was too large.,silver cushion,gold storage box,0,silver cushion,T1-B03-C0
+T1-T1-B03-C0-00078,1,The silver cushion could not fit into the gold storage box because it was too small.,silver cushion,gold storage box,1,gold storage box,T1-B03-C0
+T1-T1-B18-C1-00448,1,The silver book was unable to fit into the gold box because it was too small.,silver book,gold box,1,gold box,T1-B18-C1
+T1-T1-B19-C0-00458,1,The red camera could not fit into the blue carrying case because it was too large.,red camera,blue carrying case,0,red camera,T1-B19-C0
+T1-T1-B04-C0-00103,1,The silver toolkit would not fit inside the gold drawer since it was too small.,silver toolkit,gold drawer,1,gold drawer,T1-B04-C0
+T1-T1-B14-C1-00346,1,The silver laptop could not fit into the gold bag because it was too large.,silver laptop,gold bag,0,silver laptop,T1-B14-C1
+T1-T1-B04-C0-00100,1,The silver toolkit was unable to fit into the gold drawer because it was too large.,silver toolkit,gold drawer,0,silver toolkit,T1-B04-C0
+T1-T1-B08-C1-00204,1,The silver lunchbox was unable to fit into the gold backpack because it was too large.,silver lunchbox,gold backpack,0,silver lunchbox,T1-B08-C1
+T1-T1-B00-C1-00014,1,The silver trophy could not fit into the gold suitcase because it was too small.,silver trophy,gold suitcase,1,gold suitcase,T1-B00-C1
+T1-T1-B07-C0-00169,1,The silver notebook did not fit inside the gold pouch because it was too large.,silver notebook,gold pouch,0,silver notebook,T1-B07-C0
+T1-T1-B15-C0-00364,1,The red file folder was unable to fit into the blue cabinet because it was too large.,red file folder,blue cabinet,0,red file folder,T1-B15-C0
+T1-T1-B12-C1-00301,1,The green tablet did not fit inside the yellow sleeve because it was too small.,green tablet,yellow sleeve,1,yellow sleeve,T1-B12-C1
+T1-T1-B11-C1-00279,1,The silver wooden block would not fit inside the gold mold since it was too small.,silver wooden block,gold mold,1,gold mold,T1-B11-C1
+T1-T1-B17-C1-00424,1,The green soap bar was unable to fit into the yellow tin because it was too small.,green soap bar,yellow tin,1,yellow tin,T1-B17-C1
+T1-T1-B07-C0-00175,1,The silver notebook would not fit inside the gold pouch since it was too small.,silver notebook,gold pouch,1,gold pouch,T1-B07-C0
+T1-T1-B14-C1-00345,1,The silver laptop did not fit inside the gold bag because it was too large.,silver laptop,gold bag,0,silver laptop,T1-B14-C1
+T1-T1-B21-C1-00514,1,The red canister could not fit into the blue cubby because it was too large.,red canister,blue cubby,0,red canister,T1-B21-C1
+T1-T1-B09-C0-00219,1,The red bottle would not fit inside the blue cooler since it was too large.,red bottle,blue cooler,0,red bottle,T1-B09-C0
+T1-T1-B15-C0-00366,1,The red file folder could not fit into the blue cabinet because it was too small.,red file folder,blue cabinet,1,blue cabinet,T1-B15-C0
+T1-T1-B21-C1-00519,1,The red canister would not fit inside the blue cubby since it was too small.,red canister,blue cubby,1,blue cubby,T1-B21-C1
+T1-T1-B14-C1-00350,1,The silver laptop could not fit into the gold bag because it was too small.,silver laptop,gold bag,1,gold bag,T1-B14-C1
+T1-T1-B05-C0-00124,1,The red package was unable to fit into the blue crate because it was too large.,red package,blue crate,0,red package,T1-B05-C0
+T1-T1-B06-C1-00156,1,The red sample vial was unable to fit into the blue holder because it was too large.,red sample vial,blue holder,0,red sample vial,T1-B06-C1
+T1-T1-B04-C0-00102,1,The silver toolkit could not fit into the gold drawer because it was too small.,silver toolkit,gold drawer,1,gold drawer,T1-B04-C0
+T1-T1-B15-C1-00375,1,The silver file folder would not fit inside the gold cabinet since it was too small.,silver file folder,gold cabinet,1,gold cabinet,T1-B15-C1
+T1-T1-B11-C0-00265,1,The green wooden block did not fit inside the yellow mold because it was too large.,green wooden block,yellow mold,0,green wooden block,T1-B11-C0
+T1-T1-B14-C0-00341,1,The green laptop did not fit inside the yellow bag because it was too small.,green laptop,yellow bag,1,yellow bag,T1-B14-C0
+T1-T1-B03-C0-00080,1,The silver cushion was unable to fit into the gold storage box because it was too small.,silver cushion,gold storage box,1,gold storage box,T1-B03-C0
+T1-T1-B15-C1-00371,1,The silver file folder would not fit inside the gold cabinet since it was too large.,silver file folder,gold cabinet,0,silver file folder,T1-B15-C1
+T1-T1-B10-C0-00247,1,The green painting would not fit inside the yellow frame since it was too small.,green painting,yellow frame,1,yellow frame,T1-B10-C0
+T1-T1-B04-C0-00097,1,The silver toolkit did not fit inside the gold drawer because it was too large.,silver toolkit,gold drawer,0,silver toolkit,T1-B04-C0
+T1-T1-B13-C0-00317,1,The red phone did not fit inside the blue case because it was too small.,red phone,blue case,1,blue case,T1-B13-C0
+T1-T1-B06-C1-00158,1,The red sample vial could not fit into the blue holder because it was too small.,red sample vial,blue holder,1,blue holder,T1-B06-C1
+T1-T1-B10-C1-00252,1,The red painting was unable to fit into the blue frame because it was too large.,red painting,blue frame,0,red painting,T1-B10-C1
+T1-T1-B21-C1-00516,1,The red canister was unable to fit into the blue cubby because it was too large.,red canister,blue cubby,0,red canister,T1-B21-C1
+T1-T1-B14-C0-00343,1,The green laptop would not fit inside the yellow bag since it was too small.,green laptop,yellow bag,1,yellow bag,T1-B14-C0
+T1-T1-B21-C0-00512,1,The silver canister was unable to fit into the gold cubby because it was too small.,silver canister,gold cubby,1,gold cubby,T1-B21-C0
+T1-T1-B08-C0-00198,1,The green lunchbox could not fit into the yellow backpack because it was too small.,green lunchbox,yellow backpack,1,yellow backpack,T1-B08-C0
+T1-T1-B03-C0-00074,1,The silver cushion could not fit into the gold storage box because it was too large.,silver cushion,gold storage box,0,silver cushion,T1-B03-C0
+T1-T1-B18-C1-00444,1,The silver book was unable to fit into the gold box because it was too large.,silver book,gold box,0,silver book,T1-B18-C1
+T1-T1-B06-C1-00159,1,The red sample vial would not fit inside the blue holder since it was too small.,red sample vial,blue holder,1,blue holder,T1-B06-C1
+T1-T1-B09-C1-00232,1,The silver bottle was unable to fit into the gold cooler because it was too small.,silver bottle,gold cooler,1,gold cooler,T1-B09-C1
+T1-T1-B12-C1-00302,1,The green tablet could not fit into the yellow sleeve because it was too small.,green tablet,yellow sleeve,1,yellow sleeve,T1-B12-C1
+T1-T1-B18-C1-00445,1,The silver book did not fit inside the gold box because it was too small.,silver book,gold box,1,gold box,T1-B18-C1
+T1-T1-B19-C0-00457,1,The red camera did not fit inside the blue carrying case because it was too large.,red camera,blue carrying case,0,red camera,T1-B19-C0
+T1-T1-B21-C1-00520,1,The red canister was unable to fit into the blue cubby because it was too small.,red canister,blue cubby,1,blue cubby,T1-B21-C1
+T1-T1-B04-C0-00098,1,The silver toolkit could not fit into the gold drawer because it was too large.,silver toolkit,gold drawer,0,silver toolkit,T1-B04-C0
+T1-T1-B18-C1-00442,1,The silver book could not fit into the gold box because it was too large.,silver book,gold box,0,silver book,T1-B18-C1
+T1-T1-B01-C0-00030,1,The silver parcel could not fit into the gold locker because it was too small.,silver parcel,gold locker,1,gold locker,T1-B01-C0
+T1-T1-B13-C0-00315,1,The red phone would not fit inside the blue case since it was too large.,red phone,blue case,0,red phone,T1-B13-C0
+T1-T1-B11-C1-00274,1,The silver wooden block could not fit into the gold mold because it was too large.,silver wooden block,gold mold,0,silver wooden block,T1-B11-C1
+T1-T1-B20-C0-00483,1,The green keychain would not fit inside the yellow pocket since it was too large.,green keychain,yellow pocket,0,green keychain,T1-B20-C0
+T1-T1-B11-C0-00268,1,The green wooden block was unable to fit into the yellow mold because it was too large.,green wooden block,yellow mold,0,green wooden block,T1-B11-C0
+T1-T1-B17-C0-00416,1,The red soap bar was unable to fit into the blue tin because it was too small.,red soap bar,blue tin,1,blue tin,T1-B17-C0
+T1-T1-B18-C1-00447,1,The silver book would not fit inside the gold box since it was too small.,silver book,gold box,1,gold box,T1-B18-C1
+T1-T1-B22-C0-00534,1,The green sculpture could not fit into the yellow display case because it was too small.,green sculpture,yellow display case,1,yellow display case,T1-B22-C0
+T1-T1-B00-C0-00008,1,The green trophy was unable to fit into the yellow suitcase because it was too small.,green trophy,yellow suitcase,1,yellow suitcase,T1-B00-C0
+T1-T1-B20-C1-00496,1,The silver keychain was unable to fit into the gold pocket because it was too small.,silver keychain,gold pocket,1,gold pocket,T1-B20-C1
+T1-T1-B02-C1-00059,1,The silver foam insert would not fit inside the gold compartment since it was too large.,silver foam insert,gold compartment,0,silver foam insert,T1-B02-C1
+T1-T1-B21-C1-00518,1,The red canister could not fit into the blue cubby because it was too small.,red canister,blue cubby,1,blue cubby,T1-B21-C1
+T1-T1-B08-C0-00193,1,The green lunchbox did not fit inside the yellow backpack because it was too large.,green lunchbox,yellow backpack,0,green lunchbox,T1-B08-C0
+T1-T1-B13-C1-00321,1,The green phone did not fit inside the yellow case because it was too large.,green phone,yellow case,0,green phone,T1-B13-C1
+T1-T1-B19-C0-00459,1,The red camera would not fit inside the blue carrying case since it was too large.,red camera,blue carrying case,0,red camera,T1-B19-C0
+T1-T1-B17-C0-00410,1,The red soap bar could not fit into the blue tin because it was too large.,red soap bar,blue tin,0,red soap bar,T1-B17-C0
+T1-T1-B21-C1-00515,1,The red canister would not fit inside the blue cubby since it was too large.,red canister,blue cubby,0,red canister,T1-B21-C1
+T1-T1-B00-C0-00007,1,The green trophy would not fit inside the yellow suitcase since it was too small.,green trophy,yellow suitcase,1,yellow suitcase,T1-B00-C0
+T1-T1-B01-C0-00031,1,The silver parcel would not fit inside the gold locker since it was too small.,silver parcel,gold locker,1,gold locker,T1-B01-C0
+T1-T1-B11-C1-00278,1,The silver wooden block could not fit into the gold mold because it was too small.,silver wooden block,gold mold,1,gold mold,T1-B11-C1
+T1-T1-B04-C1-00107,1,The green toolkit would not fit inside the yellow drawer since it was too large.,green toolkit,yellow drawer,0,green toolkit,T1-B04-C1
+T1-T1-B08-C0-00196,1,The green lunchbox was unable to fit into the yellow backpack because it was too large.,green lunchbox,yellow backpack,0,green lunchbox,T1-B08-C0
+T1-T1-B11-C0-00266,1,The green wooden block could not fit into the yellow mold because it was too large.,green wooden block,yellow mold,0,green wooden block,T1-B11-C0
+T1-T1-B08-C1-00201,1,The silver lunchbox did not fit inside the gold backpack because it was too large.,silver lunchbox,gold backpack,0,silver lunchbox,T1-B08-C1
+T1-T1-B14-C1-00347,1,The silver laptop would not fit inside the gold bag since it was too large.,silver laptop,gold bag,0,silver laptop,T1-B14-C1
+T1-T1-B12-C0-00289,1,The red tablet did not fit inside the blue sleeve because it was too large.,red tablet,blue sleeve,0,red tablet,T1-B12-C0
+T1-T1-B19-C0-00460,1,The red camera was unable to fit into the blue carrying case because it was too large.,red camera,blue carrying case,0,red camera,T1-B19-C0
+T1-T1-B05-C1-00133,1,The silver package did not fit inside the gold crate because it was too small.,silver package,gold crate,1,gold crate,T1-B05-C1
+T1-T1-B09-C1-00228,1,The silver bottle was unable to fit into the gold cooler because it was too large.,silver bottle,gold cooler,0,silver bottle,T1-B09-C1
+T1-T1-B22-C0-00530,1,The green sculpture could not fit into the yellow display case because it was too large.,green sculpture,yellow display case,0,green sculpture,T1-B22-C0
+T1-T1-B18-C0-00435,1,The red book would not fit inside the blue box since it was too large.,red book,blue box,0,red book,T1-B18-C0
+T1-T1-B08-C1-00206,1,The silver lunchbox could not fit into the gold backpack because it was too small.,silver lunchbox,gold backpack,1,gold backpack,T1-B08-C1
+T1-T1-B10-C1-00254,1,The red painting could not fit into the blue frame because it was too small.,red painting,blue frame,1,blue frame,T1-B10-C1
+T1-T1-B11-C0-00271,1,The green wooden block would not fit inside the yellow mold since it was too small.,green wooden block,yellow mold,1,yellow mold,T1-B11-C0
+T1-T1-B10-C1-00253,1,The red painting did not fit inside the blue frame because it was too small.,red painting,blue frame,1,blue frame,T1-B10-C1
+T1-T1-B05-C0-00122,1,The red package could not fit into the blue crate because it was too large.,red package,blue crate,0,red package,T1-B05-C0
+T1-T1-B10-C0-00244,1,The green painting was unable to fit into the yellow frame because it was too large.,green painting,yellow frame,0,green painting,T1-B10-C0
+T1-T1-B03-C0-00075,1,The silver cushion would not fit inside the gold storage box since it was too large.,silver cushion,gold storage box,0,silver cushion,T1-B03-C0
+T1-T1-B05-C0-00123,1,The red package would not fit inside the blue crate since it was too large.,red package,blue crate,0,red package,T1-B05-C0
+T1-T1-B16-C1-00395,1,The red toy would not fit inside the blue container since it was too large.,red toy,blue container,0,red toy,T1-B16-C1
+T1-T1-B03-C0-00079,1,The silver cushion would not fit inside the gold storage box since it was too small.,silver cushion,gold storage box,1,gold storage box,T1-B03-C0
+T1-T1-B10-C0-00248,1,The green painting was unable to fit into the yellow frame because it was too small.,green painting,yellow frame,1,yellow frame,T1-B10-C0
+T1-T1-B04-C1-00108,1,The green toolkit was unable to fit into the yellow drawer because it was too large.,green toolkit,yellow drawer,0,green toolkit,T1-B04-C1
+T1-T1-B19-C1-00471,1,The green camera would not fit inside the yellow carrying case since it was too small.,green camera,yellow carrying case,1,yellow carrying case,T1-B19-C1
+T1-T1-B09-C1-00230,1,The silver bottle could not fit into the gold cooler because it was too small.,silver bottle,gold cooler,1,gold cooler,T1-B09-C1
+T1-T1-B11-C1-00277,1,The silver wooden block did not fit inside the gold mold because it was too small.,silver wooden block,gold mold,1,gold mold,T1-B11-C1
+T1-T1-B14-C1-00351,1,The silver laptop would not fit inside the gold bag since it was too small.,silver laptop,gold bag,1,gold bag,T1-B14-C1
+T1-T1-B16-C0-00391,1,The silver toy would not fit inside the gold container since it was too small.,silver toy,gold container,1,gold container,T1-B16-C0
+T1-T1-B16-C0-00387,1,The silver toy would not fit inside the gold container since it was too large.,silver toy,gold container,0,silver toy,T1-B16-C0
+T1-T1-B00-C1-00010,1,The silver trophy could not fit into the gold suitcase because it was too large.,silver trophy,gold suitcase,0,silver trophy,T1-B00-C1
+T1-T1-B16-C0-00386,1,The silver toy could not fit into the gold container because it was too large.,silver toy,gold container,0,silver toy,T1-B16-C0
+T1-T1-B17-C1-00419,1,The green soap bar would not fit inside the yellow tin since it was too large.,green soap bar,yellow tin,0,green soap bar,T1-B17-C1
+T1-T1-B09-C0-00218,1,The red bottle could not fit into the blue cooler because it was too large.,red bottle,blue cooler,0,red bottle,T1-B09-C0
+T1-T1-B21-C0-00508,1,The silver canister was unable to fit into the gold cubby because it was too large.,silver canister,gold cubby,0,silver canister,T1-B21-C0
+T1-T1-B02-C0-00053,1,The green foam insert did not fit inside the yellow compartment because it was too small.,green foam insert,yellow compartment,1,yellow compartment,T1-B02-C0
+T1-T1-B07-C0-00171,1,The silver notebook would not fit inside the gold pouch since it was too large.,silver notebook,gold pouch,0,silver notebook,T1-B07-C0
+T1-T1-B05-C0-00121,1,The red package did not fit inside the blue crate because it was too large.,red package,blue crate,0,red package,T1-B05-C0
+T1-T1-B13-C1-00327,1,The green phone would not fit inside the yellow case since it was too small.,green phone,yellow case,1,yellow case,T1-B13-C1
+T1-T1-B19-C1-00466,1,The green camera could not fit into the yellow carrying case because it was too large.,green camera,yellow carrying case,0,green camera,T1-B19-C1
+T1-T1-B05-C1-00130,1,The silver package could not fit into the gold crate because it was too large.,silver package,gold crate,0,silver package,T1-B05-C1
+T1-T1-B10-C0-00242,1,The green painting could not fit into the yellow frame because it was too large.,green painting,yellow frame,0,green painting,T1-B10-C0
+T1-T1-B00-C0-00001,1,The green trophy did not fit inside the yellow suitcase because it was too large.,green trophy,yellow suitcase,0,green trophy,T1-B00-C0
+T1-T1-B15-C0-00362,1,The red file folder could not fit into the blue cabinet because it was too large.,red file folder,blue cabinet,0,red file folder,T1-B15-C0
+T1-T1-B16-C0-00385,1,The silver toy did not fit inside the gold container because it was too large.,silver toy,gold container,0,silver toy,T1-B16-C0
+T1-T1-B13-C1-00325,1,The green phone did not fit inside the yellow case because it was too small.,green phone,yellow case,1,yellow case,T1-B13-C1
+T1-T1-B10-C1-00251,1,The red painting would not fit inside the blue frame since it was too large.,red painting,blue frame,0,red painting,T1-B10-C1
+T1-T1-B12-C0-00290,1,The red tablet could not fit into the blue sleeve because it was too large.,red tablet,blue sleeve,0,red tablet,T1-B12-C0
+T1-T1-B12-C1-00299,1,The green tablet would not fit inside the yellow sleeve since it was too large.,green tablet,yellow sleeve,0,green tablet,T1-B12-C1
+T1-T1-B22-C1-00538,1,The red sculpture could not fit into the blue display case because it was too large.,red sculpture,blue display case,0,red sculpture,T1-B22-C1
+T1-T1-B18-C0-00440,1,The red book was unable to fit into the blue box because it was too small.,red book,blue box,1,blue box,T1-B18-C0
+T1-T1-B13-C1-00324,1,The green phone was unable to fit into the yellow case because it was too large.,green phone,yellow case,0,green phone,T1-B13-C1
+T1-T1-B14-C1-00352,1,The silver laptop was unable to fit into the gold bag because it was too small.,silver laptop,gold bag,1,gold bag,T1-B14-C1
+T1-T1-B05-C0-00128,1,The red package was unable to fit into the blue crate because it was too small.,red package,blue crate,1,blue crate,T1-B05-C0
+T1-T1-B04-C0-00104,1,The silver toolkit was unable to fit into the gold drawer because it was too small.,silver toolkit,gold drawer,1,gold drawer,T1-B04-C0
+T1-T1-B11-C0-00272,1,The green wooden block was unable to fit into the yellow mold because it was too small.,green wooden block,yellow mold,1,yellow mold,T1-B11-C0
+T1-T1-B18-C1-00441,1,The silver book did not fit inside the gold box because it was too large.,silver book,gold box,0,silver book,T1-B18-C1
+T1-T1-B01-C0-00028,1,The silver parcel was unable to fit into the gold locker because it was too large.,silver parcel,gold locker,0,silver parcel,T1-B01-C0
+T1-T1-B20-C1-00493,1,The silver keychain did not fit inside the gold pocket because it was too small.,silver keychain,gold pocket,1,gold pocket,T1-B20-C1
+T1-T1-B13-C0-00316,1,The red phone was unable to fit into the blue case because it was too large.,red phone,blue case,0,red phone,T1-B13-C0
+T1-T1-B17-C0-00412,1,The red soap bar was unable to fit into the blue tin because it was too large.,red soap bar,blue tin,0,red soap bar,T1-B17-C0
+T1-T1-B15-C1-00373,1,The silver file folder did not fit inside the gold cabinet because it was too small.,silver file folder,gold cabinet,1,gold cabinet,T1-B15-C1
+T1-T1-B16-C1-00397,1,The red toy did not fit inside the blue container because it was too small.,red toy,blue container,1,blue container,T1-B16-C1
+T1-T1-B07-C0-00173,1,The silver notebook did not fit inside the gold pouch because it was too small.,silver notebook,gold pouch,1,gold pouch,T1-B07-C0
+T1-T1-B19-C0-00461,1,The red camera did not fit inside the blue carrying case because it was too small.,red camera,blue carrying case,1,blue carrying case,T1-B19-C0
+T1-T1-B22-C1-00541,1,The red sculpture did not fit inside the blue display case because it was too small.,red sculpture,blue display case,1,blue display case,T1-B22-C1
+T1-T1-B10-C1-00249,1,The red painting did not fit inside the blue frame because it was too large.,red painting,blue frame,0,red painting,T1-B10-C1
+T1-T1-B20-C1-00489,1,The silver keychain did not fit inside the gold pocket because it was too large.,silver keychain,gold pocket,0,silver keychain,T1-B20-C1
+T1-T1-B19-C1-00468,1,The green camera was unable to fit into the yellow carrying case because it was too large.,green camera,yellow carrying case,0,green camera,T1-B19-C1
+T1-T1-B00-C1-00011,1,The silver trophy would not fit inside the gold suitcase since it was too large.,silver trophy,gold suitcase,0,silver trophy,T1-B00-C1
+T1-T1-B06-C0-00152,1,The green sample vial was unable to fit into the yellow holder because it was too small.,green sample vial,yellow holder,1,yellow holder,T1-B06-C0
+T1-T1-B05-C1-00131,1,The silver package would not fit inside the gold crate since it was too large.,silver package,gold crate,0,silver package,T1-B05-C1
+T1-T1-B09-C0-00221,1,The red bottle did not fit inside the blue cooler because it was too small.,red bottle,blue cooler,1,blue cooler,T1-B09-C0
+T1-T1-B09-C0-00223,1,The red bottle would not fit inside the blue cooler since it was too small.,red bottle,blue cooler,1,blue cooler,T1-B09-C0
+T1-T1-B18-C0-00433,1,The red book did not fit inside the blue box because it was too large.,red book,blue box,0,red book,T1-B18-C0
+T1-T1-B12-C1-00304,1,The green tablet was unable to fit into the yellow sleeve because it was too small.,green tablet,yellow sleeve,1,yellow sleeve,T1-B12-C1
+T1-T1-B05-C0-00127,1,The red package would not fit inside the blue crate since it was too small.,red package,blue crate,1,blue crate,T1-B05-C0
+T1-T1-B02-C1-00060,1,The silver foam insert was unable to fit into the gold compartment because it was too large.,silver foam insert,gold compartment,0,silver foam insert,T1-B02-C1
+T1-T1-B10-C0-00243,1,The green painting would not fit inside the yellow frame since it was too large.,green painting,yellow frame,0,green painting,T1-B10-C0
+T1-T1-B19-C1-00469,1,The green camera did not fit inside the yellow carrying case because it was too small.,green camera,yellow carrying case,1,yellow carrying case,T1-B19-C1
+T1-T1-B00-C0-00004,1,The green trophy was unable to fit into the yellow suitcase because it was too large.,green trophy,yellow suitcase,0,green trophy,T1-B00-C0
+T1-T1-B09-C0-00220,1,The red bottle was unable to fit into the blue cooler because it was too large.,red bottle,blue cooler,0,red bottle,T1-B09-C0
+T1-T1-B17-C1-00418,1,The green soap bar could not fit into the yellow tin because it was too large.,green soap bar,yellow tin,0,green soap bar,T1-B17-C1
+T1-T1-B16-C1-00399,1,The red toy would not fit inside the blue container since it was too small.,red toy,blue container,1,blue container,T1-B16-C1
+T1-T1-B15-C1-00376,1,The silver file folder was unable to fit into the gold cabinet because it was too small.,silver file folder,gold cabinet,1,gold cabinet,T1-B15-C1
+T1-T1-B16-C1-00394,1,The red toy could not fit into the blue container because it was too large.,red toy,blue container,0,red toy,T1-B16-C1
+T1-T1-B06-C0-00146,1,The green sample vial could not fit into the yellow holder because it was too large.,green sample vial,yellow holder,0,green sample vial,T1-B06-C0
+T1-T1-B20-C0-00485,1,The green keychain did not fit inside the yellow pocket because it was too small.,green keychain,yellow pocket,1,yellow pocket,T1-B20-C0
+T1-T1-B02-C1-00063,1,The silver foam insert would not fit inside the gold compartment since it was too small.,silver foam insert,gold compartment,1,gold compartment,T1-B02-C1
+T1-T1-B13-C1-00323,1,The green phone would not fit inside the yellow case since it was too large.,green phone,yellow case,0,green phone,T1-B13-C1
+T1-T1-B15-C1-00372,1,The silver file folder was unable to fit into the gold cabinet because it was too large.,silver file folder,gold cabinet,0,silver file folder,T1-B15-C1
+T1-T1-B18-C0-00438,1,The red book could not fit into the blue box because it was too small.,red book,blue box,1,blue box,T1-B18-C0
+T1-T1-B10-C1-00256,1,The red painting was unable to fit into the blue frame because it was too small.,red painting,blue frame,1,blue frame,T1-B10-C1
+T1-T1-B15-C0-00361,1,The red file folder did not fit inside the blue cabinet because it was too large.,red file folder,blue cabinet,0,red file folder,T1-B15-C0
+T1-T1-B12-C0-00293,1,The red tablet did not fit inside the blue sleeve because it was too small.,red tablet,blue sleeve,1,blue sleeve,T1-B12-C0
+T1-T1-B17-C0-00413,1,The red soap bar did not fit inside the blue tin because it was too small.,red soap bar,blue tin,1,blue tin,T1-B17-C0
+T1-T1-B11-C1-00275,1,The silver wooden block would not fit inside the gold mold since it was too large.,silver wooden block,gold mold,0,silver wooden block,T1-B11-C1
+T1-T1-B15-C0-00365,1,The red file folder did not fit inside the blue cabinet because it was too small.,red file folder,blue cabinet,1,blue cabinet,T1-B15-C0
+T1-T1-B02-C0-00049,1,The green foam insert did not fit inside the yellow compartment because it was too large.,green foam insert,yellow compartment,0,green foam insert,T1-B02-C0
+T1-T1-B09-C1-00229,1,The silver bottle did not fit inside the gold cooler because it was too small.,silver bottle,gold cooler,1,gold cooler,T1-B09-C1
+T1-T1-B17-C1-00423,1,The green soap bar would not fit inside the yellow tin since it was too small.,green soap bar,yellow tin,1,yellow tin,T1-B17-C1
+T1-T1-B22-C1-00539,1,The red sculpture would not fit inside the blue display case since it was too large.,red sculpture,blue display case,0,red sculpture,T1-B22-C1
+T1-T1-B06-C0-00150,1,The green sample vial could not fit into the yellow holder because it was too small.,green sample vial,yellow holder,1,yellow holder,T1-B06-C0
+T1-T1-B14-C1-00348,1,The silver laptop was unable to fit into the gold bag because it was too large.,silver laptop,gold bag,0,silver laptop,T1-B14-C1
+T1-T1-B20-C0-00481,1,The green keychain did not fit inside the yellow pocket because it was too large.,green keychain,yellow pocket,0,green keychain,T1-B20-C0
+T1-T1-B20-C0-00486,1,The green keychain could not fit into the yellow pocket because it was too small.,green keychain,yellow pocket,1,yellow pocket,T1-B20-C0
+T1-T1-B20-C1-00494,1,The silver keychain could not fit into the gold pocket because it was too small.,silver keychain,gold pocket,1,gold pocket,T1-B20-C1
+T1-T1-B21-C0-00511,1,The silver canister would not fit inside the gold cubby since it was too small.,silver canister,gold cubby,1,gold cubby,T1-B21-C0
+T1-T1-B14-C0-00344,1,The green laptop was unable to fit into the yellow bag because it was too small.,green laptop,yellow bag,1,yellow bag,T1-B14-C0
+T1-T1-B07-C0-00172,1,The silver notebook was unable to fit into the gold pouch because it was too large.,silver notebook,gold pouch,0,silver notebook,T1-B07-C0
+T1-T1-B03-C1-00082,1,The red cushion could not fit into the blue storage box because it was too large.,red cushion,blue storage box,0,red cushion,T1-B03-C1
+T1-T1-B03-C1-00086,1,The red cushion could not fit into the blue storage box because it was too small.,red cushion,blue storage box,1,blue storage box,T1-B03-C1
+T1-T1-B11-C0-00267,1,The green wooden block would not fit inside the yellow mold since it was too large.,green wooden block,yellow mold,0,green wooden block,T1-B11-C0
+T1-T1-B07-C1-00184,1,The green notebook was unable to fit into the yellow pouch because it was too small.,green notebook,yellow pouch,1,yellow pouch,T1-B07-C1
+T1-T1-B11-C1-00276,1,The silver wooden block was unable to fit into the gold mold because it was too large.,silver wooden block,gold mold,0,silver wooden block,T1-B11-C1
+T1-T1-B14-C0-00339,1,The green laptop would not fit inside the yellow bag since it was too large.,green laptop,yellow bag,0,green laptop,T1-B14-C0
+T1-T1-B06-C0-00151,1,The green sample vial would not fit inside the yellow holder since it was too small.,green sample vial,yellow holder,1,yellow holder,T1-B06-C0
+T1-T1-B17-C1-00420,1,The green soap bar was unable to fit into the yellow tin because it was too large.,green soap bar,yellow tin,0,green soap bar,T1-B17-C1
+T1-T1-B14-C0-00340,1,The green laptop was unable to fit into the yellow bag because it was too large.,green laptop,yellow bag,0,green laptop,T1-B14-C0
+T1-T1-B04-C1-00109,1,The green toolkit did not fit inside the yellow drawer because it was too small.,green toolkit,yellow drawer,1,yellow drawer,T1-B04-C1
+T1-T1-B18-C0-00439,1,The red book would not fit inside the blue box since it was too small.,red book,blue box,1,blue box,T1-B18-C0
+T1-T1-B02-C0-00051,1,The green foam insert would not fit inside the yellow compartment since it was too large.,green foam insert,yellow compartment,0,green foam insert,T1-B02-C0
+T1-T1-B17-C1-00422,1,The green soap bar could not fit into the yellow tin because it was too small.,green soap bar,yellow tin,1,yellow tin,T1-B17-C1
+T1-T1-B21-C1-00517,1,The red canister did not fit inside the blue cubby because it was too small.,red canister,blue cubby,1,blue cubby,T1-B21-C1
+T1-T1-B20-C1-00490,1,The silver keychain could not fit into the gold pocket because it was too large.,silver keychain,gold pocket,0,silver keychain,T1-B20-C1
+T1-T1-B02-C0-00054,1,The green foam insert could not fit into the yellow compartment because it was too small.,green foam insert,yellow compartment,1,yellow compartment,T1-B02-C0
+T1-T1-B16-C0-00388,1,The silver toy was unable to fit into the gold container because it was too large.,silver toy,gold container,0,silver toy,T1-B16-C0
+T1-T1-B20-C1-00492,1,The silver keychain was unable to fit into the gold pocket because it was too large.,silver keychain,gold pocket,0,silver keychain,T1-B20-C1
+T1-T1-B08-C0-00197,1,The green lunchbox did not fit inside the yellow backpack because it was too small.,green lunchbox,yellow backpack,1,yellow backpack,T1-B08-C0
+T1-T1-B12-C0-00296,1,The red tablet was unable to fit into the blue sleeve because it was too small.,red tablet,blue sleeve,1,blue sleeve,T1-B12-C0
+T1-T1-B01-C0-00027,1,The silver parcel would not fit inside the gold locker since it was too large.,silver parcel,gold locker,0,silver parcel,T1-B01-C0
+T1-T1-B00-C0-00003,1,The green trophy would not fit inside the yellow suitcase since it was too large.,green trophy,yellow suitcase,0,green trophy,T1-B00-C0
+T1-T1-B22-C0-00529,1,The green sculpture did not fit inside the yellow display case because it was too large.,green sculpture,yellow display case,0,green sculpture,T1-B22-C0
+T1-T1-B08-C1-00208,1,The silver lunchbox was unable to fit into the gold backpack because it was too small.,silver lunchbox,gold backpack,1,gold backpack,T1-B08-C1
+T1-T1-B05-C0-00126,1,The red package could not fit into the blue crate because it was too small.,red package,blue crate,1,blue crate,T1-B05-C0
+T1-T1-B14-C0-00338,1,The green laptop could not fit into the yellow bag because it was too large.,green laptop,yellow bag,0,green laptop,T1-B14-C0
+T1-T1-B03-C1-00088,1,The red cushion was unable to fit into the blue storage box because it was too small.,red cushion,blue storage box,1,blue storage box,T1-B03-C1
+T1-T1-B07-C1-00180,1,The green notebook was unable to fit into the yellow pouch because it was too large.,green notebook,yellow pouch,0,green notebook,T1-B07-C1
+T1-T1-B15-C1-00374,1,The silver file folder could not fit into the gold cabinet because it was too small.,silver file folder,gold cabinet,1,gold cabinet,T1-B15-C1
+T1-T1-B10-C0-00241,1,The green painting did not fit inside the yellow frame because it was too large.,green painting,yellow frame,0,green painting,T1-B10-C0
+T1-T1-B08-C0-00199,1,The green lunchbox would not fit inside the yellow backpack since it was too small.,green lunchbox,yellow backpack,1,yellow backpack,T1-B08-C0
+T1-T1-B07-C1-00177,1,The green notebook did not fit inside the yellow pouch because it was too large.,green notebook,yellow pouch,0,green notebook,T1-B07-C1
+T1-T1-B12-C0-00295,1,The red tablet would not fit inside the blue sleeve since it was too small.,red tablet,blue sleeve,1,blue sleeve,T1-B12-C0
+T1-T1-B05-C1-00134,1,The silver package could not fit into the gold crate because it was too small.,silver package,gold crate,1,gold crate,T1-B05-C1
+T1-T1-B18-C1-00443,1,The silver book would not fit inside the gold box since it was too large.,silver book,gold box,0,silver book,T1-B18-C1
+T1-T1-B10-C1-00250,1,The red painting could not fit into the blue frame because it was too large.,red painting,blue frame,0,red painting,T1-B10-C1
+T1-T1-B11-C1-00280,1,The silver wooden block was unable to fit into the gold mold because it was too small.,silver wooden block,gold mold,1,gold mold,T1-B11-C1
+T1-T1-B12-C1-00300,1,The green tablet was unable to fit into the yellow sleeve because it was too large.,green tablet,yellow sleeve,0,green tablet,T1-B12-C1
+T1-T1-B09-C0-00224,1,The red bottle was unable to fit into the blue cooler because it was too small.,red bottle,blue cooler,1,blue cooler,T1-B09-C0
+T1-T1-B02-C1-00062,1,The silver foam insert could not fit into the gold compartment because it was too small.,silver foam insert,gold compartment,1,gold compartment,T1-B02-C1
+T1-T1-B09-C1-00231,1,The silver bottle would not fit inside the gold cooler since it was too small.,silver bottle,gold cooler,1,gold cooler,T1-B09-C1
+T1-T1-B19-C1-00465,1,The green camera did not fit inside the yellow carrying case because it was too large.,green camera,yellow carrying case,0,green camera,T1-B19-C1
+T1-T1-B22-C0-00531,1,The green sculpture would not fit inside the yellow display case since it was too large.,green sculpture,yellow display case,0,green sculpture,T1-B22-C0
+T1-T1-B02-C1-00057,1,The silver foam insert did not fit inside the gold compartment because it was too large.,silver foam insert,gold compartment,0,silver foam insert,T1-B02-C1
+T1-T1-B07-C1-00178,1,The green notebook could not fit into the yellow pouch because it was too large.,green notebook,yellow pouch,0,green notebook,T1-B07-C1
+T1-T1-B12-C0-00291,1,The red tablet would not fit inside the blue sleeve since it was too large.,red tablet,blue sleeve,0,red tablet,T1-B12-C0
+T1-T1-B06-C1-00157,1,The red sample vial did not fit inside the blue holder because it was too small.,red sample vial,blue holder,1,blue holder,T1-B06-C1
+T1-T1-B04-C1-00106,1,The green toolkit could not fit into the yellow drawer because it was too large.,green toolkit,yellow drawer,0,green toolkit,T1-B04-C1
+T1-T1-B22-C1-00540,1,The red sculpture was unable to fit into the blue display case because it was too large.,red sculpture,blue display case,0,red sculpture,T1-B22-C1
+T1-T1-B03-C0-00073,1,The silver cushion did not fit inside the gold storage box because it was too large.,silver cushion,gold storage box,0,silver cushion,T1-B03-C0
+T1-T1-B18-C0-00437,1,The red book did not fit inside the blue box because it was too small.,red book,blue box,1,blue box,T1-B18-C0
+T1-T1-B09-C1-00227,1,The silver bottle would not fit inside the gold cooler since it was too large.,silver bottle,gold cooler,0,silver bottle,T1-B09-C1
+T1-T1-B13-C0-00320,1,The red phone was unable to fit into the blue case because it was too small.,red phone,blue case,1,blue case,T1-B13-C0
+T1-T1-B06-C0-00148,1,The green sample vial was unable to fit into the yellow holder because it was too large.,green sample vial,yellow holder,0,green sample vial,T1-B06-C0
+T1-T1-B09-C0-00222,1,The red bottle could not fit into the blue cooler because it was too small.,red bottle,blue cooler,1,blue cooler,T1-B09-C0
+T1-T1-B00-C0-00005,1,The green trophy did not fit inside the yellow suitcase because it was too small.,green trophy,yellow suitcase,1,yellow suitcase,T1-B00-C0
+T1-T1-B03-C1-00084,1,The red cushion was unable to fit into the blue storage box because it was too large.,red cushion,blue storage box,0,red cushion,T1-B03-C1
+T1-T1-B21-C0-00509,1,The silver canister did not fit inside the gold cubby because it was too small.,silver canister,gold cubby,1,gold cubby,T1-B21-C0
+T1-T1-B02-C0-00052,1,The green foam insert was unable to fit into the yellow compartment because it was too large.,green foam insert,yellow compartment,0,green foam insert,T1-B02-C0
+T1-T1-B08-C1-00202,1,The silver lunchbox could not fit into the gold backpack because it was too large.,silver lunchbox,gold backpack,0,silver lunchbox,T1-B08-C1
+T1-T1-B16-C0-00390,1,The silver toy could not fit into the gold container because it was too small.,silver toy,gold container,1,gold container,T1-B16-C0
+T1-T1-B16-C0-00392,1,The silver toy was unable to fit into the gold container because it was too small.,silver toy,gold container,1,gold container,T1-B16-C0
+T1-T1-B22-C1-00542,1,The red sculpture could not fit into the blue display case because it was too small.,red sculpture,blue display case,1,blue display case,T1-B22-C1
+T1-T1-B15-C0-00363,1,The red file folder would not fit inside the blue cabinet since it was too large.,red file folder,blue cabinet,0,red file folder,T1-B15-C0
+T1-T1-B08-C1-00207,1,The silver lunchbox would not fit inside the gold backpack since it was too small.,silver lunchbox,gold backpack,1,gold backpack,T1-B08-C1
+T1-T1-B16-C1-00398,1,The red toy could not fit into the blue container because it was too small.,red toy,blue container,1,blue container,T1-B16-C1
+T1-T1-B07-C1-00181,1,The green notebook did not fit inside the yellow pouch because it was too small.,green notebook,yellow pouch,1,yellow pouch,T1-B07-C1
+T1-T1-B13-C1-00326,1,The green phone could not fit into the yellow case because it was too small.,green phone,yellow case,1,yellow case,T1-B13-C1
+T1-T1-B21-C0-00507,1,The silver canister would not fit inside the gold cubby since it was too large.,silver canister,gold cubby,0,silver canister,T1-B21-C0
+T1-T1-B06-C0-00149,1,The green sample vial did not fit inside the yellow holder because it was too small.,green sample vial,yellow holder,1,yellow holder,T1-B06-C0
+T1-T1-B21-C0-00510,1,The silver canister could not fit into the gold cubby because it was too small.,silver canister,gold cubby,1,gold cubby,T1-B21-C0
+T1-T1-B03-C1-00083,1,The red cushion would not fit inside the blue storage box since it was too large.,red cushion,blue storage box,0,red cushion,T1-B03-C1
+T1-T1-B00-C0-00002,1,The green trophy could not fit into the yellow suitcase because it was too large.,green trophy,yellow suitcase,0,green trophy,T1-B00-C0
+T1-T1-B20-C0-00487,1,The green keychain would not fit inside the yellow pocket since it was too small.,green keychain,yellow pocket,1,yellow pocket,T1-B20-C0
+T1-T1-B16-C1-00400,1,The red toy was unable to fit into the blue container because it was too small.,red toy,blue container,1,blue container,T1-B16-C1
+T1-T1-B02-C1-00058,1,The silver foam insert could not fit into the gold compartment because it was too large.,silver foam insert,gold compartment,0,silver foam insert,T1-B02-C1
+T1-T1-B19-C0-00463,1,The red camera would not fit inside the blue carrying case since it was too small.,red camera,blue carrying case,1,blue carrying case,T1-B19-C0
+T1-T1-B20-C0-00482,1,The green keychain could not fit into the yellow pocket because it was too large.,green keychain,yellow pocket,0,green keychain,T1-B20-C0
+T1-T1-B12-C1-00303,1,The green tablet would not fit inside the yellow sleeve since it was too small.,green tablet,yellow sleeve,1,yellow sleeve,T1-B12-C1
+T1-T1-B05-C1-00132,1,The silver package was unable to fit into the gold crate because it was too large.,silver package,gold crate,0,silver package,T1-B05-C1
+T1-T1-B03-C1-00081,1,The red cushion did not fit inside the blue storage box because it was too large.,red cushion,blue storage box,0,red cushion,T1-B03-C1
+T1-T1-B13-C0-00314,1,The red phone could not fit into the blue case because it was too large.,red phone,blue case,0,red phone,T1-B13-C0
+T1-T1-B15-C1-00369,1,The silver file folder did not fit inside the gold cabinet because it was too large.,silver file folder,gold cabinet,0,silver file folder,T1-B15-C1
+T1-T1-B07-C0-00170,1,The silver notebook could not fit into the gold pouch because it was too large.,silver notebook,gold pouch,0,silver notebook,T1-B07-C0
+T1-T1-B13-C0-00318,1,The red phone could not fit into the blue case because it was too small.,red phone,blue case,1,blue case,T1-B13-C0
+T1-T1-B05-C1-00135,1,The silver package would not fit inside the gold crate since it was too small.,silver package,gold crate,1,gold crate,T1-B05-C1
+T1-T1-B12-C1-00298,1,The green tablet could not fit into the yellow sleeve because it was too large.,green tablet,yellow sleeve,0,green tablet,T1-B12-C1
+T1-T1-B10-C0-00245,1,The green painting did not fit inside the yellow frame because it was too small.,green painting,yellow frame,1,yellow frame,T1-B10-C0
+T1-T1-B12-C0-00292,1,The red tablet was unable to fit into the blue sleeve because it was too large.,red tablet,blue sleeve,0,red tablet,T1-B12-C0
+T1-T1-B09-C1-00225,1,The silver bottle did not fit inside the gold cooler because it was too large.,silver bottle,gold cooler,0,silver bottle,T1-B09-C1
+T1-T1-B04-C1-00111,1,The green toolkit would not fit inside the yellow drawer since it was too small.,green toolkit,yellow drawer,1,yellow drawer,T1-B04-C1
+T1-T1-B21-C0-00505,1,The silver canister did not fit inside the gold cubby because it was too large.,silver canister,gold cubby,0,silver canister,T1-B21-C0
+T1-T1-B03-C1-00085,1,The red cushion did not fit inside the blue storage box because it was too small.,red cushion,blue storage box,1,blue storage box,T1-B03-C1
+T1-T1-B14-C0-00342,1,The green laptop could not fit into the yellow bag because it was too small.,green laptop,yellow bag,1,yellow bag,T1-B14-C0
+T1-T1-B00-C1-00013,1,The silver trophy did not fit inside the gold suitcase because it was too small.,silver trophy,gold suitcase,1,gold suitcase,T1-B00-C1
+T1-T1-B22-C0-00532,1,The green sculpture was unable to fit into the yellow display case because it was too large.,green sculpture,yellow display case,0,green sculpture,T1-B22-C0
+T1-T1-B16-C1-00393,1,The red toy did not fit inside the blue container because it was too large.,red toy,blue container,0,red toy,T1-B16-C1
+T1-T1-B06-C1-00153,1,The red sample vial did not fit inside the blue holder because it was too large.,red sample vial,blue holder,0,red sample vial,T1-B06-C1
+T1-T1-B07-C1-00182,1,The green notebook could not fit into the yellow pouch because it was too small.,green notebook,yellow pouch,1,yellow pouch,T1-B07-C1
+T1-T1-B15-C0-00367,1,The red file folder would not fit inside the blue cabinet since it was too small.,red file folder,blue cabinet,1,blue cabinet,T1-B15-C0
+T1-T1-B08-C1-00205,1,The silver lunchbox did not fit inside the gold backpack because it was too small.,silver lunchbox,gold backpack,1,gold backpack,T1-B08-C1
+T1-T1-B17-C0-00415,1,The red soap bar would not fit inside the blue tin since it was too small.,red soap bar,blue tin,1,blue tin,T1-B17-C0
+T1-T1-B06-C1-00160,1,The red sample vial was unable to fit into the blue holder because it was too small.,red sample vial,blue holder,1,blue holder,T1-B06-C1
+T1-T1-B18-C1-00446,1,The silver book could not fit into the gold box because it was too small.,silver book,gold box,1,gold box,T1-B18-C1
+T1-T1-B19-C1-00470,1,The green camera could not fit into the yellow carrying case because it was too small.,green camera,yellow carrying case,1,yellow carrying case,T1-B19-C1
+T1-T1-B04-C0-00101,1,The silver toolkit did not fit inside the gold drawer because it was too small.,silver toolkit,gold drawer,1,gold drawer,T1-B04-C0
+T1-T1-B19-C1-00467,1,The green camera would not fit inside the yellow carrying case since it was too large.,green camera,yellow carrying case,0,green camera,T1-B19-C1
+T1-T1-B13-C1-00322,1,The green phone could not fit into the yellow case because it was too large.,green phone,yellow case,0,green phone,T1-B13-C1
+T1-T1-B20-C1-00495,1,The silver keychain would not fit inside the gold pocket since it was too small.,silver keychain,gold pocket,1,gold pocket,T1-B20-C1
+T1-T1-B20-C1-00491,1,The silver keychain would not fit inside the gold pocket since it was too large.,silver keychain,gold pocket,0,silver keychain,T1-B20-C1
+T1-T1-B08-C1-00203,1,The silver lunchbox would not fit inside the gold backpack since it was too large.,silver lunchbox,gold backpack,0,silver lunchbox,T1-B08-C1
+T1-T1-B17-C1-00421,1,The green soap bar did not fit inside the yellow tin because it was too small.,green soap bar,yellow tin,1,yellow tin,T1-B17-C1
+T1-T1-B07-C0-00174,1,The silver notebook could not fit into the gold pouch because it was too small.,silver notebook,gold pouch,1,gold pouch,T1-B07-C0
+T1-T1-B12-C1-00297,1,The green tablet did not fit inside the yellow sleeve because it was too large.,green tablet,yellow sleeve,0,green tablet,T1-B12-C1
+T1-T1-B19-C0-00462,1,The red camera could not fit into the blue carrying case because it was too small.,red camera,blue carrying case,1,blue carrying case,T1-B19-C0
+T1-T1-B00-C1-00009,1,The silver trophy did not fit inside the gold suitcase because it was too large.,silver trophy,gold suitcase,0,silver trophy,T1-B00-C1
+T1-T1-B18-C0-00434,1,The red book could not fit into the blue box because it was too large.,red book,blue box,0,red book,T1-B18-C0
+T1-T1-B02-C1-00061,1,The silver foam insert did not fit inside the gold compartment because it was too small.,silver foam insert,gold compartment,1,gold compartment,T1-B02-C1
+T1-T1-B01-C0-00025,1,The silver parcel did not fit inside the gold locker because it was too large.,silver parcel,gold locker,0,silver parcel,T1-B01-C0
+T1-T1-B11-C0-00269,1,The green wooden block did not fit inside the yellow mold because it was too small.,green wooden block,yellow mold,1,yellow mold,T1-B11-C0
+T1-T1-B09-C1-00226,1,The silver bottle could not fit into the gold cooler because it was too large.,silver bottle,gold cooler,0,silver bottle,T1-B09-C1
+T1-T1-B04-C1-00105,1,The green toolkit did not fit inside the yellow drawer because it was too large.,green toolkit,yellow drawer,0,green toolkit,T1-B04-C1
+T1-T1-B00-C1-00012,1,The silver trophy was unable to fit into the gold suitcase because it was too large.,silver trophy,gold suitcase,0,silver trophy,T1-B00-C1
+T1-T1-B17-C0-00411,1,The red soap bar would not fit inside the blue tin since it was too large.,red soap bar,blue tin,0,red soap bar,T1-B17-C0
+T1-T1-B17-C1-00417,1,The green soap bar did not fit inside the yellow tin because it was too large.,green soap bar,yellow tin,0,green soap bar,T1-B17-C1
+T1-T1-B22-C0-00536,1,The green sculpture was unable to fit into the yellow display case because it was too small.,green sculpture,yellow display case,1,yellow display case,T1-B22-C0
+T1-T1-B02-C0-00050,1,The green foam insert could not fit into the yellow compartment because it was too large.,green foam insert,yellow compartment,0,green foam insert,T1-B02-C0
+T1-T1-B22-C1-00537,1,The red sculpture did not fit inside the blue display case because it was too large.,red sculpture,blue display case,0,red sculpture,T1-B22-C1
+T1-T1-B13-C1-00328,1,The green phone was unable to fit into the yellow case because it was too small.,green phone,yellow case,1,yellow case,T1-B13-C1
+T1-T1-B14-C0-00337,1,The green laptop did not fit inside the yellow bag because it was too large.,green laptop,yellow bag,0,green laptop,T1-B14-C0
+T1-T1-B03-C1-00087,1,The red cushion would not fit inside the blue storage box since it was too small.,red cushion,blue storage box,1,blue storage box,T1-B03-C1
+T1-T1-B22-C1-00543,1,The red sculpture would not fit inside the blue display case since it was too small.,red sculpture,blue display case,1,blue display case,T1-B22-C1
+T1-T1-B02-C0-00055,1,The green foam insert would not fit inside the yellow compartment since it was too small.,green foam insert,yellow compartment,1,yellow compartment,T1-B02-C0
+T1-T1-B11-C1-00273,1,The silver wooden block did not fit inside the gold mold because it was too large.,silver wooden block,gold mold,0,silver wooden block,T1-B11-C1
+T1-T1-B21-C0-00506,1,The silver canister could not fit into the gold cubby because it was too large.,silver canister,gold cubby,0,silver canister,T1-B21-C0
+T1-T1-B14-C1-00349,1,The silver laptop did not fit inside the gold bag because it was too small.,silver laptop,gold bag,1,gold bag,T1-B14-C1
+T1-T1-B01-C0-00026,1,The silver parcel could not fit into the gold locker because it was too large.,silver parcel,gold locker,0,silver parcel,T1-B01-C0
+T1-T1-B06-C0-00145,1,The green sample vial did not fit inside the yellow holder because it was too large.,green sample vial,yellow holder,0,green sample vial,T1-B06-C0
+T1-T1-B10-C1-00255,1,The red painting would not fit inside the blue frame since it was too small.,red painting,blue frame,1,blue frame,T1-B10-C1
+T1-T1-B06-C1-00154,1,The red sample vial could not fit into the blue holder because it was too large.,red sample vial,blue holder,0,red sample vial,T1-B06-C1
+T1-T1-B20-C0-00484,1,The green keychain was unable to fit into the yellow pocket because it was too large.,green keychain,yellow pocket,0,green keychain,T1-B20-C0
+T1-T1-B00-C1-00016,1,The silver trophy was unable to fit into the gold suitcase because it was too small.,silver trophy,gold suitcase,1,gold suitcase,T1-B00-C1
+T1-T1-B06-C1-00155,1,The red sample vial would not fit inside the blue holder since it was too large.,red sample vial,blue holder,0,red sample vial,T1-B06-C1
+T1-T1-B10-C0-00246,1,The green painting could not fit into the yellow frame because it was too small.,green painting,yellow frame,1,yellow frame,T1-B10-C0
+T1-T1-B04-C1-00112,1,The green toolkit was unable to fit into the yellow drawer because it was too small.,green toolkit,yellow drawer,1,yellow drawer,T1-B04-C1
+T1-T1-B06-C0-00147,1,The green sample vial would not fit inside the yellow holder since it was too large.,green sample vial,yellow holder,0,green sample vial,T1-B06-C0
+T1-T1-B04-C0-00099,1,The silver toolkit would not fit inside the gold drawer since it was too large.,silver toolkit,gold drawer,0,silver toolkit,T1-B04-C0
+T1-T1-B07-C1-00179,1,The green notebook would not fit inside the yellow pouch since it was too large.,green notebook,yellow pouch,0,green notebook,T1-B07-C1
+T1-T1-B00-C1-00015,1,The silver trophy would not fit inside the gold suitcase since it was too small.,silver trophy,gold suitcase,1,gold suitcase,T1-B00-C1
+T1-T1-B13-C0-00313,1,The red phone did not fit inside the blue case because it was too large.,red phone,blue case,0,red phone,T1-B13-C0
+T1-T1-B18-C0-00436,1,The red book was unable to fit into the blue box because it was too large.,red book,blue box,0,red book,T1-B18-C0
+T1-T1-B00-C0-00006,1,The green trophy could not fit into the yellow suitcase because it was too small.,green trophy,yellow suitcase,1,yellow suitcase,T1-B00-C0
+T1-T1-B11-C0-00270,1,The green wooden block could not fit into the yellow mold because it was too small.,green wooden block,yellow mold,1,yellow mold,T1-B11-C0
+T1-T1-B01-C0-00029,1,The silver parcel did not fit inside the gold locker because it was too small.,silver parcel,gold locker,1,gold locker,T1-B01-C0
+T1-T1-B15-C0-00368,1,The red file folder was unable to fit into the blue cabinet because it was too small.,red file folder,blue cabinet,1,blue cabinet,T1-B15-C0
+T1-T1-B19-C1-00472,1,The green camera was unable to fit into the yellow carrying case because it was too small.,green camera,yellow carrying case,1,yellow carrying case,T1-B19-C1
+T1-T1-B12-C0-00294,1,The red tablet could not fit into the blue sleeve because it was too small.,red tablet,blue sleeve,1,blue sleeve,T1-B12-C0
+T1-T1-B16-C1-00396,1,The red toy was unable to fit into the blue container because it was too large.,red toy,blue container,0,red toy,T1-B16-C1
+T1-T1-B02-C0-00056,1,The green foam insert was unable to fit into the yellow compartment because it was too small.,green foam insert,yellow compartment,1,yellow compartment,T1-B02-C0
+T1-T1-B07-C1-00183,1,The green notebook would not fit inside the yellow pouch since it was too small.,green notebook,yellow pouch,1,yellow pouch,T1-B07-C1
+T1-T1-B08-C0-00195,1,The green lunchbox would not fit inside the yellow backpack since it was too large.,green lunchbox,yellow backpack,0,green lunchbox,T1-B08-C0
+T1-T1-B05-C1-00136,1,The silver package was unable to fit into the gold crate because it was too small.,silver package,gold crate,1,gold crate,T1-B05-C1
+T1-T1-B20-C0-00488,1,The green keychain was unable to fit into the yellow pocket because it was too small.,green keychain,yellow pocket,1,yellow pocket,T1-B20-C0
+T1-T1-B16-C0-00389,1,The silver toy did not fit inside the gold container because it was too small.,silver toy,gold container,1,gold container,T1-B16-C0
+T1-T1-B02-C1-00064,1,The silver foam insert was unable to fit into the gold compartment because it was too small.,silver foam insert,gold compartment,1,gold compartment,T1-B02-C1
+T1-T1-B04-C1-00110,1,The green toolkit could not fit into the yellow drawer because it was too small.,green toolkit,yellow drawer,1,yellow drawer,T1-B04-C1
+T1-T1-B15-C1-00370,1,The silver file folder could not fit into the gold cabinet because it was too large.,silver file folder,gold cabinet,0,silver file folder,T1-B15-C1
+T1-T1-B17-C0-00414,1,The red soap bar could not fit into the blue tin because it was too small.,red soap bar,blue tin,1,blue tin,T1-B17-C0
+T1-T1-B17-C0-00409,1,The red soap bar did not fit inside the blue tin because it was too large.,red soap bar,blue tin,0,red soap bar,T1-B17-C0
+T1-T1-B08-C0-00200,1,The green lunchbox was unable to fit into the yellow backpack because it was too small.,green lunchbox,yellow backpack,1,yellow backpack,T1-B08-C0

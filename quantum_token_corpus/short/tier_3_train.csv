@@ -1,0 +1,361 @@
+id,tier,sentence,candidate_0,candidate_1,label,referent,scenario_id
+T3-T3-B01-C0-01134,3,"Silver screen begins brighter than gold screen. Settings unchanged; select it, now brighter.",silver screen,gold screen,0,silver screen,T3-B01-C0
+T3-T3-B11-C0-01370,3,"Green pipe was at lower pressure than yellow pipe. Settings unchanged; examine it, now higher.",green pipe,yellow pipe,1,yellow pipe,T3-B11-C0
+T3-T3-B10-C1-01354,3,"Red cylinder was at lower pressure than blue cylinder. Settings unchanged; examine it, now higher.",red cylinder,blue cylinder,1,blue cylinder,T3-B10-C1
+T3-T3-B10-C1-01357,3,"Red cylinder was at higher pressure than blue cylinder. Settings unchanged; examine it, now lower.",red cylinder,blue cylinder,1,blue cylinder,T3-B10-C1
+T3-T3-B00-C0-01112,3,"Green lamp starts brighter than yellow lamp. Settings exchanged; inspect it, now brighter.",green lamp,yellow lamp,1,yellow lamp,T3-B00-C0
+T3-T3-B14-C1-01452,3,"Silver motor starts slower than gold motor. Settings exchanged; inspect it, now faster.",silver motor,gold motor,0,silver motor,T3-B14-C1
+T3-T3-B21-C0-01611,3,"Silver cell starts at lower voltage than gold cell. Settings exchanged; inspect it, now lower.",silver cell,gold cell,1,gold cell,T3-B21-C0
+T3-T3-B20-C0-01585,3,"Green battery was at lower voltage than yellow battery. Settings unchanged; examine it, now lower.",green battery,yellow battery,0,green battery,T3-B20-C0
+T3-T3-B08-C0-01297,3,"Green chamber was cooler than yellow chamber. Settings unchanged; examine it, now cooler.",green chamber,yellow chamber,0,green chamber,T3-B08-C0
+T3-T3-B12-C0-01399,3,"Red chamber starts at higher pressure than blue chamber. Settings exchanged; inspect it, now lower.",red chamber,blue chamber,0,red chamber,T3-B12-C0
+T3-T3-B22-C0-01638,3,"Green device begins at higher voltage than yellow device. Settings unchanged; select it, now higher.",green device,yellow device,0,green device,T3-B22-C0
+T3-T3-B16-C1-01504,3,"Red wheel was faster than blue wheel. Settings swapped; examine it, now faster.",red wheel,blue wheel,1,blue wheel,T3-B16-C1
+T3-T3-B06-C1-01263,3,"Red flask begins warmer than blue flask. Settings swapped; select it, now cooler.",red flask,blue flask,0,red flask,T3-B06-C1
+T3-T3-B06-C0-01254,3,"Green flask starts warmer than yellow flask. Settings unchanged; inspect it, now warmer.",green flask,yellow flask,0,green flask,T3-B06-C0
+T3-T3-B20-C0-01589,3,"Green battery was at higher voltage than yellow battery. Settings unchanged; examine it, now lower.",green battery,yellow battery,1,yellow battery,T3-B20-C0
+T3-T3-B14-C0-01441,3,"Green motor was slower than yellow motor. Settings unchanged; examine it, now slower.",green motor,yellow motor,0,green motor,T3-B14-C0
+T3-T3-B22-C1-01648,3,"Red device was at higher voltage than blue device. Settings swapped; examine it, now higher.",red device,blue device,1,blue device,T3-B22-C1
+T3-T3-B13-C0-01418,3,"Red fan begins slower than blue fan. Settings unchanged; select it, now faster.",red fan,blue fan,1,blue fan,T3-B13-C0
+T3-T3-B17-C0-01515,3,"Red speaker was quieter than blue speaker. Settings swapped; examine it, now quieter.",red speaker,blue speaker,1,blue speaker,T3-B17-C0
+T3-T3-B20-C1-01595,3,"Silver battery starts at lower voltage than gold battery. Settings exchanged; inspect it, now lower.",silver battery,gold battery,1,gold battery,T3-B20-C1
+T3-T3-B17-C1-01522,3,"Green speaker starts quieter than yellow speaker. Settings unchanged; inspect it, now louder.",green speaker,yellow speaker,1,yellow speaker,T3-B17-C1
+T3-T3-B07-C0-01277,3,"Silver cup begins warmer than gold cup. Settings unchanged; select it, now cooler.",silver cup,gold cup,1,gold cup,T3-B07-C0
+T3-T3-B09-C0-01327,3,"Red tank starts at higher pressure than blue tank. Settings exchanged; inspect it, now lower.",red tank,blue tank,0,red tank,T3-B09-C0
+T3-T3-B05-C0-01228,3,"Red tank was cooler than blue tank. Settings swapped; examine it, now warmer.",red tank,blue tank,0,red tank,T3-B05-C0
+T3-T3-B21-C1-01621,3,"Red cell begins at higher voltage than blue cell. Settings unchanged; select it, now lower.",red cell,blue cell,1,blue cell,T3-B21-C1
+T3-T3-B11-C1-01380,3,"Silver pipe starts at lower pressure than gold pipe. Settings exchanged; inspect it, now higher.",silver pipe,gold pipe,0,silver pipe,T3-B11-C1
+T3-T3-B17-C1-01524,3,"Green speaker starts quieter than yellow speaker. Settings exchanged; inspect it, now louder.",green speaker,yellow speaker,0,green speaker,T3-B17-C1
+T3-T3-B19-C1-01576,3,"Green buzzer was louder than yellow buzzer. Settings swapped; examine it, now louder.",green buzzer,yellow buzzer,1,yellow buzzer,T3-B19-C1
+T3-T3-B17-C0-01517,3,"Red speaker was louder than blue speaker. Settings unchanged; examine it, now quieter.",red speaker,blue speaker,1,blue speaker,T3-B17-C0
+T3-T3-B06-C0-01256,3,"Green flask starts warmer than yellow flask. Settings exchanged; inspect it, now warmer.",green flask,yellow flask,1,yellow flask,T3-B06-C0
+T3-T3-B17-C1-01528,3,"Green speaker starts louder than yellow speaker. Settings exchanged; inspect it, now louder.",green speaker,yellow speaker,1,yellow speaker,T3-B17-C1
+T3-T3-B02-C1-01167,3,"Silver signal light starts brighter than gold signal light. Settings exchanged; inspect it, now dimmer.",silver signal light,gold signal light,0,silver signal light,T3-B02-C1
+T3-T3-B15-C0-01471,3,"Red conveyor starts faster than blue conveyor. Settings exchanged; inspect it, now slower.",red conveyor,blue conveyor,0,red conveyor,T3-B15-C0
+T3-T3-B22-C0-01640,3,"Green device begins at higher voltage than yellow device. Settings swapped; select it, now higher.",green device,yellow device,1,yellow device,T3-B22-C0
+T3-T3-B03-C0-01178,3,"Silver monitor starts dimmer than gold monitor. Settings unchanged; inspect it, now brighter.",silver monitor,gold monitor,1,gold monitor,T3-B03-C0
+T3-T3-B14-C1-01449,3,"Silver motor starts slower than gold motor. Settings unchanged; inspect it, now slower.",silver motor,gold motor,0,silver motor,T3-B14-C1
+T3-T3-B16-C0-01496,3,"Silver wheel begins faster than gold wheel. Settings swapped; select it, now faster.",silver wheel,gold wheel,1,gold wheel,T3-B16-C0
+T3-T3-B00-C0-01109,3,"Green lamp starts brighter than yellow lamp. Settings unchanged; inspect it, now dimmer.",green lamp,yellow lamp,1,yellow lamp,T3-B00-C0
+T3-T3-B08-C1-01311,3,"Silver chamber starts warmer than gold chamber. Settings exchanged; inspect it, now cooler.",silver chamber,gold chamber,0,silver chamber,T3-B08-C1
+T3-T3-B20-C0-01592,3,"Green battery was at higher voltage than yellow battery. Settings swapped; examine it, now higher.",green battery,yellow battery,1,yellow battery,T3-B20-C0
+T3-T3-B05-C1-01233,3,"Silver tank starts cooler than gold tank. Settings unchanged; inspect it, now cooler.",silver tank,gold tank,0,silver tank,T3-B05-C1
+T3-T3-B04-C0-01203,3,"Silver beaker begins cooler than gold beaker. Settings swapped; select it, now cooler.",silver beaker,gold beaker,1,gold beaker,T3-B04-C0
+T3-T3-B19-C1-01570,3,"Green buzzer was quieter than yellow buzzer. Settings unchanged; examine it, now louder.",green buzzer,yellow buzzer,1,yellow buzzer,T3-B19-C1
+T3-T3-B12-C0-01396,3,"Red chamber starts at lower pressure than blue chamber. Settings exchanged; inspect it, now higher.",red chamber,blue chamber,0,red chamber,T3-B12-C0
+T3-T3-B16-C1-01499,3,"Red wheel was slower than blue wheel. Settings swapped; examine it, now slower.",red wheel,blue wheel,1,blue wheel,T3-B16-C1
+T3-T3-B02-C0-01158,3,"Green signal light was brighter than yellow signal light. Settings unchanged; examine it, now brighter.",green signal light,yellow signal light,0,green signal light,T3-B02-C0
+T3-T3-B18-C0-01544,3,"Red alarm starts louder than blue alarm. Settings exchanged; inspect it, now louder.",red alarm,blue alarm,1,blue alarm,T3-B18-C0
+T3-T3-B01-C0-01131,3,"Silver screen begins dimmer than gold screen. Settings swapped; select it, now dimmer.",silver screen,gold screen,1,gold screen,T3-B01-C0
+T3-T3-B13-C1-01432,3,"Green fan was faster than yellow fan. Settings swapped; examine it, now faster.",green fan,yellow fan,1,yellow fan,T3-B13-C1
+T3-T3-B20-C1-01593,3,"Silver battery starts at lower voltage than gold battery. Settings unchanged; inspect it, now lower.",silver battery,gold battery,0,silver battery,T3-B20-C1
+T3-T3-B04-C0-01201,3,"Silver beaker begins cooler than gold beaker. Settings unchanged; select it, now cooler.",silver beaker,gold beaker,0,silver beaker,T3-B04-C0
+T3-T3-B09-C1-01329,3,"Silver tank begins at lower pressure than gold tank. Settings unchanged; select it, now lower.",silver tank,gold tank,0,silver tank,T3-B09-C1
+T3-T3-B16-C1-01500,3,"Red wheel was slower than blue wheel. Settings swapped; examine it, now faster.",red wheel,blue wheel,0,red wheel,T3-B16-C1
+T3-T3-B03-C1-01186,3,"Red monitor begins dimmer than blue monitor. Settings unchanged; select it, now brighter.",red monitor,blue monitor,1,blue monitor,T3-B03-C1
+T3-T3-B07-C0-01273,3,"Silver cup begins cooler than gold cup. Settings unchanged; select it, now cooler.",silver cup,gold cup,0,silver cup,T3-B07-C0
+T3-T3-B22-C1-01642,3,"Red device was at lower voltage than blue device. Settings unchanged; examine it, now higher.",red device,blue device,1,blue device,T3-B22-C1
+T3-T3-B01-C0-01130,3,"Silver screen begins dimmer than gold screen. Settings unchanged; select it, now brighter.",silver screen,gold screen,1,gold screen,T3-B01-C0
+T3-T3-B04-C1-01209,3,"Green beaker was cooler than yellow beaker. Settings unchanged; examine it, now cooler.",green beaker,yellow beaker,0,green beaker,T3-B04-C1
+T3-T3-B08-C1-01310,3,"Silver chamber starts warmer than gold chamber. Settings unchanged; inspect it, now warmer.",silver chamber,gold chamber,0,silver chamber,T3-B08-C1
+T3-T3-B14-C0-01442,3,"Green motor was slower than yellow motor. Settings unchanged; examine it, now faster.",green motor,yellow motor,1,yellow motor,T3-B14-C0
+T3-T3-B06-C1-01257,3,"Red flask begins cooler than blue flask. Settings unchanged; select it, now cooler.",red flask,blue flask,0,red flask,T3-B06-C1
+T3-T3-B19-C1-01573,3,"Green buzzer was louder than yellow buzzer. Settings unchanged; examine it, now quieter.",green buzzer,yellow buzzer,1,yellow buzzer,T3-B19-C1
+T3-T3-B04-C1-01212,3,"Green beaker was cooler than yellow beaker. Settings swapped; examine it, now warmer.",green beaker,yellow beaker,0,green beaker,T3-B04-C1
+T3-T3-B18-C1-01551,3,"Silver alarm begins louder than gold alarm. Settings swapped; select it, now quieter.",silver alarm,gold alarm,0,silver alarm,T3-B18-C1
+T3-T3-B09-C0-01324,3,"Red tank starts at lower pressure than blue tank. Settings exchanged; inspect it, now higher.",red tank,blue tank,0,red tank,T3-B09-C0
+T3-T3-B02-C0-01157,3,"Green signal light was brighter than yellow signal light. Settings unchanged; examine it, now dimmer.",green signal light,yellow signal light,1,yellow signal light,T3-B02-C0
+T3-T3-B11-C0-01373,3,"Green pipe was at higher pressure than yellow pipe. Settings unchanged; examine it, now lower.",green pipe,yellow pipe,1,yellow pipe,T3-B11-C0
+T3-T3-B03-C1-01185,3,"Red monitor begins dimmer than blue monitor. Settings unchanged; select it, now dimmer.",red monitor,blue monitor,0,red monitor,T3-B03-C1
+T3-T3-B02-C0-01154,3,"Green signal light was dimmer than yellow signal light. Settings unchanged; examine it, now brighter.",green signal light,yellow signal light,1,yellow signal light,T3-B02-C0
+T3-T3-B11-C1-01378,3,"Silver pipe starts at lower pressure than gold pipe. Settings unchanged; inspect it, now higher.",silver pipe,gold pipe,1,gold pipe,T3-B11-C1
+T3-T3-B18-C1-01545,3,"Silver alarm begins quieter than gold alarm. Settings unchanged; select it, now quieter.",silver alarm,gold alarm,0,silver alarm,T3-B18-C1
+T3-T3-B04-C1-01210,3,"Green beaker was cooler than yellow beaker. Settings unchanged; examine it, now warmer.",green beaker,yellow beaker,1,yellow beaker,T3-B04-C1
+T3-T3-B14-C0-01445,3,"Green motor was faster than yellow motor. Settings unchanged; examine it, now slower.",green motor,yellow motor,1,yellow motor,T3-B14-C0
+T3-T3-B21-C0-01613,3,"Silver cell starts at higher voltage than gold cell. Settings unchanged; inspect it, now lower.",silver cell,gold cell,1,gold cell,T3-B21-C0
+T3-T3-B11-C0-01376,3,"Green pipe was at higher pressure than yellow pipe. Settings swapped; examine it, now higher.",green pipe,yellow pipe,1,yellow pipe,T3-B11-C0
+T3-T3-B02-C1-01168,3,"Silver signal light starts brighter than gold signal light. Settings exchanged; inspect it, now brighter.",silver signal light,gold signal light,1,gold signal light,T3-B02-C1
+T3-T3-B08-C0-01301,3,"Green chamber was warmer than yellow chamber. Settings unchanged; examine it, now cooler.",green chamber,yellow chamber,1,yellow chamber,T3-B08-C0
+T3-T3-B10-C1-01353,3,"Red cylinder was at lower pressure than blue cylinder. Settings unchanged; examine it, now lower.",red cylinder,blue cylinder,0,red cylinder,T3-B10-C1
+T3-T3-B00-C0-01108,3,"Green lamp starts dimmer than yellow lamp. Settings exchanged; inspect it, now brighter.",green lamp,yellow lamp,0,green lamp,T3-B00-C0
+T3-T3-B20-C0-01588,3,"Green battery was at lower voltage than yellow battery. Settings swapped; examine it, now higher.",green battery,yellow battery,0,green battery,T3-B20-C0
+T3-T3-B17-C1-01521,3,"Green speaker starts quieter than yellow speaker. Settings unchanged; inspect it, now quieter.",green speaker,yellow speaker,0,green speaker,T3-B17-C1
+T3-T3-B06-C0-01255,3,"Green flask starts warmer than yellow flask. Settings exchanged; inspect it, now cooler.",green flask,yellow flask,0,green flask,T3-B06-C0
+T3-T3-B14-C1-01456,3,"Silver motor starts faster than gold motor. Settings exchanged; inspect it, now faster.",silver motor,gold motor,1,gold motor,T3-B14-C1
+T3-T3-B14-C1-01450,3,"Silver motor starts slower than gold motor. Settings unchanged; inspect it, now faster.",silver motor,gold motor,1,gold motor,T3-B14-C1
+T3-T3-B03-C1-01190,3,"Red monitor begins brighter than blue monitor. Settings unchanged; select it, now brighter.",red monitor,blue monitor,0,red monitor,T3-B03-C1
+T3-T3-B12-C1-01408,3,"Green chamber begins at higher pressure than yellow chamber. Settings swapped; select it, now higher.",green chamber,yellow chamber,1,yellow chamber,T3-B12-C1
+T3-T3-B05-C0-01230,3,"Red tank was warmer than blue tank. Settings unchanged; examine it, now warmer.",red tank,blue tank,0,red tank,T3-B05-C0
+T3-T3-B17-C0-01513,3,"Red speaker was quieter than blue speaker. Settings unchanged; examine it, now quieter.",red speaker,blue speaker,0,red speaker,T3-B17-C0
+T3-T3-B05-C0-01231,3,"Red tank was warmer than blue tank. Settings swapped; examine it, now cooler.",red tank,blue tank,0,red tank,T3-B05-C0
+T3-T3-B03-C1-01189,3,"Red monitor begins brighter than blue monitor. Settings unchanged; select it, now dimmer.",red monitor,blue monitor,1,blue monitor,T3-B03-C1
+T3-T3-B02-C0-01155,3,"Green signal light was dimmer than yellow signal light. Settings swapped; examine it, now dimmer.",green signal light,yellow signal light,1,yellow signal light,T3-B02-C0
+T3-T3-B19-C1-01575,3,"Green buzzer was louder than yellow buzzer. Settings swapped; examine it, now quieter.",green buzzer,yellow buzzer,0,green buzzer,T3-B19-C1
+T3-T3-B21-C1-01618,3,"Red cell begins at lower voltage than blue cell. Settings unchanged; select it, now higher.",red cell,blue cell,1,blue cell,T3-B21-C1
+T3-T3-B07-C1-01288,3,"Green cup was warmer than yellow cup. Settings swapped; examine it, now warmer.",green cup,yellow cup,1,yellow cup,T3-B07-C1
+T3-T3-B16-C1-01497,3,"Red wheel was slower than blue wheel. Settings unchanged; examine it, now slower.",red wheel,blue wheel,0,red wheel,T3-B16-C1
+T3-T3-B12-C1-01401,3,"Green chamber begins at lower pressure than yellow chamber. Settings unchanged; select it, now lower.",green chamber,yellow chamber,0,green chamber,T3-B12-C1
+T3-T3-B20-C1-01594,3,"Silver battery starts at lower voltage than gold battery. Settings unchanged; inspect it, now higher.",silver battery,gold battery,1,gold battery,T3-B20-C1
+T3-T3-B15-C1-01479,3,"Silver conveyor begins faster than gold conveyor. Settings swapped; select it, now slower.",silver conveyor,gold conveyor,0,silver conveyor,T3-B15-C1
+T3-T3-B02-C1-01165,3,"Silver signal light starts brighter than gold signal light. Settings unchanged; inspect it, now dimmer.",silver signal light,gold signal light,1,gold signal light,T3-B02-C1
+T3-T3-B07-C1-01281,3,"Green cup was cooler than yellow cup. Settings unchanged; examine it, now cooler.",green cup,yellow cup,0,green cup,T3-B07-C1
+T3-T3-B22-C0-01639,3,"Green device begins at higher voltage than yellow device. Settings swapped; select it, now lower.",green device,yellow device,0,green device,T3-B22-C0
+T3-T3-B16-C1-01502,3,"Red wheel was faster than blue wheel. Settings unchanged; examine it, now faster.",red wheel,blue wheel,0,red wheel,T3-B16-C1
+T3-T3-B20-C0-01590,3,"Green battery was at higher voltage than yellow battery. Settings unchanged; examine it, now higher.",green battery,yellow battery,0,green battery,T3-B20-C0
+T3-T3-B00-C1-01116,3,"Silver lamp begins dimmer than gold lamp. Settings swapped; select it, now brighter.",silver lamp,gold lamp,0,silver lamp,T3-B00-C1
+T3-T3-B15-C1-01475,3,"Silver conveyor begins slower than gold conveyor. Settings swapped; select it, now slower.",silver conveyor,gold conveyor,1,gold conveyor,T3-B15-C1
+T3-T3-B03-C1-01191,3,"Red monitor begins brighter than blue monitor. Settings swapped; select it, now dimmer.",red monitor,blue monitor,0,red monitor,T3-B03-C1
+T3-T3-B07-C1-01284,3,"Green cup was cooler than yellow cup. Settings swapped; examine it, now warmer.",green cup,yellow cup,0,green cup,T3-B07-C1
+T3-T3-B07-C1-01283,3,"Green cup was cooler than yellow cup. Settings swapped; examine it, now cooler.",green cup,yellow cup,1,yellow cup,T3-B07-C1
+T3-T3-B11-C0-01375,3,"Green pipe was at higher pressure than yellow pipe. Settings swapped; examine it, now lower.",green pipe,yellow pipe,0,green pipe,T3-B11-C0
+T3-T3-B18-C1-01547,3,"Silver alarm begins quieter than gold alarm. Settings swapped; select it, now quieter.",silver alarm,gold alarm,1,gold alarm,T3-B18-C1
+T3-T3-B05-C0-01227,3,"Red tank was cooler than blue tank. Settings swapped; examine it, now cooler.",red tank,blue tank,1,blue tank,T3-B05-C0
+T3-T3-B00-C1-01118,3,"Silver lamp begins brighter than gold lamp. Settings unchanged; select it, now brighter.",silver lamp,gold lamp,0,silver lamp,T3-B00-C1
+T3-T3-B00-C0-01107,3,"Green lamp starts dimmer than yellow lamp. Settings exchanged; inspect it, now dimmer.",green lamp,yellow lamp,1,yellow lamp,T3-B00-C0
+T3-T3-B14-C0-01448,3,"Green motor was faster than yellow motor. Settings swapped; examine it, now faster.",green motor,yellow motor,1,yellow motor,T3-B14-C0
+T3-T3-B02-C1-01161,3,"Silver signal light starts dimmer than gold signal light. Settings unchanged; inspect it, now dimmer.",silver signal light,gold signal light,0,silver signal light,T3-B02-C1
+T3-T3-B19-C0-01563,3,"Red buzzer begins quieter than blue buzzer. Settings swapped; select it, now quieter.",red buzzer,blue buzzer,1,blue buzzer,T3-B19-C0
+T3-T3-B08-C0-01300,3,"Green chamber was cooler than yellow chamber. Settings swapped; examine it, now warmer.",green chamber,yellow chamber,0,green chamber,T3-B08-C0
+T3-T3-B10-C0-01352,3,"Green cylinder begins at higher pressure than yellow cylinder. Settings swapped; select it, now higher.",green cylinder,yellow cylinder,1,yellow cylinder,T3-B10-C0
+T3-T3-B08-C0-01304,3,"Green chamber was warmer than yellow chamber. Settings swapped; examine it, now warmer.",green chamber,yellow chamber,1,yellow chamber,T3-B08-C0
+T3-T3-B04-C1-01211,3,"Green beaker was cooler than yellow beaker. Settings swapped; examine it, now cooler.",green beaker,yellow beaker,1,yellow beaker,T3-B04-C1
+T3-T3-B09-C0-01328,3,"Red tank starts at higher pressure than blue tank. Settings exchanged; inspect it, now higher.",red tank,blue tank,1,blue tank,T3-B09-C0
+T3-T3-B11-C1-01382,3,"Silver pipe starts at higher pressure than gold pipe. Settings unchanged; inspect it, now higher.",silver pipe,gold pipe,0,silver pipe,T3-B11-C1
+T3-T3-B20-C0-01586,3,"Green battery was at lower voltage than yellow battery. Settings unchanged; examine it, now higher.",green battery,yellow battery,1,yellow battery,T3-B20-C0
+T3-T3-B10-C0-01346,3,"Green cylinder begins at lower pressure than yellow cylinder. Settings unchanged; select it, now higher.",green cylinder,yellow cylinder,1,yellow cylinder,T3-B10-C0
+T3-T3-B12-C0-01398,3,"Red chamber starts at higher pressure than blue chamber. Settings unchanged; inspect it, now higher.",red chamber,blue chamber,0,red chamber,T3-B12-C0
+T3-T3-B01-C0-01136,3,"Silver screen begins brighter than gold screen. Settings swapped; select it, now brighter.",silver screen,gold screen,1,gold screen,T3-B01-C0
+T3-T3-B06-C1-01261,3,"Red flask begins warmer than blue flask. Settings unchanged; select it, now cooler.",red flask,blue flask,1,blue flask,T3-B06-C1
+T3-T3-B12-C1-01406,3,"Green chamber begins at higher pressure than yellow chamber. Settings unchanged; select it, now higher.",green chamber,yellow chamber,0,green chamber,T3-B12-C1
+T3-T3-B16-C0-01492,3,"Silver wheel begins slower than gold wheel. Settings swapped; select it, now faster.",silver wheel,gold wheel,0,silver wheel,T3-B16-C0
+T3-T3-B10-C1-01360,3,"Red cylinder was at higher pressure than blue cylinder. Settings swapped; examine it, now higher.",red cylinder,blue cylinder,1,blue cylinder,T3-B10-C1
+T3-T3-B12-C1-01407,3,"Green chamber begins at higher pressure than yellow chamber. Settings swapped; select it, now lower.",green chamber,yellow chamber,0,green chamber,T3-B12-C1
+T3-T3-B17-C0-01519,3,"Red speaker was louder than blue speaker. Settings swapped; examine it, now quieter.",red speaker,blue speaker,0,red speaker,T3-B17-C0
+T3-T3-B07-C0-01279,3,"Silver cup begins warmer than gold cup. Settings swapped; select it, now cooler.",silver cup,gold cup,0,silver cup,T3-B07-C0
+T3-T3-B03-C0-01179,3,"Silver monitor starts dimmer than gold monitor. Settings exchanged; inspect it, now dimmer.",silver monitor,gold monitor,1,gold monitor,T3-B03-C0
+T3-T3-B03-C1-01187,3,"Red monitor begins dimmer than blue monitor. Settings swapped; select it, now dimmer.",red monitor,blue monitor,1,blue monitor,T3-B03-C1
+T3-T3-B18-C0-01537,3,"Red alarm starts quieter than blue alarm. Settings unchanged; inspect it, now quieter.",red alarm,blue alarm,0,red alarm,T3-B18-C0
+T3-T3-B08-C0-01299,3,"Green chamber was cooler than yellow chamber. Settings swapped; examine it, now cooler.",green chamber,yellow chamber,1,yellow chamber,T3-B08-C0
+T3-T3-B21-C1-01624,3,"Red cell begins at higher voltage than blue cell. Settings swapped; select it, now higher.",red cell,blue cell,1,blue cell,T3-B21-C1
+T3-T3-B21-C1-01623,3,"Red cell begins at higher voltage than blue cell. Settings swapped; select it, now lower.",red cell,blue cell,0,red cell,T3-B21-C1
+T3-T3-B15-C1-01477,3,"Silver conveyor begins faster than gold conveyor. Settings unchanged; select it, now slower.",silver conveyor,gold conveyor,1,gold conveyor,T3-B15-C1
+T3-T3-B21-C0-01616,3,"Silver cell starts at higher voltage than gold cell. Settings exchanged; inspect it, now higher.",silver cell,gold cell,1,gold cell,T3-B21-C0
+T3-T3-B07-C0-01278,3,"Silver cup begins warmer than gold cup. Settings unchanged; select it, now warmer.",silver cup,gold cup,0,silver cup,T3-B07-C0
+T3-T3-B17-C0-01516,3,"Red speaker was quieter than blue speaker. Settings swapped; examine it, now louder.",red speaker,blue speaker,0,red speaker,T3-B17-C0
+T3-T3-B16-C0-01495,3,"Silver wheel begins faster than gold wheel. Settings swapped; select it, now slower.",silver wheel,gold wheel,0,silver wheel,T3-B16-C0
+T3-T3-B01-C0-01129,3,"Silver screen begins dimmer than gold screen. Settings unchanged; select it, now dimmer.",silver screen,gold screen,0,silver screen,T3-B01-C0
+T3-T3-B03-C1-01192,3,"Red monitor begins brighter than blue monitor. Settings swapped; select it, now brighter.",red monitor,blue monitor,1,blue monitor,T3-B03-C1
+T3-T3-B00-C1-01115,3,"Silver lamp begins dimmer than gold lamp. Settings swapped; select it, now dimmer.",silver lamp,gold lamp,1,gold lamp,T3-B00-C1
+T3-T3-B20-C1-01598,3,"Silver battery starts at higher voltage than gold battery. Settings unchanged; inspect it, now higher.",silver battery,gold battery,0,silver battery,T3-B20-C1
+T3-T3-B07-C0-01275,3,"Silver cup begins cooler than gold cup. Settings swapped; select it, now cooler.",silver cup,gold cup,1,gold cup,T3-B07-C0
+T3-T3-B22-C1-01644,3,"Red device was at lower voltage than blue device. Settings swapped; examine it, now higher.",red device,blue device,0,red device,T3-B22-C1
+T3-T3-B10-C1-01356,3,"Red cylinder was at lower pressure than blue cylinder. Settings swapped; examine it, now higher.",red cylinder,blue cylinder,0,red cylinder,T3-B10-C1
+T3-T3-B09-C0-01322,3,"Red tank starts at lower pressure than blue tank. Settings unchanged; inspect it, now higher.",red tank,blue tank,1,blue tank,T3-B09-C0
+T3-T3-B08-C0-01298,3,"Green chamber was cooler than yellow chamber. Settings unchanged; examine it, now warmer.",green chamber,yellow chamber,1,yellow chamber,T3-B08-C0
+T3-T3-B15-C1-01480,3,"Silver conveyor begins faster than gold conveyor. Settings swapped; select it, now faster.",silver conveyor,gold conveyor,1,gold conveyor,T3-B15-C1
+T3-T3-B20-C0-01587,3,"Green battery was at lower voltage than yellow battery. Settings swapped; examine it, now lower.",green battery,yellow battery,1,yellow battery,T3-B20-C0
+T3-T3-B03-C0-01177,3,"Silver monitor starts dimmer than gold monitor. Settings unchanged; inspect it, now dimmer.",silver monitor,gold monitor,0,silver monitor,T3-B03-C0
+T3-T3-B22-C1-01643,3,"Red device was at lower voltage than blue device. Settings swapped; examine it, now lower.",red device,blue device,1,blue device,T3-B22-C1
+T3-T3-B04-C1-01214,3,"Green beaker was warmer than yellow beaker. Settings unchanged; examine it, now warmer.",green beaker,yellow beaker,0,green beaker,T3-B04-C1
+T3-T3-B09-C1-01335,3,"Silver tank begins at higher pressure than gold tank. Settings swapped; select it, now lower.",silver tank,gold tank,0,silver tank,T3-B09-C1
+T3-T3-B12-C1-01404,3,"Green chamber begins at lower pressure than yellow chamber. Settings swapped; select it, now higher.",green chamber,yellow chamber,0,green chamber,T3-B12-C1
+T3-T3-B18-C1-01548,3,"Silver alarm begins quieter than gold alarm. Settings swapped; select it, now louder.",silver alarm,gold alarm,0,silver alarm,T3-B18-C1
+T3-T3-B18-C0-01542,3,"Red alarm starts louder than blue alarm. Settings unchanged; inspect it, now louder.",red alarm,blue alarm,0,red alarm,T3-B18-C0
+T3-T3-B04-C0-01205,3,"Silver beaker begins warmer than gold beaker. Settings unchanged; select it, now cooler.",silver beaker,gold beaker,1,gold beaker,T3-B04-C0
+T3-T3-B16-C0-01494,3,"Silver wheel begins faster than gold wheel. Settings unchanged; select it, now faster.",silver wheel,gold wheel,0,silver wheel,T3-B16-C0
+T3-T3-B00-C1-01113,3,"Silver lamp begins dimmer than gold lamp. Settings unchanged; select it, now dimmer.",silver lamp,gold lamp,0,silver lamp,T3-B00-C1
+T3-T3-B22-C1-01645,3,"Red device was at higher voltage than blue device. Settings unchanged; examine it, now lower.",red device,blue device,1,blue device,T3-B22-C1
+T3-T3-B08-C1-01308,3,"Silver chamber starts cooler than gold chamber. Settings exchanged; inspect it, now warmer.",silver chamber,gold chamber,0,silver chamber,T3-B08-C1
+T3-T3-B10-C0-01349,3,"Green cylinder begins at higher pressure than yellow cylinder. Settings unchanged; select it, now lower.",green cylinder,yellow cylinder,1,yellow cylinder,T3-B10-C0
+T3-T3-B04-C0-01206,3,"Silver beaker begins warmer than gold beaker. Settings unchanged; select it, now warmer.",silver beaker,gold beaker,0,silver beaker,T3-B04-C0
+T3-T3-B18-C1-01550,3,"Silver alarm begins louder than gold alarm. Settings unchanged; select it, now louder.",silver alarm,gold alarm,0,silver alarm,T3-B18-C1
+T3-T3-B14-C0-01447,3,"Green motor was faster than yellow motor. Settings swapped; examine it, now slower.",green motor,yellow motor,0,green motor,T3-B14-C0
+T3-T3-B19-C1-01574,3,"Green buzzer was louder than yellow buzzer. Settings unchanged; examine it, now louder.",green buzzer,yellow buzzer,0,green buzzer,T3-B19-C1
+T3-T3-B19-C0-01568,3,"Red buzzer begins louder than blue buzzer. Settings swapped; select it, now louder.",red buzzer,blue buzzer,1,blue buzzer,T3-B19-C0
+T3-T3-B06-C1-01262,3,"Red flask begins warmer than blue flask. Settings unchanged; select it, now warmer.",red flask,blue flask,0,red flask,T3-B06-C1
+T3-T3-B14-C0-01444,3,"Green motor was slower than yellow motor. Settings swapped; examine it, now faster.",green motor,yellow motor,0,green motor,T3-B14-C0
+T3-T3-B03-C0-01182,3,"Silver monitor starts brighter than gold monitor. Settings unchanged; inspect it, now brighter.",silver monitor,gold monitor,0,silver monitor,T3-B03-C0
+T3-T3-B13-C0-01421,3,"Red fan begins faster than blue fan. Settings unchanged; select it, now slower.",red fan,blue fan,1,blue fan,T3-B13-C0
+T3-T3-B00-C1-01117,3,"Silver lamp begins brighter than gold lamp. Settings unchanged; select it, now dimmer.",silver lamp,gold lamp,1,gold lamp,T3-B00-C1
+T3-T3-B00-C0-01105,3,"Green lamp starts dimmer than yellow lamp. Settings unchanged; inspect it, now dimmer.",green lamp,yellow lamp,0,green lamp,T3-B00-C0
+T3-T3-B21-C1-01619,3,"Red cell begins at lower voltage than blue cell. Settings swapped; select it, now lower.",red cell,blue cell,1,blue cell,T3-B21-C1
+T3-T3-B11-C1-01379,3,"Silver pipe starts at lower pressure than gold pipe. Settings exchanged; inspect it, now lower.",silver pipe,gold pipe,1,gold pipe,T3-B11-C1
+T3-T3-B19-C0-01561,3,"Red buzzer begins quieter than blue buzzer. Settings unchanged; select it, now quieter.",red buzzer,blue buzzer,0,red buzzer,T3-B19-C0
+T3-T3-B15-C1-01473,3,"Silver conveyor begins slower than gold conveyor. Settings unchanged; select it, now slower.",silver conveyor,gold conveyor,0,silver conveyor,T3-B15-C1
+T3-T3-B19-C1-01571,3,"Green buzzer was quieter than yellow buzzer. Settings swapped; examine it, now quieter.",green buzzer,yellow buzzer,1,yellow buzzer,T3-B19-C1
+T3-T3-B04-C0-01204,3,"Silver beaker begins cooler than gold beaker. Settings swapped; select it, now warmer.",silver beaker,gold beaker,0,silver beaker,T3-B04-C0
+T3-T3-B08-C1-01305,3,"Silver chamber starts cooler than gold chamber. Settings unchanged; inspect it, now cooler.",silver chamber,gold chamber,0,silver chamber,T3-B08-C1
+T3-T3-B11-C0-01371,3,"Green pipe was at lower pressure than yellow pipe. Settings swapped; examine it, now lower.",green pipe,yellow pipe,1,yellow pipe,T3-B11-C0
+T3-T3-B03-C0-01181,3,"Silver monitor starts brighter than gold monitor. Settings unchanged; inspect it, now dimmer.",silver monitor,gold monitor,1,gold monitor,T3-B03-C0
+T3-T3-B04-C0-01208,3,"Silver beaker begins warmer than gold beaker. Settings swapped; select it, now warmer.",silver beaker,gold beaker,1,gold beaker,T3-B04-C0
+T3-T3-B11-C1-01383,3,"Silver pipe starts at higher pressure than gold pipe. Settings exchanged; inspect it, now lower.",silver pipe,gold pipe,0,silver pipe,T3-B11-C1
+T3-T3-B00-C1-01119,3,"Silver lamp begins brighter than gold lamp. Settings swapped; select it, now dimmer.",silver lamp,gold lamp,0,silver lamp,T3-B00-C1
+T3-T3-B04-C0-01202,3,"Silver beaker begins cooler than gold beaker. Settings unchanged; select it, now warmer.",silver beaker,gold beaker,1,gold beaker,T3-B04-C0
+T3-T3-B09-C0-01321,3,"Red tank starts at lower pressure than blue tank. Settings unchanged; inspect it, now lower.",red tank,blue tank,0,red tank,T3-B09-C0
+T3-T3-B13-C1-01431,3,"Green fan was faster than yellow fan. Settings swapped; examine it, now slower.",green fan,yellow fan,0,green fan,T3-B13-C1
+T3-T3-B20-C1-01596,3,"Silver battery starts at lower voltage than gold battery. Settings exchanged; inspect it, now higher.",silver battery,gold battery,0,silver battery,T3-B20-C1
+T3-T3-B06-C1-01260,3,"Red flask begins cooler than blue flask. Settings swapped; select it, now warmer.",red flask,blue flask,0,red flask,T3-B06-C1
+T3-T3-B13-C0-01420,3,"Red fan begins slower than blue fan. Settings swapped; select it, now faster.",red fan,blue fan,0,red fan,T3-B13-C0
+T3-T3-B05-C1-01238,3,"Silver tank starts warmer than gold tank. Settings unchanged; inspect it, now warmer.",silver tank,gold tank,0,silver tank,T3-B05-C1
+T3-T3-B10-C1-01358,3,"Red cylinder was at higher pressure than blue cylinder. Settings unchanged; examine it, now higher.",red cylinder,blue cylinder,0,red cylinder,T3-B10-C1
+T3-T3-B15-C0-01470,3,"Red conveyor starts faster than blue conveyor. Settings unchanged; inspect it, now faster.",red conveyor,blue conveyor,0,red conveyor,T3-B15-C0
+T3-T3-B08-C1-01309,3,"Silver chamber starts warmer than gold chamber. Settings unchanged; inspect it, now cooler.",silver chamber,gold chamber,1,gold chamber,T3-B08-C1
+T3-T3-B00-C0-01106,3,"Green lamp starts dimmer than yellow lamp. Settings unchanged; inspect it, now brighter.",green lamp,yellow lamp,1,yellow lamp,T3-B00-C0
+T3-T3-B20-C1-01599,3,"Silver battery starts at higher voltage than gold battery. Settings exchanged; inspect it, now lower.",silver battery,gold battery,0,silver battery,T3-B20-C1
+T3-T3-B11-C0-01374,3,"Green pipe was at higher pressure than yellow pipe. Settings unchanged; examine it, now higher.",green pipe,yellow pipe,0,green pipe,T3-B11-C0
+T3-T3-B18-C0-01540,3,"Red alarm starts quieter than blue alarm. Settings exchanged; inspect it, now louder.",red alarm,blue alarm,0,red alarm,T3-B18-C0
+T3-T3-B06-C0-01252,3,"Green flask starts cooler than yellow flask. Settings exchanged; inspect it, now warmer.",green flask,yellow flask,0,green flask,T3-B06-C0
+T3-T3-B04-C1-01213,3,"Green beaker was warmer than yellow beaker. Settings unchanged; examine it, now cooler.",green beaker,yellow beaker,1,yellow beaker,T3-B04-C1
+T3-T3-B03-C0-01180,3,"Silver monitor starts dimmer than gold monitor. Settings exchanged; inspect it, now brighter.",silver monitor,gold monitor,0,silver monitor,T3-B03-C0
+T3-T3-B13-C0-01423,3,"Red fan begins faster than blue fan. Settings swapped; select it, now slower.",red fan,blue fan,0,red fan,T3-B13-C0
+T3-T3-B10-C0-01348,3,"Green cylinder begins at lower pressure than yellow cylinder. Settings swapped; select it, now higher.",green cylinder,yellow cylinder,0,green cylinder,T3-B10-C0
+T3-T3-B05-C0-01225,3,"Red tank was cooler than blue tank. Settings unchanged; examine it, now cooler.",red tank,blue tank,0,red tank,T3-B05-C0
+T3-T3-B10-C1-01355,3,"Red cylinder was at lower pressure than blue cylinder. Settings swapped; examine it, now lower.",red cylinder,blue cylinder,1,blue cylinder,T3-B10-C1
+T3-T3-B09-C1-01334,3,"Silver tank begins at higher pressure than gold tank. Settings unchanged; select it, now higher.",silver tank,gold tank,0,silver tank,T3-B09-C1
+T3-T3-B13-C0-01419,3,"Red fan begins slower than blue fan. Settings swapped; select it, now slower.",red fan,blue fan,1,blue fan,T3-B13-C0
+T3-T3-B11-C1-01377,3,"Silver pipe starts at lower pressure than gold pipe. Settings unchanged; inspect it, now lower.",silver pipe,gold pipe,0,silver pipe,T3-B11-C1
+T3-T3-B13-C0-01417,3,"Red fan begins slower than blue fan. Settings unchanged; select it, now slower.",red fan,blue fan,0,red fan,T3-B13-C0
+T3-T3-B22-C1-01641,3,"Red device was at lower voltage than blue device. Settings unchanged; examine it, now lower.",red device,blue device,0,red device,T3-B22-C1
+T3-T3-B20-C1-01600,3,"Silver battery starts at higher voltage than gold battery. Settings exchanged; inspect it, now higher.",silver battery,gold battery,1,gold battery,T3-B20-C1
+T3-T3-B09-C1-01330,3,"Silver tank begins at lower pressure than gold tank. Settings unchanged; select it, now higher.",silver tank,gold tank,1,gold tank,T3-B09-C1
+T3-T3-B11-C1-01381,3,"Silver pipe starts at higher pressure than gold pipe. Settings unchanged; inspect it, now lower.",silver pipe,gold pipe,1,gold pipe,T3-B11-C1
+T3-T3-B15-C1-01478,3,"Silver conveyor begins faster than gold conveyor. Settings unchanged; select it, now faster.",silver conveyor,gold conveyor,0,silver conveyor,T3-B15-C1
+T3-T3-B21-C1-01620,3,"Red cell begins at lower voltage than blue cell. Settings swapped; select it, now higher.",red cell,blue cell,0,red cell,T3-B21-C1
+T3-T3-B07-C1-01282,3,"Green cup was cooler than yellow cup. Settings unchanged; examine it, now warmer.",green cup,yellow cup,1,yellow cup,T3-B07-C1
+T3-T3-B21-C1-01622,3,"Red cell begins at higher voltage than blue cell. Settings unchanged; select it, now higher.",red cell,blue cell,0,red cell,T3-B21-C1
+T3-T3-B16-C0-01491,3,"Silver wheel begins slower than gold wheel. Settings swapped; select it, now slower.",silver wheel,gold wheel,1,gold wheel,T3-B16-C0
+T3-T3-B05-C0-01226,3,"Red tank was cooler than blue tank. Settings unchanged; examine it, now warmer.",red tank,blue tank,1,blue tank,T3-B05-C0
+T3-T3-B17-C1-01523,3,"Green speaker starts quieter than yellow speaker. Settings exchanged; inspect it, now quieter.",green speaker,yellow speaker,1,yellow speaker,T3-B17-C1
+T3-T3-B13-C1-01426,3,"Green fan was slower than yellow fan. Settings unchanged; examine it, now faster.",green fan,yellow fan,1,yellow fan,T3-B13-C1
+T3-T3-B02-C1-01163,3,"Silver signal light starts dimmer than gold signal light. Settings exchanged; inspect it, now dimmer.",silver signal light,gold signal light,1,gold signal light,T3-B02-C1
+T3-T3-B14-C1-01454,3,"Silver motor starts faster than gold motor. Settings unchanged; inspect it, now faster.",silver motor,gold motor,0,silver motor,T3-B14-C1
+T3-T3-B19-C1-01572,3,"Green buzzer was quieter than yellow buzzer. Settings swapped; examine it, now louder.",green buzzer,yellow buzzer,0,green buzzer,T3-B19-C1
+T3-T3-B14-C0-01446,3,"Green motor was faster than yellow motor. Settings unchanged; examine it, now faster.",green motor,yellow motor,0,green motor,T3-B14-C0
+T3-T3-B15-C0-01465,3,"Red conveyor starts slower than blue conveyor. Settings unchanged; inspect it, now slower.",red conveyor,blue conveyor,0,red conveyor,T3-B15-C0
+T3-T3-B02-C0-01153,3,"Green signal light was dimmer than yellow signal light. Settings unchanged; examine it, now dimmer.",green signal light,yellow signal light,0,green signal light,T3-B02-C0
+T3-T3-B10-C0-01351,3,"Green cylinder begins at higher pressure than yellow cylinder. Settings swapped; select it, now lower.",green cylinder,yellow cylinder,0,green cylinder,T3-B10-C0
+T3-T3-B00-C1-01114,3,"Silver lamp begins dimmer than gold lamp. Settings unchanged; select it, now brighter.",silver lamp,gold lamp,1,gold lamp,T3-B00-C1
+T3-T3-B10-C1-01359,3,"Red cylinder was at higher pressure than blue cylinder. Settings swapped; examine it, now lower.",red cylinder,blue cylinder,0,red cylinder,T3-B10-C1
+T3-T3-B13-C1-01430,3,"Green fan was faster than yellow fan. Settings unchanged; examine it, now faster.",green fan,yellow fan,0,green fan,T3-B13-C1
+T3-T3-B21-C0-01610,3,"Silver cell starts at lower voltage than gold cell. Settings unchanged; inspect it, now higher.",silver cell,gold cell,1,gold cell,T3-B21-C0
+T3-T3-B21-C0-01612,3,"Silver cell starts at lower voltage than gold cell. Settings exchanged; inspect it, now higher.",silver cell,gold cell,0,silver cell,T3-B21-C0
+T3-T3-B17-C0-01514,3,"Red speaker was quieter than blue speaker. Settings unchanged; examine it, now louder.",red speaker,blue speaker,1,blue speaker,T3-B17-C0
+T3-T3-B08-C0-01302,3,"Green chamber was warmer than yellow chamber. Settings unchanged; examine it, now warmer.",green chamber,yellow chamber,0,green chamber,T3-B08-C0
+T3-T3-B15-C0-01472,3,"Red conveyor starts faster than blue conveyor. Settings exchanged; inspect it, now faster.",red conveyor,blue conveyor,1,blue conveyor,T3-B15-C0
+T3-T3-B07-C1-01286,3,"Green cup was warmer than yellow cup. Settings unchanged; examine it, now warmer.",green cup,yellow cup,0,green cup,T3-B07-C1
+T3-T3-B00-C1-01120,3,"Silver lamp begins brighter than gold lamp. Settings swapped; select it, now brighter.",silver lamp,gold lamp,1,gold lamp,T3-B00-C1
+T3-T3-B03-C1-01188,3,"Red monitor begins dimmer than blue monitor. Settings swapped; select it, now brighter.",red monitor,blue monitor,0,red monitor,T3-B03-C1
+T3-T3-B19-C0-01565,3,"Red buzzer begins louder than blue buzzer. Settings unchanged; select it, now quieter.",red buzzer,blue buzzer,1,blue buzzer,T3-B19-C0
+T3-T3-B09-C1-01331,3,"Silver tank begins at lower pressure than gold tank. Settings swapped; select it, now lower.",silver tank,gold tank,1,gold tank,T3-B09-C1
+T3-T3-B12-C0-01397,3,"Red chamber starts at higher pressure than blue chamber. Settings unchanged; inspect it, now lower.",red chamber,blue chamber,1,blue chamber,T3-B12-C0
+T3-T3-B18-C1-01546,3,"Silver alarm begins quieter than gold alarm. Settings unchanged; select it, now louder.",silver alarm,gold alarm,1,gold alarm,T3-B18-C1
+T3-T3-B05-C1-01235,3,"Silver tank starts cooler than gold tank. Settings exchanged; inspect it, now cooler.",silver tank,gold tank,1,gold tank,T3-B05-C1
+T3-T3-B19-C0-01562,3,"Red buzzer begins quieter than blue buzzer. Settings unchanged; select it, now louder.",red buzzer,blue buzzer,1,blue buzzer,T3-B19-C0
+T3-T3-B05-C1-01240,3,"Silver tank starts warmer than gold tank. Settings exchanged; inspect it, now warmer.",silver tank,gold tank,1,gold tank,T3-B05-C1
+T3-T3-B08-C1-01312,3,"Silver chamber starts warmer than gold chamber. Settings exchanged; inspect it, now warmer.",silver chamber,gold chamber,1,gold chamber,T3-B08-C1
+T3-T3-B07-C0-01280,3,"Silver cup begins warmer than gold cup. Settings swapped; select it, now warmer.",silver cup,gold cup,1,gold cup,T3-B07-C0
+T3-T3-B16-C1-01503,3,"Red wheel was faster than blue wheel. Settings swapped; examine it, now slower.",red wheel,blue wheel,0,red wheel,T3-B16-C1
+T3-T3-B06-C0-01253,3,"Green flask starts warmer than yellow flask. Settings unchanged; inspect it, now cooler.",green flask,yellow flask,1,yellow flask,T3-B06-C0
+T3-T3-B21-C0-01609,3,"Silver cell starts at lower voltage than gold cell. Settings unchanged; inspect it, now lower.",silver cell,gold cell,0,silver cell,T3-B21-C0
+T3-T3-B18-C1-01549,3,"Silver alarm begins louder than gold alarm. Settings unchanged; select it, now quieter.",silver alarm,gold alarm,1,gold alarm,T3-B18-C1
+T3-T3-B22-C0-01633,3,"Green device begins at lower voltage than yellow device. Settings unchanged; select it, now lower.",green device,yellow device,0,green device,T3-B22-C0
+T3-T3-B05-C1-01234,3,"Silver tank starts cooler than gold tank. Settings unchanged; inspect it, now warmer.",silver tank,gold tank,1,gold tank,T3-B05-C1
+T3-T3-B17-C0-01518,3,"Red speaker was louder than blue speaker. Settings unchanged; examine it, now louder.",red speaker,blue speaker,0,red speaker,T3-B17-C0
+T3-T3-B12-C0-01400,3,"Red chamber starts at higher pressure than blue chamber. Settings exchanged; inspect it, now higher.",red chamber,blue chamber,1,blue chamber,T3-B12-C0
+T3-T3-B09-C1-01333,3,"Silver tank begins at higher pressure than gold tank. Settings unchanged; select it, now lower.",silver tank,gold tank,1,gold tank,T3-B09-C1
+T3-T3-B06-C1-01258,3,"Red flask begins cooler than blue flask. Settings unchanged; select it, now warmer.",red flask,blue flask,1,blue flask,T3-B06-C1
+T3-T3-B22-C0-01635,3,"Green device begins at lower voltage than yellow device. Settings swapped; select it, now lower.",green device,yellow device,1,yellow device,T3-B22-C0
+T3-T3-B05-C1-01239,3,"Silver tank starts warmer than gold tank. Settings exchanged; inspect it, now cooler.",silver tank,gold tank,0,silver tank,T3-B05-C1
+T3-T3-B13-C1-01427,3,"Green fan was slower than yellow fan. Settings swapped; examine it, now slower.",green fan,yellow fan,1,yellow fan,T3-B13-C1
+T3-T3-B12-C1-01402,3,"Green chamber begins at lower pressure than yellow chamber. Settings unchanged; select it, now higher.",green chamber,yellow chamber,1,yellow chamber,T3-B12-C1
+T3-T3-B21-C1-01617,3,"Red cell begins at lower voltage than blue cell. Settings unchanged; select it, now lower.",red cell,blue cell,0,red cell,T3-B21-C1
+T3-T3-B14-C0-01443,3,"Green motor was slower than yellow motor. Settings swapped; examine it, now slower.",green motor,yellow motor,1,yellow motor,T3-B14-C0
+T3-T3-B01-C0-01132,3,"Silver screen begins dimmer than gold screen. Settings swapped; select it, now brighter.",silver screen,gold screen,0,silver screen,T3-B01-C0
+T3-T3-B16-C0-01493,3,"Silver wheel begins faster than gold wheel. Settings unchanged; select it, now slower.",silver wheel,gold wheel,1,gold wheel,T3-B16-C0
+T3-T3-B06-C0-01251,3,"Green flask starts cooler than yellow flask. Settings exchanged; inspect it, now cooler.",green flask,yellow flask,1,yellow flask,T3-B06-C0
+T3-T3-B14-C1-01453,3,"Silver motor starts faster than gold motor. Settings unchanged; inspect it, now slower.",silver motor,gold motor,1,gold motor,T3-B14-C1
+T3-T3-B12-C1-01405,3,"Green chamber begins at higher pressure than yellow chamber. Settings unchanged; select it, now lower.",green chamber,yellow chamber,1,yellow chamber,T3-B12-C1
+T3-T3-B03-C0-01183,3,"Silver monitor starts brighter than gold monitor. Settings exchanged; inspect it, now dimmer.",silver monitor,gold monitor,0,silver monitor,T3-B03-C0
+T3-T3-B01-C0-01135,3,"Silver screen begins brighter than gold screen. Settings swapped; select it, now dimmer.",silver screen,gold screen,0,silver screen,T3-B01-C0
+T3-T3-B05-C1-01237,3,"Silver tank starts warmer than gold tank. Settings unchanged; inspect it, now cooler.",silver tank,gold tank,1,gold tank,T3-B05-C1
+T3-T3-B16-C1-01498,3,"Red wheel was slower than blue wheel. Settings unchanged; examine it, now faster.",red wheel,blue wheel,1,blue wheel,T3-B16-C1
+T3-T3-B01-C0-01133,3,"Silver screen begins brighter than gold screen. Settings unchanged; select it, now dimmer.",silver screen,gold screen,1,gold screen,T3-B01-C0
+T3-T3-B12-C0-01393,3,"Red chamber starts at lower pressure than blue chamber. Settings unchanged; inspect it, now lower.",red chamber,blue chamber,0,red chamber,T3-B12-C0
+T3-T3-B05-C0-01229,3,"Red tank was warmer than blue tank. Settings unchanged; examine it, now cooler.",red tank,blue tank,1,blue tank,T3-B05-C0
+T3-T3-B21-C0-01614,3,"Silver cell starts at higher voltage than gold cell. Settings unchanged; inspect it, now higher.",silver cell,gold cell,0,silver cell,T3-B21-C0
+T3-T3-B17-C1-01527,3,"Green speaker starts louder than yellow speaker. Settings exchanged; inspect it, now quieter.",green speaker,yellow speaker,0,green speaker,T3-B17-C1
+T3-T3-B15-C0-01467,3,"Red conveyor starts slower than blue conveyor. Settings exchanged; inspect it, now slower.",red conveyor,blue conveyor,1,blue conveyor,T3-B15-C0
+T3-T3-B11-C1-01384,3,"Silver pipe starts at higher pressure than gold pipe. Settings exchanged; inspect it, now higher.",silver pipe,gold pipe,1,gold pipe,T3-B11-C1
+T3-T3-B06-C0-01250,3,"Green flask starts cooler than yellow flask. Settings unchanged; inspect it, now warmer.",green flask,yellow flask,1,yellow flask,T3-B06-C0
+T3-T3-B04-C0-01207,3,"Silver beaker begins warmer than gold beaker. Settings swapped; select it, now cooler.",silver beaker,gold beaker,0,silver beaker,T3-B04-C0
+T3-T3-B15-C0-01468,3,"Red conveyor starts slower than blue conveyor. Settings exchanged; inspect it, now faster.",red conveyor,blue conveyor,0,red conveyor,T3-B15-C0
+T3-T3-B18-C1-01552,3,"Silver alarm begins louder than gold alarm. Settings swapped; select it, now louder.",silver alarm,gold alarm,1,gold alarm,T3-B18-C1
+T3-T3-B02-C1-01166,3,"Silver signal light starts brighter than gold signal light. Settings unchanged; inspect it, now brighter.",silver signal light,gold signal light,0,silver signal light,T3-B02-C1
+T3-T3-B18-C0-01541,3,"Red alarm starts louder than blue alarm. Settings unchanged; inspect it, now quieter.",red alarm,blue alarm,1,blue alarm,T3-B18-C0
+T3-T3-B07-C1-01287,3,"Green cup was warmer than yellow cup. Settings swapped; examine it, now cooler.",green cup,yellow cup,0,green cup,T3-B07-C1
+T3-T3-B05-C0-01232,3,"Red tank was warmer than blue tank. Settings swapped; examine it, now warmer.",red tank,blue tank,1,blue tank,T3-B05-C0
+T3-T3-B02-C1-01162,3,"Silver signal light starts dimmer than gold signal light. Settings unchanged; inspect it, now brighter.",silver signal light,gold signal light,1,gold signal light,T3-B02-C1
+T3-T3-B12-C0-01394,3,"Red chamber starts at lower pressure than blue chamber. Settings unchanged; inspect it, now higher.",red chamber,blue chamber,1,blue chamber,T3-B12-C0
+T3-T3-B11-C0-01372,3,"Green pipe was at lower pressure than yellow pipe. Settings swapped; examine it, now higher.",green pipe,yellow pipe,0,green pipe,T3-B11-C0
+T3-T3-B08-C0-01303,3,"Green chamber was warmer than yellow chamber. Settings swapped; examine it, now cooler.",green chamber,yellow chamber,0,green chamber,T3-B08-C0
+T3-T3-B15-C1-01474,3,"Silver conveyor begins slower than gold conveyor. Settings unchanged; select it, now faster.",silver conveyor,gold conveyor,1,gold conveyor,T3-B15-C1
+T3-T3-B06-C1-01264,3,"Red flask begins warmer than blue flask. Settings swapped; select it, now warmer.",red flask,blue flask,1,blue flask,T3-B06-C1
+T3-T3-B04-C1-01216,3,"Green beaker was warmer than yellow beaker. Settings swapped; examine it, now warmer.",green beaker,yellow beaker,1,yellow beaker,T3-B04-C1
+T3-T3-B07-C0-01276,3,"Silver cup begins cooler than gold cup. Settings swapped; select it, now warmer.",silver cup,gold cup,0,silver cup,T3-B07-C0
+T3-T3-B00-C0-01110,3,"Green lamp starts brighter than yellow lamp. Settings unchanged; inspect it, now brighter.",green lamp,yellow lamp,0,green lamp,T3-B00-C0
+T3-T3-B14-C1-01455,3,"Silver motor starts faster than gold motor. Settings exchanged; inspect it, now slower.",silver motor,gold motor,0,silver motor,T3-B14-C1
+T3-T3-B12-C0-01395,3,"Red chamber starts at lower pressure than blue chamber. Settings exchanged; inspect it, now lower.",red chamber,blue chamber,1,blue chamber,T3-B12-C0
+T3-T3-B22-C1-01646,3,"Red device was at higher voltage than blue device. Settings unchanged; examine it, now higher.",red device,blue device,0,red device,T3-B22-C1
+T3-T3-B16-C0-01490,3,"Silver wheel begins slower than gold wheel. Settings unchanged; select it, now faster.",silver wheel,gold wheel,1,gold wheel,T3-B16-C0
+T3-T3-B19-C0-01567,3,"Red buzzer begins louder than blue buzzer. Settings swapped; select it, now quieter.",red buzzer,blue buzzer,0,red buzzer,T3-B19-C0
+T3-T3-B16-C0-01489,3,"Silver wheel begins slower than gold wheel. Settings unchanged; select it, now slower.",silver wheel,gold wheel,0,silver wheel,T3-B16-C0
+T3-T3-B08-C1-01307,3,"Silver chamber starts cooler than gold chamber. Settings exchanged; inspect it, now cooler.",silver chamber,gold chamber,1,gold chamber,T3-B08-C1
+T3-T3-B09-C1-01336,3,"Silver tank begins at higher pressure than gold tank. Settings swapped; select it, now higher.",silver tank,gold tank,1,gold tank,T3-B09-C1
+T3-T3-B11-C0-01369,3,"Green pipe was at lower pressure than yellow pipe. Settings unchanged; examine it, now lower.",green pipe,yellow pipe,0,green pipe,T3-B11-C0
+T3-T3-B02-C0-01156,3,"Green signal light was dimmer than yellow signal light. Settings swapped; examine it, now brighter.",green signal light,yellow signal light,0,green signal light,T3-B02-C0
+T3-T3-B19-C0-01564,3,"Red buzzer begins quieter than blue buzzer. Settings swapped; select it, now louder.",red buzzer,blue buzzer,0,red buzzer,T3-B19-C0
+T3-T3-B17-C0-01520,3,"Red speaker was louder than blue speaker. Settings swapped; examine it, now louder.",red speaker,blue speaker,1,blue speaker,T3-B17-C0
+T3-T3-B13-C0-01424,3,"Red fan begins faster than blue fan. Settings swapped; select it, now faster.",red fan,blue fan,1,blue fan,T3-B13-C0
+T3-T3-B05-C1-01236,3,"Silver tank starts cooler than gold tank. Settings exchanged; inspect it, now warmer.",silver tank,gold tank,0,silver tank,T3-B05-C1
+T3-T3-B12-C1-01403,3,"Green chamber begins at lower pressure than yellow chamber. Settings swapped; select it, now lower.",green chamber,yellow chamber,1,yellow chamber,T3-B12-C1
+T3-T3-B18-C0-01539,3,"Red alarm starts quieter than blue alarm. Settings exchanged; inspect it, now quieter.",red alarm,blue alarm,1,blue alarm,T3-B18-C0
+T3-T3-B10-C0-01345,3,"Green cylinder begins at lower pressure than yellow cylinder. Settings unchanged; select it, now lower.",green cylinder,yellow cylinder,0,green cylinder,T3-B10-C0
+T3-T3-B02-C1-01164,3,"Silver signal light starts dimmer than gold signal light. Settings exchanged; inspect it, now brighter.",silver signal light,gold signal light,0,silver signal light,T3-B02-C1
+T3-T3-B13-C1-01428,3,"Green fan was slower than yellow fan. Settings swapped; examine it, now faster.",green fan,yellow fan,0,green fan,T3-B13-C1
+T3-T3-B06-C0-01249,3,"Green flask starts cooler than yellow flask. Settings unchanged; inspect it, now cooler.",green flask,yellow flask,0,green flask,T3-B06-C0
+T3-T3-B13-C0-01422,3,"Red fan begins faster than blue fan. Settings unchanged; select it, now faster.",red fan,blue fan,0,red fan,T3-B13-C0
+T3-T3-B22-C1-01647,3,"Red device was at higher voltage than blue device. Settings swapped; examine it, now lower.",red device,blue device,0,red device,T3-B22-C1
+T3-T3-B17-C1-01525,3,"Green speaker starts louder than yellow speaker. Settings unchanged; inspect it, now quieter.",green speaker,yellow speaker,1,yellow speaker,T3-B17-C1
+T3-T3-B09-C0-01323,3,"Red tank starts at lower pressure than blue tank. Settings exchanged; inspect it, now lower.",red tank,blue tank,1,blue tank,T3-B09-C0
+T3-T3-B09-C0-01326,3,"Red tank starts at higher pressure than blue tank. Settings unchanged; inspect it, now higher.",red tank,blue tank,0,red tank,T3-B09-C0
+T3-T3-B21-C0-01615,3,"Silver cell starts at higher voltage than gold cell. Settings exchanged; inspect it, now lower.",silver cell,gold cell,0,silver cell,T3-B21-C0
+T3-T3-B02-C0-01160,3,"Green signal light was brighter than yellow signal light. Settings swapped; examine it, now brighter.",green signal light,yellow signal light,1,yellow signal light,T3-B02-C0
+T3-T3-B07-C1-01285,3,"Green cup was warmer than yellow cup. Settings unchanged; examine it, now cooler.",green cup,yellow cup,1,yellow cup,T3-B07-C1
+T3-T3-B20-C0-01591,3,"Green battery was at higher voltage than yellow battery. Settings swapped; examine it, now lower.",green battery,yellow battery,0,green battery,T3-B20-C0
+T3-T3-B14-C1-01451,3,"Silver motor starts slower than gold motor. Settings exchanged; inspect it, now slower.",silver motor,gold motor,1,gold motor,T3-B14-C1
+T3-T3-B15-C1-01476,3,"Silver conveyor begins slower than gold conveyor. Settings swapped; select it, now faster.",silver conveyor,gold conveyor,0,silver conveyor,T3-B15-C1
+T3-T3-B15-C0-01469,3,"Red conveyor starts faster than blue conveyor. Settings unchanged; inspect it, now slower.",red conveyor,blue conveyor,1,blue conveyor,T3-B15-C0
+T3-T3-B13-C1-01425,3,"Green fan was slower than yellow fan. Settings unchanged; examine it, now slower.",green fan,yellow fan,0,green fan,T3-B13-C1
+T3-T3-B13-C1-01429,3,"Green fan was faster than yellow fan. Settings unchanged; examine it, now slower.",green fan,yellow fan,1,yellow fan,T3-B13-C1
+T3-T3-B09-C1-01332,3,"Silver tank begins at lower pressure than gold tank. Settings swapped; select it, now higher.",silver tank,gold tank,0,silver tank,T3-B09-C1
+T3-T3-B06-C1-01259,3,"Red flask begins cooler than blue flask. Settings swapped; select it, now cooler.",red flask,blue flask,1,blue flask,T3-B06-C1
+T3-T3-B22-C0-01634,3,"Green device begins at lower voltage than yellow device. Settings unchanged; select it, now higher.",green device,yellow device,1,yellow device,T3-B22-C0
+T3-T3-B00-C0-01111,3,"Green lamp starts brighter than yellow lamp. Settings exchanged; inspect it, now dimmer.",green lamp,yellow lamp,0,green lamp,T3-B00-C0
+T3-T3-B19-C1-01569,3,"Green buzzer was quieter than yellow buzzer. Settings unchanged; examine it, now quieter.",green buzzer,yellow buzzer,0,green buzzer,T3-B19-C1
+T3-T3-B15-C0-01466,3,"Red conveyor starts slower than blue conveyor. Settings unchanged; inspect it, now faster.",red conveyor,blue conveyor,1,blue conveyor,T3-B15-C0
+T3-T3-B10-C0-01347,3,"Green cylinder begins at lower pressure than yellow cylinder. Settings swapped; select it, now lower.",green cylinder,yellow cylinder,1,yellow cylinder,T3-B10-C0
+T3-T3-B17-C1-01526,3,"Green speaker starts louder than yellow speaker. Settings unchanged; inspect it, now louder.",green speaker,yellow speaker,0,green speaker,T3-B17-C1
+T3-T3-B03-C0-01184,3,"Silver monitor starts brighter than gold monitor. Settings exchanged; inspect it, now brighter.",silver monitor,gold monitor,1,gold monitor,T3-B03-C0
+T3-T3-B09-C0-01325,3,"Red tank starts at higher pressure than blue tank. Settings unchanged; inspect it, now lower.",red tank,blue tank,1,blue tank,T3-B09-C0
+T3-T3-B04-C1-01215,3,"Green beaker was warmer than yellow beaker. Settings swapped; examine it, now cooler.",green beaker,yellow beaker,0,green beaker,T3-B04-C1
+T3-T3-B10-C0-01350,3,"Green cylinder begins at higher pressure than yellow cylinder. Settings unchanged; select it, now higher.",green cylinder,yellow cylinder,0,green cylinder,T3-B10-C0
+T3-T3-B07-C0-01274,3,"Silver cup begins cooler than gold cup. Settings unchanged; select it, now warmer.",silver cup,gold cup,1,gold cup,T3-B07-C0
+T3-T3-B18-C0-01538,3,"Red alarm starts quieter than blue alarm. Settings unchanged; inspect it, now louder.",red alarm,blue alarm,1,blue alarm,T3-B18-C0
+T3-T3-B16-C1-01501,3,"Red wheel was faster than blue wheel. Settings unchanged; examine it, now slower.",red wheel,blue wheel,1,blue wheel,T3-B16-C1
+T3-T3-B18-C0-01543,3,"Red alarm starts louder than blue alarm. Settings exchanged; inspect it, now quieter.",red alarm,blue alarm,0,red alarm,T3-B18-C0
+T3-T3-B08-C1-01306,3,"Silver chamber starts cooler than gold chamber. Settings unchanged; inspect it, now warmer.",silver chamber,gold chamber,1,gold chamber,T3-B08-C1
+T3-T3-B22-C0-01636,3,"Green device begins at lower voltage than yellow device. Settings swapped; select it, now higher.",green device,yellow device,0,green device,T3-B22-C0
+T3-T3-B20-C1-01597,3,"Silver battery starts at higher voltage than gold battery. Settings unchanged; inspect it, now lower.",silver battery,gold battery,1,gold battery,T3-B20-C1
+T3-T3-B22-C0-01637,3,"Green device begins at higher voltage than yellow device. Settings unchanged; select it, now lower.",green device,yellow device,1,yellow device,T3-B22-C0
+T3-T3-B02-C0-01159,3,"Green signal light was brighter than yellow signal light. Settings swapped; examine it, now dimmer.",green signal light,yellow signal light,0,green signal light,T3-B02-C0
+T3-T3-B19-C0-01566,3,"Red buzzer begins louder than blue buzzer. Settings unchanged; select it, now louder.",red buzzer,blue buzzer,0,red buzzer,T3-B19-C0

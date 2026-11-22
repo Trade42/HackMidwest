@@ -1,0 +1,15 @@
+n_train,baseline,gain,interval_low,interval_high,subset_seeds,interpretation
+128,iqp_plain,-0.007246376811594203,-0.07721979107848673,0.06521739130434782,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+128,rbf,0.0006587615283267457,-0.0533596837944664,0.06328933747411998,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+128,polynomial,-0.007246376811594203,-0.061313052889139845,0.04940711462450593,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+128,mlp,-0.013175230566534914,-0.08112412949369471,0.06460686053077348,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+128,full_rbf,-0.030303030303030304,-0.11081662902315076,0.0495518068887631,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+128,fourier,0.00461133069828722,-0.058163937511763596,0.0691699604743083,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+128,surrogate,0.013175230566534914,-0.041550207039337476,0.06719367588932806,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+256,iqp_plain,-0.0032938076416337285,-0.05943322981366459,0.06324110671936758,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+256,rbf,0.005928853754940711,-0.05533596837944664,0.05928853754940711,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+256,polynomial,0.0006587615283267457,-0.058163937511763596,0.05665349143610013,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+256,mlp,-0.003952569169960474,-0.07312252964426877,0.06277526821005042,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+256,full_rbf,-0.019104084321475624,-0.08102766798418973,0.043478260869565216,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+256,fourier,0.0032938076416337285,-0.055432429888951626,0.059433229813664286,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals
+256,surrogate,0.00922266139657444,-0.03162055335968379,0.05806747600225841,3,Exploratory paired world/seed bootstrap; adjusted approximate intervals

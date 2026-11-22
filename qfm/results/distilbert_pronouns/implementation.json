@@ -1,0 +1,16 @@
+{
+  "recorded_at": "completion",
+  "source_sha256": {
+    "frozen_encoder.py": "0a7c329681a0cd58759b480711bc4c658cffc4e38914d404a6d09cc2b97b116a",
+    "nlp_features.py": "f0b8688bcdc311922da28bbb2a8cdc0dc73d58fa9f262da5c55188aefee562c6",
+    "distilbert_experiment.py": "0ec903ffda3b4e2b73715754dbc6c19d4ca3bf964e8ea676d22c70022f1773ac",
+    "distilbert_shots.py": "a75936a9ee4490454da84f1466001ff5df284be09135f689ad0f7ce2e5715873",
+    "predict_distilbert.py": "5f694a2bd810254c7e8704120b33cd5916719753e7671112bcab27202a6ea7a3",
+    "learning_curves.py": "6a2be2ce28c3b0d60d22c0bc1b8ffa403930c75021ec0e7e6cbfb7ac29e95723",
+    "qfp.py": "0c72ae8a02de1197cd65bcfa7c170b3b6d7f7ad6147abf46781575d904860770",
+    "feature_preprocessing.py": "808d562887cb7f7c4bb2d56e55e08711f6fcd4e3d5a22a1d75e8fbeff46d44f9",
+    "corpus_experiment.py": "4a326fc8ffa2325ab752fd670d1b25663a406943d709ec5bd8a56dfd1445f73d",
+    "confirm_feature_gain.py": "7d911297fa1d60b9dedb2b6b92c32bbfc4a6d477af6690bb2064ff3e6a2313db"
+  },
+  "purpose": "Current implementation accompanying saved frozen model artifacts"
+}

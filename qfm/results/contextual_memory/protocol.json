@@ -1,0 +1,36 @@
+{
+  "task": "Two independent sentence facts, uniformly random delayed query",
+  "preparations": 4,
+  "queries": [
+    "Choose her: taller.",
+    "Choose her: older."
+  ],
+  "candidate_order": [
+    "Ava",
+    "Mia"
+  ],
+  "word_count": 9,
+  "semantic_bits": 2,
+  "quantum_message_qubits": 1,
+  "copies_per_trial": 1,
+  "measurements_per_trial": 1,
+  "query_available_to_encoder": false,
+  "decoder_input": "one physical qubit and query; no text, amplitudes or expectation vector",
+  "classical_constraint": "Every message must hide the XOR of the two independent facts",
+  "unrestricted_classical_control": "Both facts retained; 100% correct, reveals parity",
+  "training": "None; analytic protocol, fixed before sampling",
+  "scope": "Classical simulation of a contextual memory protocol with an explicit sentence parser",
+  "does_not_establish": [
+    "NLP generalization",
+    "learning sample efficiency",
+    "computational speedup",
+    "an unrestricted classical accuracy advantage",
+    "a hardware violation"
+  ],
+  "primary_statistic": "One-sided binomial test against the exact classical bound",
+  "uncertainty": "95% exact binomial interval; simulated measurement noise only",
+  "visibility": 1.0,
+  "trials": 4096,
+  "seed": 241123,
+  "reference": "https://arxiv.org/abs/0805.1463"
+}

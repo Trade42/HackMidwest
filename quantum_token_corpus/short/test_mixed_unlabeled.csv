@@ -1,0 +1,217 @@
+id,tier,sentence,candidate_0,candidate_1
+T3-T3-B21-C2-01631,3,"Green cell was at higher voltage than yellow cell. Settings swapped; examine it, now lower.",green cell,yellow cell
+T3-T3-B09-C2-01341,3,"Green tank was at higher pressure than yellow tank. Settings unchanged; examine it, now lower.",green tank,yellow tank
+T3-T3-B05-C2-01248,3,"Green tank begins warmer than yellow tank. Settings swapped; select it, now warmer.",green tank,yellow tank
+T2-T2-B11-C2-00838,2,Red awning cannot cover blue patio; it's too large.,red awning,blue patio
+T2-T2-B22-C2-01099,2,Silver vinyl wrap won't fit on gold door; it's too small.,silver vinyl wrap,gold door
+T1-T1-B18-C2-00453,1,Green book won't fit inside yellow box; it's too small.,green book,yellow box
+T1-T1-B13-C2-00334,1,Silver phone cannot fit inside gold case; it's too small.,silver phone,gold case
+T2-T2-B09-C2-00789,2,Green fabric sheet won't cover yellow workbench; it's too large.,green fabric sheet,yellow workbench
+T3-T3-B02-C2-01172,3,"Red signal light begins dimmer than blue signal light. Settings swapped; select it, now brighter.",red signal light,blue signal light
+T3-T3-B02-C2-01169,3,"Red signal light begins dimmer than blue signal light. Settings unchanged; select it, now dimmer.",red signal light,blue signal light
+T1-T1-B11-C2-00282,1,Red wooden block cannot fit inside blue mold; it's too large.,red wooden block,blue mold
+T1-T1-B02-C2-00072,1,Red foam insert cannot fit into blue compartment; it's too small.,red foam insert,blue compartment
+T1-T1-B21-C2-00526,1,Green canister cannot fit inside yellow cubby; it's too small.,green canister,yellow cubby
+T1-T1-B22-C2-00546,1,Silver sculpture cannot fit inside gold display case; it's too large.,silver sculpture,gold display case
+T2-T2-B22-C2-01100,2,Silver vinyl wrap cannot fit on gold door; it's too small.,silver vinyl wrap,gold door
+T3-T3-B11-C2-01392,3,"Red pipe begins at higher pressure than blue pipe. Settings swapped; select it, now higher.",red pipe,blue pipe
+T1-T1-B13-C2-00335,1,Silver phone won't fit into gold case; it's too small.,silver phone,gold case
+T1-T1-B09-C2-00234,1,Green bottle cannot fit inside yellow cooler; it's too large.,green bottle,yellow cooler
+T1-T1-B21-C2-00524,1,Green canister cannot fit into yellow cubby; it's too large.,green canister,yellow cubby
+T1-T1-B02-C2-00065,1,Red foam insert won't fit inside blue compartment; it's too large.,red foam insert,blue compartment
+T2-T2-B05-C2-00693,2,Green protective film won't cover yellow window; it's too large.,green protective film,yellow window
+T2-T2-B18-C2-01007,2,Green insulation sheet won't cover yellow wall; it's too small.,green insulation sheet,yellow wall
+T2-T2-B22-C2-01102,2,Silver vinyl wrap cannot cover gold door; it's too large.,silver vinyl wrap,gold door
+T3-T3-B22-C2-01653,3,"Silver device starts at higher voltage than gold device. Settings unchanged; inspect it, now lower.",silver device,gold device
+T1-T1-B18-C2-00451,1,Green book won't fit into yellow box; it's too large.,green book,yellow box
+T1-T1-B22-C2-00547,1,Silver sculpture won't fit into gold display case; it's too large.,silver sculpture,gold display case
+T2-T2-B16-C2-00954,2,Green mat cannot fit on yellow shelf; it's too large.,green mat,yellow shelf
+T3-T3-B09-C2-01343,3,"Green tank was at higher pressure than yellow tank. Settings swapped; examine it, now lower.",green tank,yellow tank
+T2-T2-B18-C2-01001,2,Green insulation sheet won't fit on yellow wall; it's too large.,green insulation sheet,yellow wall
+T2-T2-B21-C2-01080,2,Green paper overlay cannot cover yellow diagram; it's too small.,green paper overlay,yellow diagram
+T1-T1-B11-C2-00288,1,Red wooden block cannot fit into blue mold; it's too small.,red wooden block,blue mold
+T1-T1-B09-C2-00235,1,Green bottle won't fit into yellow cooler; it's too large.,green bottle,yellow cooler
+T2-T2-B22-C2-01101,2,Silver vinyl wrap won't cover gold door; it's too large.,silver vinyl wrap,gold door
+T1-T1-B22-C2-00548,1,Silver sculpture cannot fit into gold display case; it's too large.,silver sculpture,gold display case
+T3-T3-B02-C2-01173,3,"Red signal light begins brighter than blue signal light. Settings unchanged; select it, now dimmer.",red signal light,blue signal light
+T3-T3-B13-C2-01436,3,"Silver fan starts slower than gold fan. Settings exchanged; inspect it, now faster.",silver fan,gold fan
+T2-T2-B18-C2-01002,2,Green insulation sheet cannot fit on yellow wall; it's too large.,green insulation sheet,yellow wall
+T3-T3-B13-C2-01433,3,"Silver fan starts slower than gold fan. Settings unchanged; inspect it, now slower.",silver fan,gold fan
+T3-T3-B05-C2-01244,3,"Green tank begins cooler than yellow tank. Settings swapped; select it, now warmer.",green tank,yellow tank
+T3-T3-B21-C2-01627,3,"Green cell was at lower voltage than yellow cell. Settings swapped; examine it, now lower.",green cell,yellow cell
+T2-T2-B02-C2-00624,2,Red tablecloth cannot cover blue table; it's too small.,red tablecloth,blue table
+T1-T1-B18-C2-00456,1,Green book cannot fit into yellow box; it's too small.,green book,yellow box
+T1-T1-B05-C2-00142,1,Green package cannot fit inside yellow crate; it's too small.,green package,yellow crate
+T3-T3-B09-C2-01339,3,"Green tank was at lower pressure than yellow tank. Settings swapped; examine it, now lower.",green tank,yellow tank
+T1-T1-B05-C2-00144,1,Green package cannot fit into yellow crate; it's too small.,green package,yellow crate
+T3-T3-B09-C2-01340,3,"Green tank was at lower pressure than yellow tank. Settings swapped; examine it, now higher.",green tank,yellow tank
+T2-T2-B16-C2-00958,2,Green mat cannot cover yellow shelf; it's too large.,green mat,yellow shelf
+T2-T2-B18-C2-01006,2,Green insulation sheet cannot cover yellow wall; it's too large.,green insulation sheet,yellow wall
+T2-T2-B21-C2-01078,2,Green paper overlay cannot cover yellow diagram; it's too large.,green paper overlay,yellow diagram
+T2-T2-B13-C2-00881,2,Silver sticker won't fit on gold label area; it's too large.,silver sticker,gold label area
+T3-T3-B09-C2-01342,3,"Green tank was at higher pressure than yellow tank. Settings unchanged; examine it, now higher.",green tank,yellow tank
+T3-T3-B22-C2-01652,3,"Silver device starts at lower voltage than gold device. Settings exchanged; inspect it, now higher.",silver device,gold device
+T1-T1-B22-C2-00550,1,Silver sculpture cannot fit inside gold display case; it's too small.,silver sculpture,gold display case
+T2-T2-B13-C2-00885,2,Silver sticker won't cover gold label area; it's too large.,silver sticker,gold label area
+T2-T2-B02-C2-00617,2,Red tablecloth won't fit on blue table; it's too large.,red tablecloth,blue table
+T1-T1-B18-C2-00450,1,Green book cannot fit inside yellow box; it's too large.,green book,yellow box
+T3-T3-B09-C2-01337,3,"Green tank was at lower pressure than yellow tank. Settings unchanged; examine it, now lower.",green tank,yellow tank
+T3-T3-B22-C2-01656,3,"Silver device starts at higher voltage than gold device. Settings exchanged; inspect it, now higher.",silver device,gold device
+T2-T2-B13-C2-00886,2,Silver sticker cannot cover gold label area; it's too large.,silver sticker,gold label area
+T3-T3-B11-C2-01391,3,"Red pipe begins at higher pressure than blue pipe. Settings swapped; select it, now lower.",red pipe,blue pipe
+T3-T3-B05-C2-01247,3,"Green tank begins warmer than yellow tank. Settings swapped; select it, now cooler.",green tank,yellow tank
+T3-T3-B18-C2-01554,3,"Green alarm was quieter than yellow alarm. Settings unchanged; examine it, now louder.",green alarm,yellow alarm
+T2-T2-B13-C2-00887,2,Silver sticker won't cover gold label area; it's too small.,silver sticker,gold label area
+T1-T1-B22-C2-00545,1,Silver sculpture won't fit inside gold display case; it's too large.,silver sculpture,gold display case
+T2-T2-B18-C2-01003,2,Green insulation sheet won't fit on yellow wall; it's too small.,green insulation sheet,yellow wall
+T1-T1-B05-C2-00143,1,Green package won't fit into yellow crate; it's too small.,green package,yellow crate
+T2-T2-B11-C2-00835,2,Red awning won't fit on blue patio; it's too small.,red awning,blue patio
+T1-T1-B02-C2-00068,1,Red foam insert cannot fit into blue compartment; it's too large.,red foam insert,blue compartment
+T1-T1-B21-C2-00523,1,Green canister won't fit into yellow cubby; it's too large.,green canister,yellow cubby
+T3-T3-B02-C2-01175,3,"Red signal light begins brighter than blue signal light. Settings swapped; select it, now dimmer.",red signal light,blue signal light
+T1-T1-B09-C2-00237,1,Green bottle won't fit inside yellow cooler; it's too small.,green bottle,yellow cooler
+T3-T3-B21-C2-01630,3,"Green cell was at higher voltage than yellow cell. Settings unchanged; examine it, now higher.",green cell,yellow cell
+T3-T3-B18-C2-01556,3,"Green alarm was quieter than yellow alarm. Settings swapped; examine it, now louder.",green alarm,yellow alarm
+T3-T3-B22-C2-01650,3,"Silver device starts at lower voltage than gold device. Settings unchanged; inspect it, now higher.",silver device,gold device
+T3-T3-B13-C2-01434,3,"Silver fan starts slower than gold fan. Settings unchanged; inspect it, now faster.",silver fan,gold fan
+T3-T3-B16-C2-01506,3,"Green wheel starts slower than yellow wheel. Settings unchanged; inspect it, now faster.",green wheel,yellow wheel
+T3-T3-B11-C2-01387,3,"Red pipe begins at lower pressure than blue pipe. Settings swapped; select it, now lower.",red pipe,blue pipe
+T1-T1-B13-C2-00331,1,Silver phone won't fit into gold case; it's too large.,silver phone,gold case
+T1-T1-B13-C2-00330,1,Silver phone cannot fit inside gold case; it's too large.,silver phone,gold case
+T2-T2-B21-C2-01073,2,Green paper overlay won't fit on yellow diagram; it's too large.,green paper overlay,yellow diagram
+T3-T3-B16-C2-01505,3,"Green wheel starts slower than yellow wheel. Settings unchanged; inspect it, now slower.",green wheel,yellow wheel
+T3-T3-B05-C2-01243,3,"Green tank begins cooler than yellow tank. Settings swapped; select it, now cooler.",green tank,yellow tank
+T2-T2-B05-C2-00696,2,Green protective film cannot cover yellow window; it's too small.,green protective film,yellow window
+T1-T1-B21-C2-00522,1,Green canister cannot fit inside yellow cubby; it's too large.,green canister,yellow cubby
+T2-T2-B05-C2-00691,2,Green protective film won't fit on yellow window; it's too small.,green protective film,yellow window
+T1-T1-B22-C2-00552,1,Silver sculpture cannot fit into gold display case; it's too small.,silver sculpture,gold display case
+T3-T3-B05-C2-01242,3,"Green tank begins cooler than yellow tank. Settings unchanged; select it, now warmer.",green tank,yellow tank
+T2-T2-B11-C2-00836,2,Red awning cannot fit on blue patio; it's too small.,red awning,blue patio
+T3-T3-B11-C2-01389,3,"Red pipe begins at higher pressure than blue pipe. Settings unchanged; select it, now lower.",red pipe,blue pipe
+T1-T1-B16-C2-00405,1,Green toy won't fit inside yellow container; it's too small.,green toy,yellow container
+T2-T2-B22-C2-01097,2,Silver vinyl wrap won't fit on gold door; it's too large.,silver vinyl wrap,gold door
+T3-T3-B16-C2-01510,3,"Green wheel starts faster than yellow wheel. Settings unchanged; inspect it, now faster.",green wheel,yellow wheel
+T2-T2-B02-C2-00621,2,Red tablecloth won't cover blue table; it's too large.,red tablecloth,blue table
+T2-T2-B13-C2-00883,2,Silver sticker won't fit on gold label area; it's too small.,silver sticker,gold label area
+T1-T1-B09-C2-00233,1,Green bottle won't fit inside yellow cooler; it's too large.,green bottle,yellow cooler
+T1-T1-B21-C2-00528,1,Green canister cannot fit into yellow cubby; it's too small.,green canister,yellow cubby
+T3-T3-B21-C2-01626,3,"Green cell was at lower voltage than yellow cell. Settings unchanged; examine it, now higher.",green cell,yellow cell
+T2-T2-B09-C2-00791,2,Green fabric sheet won't cover yellow workbench; it's too small.,green fabric sheet,yellow workbench
+T1-T1-B09-C2-00239,1,Green bottle won't fit into yellow cooler; it's too small.,green bottle,yellow cooler
+T2-T2-B13-C2-00884,2,Silver sticker cannot fit on gold label area; it's too small.,silver sticker,gold label area
+T1-T1-B16-C2-00403,1,Green toy won't fit into yellow container; it's too large.,green toy,yellow container
+T1-T1-B02-C2-00071,1,Red foam insert won't fit into blue compartment; it's too small.,red foam insert,blue compartment
+T1-T1-B11-C2-00283,1,Red wooden block won't fit into blue mold; it's too large.,red wooden block,blue mold
+T1-T1-B05-C2-00138,1,Green package cannot fit inside yellow crate; it's too large.,green package,yellow crate
+T3-T3-B18-C2-01555,3,"Green alarm was quieter than yellow alarm. Settings swapped; examine it, now quieter.",green alarm,yellow alarm
+T2-T2-B22-C2-01103,2,Silver vinyl wrap won't cover gold door; it's too small.,silver vinyl wrap,gold door
+T2-T2-B09-C2-00788,2,Green fabric sheet cannot fit on yellow workbench; it's too small.,green fabric sheet,yellow workbench
+T1-T1-B18-C2-00455,1,Green book won't fit into yellow box; it's too small.,green book,yellow box
+T1-T1-B02-C2-00070,1,Red foam insert cannot fit inside blue compartment; it's too small.,red foam insert,blue compartment
+T1-T1-B16-C2-00407,1,Green toy won't fit into yellow container; it's too small.,green toy,yellow container
+T3-T3-B18-C2-01560,3,"Green alarm was louder than yellow alarm. Settings swapped; examine it, now louder.",green alarm,yellow alarm
+T2-T2-B21-C2-01079,2,Green paper overlay won't cover yellow diagram; it's too small.,green paper overlay,yellow diagram
+T2-T2-B16-C2-00956,2,Green mat cannot fit on yellow shelf; it's too small.,green mat,yellow shelf
+T2-T2-B16-C2-00955,2,Green mat won't fit on yellow shelf; it's too small.,green mat,yellow shelf
+T3-T3-B02-C2-01174,3,"Red signal light begins brighter than blue signal light. Settings unchanged; select it, now brighter.",red signal light,blue signal light
+T1-T1-B16-C2-00404,1,Green toy cannot fit into yellow container; it's too large.,green toy,yellow container
+T1-T1-B02-C2-00069,1,Red foam insert won't fit inside blue compartment; it's too small.,red foam insert,blue compartment
+T2-T2-B02-C2-00622,2,Red tablecloth cannot cover blue table; it's too large.,red tablecloth,blue table
+T2-T2-B16-C2-00960,2,Green mat cannot cover yellow shelf; it's too small.,green mat,yellow shelf
+T3-T3-B21-C2-01629,3,"Green cell was at higher voltage than yellow cell. Settings unchanged; examine it, now lower.",green cell,yellow cell
+T1-T1-B18-C2-00454,1,Green book cannot fit inside yellow box; it's too small.,green book,yellow box
+T1-T1-B18-C2-00452,1,Green book cannot fit into yellow box; it's too large.,green book,yellow box
+T1-T1-B13-C2-00336,1,Silver phone cannot fit into gold case; it's too small.,silver phone,gold case
+T2-T2-B05-C2-00689,2,Green protective film won't fit on yellow window; it's too large.,green protective film,yellow window
+T2-T2-B22-C2-01098,2,Silver vinyl wrap cannot fit on gold door; it's too large.,silver vinyl wrap,gold door
+T2-T2-B21-C2-01076,2,Green paper overlay cannot fit on yellow diagram; it's too small.,green paper overlay,yellow diagram
+T3-T3-B22-C2-01654,3,"Silver device starts at higher voltage than gold device. Settings unchanged; inspect it, now higher.",silver device,gold device
+T2-T2-B09-C2-00792,2,Green fabric sheet cannot cover yellow workbench; it's too small.,green fabric sheet,yellow workbench
+T3-T3-B16-C2-01508,3,"Green wheel starts slower than yellow wheel. Settings exchanged; inspect it, now faster.",green wheel,yellow wheel
+T1-T1-B13-C2-00329,1,Silver phone won't fit inside gold case; it's too large.,silver phone,gold case
+T2-T2-B05-C2-00695,2,Green protective film won't cover yellow window; it's too small.,green protective film,yellow window
+T3-T3-B05-C2-01241,3,"Green tank begins cooler than yellow tank. Settings unchanged; select it, now cooler.",green tank,yellow tank
+T1-T1-B11-C2-00284,1,Red wooden block cannot fit into blue mold; it's too large.,red wooden block,blue mold
+T3-T3-B13-C2-01438,3,"Silver fan starts faster than gold fan. Settings unchanged; inspect it, now faster.",silver fan,gold fan
+T2-T2-B02-C2-00618,2,Red tablecloth cannot fit on blue table; it's too large.,red tablecloth,blue table
+T1-T1-B16-C2-00402,1,Green toy cannot fit inside yellow container; it's too large.,green toy,yellow container
+T3-T3-B18-C2-01553,3,"Green alarm was quieter than yellow alarm. Settings unchanged; examine it, now quieter.",green alarm,yellow alarm
+T2-T2-B09-C2-00786,2,Green fabric sheet cannot fit on yellow workbench; it's too large.,green fabric sheet,yellow workbench
+T3-T3-B05-C2-01246,3,"Green tank begins warmer than yellow tank. Settings unchanged; select it, now warmer.",green tank,yellow tank
+T2-T2-B11-C2-00839,2,Red awning won't cover blue patio; it's too small.,red awning,blue patio
+T1-T1-B16-C2-00401,1,Green toy won't fit inside yellow container; it's too large.,green toy,yellow container
+T1-T1-B22-C2-00549,1,Silver sculpture won't fit inside gold display case; it's too small.,silver sculpture,gold display case
+T1-T1-B16-C2-00406,1,Green toy cannot fit inside yellow container; it's too small.,green toy,yellow container
+T1-T1-B05-C2-00137,1,Green package won't fit inside yellow crate; it's too large.,green package,yellow crate
+T1-T1-B22-C2-00551,1,Silver sculpture won't fit into gold display case; it's too small.,silver sculpture,gold display case
+T2-T2-B18-C2-01008,2,Green insulation sheet cannot cover yellow wall; it's too small.,green insulation sheet,yellow wall
+T2-T2-B18-C2-01004,2,Green insulation sheet cannot fit on yellow wall; it's too small.,green insulation sheet,yellow wall
+T3-T3-B02-C2-01176,3,"Red signal light begins brighter than blue signal light. Settings swapped; select it, now brighter.",red signal light,blue signal light
+T2-T2-B05-C2-00694,2,Green protective film cannot cover yellow window; it's too large.,green protective film,yellow window
+T3-T3-B13-C2-01437,3,"Silver fan starts faster than gold fan. Settings unchanged; inspect it, now slower.",silver fan,gold fan
+T1-T1-B09-C2-00240,1,Green bottle cannot fit into yellow cooler; it's too small.,green bottle,yellow cooler
+T2-T2-B11-C2-00840,2,Red awning cannot cover blue patio; it's too small.,red awning,blue patio
+T3-T3-B02-C2-01170,3,"Red signal light begins dimmer than blue signal light. Settings unchanged; select it, now brighter.",red signal light,blue signal light
+T2-T2-B11-C2-00833,2,Red awning won't fit on blue patio; it's too large.,red awning,blue patio
+T3-T3-B18-C2-01557,3,"Green alarm was louder than yellow alarm. Settings unchanged; examine it, now quieter.",green alarm,yellow alarm
+T3-T3-B09-C2-01344,3,"Green tank was at higher pressure than yellow tank. Settings swapped; examine it, now higher.",green tank,yellow tank
+T1-T1-B05-C2-00140,1,Green package cannot fit into yellow crate; it's too large.,green package,yellow crate
+T3-T3-B22-C2-01655,3,"Silver device starts at higher voltage than gold device. Settings exchanged; inspect it, now lower.",silver device,gold device
+T2-T2-B16-C2-00959,2,Green mat won't cover yellow shelf; it's too small.,green mat,yellow shelf
+T2-T2-B05-C2-00690,2,Green protective film cannot fit on yellow window; it's too large.,green protective film,yellow window
+T3-T3-B11-C2-01388,3,"Red pipe begins at lower pressure than blue pipe. Settings swapped; select it, now higher.",red pipe,blue pipe
+T2-T2-B02-C2-00619,2,Red tablecloth won't fit on blue table; it's too small.,red tablecloth,blue table
+T1-T1-B16-C2-00408,1,Green toy cannot fit into yellow container; it's too small.,green toy,yellow container
+T2-T2-B09-C2-00785,2,Green fabric sheet won't fit on yellow workbench; it's too large.,green fabric sheet,yellow workbench
+T1-T1-B02-C2-00067,1,Red foam insert won't fit into blue compartment; it's too large.,red foam insert,blue compartment
+T3-T3-B16-C2-01509,3,"Green wheel starts faster than yellow wheel. Settings unchanged; inspect it, now slower.",green wheel,yellow wheel
+T3-T3-B11-C2-01385,3,"Red pipe begins at lower pressure than blue pipe. Settings unchanged; select it, now lower.",red pipe,blue pipe
+T1-T1-B11-C2-00281,1,Red wooden block won't fit inside blue mold; it's too large.,red wooden block,blue mold
+T1-T1-B11-C2-00285,1,Red wooden block won't fit inside blue mold; it's too small.,red wooden block,blue mold
+T2-T2-B05-C2-00692,2,Green protective film cannot fit on yellow window; it's too small.,green protective film,yellow window
+T1-T1-B13-C2-00333,1,Silver phone won't fit inside gold case; it's too small.,silver phone,gold case
+T3-T3-B13-C2-01440,3,"Silver fan starts faster than gold fan. Settings exchanged; inspect it, now faster.",silver fan,gold fan
+T1-T1-B05-C2-00141,1,Green package won't fit inside yellow crate; it's too small.,green package,yellow crate
+T3-T3-B21-C2-01632,3,"Green cell was at higher voltage than yellow cell. Settings swapped; examine it, now higher.",green cell,yellow cell
+T3-T3-B13-C2-01435,3,"Silver fan starts slower than gold fan. Settings exchanged; inspect it, now slower.",silver fan,gold fan
+T2-T2-B16-C2-00953,2,Green mat won't fit on yellow shelf; it's too large.,green mat,yellow shelf
+T2-T2-B21-C2-01074,2,Green paper overlay cannot fit on yellow diagram; it's too large.,green paper overlay,yellow diagram
+T2-T2-B21-C2-01077,2,Green paper overlay won't cover yellow diagram; it's too large.,green paper overlay,yellow diagram
+T2-T2-B16-C2-00957,2,Green mat won't cover yellow shelf; it's too large.,green mat,yellow shelf
+T2-T2-B02-C2-00620,2,Red tablecloth cannot fit on blue table; it's too small.,red tablecloth,blue table
+T1-T1-B13-C2-00332,1,Silver phone cannot fit into gold case; it's too large.,silver phone,gold case
+T1-T1-B18-C2-00449,1,Green book won't fit inside yellow box; it's too large.,green book,yellow box
+T2-T2-B09-C2-00790,2,Green fabric sheet cannot cover yellow workbench; it's too large.,green fabric sheet,yellow workbench
+T1-T1-B21-C2-00521,1,Green canister won't fit inside yellow cubby; it's too large.,green canister,yellow cubby
+T2-T2-B02-C2-00623,2,Red tablecloth won't cover blue table; it's too small.,red tablecloth,blue table
+T2-T2-B09-C2-00787,2,Green fabric sheet won't fit on yellow workbench; it's too small.,green fabric sheet,yellow workbench
+T1-T1-B11-C2-00286,1,Red wooden block cannot fit inside blue mold; it's too small.,red wooden block,blue mold
+T3-T3-B09-C2-01338,3,"Green tank was at lower pressure than yellow tank. Settings unchanged; examine it, now higher.",green tank,yellow tank
+T3-T3-B11-C2-01390,3,"Red pipe begins at higher pressure than blue pipe. Settings unchanged; select it, now higher.",red pipe,blue pipe
+T3-T3-B11-C2-01386,3,"Red pipe begins at lower pressure than blue pipe. Settings unchanged; select it, now higher.",red pipe,blue pipe
+T3-T3-B16-C2-01507,3,"Green wheel starts slower than yellow wheel. Settings exchanged; inspect it, now slower.",green wheel,yellow wheel
+T2-T2-B22-C2-01104,2,Silver vinyl wrap cannot cover gold door; it's too small.,silver vinyl wrap,gold door
+T2-T2-B11-C2-00837,2,Red awning won't cover blue patio; it's too large.,red awning,blue patio
+T3-T3-B18-C2-01559,3,"Green alarm was louder than yellow alarm. Settings swapped; examine it, now quieter.",green alarm,yellow alarm
+T2-T2-B13-C2-00882,2,Silver sticker cannot fit on gold label area; it's too large.,silver sticker,gold label area
+T3-T3-B16-C2-01511,3,"Green wheel starts faster than yellow wheel. Settings exchanged; inspect it, now slower.",green wheel,yellow wheel
+T3-T3-B13-C2-01439,3,"Silver fan starts faster than gold fan. Settings exchanged; inspect it, now slower.",silver fan,gold fan
+T1-T1-B05-C2-00139,1,Green package won't fit into yellow crate; it's too large.,green package,yellow crate
+T2-T2-B21-C2-01075,2,Green paper overlay won't fit on yellow diagram; it's too small.,green paper overlay,yellow diagram
+T3-T3-B21-C2-01625,3,"Green cell was at lower voltage than yellow cell. Settings unchanged; examine it, now lower.",green cell,yellow cell
+T1-T1-B21-C2-00525,1,Green canister won't fit inside yellow cubby; it's too small.,green canister,yellow cubby
+T2-T2-B11-C2-00834,2,Red awning cannot fit on blue patio; it's too large.,red awning,blue patio
+T3-T3-B02-C2-01171,3,"Red signal light begins dimmer than blue signal light. Settings swapped; select it, now dimmer.",red signal light,blue signal light
+T2-T2-B13-C2-00888,2,Silver sticker cannot cover gold label area; it's too small.,silver sticker,gold label area
+T1-T1-B09-C2-00236,1,Green bottle cannot fit into yellow cooler; it's too large.,green bottle,yellow cooler
+T1-T1-B11-C2-00287,1,Red wooden block won't fit into blue mold; it's too small.,red wooden block,blue mold
+T3-T3-B18-C2-01558,3,"Green alarm was louder than yellow alarm. Settings unchanged; examine it, now louder.",green alarm,yellow alarm
+T3-T3-B22-C2-01651,3,"Silver device starts at lower voltage than gold device. Settings exchanged; inspect it, now lower.",silver device,gold device
+T2-T2-B18-C2-01005,2,Green insulation sheet won't cover yellow wall; it's too large.,green insulation sheet,yellow wall
+T3-T3-B05-C2-01245,3,"Green tank begins warmer than yellow tank. Settings unchanged; select it, now cooler.",green tank,yellow tank
+T3-T3-B16-C2-01512,3,"Green wheel starts faster than yellow wheel. Settings exchanged; inspect it, now faster.",green wheel,yellow wheel
+T1-T1-B09-C2-00238,1,Green bottle cannot fit inside yellow cooler; it's too small.,green bottle,yellow cooler
+T3-T3-B21-C2-01628,3,"Green cell was at lower voltage than yellow cell. Settings swapped; examine it, now higher.",green cell,yellow cell
+T1-T1-B02-C2-00066,1,Red foam insert cannot fit inside blue compartment; it's too large.,red foam insert,blue compartment
+T1-T1-B21-C2-00527,1,Green canister won't fit into yellow cubby; it's too small.,green canister,yellow cubby
+T3-T3-B22-C2-01649,3,"Silver device starts at lower voltage than gold device. Settings unchanged; inspect it, now lower.",silver device,gold device

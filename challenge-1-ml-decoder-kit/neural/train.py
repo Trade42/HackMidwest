@@ -24,7 +24,8 @@ and s. A resumed run therefore continues exactly where the first one stopped.
 Each report prints, for p = 0.001 to 0.005, on fresh shots from the error model (not Stim
 shots; the same shots in every report):
   shots wrong   the share of shots with at least one of the 12 logical bits predicted wrong
-  bits right    the share of single bits predicted right
+  bits right    the share of single bits predicted right (with --logicals light: of the light
+                operators' bits; "shots wrong" is the same for both sets of operators)
 and next to each the value of always answering 0. The lines that start with "speed" depend
 on the machine; every other line is the same when the same command is run twice on it.
 """
@@ -41,20 +42,20 @@ from pathlib import Path
 import torch
 from torch.nn import functional as F
 
-from neural.model import CascadeDecoder, count_parameters
+from neural.model import CascadeDecoder, count_parameters, mirrored_weights
 from neural.sampler import DemSampler
 
 DEFAULTS = {
     "code": "gross", "basis": "X", "rounds": None, "detectors": "all",
-    "width": 128, "depth": 8, "bottleneck": 4, "residual": "branch",
+    "width": 128, "depth": 8, "bottleneck": 4, "residual": "branch", "logicals": "kit",
     "batch": 128, "steps": 400000, "lr": 1e-3, "warmup_steps": 1000, "lr_decay_steps": None,
     "weight_decay": 3e-3, "clip": 1.0, "ema": 0.9998,
     "p_start": 0.001, "p_train": 0.0055, "steps_start": 4000, "steps_anneal": 24000, "anneal_levels": 12,
     "report_every": 2000, "report_shots": 2000, "report_p": [0.001, 0.002, 0.003, 0.004, 0.005],
-    "snapshot_every": 10000, "seed": 0, "amp": "auto",
+    "snapshot_every": 10000, "seed": 0, "amp": "auto", "init_from": None,
 }
 TINY = {"width": 32, "depth": 3, "batch": 32}   # for tests and smoke runs on a CPU
-MODEL_KEYS = ["code", "basis", "rounds", "detectors", "width", "depth", "bottleneck", "residual"]
+MODEL_KEYS = ["code", "basis", "rounds", "detectors", "width", "depth", "bottleneck", "residual", "logicals"]
 # Settings that may change when a run is resumed. Everything else is fixed by the checkpoint.
 RUN_CONTROL = ["steps", "lr_decay_steps", "report_every", "report_shots", "snapshot_every"]
 TRAIN_STREAM, REPORT_STREAM = 1, 2
@@ -169,11 +170,36 @@ def new_run(config, device):
                                    {"params": others, "weight_decay": 0.0}], lr=config["lr"],
                                   fused=device.type == "cuda")
     levels = sorted(set(noise_levels(config)) | set(config["report_p"]))
-    sampler = DemSampler(config["code"], config["basis"], config["rounds"], config["detectors"], levels, device)
+    sampler = DemSampler(config["code"], config["basis"], config["rounds"], config["detectors"], levels, device,
+                         config["logicals"])
     run = Run(config, device, model, deepcopy(model), optimizer, None, sampler, torch.Generator(device=device))
     run.scaler = torch.amp.GradScaler(device.type, enabled=run.amp_dtype == torch.float16)
     run.start_average(model)
     return run
+
+
+def start_from(run, path):
+    """Begin a new run at the averaged weights of another run's checkpoint, instead of random weights.
+
+    The other run must have the same code and model size. If it decoded the other memory
+    basis, its weights are mirrored (model.mirrored_weights): a warm start for this basis.
+    Returns a line that describes the source.
+    """
+    state = torch.load(path, map_location="cpu", weights_only=True)
+    source = DEFAULTS | state["config"]
+    different = [key for key in MODEL_KEYS if key not in ("basis", "logicals") and source[key] != run.config[key]]
+    if different:
+        raise SystemExit(f"--init-from needs the same {', '.join(different)} as this run")
+    weights = state["ema_model"]
+    if source["basis"] != run.config["basis"]:
+        weights = mirrored_weights(weights)
+    run.model.load_state_dict(weights)
+    run.averaged_model.load_state_dict(weights)
+    run.start_average(run.model)
+    how = "mirrored from" if source["basis"] != run.config["basis"] else "copied from"
+    run.config["init_from"] = (f"{how} {source['basis']} memory, step {state['step']}, seed {source['seed']}, "
+                               f"commit {state['commit']}")
+    return run.config["init_from"]
 
 
 def save_checkpoint(run, path):
@@ -209,6 +235,7 @@ def load_checkpoint(path, device, changes=None):
 def load_decoder(path, device="cpu"):
     """The trained decoder of a checkpoint (the moving-average weights), ready to predict, and the checkpoint's contents."""
     state = torch.load(path, map_location="cpu", weights_only=True)
+    state["config"] = DEFAULTS | state["config"]          # DEFAULTS fills settings newer than the file
     model = CascadeDecoder(**{key: state["config"][key] for key in MODEL_KEYS})
     model.load_state_dict(state["ema_model"])
     return model.to(device).eval(), state
@@ -316,6 +343,9 @@ def parse_args(argv=None):
     add = parser.add_argument
     add("--out", required=True, help="folder for checkpoint.pt and train.log")
     add("--resume", help="a checkpoint to continue; the run's settings come from it")
+    add("--init-from", dest="init_checkpoint",
+        help="start a new run at the averaged weights of this checkpoint (same code and model size). A checkpoint of "
+             "the other memory basis is mirrored: a warm start, for example of Z memory from a trained X run")
     add("--device", default="auto", help="auto, cpu or cuda")
     add("--max-hours", type=float, help="stop after this time, with a report and a checkpoint")
     add("--checkpoint-minutes", type=float, default=10.0,
@@ -330,6 +360,9 @@ def parse_args(argv=None):
     add("--depth", type=int, help="residual blocks (default 8)")
     add("--bottleneck", type=int, help="the blocks work at width / bottleneck (default 4)")
     add("--residual", choices=["branch", "skip"], help="which side of the residual sum is divided by sqrt(2 depth) (default branch)")
+    add("--logicals", choices=["kit", "light"],
+        help="the 12 logical operators the network predicts: the kit's, or a lighter set from which the kit's bits "
+             "follow exactly (default kit; use light for Z memory)")
     add("--batch", type=int, help="shots per step (default 128)")
     add("--steps", type=int, help="optimizer steps in all (default 400000)")
     add("--lr", type=float, help="peak learning rate (default 1e-3)")
@@ -382,15 +415,22 @@ def main(argv=None):
             log.write(line + "\n")
 
     started = time.perf_counter()
+    if args.resume and args.init_checkpoint:
+        raise SystemExit("--resume continues a run; --init-from starts a new one. Give one of them.")
     run = load_checkpoint(args.resume, device, changes) if args.resume else new_run(config, device)
+    if args.init_checkpoint:
+        start_from(run, args.init_checkpoint)
     config = run.config
     say(f"{'resumed at step ' + str(run.step) if args.resume else 'new run'} | seed {config['seed']} | "
         f"{config['code']} code, {config['basis']} memory, {config['rounds']} cycles, detectors={config['detectors']} "
-        f"({run.sampler.num_detectors} detectors, {run.sampler.num_mechanisms} error mechanisms)")
+        f"({run.sampler.num_detectors} detectors, {run.sampler.num_mechanisms} error mechanisms)"
+        + (f" | logical operators: {config['logicals']}" if config["logicals"] != "kit" else ""))
     say(f"model: width {config['width']}, depth {config['depth']}, bottleneck {config['bottleneck']}, "
         f"residual {config['residual']}, {count_parameters(run.model)} parameters | batch {config['batch']}")
     say(f"curriculum: {config['steps_start']} steps at p={config['p_start']:g}, {config['steps_anneal']} steps climbing "
         f"in {config['anneal_levels']} jumps, then p={config['p_train']:g} | peak learning rate {config['lr']:g}")
+    if config["init_from"]:
+        say(f"initial weights: {config['init_from']}")
     say(f"commit {git_commit()} | torch {torch.__version__}")
     amp = {torch.float16: "fp16", torch.bfloat16: "bf16", None: "off"}[run.amp_dtype]
     say(f"speed: device {device}, mixed precision {amp}, start-up {time.perf_counter() - started:.0f} s")
@@ -424,7 +464,9 @@ def main(argv=None):
             stop_file.unlink(missing_ok=True)
             say(f"speed: stopped by {stop} at step {run.step}; continue with --resume {checkpoint}")
             break
-    say(f"checkpoint: {out / 'checkpoint.pt'} at step {run.step}")
+    if not checkpoint.exists():           # a run of zero steps
+        save_checkpoint(run, checkpoint)
+    say(f"checkpoint: {checkpoint} at step {run.step}")
 
 
 if __name__ == "__main__":

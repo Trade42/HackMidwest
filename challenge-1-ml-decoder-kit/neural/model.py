@@ -16,11 +16,12 @@ The network keeps a vector of `width` numbers on every check, in every round.
 
 All tensors keep the channel last: [shots, rounds, nodes, channels].
 """
+import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
 
-from neural.graph import build_graph
+from neural.graph import build_graph, check_parity_matrix
 
 EVENT_CODES = 3   # per check type: no event, event, no detector at this place
 
@@ -134,18 +135,23 @@ class CascadeDecoder(nn.Module):
 
     residual="branch" computes x + f(x) / sqrt(2 depth). residual="skip" computes
     x / sqrt(2 depth) + f(x), the other reading of the paper's block figure.
+
+    logicals="kit": the 12 logits are the kit's 12 observables. logicals="light": they are 12
+    lighter logical operators of the same basis (graph.py); `kit_bits` turns their bits into
+    the kit's.
     """
 
     def __init__(self, code="gross", basis="X", rounds=None, detectors="all", width=128, depth=8,
-                 bottleneck=4, residual="branch"):
+                 bottleneck=4, residual="branch", logicals="kit"):
         super().__init__()
         if detectors not in ("all", "basis") or residual not in ("branch", "skip"):
             raise ValueError("detectors is 'all' or 'basis'; residual is 'branch' or 'skip'")
         if width % bottleneck:
             raise ValueError("width must be a multiple of the bottleneck factor")
-        graph = build_graph(code, basis, rounds)
+        graph = build_graph(code, basis, rounds, logicals)
         self.config = {"code": code, "basis": basis, "rounds": graph.rounds, "detectors": detectors,
-                       "width": width, "depth": depth, "bottleneck": bottleneck, "residual": residual}
+                       "width": width, "depth": depth, "bottleneck": bottleneck, "residual": residual,
+                       "logicals": logicals}
         self.rounds, self.checks = graph.rounds + 1, 2 * graph.n2
 
         inputs = torch.arange(graph.num_detectors) if detectors == "all" else torch.from_numpy(graph.basis_detectors)
@@ -157,6 +163,10 @@ class CascadeDecoder(nn.Module):
         self.register_buffer("empty_code", (EVENT_CODES * check_type + 2).repeat(self.rounds), persistent=False)
         support = torch.from_numpy(graph.observable_support).float()
         self.register_buffer("pool", support / support.sum(dim=1, keepdim=True), persistent=False)   # [observables, data]
+        # kit bits = kit_from_model x model bits + kit_from_inputs x detector bits (mod 2). Small exact counts, kept as floats.
+        from_inputs = (graph.kit_from_checks.astype(np.int64) @ check_parity_matrix(graph, inputs.numpy())) % 2
+        self.register_buffer("kit_from_model", torch.from_numpy(graph.kit_from_model).float(), persistent=False)
+        self.register_buffer("kit_from_inputs", torch.from_numpy(from_inputs).float(), persistent=False)
 
         check_neighbours = torch.from_numpy(graph.check_neighbours)
         data_neighbours = torch.from_numpy(graph.data_neighbours)
@@ -199,6 +209,41 @@ class CascadeDecoder(nn.Module):
     def forward(self, detectors):
         return self.readout(self.features(detectors))
 
+    def kit_bits(self, detectors, bits):
+        """The kit's 12 observable bits, from the model's 12 bits (0/1, [shots, 12]) and the shots' detector bits.
+
+        With logicals="kit" the bits come back unchanged.
+        """
+        if self.config["logicals"] == "kit":
+            return bits.to(torch.uint8)
+        counts = bits.float() @ self.kit_from_model.T + detectors.float() @ self.kit_from_inputs.T
+        return counts.remainder(2).to(torch.uint8)
+
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters())
+
+
+def mirrored_weights(state):
+    """The weights of a decoder of one memory basis, turned into weights for the other basis.
+
+    The code looks the same with X and Z checks exchanged, the two data blocks exchanged and
+    every torus position negated. In the network's tables that exchanges the two blocks of
+    every kind of node and moves neighbour slot s to slot s + 3 (mod 6). The network with
+    these weights, reading a syndrome, computes exactly what the original computes on the
+    mirror image of that syndrome (tested). The two memory circuits are not mirror images of
+    each other, so the result is a starting point for training, not a finished decoder.
+    """
+    swapped = {".linears.0.": ".linears.1.", ".linears.1.": ".linears.0."}
+    result = {}
+    for name, tensor in state.items():
+        if name == "embedding.weight":
+            tensor = tensor.roll(EVENT_CODES, dims=0)                    # the codes of the two check types change places
+        for block, other in swapped.items():
+            if block in name:
+                tensor = state[name.replace(block, other)]              # the two blocks of targets change places
+                if name.endswith("weight"):
+                    tensor = tensor.roll(tensor.shape[1] // 2, dims=1)  # slots 0 1 2 and 3 4 5 change places
+                break
+        result[name] = tensor.clone()
+    return result

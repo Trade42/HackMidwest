@@ -25,7 +25,7 @@ def load_features(path, split):
 def train(train_path, validation_path, max_missed_wrong, out):
     train_meta, train_features, train_wrong, train_easy = load_features(train_path, "train")
     val_meta, val_features, val_wrong, val_easy = load_features(validation_path, "validation")
-    for field in ("basis", "p", "matrix_sha256", "commit_manifest_sha256"):
+    for field in ("basis", "p", "matrix_sha256", "matrix_semantic_sha256", "commit_manifest_sha256"):
         if train_meta.get(field) != val_meta.get(field):
             raise ValueError(f"train/validation {field} mismatch")
     if (train_meta["dataset"]["sha256"] == val_meta["dataset"]["sha256"] or
@@ -39,7 +39,9 @@ def train(train_path, validation_path, max_missed_wrong, out):
     threshold = select_threshold(scores, val_wrong[val_hard], max_missed_wrong)
     validation = threshold_report(scores, val_wrong[val_hard], threshold)
     model.update({"basis": train_meta["basis"], "p": train_meta["p"],
-                  "matrix_sha256": train_meta["matrix_sha256"], "threshold": threshold,
+                  "matrix_sha256": train_meta["matrix_sha256"],
+                  "matrix_semantic_sha256": train_meta.get("matrix_semantic_sha256"),
+                  "threshold": threshold,
                   "commit_manifest_sha256": train_meta.get("commit_manifest_sha256"),
                   "train_dataset": train_meta["dataset"], "validation_dataset": val_meta["dataset"],
                   "training_seconds": training_seconds,

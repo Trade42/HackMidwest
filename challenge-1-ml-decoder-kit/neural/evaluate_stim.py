@@ -23,7 +23,9 @@ Files named test_* or go_* are the team's held-out shots. The script refuses the
 --final is given: score them once, after every choice is frozen on validation shots.
 
 --save writes <prefix>.json (the numbers) and <prefix>.npz (per shot, in file order: logits,
-predictions, observables, failed, confidence), for a router to use later.
+predictions, observables, failed, confidence), for a router to use later. predictions and
+observables are always the kit's 12 bits. For a model trained with --logicals light the logits
+are those of its own 12 operators, so logits > 0 is not the prediction; the file says which.
 """
 import argparse
 import json
@@ -77,11 +79,19 @@ def sample_shots(config, p, shots, seed):
 
 
 def decode(model, detectors, device, batch=250):
-    """Logits [shots, observables] as a float32 array, in the order of the shots. A positive logit predicts a flip."""
+    """(logits, predictions) as arrays in the order of the shots.
+
+    logits [shots, 12] are the model's outputs; a positive logit predicts a flip of the model's
+    logical operator. predictions [shots, 12] are the kit's 12 observable bits.
+    """
+    logits, predictions = [], []
     with torch.no_grad():
-        parts = [model(torch.from_numpy(detectors[start:start + batch]).to(device)).float().cpu()
-                 for start in range(0, len(detectors), batch)]
-    return torch.cat(parts).numpy()
+        for start in range(0, len(detectors), batch):
+            shots = torch.from_numpy(detectors[start:start + batch]).to(device)
+            out = model(shots).float()
+            logits.append(out.cpu())
+            predictions.append(model.kit_bits(shots, out > 0).cpu())
+    return torch.cat(logits).numpy(), torch.cat(predictions).numpy()
 
 
 def batch_one_latency(model, detectors, device, shots=200, warm_up=10):
@@ -123,8 +133,7 @@ def evaluate(checkpoint, detectors, observables, device="cpu", latency_shots=200
         circuit = memory_experiment(config["code"], config["basis"], config["rounds"])
         detectors = detectors[:, detector_ids(circuit, config["basis"])]
     detectors, observables = np.ascontiguousarray(detectors, dtype=np.uint8), np.asarray(observables, dtype=np.uint8)
-    logits = decode(model, detectors, device)
-    predictions = (logits > 0).astype(np.uint8)
+    logits, predictions = decode(model, detectors, device)
     failed = (predictions != observables).any(axis=1)
     confidence = np.abs(logits).min(axis=1)
     shots, failures, cycles = len(failed), int(failed.sum()), config["rounds"]
@@ -140,10 +149,11 @@ def evaluate(checkpoint, detectors, observables, device="cpu", latency_shots=200
         "latency_ms_mean": float(latency.mean() * 1e3), "latency_ms_median": float(np.median(latency) * 1e3),
         "latency_ms_p99": float(np.percentile(latency, 99) * 1e3), "latency_shots": len(latency),
         "device": device_name(device), "checkpoint_step": saved["step"], "checkpoint_commit": saved["commit"],
-        "detectors_read": config["detectors"], "training_seed": config["seed"],
+        "detectors_read": config["detectors"], "training_seed": config["seed"], "logicals": config["logicals"],
     }
+    # predictions and observables are the kit's 12 bits. The logits belong to the model's logical operators.
     per_shot = {"logits": logits, "predictions": predictions, "observables": observables, "failed": failed,
-                "confidence": confidence}
+                "confidence": confidence, "logits_are_for": np.array(config["logicals"] + " logical operators")}
     return numbers, per_shot
 
 
@@ -170,7 +180,7 @@ def main(argv=None):
     if args.threads:
         torch.set_num_threads(args.threads)
     device = "cuda" if args.device == "auto" and torch.cuda.is_available() else "cpu" if args.device == "auto" else args.device
-    config = torch.load(args.checkpoint, map_location="cpu", weights_only=True)["config"]
+    config = load_decoder(args.checkpoint)[1]["config"]
     if args.data:
         detectors, observables, basis, description = load_shots(args.data, args.final)
         if basis != config["basis"]:
@@ -185,7 +195,8 @@ def main(argv=None):
     low, high = numbers["failure_interval"]
     cycle_low, cycle_high = numbers["per_cycle_interval"]
     print(f"checkpoint {args.checkpoint}: step {numbers['checkpoint_step']}, commit {numbers['checkpoint_commit']}, "
-          f"training seed {numbers['training_seed']}, reads detectors={numbers['detectors_read']}")
+          f"training seed {numbers['training_seed']}, reads detectors={numbers['detectors_read']}, "
+          f"logical operators: {numbers['logicals']}")
     print(f"data: {description}")
     print(f"{numbers['basis']} memory: failures {numbers['failures']} of {numbers['shots']} "
           f"(always-0 would fail {numbers['always_zero_failures']})")

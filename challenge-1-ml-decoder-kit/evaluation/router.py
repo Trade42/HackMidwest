@@ -9,7 +9,7 @@ from scipy.optimize import minimize
 from scipy.special import expit
 
 from evaluation.adapters import ShotResult, _prediction
-from evaluation.predecoder_layout import matrix_identity
+from evaluation.predecoder_layout import matrix_identity, matrix_semantic_identity
 
 FEATURE_NAMES = ("first_solution_iterations", "candidate_converged", "mean_abs_posterior_ratio",
                  "correction_weight", *(f"syndrome_weight_cycle_{i}" for i in range(13)))
@@ -103,7 +103,11 @@ def load_frozen_router(path, problem):
     model = json.loads(path.read_text())
     if model.get("threshold") is None or model.get("basis") != problem.basis or model.get("p") != problem.p:
         raise ValueError("frozen router threshold, basis, or p does not match evaluation")
-    if model.get("matrix_sha256") != matrix_identity(problem.H, problem.L, problem.priors):
+    portable = model.get("matrix_semantic_sha256")
+    if portable is not None:
+        if portable != matrix_semantic_identity(problem.H, problem.L, problem.priors):
+            raise ValueError("frozen router matrix identity does not match evaluation")
+    elif model.get("matrix_sha256") != matrix_identity(problem.H, problem.L, problem.priors):
         raise ValueError("frozen router matrix identity does not match evaluation")
     return model, hashlib.sha256(path.read_bytes()).hexdigest()
 

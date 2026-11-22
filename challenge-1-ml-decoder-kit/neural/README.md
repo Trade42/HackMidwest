@@ -11,7 +11,7 @@ repository. The folder uses only torch, numpy, scipy and stim, and the kit's own
 
 | file | what it does |
 |------|--------------|
-| `graph.py` | the code's structure as index tables, read from the kit |
+| `graph.py` | the code's structure as index tables, read from the kit; the lighter logical operators |
 | `model.py` | the network |
 | `sampler.py` | training shots drawn from the detector error model, and the check against Stim |
 | `train.py` | the trainer |
@@ -74,6 +74,65 @@ with the kit's prior, the detectors are H times the fired mechanisms mod 2, and 
 are L times them mod 2. Nothing is read from disk, so no shot is seen twice. The labels go
 to the loss only; the network's one input is the detector bits (tested).
 
+## Z memory: lighter logical operators, and a warm start from X
+
+**The problem.** The kit's 12 X observables are logical operators on 12 to 14 data qubits
+each. Its 12 Z observables sit on 12, 12, 12, 12, 12, 12, 12, 24, 28, 34, 36 and 38 qubits.
+A label flips when an odd number of errors falls on its operator, so a heavy operator's
+label is closer to a fair coin, and the readout (an average over the operator's support,
+then one head shared by all 12) is built for supports of one size. With the kit's operators
+the tiny model has 67.2% of Z shots wrong at step 250 of the smoke run, where X has 41.4%
+(the table is under "Numbers"). A scratch diagnostic on that run's step-250 weights, which
+this folder has no command for, split the 12 bits (750 error-model shots at p = 0.0005):
+the seven light operators' bits were right 89 to 96% of the time, the five heavy ones' 63
+to 74%.
+
+**The fix: `--logicals light`.** The Gross code looks the same with X and Z checks
+exchanged, the two data blocks exchanged and every torus position negated. That carries the
+kit's X operators onto 12 valid Z operators with supports of 12 to 14 qubits. The network
+predicts those, and the kit's 12 bits follow exactly:
+
+    kit bits = M x light bits + C x check parities   (mod 2)
+
+M is an invertible 12 x 12 matrix and C picks some Z checks; both are solved from the kit's
+own matrices in `graph.py`. The parity of a check is the sum of its detectors over all
+rounds. Nothing is approximated: on noisy Stim measurement records the converted bits equal
+Stim's observables on every shot (tested, Gross and [[72,12,6]], both detector sets). A shot
+is wrong in the kit's bits exactly when it is wrong in the light bits, so the kit's failure
+count is unchanged; only "bits right" in a training report refers to the light bits. For X
+memory the kit's operators are already the light set, and the option changes nothing.
+
+**A warm start from X: `--init-from <X checkpoint>`.** The same symmetry turns the weights
+of an X decoder into weights of a Z decoder, exactly: the mirrored network computes on a Z
+syndrome what the X network computes on the mirrored syndrome (tested to 1e-10). The two
+memory circuits are not mirror images of each other, though: the checks meet their
+neighbours in different orders. So a mirrored X decoder is a starting point for Z, not a Z
+decoder. Measured: a Z run started from the tiny X smoke checkpoint reports 37.0% of shots
+wrong before its first training step (400 error-model shots at p = 0.0005, always-0 85.3%),
+where that checkpoint has 16.2% of X shots wrong:
+
+```sh
+python -m neural.train --basis Z --logicals light --init-from <the X smoke folder>/checkpoint.pt --out <folder> \
+    --tiny --seed 1 --p-start 0.0005 --p-train 0.0005 --steps 0 --report-shots 400 --report-p 0.0005 --threads 1
+```
+
+A scratch comparison of the two error models at p = 0.004, which this folder has no command
+for, found that the mirrored X model and the Z model share 11,952 of about 67,800 detector
+sets, carrying 61% of the fault probability, with equal priors on 95% of those.
+
+```sh
+# Z memory from scratch
+python -m neural.train --basis Z --logicals light --out runs/cascade_Z_s1 --seed 1 --steps-start 2000 --steps-anneal 12000
+# Z memory from an X run of the same size, with a short climb
+python -m neural.train --basis Z --logicals light --init-from runs/cascade_X_s1/checkpoint.pt \
+    --out runs/cascade_Z_s1 --seed 1 --steps-start 1000 --steps-anneal 6000
+```
+
+With the light operators, Z from scratch learns like X: the tiny model has 18.0% of shots
+wrong after 16,000 shots at p = 0.0005, against 16.2% for X (the table is under "Numbers").
+How much training the warm start saves at the default size was not measured when this was
+written.
+
 ## Where the paper is silent, and where this differs from it
 
 | Point | The paper | Here |
@@ -83,6 +142,7 @@ to the loss only; the network's one input is the detector bits (tested).
 | Time slots of the data qubits | "2 temporal offsets" per step | cycle c exchanges with rounds c and c + 1 |
 | The readout's average | "over the data qubits in that observable's support" | over those qubits and over time. No nonlinearity between the last collecting step and the average, so the average over time is taken first (same result, about six times less work in that step; tested) |
 | Weights of the two check types | not stated | X and Z checks have their own weights, and so do the left and right data qubits |
+| Which logical operators are predicted | not stated | the kit's for X memory; for Z memory a lighter set from which the kit's follow exactly (`--logicals light`) |
 | Which detectors | not stated. Its count of 22 neighbouring checks per convolution equals this graph's (tested), which needs both check types | both types, or the basis alone |
 | Optimizer | Muon and Lion, with Maximal Update Parameterization | AdamW, PyTorch's default initialisation |
 | Curriculum | "at most 2% of the steps"; no values | 4,000 steps at p = 0.001, 24,000 steps of climb in 12 jumps (options) |
@@ -109,8 +169,9 @@ numpy, scipy and stim.
 # tests (about a minute on a CPU)
 python -m pytest -p no:cacheprovider neural
 
-# the sampler against Stim's circuit sampler, and the sampler's speed
-python -m neural.sampler --p 0.001 --shots 200000
+# the sampler against Stim's circuit sampler, and the sampler's speed (one detector set per call)
+python -m neural.sampler --p 0.001 --shots 200000 --detectors all --threads 4
+python -m neural.sampler --p 0.001 --shots 200000 --detectors basis --threads 4
 
 # train (the defaults are sized for an 8 GB GPU); stop after 2 hours with a checkpoint
 python -m neural.train --out runs/cascade_X_s1 --seed 1 --max-hours 2
@@ -173,6 +234,9 @@ classical decoder takes the rest.
   another file.
 - `--save <prefix>` writes `<prefix>.json` (every number) and `<prefix>.npz` (per shot, in
   file order: `logits`, `predictions`, `observables`, `failed`, `confidence`).
+  `predictions` and `observables` are always the kit's 12 bits. The `logits` belong to the
+  model's own operators: for a `--logicals light` model, `logits > 0` is not the prediction,
+  and the file's `logits_are_for` entry says so.
 - Files named `test_*` or `go_*` are refused without `--final`.
 
 ### Seeds, checkpoints, stopping and resuming
@@ -200,7 +264,7 @@ Two machines. They never share a line.
 
 ### This PC (CPU only: Ryzen 7 7730U, 4 threads of lane A, niced, torch 2.15.0+cpu)
 
-**The sampler against Stim's circuit sampler** (`python -m neural.sampler --p 0.001 --shots 200000`,
+**The sampler against Stim's circuit sampler** (the two `neural.sampler` commands above,
 seed 7, X memory, 200,000 shots from each sampler). A z score compares one rate between the
 two samplers; 1,740 of them should stay under about 4.
 
@@ -220,6 +284,15 @@ GPU it does not matter: the laptop draws a batch of 32 from the full model in 1.
 
 **The model's size** (`python -m neural.measure --device cpu`): 893,697 parameters at width
 128 and depth 8; 67 MB of activations per shot in training with 32-bit floats.
+
+**Z memory with the kit's operators and with the light ones** (the smoke command below with
+`--basis Z`, and with `--basis Z --logicals light`; share of shots wrong at p = 0.0005 on 500
+error-model shots, +-0.044):
+
+| step | X memory | Z memory, the kit's operators | Z memory, `--logicals light` |
+|---|---|---|---|
+| 250 | 0.414 | 0.672 | 0.420 |
+| 500 | 0.162 | not reached (the lane cut the run) | 0.180 |
 
 **The CPU smoke run: a tiny model learns at low noise.** Width 32, depth 3 (38,537
 parameters), batch 32, 500 steps (16,000 shots) at p = 0.0005, seed 1, about 7 minutes:
@@ -284,6 +357,7 @@ Share of shots wrong on 2,000 error-model shots per p (+-0.022 or less):
 | 4,000 | 512,000 | p = 0.001 | 0.0170 | 0.1650 | 0.5385 | 0.8525 | 0.9740 |
 | 6,000 | 768,000 | p = 0.001375 | not forwarded | not forwarded | 0.409 | not forwarded | not forwarded |
 | 12,000 | 1,536,000 | up to p = 0.0025 | 0.0028 | 0.0386 | 0.2108 | 0.5390 | 0.8288 |
+| 28,000 (the climb ends) | 3,584,000 | up to p = 0.0055 | not forwarded | not forwarded | 0.0862 | 0.2724 | 0.5724 |
 
 Up to step 4,000 the network had only seen noise of p = 0.001. At step 10,000 the run was
 moved to commit 7ff6a68 by `--resume`, with 5,000 report shots per p (+-0.014 or less) from
@@ -387,12 +461,12 @@ score saved Stim shots with `evaluate_stim.py`, the last checkpoint and a few ke
 4. A faster climb is safe for a new run, on this evidence: at step 4,000 the network had
    46% of shots right at p = 0.003 without having seen noise above 0.001. Use
    `--steps-start 2000 --steps-anneal 12000`.
-5. Train Z memory the same way (`--basis Z`, its own `--out`) once X shows the size is
-   right: the kit's score needs both bases.
+5. The kit's score needs both bases. Train Z memory with `--basis Z --logicals light`, and
+   start it from the X run's weights with `--init-from` (see "Z memory" above).
 
 ## What is tested, and what is not
 
-`test_neural.py` (39 tests, about a minute and a half on one CPU thread):
+`test_neural.py` (51 tests, about a minute and a half of CPU time on one thread):
 
 - **Structure.** Every check has its six data qubits, equal to the kit's check matrices;
   every data qubit has three checks of each type; the neighbour tables move with the torus;
@@ -403,6 +477,10 @@ score saved Stim shots with `evaluate_stim.py`, the last checkpoint and a few ke
   in evaluation mode); the gather's hand-written backward pass equals PyTorch's bit for bit;
   the readout equals the paper's order of operations; the `basis` input leaves the other
   checks without a detector; the model takes detector bits only; mixed precision runs.
+- **Z memory.** The light operators are logical operators of the memory basis and rebuild
+  the kit's; on Stim measurement records the converted bits equal Stim's observables, and a
+  shot is wrong in both sets or in neither; the sampler's light labels convert to the kit's;
+  mirrored weights decode the mirrored syndrome; a run starts from another basis' checkpoint.
 - **Sampler.** Detectors equal H times the faults and labels equal L times the faults; the
   faults fire at the kit's priors; the rates agree with Stim on the [[72,12,6]] code; the
   same seed gives the same shots.
@@ -420,8 +498,8 @@ Not tested:
   precision, the gradient scaler, the fused AdamW and `--resume` (also from older code to
   newer) ran on the laptop, at commits f0a95fa and 7ff6a68; nothing here checks them.
 - **Whether the default model decodes at p = 0.003 to 0.005.** That is the GPU experiment.
-- **Z memory on the Gross code beyond the structure tests,** and codes other than gross and
-  bb72.
+- **A Z decoder at the default size.** Z memory was trained only with the tiny model on the
+  CPU. Codes other than gross and bb72 are not tested.
 - **`--amp bf16` and `--residual skip`** beyond a forward and backward pass.
 
 ## Later: a plugin for `evaluation.evaluate`
@@ -429,7 +507,10 @@ Not tested:
 Once trained models exist for X and Z, a plugin is a small file. The evaluator calls
 `make_decoder(problem, options)` once per basis and `decode_shot(full, basis)` per shot,
 where `full` holds the 1,728 detector bits. The plugin would load the checkpoint of
-`problem.basis` with `neural.train.load_decoder`, run `neural.train.predict` on `full` (or
-on `basis` for a `--detectors basis` model) and return
+`problem.basis` with `neural.train.load_decoder`, run the model on `full` (or on `basis` for
+a `--detectors basis` model) and turn its logits into the kit's 12 bits with
+`model.kit_bits(detectors, logits > 0)`, as `evaluate_stim.decode` does. That last step
+matters: a `--logicals light` model's own bits are not the kit's. It returns
 `ShotResult(predictions, {"confidence": ...})`. The smallest |logit| of the 12 is a natural
-confidence for a router: the paper reports that such outputs are well calibrated.
+confidence for a router: the paper reports that such outputs are well calibrated, and the
+confidence sweep above shows it on the smoke model.

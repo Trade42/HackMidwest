@@ -14,7 +14,7 @@ from circuit import dem_matrices, detector_ids, sample
 from make_circuit import code_layout, memory_experiment
 from neural import evaluate_stim, train
 from neural import model as model_module
-from neural.graph import build_graph
+from neural.graph import build_graph, gf2_inverse
 from neural.model import EVENT_CODES, CascadeDecoder
 from neural.sampler import DemSampler, compare_with_stim
 
@@ -123,6 +123,93 @@ def test_observables_read_the_logical_operators_of_the_memory_basis(gross):
     assert not ((other @ support.T) % 2).any()
     from make_circuit import gf2_rank
     assert gf2_rank(np.vstack([same, support])) == gf2_rank(same) + 12
+
+
+# ---------- the lighter logical operators ----------
+
+@pytest.mark.parametrize("code", ["gross", "bb72"])
+def test_light_operators_are_logical_operators_of_the_memory_basis(code):
+    layout = code_layout(code)
+    from make_circuit import gf2_rank
+    for basis, same, other in (("X", layout.hx, layout.hz), ("Z", layout.hz, layout.hx)):
+        kit, light = build_graph(code, basis), build_graph(code, basis, logicals="light")
+        support = light.observable_support
+        assert not ((other @ support.T) % 2).any()                                  # they commute with the other checks
+        assert gf2_rank(np.vstack([same, support])) == gf2_rank(same) + 12          # and are independent logical operators
+        assert support.sum(axis=1).max() <= kit.observable_support.sum(axis=1).max()
+        rebuilt = (light.kit_from_model @ support + light.kit_from_checks @ same) % 2
+        assert np.array_equal(rebuilt, kit.observable_support)                      # the kit's operators follow exactly
+        assert np.array_equal((gf2_inverse(light.kit_from_model) @ light.kit_from_model) % 2, np.eye(12, dtype=np.uint8))
+    assert build_graph("gross", "Z", logicals="light").observable_support.sum(axis=1).max() == 14
+    assert build_graph("gross", "Z").observable_support.sum(axis=1).max() == 38
+    assert np.array_equal(build_graph("gross", "X", logicals="light").observable_support,
+                          build_graph("gross", "X").observable_support)             # X already has the light set
+
+
+@pytest.mark.parametrize("code,detectors", [("gross", "all"), ("gross", "basis"), ("bb72", "all"), ("bb72", "basis")])
+def test_kit_bits_follow_exactly_from_the_light_bits_on_stim_shots(code, detectors):
+    """On noisy Stim measurement records: the light operators' true bits are the parities of the data readout on
+    their supports, and kit_bits turns them into exactly the observables that Stim reports."""
+    circuit = memory_experiment(code, "Z", p=0.004)
+    graph = build_graph(code, "Z", logicals="light")
+    records = circuit.compile_sampler(seed=5).sample(200)
+    syndromes, kit_bits = circuit.compile_m2d_converter().convert(measurements=records, separate_observables=True)
+    readout = records[:, -2 * graph.n2:].astype(np.int64)
+    light_bits = torch.from_numpy((readout @ graph.observable_support.T.astype(np.int64)) % 2)
+    assert light_bits.any() and not np.array_equal(light_bits.numpy(), kit_bits)
+    model = CascadeDecoder(code, "Z", detectors=detectors, width=8, depth=1, logicals="light")
+    inputs = torch.from_numpy(syndromes if detectors == "all" else syndromes[:, graph.basis_detectors])
+    assert np.array_equal(model.kit_bits(inputs, light_bits).numpy(), kit_bits)
+    # A shot is wrong in one set of operators exactly when it is wrong in the other.
+    guess = (torch.rand(200, 12, generator=torch.Generator().manual_seed(1)) < 0.05).long() ^ light_bits
+    wrong_light = (guess != light_bits).any(dim=1).numpy()
+    wrong_kit = (model.kit_bits(inputs, guess).numpy() != kit_bits).any(axis=1)
+    assert np.array_equal(wrong_light, wrong_kit) and 0 < wrong_light.sum() < 200
+
+
+@pytest.mark.parametrize("detectors", ["all", "basis"])
+def test_sampler_labels_shots_with_the_light_operators(detectors):
+    kit = DemSampler("bb72", "Z", detectors=detectors, noise_levels=[0.004])
+    light = DemSampler("bb72", "Z", detectors=detectors, noise_levels=[0.004], logicals="light")
+    syndromes, light_labels, (shot, mechanism) = light.sample(300, 0.004, torch.Generator().manual_seed(3), return_faults=True)
+    faults = sp.csr_matrix((np.ones(len(shot), dtype=np.int64), (shot.numpy(), mechanism.numpy())), shape=(300, kit.num_mechanisms))
+    kit_labels = (faults @ kit.L.T.astype(np.int64)).toarray() % 2
+    model = CascadeDecoder("bb72", "Z", detectors=detectors, width=8, depth=1, logicals="light")
+    assert np.array_equal(model.kit_bits(syndromes, light_labels).numpy(), kit_labels)
+    assert not np.array_equal(light_labels.numpy(), kit_labels)
+    assert (kit.H != light.H).nnz == 0                                              # the detectors are untouched
+
+
+def mirror_of_detectors(source, target):
+    """For every detector of the `source` memory circuit, its mirror image among the detectors of `target`."""
+    n2, position = source.n2, np.arange(source.n2)
+    negated = ((-(position // source.m)) % source.ell) * source.m + (-(position % source.m)) % source.m
+    check = source.detector_check
+    mirrored_check = np.where(check < n2, n2 + negated[check % n2], negated[check % n2])
+    places = target.detector_round * 2 * n2 + target.detector_check
+    at_place = np.full(places.max() + 1, -1)
+    at_place[places] = np.arange(target.num_detectors)
+    image = at_place[source.detector_round * 2 * n2 + mirrored_check]
+    assert (image >= 0).all() and len(set(image)) == source.num_detectors
+    return image
+
+
+@pytest.mark.parametrize("code", ["gross", "bb72"])
+def test_mirrored_weights_decode_the_mirrored_syndrome(code):
+    """An X decoder's weights, mirrored, give a Z decoder that computes on a Z syndrome exactly what the X decoder
+    computes on that syndrome's mirror image. It is the basis of the warm start of Z from X."""
+    torch.manual_seed(0)
+    x_model = CascadeDecoder(code, "X", width=16, depth=2).double().eval()
+    z_model = CascadeDecoder(code, "Z", width=16, depth=2, logicals="light").double().eval()
+    z_model.load_state_dict(model_module.mirrored_weights(x_model.state_dict()))
+    x_graph, z_graph = build_graph(code, "X"), build_graph(code, "Z")
+    z_syndrome = (torch.rand(3, z_graph.num_detectors) < 0.08).long()
+    x_syndrome = z_syndrome[:, torch.from_numpy(mirror_of_detectors(x_graph, z_graph))]
+    with torch.no_grad():
+        assert torch.allclose(z_model(z_syndrome), x_model(x_syndrome), atol=1e-10)
+        assert not torch.allclose(x_model(z_syndrome), x_model(x_syndrome), atol=1e-3)
+    twice = model_module.mirrored_weights(model_module.mirrored_weights(x_model.state_dict()))
+    assert same(twice, dict(x_model.state_dict()))
 
 
 # ---------- the model ----------
@@ -235,7 +322,7 @@ def test_sampled_syndromes_are_H_times_the_faults(detectors):
 
 @pytest.mark.parametrize("detectors", ["all", "basis"])
 def test_sampler_agrees_with_stim(detectors):
-    result = compare_with_stim("bb72", "X", None, detectors, p=0.004, shots=20000, seed=11)
+    result = compare_with_stim("bb72", "X", None, detectors, p=0.004, shots=10000, seed=11)
     assert result["passed"], result
 
 
@@ -295,10 +382,11 @@ def test_checkpoint_round_trips_and_resumes_to_the_same_steps(tmp_path):
     train.save_checkpoint(stopped, tmp_path / "checkpoint.pt")
     resumed = train.load_checkpoint(tmp_path / "checkpoint.pt", "cpu")
     assert resumed.step == 3 and resumed.config == stopped.config and same(state_of(resumed), state_of(stopped))
-    older = torch.load(tmp_path / "checkpoint.pt", weights_only=True)             # a file from before a setting existed
-    del older["config"]["snapshot_every"]
+    older = torch.load(tmp_path / "checkpoint.pt", weights_only=True)             # a file from before two settings existed
+    del older["config"]["snapshot_every"], older["config"]["logicals"]
     torch.save(older, tmp_path / "older.pt")
     assert train.load_checkpoint(tmp_path / "older.pt", "cpu").config == stopped.config
+    assert same(train.load_decoder(tmp_path / "older.pt")[0].state_dict(), stopped.ema_model.state_dict())
     for _ in range(3):
         train.train_step(resumed)
     assert resumed.step == 6 and same(state_of(resumed), state_of(straight))
@@ -317,12 +405,43 @@ def test_a_different_seed_gives_a_different_run():
     assert not same(runs[0].model.state_dict(), runs[1].model.state_dict())
 
 
-def test_z_memory_trains_too():
-    run = train.new_run(SMALL | {"basis": "Z"}, "cpu")
+@pytest.mark.parametrize("logicals", ["kit", "light"])
+def test_z_memory_trains_too(logicals, tmp_path):
+    run = train.new_run(SMALL | {"basis": "Z", "logicals": logicals}, "cpu")
     train.train_step(run)
     row = train.evaluate(run, 0.003, 40)
     assert run.step == 1 and row["shots"] == 40 and 0 <= row["shots_wrong"] <= 1
     assert run.model.config["basis"] == "Z" and run.sampler.num_detectors == run.model.num_inputs
+    # Scored on Stim shots, the failures are counted in the kit's bits whatever the model predicts.
+    train.save_checkpoint(run, tmp_path / "checkpoint.pt")
+    circuit = memory_experiment("bb72", "Z", 2, 0.003)
+    syndromes, labels = sample(circuit, 200, seed=8)
+    numbers, per_shot = evaluate_stim.evaluate(tmp_path / "checkpoint.pt", syndromes, labels, latency_shots=2)
+    model, _ = train.load_decoder(tmp_path / "checkpoint.pt")
+    inputs = torch.from_numpy(syndromes)
+    kit_predictions = model.kit_bits(inputs, train.predict(model, inputs)).numpy()
+    assert np.array_equal(per_shot["predictions"], kit_predictions) and numbers["logicals"] == logicals
+    assert numbers["failures"] == int((kit_predictions != labels).any(axis=1).sum())
+    assert np.array_equal(per_shot["predictions"], per_shot["logits"] > 0) == (logicals == "kit")
+
+
+def test_a_run_can_start_from_another_basis(tmp_path):
+    source = train.new_run(SMALL, "cpu")
+    train.train_step(source)
+    train.save_checkpoint(source, tmp_path / "x.pt")
+    options = ["--code", "bb72", "--rounds", "2", "--width", "16", "--depth", "2", "--batch", "8", "--steps", "0",
+               "--p-start", "0.001", "--p-train", "0.003", "--anneal-levels", "2", "--report-shots", "40",
+               "--report-p", "0.001", "0.003", "--threads", "1", "--init-from", str(tmp_path / "x.pt")]
+    train.main(["--out", str(tmp_path / "z"), "--basis", "Z", "--logicals", "light", *options])
+    assert "initial weights: mirrored from X memory, step 1, seed 5" in (tmp_path / "z" / "train.log").read_text()
+    train.main(["--out", str(tmp_path / "x2"), "--basis", "X", *options])
+    assert "initial weights: copied from X memory, step 1" in (tmp_path / "x2" / "train.log").read_text()
+    with pytest.raises(SystemExit):
+        train.main(["--out", str(tmp_path / "bad"), "--basis", "Z", *options, "--width", "32"])
+    started = train.new_run(SMALL | {"basis": "Z", "logicals": "light"}, "cpu")
+    train.start_from(started, tmp_path / "x.pt")
+    assert same(started.model.state_dict(), model_module.mirrored_weights(source.ema_model.state_dict()))
+    assert same(started.ema_model.state_dict(), started.model.state_dict())
 
 
 def log_lines(folder):

@@ -71,17 +71,22 @@ def shot_name(basis, factor, uniform_p, loss, seed):
     return f"{basis}_{noise}{'_loss' if loss else ''}_seed{seed}"
 
 
-def make(basis, factor, uniform_p, loss, shots, seed, out):
-    """Sample and save one shot file in the folder `out`, unless it is already there. Returns its path."""
+def make(basis, factor, uniform_p, loss, shots, seed, out, noise=None, name=None):
+    """Sample and save one shot file in the folder `out`, unless it is already there. Returns its path.
+
+    `noise` and `name` replace the noise and the file name that factor or uniform_p would give (loss_check.py
+    uses them for the kit's uniform noise with loss).
+    """
     out = Path(out)
-    path = out / (shot_name(basis, factor, uniform_p, loss, seed) + ".npz")
+    path = out / ((name or shot_name(basis, factor, uniform_p, loss, seed)) + ".npz")
     if path.exists():
         kept = load_shots(path)["meta"]
         if kept["shots"] != shots:
             raise SystemExit(f"{path} holds {kept['shots']} shots, not {shots}: use another seed or folder")
         print(json.dumps({"file": path.name, "sha256": sha256(path), "kept": True}), flush=True)
         return path
-    noise = kit_uniform(uniform_p) if uniform_p is not None else neutral_atom(factor)
+    if noise is None:
+        noise = kit_uniform(uniform_p) if uniform_p is not None else neutral_atom(factor)
     circuit = model_circuit(basis, noise)
     meta = {"basis": basis, "factor": factor, "uniform_p": uniform_p, "noise": noise.as_dict(), "loss": bool(loss),
             "shots": shots, "seed": seed, "num_detectors": circuit.num_detectors,

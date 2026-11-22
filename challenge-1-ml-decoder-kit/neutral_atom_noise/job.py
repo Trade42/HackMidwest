@@ -18,6 +18,8 @@ path of a particular machine: everything goes under --out, and --workers sets th
   blind/generic-2q (FLAGS is a condition of loss/lossmap.py).
 - Results: OUTDIR/results/, in parts of --part shots. A finished part is kept, so the same command resumes.
   --budget-minutes stops before a new part once the time is spent (exit code 3: more to do).
+  --first N decodes only the first N test shots of every row; a later call without it (or with a larger N)
+  widens the same rows. Keep --part the same in every call on one OUTDIR.
 - At the end: OUTDIR/tables.md, summary.json, rates.csv and the plot (summarize.py).
 """
 import argparse
@@ -68,19 +70,22 @@ def main():
     parser.add_argument("--factors", required=True, help="comma-separated noise factors")
     parser.add_argument("--shots", type=int, default=2000, help="test shots per factor")
     parser.add_argument("--seed", type=int, required=True, help="seed of the test shots")
-    parser.add_argument("--train-shots", type=int, default=250)
+    parser.add_argument("--train-shots", type=int, default=250, help="a multiple of --part")
     parser.add_argument("--train-seed", type=int, default=None, help="seed of the train shots (default: seed + 1000)")
     parser.add_argument("--grid", default="0.25,0.5,1,2", help="multipliers of the generic-2q p tried by generic-fit")
     parser.add_argument("--decoders", default="relay,bposd")
     parser.add_argument("--rows", default="matched,generic-2q,generic-fit")
     parser.add_argument("--loss", action="store_true", help="shots with atom loss (Clifft); rows are FLAGS/PRIORS")
     parser.add_argument("--workers", type=int, default=4, help="worker processes")
-    parser.add_argument("--part", type=int, default=250, help="shots per result file")
+    parser.add_argument("--part", type=int, default=125, help="shots per result file")
+    parser.add_argument("--first", type=int, default=None, help="decode only the first N test shots of every row")
     parser.add_argument("--budget-minutes", type=float, default=None)
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
     args.grid = [float(g) for g in args.grid.split(",")]
     args.train_seed = args.seed + 1000 if args.train_seed is None else args.train_seed
+    if args.train_seed == args.seed:
+        parser.error("the train shots need a seed of their own: nothing may be fitted on the shots it is scored on")
     out = Path(args.out)
     deadline = time.monotonic() + 60 * args.budget_minutes if args.budget_minutes else None
     fit_path = out / "fit.json"
@@ -99,7 +104,8 @@ def main():
                         fit_path.write_text(json.dumps(fit, indent=1))
                         print(json.dumps({"fit": test.name, "decoder": decoder, "flags": flags, **entry}), flush=True)
                         priors = "generic-2q" if entry["multiplier"] == 1 else entry["priors"]
-                    decode_all(test, args.shots, decoder, priors, flags, args, out / "results", deadline)
+                    decode_all(test, min(args.first or args.shots, args.shots), decoder, priors, flags, args,
+                               out / "results", deadline)
     except OutOfTime:
         finished = False
         print(f"budget of {args.budget_minutes} minutes spent: rerun the same command to go on", flush=True)

@@ -77,7 +77,8 @@ def _decode(k):
     priors = s["priors"] if s["flags"] is None else s["builder"].priors(s["flags"], s["heralds"][k])
     start = time.perf_counter()
     if s["decoder"] == "relay":
-        result = relay_decoder(s["H"], priors, seed=1).decode_detailed(s["detectors"][k])
+        settings = s["flags"]["relay"] if s["flags"] else {}     # loss/'s 'stop1' conditions change one setting
+        result = relay_decoder(s["H"], priors, seed=1, **settings).decode_detailed(s["detectors"][k])
         error, converged, iterations = np.asarray(result.decoding, np.uint8), bool(result.success), int(result.iterations)
     else:
         decoder = s["bposd"] if s["flags"] is None else bposd_decoder(s["H"], priors)

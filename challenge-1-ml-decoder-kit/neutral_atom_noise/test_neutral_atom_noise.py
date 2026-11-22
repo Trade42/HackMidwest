@@ -161,3 +161,37 @@ def test_bposd_with_matched_priors_decodes_low_noise_shots():
     decoder = bposd_decoder(H, matched_priors("X", noise)[0])
     failed, _ = score(decoder.decode, L, det[:, detector_ids(circuit, "X")], obs)
     assert det.any() and not failed.any()
+
+
+# ---------- atom loss (question 2): our loop against loss/'s own job ----------
+
+def test_our_loss_loop_equals_the_loss_folders_job_on_the_kits_noise(tmp_path):
+    """With the kit's uniform noise plus loss, our sampler and decode loop reproduce `python -m loss.job`.
+
+    The shots are bit-identical and every shot decodes the same (failed, converged, iterations, wrong
+    observables) under the published flag-aware recipe (`starter`). A 100-shot run of the same check at
+    p = 0.004 and s = 1e-3 is logged in RESULTS.md.
+    """
+    pytest.importorskip("clifft")
+    from neutral_atom_noise.loss_check import compare
+    report = compare(basis="X", p=0.003, s=5e-4, shots=12, seed=7, workers=2, out=tmp_path)
+    assert report["equal"] == {name: True for name in ("detectors", "observables", "heralds", "failed", "converged",
+                                                       "iterations", "wrong_mask")}
+    assert report["lost_data_atoms_per_shot"] > 1 and report["mean_iterations"] > 0
+
+
+# ---------- the statistics of the tables ----------
+
+def test_wilson_interval_and_paired_counts():
+    from neutral_atom_noise.summarize import paired, per_cycle, wilson
+    low, high = wilson(0, 2000)
+    assert low == 0 and high == pytest.approx(3.8415 / (2000 + 3.8415), rel=1e-3)   # no failure seen: about 0.19%
+    low, high = wilson(50, 1000)
+    assert low == pytest.approx(0.0381, abs=2e-4) and high == pytest.approx(0.0653, abs=2e-4)
+    assert per_cycle(0.5) == pytest.approx(1 - 0.5 ** (1 / 12))
+    a = np.array([1, 1, 1, 0, 0, 0, 1, 0], bool)      # a alone is wrong on shots 0, 1, 2; b alone on none
+    b = np.array([0, 0, 0, 0, 0, 0, 1, 0], bool)
+    test = paired(a, b)
+    assert (test["only_a"], test["only_b"], test["a_failures"], test["b_failures"]) == (3, 0, 4, 1)
+    assert test["p"] == pytest.approx(0.25)           # two-sided sign test: 2 * (1/2)^3
+    assert paired(b, b)["p"] == 1.0

@@ -28,7 +28,9 @@ def wilson(failures, shots, z=1.959964):
     p = failures / shots
     centre = (p + z * z / (2 * shots)) / (1 + z * z / shots)
     half = z * np.sqrt(p * (1 - p) / shots + z * z / (4 * shots * shots)) / (1 + z * z / shots)
-    return max(0.0, centre - half), min(1.0, centre + half)
+    low = 0.0 if failures == 0 else max(0.0, float(centre - half))      # exact 0, not a rounding leftover
+    high = 1.0 if failures == shots else min(1.0, float(centre + half))
+    return low, high
 
 
 def per_cycle(fraction):
@@ -57,6 +59,8 @@ def load_results(folder):
     rows = {}
     for key, runs in parts.items():
         runs.sort(key=lambda item: item[0]["start"])
+        if len({run["shots_sha256"] for run, _ in runs}) != 1:
+            raise SystemExit(f"the parts of {key} decoded different shot files")
         joined = {k: np.concatenate([arrays[k] for _, arrays in runs]) for k in runs[0][1]}
         if not (joined["shots"] == np.arange(len(joined["shots"]))).all():
             raise SystemExit(f"the parts of {key} do not cover shots 0..N-1 exactly once")
@@ -107,6 +111,22 @@ def _order(row):
     return (row["basis"], row["loss"], row["factor"] or 0, row["decoder"] != "relay", row["flags"] or "", rank, row["priors"])
 
 
+def flag_pairs(rows, fit):
+    """Loss shots: every flag-aware row against the row that ignores the heralds (`blind`), same priors."""
+    pairs = []
+    for row in sorted(rows.values(), key=_order):
+        blind = rows.get((row["shots_file"], row["decoder"], row["priors"], "blind"))
+        if row["flags"] in (None, "blind") or blind is None:
+            continue
+        test = paired(blind["failed"], row["failed"])
+        n = test["shots"]
+        pairs.append({"basis": row["basis"], "factor": row["factor"], "decoder": row["decoder"], "flags": row["flags"],
+                      "picture": describe(row, fit).split(" + ", 1)[1], **test,
+                      "iterations_blind": float(blind["iterations"][:n].mean()),
+                      "iterations_flags": float(row["iterations"][:n].mean())})
+    return pairs
+
+
 def summarize(rows, fit):
     """(rate records, paired records). Every generic row is paired with the matched row of its point."""
     ordered = sorted(rows.values(), key=_order)
@@ -116,6 +136,8 @@ def summarize(rows, fit):
         reference = rows.get((row["shots_file"], row["decoder"], "matched", row["flags"]))
         if row["priors"] == "matched" or reference is None:
             continue
+        if row["shots_sha256"] != reference["shots_sha256"]:
+            raise SystemExit(f"{row['shots_file']}: two rows of one point decoded different shot files")
         test = paired(row["failed"], reference["failed"])
         n = test["shots"]
         pairs.append({"basis": row["basis"], "factor": row["factor"], "loss": row["loss"], "decoder": row["decoder"],
@@ -134,7 +156,7 @@ def _percent(x):
     return f"{100 * x:.2f}%" if x >= 0.001 or x == 0 else f"{100 * x:.3f}%"
 
 
-def markdown(rates, pairs):
+def markdown(rates, pairs, flags=()):
     lines = ["| Basis | Factor | Decoder | Picture of the noise | Failures / shots | Failure fraction (95% Wilson) | Per cycle | "
              "Unconverged | Mean iterations | Mean ms per shot |", "|---|---|---|---|---|---|---|---|---|---|"]
     for r in rates:
@@ -151,6 +173,14 @@ def markdown(rates, pairs):
         lines.append(f"| {p['basis']}{' + loss' if p['loss'] else ''} | {p['factor']:g} | {DECODER_NAMES[p['decoder']]} | {name} | {p['shots']} | "
                      f"{p['a_failures']}, {p['b_failures']} | {p['only_a']} | {p['only_b']} | {p['p']:.2g} | "
                      f"{p['iterations_generic']:.0f} ÷ {p['iterations_matched']:.0f} = {ratio:.1f} |")
+    if flags:
+        lines += ["", "What the loss flags add, on the same shots (the row that ignores the heralds against the flag-aware row, "
+                  "same Pauli priors):", "",
+                  "| Factor | Decoder | Pauli priors | Shots | Failures: no flags, with flags | Only no-flags wrong | "
+                  "Only with-flags wrong | Exact sign test p | Mean iterations: no flags, with flags |", "|---|---|---|---|---|---|---|---|---|"]
+        for p in flags:
+            lines.append(f"| {p['factor']:g} | {DECODER_NAMES[p['decoder']]} | {p['picture']} | {p['shots']} | {p['a_failures']}, {p['b_failures']} | "
+                         f"{p['only_a']} | {p['only_b']} | {p['p']:.2g} | {p['iterations_blind']:.0f}, {p['iterations_flags']:.0f} |")
     return "\n".join(lines) + "\n"
 
 
@@ -167,7 +197,8 @@ def plot(rates, path, basis="X", loss=False, published_factor=1.0):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    rates = [r for r in rates if r["basis"] == basis and r["loss"] == loss and not r["flags"]]
+    flags = "starter" if loss else None      # with loss, the plot shows the flag-aware rows
+    rates = [r for r in rates if r["basis"] == basis and r["loss"] == loss and r["flags"] == flags]
     decoders = [d for d in DECODER_NAMES if any(r["decoder"] == d for r in rates)]
     if not decoders:
         return False
@@ -215,7 +246,7 @@ def plot(rates, path, basis="X", loss=False, published_factor=1.0):
                for key, label, colour, marker in SERIES if any(key in _series(r) for r in rates)]
     figure.legend(handles=handles, loc="lower center", ncol=len(handles), frameon=False, fontsize=9, labelcolor=INK)
     shots = sorted({r["shots"] for r in rates})
-    figure.suptitle(f"{basis} memory{' with atom loss' if loss else ''}, Gross code, 12 cycles: failures against the noise factor\n"
+    figure.suptitle(f"{basis} memory{' with atom loss, flag-aware decoding' if loss else ''}, Gross code, 12 cycles: failures against the noise factor\n"
                     f"{' or '.join(str(s) for s in shots)} shots per point, 95% Wilson intervals; "
                     "a hollow triangle is the upper limit where no shot failed", color=INK, fontsize=10, x=0.01, ha="left")
     figure.tight_layout(rect=(0, 0.06, 1, 0.9))
@@ -234,11 +265,13 @@ def write_all(results, fit_path, out):
     """Write tables.md, summary.json, rates.csv and the plot into `out`. Returns the markdown."""
     out = Path(out)
     fit = json.loads(Path(fit_path).read_text()) if fit_path and Path(fit_path).exists() else {}
-    rates, pairs = summarize(load_results(results), fit)
-    text = markdown(rates, pairs)
+    rows = load_results(results)
+    rates, pairs = summarize(rows, fit)
+    flags = flag_pairs(rows, fit)
+    text = markdown(rates, pairs, flags)
     out.mkdir(parents=True, exist_ok=True)
     (out / "tables.md").write_text(text)
-    (out / "summary.json").write_text(json.dumps({"rates": rates, "paired": pairs, "fit": fit}, indent=1))
+    (out / "summary.json").write_text(json.dumps({"rates": rates, "paired": pairs, "flags": flags, "fit": fit}, indent=1))
     with open(out / "rates.csv", "w", newline="") as f:
         columns = ["basis", "factor", "loss", "decoder", "priors", "flags", "picture", "shots", "failures", "fraction",
                    "wilson_low", "wilson_high", "per_cycle", "unconverged", "mean_iterations", "mean_ms", "seed", "shots_sha256"]
@@ -246,8 +279,8 @@ def write_all(results, fit_path, out):
         writer.writeheader()
         writer.writerows(rates)
     try:
-        for basis in sorted({r["basis"] for r in rates}):
-            plot(rates, out / f"failure_vs_factor_{basis}.png", basis)
+        for basis, loss in sorted({(r["basis"], r["loss"]) for r in rates}):
+            plot(rates, out / f"failure_vs_factor_{basis}{'_loss' if loss else ''}.png", basis, loss)
     except ImportError:
         print("matplotlib is not installed: no plot written")
     return text

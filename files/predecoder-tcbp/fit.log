@@ -30,3 +30,9 @@ fit of the knobs for tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/N
   train_X_T_right.npz: 2000 shots, {'mode': 'logodds', 'alpha': 0.1, 'eps': 0.0001}, failures 3, 320 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
     train_X_T_failed alpha 0.2: 200 of 390 shots, build 40.9 ms, decode 12.4 ms mean (last 200: 40.9 + 12.4 ms), 12 s
   train_X_T_failed.npz: 390 shots, {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}, failures 134, 343 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+    train_X_T_right alpha 0.2: 200 of 2000 shots, build 41.0 ms, decode 3.4 ms mean (last 200: 41.0 + 3.4 ms), 10 s
+    train_X_T_right alpha 0.2: 400 of 2000 shots, build 41.0 ms, decode 3.7 ms mean (last 200: 40.9 + 4.0 ms), 20 s
+    train_X_T_right alpha 0.2: 600 of 2000 shots, build 41.0 ms, decode 3.5 ms mean (last 200: 40.9 + 3.1 ms), 30 s
+    train_X_T_right alpha 0.2: 800 of 2000 shots, build 40.9 ms, decode 3.5 ms mean (last 200: 40.8 + 3.6 ms), 40 s
+    train_X_T_right alpha 0.2: 1000 of 2000 shots, build 41.2 ms, decode 3.5 ms mean (last 200: 42.2 + 3.4 ms), 51 s
+    train_X_T_right alpha 0.2: 1200 of 2000 shots, build 41.1 ms, decode 3.6 ms mean (last 200: 40.9 + 4.0 ms), 61 s

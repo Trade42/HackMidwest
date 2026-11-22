@@ -105,7 +105,7 @@ per-shot files" is combined offline from saved answers and has no time measured 
 
 ![Mean decoding time per pair against p](figures/time_vs_p.png)
 
-**What the numbers say.** <!--f:findings-->On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row). The two fail equally many pairs at p = 0.003.<!--/f--> The exact tests, the intervals, the median and 99th-percentile
+**What the numbers say.** <!--f:findings-->On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row); with its two fast decodes side by side on two cores, 28.9 ms per pair. The two fail equally many pairs at p = 0.003.<!--/f--> The exact tests, the intervals, the median and 99th-percentile
 times and what ran beside each row are in `APPENDIX.md`.
 
 ### Whose gain is whose

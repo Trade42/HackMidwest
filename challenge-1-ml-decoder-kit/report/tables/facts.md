@@ -298,7 +298,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
-| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row). The two fail equally many pairs at p = 0.003. | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
+| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row); with its two fast decodes side by side on two cores, 28.9 ms per pair. The two fail equally many pairs at p = 0.003. | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
 | `framing` | not measured | `tables/test_ablation.md` |
 | `framing_slide` | pending: the ablation on the test shots has not landed. | `tables/test_ablation.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
@@ -320,6 +320,12 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_Z_wrong4` | 4.1% | `tables/networks.md` |
 | `net_Z_wrong5` | 18.6% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
+| `netalone3_X` | not measured | `data/test/net_p0.003/` |
+| `netalone3_Z` | not measured | `data/test/net_p0.003/` |
+| `netalone4_X` | not measured | `data/test/net_p0.004/` |
+| `netalone4_Z` | not measured | `data/test/net_p0.004/` |
+| `netalone5_X` | not measured | `data/test/net_p0.005/` |
+| `netalone5_Z` | not measured | `data/test/net_p0.005/` |
 | `rule_X` | network | `data/test/test_run.out` |
 | `rule_X_converged` | 67 | `data/test/test_run.out` |
 | `rule_X_network` | 60 | `data/test/test_run.out` |
@@ -379,19 +385,19 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_hierarchy_p99_ms` | 395 | `tables/test_p0.003.md` |
 | `t3_hierarchy_paired_p` | 0.50 | `tables/test_p0.003.md` |
 | `t3_hierarchy_pairs` | 3 | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_both` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_error` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_mean_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_median_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_only_relay` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_only_this` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_p99_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_pairs` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_both` | 3 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_error` | 1.4e-05 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_mean_ms` | 28.9 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_median_ms` | 7.8 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_only_relay` | 2 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_only_this` | 0 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_p99_ms` | 245 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_paired_p` | 0.50 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_pairs` | 3 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_rate` | 2.50e-05 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_time_ratio` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_xz` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_wall_hours` | 0.1 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_xz` | 1, 2 | `tables/test_p0.003.md` |
 | `t3_hierarchy_rate` | 2.50e-05 | `tables/test_p0.003.md` |
 | `t3_hierarchy_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_wall_hours` | 0.1 | `tables/test_p0.003.md` |

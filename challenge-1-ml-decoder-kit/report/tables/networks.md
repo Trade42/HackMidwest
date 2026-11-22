@@ -20,3 +20,11 @@ The X network alone, on the team's Stim shot files (exploration shots; `report/d
 | 100,000 | 0.72% of 5,000 | 0.81% of 20,000 | 5.32% of 5,000 | 4.76% of 20,000 | 19.56% of 5,000 | 19.54% of 20,000 |
 | 110,000 | 0.76% of 5,000 | 0.66% of 20,000 | 5.02% of 5,000 | 4.30% of 20,000 | 18.02% of 5,000 | 18.32% of 20,000 |
 | 120,000 | 0.56% of 5,000 | 0.68% of 20,000 | 4.74% of 5,000 | 3.95% of 20,000 | 17.16% of 5,000 | 17.73% of 20,000 |
+
+The final networks alone on the **test shots** (the team's test files, `neural.evaluate_stim`; `report/data/test/net_p<p>/`), share of shots with any logical bit wrong. Alone they are far worse than relay-BP; they are only ever asked to choose among candidates.
+
+| p | X network (step 120,000) | Z network (step 100,000) |
+|---|---|---|
+| 0.003 | not measured | not measured |
+| 0.004 | not measured | not measured |
+| 0.005 | not measured | not measured |

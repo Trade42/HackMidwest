@@ -50,7 +50,7 @@ DECODERS = {decoder.key: decoder for decoder in [
     Decoder("hierarchy", "our hierarchy, neural tie-break", "ours", "ours",
             "a neural network picks among the candidates where the fast decodes disagree", "#eb6834", "^", ours=True),
     Decoder("hierarchy-parallel", "our hierarchy, neural tie-break, the two fast decodes side by side on two cores", "ours, 2 cores", "ours",
-            "the same decoder as the row above; only the wall time differs", "#e34948", ">", ours=True, figures="time"),
+            "the same decoder as the row above, with the same answers on every shot (checked); only the wall time differs", "#e34948", ">", ours=True, figures="time"),
     Decoder("ensemble", "our ensemble (combined offline)", "ours, ensemble", "ours",
             "only the rules that use the network have a learned part: see the rule named in the row", "#008300", "X", ours=True),
     Decoder("tcbp", "TCBP-JOBS (NVIDIA, GPU)", "TCBP-JOBS (GPU)", "NVIDIA; run by teammates", "a model it fits at start-up, per memory basis", "#1baf7a", "P"),

@@ -9,7 +9,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.003 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, neural tie-break | 3 of 10,000 | 45.7 | relay-BP's time not clean | 14.2 | 395 | CPU, 1 core |
-| 0.003 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.003 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 3 of 10,000 | 28.9 | relay-BP's time not clean | 7.8 | 245 | CPU, 2 cores |
 | 0.003 | our ensemble (combined offline) | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | TCBP-JOBS (NVIDIA, GPU) | 3 of 10,000 | 3.9 | not comparable: another device and timer | 3.8 | 15.0 | GPU, 1 core |
 | 0.004 | BP-OSD (kit baseline) | 472 of 10,000 | 302 | 0.94 | 350 | 863 | CPU, 1 core |

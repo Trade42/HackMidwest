@@ -191,6 +191,13 @@ def load_test_rows(data=DATA):
                 if spec.kind == "evaluator" and not row.get("offline") and (retime / "summary.json").is_file():
                     take_retime(row, retime, log, monitor, jobs, p)
             measured[p][spec.decoder] = row
+        one, two = measured[p].get("hierarchy"), measured[p].get("hierarchy-parallel")
+        if one and two and one.get("per_shot_file") and two.get("per_shot_file"):     # the side-by-side row must be the same decoder, only faster
+            with np.load(DATA / one["per_shot_file"], allow_pickle=False) as first, np.load(DATA / two["per_shot_file"], allow_pickle=False) as second:
+                same = all(np.array_equal(first[key], second[key]) for key in ("predictions_X", "predictions_Z"))
+            if not same:
+                raise Mismatch(f"p = {p}: the two-core row predicts other bits than the one-core row; it cannot be labelled the same decoder")
+            two["same_answers"] = True
         reference = measured[p].get(REFERENCE)
         for key, row in measured[p].items():
             if row is not None:
@@ -1208,6 +1215,21 @@ def networks_table():
         records.append({"network": name, "basis": log["basis"], "machine": where, "parameters": log["parameters"], "last_step_in_log": last["step"],
                         "planned_steps": last["of"], "shots_seen": last["step"] * log["batch"], "median_shots_per_second": speed,
                         **{f"wrong_p{p}": last["wrong"][p] for p in P_VALUES}, "source": log["source"]})
+    alone = []
+    for p in P_VALUES:
+        cells = []
+        for basis in "XZ":
+            found = None
+            for file in sorted((DATA / "test" / f"net_p{p}").glob("*.json")) if (DATA / "test" / f"net_p{p}").is_dir() else []:
+                record = json.loads(file.read_text(encoding="utf-8"))
+                if record.get("basis") == basis and record.get("shots") == 10000:
+                    found = record
+            cells.append(NOT_MEASURED if found is None else f"{found['failures']:,} of {found['shots']:,} ({found['failure_fraction']:.1%})")
+            fact(f"netalone{p[-1]}_{basis}", found and f"{found['failure_fraction']:.1%}", f"data/test/net_p{p}/")
+        alone.append([p] + cells)
+    alone_text = ("\n\nThe final networks alone on the **test shots** (the team's test files, `neural.evaluate_stim`; `report/data/test/net_p<p>/`), "
+                  "share of shots with any logical bit wrong. Alone they are far worse than relay-BP; they are only ever asked to choose among candidates.\n\n"
+                  + markdown(["p", "X network (step 120,000)", "Z network (step 100,000)"], alone))
     text = ("The two networks, from their training logs (`report/data/networks/*.train.log`). \"Shots wrong\" is the share of shots with at least "
             "one of the 12 logical bits wrong, on error-model shots drawn for the training report: a training diagnostic, not a result on Stim shots.\n\n"
             + markdown(["Network", "Trained on", "Size", "Started from", "Training step (last in the copied log)", "Shots seen",
@@ -1220,6 +1242,7 @@ def networks_table():
                        for step in steps]
         text += ("\n\nThe X network alone, on the team's Stim shot files (exploration shots; `report/data/exploration/cascade_X_s1/SCORES.md`), "
                  "share of shots wrong:\n\n" + markdown(["Training step"] + [f"`{name}`" for name in files], score_lines))
+    text += alone_text
     return write("networks", text, records)
 
 

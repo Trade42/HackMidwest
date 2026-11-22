@@ -43,6 +43,7 @@ SOURCES = [
     ("test/", "origin/server-logs", "files/clean/ensemble_p*/test_*.npz", False),
     ("test/", "origin/server-logs", "files/clean/ensemble_p*/test_*.json", False),
     ("test/cpu_monitor.out", "origin/server-logs", "cpu_monitor.out", True),
+    ("test/", "origin/server-logs", "files/clean/net_p*/*.json", False),      # the final networks alone on the test files (neural.evaluate_stim)
     ("test/test_rows.out", "origin/server-logs", "test_rows.out", True),
     ("test/test_run.out", "origin/server-logs", "test_run.out", True),       # the test job's printout: the frozen commit and both checkpoints' sha256
     # the ensemble on exploration shots (validation files): the members' answers combined offline, and TCBP-JOBS's answers

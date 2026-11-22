@@ -747,3 +747,38 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/data.npz shots 
   200/500 shots, 10s, failures so far starter=0 starter@0.5/stop1=1
   250/500 shots, 11s, failures so far starter=0 starter@0.5/stop1=1
   300/500 shots, 12s, failures so far starter=0 starter@0.5/stop1=1
+  350/500 shots, 15s, failures so far starter=1 starter@0.5/stop1=1
+  400/500 shots, 16s, failures so far starter=1 starter@0.5/stop1=1
+  450/500 shots, 16s, failures so far starter=2 starter@0.5/stop1=2
+  500/500 shots, 25s, failures so far starter=4 starter@0.5/stop1=4
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/parts/starter+startercap0.5_stop1/019000-019500.npz.tmp.npz in 25s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/data.npz shots 19500..20000 conditions ['starter', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 7s, failures so far starter=0 starter@0.5/stop1=0
+  100/500 shots, 7s, failures so far starter=0 starter@0.5/stop1=0
+  150/500 shots, 8s, failures so far starter=0 starter@0.5/stop1=1
+  200/500 shots, 10s, failures so far starter=0 starter@0.5/stop1=1
+  250/500 shots, 11s, failures so far starter=0 starter@0.5/stop1=1
+  300/500 shots, 15s, failures so far starter=0 starter@0.5/stop1=1
+  350/500 shots, 18s, failures so far starter=1 starter@0.5/stop1=3
+  400/500 shots, 20s, failures so far starter=2 starter@0.5/stop1=4
+  450/500 shots, 21s, failures so far starter=4 starter@0.5/stop1=5
+  500/500 shots, 29s, failures so far starter=6 starter@0.5/stop1=7
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L1_s2e-4_seed5100/parts/starter+startercap0.5_stop1/019500-020000.npz.tmp.npz in 29s
+### X memory, p = 0.004, s = 0.0002, seed 5100: reference blind
+
+| condition | failures / shots | fail fraction (95% Wilson) | per cycle | unconverged (of them right) | mean iterations | paired shots: blind fails, cond fails | blind-only / cond-only (sign test) | blind ÷ cond (95% bootstrap) |
+|---|---|---|---|---|---|---|---|---|
+| blind | 81 / 3000 | 0.0270 (0.0218–0.0334) | 2.28e-03 | 51 (1) | 1641 | reference |  |  |
+| starter | 160 / 20000 | 0.0080 (0.0069–0.0093) | 6.69e-04 | 73 (3) | 696 | 3000: 81, 23 | 63 / 5 (p=7.7e-14) | 3.52 (2.53–5.43) |
+| starter@0.5/stop1 | 216 / 20000 | 0.0108 (0.0095–0.0123) | 9.04e-04 | 73 (3) | 218 | 3000: 81, 30 | 60 / 9 (p=2.2e-10) | 2.70 (2.02–3.95) |
+
+### X memory, p = 0.004, s = 0.0002, seed 5100: reference starter
+
+| condition | failures / shots | fail fraction (95% Wilson) | per cycle | unconverged (of them right) | mean iterations | paired shots: starter fails, cond fails | starter-only / cond-only (sign test) | starter ÷ cond (95% bootstrap) |
+|---|---|---|---|---|---|---|---|---|
+| starter | 160 / 20000 | 0.0080 (0.0069–0.0093) | 6.69e-04 | 73 (3) | 696 | reference |  |  |
+| starter@0.5/stop1 | 216 / 20000 | 0.0108 (0.0095–0.0123) | 9.04e-04 | 73 (3) | 218 | 20000: 160, 216 | 23 / 79 (p=2.3e-08) | 0.74 (0.66–0.82) |
+
+job done in 1460s
+{"dataset": "/home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz", "sha256": "c68f6e67cd84784a16007ea4611af5b0d69d7b577de775310c18e2cf11b85336", "basis": "X", "p": 0.004, "s": 0.0005, "shots": 10000, "seed": 5200, "lost_data_atoms_per_shot": 5.108, "check_heralds_per_shot": 5.17, "sample_seconds": 11.5}
+decode /home/blakew3/mlBranchMidwest/runs/loss/L1_s5e-4_seed5200/data.npz shots 0..500 conditions ['blind'] workers 10

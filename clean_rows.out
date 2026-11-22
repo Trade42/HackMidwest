@@ -4,3 +4,5 @@
 2026-11-22T07:26:20Z START p=0.005 router [load 5.93, evaluators 3, joint 0, loss.job 0, candidates 0, throttled so far 4578.0 s]
 2026-11-22T07:26:30Z START p=0.004 bposd [load 6.01, evaluators 4, joint 0, loss.job 0, candidates 0, throttled so far 4578.0 s]
 2026-11-22T07:26:40Z START p=0.004 router [load 6.16, evaluators 5, joint 0, loss.job 0, candidates 0, throttled so far 4578.0 s]
+2026-11-22T08:16:53Z END p=0.004 bposd exit 0: bposd,230,243,472,0.004021082123034647,0.0001849193942319305,301.3050235011033 [load 13.51, evaluators 5, joint 0, loss.job 0, candidates 0, throttled so far 4646.9 s]
+2026-11-22T08:16:55Z START p=0.003 bposd [load 13.31, evaluators 5, joint 0, loss.job 0, candidates 0, throttled so far 4646.9 s]

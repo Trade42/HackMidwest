@@ -256,9 +256,9 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_X_wrong3` | 0.5% | `tables/networks.md` |
 | `net_X_wrong4` | 3.8% | `tables/networks.md` |
 | `net_X_wrong5` | 18.3% | `tables/networks.md` |
-| `net_Z_step` | 90,000 | `tables/networks.md` |
-| `net_Z_wrong3` | 0.6% | `tables/networks.md` |
-| `net_Z_wrong4` | 4.5% | `tables/networks.md` |
+| `net_Z_step` | 96,000 | `tables/networks.md` |
+| `net_Z_wrong3` | 0.5% | `tables/networks.md` |
+| `net_Z_wrong4` | 4.2% | `tables/networks.md` |
 | `net_Z_wrong5` | 18.8% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
@@ -628,6 +628,8 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `trk_gain` | 58% (38% to 78%) | `data/loss/tracker/test.json` |
 | `trk_gain_pooled` | 54% (38% to 68%) | `data/loss/tracker/pooled_7300_7310.json` |
 | `trk_gain_replication` | 49% (25% to 70%) | `data/loss/tracker/replication_seed7310.json` |
+| `trk_ms` | 8.1 | `data/loss/tracker/timing.json` |
+| `trk_ms_p99` | 13.9 | `data/loss/tracker/timing.json` |
 | `trk_oracle_round` | 112 of 4,000 | `data/loss/tracker/test.json` |
 | `trk_oracle_round_share` | 2.80% | `data/loss/tracker/test.json` |
 | `trk_secondary` | an earlier version of the tracker fails 144 of the same shots against the frozen one's 147 (only the frozen one fails 42, only the earlier one 39, p = 0.82) | `data/loss/tracker/test_secondary.json` |

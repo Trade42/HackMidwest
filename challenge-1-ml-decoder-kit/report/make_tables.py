@@ -947,6 +947,16 @@ def background_table():
                 f"the network answers {coverage}% of the shots; {ours} failures against the hierarchy's {base} (only network-first fails {only_ours}, only the "
                 f"hierarchy {only_base}, p = {p_value}); {time} against {base_time} ms per shot on the laptop beside a GPU training: no gain in accuracy",
                 f"background/{file.name}")
+    file = DATA / "loss" / "tracker" / "accuracy_val_learned.json"
+    if file.is_file():
+        versions = json.loads(file.read_text(encoding="utf-8"))["versions"]
+        learned, model = versions.get("learned", {}).get("all"), versions.get("order1_explain1", {}).get("all")
+        if learned and model:
+            add("A learned loss-time tracker (a small recurrent network, a GRU, over the 13 detector rounds of a flagged atom) in place of the "
+                f"tracker's statistical model (X memory, p = 0.004, s = 0.001, validation shots, {learned['atoms']:,} lost data atoms)",
+                f"right round {learned['top1']:.1%} and within one round {learned['within1']:.1%} of the time, against {model['top1']:.1%} and "
+                f"{model['within1']:.1%} for the model; mean log-probability of the true round {learned['mean_log_p_true']:.3f} against "
+                f"{model['mean_log_p_true']:.3f}: it does not beat the model, so it was not decoded", "loss/tracker/accuracy_val_learned.json")
     file = folder / "plain_cnn_runs" / "README.md"
     if file.is_file():
         for line in file.read_text(encoding="utf-8").splitlines():
@@ -1020,6 +1030,13 @@ def tracker_facts(tracked, shares):
     fact("trk_top1", every and f"{every['top1']:.1%}", "data/loss/tracker/accuracy_test.json")
     fact("trk_within1", every and f"{every['within1']:.1%}", "data/loss/tracker/accuracy_test.json")
     fact("trk_atoms", every and f"{every['atoms']:,}", "data/loss/tracker/accuracy_test.json")
+    timing = DATA / "loss" / "tracker" / "timing.json"
+    frozen = None
+    if timing.is_file():
+        table = json.loads(timing.read_text(encoding="utf-8"))
+        frozen = next((row for row in table["rows"] if row["version"].startswith("order1_explain1")), None)
+    fact("trk_ms", frozen and f"{frozen['one_shot_mean_ms']:.1f}", "data/loss/tracker/timing.json")
+    fact("trk_ms_p99", frozen and f"{frozen['one_shot_p99_ms']:.1f}", "data/loss/tracker/timing.json")
     secondary = DATA / "loss" / "tracker" / "test_secondary.json"
     pair = None
     if secondary.is_file():

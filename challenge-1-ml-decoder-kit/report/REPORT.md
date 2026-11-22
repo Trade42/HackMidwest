@@ -176,7 +176,8 @@ Each with its count and its file in `APPENDIX.md`, "What we measured before buil
   came free.
 - **Joint decoding of X and Z checks** fixes most of relay-BP's failures but is far too slow to run on every shot.
 - **Under loss,** exact weights for where a lost atom can have been gave no gain over the simple rule, and stopping
-  relay-BP at its first solution cost failures.
+  relay-BP at its first solution cost failures. A learned loss-time tracker (a small recurrent network) did not beat
+  the tracker's statistical model, so the model is what we decode with.
 - **Longer training of the network** improved it a lot as a decoder and only a little as a tie-breaker: the hard
   shots are hard for the network too.
 - **Letting the network answer first** where it is confident, and the hierarchy elsewhere, gave no gain in accuracy
@@ -208,6 +209,8 @@ record of them (`report/data/background/plain_cnn_runs/`).
 
 - **Our decoder needs no GPU.** PriorTilt and relay-BP run on one CPU core; the network is called on the hard shots
   only.
+- **The loss-time tracker** costs <!--f:trk_ms-->8.1<!--/f--> ms per shot on one CPU thread of our PC (99th percentile
+  <!--f:trk_ms_p99-->13.9<!--/f--> ms), with about ten flagged atoms per shot (`report/data/loss/tracker/timing.json`).
 - **Training cost.** `APPENDIX.md` ("The networks") gives, per network, the steps, the shots seen and the GPU hours.
   Training shots are drawn from the kit's error model on the GPU, so there is no training set on disk.
 - **TCBP-JOBS** needs an NVIDIA GPU. Before it decodes, it fits a model per memory basis, which took

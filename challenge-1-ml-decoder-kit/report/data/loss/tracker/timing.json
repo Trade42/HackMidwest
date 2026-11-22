@@ -1,0 +1,54 @@
+{
+ "dataset": {
+  "basis": "X",
+  "p": 0.004,
+  "s": 0.001,
+  "shots": 4000,
+  "seed": 7200,
+  "chunk": 2000,
+  "probes": true,
+  "clifft": "0.13.0",
+  "file": "val_X_p0.004_s1e-3_seed7200.npz"
+ },
+ "shots": 300,
+ "flagged_data_atoms_per_shot": 9.95,
+ "machine": "x86_64",
+ "node": "this PC (AMD Ryzen 7 7730U), one process",
+ "rows": [
+  {
+   "version": "order1_explain1 (the frozen tracker of step 3)",
+   "one_shot_mean_ms": 8.131233205397924,
+   "one_shot_median_ms": 7.893413538113236,
+   "one_shot_p99_ms": 13.911110204644498,
+   "batch_of_100_ms_per_shot": 4.443000620231032
+  },
+  {
+   "version": "order1_explain2",
+   "one_shot_mean_ms": 9.696630104444921,
+   "one_shot_median_ms": 9.473871905356646,
+   "one_shot_p99_ms": 14.27212283480912,
+   "batch_of_100_ms_per_shot": 5.513762100599706
+  },
+  {
+   "version": "order1_coupled2",
+   "one_shot_mean_ms": 18.843264792424936,
+   "one_shot_median_ms": 18.267569364979863,
+   "one_shot_p99_ms": 31.72961587086318,
+   "batch_of_100_ms_per_shot": 11.399783504505953
+  },
+  {
+   "version": "order1_coupled0",
+   "one_shot_mean_ms": 6.5654016472399235,
+   "one_shot_median_ms": 6.448253523558378,
+   "one_shot_p99_ms": 9.294844018295407,
+   "batch_of_100_ms_per_shot": 3.388240636947254
+  },
+  {
+   "version": "order0_coupled2 (independent rounds)",
+   "one_shot_mean_ms": 4.240384752241273,
+   "one_shot_median_ms": 4.049743292853236,
+   "one_shot_p99_ms": 6.971191777847707,
+   "batch_of_100_ms_per_shot": 1.4376346270243328
+  }
+ ]
+}

@@ -659,6 +659,28 @@
   "path": "loss_tracker/results/accuracy_test.md",
   "sha256": "bac2aabd8bfced2d6fe762fea5477764248948e705a25f06f855adc80455d1c0"
  },
+ "loss/tracker/accuracy_val_learned.json": {
+  "branch": "tree",
+  "bytes": 20798,
+  "commit": "36199d28321033f7e99ae28ddcdaed9286a700ec",
+  "copied_utc": "2026-11-22 09:56",
+  "file": "loss/tracker/accuracy_val_learned.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/loss_tracker/results/accuracy_val_learned.json` (last changed in commit `36199d283210`)",
+  "grows": false,
+  "path": "loss_tracker/results/accuracy_val_learned.json",
+  "sha256": "2089d6ec6f06bed7073c5cef87a1fdd707c7d256e0096cbfd064e76d657598fc"
+ },
+ "loss/tracker/accuracy_val_learned.md": {
+  "branch": "tree",
+  "bytes": 4062,
+  "commit": "36199d28321033f7e99ae28ddcdaed9286a700ec",
+  "copied_utc": "2026-11-22 09:56",
+  "file": "loss/tracker/accuracy_val_learned.md",
+  "from": "this branch, `challenge-1-ml-decoder-kit/loss_tracker/results/accuracy_val_learned.md` (last changed in commit `36199d283210`)",
+  "grows": false,
+  "path": "loss_tracker/results/accuracy_val_learned.md",
+  "sha256": "2f227f53e3a9ce26098a6109738bb4146e622bff36276d477fe131dc4dd22032"
+ },
  "loss/tracker/pooled_7300_7310.json": {
   "branch": "tree",
   "bytes": 9052,
@@ -747,6 +769,28 @@
   "path": "loss_tracker/results/test_secondary.md",
   "sha256": "219fb88ee87663351887205a2d5be0188de70abf91f9f88b5efd25eea1a5e158"
  },
+ "loss/tracker/timing.json": {
+  "branch": "tree",
+  "bytes": 1488,
+  "commit": "f4c216a1c9857faa825e962ab95d34704ee3d848",
+  "copied_utc": "2026-11-22 09:56",
+  "file": "loss/tracker/timing.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/loss_tracker/results/timing.json` (last changed in commit `f4c216a1c985`)",
+  "grows": false,
+  "path": "loss_tracker/results/timing.json",
+  "sha256": "d708501915f6bd6e2d263bf7078c5c9dda6250a312a5d02d50c389086e34d640"
+ },
+ "loss/tracker/timing.md": {
+  "branch": "tree",
+  "bytes": 534,
+  "commit": "f4c216a1c9857faa825e962ab95d34704ee3d848",
+  "copied_utc": "2026-11-22 09:56",
+  "file": "loss/tracker/timing.md",
+  "from": "this branch, `challenge-1-ml-decoder-kit/loss_tracker/results/timing.md` (last changed in commit `f4c216a1c985`)",
+  "grows": false,
+  "path": "loss_tracker/results/timing.md",
+  "sha256": "9c54d776c62064d8e765b75d06ea90c4109bec5a6b2ae9ed05a7bef66e4d44c5"
+ },
  "machines/cascade_X_s1_SHA256SUMS": {
   "branch": "origin/laptop-artifacts",
   "bytes": 993,
@@ -761,13 +805,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "899798eb29a7881712d1f7126fe7ad2cef5f1af0",
-  "copied_utc": "2026-11-22 09:43",
+  "commit": "4c798d78cdbdc967ba651042fc7f0eb1d5424cc3",
+  "copied_utc": "2026-11-22 09:56",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `899798eb29a7`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `4c798d78cdbd`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "886e1f6785fc30c70a9f0a8a5960e741fe2a0d6a6beabbb14fb0d251bc9ef440"
+  "sha256": "642d27015538ac14f91aaaae27c34d66ccc0be982e45aceb518761fd1c867ec2"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -782,14 +826,14 @@
  },
  "networks/cascade_Z_s1.train.log": {
   "branch": "origin/server-logs",
-  "bytes": 37093,
-  "commit": "899798eb29a7881712d1f7126fe7ad2cef5f1af0",
-  "copied_utc": "2026-11-22 09:43",
+  "bytes": 39379,
+  "commit": "4c798d78cdbdc967ba651042fc7f0eb1d5424cc3",
+  "copied_utc": "2026-11-22 09:56",
   "file": "networks/cascade_Z_s1.train.log",
-  "from": "branch `server-logs` at commit `899798eb29a7`, `cascade_Z_s1.train.log`",
+  "from": "branch `server-logs` at commit `4c798d78cdbd`, `cascade_Z_s1.train.log`",
   "grows": true,
   "path": "cascade_Z_s1.train.log",
-  "sha256": "28a080e69151dd8574eb00531a086524acc2ed0e2c13781b6a5800db1272d0a1"
+  "sha256": "a971a38086e6eae37236a6bf2fee5c81df002c4aad5c966ae3bccaa5f04849f5"
  },
  "tcbp_own_shots/tcbp-jobs_p0.003_shots10000_seed1_20261122_005215_437826+0000.log": {
   "branch": "tree",
@@ -969,14 +1013,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 10052,
-  "commit": "899798eb29a7881712d1f7126fe7ad2cef5f1af0",
-  "copied_utc": "2026-11-22 09:43",
+  "bytes": 10754,
+  "commit": "4c798d78cdbdc967ba651042fc7f0eb1d5424cc3",
+  "copied_utc": "2026-11-22 09:56",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `899798eb29a7`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `4c798d78cdbd`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "346457055f105bcc8e02d29fb54c14316f859f74d68b214dca2778216bf8533c"
+  "sha256": "d870337ece296599720a71c42b906bfaff5d1768bb1e26ef436a8fd927dc8683"
  },
  "test/eval_p0.003_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",

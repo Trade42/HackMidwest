@@ -54,7 +54,13 @@ DECODERS = {decoder.key: decoder for decoder in [
     Decoder("ensemble", "our ensemble (combined offline)", "ours, ensemble", "ours",
             "only the rules that use the network have a learned part: see the rule named in the row", "#008300", "X", ours=True),
     Decoder("tcbp", "TCBP-JOBS (NVIDIA, GPU)", "TCBP-JOBS (GPU)", "NVIDIA; run by teammates", "a model it fits at start-up, per memory basis", "#1baf7a", "P"),
+    # registered after the test results were seen (server job ctl 120, the team's request): an ablation arm, kept last and out of the figures
+    Decoder("hierarchy-converged-parallel", "our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores",
+            "ours, no network, 2 cores", "ours", "nothing of ours (PriorTilt's parameters are its authors')", "#eb6834", "<", ours=True, figures="none"),
 ]}
+
+# Decoders registered after the test results were seen; the figures leave them out of their spacing so that no earlier point moves.
+REGISTERED_AFTER_TEST = ("hierarchy-converged-parallel",)
 
 REFERENCE = "relay-bp"   # the paired counts are against this row
 
@@ -82,6 +88,7 @@ TEST_ROWS = [
     TestRow("hierarchy-parallel", "eval_p{p}_hierarchy-parallel", "evaluator", rule="network", cores=2),
     TestRow("ensemble", "ensemble_p{p}", "ensemble"),
     TestRow("tcbp", "tcbp_p{p}", "tcbp", member="T"),
+    TestRow("hierarchy-converged-parallel", "eval_p{p}_hierarchy-converged-parallel", "evaluator", rule="converged", cores=2),
 ]
 
 # The ladder "whose gain is whose", on the test shots, from hierarchy.ensemble's offline output: every rung
@@ -157,14 +164,17 @@ P_RAMP = {"0.003": "#86b6ef", "0.004": "#3987e5", "0.005": "#184f95"}
 
 # The learned predecoder (predecoder/): relay-BP with per-shot priors from our network's second output, run on the saved test
 # shots one basis and noise level at a time. (p, basis) in table order; a run whose files have not landed prints "not measured".
-PREDECODER_TEST = [("0.005", "X"), ("0.004", "X"), ("0.003", "X")]
+EXTENSION = "run after the p = 0.005 X test result (the registered extension)"
+PREDECODER_TEST = [("0.005", "X", ""), ("0.004", "X", EXTENSION), ("0.003", "X", EXTENSION), ("0.005", "Z", EXTENSION)]
 PREDECODER_LABEL = ("secondary (chosen after the declared gate at p = 0.004 failed), one basis at a time, accuracy only, not a pair score; "
                     "its times are not clean (a shared 12-worker pool on the team's PC), so iterations are shown instead")
 # The fallback rule (relay-BP with the head's priors where that relay-BP converged, else TCBP-JOBS), designed after the first test
 # result and frozen on the validation file before it was applied: (p, basis, what its number is). Shown apart from the held-out rows.
 PREDECODER_FALLBACK = [
     ("0.005", "X", "post hoc: the rule was prompted by these same test shots, so this number is not held out"),
-    ("0.005", "Z", "its clean test: the rule was frozen before the Z test file was opened"),
+    ("0.005", "Z", "its clean test, " + EXTENSION + "; the rule was frozen before the Z test file was opened"),
+    ("0.004", "X", "post hoc: the rule was designed after the first test result, and frozen before it was applied here; " + EXTENSION),
+    ("0.003", "X", "post hoc: the rule was designed after the first test result, and frozen before it was applied here; " + EXTENSION),
 ]
 PREDECODER_FALLBACK_LABEL = ("designed after the first test result; frozen on the validation file before this application; the rule was prompted "
                              "by the X test shots at p = 0.005, so its X number there is post hoc, not held out")

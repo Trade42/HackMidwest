@@ -34,7 +34,7 @@ from matplotlib.ticker import FuncFormatter, NullFormatter  # noqa: E402
 from report import loaders, stats  # noqa: E402
 from report.loaders import DATA, Mismatch  # noqa: E402
 from report.make_tables import failure_split, load_test_rows  # noqa: E402
-from report.rows import DECODERS, LOSS_CONDITIONS, P_RAMP, P_VALUES, TCBP_OWN  # noqa: E402
+from report.rows import DECODERS, LOSS_CONDITIONS, P_RAMP, P_VALUES, REGISTERED_AFTER_TEST, TCBP_OWN  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 FIGURES = Path(os.environ.get("REPORT_OUT") or HERE) / "figures"   # REPORT_OUT: used by the tests only
@@ -154,12 +154,20 @@ def missing_note(measured, own):
     return " ".join(parts)
 
 
+def after_note(measured, drawn):
+    """The points drawn that come from rows run after the test results were seen, at the team's request (ablations, not our decoder)."""
+    rows = [f"{DECODERS[key].short} at p = {p}" for p in P_VALUES for key, row in measured[p].items()
+            if row and row.get("after_test") and DECODERS[key].figures in drawn]
+    return (" Run after the test results were seen, at the team's request (an ablation, not our decoder): " + "; ".join(rows) + ".") if rows else ""
+
+
 def unclean_note(measured):
     rows = [f"{DECODERS[key].short} at p = {p}" for p in P_VALUES for key, row in measured[p].items() if row and not row.get("time_clean", True)]
     return (" Not drawn, the time not clean (the server throttled the row): " + "; ".join(rows) + ".") if rows else ""
 
 
-DODGE = {key: (index - (len(DECODERS) - 1) / 2) * 0.000016 for index, key in enumerate(DECODERS)}
+_SPACED = [key for key in DECODERS if key not in REGISTERED_AFTER_TEST]
+DODGE = {key: (index - (len(_SPACED) - 1) / 2) * 0.000016 for index, key in enumerate(_SPACED)}
 
 
 # ---------- 1. the required plot ----------
@@ -223,6 +231,7 @@ def ler_vs_p(measured):
         note += " TCBP-JOBS is drawn from the teammates' run on its own sampled shots (hollow, dotted; interval from the logged error)."
     if limits:
         note += " A hollow triangle marks a row without a single failed pair: it is the upper end of the 95% interval, not a measured rate."
+    note += after_note(measured, ("all",))
     footnote(figure, note.strip())
     return save(figure, "ler_vs_p")
 
@@ -263,7 +272,7 @@ def time_vs_p(measured):
     axes.set_ylabel("mean time per pair")
     p_axis(axes)
     end_labels(axes, labels)
-    note = missing_note(measured, own) + unclean_note(measured)
+    note = missing_note(measured, own) + unclean_note(measured) + after_note(measured, ("all", "time"))
     if not lines["tcbp"]:
         note += (" TCBP-JOBS: only its p = 0.003 time on its own shots is usable; at p = 0.004 and 0.005 its GPU was shared with a training of ours."
                  if own else " TCBP-JOBS has no usable time yet.")
@@ -312,7 +321,7 @@ def ler_vs_time(measured):
     axes.set_xlabel("mean time per pair")
     axes.set_ylabel("logical error rate per cycle")
     end_labels(axes, labels)
-    footnote(figure, (missing_note(measured, {}) + unclean_note(measured) + " CPU rows: one process each on the server, timing the whole decode of a pair. TCBP-JOBS (GPU) times its decode call alone: not comparable. "
+    footnote(figure, (missing_note(measured, {}) + unclean_note(measured) + after_note(measured, ("all", "time")) + " CPU rows: one process each on the server, timing the whole decode of a pair. TCBP-JOBS (GPU) times its decode call alone: not comparable. "
                       "Rows combined offline from per-shot files have no time measured in one process and are not drawn.").strip())
     return save(figure, "ler_vs_time")
 

@@ -62,3 +62,15 @@
 2026-11-22T12:52:57Z END eval_p0.005_priortilt exit 0: row p=0.005 priortilt exit 0: hierarchy.priortilt_plugin:make_decoder,303,307,601,0.0051518329160300524,0.00020988230851526346,263.5825260659214 [CPUs in use 1.1, tokens 2, throttled so far 4845.0 s, load 7.00]
 2026-11-22T13:05:39Z END eval_p0.004_hierarchy-converged exit 0: row p=0.004 hierarchy-converged exit 0: hierarchy.plugin:make_decoder,25,27,52,0.00043436955529130294,6.0243168789386736e-05,218.29208202710143 [CPUs in use 0.1, tokens 1, throttled so far 4845.0 s, load 2.43]
 2026-11-22T13:05:43Z TEST RUN END
+2026-11-22T14:01:28Z NOML START: the hierarchy without the network (the team's request, 13:52 UTC), an ablation after TEST RUN END; frozen fd3aed3c0d1f2e9e8bd181bd22c9853a19e2dfc5; rules converged and weight
+2026-11-22T14:01:43Z START eval_p0.005_hierarchy-converged: weight 1, pid 400368; before it: tokens 0, CPUs in use 0.1, throttled so far 4845.0 s
+2026-11-22T14:02:23Z START eval_p0.005_hierarchy-converged-parallel: weight 2, pid 400863; before it: tokens 1, CPUs in use 1.3, throttled so far 4845.0 s
+2026-11-22T14:03:03Z START eval_p0.005_hierarchy-weight: weight 1, pid 401489; before it: tokens 3, CPUs in use 2.5, throttled so far 4845.0 s
+2026-11-22T14:03:43Z START eval_p0.004_hierarchy-converged-parallel: weight 2, pid 401946; before it: tokens 4, CPUs in use 3.6, throttled so far 4845.0 s
+2026-11-22T14:04:23Z START eval_p0.004_hierarchy-weight: weight 1, pid 402683; before it: tokens 6, CPUs in use 5.1, throttled so far 4845.0 s
+2026-11-22T14:05:03Z START eval_p0.003_hierarchy-converged-parallel: weight 2, pid 403379; before it: tokens 7, CPUs in use 6.4, throttled so far 4845.0 s
+2026-11-22T14:05:43Z START eval_p0.003_hierarchy-weight: weight 1, pid 403842; before it: tokens 9, CPUs in use 7.7, throttled so far 4845.0 s
+2026-11-22T14:10:12Z END eval_p0.003_hierarchy-converged-parallel exit 0: row p=0.003 hierarchy-converged-parallel exit 0: hierarchy.plugin:make_decoder,2,2,4,3.3339446006586115e-05,1.6670973765342545e-05,29.029626443819144 [CPUs in use 6.9, tokens 10, throttled so far 4845.3 s, load 12.43]
+2026-11-22T14:13:46Z END eval_p0.003_hierarchy-weight exit 0: row p=0.003 hierarchy-weight exit 0: hierarchy.plugin:make_decoder,2,2,4,3.3339446006586115e-05,1.6670973765342545e-05,46.891186313994695 [CPUs in use 5.2, tokens 8, throttled so far 4845.3 s, load 10.04]
+2026-11-22T14:29:01Z END eval_p0.004_hierarchy-converged-parallel exit 0: row p=0.004 hierarchy-converged-parallel exit 0: hierarchy.plugin:make_decoder,25,27,52,0.00043436955529130294,6.0243168789386736e-05,149.97688090866433 [CPUs in use 4.3, tokens 7, throttled so far 4845.3 s, load 8.16]
+2026-11-22T14:40:25Z END eval_p0.004_hierarchy-weight exit 0: row p=0.004 hierarchy-weight exit 0: hierarchy.plugin:make_decoder,27,33,60,0.0005013802940021517,6.473484079760894e-05,214.7558510100702 [CPUs in use 3.7, tokens 5, throttled so far 4845.3 s, load 7.66]

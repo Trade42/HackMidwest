@@ -4,13 +4,13 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 |---|---|---|---|---|---|---|---|
 | 0.003 | both timed | relay-BP with a learned router | relay-BP (kit baseline) | 6 against 5 | 4 | 2 / 1 | 1.00 |
 | 0.003 | both timed | PriorTilt, one run | relay-BP (kit baseline) | 4 against 5 | 3 | 1 / 2 | 1.00 |
-| 0.003 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | PriorTilt, one run | 3 against 4 | 2 | 1 / 2 | 1.00 |
-| 0.003 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | relay-BP (kit baseline) | 3 against 5 | 2 | 1 / 3 | 0.62 |
+| 0.003 | both timed | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | PriorTilt, one run | 4 against 4 | 3 | 1 / 1 | 1.00 |
+| 0.003 | both timed | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | relay-BP (kit baseline) | 4 against 5 | 3 | 1 / 2 | 1.00 |
 | 0.003 | both timed | our hierarchy, neural tie-break | PriorTilt, one run | 3 against 4 | 3 | 0 / 1 | 1.00 |
 | 0.003 | both timed | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 3 against 4 | 3 | 0 / 1 | 1.00 |
 | 0.003 | both timed | our hierarchy, classical tie-break (lowest weight among the converged candidates) | PriorTilt, one run | 4 against 4 | 3 | 1 / 1 | 1.00 |
 | 0.003 | both timed | our hierarchy, classical tie-break (lowest weight among the converged candidates) | relay-BP (kit baseline) | 4 against 5 | 3 | 1 / 2 | 1.00 |
-| 0.003 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 3 against 3 | 2 | 1 / 1 | 1.00 |
+| 0.003 | both timed | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | 3 against 4 | 3 | 0 / 1 | 1.00 |
 | 0.003 | both timed | our hierarchy, neural tie-break | relay-BP (kit baseline) | 3 against 5 | 3 | 0 / 2 | 0.50 |
 | 0.003 | both timed | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | 3 against 3 | 2 | 1 / 1 | 1.00 |
 | 0.003 | **mixed**: a timed row against an offline combination, with other random draws | our ensemble (combined offline) (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere joint decoding where it converged, else TCBP-JOBS; joint decoding ran on 5 of the 5 disputed shots) | our hierarchy, neural tie-break | 2 against 3 | 2 | 0 / 1 | 1.00 |
@@ -18,13 +18,13 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.003 | both timed | TCBP-JOBS (NVIDIA, GPU) | relay-BP (kit baseline) | 3 against 5 | 2 | 1 / 3 | 0.62 |
 | 0.004 | both timed | relay-BP with a learned router | relay-BP (kit baseline) | 87 against 83 | 51 | 36 / 32 | 0.72 |
 | 0.004 | both timed | PriorTilt, one run | relay-BP (kit baseline) | 74 against 83 | 41 | 33 / 42 | 0.36 |
-| 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | PriorTilt, one run | 57 against 74 | 43 | 14 / 31 | 0.016 |
-| 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | relay-BP (kit baseline) | 57 against 83 | 37 | 20 / 46 | 0.002 |
+| 0.004 | both timed | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | PriorTilt, one run | 60 against 74 | 48 | 12 / 26 | 0.034 |
+| 0.004 | both timed | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | relay-BP (kit baseline) | 60 against 83 | 40 | 20 / 43 | 0.005 |
 | 0.004 | both timed | our hierarchy, neural tie-break | PriorTilt, one run | 44 against 74 | 39 | 5 / 35 | 1e-06 |
 | 0.004 | both timed | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 44 against 52 | 36 | 8 / 16 | 0.15 |
 | 0.004 | both timed | our hierarchy, classical tie-break (lowest weight among the converged candidates) | PriorTilt, one run | 52 against 74 | 44 | 8 / 30 | 5e-04 |
 | 0.004 | both timed | our hierarchy, classical tie-break (lowest weight among the converged candidates) | relay-BP (kit baseline) | 52 against 83 | 34 | 18 / 49 | 2e-04 |
-| 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 44 against 57 | 34 | 10 / 23 | 0.035 |
+| 0.004 | both timed | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break (run after the test results were seen, at the team's request; an ablation, not our decoder) | 44 against 60 | 39 | 5 / 21 | 0.002 |
 | 0.004 | both timed | our hierarchy, neural tie-break | relay-BP (kit baseline) | 44 against 83 | 29 | 15 / 54 | 3e-06 |
 | 0.004 | both timed | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | 44 against 41 | 24 | 20 / 17 | 0.74 |
 | 0.004 | **mixed**: a timed row against an offline combination, with other random draws | our ensemble (combined offline) (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere joint decoding where it converged, else TCBP-JOBS; joint decoding ran on 93 of the 93 disputed shots) | our hierarchy, neural tie-break | 16 against 44 | 13 | 3 / 31 | 8e-07 |

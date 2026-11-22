@@ -110,14 +110,15 @@ per-shot files" is combined offline from saved answers and has no time measured 
 | relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05 · 5 pairs · 85.3 ms | 6.94e-04 ± 7.6e-05 · 83 pairs · 319 ms | 7.33e-03 ± 2.5e-04 · 845 pairs · 1,471 ms |
 | relay-BP with a learned router | 5.00e-05 ± 2.0e-05 · 6 pairs · 41.0 ms | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | 6.99e-03 ± 2.5e-04 · 807 pairs · 1,928 ms |
 | PriorTilt, one run | 3.33e-05 ± 1.7e-05 · 4 pairs · 22.7 ms | 6.19e-04 ± 7.2e-05 · 74 pairs · 87.3 ms | 5.15e-03 ± 2.1e-04 · 601 pairs · 264 ms |
-| our hierarchy, lowest-weight tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · offline, no time | 4.76e-04 ± 6.3e-05 · 57 pairs · offline, no time | 4.50e-03 ± 2.0e-04 · 527 pairs · offline, no time |
+| our hierarchy, lowest-weight tie-break | 3.33e-05 ± 1.7e-05 · 4 pairs · 46.9 ms · **run after the test results were seen (an ablation)** · pre-registered offline decode: 3 pairs | 5.01e-04 ± 6.5e-05 · 60 pairs · 215 ms · **run after the test results were seen (an ablation)** · pre-registered offline decode: 57 pairs | 4.50e-03 ± 2.0e-04 · 527 pairs · offline, no time |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 3.33e-05 ± 1.7e-05 · 4 pairs · 46.3 ms | 4.34e-04 ± 6.0e-05 · 52 pairs · 218 ms | 3.99e-03 ± 1.8e-04 · 469 pairs · offline, no time |
 | our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · 45.7 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 216 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 825 ms |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 2.50e-05 ± 1.4e-05 · 3 pairs · 28.9 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 150 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 608 ms |
 | our ensemble (combined offline) | 1.67e-05 ± 1.2e-05 · 2 pairs · offline, no time | 1.33e-04 ± 3.3e-05 · 16 pairs · offline, no time | 3.05e-03 ± 1.6e-04 · 360 pairs · offline, no time; fails exactly TCBP-JOBS's shots |
 | TCBP-JOBS (NVIDIA, GPU) | 2.50e-05 ± 1.4e-05 · 3 pairs · 3.9 ms | 3.42e-04 ± 5.3e-05 · 41 pairs · 7.8 ms | 3.05e-03 ± 1.6e-04 · 360 pairs · 16.9 ms |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores | 3.33e-05 ± 1.7e-05 · 4 pairs · 29.0 ms · **run after the test results were seen (an ablation)** | 4.34e-04 ± 6.0e-05 · 52 pairs · 150 ms · **run after the test results were seen (an ablation)** | not measured |
 
-Each cell: logical error rate per cycle ± the kit's error · failed pairs of 10,000 · mean time per pair. "Offline" marks a row combined from saved per-shot answers, with no time measured in one process. Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.
+Each cell: logical error rate per cycle ± the kit's error · failed pairs of 10,000 · mean time per pair. "Offline" marks a row combined from saved per-shot answers, with no time measured in one process. A cell marked "run after the test results were seen (an ablation)" is a row the team asked for after the test results were seen: an ablation, not our decoder. Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.
 <!-- END table:test_sweep -->
 
 ![Logical error rate per cycle against p](figures/ler_vs_p.png)
@@ -193,6 +194,33 @@ at the team's request. These rows are ablations. None of them is our decoder, an
 choices above. Where one fails fewer pairs than our decoder, it is still not our result: picking it now would be
 choosing on the test shots.
 
+**The hierarchy without the network, timed.** The team asked for a clean run of our pipeline with no machine-learning
+part, to show how much the network actually does. The server ran the frozen decoder through the team's evaluator on
+the same test pairs, with a hand-written tie-break in place of the network. There are two such tie-breaks: the best
+hand-written rule (lowest weight among the candidates whose decode converged) and plain lowest weight. Each ran on one
+core, and the best rule also ran on two cores. The best rule's one-core rows at p = 0.003 and 0.004 already ran in the
+test run, among its pre-registered arms. Every other row here ran after the test results were seen.
+
+<!-- BEGIN table:test_network_timed -->
+**How much the network does, timed against timed.** Our decoder's timed row (the hierarchy with the neural tie-break) against the same hierarchy with a hand-written tie-break in place of the network, each a timed row of the team's evaluator on the same 10,000 test pairs, in one process ("1 core"; "2 cores": the two fast decodes side by side). Only the shots where the two fast decodes disagree can differ. A row marked "run after the test results were seen (an ablation)" is an ablation the team asked for after the test results were seen, not our decoder; the rows at p = 0.003 and 0.004 of the best hand-written rule on one core ran in the test run itself, among its pre-registered arms. Times are comparable to a few percent (`APPENDIX.md` A).
+
+| p | Cores | Without the network: the tie-break | Failed pairs: with the network against without | Both fail | Only with the network fails / only without | Exact p | Mean time per pair, ms: with against without |
+|---|---|---|---|---|---|---|---|
+| 0.003 | 1 core | the best hand-written rule (lowest weight among the converged candidates) | 3 against 4 | 3 | 0 / 1 | 1.00 | 45.7 against 46.3 |
+| 0.003 | 1 core | plain lowest weight [run after the test results were seen (an ablation)] | 3 against 4 | 3 | 0 / 1 | 1.00 | 45.7 against 46.9 |
+| 0.003 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] (each gives its one-core row's answers on every shot) | 3 against 4 | 3 | 0 / 1 | 1.00 | 28.9 against 29.0 |
+| 0.004 | 1 core | the best hand-written rule (lowest weight among the converged candidates) | 44 against 52 | 36 | 8 / 16 | 0.15 | 216 against 218 |
+| 0.004 | 1 core | plain lowest weight [run after the test results were seen (an ablation)] | 44 against 60 | 39 | 5 / 21 | 0.002 | 216 against 215 |
+| 0.004 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) [run after the test results were seen (an ablation)] (each gives its one-core row's answers on every shot) | 44 against 52 | 36 | 8 / 16 | 0.15 | 150 against 150 |
+| 0.005 | 1 core | the best hand-written rule (lowest weight among the converged candidates) | not measured (only offline) |  |  |  |  |
+| 0.005 | 1 core | plain lowest weight | not measured (only offline) |  |  |  |  |
+| 0.005 | 2 cores | the best hand-written rule (lowest weight among the converged candidates) | not measured |  |  |  |  |
+| 0.003, 0.004 together | 1 core | the best hand-written rule (lowest weight among the converged candidates) | 47 against 56 |  | 8 / 17 | 0.11 |  |
+| 0.003, 0.004 together | 1 core | plain lowest weight | 47 against 64 |  | 5 / 22 | 0.002 |  |
+<!-- END table:test_network_timed -->
+
+<!--f:net_timed_per_p-->With the network against without it, timed rows on one core: at p = 0.003, against the best hand-written rule 3 against 4 failed pairs (only with the network 0, only without 1, exact p = 1.00; 45.7 against 46.3 ms per pair) and against plain lowest weight [run after the test results were seen (an ablation)] 3 against 4 failed pairs (only with the network 0, only without 1, exact p = 1.00; 45.7 against 46.9 ms per pair); at p = 0.004, against the best hand-written rule 44 against 52 failed pairs (only with the network 8, only without 16, exact p = 0.15; 216 against 218 ms per pair) and against plain lowest weight [run after the test results were seen (an ablation)] 44 against 60 failed pairs (only with the network 5, only without 21, exact p = 0.002; 216 against 215 ms per pair).<!--/f--> <!--f:net_timed_statement-->How much the network does, timed against timed (each row through the team's evaluator, one process on the team's server, the same test pairs): against the best hand-written rule (lowest weight among the converged candidates) at p = 0.003, 0.004 together, the network fails 47 pairs and the rule 56 (only the network fails 8, only the rule 17, exact p = 0.11: not significantly different from it); against plain lowest weight at p = 0.003, 0.004 together, the network fails 47 pairs and the rule 64 (only the network fails 5, only the rule 22, exact p = 0.002: better than it; its rows at p = 0.003, 0.004 were run after the test results were seen, at the team's request; an ablation, not our decoder).<!--/f--> <!--f:net_timed_plain-->In plain words: on the timed rows the network does not do measurably more than a good hand-written rule, and on one core its time is within 4% of the rule's at every p, the size of the run-to-run spread of these rows, so it costs no time the timer can see. The gain over relay-BP is PriorTilt's and the hierarchy's, as in the offline ablation above.<!--/f-->
+
 **TCBP-JOBS in place of relay-BP.** The team asked what happens if TCBP-JOBS replaces relay-BP as the third
 candidate. No new rule is computed for this. The row below is the ensemble's rule d, which the ensemble had already
 scored on the test shots among its pre-registered rules, and it is the closest of them to that swap.
@@ -223,21 +251,22 @@ believes, instead of choosing among finished answers. The head is ours; relay-BP
   priors (only the head's <!--f:pregate_only_H-->6<!--/f--> against <!--f:pregate_only_fresh-->12<!--/f-->, exact p = <!--f:pregate_p-->0.24<!--/f-->): not a significant gain.
 - **One run on the test shots at p = 0.005, X memory, on Sal's yes.** It was registered before any p = 0.005 row of
   ours existed, run once, and confirmed by the test audit. It is a **secondary result**: chosen after the gate failed,
-  X memory only, accuracy only, and not a pair score, because Z memory has no head yet. On the 10,000 test X shots,
+  X memory only, accuracy only, and not a pair score, because <!--f:pre_z_reason-->Z memory has no result yet<!--/f-->. On the 10,000 test X shots,
   relay-BP with the head's priors fails <!--f:pre5X_H-->151<!--/f--> against <!--f:pre5X_fresh-->433<!--/f--> with the kit's priors, built the same way
   (only the head's <!--f:pre5X_vs_fresh_only_H-->26<!--/f--> against <!--f:pre5X_vs_fresh_only_other-->308<!--/f-->, exact p = <!--f:pre5X_vs_fresh_p-->2e-62<!--/f-->). That is <!--f:pre5X_ratio-->2.9<!--/f--> times fewer
   failures, with <!--f:pre5X_it_ratio-->3.4<!--/f--> times fewer BP iterations. On the same X shots, TCBP-JOBS fails <!--f:pre5X_T-->186<!--/f--> (only the
   head's <!--f:pre5X_vs_T_only_H-->61<!--/f--> against <!--f:pre5X_vs_T_only_other-->96<!--/f-->, exact p = <!--f:pre5X_vs_T_p-->0.006<!--/f-->), and relay-BP's timed row fails <!--f:pre5X_R-->432<!--/f-->.
+- **The registered extension, run after the p = 0.005 X test result** (`predecoder/logs/extension_registered_spec.md`,
+  written before any of its numbers existed). <!--f:pre_extension-->On the X test shots at p = 0.004, relay-BP with the head's priors fails 15 against 39 with the kit's priors (only the head's 3 against 27, exact p = 8e-06), and TCBP-JOBS fails 20 (only the head's 7 against 12, exact p = 0.36).<!--/f--> <!--f:pre_pair-->The pair score at p = 0.005 has not landed yet.<!--/f-->
 - **Not held out: a fallback rule designed after that result.** The rule is simple: take relay-BP with the head's
   priors where that relay-BP converged (its own success flag, no truth), else take TCBP-JOBS. It was Sal's idea,
   prompted by these same test shots, so **its X number is post hoc, not held out**. It was frozen on the validation
   file before it was applied: on exploration shots (validation, X, p = 0.005), the rule fails <!--f:fbval_rule-->50<!--/f--> against TCBP-JOBS's
   <!--f:fbval_T-->91<!--/f--> (only the rule <!--f:fbval_only_rule-->12<!--/f-->, only TCBP-JOBS <!--f:fbval_only_T-->53<!--/f-->, exact p = <!--f:fbval_p-->3e-07<!--/f-->). On the same test X shots as above it fails
   <!--f:fb5X_rule-->107<!--/f--> against TCBP-JOBS's <!--f:fb5X_T-->186<!--/f--> (only the rule <!--f:fb5X_vs_T_only_rule-->16<!--/f-->, only TCBP-JOBS <!--f:fb5X_vs_T_only_T-->95<!--/f-->, exact p = <!--f:fb5X_vs_T_p-->8e-15<!--/f-->) and the head's priors alone <!--f:fb5X_H-->151<!--/f-->, and it
-  falls back on <!--f:fb5X_back-->90<!--/f--> shots. Why it works: on the <!--f:fb5X_conv_shots-->9,910<!--/f--> shots where that relay-BP converged, H fails <!--f:fb5X_conv_H-->63<!--/f--> and
-  TCBP-JOBS <!--f:fb5X_conv_T-->142<!--/f-->; on the <!--f:fb5X_back-->90<!--/f--> where it did not, H fails <!--f:fb5X_back_H-->88<!--/f--> and TCBP-JOBS <!--f:fb5X_back_T-->44<!--/f-->. Its clean test is the Z
-  test file at p = 0.005, which was opened only after the rule was frozen: <!--f:fb5Z_rule-->not measured<!--/f--> yet.
-- **What it does not show.** It covers one noise level and one basis, so it is not the kit's score, which counts
+  falls back on <!--f:fb5X_back-->90<!--/f--> shots. Why it works: on the <!--f:fb5X_conv_shots-->9,910<!--/f--> shots where that relay-BP converged, relay-BP with the head's priors fails <!--f:fb5X_conv_H-->63<!--/f--> and
+  TCBP-JOBS <!--f:fb5X_conv_T-->142<!--/f-->; on the <!--f:fb5X_back-->90<!--/f--> where it did not, it fails <!--f:fb5X_back_H-->88<!--/f--> and TCBP-JOBS <!--f:fb5X_back_T-->44<!--/f-->. <!--f:fb5Z_clause-->Its clean test will be the Z test file at p = 0.005, registered to be opened only after the rule was frozen (`predecoder/logs/fallback_rule_frozen.md`); that run has not landed yet.<!--/f-->
+- **What it does not show.** The held-out run covers one noise level and one basis, so it is not the kit's score, which counts
   pairs. Its times come from a shared 12-worker pool on the team's PC and are not clean, so the table gives
   iterations instead. `APPENDIX.md` K has the table.
 
@@ -347,12 +376,13 @@ What each decoder needed for its row on the test shots. Memory is the peak resid
 | relay-BP (kit baseline) | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.0 / 0.0 / 0.0 | nothing |
 | relay-BP with a learned router | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.0 / 0.0 / 0.0 | a logistic model decides when relay-BP's first answer is enough |
 | PriorTilt, one run | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.1 / 0.1 / 0.1 | 14 parameters, fitted by its authors |
-| our hierarchy, lowest-weight tie-break | CPU, 1 process, 1 thread | not measured / not measured / not measured | not measured / not measured / not measured | nothing of ours (PriorTilt's parameters are its authors') |
+| our hierarchy, lowest-weight tie-break (at p = 0.003, 0.004: run after the test results were seen, at the team's request; an ablation, not our decoder) | CPU, 1 process, 1 thread | 284 / 284 / not measured | 0.2 / 0.1 / not measured | nothing of ours (PriorTilt's parameters are its authors') |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | CPU, 1 process, 1 thread | 284 / 284 / not measured | 0.2 / 0.1 / not measured | nothing of ours (PriorTilt's parameters are its authors') |
 | our hierarchy, neural tie-break | CPU, 1 process, 1 thread | 781 / 782 / 788 | 5.1 / 4.9 / 5.2 | a neural network picks among the candidates where the fast decodes disagree |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | CPU, 1 process, 1 thread | 778 / 778 / 784 | 11.3 / 10.5 / 9.7 | the same decoder as the row above, with the same answers on every shot (checked); only the wall time differs |
 | our ensemble (combined offline) | CPU and GPU, 1 process, 1 thread | not measured / not measured / not measured | not measured / not measured / not measured | only the rules that use the network have a learned part: see the rule named in the row |
 | TCBP-JOBS (NVIDIA, GPU) | GPU, 1 process, 1 thread | not measured / not measured / not measured | not measured / not measured / not measured | a model it fits at start-up, per memory basis |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores (at p = 0.003, 0.004: run after the test results were seen, at the team's request; an ablation, not our decoder) | CPU, 1 process, 1 thread | 283 / 284 / not measured | 5.1 / 5.6 / not measured | nothing of ours (PriorTilt's parameters are its authors') |
 <!-- END table:resources -->
 
 - **Our decoder needs no GPU.** PriorTilt and relay-BP run on one CPU core; the network is called on the hard shots

@@ -27,7 +27,7 @@ import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
+from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, EXTENSION, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
                          REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256)
 
 HERE = Path(__file__).resolve().parent
@@ -41,10 +41,17 @@ NOT_MEASURED = "not measured"
 # so one process's throttled share is estimated as throttled seconds / (quota x wall time).
 THROTTLE_LIMIT = 0.05
 
+# Rows run or read after the test results were seen, at the team's request. They are ablations: none of them is our decoder,
+# and none may change its headline, its framing or the frozen choice of its rules (choosing on the test shots now would fit them).
+AFTER_TEST = "run after the test results were seen, at the team's request; an ablation, not our decoder"
+AFTER_SHORT = "run after the test results were seen (an ablation)"
+SWAP_RULE = "d"   # the ensemble's pre-registered rule closest to TCBP-JOBS in place of relay-BP in our hierarchy
+
 # Single numbers that the prose of REPORT.md and SLIDES.md quotes. A document writes
 # <!--f:name-->value<!--/f--> and this script puts the current value between the two comments,
 # so a sentence can never keep a number that the files no longer support. tables/facts.md lists them all.
 FACTS = {}
+LEFT_OUT = []   # rows registered after the test results that failed a check and are left out of every table
 
 
 def fact(name, value, source):
@@ -146,6 +153,7 @@ def load_test_rows(data=DATA):
     jobs = loaders.runner_logs(sorted((data / "test").glob("runner_*.out"))) if (data / "test").is_dir() else {}
     monitor = loaders.cpu_monitor(data / "test" / "cpu_monitor.out")
     quota = loaders.cpu_quota(data / "test" / "cpu_monitor.out")
+    test_end = loaders.test_run_end(data / "test" / "test_rows.out")
     measured, combined = {}, {}
     for p in P_VALUES:
         measured[p] = {}
@@ -201,17 +209,31 @@ def load_test_rows(data=DATA):
                                                                                      "converged": "lowest weight among the converged"}[used[basis]] for basis in "XZ") + ")"
                 run = None if row.get("offline") else log.get((p, spec.folder.format(p=p).removeprefix(f"eval_p{p}_")))
                 attach_run(row, run, monitor, jobs, quota)
+                row["after_test"] = bool(run and run["start"] and test_end and run["start"] > test_end)
+                if row["after_test"]:            # ctl 120 and later: labelled wherever the row appears
+                    if run["end"] is None or run["exit"] != 0:
+                        raise Mismatch(f"{folder}: run after the test results, but test_rows.out has no END line with exit 0 for it")
+                    row["label_note"] += f" ({AFTER_TEST})"
+                    if spec.member and combined[p] and spec.member in combined[p]["rows"]:   # the pre-registered offline decode it replaces in the tables
+                        row["offline_before"] = combined[p]["rows"][spec.member]["failures_pair"]
                 retime = folder.with_name(folder.name + RETIME)
                 if spec.kind == "evaluator" and not row.get("offline") and (retime / "summary.json").is_file():
                     take_retime(row, retime, log, monitor, jobs, p)
             measured[p][spec.decoder] = row
-        one, two = measured[p].get("hierarchy"), measured[p].get("hierarchy-parallel")
-        if one and two and one.get("per_shot_file") and two.get("per_shot_file"):     # the side-by-side row must be the same decoder, only faster
-            with np.load(DATA / one["per_shot_file"], allow_pickle=False) as first, np.load(DATA / two["per_shot_file"], allow_pickle=False) as second:
-                same = all(np.array_equal(first[key], second[key]) for key in ("predictions_X", "predictions_Z"))
-            if not same:
-                raise Mismatch(f"p = {p}: the two-core row predicts other bits than the one-core row; it cannot be labelled the same decoder")
-            two["same_answers"] = True
+        for single, double in (("hierarchy", "hierarchy-parallel"), ("hierarchy-converged", "hierarchy-converged-parallel")):
+            one, two = measured[p].get(single), measured[p].get(double)
+            if one and two and not one.get("offline") and one.get("per_shot_file") and two.get("per_shot_file"):   # the side-by-side row must be the same decoder, only faster
+                with np.load(DATA / one["per_shot_file"], allow_pickle=False) as first, np.load(DATA / two["per_shot_file"], allow_pickle=False) as second:
+                    same = all(np.array_equal(first[key], second[key]) for key in ("predictions_X", "predictions_Z"))
+                if not same and double == "hierarchy-converged-parallel":     # an ablation added after the test: left out, said so in checks.md
+                    LEFT_OUT.append(f"{DECODERS[double].short} at p = {p}: its predictions differ from the one-core row's, so it is left out")
+                    measured[p][double] = None
+                    continue
+                if not same:
+                    raise Mismatch(f"p = {p}: the two-core row {double} predicts other bits than the one-core row; it cannot be labelled the same decoder")
+                two["same_answers"] = True
+            elif two is not None and double == "hierarchy-converged-parallel":
+                two["label_note"] += "; its answers are not yet checked against a timed one-core row"
         reference = measured[p].get(REFERENCE)
         for key, row in measured[p].items():
             if row is not None:
@@ -301,7 +323,8 @@ def test_tables(measured):
                                    ms(row["median_ms"]) if timed else "", ms(row["p99_ms"]) if timed else "",
                                    "" if not timed else "GPU" if row["device"] == "GPU" else f"{row['device']}, {row.get('cores', 1)} core" + ("s" if row.get("cores", 1) > 1 else "")])
                 paired = row.get("paired") or {}
-                record |= {"pairs": row["shots"], "failures_X": row["failures_X"], "failures_Z": row["failures_Z"],
+                record |= {"label_note": row["label_note"].strip(" ()"), "after_test": bool(row.get("after_test")),
+                           "pairs": row["shots"], "failures_X": row["failures_X"], "failures_Z": row["failures_Z"],
                            "failures_pair": row["failures_pair"], "rate_per_cycle": row["rate"], "kit_error": row["error"],
                            "wilson95_low": row["interval"][0], "wilson95_high": row["interval"][1],
                            "mean_ms_per_pair": row["mean_ms"], "median_ms_per_pair": row["median_ms"], "p99_ms_per_pair": row["p99_ms"],
@@ -364,7 +387,9 @@ def test_tables(measured):
                 cells.append(NOT_MEASURED)
             else:
                 time = f"{ms(row['mean_ms'])} ms" if row["mean_ms"] is not None else "time " + NOT_MEASURED
-                cells.append(f"{rate_text(row['rate'], row['error'])} · {row['failures_pair']} pairs · {time}")
+                cells.append(f"{rate_text(row['rate'], row['error'])} · {row['failures_pair']} pairs · {time}"
+                             + (f" · **{AFTER_SHORT}**" if row.get("after_test") else "")
+                             + (f" · pre-registered offline decode: {row['offline_before']} pairs" if row.get("offline_before") is not None else ""))
         lines.append([DECODERS[key].label] + cells)
     slide_lines = []
     for key in ("bposd", "relay-bp", "router", "priortilt", "hierarchy", "hierarchy-parallel", "tcbp", "ensemble"):
@@ -383,7 +408,9 @@ def test_tables(measured):
     sweep = write("test_sweep", markdown(["Decoder"] + [f"p = {p}" for p in P_VALUES], lines)
                   + "\n\nEach cell: logical error rate per cycle ± the kit's error · failed pairs of 10,000 · mean time per pair. \"Offline\" marks a "
                     "row combined from saved per-shot answers, with no time measured in one process. "
-                    "Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.")
+                  + ("A cell marked \"" + AFTER_SHORT + "\" is a row the team asked for after the test results were seen: an ablation, not our decoder. "
+                     if any(row and row.get("after_test") for p in P_VALUES for row in measured[p].values()) else "")
+                  + "Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.")
     return texts, (sweep, sweep_slide)
 
 
@@ -558,7 +585,8 @@ def comparisons_table(measured):
             lines.append([p, mode, DECODERS[first].label + a["label_note"], DECODERS[second].label + b["label_note"],
                           f"{a['failures_pair']} against {b['failures_pair']}", paired["both"],
                           f"{paired['row_only']} / {paired['reference_only']}", stats.p_text(paired["p"])])
-            records.append({"p": p, "first": first, "second": second, "first_failed_pairs": a["failures_pair"], "second_failed_pairs": b["failures_pair"],
+            records.append({"p": p, "first": first, "second": second, "first_after_test": bool(a.get("after_test")),
+                            "second_after_test": bool(b.get("after_test")), "first_failed_pairs": a["failures_pair"], "second_failed_pairs": b["failures_pair"],
                             "both_fail": paired["both"], "only_first_fails": paired["row_only"], "only_second_fails": paired["reference_only"],
                             "exact_p": paired["p"]})
             for part, value in (("both", paired["both"]), ("only_first", paired["row_only"]), ("only_second", paired["reference_only"]),
@@ -1380,7 +1408,9 @@ def resources_table(measured):
         first = next(row for row in rows if row)
         memory = " / ".join(f"{row['peak_rss_mb']:,.0f}" if row and row.get("peak_rss_mb") else NOT_MEASURED for row in rows)
         setup = " / ".join(f"{row['setup_seconds']:.1f}" if row and row.get("setup_seconds") is not None else NOT_MEASURED for row in rows)
-        lines.append([decoder.label, f"{first['device']}, {first['workers']} process, 1 thread", memory, setup, decoder.learned])
+        after = [p for p, row in zip(P_VALUES, rows) if row and row.get("after_test")]
+        lines.append([decoder.label + (f" (at p = {', '.join(after)}: {AFTER_TEST})" if after else ""),
+                      f"{first['device']}, {first['workers']} process, 1 thread", memory, setup, decoder.learned])
     text = ("What each decoder needed for its row on the test shots. Memory is the peak resident memory of the evaluator's process (the decoder, "
             "the shot file and Python together), as the evaluator records it; start-up is building the decoder for both bases, outside the per-shot time. "
             "Values are for p = 0.003 / 0.004 / 0.005.\n\n"
@@ -1460,6 +1490,11 @@ def checks_text(measured, extra, cross_checks, modes=()):
                  "comparisons (`results/icrn/gain_p0.003_portable`, `results/mac/gain_p0.004`) from the per-shot files and gets the same counts.")
     lines += [f"- **Cross-check with the teammates' earlier runs.** {text}" for text in cross_checks]
     lines += [f"- **Timed row against the offline decode of the same shots.** {text}." for text in modes]
+    lines += [f"- **Left out:** {text}." for text in LEFT_OUT]
+    after = [(p, key) for p in P_VALUES for key, row in measured[p].items() if row is not None and row.get("after_test")]
+    if after:
+        lines.append(f"- **Rows run after the test results were seen** (their START in `test_rows.out` is after its TEST RUN END line; each is labelled "
+                     f"\"{AFTER_TEST}\" wherever it appears, and none is our decoder): {name(after)}.")
     if extra:
         lines.append(f"- **Folders under `report/data/test/` that no table reads:** {', '.join('`' + name + '`' for name in extra)}.")
     return write("checks", "\n".join(lines))
@@ -1538,15 +1573,133 @@ def findings(measured):
         fact(f"findings{p[-1]}", text and (text[0].upper() + text[1:] + "."), f"tables/test_p{p}.md")
 
 
+NO_NETWORK = {"hierarchy-converged": "the best hand-written rule (lowest weight among the converged candidates)",
+              "hierarchy-weight": "plain lowest weight"}
+
+
+def network_timed_table(measured):
+    """How much the network does, timed against timed: our decoder's timed row against the same hierarchy with a hand-written
+    tie-break in its place, each through the team's evaluator on the same test pairs, in one process (and the same on two cores)."""
+    from scipy.stats import binomtest
+    source = "tables/test_network_timed.md"
+    lines, records, pooled = [], [], {arm: {"levels": [], "after": [], "net": 0, "arm": 0, "only_net": 0, "only_arm": 0} for arm in NO_NETWORK}
+    for p in P_VALUES:
+        ours = measured[p].get("hierarchy")
+        for arm_key, words in NO_NETWORK.items():
+            arm = measured[p].get(arm_key)
+            n = f"nt{p[-1]}_{arm_key.removeprefix('hierarchy-')}"
+            if (ours is None or arm is None or ours.get("offline") or arm.get("offline")
+                    or ours["failed_pair"] is None or arm["failed_pair"] is None):
+                lines.append([p, "1 core", words, NOT_MEASURED + (" (only offline)" if arm is not None and arm.get("offline") else "")] + [""] * 4)
+                for name in ("net", "arm", "only_net", "only_arm", "p", "ms_net", "ms_arm"):
+                    fact(f"{n}_{name}", None, source)
+                continue
+            paired = stats.paired(arm["failed_pair"], ours["failed_pair"])
+            mark = f" [{AFTER_SHORT}]" if arm.get("after_test") else ""
+            lines.append([p, "1 core", words + mark, f"{ours['failures_pair']} against {arm['failures_pair']}", paired["both"],
+                          f"{paired['row_only']} / {paired['reference_only']}", stats.p_text(paired["p"]),
+                          f"{ms(ours['mean_ms'])} against {ms(arm['mean_ms'])}"])
+            records.append({"p": p, "cores": 1, "without_network": arm_key, "after_test": arm.get("after_test"), "network_failed_pairs": ours["failures_pair"],
+                            "without_failed_pairs": arm["failures_pair"], "both_fail": paired["both"], "only_network_fails": paired["row_only"],
+                            "only_without_fails": paired["reference_only"], "exact_p": paired["p"], "network_mean_ms": ours["mean_ms"], "without_mean_ms": arm["mean_ms"]})
+            for name, value in (("net", ours["failures_pair"]), ("arm", arm["failures_pair"]), ("only_net", paired["row_only"]),
+                                ("only_arm", paired["reference_only"]), ("p", stats.p_text(paired["p"])), ("ms_net", ms(ours["mean_ms"])), ("ms_arm", ms(arm["mean_ms"]))):
+                fact(f"{n}_{name}", value, source)
+            bucket = pooled[arm_key]
+            bucket["levels"].append(p)
+            bucket["after"] += [p] if arm.get("after_test") else []
+            bucket["net"] += ours["failures_pair"]; bucket["arm"] += arm["failures_pair"]
+            bucket["only_net"] += paired["row_only"]; bucket["only_arm"] += paired["reference_only"]
+        two, arm = measured[p].get("hierarchy-parallel"), measured[p].get("hierarchy-converged-parallel")
+        if two is not None and arm is not None and two["failed_pair"] is not None and arm["failed_pair"] is not None:
+            paired = stats.paired(arm["failed_pair"], two["failed_pair"])
+            same = " (each gives its one-core row's answers on every shot)" if two.get("same_answers") and arm.get("same_answers") else ""
+            lines.append([p, "2 cores", NO_NETWORK["hierarchy-converged"] + (f" [{AFTER_SHORT}]" if arm.get("after_test") else "") + same,
+                          f"{two['failures_pair']} against {arm['failures_pair']}", paired["both"], f"{paired['row_only']} / {paired['reference_only']}",
+                          stats.p_text(paired["p"]), f"{ms(two['mean_ms'])} against {ms(arm['mean_ms'])}"])
+            fact(f"nt{p[-1]}_two_ms_net", ms(two["mean_ms"]), source)
+            fact(f"nt{p[-1]}_two_ms_arm", ms(arm["mean_ms"]), source)
+        else:
+            lines.append([p, "2 cores", NO_NETWORK["hierarchy-converged"], NOT_MEASURED] + [""] * 4)
+            fact(f"nt{p[-1]}_two_ms_net", None, source)
+            fact(f"nt{p[-1]}_two_ms_arm", None, source)
+    verdicts = {}
+    for arm_key, bucket in pooled.items():
+        n = f"ntall_{arm_key.removeprefix('hierarchy-')}"
+        if not bucket["levels"]:
+            for name in ("levels", "net", "arm", "only_net", "only_arm", "p", "verdict"):
+                fact(f"{n}_{name}", None, source)
+            continue
+        discordant = bucket["only_net"] + bucket["only_arm"]
+        p_value = float(binomtest(bucket["only_net"], discordant).pvalue) if discordant else 1.0
+        verdict = ("better than" if bucket["net"] < bucket["arm"] and p_value < 0.05 else "worse than" if bucket["net"] > bucket["arm"] and p_value < 0.05
+                   else "not significantly different from")
+        verdicts[arm_key] = (verdict, bucket, p_value)
+        lines.append([", ".join(bucket["levels"]) + (" together" if len(bucket["levels"]) > 1 else ""), "1 core", NO_NETWORK[arm_key], f"{bucket['net']} against {bucket['arm']}", "",
+                      f"{bucket['only_net']} / {bucket['only_arm']}", stats.p_text(p_value), ""])
+        for name, value in (("levels", ", ".join(bucket["levels"])), ("net", bucket["net"]), ("arm", bucket["arm"]), ("only_net", bucket["only_net"]),
+                            ("only_arm", bucket["only_arm"]), ("p", stats.p_text(p_value)), ("verdict", verdict)):
+            fact(f"{n}_{name}", value, source)
+    per_p = []
+    for p in P_VALUES:
+        clauses = []
+        for arm_key, short_words in (("hierarchy-converged", "the best hand-written rule"), ("hierarchy-weight", "plain lowest weight")):
+            n = f"nt{p[-1]}_{arm_key.removeprefix('hierarchy-')}"
+            if FACTS[f"{n}_net"][0] == NOT_MEASURED:
+                continue
+            after = measured[p][arm_key].get("after_test")
+            clauses.append(f"against {short_words}{' [' + AFTER_SHORT + ']' if after else ''} {FACTS[n + '_net'][0]} against {FACTS[n + '_arm'][0]} failed pairs "
+                           f"(only with the network {FACTS[n + '_only_net'][0]}, only without {FACTS[n + '_only_arm'][0]}, exact p = {FACTS[n + '_p'][0]}; "
+                           f"{FACTS[n + '_ms_net'][0]} against {FACTS[n + '_ms_arm'][0]} ms per pair)")
+        if clauses:
+            per_p.append(f"at p = {p}, " + " and ".join(clauses))
+    fact("net_timed_per_p", per_p and ("With the network against without it, timed rows on one core: " + "; ".join(per_p) + "."), source)
+    if verdicts:
+        parts = []
+        for arm_key, (verdict, bucket, p_value) in verdicts.items():
+            after = f"; its rows at p = {', '.join(bucket['after'])} were {AFTER_TEST}" if bucket["after"] else ""
+            parts.append(f"against {NO_NETWORK[arm_key]} at p = {', '.join(bucket['levels'])}" + (" together" if len(bucket["levels"]) > 1 else "") + f", the network fails {bucket['net']} pairs and the rule "
+                         f"{bucket['arm']} (only the network fails {bucket['only_net']}, only the rule {bucket['only_arm']}, exact p = {stats.p_text(p_value)}: "
+                         f"{verdict} it{after})")
+        text = ("How much the network does, timed against timed (each row through the team's evaluator, one process on the team's server, the same "
+                "test pairs): " + "; ".join(parts) + ".")
+    else:
+        text = "The hierarchy without the network has no timed row on the test shots."
+    fact("net_timed_statement", text, source)
+    best = verdicts.get("hierarchy-converged")
+    close = [abs(float(FACTS[f"nt{p[-1]}_converged_ms_net"][0].replace(",", "")) / float(FACTS[f"nt{p[-1]}_converged_ms_arm"][0].replace(",", "")) - 1)
+             for p in (best[1]["levels"] if best else [])]
+    timing = ("and on one core its time is within 4% of the rule's at every p, the size of the run-to-run spread of these rows, so it costs no time the "
+              "timer can see" if close and max(close) < 0.04 else "and the times differ by more than the rows' spread at some p: see the table")
+    fact("net_timed_plain", best and {
+        "not significantly different from": f"In plain words: on the timed rows the network does not do measurably more than a good hand-written rule, {timing}. "
+                                            "The gain over relay-BP is PriorTilt's and the hierarchy's, as in the offline ablation above.",
+        "better than": f"In plain words: on the timed rows the network fails fewer pairs than the best hand-written rule, a significant difference, {timing}.",
+        "worse than": f"In plain words: on the timed rows the network fails more pairs than the best hand-written rule, a significant difference, {timing}.",
+    }[best[0]], source)
+    fact("net_timed_slide_title", best and (f"Timed against timed, the network is {best[0]} the best hand-written tie-break "
+                                            f"({best[1]['net']} against {best[1]['arm']} failed pairs at p = {', '.join(best[1]['levels'])}, exact p = {stats.p_text(best[2])})"),
+         source)
+    return write("test_network_timed",
+                 "**How much the network does, timed against timed.** Our decoder's timed row (the hierarchy with the neural tie-break) against the same "
+                 "hierarchy with a hand-written tie-break in place of the network, each a timed row of the team's evaluator on the same 10,000 test pairs, "
+                 "in one process (\"1 core\"; \"2 cores\": the two fast decodes side by side). Only the shots where the two fast decodes disagree can differ. "
+                 f"A row marked \"{AFTER_SHORT}\" is an ablation the team asked for after the test results were seen, not our decoder; the rows at p = 0.003 and 0.004 of the best hand-written rule on one core ran in the "
+                 "test run itself, among its pre-registered arms. Times are comparable to a few percent (`APPENDIX.md` A).\n\n"
+                 + markdown(["p", "Cores", "Without the network: the tie-break", "Failed pairs: with the network against without", "Both fail",
+                             "Only with the network fails / only without", "Exact p", "Mean time per pair, ms: with against without"], lines), records)
+
+
 def timed_ablation(measured):
     """The ablation again on the timed rows where both arms were timed: the network against the best hand-written tie-break."""
-    levels, network, classical, only_network, only_classical = [], 0, 0, 0, 0
+    levels, after, network, classical, only_network, only_classical = [], [], 0, 0, 0, 0
     for p in P_VALUES:
         ours, arm = measured[p].get("hierarchy"), measured[p].get("hierarchy-converged")
         if ours is None or arm is None or ours.get("offline") or arm.get("offline") or ours["failed_pair"] is None:
             continue
         paired = stats.paired(arm["failed_pair"], ours["failed_pair"])
         levels.append(p)
+        after += [p] if arm.get("after_test") else []
         network += ours["failures_pair"]; classical += arm["failures_pair"]
         only_network += paired["row_only"]; only_classical += paired["reference_only"]
     if levels:
@@ -1558,14 +1711,18 @@ def timed_ablation(measured):
                 f"hand-written rule {classical} (only the network rule fails {only_network}, only the hand-written rule {only_classical}, exact p = "
                 f"{stats.p_text(p_value)}, " + ("a significant difference" if p_value < 0.05 else "not a significant difference") + ")"
                 + (f"; at p = {', '.join(missing)} the hand-written rule has no timed row" if missing else "")
+                + (f"; the hand-written rule's row at p = {', '.join(after)} was {AFTER_TEST}" if after else "")
                 + ". The timed and the offline decodes draw other random numbers, so they need not agree on which rule is ahead.")
     else:
         text = "The hand-written tie-break has no timed row on the test shots."
     fact("abl_timed", text, "tables/test_comparisons.md")
     direction = "ahead" if levels and network < classical else "behind" if levels and network > classical else "level"
-    fact("abl_timed_slide", levels and (f"In the timed rows at p = {' and '.join(levels)} the network is {direction} ({network} against {classical} failed "
-                                        f"pairs, exact p = {stats.p_text(p_value)}): " + ("a significant difference." if p_value < 0.05
-                                        else "not significant either way.")), "tables/test_comparisons.md")
+    joined = ", ".join(levels[:-1]) + " and " + levels[-1] if len(levels) > 1 else "".join(levels)
+    fact("abl_timed_slide", levels and (f"In the timed rows at p = {joined} the network is {direction} ({network} against {classical} failed "
+                                        f"pairs, exact p = {stats.p_text(p_value)}): " + ("a significant difference" if p_value < 0.05
+                                        else "not significant either way")
+                                        + (f"; the hand-written rule's row at p = {', '.join(after)} was {AFTER_SHORT}" if after else "") + "."),
+         "tables/test_comparisons.md")
 
 
 def ensemble_statement(measured, combined):
@@ -1599,12 +1756,6 @@ def ensemble_statement(measured, combined):
     fact("ensemble_short", short and ("our ensemble rule, frozen beforehand and combined offline from the saved answers of NVIDIA's, IonQ's "
                                       "and the kit's decoders, with no time measured as one decoder, " + ", ".join(short[:-1])
                                       + (", and " if len(short) > 1 else "") + short[-1]), "tables/test_p<p>.md (the ensemble and TCBP-JOBS rows)")
-
-
-# Rows run or read after the test results were seen, at the team's request. They are ablations: none of them is our decoder,
-# and none may change its headline, its framing or the frozen choice of its rules (choosing on the test shots now would fit them).
-AFTER_TEST = "run after the test results were seen, at the team's request; an ablation, not our decoder"
-SWAP_RULE = "d"   # the ensemble's pre-registered rule closest to TCBP-JOBS in place of relay-BP in our hierarchy
 
 
 def swap_table(combined):
@@ -1688,7 +1839,8 @@ def swap_table(combined):
             for basis in "XZ":
                 fact(f"{short}_{where}_{basis}_only_d", cells[basis][where][0], source)
                 fact(f"{short}_{where}_{basis}_only_T", cells[basis][where][1], source)
-        split_lines.append([p, "exactly two of the three agree: rule d's answer is TCBP-JOBS's (checked on every shot)", "0 / 0", "0 / 0"])
+        split_lines.append([p, "the two PriorTilt runs disagree and TCBP-JOBS sides with one of them: rule d's answer is TCBP-JOBS's (checked on every shot)",
+                            "0 / 0", "0 / 0"])
         for basis in "XZ":
             fact(f"{short}_sent_{basis}", cells[basis]["sent"], source)
     text = (f"**{AFTER_TEST[0].upper() + AFTER_TEST[1:]}.** TCBP-JOBS in place of relay-BP in our hierarchy, as the team asked after the test "
@@ -1750,11 +1902,12 @@ def predecoder_table(measured):
     """
     source = "tables/test_predecoder.md"
     lines, records = [], []
-    for p, basis in PREDECODER_TEST:
+    for p, basis, mark in PREDECODER_TEST:
         n = f"pre{p[-1]}{basis}"
+        mark = f" [{mark}]" if mark else ""
         files = [DATA / "test" / "predecoder" / f"test_run_p{p}_{basis}_{kind}.json" for kind in ("summary", "secondary")]
         if not all(file.is_file() for file in files):
-            lines.append([p, basis, "relay-BP with the head's priors (H)"] + [NOT_MEASURED] * 4)
+            lines.append([p, basis, "relay-BP with the head's priors (H)" + mark] + [NOT_MEASURED] * 4)
             for name in ("H", "fresh", "T", "R", "vs_fresh_only_H", "vs_fresh_only_other", "vs_fresh_p", "vs_T_only_H", "vs_T_only_other", "vs_T_p",
                          "vs_R_only_H", "vs_R_only_other", "vs_R_p", "it_H", "it_fresh", "ratio", "it_ratio"):
                 fact(f"{n}_{name}", None, source)
@@ -1764,11 +1917,13 @@ def predecoder_table(measured):
             if record["data"]["sha256"] != TEST_SHA256[p][basis] or record["data"]["basis"] != basis or abs(record["data"]["p"] - float(p)) > 1e-12:
                 raise Mismatch(f"test/predecoder, p = {p}, {basis}: not the team's test file (sha256 {record['data']['sha256'][:12]})")
         arms, failures, pairs = summary["arms"], secondary["failures"], secondary["pairs"]
-        key = lambda table, start: next(name for name in table if name.startswith(start))
-        declared, theirs = summary["pairs"]["head_vs_fresh"], pairs[key(pairs, "H against fresh")]
-        if (declared["both"], declared["only_head"], declared["only_fresh"]) != (theirs["both"], theirs["only_H"], theirs["only_other"]):
+        key = lambda table, start: next((name for name in table if name.startswith(start)), None)
+        has_fresh = "fresh" in arms and "head_vs_fresh" in summary.get("pairs", {}) and key(pairs, "H against fresh") is not None
+        declared, theirs = (summary["pairs"]["head_vs_fresh"], pairs[key(pairs, "H against fresh")]) if has_fresh else (None, None)
+        if has_fresh and (declared["both"], declared["only_head"], declared["only_fresh"]) != (theirs["both"], theirs["only_H"], theirs["only_other"]):
             raise Mismatch(f"test/predecoder, p = {p}, {basis}: the summary and the secondary file give other counts for head against fresh")
-        if (arms["head"]["failures"], arms["fresh"]["failures"]) != (failures[key(failures, "H ")]["failures"], failures[key(failures, "fresh")]["failures"]):
+        if arms["head"]["failures"] != failures[key(failures, "H ")]["failures"] or (
+                has_fresh and arms["fresh"]["failures"] != failures[key(failures, "fresh")]["failures"]):
             raise Mismatch(f"test/predecoder, p = {p}, {basis}: the summary and the secondary file give other failures")
         for start, report_key, words in (("T ", "tcbp", "TCBP-JOBS"), ("R ", REFERENCE, "relay-BP's timed row")):
             row = measured[p].get(report_key)
@@ -1776,13 +1931,18 @@ def predecoder_table(measured):
                 raise Mismatch(f"test/predecoder, p = {p}, {basis}: {words} fails {failures[key(failures, start)]['failures']} shots there and "
                                f"{row[f'failures_{basis}']} in this report's row on the same shots")
         shots = summary["shots"]
-        rows = [("H", "relay-BP with the head's priors, a decoder built per shot (H; ours)", arms["head"]["failures"], None, arms["head"]),
-                ("fresh", "relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit)", arms["fresh"]["failures"],
-                 theirs, arms["fresh"]),
+        rows = [("H", "relay-BP with the head's priors, a decoder built per shot (H; ours)" + mark, arms["head"]["failures"], None, arms["head"]),
+                ("fresh", "relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit)",
+                 arms["fresh"]["failures"] if has_fresh else None, theirs, arms["fresh"] if has_fresh else None),
                 ("T", "TCBP-JOBS (NVIDIA, GPU; its row of this report)", failures[key(failures, "T ")]["failures"], pairs[key(pairs, "H against T")], None),
                 ("R", "relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report)", failures[key(failures, "R ")]["failures"],
                  pairs[key(pairs, "H against R")], None)]
         for short, label, count, paired, arm in rows:
+            if count is None:
+                lines.append([p, basis, label] + ["not measured yet"] * 4)
+                for name in (f"{n}_{short}", f"{n}_vs_{short}_only_H", f"{n}_vs_{short}_only_other", f"{n}_vs_{short}_p"):
+                    fact(name, None, source)
+                continue
             low, high = stats.wilson(count, shots)
             lines.append([p, basis, label, f"{count:,} of {shots:,}", f"{count / shots:.2%} ({low:.2%} to {high:.2%})",
                           "" if paired is None else f"{paired['both']} / {paired['only_H']} / {paired['only_other']} (p = {stats.p_text(paired['p'])})",
@@ -1798,9 +1958,21 @@ def predecoder_table(measured):
                 fact(f"{n}_{tag}_p", stats.p_text(paired["p"]), source)
         fact("pre_columns", f"{summary['logits']['columns']:,}", source)
         fact(f"{n}_it_H", f"{arms['head']['mean_iterations']:,.0f}", source)
-        fact(f"{n}_it_fresh", f"{arms['fresh']['mean_iterations']:,.0f}", source)
-        fact(f"{n}_ratio", f"{arms['fresh']['failures'] / arms['head']['failures']:.1f}" if arms["head"]["failures"] else None, source)
-        fact(f"{n}_it_ratio", f"{arms['fresh']['mean_iterations'] / arms['head']['mean_iterations']:.1f}", source)
+        fact(f"{n}_it_fresh", f"{arms['fresh']['mean_iterations']:,.0f}" if has_fresh else None, source)
+        fact(f"{n}_ratio", f"{arms['fresh']['failures'] / arms['head']['failures']:.1f}" if has_fresh and arms["head"]["failures"] else None, source)
+        fact(f"{n}_it_ratio", f"{arms['fresh']['mean_iterations'] / arms['head']['mean_iterations']:.1f}" if has_fresh else None, source)
+    landed = [(p, basis) for p, basis, mark in PREDECODER_TEST if mark and FACTS[f"pre{p[-1]}{basis}_H"][0] != NOT_MEASURED]
+    fact("pre_extension", " ".join(
+        f"On the {basis} test shots at p = {p}, relay-BP with the head's priors fails {FACTS[f'pre{p[-1]}{basis}_H'][0]} "
+        + (f"against {FACTS[f'pre{p[-1]}{basis}_fresh'][0]} with the kit's priors (only the head's "
+           f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_fresh_only_other'][0]}, exact p = "
+           f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_p'][0]})" if FACTS[f"pre{p[-1]}{basis}_fresh"][0] != NOT_MEASURED
+           else "(the kit's priors, the declared comparison, not measured yet)")
+        + f", and TCBP-JOBS fails {FACTS[f'pre{p[-1]}{basis}_T'][0]} (only the head's "
+        f"{FACTS[f'pre{p[-1]}{basis}_vs_T_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_T_only_other'][0]}, exact p = {FACTS[f'pre{p[-1]}{basis}_vs_T_p'][0]})."
+        for p, basis in landed) or "The registered extension (X at p = 0.004 and 0.003, Z at p = 0.005) has not landed yet.", source)
+    fact("pre_z_reason", "the Z run of the registered extension is a later run, shown below" if ("0.005", "Z") in landed
+         else "Z memory has no result yet", source)
     fallback_lines = []
     for p, basis, what in PREDECODER_FALLBACK:
         n = f"fb{p[-1]}{basis}"
@@ -1843,6 +2015,66 @@ def predecoder_table(measured):
                             ("conv_shots", f"{shots - back:,}"), ("conv_H", conv_h), ("conv_T", failures["T"]["failures"] - back_t),
                             ("back_H", back_h), ("back_T", back_t)):
             fact(f"{n}_{name}", value, source)
+    if FACTS["fb5Z_rule"][0] == NOT_MEASURED:
+        fact("fb5Z_clause", "Its clean test will be the Z test file at p = 0.005, registered to be opened only after the rule was frozen "
+                            "(`predecoder/logs/fallback_rule_frozen.md`); that run has not landed yet.", source)
+    else:
+        fact("fb5Z_clause", f"Its clean test, the Z test file at p = 0.005, registered to be opened only after the rule was frozen, "
+                            f"{PREDECODER_TEST[-1][2]}: the rule fails {FACTS['fb5Z_rule'][0]} against TCBP-JOBS's {FACTS['fb5Z_T'][0]} "
+                            f"(only the rule {FACTS['fb5Z_vs_T_only_rule'][0]}, only TCBP-JOBS {FACTS['fb5Z_vs_T_only_T'][0]}, exact p = "
+                            f"{FACTS['fb5Z_vs_T_p'][0]}) and the head's priors alone {FACTS['fb5Z_H'][0]}.", source)
+    pair_lines, pair_file = [], DATA / "test" / "predecoder" / "pair_test_p0.005.json"
+    pair_words = {"H": "relay-BP with the head's priors in both bases, H: " + EXTENSION,
+                  "rule": "the fallback rule in both bases (designed after the first test result: post hoc on its X half)",
+                  "T": "TCBP-JOBS (its row of this report)", "R": "relay-BP, the evaluator's timed row (its row of this report)"}
+    if pair_file.is_file():
+        record = json.loads(pair_file.read_text(encoding="utf-8"))
+        decoders, paired, pairs_n = record["decoders"], record["paired"], record["pairs"]
+        for short, report_key in (("T", "tcbp"), ("R", REFERENCE)):
+            row = measured["0.005"].get(report_key)
+            if row is not None and (decoders[short]["failed_pairs"], decoders[short]["failures_X"], decoders[short]["failures_Z"]) != (
+                    row["failures_pair"], row["failures_X"], row["failures_Z"]):
+                raise Mismatch(f"test/predecoder/pair_test_p0.005.json: {short} differs from this report's row on the same pairs")
+        for short in ("H", "rule", "T", "R"):
+            if short not in decoders:
+                pair_lines.append([pair_words[short]] + ["not measured yet"] * 5)
+                continue
+            entry = decoders[short]
+            rate, error = stats.per_cycle_rate(entry["failed_pairs"], pairs_n)
+            if abs(rate - entry["per_cycle"]) > 1e-12:
+                raise Mismatch(f"test/predecoder/pair_test_p0.005.json: {short}'s rate per cycle is not 1 - (1 - P)^(1/12) of its failed pairs")
+            cells = []
+            for other in ("T", "R"):
+                name = next((k for k in paired if k.startswith(f"{short} against {other}")), None)
+                entry_p = paired.get(name) if name else None
+                only_mine = entry_p and next(v for k, v in entry_p.items() if k.startswith("only_") and not k.endswith(other))
+                cells.append("" if short in ("T", "R") or entry_p is None else
+                             f"{entry_p['both']} / {only_mine} / {entry_p['only_' + other]} (p = {stats.p_text(entry_p['p'])})")
+                if entry_p is not None and short in ("H", "rule"):
+                    fact(f"pair_{short}_vs_{other}_only_mine", only_mine, source)
+                    fact(f"pair_{short}_vs_{other}_only_other", entry_p["only_" + other], source)
+                    fact(f"pair_{short}_vs_{other}_p", stats.p_text(entry_p["p"]), source)
+            pair_lines.append([pair_words[short], f"{entry['failures_X']}, {entry['failures_Z']}", f"{entry['failed_pairs']:,} of {pairs_n:,}",
+                               rate_text(rate, error)] + cells)
+            fact(f"pair_{short}", entry["failed_pairs"], source)
+    else:
+        pair_lines.append([pair_words["H"]] + ["not measured yet"] * 5)
+    for short in ("H", "rule", "T", "R"):
+        if f"pair_{short}" not in FACTS:
+            fact(f"pair_{short}", None, source)
+        for other in ("T", "R"):
+            for part in ("only_mine", "only_other", "p"):
+                if f"pair_{short}_vs_{other}_{part}" not in FACTS and short in ("H", "rule"):
+                    fact(f"pair_{short}_vs_{other}_{part}", None, source)
+    value = lambda name: FACTS[name][0]
+    fact("pre_pair", "The pair score at p = 0.005 has not landed yet." if value("pair_H") == NOT_MEASURED else
+         (f"Scored as the kit scores (a pair of an X and a Z shot fails when either fails), at p = 0.005: relay-BP with the head's priors fails "
+          f"{value('pair_H')} pairs against TCBP-JOBS's {value('pair_T')} (only H {value('pair_H_vs_T_only_mine')}, only TCBP-JOBS "
+          f"{value('pair_H_vs_T_only_other')}, exact p = {value('pair_H_vs_T_p')}) and relay-BP's {value('pair_R')} (exact p = {value('pair_H_vs_R_p')})"
+          + (f"; the fallback rule, post hoc on its X half, fails {value('pair_rule')} (against TCBP-JOBS: only the rule "
+             f"{value('pair_rule_vs_T_only_mine')}, only TCBP-JOBS {value('pair_rule_vs_T_only_other')}, exact p = {value('pair_rule_vs_T_p')})"
+             if value("pair_rule") != NOT_MEASURED else "") + ". This pair score is part of the registered extension, not a held-out result, "
+          "and it is not in the pair-scored tables of our decoder."), source)
     validation = DATA / "exploration" / "predecoder" / "fallback_validation_X_p0.005.json"
     record = json.loads(validation.read_text(encoding="utf-8")) if validation.is_file() else None
     for name, value in (("rule", record and record["failures"]["rule"]["failures"]), ("T", record and record["failures"]["T"]["failures"]),
@@ -1877,7 +2109,14 @@ def predecoder_table(measured):
                  + markdown(["p", "Basis", "What this number is", "Shots that fall back to TCBP-JOBS", "The rule fails (share, 95% interval)",
                              "H fails", "TCBP-JOBS fails", "Rule against TCBP-JOBS: both / only the rule / only TCBP-JOBS (exact p)",
                              "Rule against H: both / only the rule / only H (exact p)"], fallback_lines)
-                 + "\n\nSource: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`).",
+                 + "\n\nSource: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`)."
+                 + f"\n\n**The pair score at p = 0.005: {EXTENSION}; the fallback rule's half on X is post hoc.** The kit's score: a pair of an X shot "
+                 "and a Z shot fails when either fails. Not a held-out result, and not in the pair-scored tables of our decoder. TCBP-JOBS's and "
+                 "relay-BP's counts are checked against their rows in this report.\n\n"
+                 + markdown(["Decoder", "Failures X, Z", "Failed pairs", "Rate per cycle ± error",
+                             "Against TCBP-JOBS: both / only this / only TCBP-JOBS (exact p)", "Against relay-BP's timed row: both / only this / only relay-BP (exact p)"],
+                            pair_lines)
+                 + "\n\nSource: `report/data/test/predecoder/pair_test_p0.005.{json,log}` (`predecoder.pair`).",
                  records)
 
 
@@ -2044,6 +2283,7 @@ def main(argv=None):
             "resources": resources_table(measured), "test_after_swap": swap_table(combined)}
         tables["test_after_swap_short"] = (TABLES / "test_after_swap_short.md").read_text(encoding="utf-8")
         tables["test_predecoder"] = predecoder_table(measured)
+        tables["test_network_timed"] = network_timed_table(measured)
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)

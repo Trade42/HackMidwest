@@ -1255,14 +1255,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 22583,
-  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
-  "copied_utc": "2026-11-22 13:30",
+  "bytes": 26557,
+  "commit": "efa17b8c9ac4d68f67f37f87784e08e1322d3d19",
+  "copied_utc": "2026-11-22 14:44",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `e854f99767f0`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `efa17b8c9ac4`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "ed74274728a840b1596425a5b4a1ca32a4e2dae5689b72eb06846ec731e81f0c"
+  "sha256": "92935f6c8db04d25b5b090a033a0d72f1ce22b19ef841b6f332c8e4041556ff8"
  },
  "test/ensemble_p0.003/test_X.json": {
   "branch": "origin/server-logs",
@@ -1462,6 +1462,39 @@
   "path": "files/clean/eval_p0.003_bposd_retime/summary.json",
   "sha256": "d8c7cd3e3af6b117584b8b6c58d2c8bb49d5219605ecee92b6f9c32a93357fac"
  },
+ "test/eval_p0.003_hierarchy-converged-parallel/01_hierarchy_plugin_make_decoder_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 323178,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
+  "file": "test/eval_p0.003_hierarchy-converged-parallel/01_hierarchy_plugin_make_decoder_shots.npz",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `files/clean/eval_p0.003_hierarchy-converged-parallel/01_hierarchy_plugin_make_decoder_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_hierarchy-converged-parallel/01_hierarchy_plugin_make_decoder_shots.npz",
+  "sha256": "3bfab0d5554eb049a19714e9d59235acd592fb819a73e4a9799e46f7d8760763"
+ },
+ "test/eval_p0.003_hierarchy-converged-parallel/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 834,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
+  "file": "test/eval_p0.003_hierarchy-converged-parallel/summary.csv",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `files/clean/eval_p0.003_hierarchy-converged-parallel/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_hierarchy-converged-parallel/summary.csv",
+  "sha256": "01d8fba7568d73b64534b4652f749a26e4be9c1e1bf39ec0eded377aeb3a5c77"
+ },
+ "test/eval_p0.003_hierarchy-converged-parallel/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 11845,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
+  "file": "test/eval_p0.003_hierarchy-converged-parallel/summary.json",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `files/clean/eval_p0.003_hierarchy-converged-parallel/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_hierarchy-converged-parallel/summary.json",
+  "sha256": "04ac80dbf9a61fbf27a4ae50dbb98da12bc2306537f8afa86abb6bb67107ef06"
+ },
  "test/eval_p0.003_hierarchy-converged/01_hierarchy_plugin_make_decoder_shots.npz": {
   "branch": "origin/server-logs",
   "bytes": 330024,
@@ -1527,6 +1560,39 @@
   "grows": false,
   "path": "files/clean/eval_p0.003_hierarchy-parallel/summary.json",
   "sha256": "a6abc1e61af9510d784e4657be3afafebeaf6475c230e506b529e551ecff833e"
+ },
+ "test/eval_p0.003_hierarchy-weight/01_hierarchy_plugin_make_decoder_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 330042,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
+  "file": "test/eval_p0.003_hierarchy-weight/01_hierarchy_plugin_make_decoder_shots.npz",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `files/clean/eval_p0.003_hierarchy-weight/01_hierarchy_plugin_make_decoder_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_hierarchy-weight/01_hierarchy_plugin_make_decoder_shots.npz",
+  "sha256": "9bafb6795b5fcbfe6ae07cb33f3fe331ac07d115e725a54442ab76ea5a636a8a"
+ },
+ "test/eval_p0.003_hierarchy-weight/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 839,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
+  "file": "test/eval_p0.003_hierarchy-weight/summary.csv",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `files/clean/eval_p0.003_hierarchy-weight/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_hierarchy-weight/summary.csv",
+  "sha256": "e33d9b5b929d4b6d55170a217196388b179c9b4c6a2fbc3a8cbf6051d594b66d"
+ },
+ "test/eval_p0.003_hierarchy-weight/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 11789,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
+  "file": "test/eval_p0.003_hierarchy-weight/summary.json",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `files/clean/eval_p0.003_hierarchy-weight/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_hierarchy-weight/summary.json",
+  "sha256": "0a59a9147a72badafc6a63ce8a2d98ede85162b95ab7f60b0e45f660cb4cdb70"
  },
  "test/eval_p0.003_hierarchy/01_hierarchy_plugin_make_decoder_shots.npz": {
   "branch": "origin/server-logs",
@@ -1771,6 +1837,39 @@
   "path": "files/clean/eval_p0.004_bposd/summary.json",
   "sha256": "5285c01f0b57ee23d293cd075b6b62033401f914b75bc7a11fd552ea9f7f613d"
  },
+ "test/eval_p0.004_hierarchy-converged-parallel/01_hierarchy_plugin_make_decoder_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 342857,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
+  "file": "test/eval_p0.004_hierarchy-converged-parallel/01_hierarchy_plugin_make_decoder_shots.npz",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `files/clean/eval_p0.004_hierarchy-converged-parallel/01_hierarchy_plugin_make_decoder_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy-converged-parallel/01_hierarchy_plugin_make_decoder_shots.npz",
+  "sha256": "140a0808739ad912a2cc54a61871516f5e77035fe81d46adef023e80d810660f"
+ },
+ "test/eval_p0.004_hierarchy-converged-parallel/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 837,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
+  "file": "test/eval_p0.004_hierarchy-converged-parallel/summary.csv",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `files/clean/eval_p0.004_hierarchy-converged-parallel/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy-converged-parallel/summary.csv",
+  "sha256": "0b735fda318a11368b1fa8b026674639a051ffc6c36ab9dc9d8560b021d4387c"
+ },
+ "test/eval_p0.004_hierarchy-converged-parallel/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 11864,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
+  "file": "test/eval_p0.004_hierarchy-converged-parallel/summary.json",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `files/clean/eval_p0.004_hierarchy-converged-parallel/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy-converged-parallel/summary.json",
+  "sha256": "408ef1408516a4c6d824447f4dbccc978c4ad45ecf4c1a2b77d396a2eefdd051"
+ },
  "test/eval_p0.004_hierarchy-converged/01_hierarchy_plugin_make_decoder_shots.npz": {
   "branch": "origin/server-logs",
   "bytes": 349771,
@@ -1836,6 +1935,39 @@
   "grows": false,
   "path": "files/clean/eval_p0.004_hierarchy-parallel/summary.json",
   "sha256": "f88d027ee1703f4d5614247519bdcb9cc222662808105eeee18bad85d68a388b"
+ },
+ "test/eval_p0.004_hierarchy-weight/01_hierarchy_plugin_make_decoder_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 349847,
+  "commit": "efa17b8c9ac4d68f67f37f87784e08e1322d3d19",
+  "copied_utc": "2026-11-22 14:44",
+  "file": "test/eval_p0.004_hierarchy-weight/01_hierarchy_plugin_make_decoder_shots.npz",
+  "from": "branch `server-logs` at commit `efa17b8c9ac4`, `files/clean/eval_p0.004_hierarchy-weight/01_hierarchy_plugin_make_decoder_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy-weight/01_hierarchy_plugin_make_decoder_shots.npz",
+  "sha256": "f70793a5746e0ff1fec7722a7000f0633fab425259b4031a26c77b9447aa68cc"
+ },
+ "test/eval_p0.004_hierarchy-weight/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 831,
+  "commit": "efa17b8c9ac4d68f67f37f87784e08e1322d3d19",
+  "copied_utc": "2026-11-22 14:44",
+  "file": "test/eval_p0.004_hierarchy-weight/summary.csv",
+  "from": "branch `server-logs` at commit `efa17b8c9ac4`, `files/clean/eval_p0.004_hierarchy-weight/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy-weight/summary.csv",
+  "sha256": "a42845025ad1de81f577532babacee3ed6974fc9154115ad2cd55852db5f2637"
+ },
+ "test/eval_p0.004_hierarchy-weight/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 11799,
+  "commit": "efa17b8c9ac4d68f67f37f87784e08e1322d3d19",
+  "copied_utc": "2026-11-22 14:44",
+  "file": "test/eval_p0.004_hierarchy-weight/summary.json",
+  "from": "branch `server-logs` at commit `efa17b8c9ac4`, `files/clean/eval_p0.004_hierarchy-weight/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.004_hierarchy-weight/summary.json",
+  "sha256": "3a21b4315562653e8b12406b158f1bd47c56ac05c668a39faadfccdc73f741d3"
  },
  "test/eval_p0.004_hierarchy/01_hierarchy_plugin_make_decoder_shots.npz": {
   "branch": "origin/server-logs",
@@ -2257,6 +2389,28 @@
   "path": "files/test/net_p0.005/netZ_test_Z.json",
   "sha256": "dca5279a90471b3dd3d7242248059dfd8e7beea249bc4a1f25cf3accbfdbfe1a"
  },
+ "test/predecoder/fallback_test_X_p0.004.json": {
+  "branch": "tree",
+  "bytes": 1135,
+  "commit": "87b484a646c3433c16d6306a7eb621e4d5764dfa",
+  "copied_utc": "2026-11-22 14:59",
+  "file": "test/predecoder/fallback_test_X_p0.004.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/fallback_test_X_p0.004.json` (last changed in commit `87b484a646c3`)",
+  "grows": false,
+  "path": "predecoder/logs/fallback_test_X_p0.004.json",
+  "sha256": "ffaf0939073b3930fecceee64b54b6ff0cff1b588fbf717dbb33a68826ae14c1"
+ },
+ "test/predecoder/fallback_test_X_p0.004.log": {
+  "branch": "tree",
+  "bytes": 715,
+  "commit": "87b484a646c3433c16d6306a7eb621e4d5764dfa",
+  "copied_utc": "2026-11-22 14:59",
+  "file": "test/predecoder/fallback_test_X_p0.004.log",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/fallback_test_X_p0.004.log` (last changed in commit `87b484a646c3`)",
+  "grows": false,
+  "path": "predecoder/logs/fallback_test_X_p0.004.log",
+  "sha256": "e0103540f6a6d8b95608e047fb4af1cd8a573b84adaccb59ca7f34415fa4af9f"
+ },
  "test/predecoder/fallback_test_X_p0.005.json": {
   "branch": "tree",
   "bytes": 1159,
@@ -2278,6 +2432,28 @@
   "grows": false,
   "path": "predecoder/logs/fallback_test_X_p0.005.log",
   "sha256": "cca8c05dc0150ae9f753bbe7ef6a1510595a0b60bb719513d7c089b8cebe5cf1"
+ },
+ "test/predecoder/test_run_p0.004_X_secondary.json": {
+  "branch": "tree",
+  "bytes": 1806,
+  "commit": "87b484a646c3433c16d6306a7eb621e4d5764dfa",
+  "copied_utc": "2026-11-22 14:59",
+  "file": "test/predecoder/test_run_p0.004_X_secondary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.004_X_secondary.json` (last changed in commit `87b484a646c3`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.004_X_secondary.json",
+  "sha256": "f7ca89620b803516b2ac227a0dd2813e8c81b31656e76723f76cbf62e66f6d31"
+ },
+ "test/predecoder/test_run_p0.004_X_summary.json": {
+  "branch": "tree",
+  "bytes": 3211,
+  "commit": "87b484a646c3433c16d6306a7eb621e4d5764dfa",
+  "copied_utc": "2026-11-22 14:59",
+  "file": "test/predecoder/test_run_p0.004_X_summary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.004_X_summary.json` (last changed in commit `87b484a646c3`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.004_X_summary.json",
+  "sha256": "0a1e8aec6b7beef04bdfc0836730ec38248e48e8151b60b57977a762aa494926"
  },
  "test/predecoder/test_run_p0.005_X_secondary.json": {
   "branch": "tree",
@@ -2314,14 +2490,14 @@
  },
  "test/runner_ctl.out": {
   "branch": "origin/server-logs",
-  "bytes": 1426,
-  "commit": "cf8ce0796eb5f2d07ee328176fd8dd65afdb9caa",
-  "copied_utc": "2026-11-22 12:29",
+  "bytes": 1532,
+  "commit": "d15217f98edb6b902c3c80fbbfef63a894a2019a",
+  "copied_utc": "2026-11-22 14:39",
   "file": "test/runner_ctl.out",
-  "from": "branch `server-logs` at commit `cf8ce0796eb5`, `runner_ctl.out`",
+  "from": "branch `server-logs` at commit `d15217f98edb`, `runner_ctl.out`",
   "grows": true,
   "path": "runner_ctl.out",
-  "sha256": "6c3e7341c8764855755d76c05a51c5bce45536005fbec39e85cf669eb5743363"
+  "sha256": "0e12eb23f00bcf6e95c1bd141eab3ba065f6ac85b45940bae1af05222b938d6d"
  },
  "test/runner_gpu.out": {
   "branch": "origin/server-logs",
@@ -2402,14 +2578,14 @@
  },
  "test/test_rows.out": {
   "branch": "origin/server-logs",
-  "bytes": 8758,
-  "commit": "413837a186a9dd4d8f62f0a57d05d3a9877255b4",
-  "copied_utc": "2026-11-22 13:07",
+  "bytes": 11124,
+  "commit": "efa17b8c9ac4d68f67f37f87784e08e1322d3d19",
+  "copied_utc": "2026-11-22 14:44",
   "file": "test/test_rows.out",
-  "from": "branch `server-logs` at commit `413837a186a9`, `test_rows.out`",
+  "from": "branch `server-logs` at commit `efa17b8c9ac4`, `test_rows.out`",
   "grows": true,
   "path": "test_rows.out",
-  "sha256": "f1989a0a02be01e52783cf73dce034694862e4d49bab792bc186e7a110b1528c"
+  "sha256": "77a2c348078baa554d26ab6fc25b680b13f38ae124eba2a3942bb561b67eca0c"
  },
  "test/test_run.out": {
   "branch": "origin/server-logs",

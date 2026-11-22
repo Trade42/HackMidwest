@@ -1,6 +1,6 @@
 # Information: what we are building, why, and where everything is
 
-Last updated: 2026-11-22 13:12 UTC (the results on the held-out test shots). This file is the overview of
+Last updated: 2026-11-22 13:40 UTC (the results on the held-out test shots). This file is the overview of
 our part of the team's work on Infleqtion's Challenge 1 (ML-assisted decoding of the Gross code).
 It lives on the branch `integration`, our one working branch: everything we have built is merged
 here.
@@ -21,8 +21,8 @@ neural network that follows the code's structure picks the most likely of the th
 the team's held-out test shots (10,000 pairs per noise level, timed on the team's server, one
 CPU core), it fails fewer pairs than relay-BP at p = 0.004 (44 against 83) and p = 0.005 (479
 against 845), in 0.68 and 0.56 of relay-BP's time, and as many within the error at p = 0.003 (3
-against 5) in 0.52 of its time; with the two fast decodes side by side on two cores the times are
-0.33, 0.47 and 0.41 of relay-BP's. NVIDIA's GPU decoder TCBP-JOBS, which teammates ran as an extra
+against 5) in 0.54 of its time; with the two fast decodes side by side on two cores the times are
+0.34, 0.47 and 0.41 of relay-BP's. NVIDIA's GPU decoder TCBP-JOBS, which teammates ran as an extra
 reference, is level with it at p = 0.003 and 0.004 and ahead at p = 0.005 (360 against 479). An
 ensemble whose rule was frozen before the test run (take the answer where both PriorTilt runs and
 TCBP-JOBS agree; otherwise decode both check types jointly), combined offline from the saved
@@ -39,15 +39,16 @@ would add.
 ## 1a. Results on the held-out test shots
 
 The one run on the test shots (2026-11-22, 10:23 to 13:05 UTC, on the team's server; the
-GPU rows on its idle A100): every decoder decoded the same saved test shots once, with every
+GPU rows on its idle A100; the p = 0.003 baselines re-timed in a quiet window afterwards, with the
+same answers on every shot): every decoder decoded the same saved test shots once, with every
 setting frozen before. Copied from `challenge-1-ml-decoder-kit/report/tables/test_sweep.md` at
-`integration` 9df6863:
+`integration` 9a6907a5:
 
 | Decoder | p = 0.003 | p = 0.004 | p = 0.005 |
 |---|---|---|---|
-| BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05 · 60 pairs · 129 ms | 4.02e-03 ± 1.8e-04 · 472 pairs · 302 ms | 2.30e-02 ± 4.6e-04 · 2433 pairs · 581 ms |
-| relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05 · 5 pairs · 88.0 ms | 6.94e-04 ± 7.6e-05 · 83 pairs · 319 ms | 7.33e-03 ± 2.5e-04 · 845 pairs · 1,471 ms |
-| relay-BP with a learned router | 5.00e-05 ± 2.0e-05 · 6 pairs · 42.5 ms | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | 6.99e-03 ± 2.5e-04 · 807 pairs · 1,928 ms |
+| BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05 · 60 pairs · 131 ms | 4.02e-03 ± 1.8e-04 · 472 pairs · 302 ms | 2.30e-02 ± 4.6e-04 · 2433 pairs · 581 ms |
+| relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05 · 5 pairs · 85.3 ms | 6.94e-04 ± 7.6e-05 · 83 pairs · 319 ms | 7.33e-03 ± 2.5e-04 · 845 pairs · 1,471 ms |
+| relay-BP with a learned router | 5.00e-05 ± 2.0e-05 · 6 pairs · 41.0 ms | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | 6.99e-03 ± 2.5e-04 · 807 pairs · 1,928 ms |
 | PriorTilt, one run | 3.33e-05 ± 1.7e-05 · 4 pairs · 22.7 ms | 6.19e-04 ± 7.2e-05 · 74 pairs · 87.3 ms | 5.15e-03 ± 2.1e-04 · 601 pairs · 264 ms |
 | our hierarchy, lowest-weight tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · offline, no time | 4.76e-04 ± 6.3e-05 · 57 pairs · offline, no time | 4.50e-03 ± 2.0e-04 · 527 pairs · offline, no time |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 3.33e-05 ± 1.7e-05 · 4 pairs · 46.3 ms | 4.34e-04 ± 6.0e-05 · 52 pairs · 218 ms | 3.99e-03 ± 1.8e-04 · 469 pairs · offline, no time |

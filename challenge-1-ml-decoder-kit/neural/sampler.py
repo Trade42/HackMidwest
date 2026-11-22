@@ -20,7 +20,7 @@ import time
 import numpy as np
 import torch
 
-from circuit import dem_matrices, sample
+from circuit import dem_matrices, detector_ids, sample
 from make_circuit import memory_experiment
 
 
@@ -120,10 +120,7 @@ def compare_with_stim(code, basis, rounds, detectors, p, shots, seed, chunk=2000
     """
     circuit = memory_experiment(code, basis, rounds, p)
     sampler = DemSampler(code, basis, rounds, detectors, [p])
-    columns = np.arange(circuit.num_detectors)
-    if detectors == "basis":
-        from circuit import detector_ids
-        columns = detector_ids(circuit, basis)
+    columns = detector_ids(circuit, basis if detectors == "basis" else None)
     generator = torch.Generator().manual_seed(seed)
     ours, stims = Tally(), Tally()
     for start in range(0, shots, chunk):
@@ -172,10 +169,14 @@ def main():
     parser.add_argument("--shots", type=int, default=200000)
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--batch", type=int, default=128, help="batch size of the timing")
+    parser.add_argument("--detectors", nargs="+", choices=["all", "basis"], default=["all", "basis"])
+    parser.add_argument("--threads", type=int, help="CPU threads for torch")
     args = parser.parse_args()
+    if args.threads:
+        torch.set_num_threads(args.threads)
     print(f"error-model sampler against Stim's circuit sampler: {args.code}, {args.basis} memory, p={args.p:g}, "
           f"{args.shots} shots each, seed {args.seed}, {torch.get_num_threads()} CPU threads")
-    for detectors in ("all", "basis"):
+    for detectors in args.detectors:
         r = compare_with_stim(args.code, args.basis, args.rounds, detectors, args.p, args.shots, args.seed)
         seconds = time_sampler(args.code, args.basis, args.rounds, detectors, args.p, args.batch)
         print(f"detectors={detectors}: {r['detectors']} detectors, {r['mechanisms']} mechanisms")

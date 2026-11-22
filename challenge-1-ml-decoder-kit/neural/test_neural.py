@@ -279,6 +279,10 @@ def test_checkpoint_round_trips_and_resumes_to_the_same_steps(tmp_path):
     train.save_checkpoint(stopped, tmp_path / "checkpoint.pt")
     resumed = train.load_checkpoint(tmp_path / "checkpoint.pt", "cpu")
     assert resumed.step == 3 and resumed.config == stopped.config and same(state_of(resumed), state_of(stopped))
+    older = torch.load(tmp_path / "checkpoint.pt", weights_only=True)             # a file from before a setting existed
+    del older["config"]["snapshot_every"]
+    torch.save(older, tmp_path / "older.pt")
+    assert train.load_checkpoint(tmp_path / "older.pt", "cpu").config == stopped.config
     for _ in range(3):
         train.train_step(resumed)
     assert resumed.step == 6 and same(state_of(resumed), state_of(straight))
@@ -297,6 +301,14 @@ def test_a_different_seed_gives_a_different_run():
     assert not same(runs[0].model.state_dict(), runs[1].model.state_dict())
 
 
+def test_z_memory_trains_too():
+    run = train.new_run(SMALL | {"basis": "Z"}, "cpu")
+    train.train_step(run)
+    row = train.evaluate(run, 0.003, 40)
+    assert run.step == 1 and row["shots"] == 40 and 0 <= row["shots_wrong"] <= 1
+    assert run.model.config["basis"] == "Z" and run.sampler.num_detectors == run.model.num_inputs
+
+
 def log_lines(folder):
     """The lines of a run's log that do not depend on the machine's speed."""
     return [line for line in (folder / "train.log").read_text().splitlines() if not line.startswith("speed")]
@@ -307,7 +319,10 @@ def test_command_runs_twice_the_same_and_resumes(tmp_path):
                "--p-start", "0.001", "--p-train", "0.003", "--steps-start", "2", "--steps-anneal", "2",
                "--anneal-levels", "2", "--lr-decay-steps", "6", "--report-every", "3", "--report-shots", "40",
                "--report-p", "0.001", "0.003", "--seed", "4", "--threads", "1"]
-    train.main(["--out", str(tmp_path / "a"), "--steps", "6", *options])
+    train.main(["--out", str(tmp_path / "a"), "--steps", "6", "--snapshot-every", "3", *options])
+    assert sorted(path.name for path in (tmp_path / "a").iterdir()) == [
+        "checkpoint.pt", "checkpoint_step3.pt", "checkpoint_step6.pt", "train.log"]
+    assert torch.load(tmp_path / "a" / "checkpoint_step3.pt", weights_only=True)["step"] == 3
     train.main(["--out", str(tmp_path / "b"), "--steps", "6", *options])
     assert log_lines(tmp_path / "a")[:-1] == log_lines(tmp_path / "b")[:-1]       # the last line names the folder
 

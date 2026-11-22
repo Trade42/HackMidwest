@@ -13,6 +13,9 @@ The recipe of arXiv:2604.08358 at a small scale:
   on a GPU, gradient clipping, a warm-up and a cosine decay of the learning rate to one tenth.
 The paper's optimizers (Muon and Lion) are replaced by AdamW.
 
+checkpoint.pt is rewritten at every report. A copy checkpoint_step<N>.pt is kept every
+`--snapshot-every` steps: the decoders along the climb, for a later comparison at each noise.
+
 Every schedule counts steps, never seconds, and the shots of step s depend only on `--seed`
 and s. A resumed run therefore continues exactly where the first one stopped.
 
@@ -26,6 +29,7 @@ on the machine; every other line is the same when the same command is run twice 
 import argparse
 import math
 import os
+import shutil
 import subprocess
 import time
 from copy import deepcopy
@@ -45,12 +49,12 @@ DEFAULTS = {
     "weight_decay": 3e-3, "clip": 1.0, "ema": 0.9998,
     "p_start": 0.001, "p_train": 0.0055, "steps_start": 4000, "steps_anneal": 24000, "anneal_levels": 12,
     "report_every": 2000, "report_shots": 2000, "report_p": [0.001, 0.002, 0.003, 0.004, 0.005],
-    "seed": 0, "amp": "auto",
+    "snapshot_every": 10000, "seed": 0, "amp": "auto",
 }
 TINY = {"width": 32, "depth": 3, "batch": 32}   # for tests and smoke runs on a CPU
 MODEL_KEYS = ["code", "basis", "rounds", "detectors", "width", "depth", "bottleneck", "residual"]
 # Settings that may change when a run is resumed. Everything else is fixed by the checkpoint.
-RUN_CONTROL = ["steps", "report_every", "report_shots"]
+RUN_CONTROL = ["steps", "lr_decay_steps", "report_every", "report_shots", "snapshot_every"]
 TRAIN_STREAM, REPORT_STREAM = 1, 2
 
 
@@ -147,7 +151,7 @@ def save_checkpoint(run, path):
 def load_checkpoint(path, device, changes=None):
     """Rebuild a run from a checkpoint. `changes` may replace the settings listed in RUN_CONTROL."""
     state = torch.load(path, map_location="cpu", weights_only=True)
-    run = new_run(dict(state["config"], **(changes or {})), device)
+    run = new_run(DEFAULTS | state["config"] | (changes or {}), device)   # DEFAULTS fills settings newer than the file
     run.model.load_state_dict(state["model"])
     run.ema_model.load_state_dict(state["ema_model"])
     run.optimizer.load_state_dict(state["optimizer"])
@@ -298,6 +302,7 @@ def parse_args(argv=None):
     add("--report-every", type=int, help="steps between reports and checkpoints (default 2000)")
     add("--report-shots", type=int, help="error-model shots per noise strength in a report (default 2000)")
     add("--report-p", type=float, nargs="+", help="noise strengths of the reports (default 0.001 0.002 0.003 0.004 0.005)")
+    add("--snapshot-every", type=int, help="steps between kept copies checkpoint_step<N>.pt (default 10000)")
     add("--seed", type=int, help="fixes the initial weights and every shot (default 0)")
     add("--amp", choices=["auto", "fp16", "bf16", "off"], help="mixed precision; auto is fp16 on cuda and off on a CPU")
     return parser.parse_args(argv)
@@ -357,6 +362,8 @@ def main(argv=None):
         trained = time.perf_counter() - tick
         report(run, say)
         save_checkpoint(run, out / "checkpoint.pt")
+        if run.step // config["snapshot_every"] > first // config["snapshot_every"]:
+            shutil.copyfile(out / "checkpoint.pt", out / f"checkpoint_step{run.step}.pt")
         memory = f", peak GPU memory {torch.cuda.max_memory_allocated() / 2 ** 30:.2f} GB" if run.device.type == "cuda" else ""
         say(f"speed: {(run.step - first) * config['batch'] / trained:.0f} shots/s in training, "
             f"{trained / (run.step - first):.3f} s per step, report {time.perf_counter() - tick - trained:.1f} s{memory}")

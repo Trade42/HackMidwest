@@ -5,3 +5,31 @@ checkout: 3d4e5db server-jobs: gpu 020 (a third lane, the selection lists, the Z
 256 shot(s) to decode on 9 process(es); 0 kept from an earlier run
 validation_X.npz shot 961: right, converged, 1822 iterations, 6 s
 validation_X.npz shot 1307: right, converged, 7967 iterations, 29 s
+validation_X.npz shot 509: right, converged, 16023 iterations, 50 s
+validation_X.npz shot 18: right, converged, 18073 iterations, 52 s
+validation_X.npz shot 2386: right, converged, 288 iterations, 1 s
+validation_X.npz shot 617: right, converged, 18053 iterations, 54 s
+validation_X.npz shot 2191: right, converged, 1813 iterations, 5 s
+validation_X.npz shot 1086: right, converged, 18050 iterations, 57 s
+validation_X.npz shot 612: failed, NOT converged, 18080 iterations, 58 s
+validation_X.npz shot 2599: right, converged, 1291 iterations, 4 s
+validation_X.npz shot 2480: right, converged, 2262 iterations, 7 s
+validation_X.npz shot 1349: failed, NOT converged, 18080 iterations, 58 s
+validation_X.npz shot 3674: right, converged, 646 iterations, 2 s
+validation_X.npz shot 1059: failed, NOT converged, 18080 iterations, 60 s
+validation_X.npz shot 4017: right, converged, 1394 iterations, 4 s
+validation_X.npz shot 1703: right, converged, 18074 iterations, 58 s
+validation_X.npz shot 4100: right, converged, 1735 iterations, 5 s
+validation_X.npz shot 4043: right, converged, 1931 iterations, 7 s
+validation_X.npz shot 4749: right, converged, 164 iterations, 1 s
+validation_X.npz shot 4441: right, converged, 1076 iterations, 3 s
+train_X.npz shot 397: right, converged, 342 iterations, 1 s
+validation_X.npz shot 4542: right, converged, 2127 iterations, 6 s
+train_X.npz shot 647: right, converged, 2138 iterations, 6 s
+validation_X.npz shot 1789: right, converged, 14215 iterations, 54 s
+validation_X.npz shot 4113: failed, converged, 9036 iterations, 29 s
+train_X.npz shot 723: right, converged, 4703 iterations, 14 s
+train_X.npz shot 1312: right, converged, 285 iterations, 1 s
+validation_X.npz shot 2484: right, converged, 13511 iterations, 40 s
+validation_X.npz shot 2653: right, converged, 12742 iterations, 40 s
+validation_X.npz shot 4302: right, converged, 9944 iterations, 37 s

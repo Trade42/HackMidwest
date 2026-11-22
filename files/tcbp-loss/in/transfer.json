@@ -1,0 +1,91 @@
+{
+ "label": "exploration, after the main test results; a separate branch",
+ "prefix": 1000,
+ "condition": "starter",
+ "files": [
+  {
+   "tag": "f0.4",
+   "shots_file": "/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise/runs/X_loss_seed6100/shots/X_f0.4_loss_seed6100.npz",
+   "shots_sha256": "9c225b77e7e5a2913267843ed0e2e11518403fa2e47afcb462eeb2a7600d92fd",
+   "shots_in_file": 2000,
+   "shots": 1000,
+   "seed": 6100,
+   "basis": "X",
+   "factor": 0.4,
+   "noise": {
+    "cx_depolarize2": 0.0,
+    "cx_phase": 0.0029200000000000003,
+    "cx_scatter": 6.276e-05,
+    "idle_depolarize": 0.0,
+    "idle_phase": 0.0004281125727106705,
+    "measure_flip": 0.005000000000000001,
+    "reset_flip": 0.008400000000000008,
+    "loss": 0.001
+   },
+   "p": 0.0059563,
+   "p_what": "generic-2q: noise.two_qubit_error()",
+   "converted": "X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz",
+   "converted_sha256": "1539aa06c4cf839191424de372a1785238c32d5aeece283b4b343ff822e9819f",
+   "columns": 8784,
+   "h_l_sha256": "a4a80003a0b234e0e10b5d65d38ce5181c39670732e0f473df0aee1796c2c8b0",
+   "generic_sum": 70.2074919121304,
+   "matched": {
+    "file": "priors_matched_f0.4.npy",
+    "sha256": "f918a92a4e70fafcbb9d30b14098080e3cdd1697805102f61a9b52f511952fde",
+    "max": 0.030358224681465953,
+    "min": 4.184000000001109e-05,
+    "columns_fired": 8784
+   },
+   "flags": {
+    "file": "flags_f0.4.npz",
+    "sha256": "4f3ddc6ba7c318d61abf2f230c17462c584798a9e2093a9d3706ab2d392a472d",
+    "bumped_entries": 160334,
+    "shots_with_flags": 1000,
+    "mean_heralds_per_shot": 20.519,
+    "largest_gap_to_loss_starter": 1.1102230246251565e-16
+   }
+  },
+  {
+   "tag": "f0.6",
+   "shots_file": "/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise/runs/X_loss_seed6100/shots/X_f0.6_loss_seed6100.npz",
+   "shots_sha256": "bcdcfdf177d27910b3096a2c1948034e6731fc876d68c861847864361c1e2282",
+   "shots_in_file": 2000,
+   "shots": 1000,
+   "seed": 6100,
+   "basis": "X",
+   "factor": 0.6,
+   "noise": {
+    "cx_depolarize2": 0.0,
+    "cx_phase": 0.00438,
+    "cx_scatter": 9.413999999999999e-05,
+    "idle_depolarize": 0.0,
+    "idle_phase": 0.0006421688590660058,
+    "measure_flip": 0.0075,
+    "reset_flip": 0.01260000000000001,
+    "loss": 0.0015
+   },
+   "p": 0.0089274,
+   "p_what": "generic-2q: noise.two_qubit_error()",
+   "converted": "X_f0.6_loss_seed6100_first1000_kitformat_p0.0089274.npz",
+   "converted_sha256": "97f0ef3644d45a06627519e01788e677480b6af86b278697f04fddc7d6c7fe34",
+   "columns": 8784,
+   "h_l_sha256": "a4a80003a0b234e0e10b5d65d38ce5181c39670732e0f473df0aee1796c2c8b0",
+   "generic_sum": 104.67165520575315,
+   "matched": {
+    "file": "priors_matched_f0.6.npy",
+    "sha256": "2f0e3823912ed1cdcc2150ed5b69d22945496205ad0f9b8aa68bd392445d4625",
+    "max": 0.04494114147825642,
+    "min": 6.275999999995578e-05,
+    "columns_fired": 8784
+   },
+   "flags": {
+    "file": "flags_f0.6.npz",
+    "sha256": "5d4629bb3168b99bac25a6f637400c28b4653a94cecc1017ac15776330ef66a4",
+    "bumped_entries": 237563,
+    "shots_with_flags": 1000,
+    "mean_heralds_per_shot": 30.532,
+    "largest_gap_to_loss_starter": 5.551115123125783e-17
+   }
+  }
+ ]
+}

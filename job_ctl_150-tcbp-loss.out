@@ -1,1 +1,24 @@
 Sun Nov 22 16:39:13 UTC 2026
+flags_f0.4.npz: OK
+flags_f0.6.npz: OK
+X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz: OK
+X_f0.6_loss_seed6100_first1000_kitformat_p0.0089274.npz: OK
+priors_matched_f0.4.npy: OK
+priors_matched_f0.6.npy: OK
+transfer.json: OK
+SHA256SUMS: OK
+head_X.pt: OK
+trunk_X.pt: OK
+flags_f0.4.npz: OK
+flags_f0.6.npz: OK
+X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz: OK
+X_f0.6_loss_seed6100_first1000_kitformat_p0.0089274.npz: OK
+priors_matched_f0.4.npy: OK
+priors_matched_f0.6.npy: OK
+transfer.json: OK
+predecoder/logs/fit_tcbp_X_p0.005.json: OK
+PYT=/home/blakew3/.conda/envs/cascade/bin/python
+Sun Nov 22 16:41:07 UTC 2026
+name, memory.used [MiB], utilization.gpu [%]
+NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
+evaluate f0.4 fp32 exit 0

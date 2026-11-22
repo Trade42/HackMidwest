@@ -42,6 +42,26 @@ from hierarchy.rules import (ORDER, P1, agree, bits_for_network, lowest_weight, 
 
 R = ORDER.index("R")
 FIELDS = ("predicted", "converged", "iterations", "weight", "seconds")
+HELD_OUT = ("test_", "go_")       # the team's held-out shot files, by the start of their name
+
+
+def refuse_held_out(data_name, what):
+    """Stop if a file that would be used to fit or to choose was made from held-out shots."""
+    name = str(data_name).replace("\\", "/").rsplit("/", 1)[-1]
+    if name.startswith(HELD_OUT):
+        raise SystemExit(f"{what} was made from the held-out file {name}: nothing is fitted or chosen on held-out shots")
+
+
+def refuse_held_out_fit(candidates, logits=()):
+    """The same for candidate files (by their data_name) and for logits files (by the .json beside them)."""
+    for path in candidates:
+        with np.load(path, allow_pickle=False) as file:
+            if "data_name" in file.files:
+                refuse_held_out(file["data_name"], path)
+    for path in logits:
+        numbers = Path(path).with_suffix(".json")
+        if numbers.is_file():       # neural.evaluate_stim writes "data": "<path of the shot file> (Stim circuit shots, ...)"
+            refuse_held_out(json.loads(numbers.read_text(encoding="utf-8")).get("data", "").split(" (")[0], path)
 
 
 # ---------- reading ----------
@@ -104,7 +124,8 @@ def load_logits(paths, pool, sources):
         numbers = Path(path).with_suffix(".json")
         if numbers.is_file():
             record = json.loads(numbers.read_text(encoding="utf-8"))
-            times.append((record["latency_ms_mean"], record["latency_shots"], record.get("device", "unknown device")))
+            if "latency_ms_mean" in record:
+                times.append((record["latency_ms_mean"], record.get("latency_shots", 1), record.get("device", "unknown device")))
     network = NetworkLogits(np.concatenate(logits_parts), np.concatenate(candidate_parts, axis=1))
     if len(times) == len(paths):
         network.ms = sum(ms * shots for ms, shots, _ in times) / sum(shots for _, shots, _ in times)
@@ -335,6 +356,7 @@ def main(argv=None):
     if args.fit_candidates or args.fit_logits or args.constants:
         if not (args.fit_candidates and args.fit_logits and args.constants):
             raise SystemExit("fitting C needs --fit-candidates, --fit-logits and --constants together")
+        refuse_held_out_fit(args.fit_candidates, args.fit_logits)
         fit_pool, fit_sources = load_candidates(args.fit_candidates)
         best, failures = fit_constant(fit_pool, load_logits(args.fit_logits, fit_pool, fit_sources), args.constants)
         fit_hashes = [source["data_sha256"] for source in fit_sources]

@@ -80,7 +80,7 @@ from pathlib import Path
 import numpy as np
 
 from hierarchy.rules import bits_for_network, network_score, paired_test, wilson_interval
-from hierarchy.select import _model_from_kit
+from hierarchy.select import _model_from_kit, refuse_held_out
 
 ALWAYS_ON = ("P1", "P2", "T")
 # key, description, the members that must agree to accept, a majority vote first?, the candidates of the later stage, the scorer
@@ -121,6 +121,7 @@ class Shots:
     data_sha256: str
     basis: str = None
     p: float = None
+    data_name: str = None   # the name of the shot file, where a member file records it
 
 
 @dataclass
@@ -156,6 +157,8 @@ def load_members(paths):
             raise SystemExit(f"{path} does not line up with the other member files: other shots or another truth")
         if "basis" in arrays:
             shots.basis, shots.p = str(arrays["basis"]), float(arrays["p"])
+        if "data_name" in arrays:
+            shots.data_name = str(arrays["data_name"])
         times_from = "no record in the file"
         if "machine" in arrays:
             processes = "/".join(str(n) for n in np.unique(arrays["processes"])) + " process(es) on " if "processes" in arrays else ""
@@ -368,7 +371,8 @@ def numbers(members, shots, network, rows):
                     both, only_row, only_reference, p_value = paired_test(row["failed"], by_key[reference]["failed"])
                     entry[f"against_{reference}"] = {"both": both, "row_only": only_row, "reference_only": only_reference, "p": p_value}
         table.append(entry)
-    return {"data_sha256": shots.data_sha256, "basis": shots.basis, "p": shots.p, "shots": len(shots.truth), "ablation": ablation(rows),
+    return {"data_sha256": shots.data_sha256, "data_name": shots.data_name, "basis": shots.basis, "p": shots.p,
+            "shots": len(shots.truth), "ablation": ablation(rows),
             "members": {member.name: {"file": member.source, "shots": int(member.covers.sum()), "times_from": member.times_from}
                         for member in members.values()},
             "network_ms": None if network is None else network.ms, "not_unanimous": int((~unanimous(members)).sum()), "rows": table}
@@ -422,6 +426,8 @@ def choose_rule(paths, shots):
     records = [json.loads(Path(path).read_text(encoding="utf-8")) for path in paths]
     if any(record["data_sha256"] == shots.data_sha256 for record in records):
         raise SystemExit("--chosen-on names a .json of the data file that is being scored: choose the rule on other shots")
+    for path, record in zip(paths, records, strict=True):
+        refuse_held_out(record.get("data_name") or "", path)
     totals = {}
     for key, *_ in RULES:
         found = [next((row.get("failures") for row in record["rows"] if row["key"] == key), None) for record in records]
@@ -431,7 +437,8 @@ def choose_rule(paths, shots):
         raise SystemExit("no rule was measured in every --chosen-on file")
     chosen = min(totals, key=lambda key: (totals[key], [rule[0] for rule in RULES].index(key)))
     shots_used = sum(record["shots"] for record in records)
-    return chosen, (f"rule chosen on {shots_used} training shots (data sha256 {', '.join(record['data_sha256'] for record in records)}): "
+    names = ", ".join(record.get("data_name") or "a file without a recorded name" for record in records)
+    return chosen, (f"rule chosen on the {shots_used} shots of {names} (data sha256 {', '.join(record['data_sha256'] for record in records)}): "
                     + ", ".join(f"{key} {value}" for key, value in totals.items()) + f" failures; chosen: {chosen}")
 
 

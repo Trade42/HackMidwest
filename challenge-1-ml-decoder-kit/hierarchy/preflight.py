@@ -13,9 +13,9 @@ preflight never opens held-out shots.
 The steps, on the first --shots shots (default 16) of each file:
 
   1. the plugin, made through the evaluator's own create_session with exactly the given
-     options file: both checkpoints must load (a basis that falls back to the weight rule is a
-     failure unless --allow-weight-rule), every shot is decoded and its result checked, and
-     the network is asked once per basis;
+     options file: every shot is decoded and its result checked. Both bases must have a
+     checkpoint (unless --allow-weight-rule), and each network is loaded through the plugin
+     and asked once, also for a basis whose chosen rule does not use it;
   2. hierarchy.candidates on the slices (P1, P2, R);
   3. neural.evaluate_stim --save with each checkpoint of the options file (the logits);
   4. hierarchy.tcbp_member in the Python given by --tcbp-python, as a subprocess (T). On a
@@ -57,8 +57,10 @@ def check_plugin(slices, options, allow_weight_rule):
         data = load_shots(path)
         session = create_session(PLUGIN, kit_problem(basis, data.p), options)
         asked, used = session.settings["rule_asked"], session.settings["rule"]
-        if asked != used and not allow_weight_rule:
-            raise SystemExit(f"{basis}: the options ask for the {asked} rule, the session uses the {used} rule: {session.settings['rule_note']}")
+        has_checkpoint = basis in (options.get("checkpoints") or {})
+        if (asked != used or not has_checkpoint) and not allow_weight_rule:
+            raise SystemExit(f"{basis}: no network can be asked for this basis: the options hold no checkpoint for it "
+                             f"(rule asked: {asked}, rule used: {used}). Pass --allow-weight-rule only if that is meant.")
         stages = []
         for full, part in zip(data.detectors, data.basis_input, strict=True):
             result = session.decode_shot(full, part)
@@ -66,6 +68,9 @@ def check_plugin(slices, options, allow_weight_rule):
             stages.append(result.metrics["stage"])
         json.dumps(session.settings)                      # the evaluator writes the settings as JSON
         line = f"{basis}: rule {used}, {len(stages)} shots decoded, stages {sorted(set(stages))}, set-up {session.setup_seconds:.1f} s"
+        if session.network is None and has_checkpoint:    # the chosen rule does not use the network: load and ask it all the same
+            session = create_session(PLUGIN, kit_problem(basis, data.p), options | {"rule": "network"})
+            line += "; the chosen rule does not use the network, which was loaded through the plugin and asked once all the same"
         if session.network is not None:                   # few shots rarely reach the network: ask it once directly
             logits, answer = session.network(data.detectors[0], data.basis_input[0])
             three = np.stack([answer, 1 - answer, np.roll(answer, 1)])[:, None, :]
@@ -73,8 +78,10 @@ def check_plugin(slices, options, allow_weight_rule):
             if logits.shape != (12,) or not np.isfinite(logits).all() or int(most_likely(own, logits[None])[0]) != 0:
                 raise SystemExit(f"{basis}: the network's answer does not score highest among its own candidates: logits {logits}")
             record = session.settings["network"]
-            line += (f"; network step {record['step']}, sha256 {record['sha256'][:12]}..., operators {record['logical_operators']}, "
+            line += (f"; NETWORK ASKED: step {record['step']}, sha256 {record['sha256'][:12]}..., operators {record['logical_operators']}, "
                      f"on {record['device']}")
+        elif not allow_weight_rule:
+            raise SystemExit(f"{basis}: the network was not asked")
         print(line, flush=True)
 
 

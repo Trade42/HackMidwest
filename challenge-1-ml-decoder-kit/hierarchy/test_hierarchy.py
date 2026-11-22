@@ -240,6 +240,17 @@ def test_select_says_when_a_constant_is_fitted_on_the_scored_shots(tmp_path, cap
     assert "counts as a result only if it was chosen on other shots" in capsys.readouterr().out
     with pytest.raises(SystemExit, match="together"):
         select.main(["--candidates", scored, "--logits", logits, "--constants", "10"])
+    # Nothing is fitted on a file made from held-out shots: candidates by their data_name, logits by the .json beside them.
+    held = arrays_of(other) | {"data_name": "test_X.npz"}
+    np.savez(tmp_path / "held.npz", **held)
+    with pytest.raises(SystemExit, match="held-out file test_X.npz"):
+        select.main(["--candidates", scored, "--logits", logits, "--fit-candidates", str(tmp_path / "held.npz"), *fit])
+    (tmp_path / "l.json").write_text(json.dumps({"data": "C:\\data\\p0.004\\go_X.npz (Stim circuit shots, p=0.004)"}))
+    with pytest.raises(SystemExit, match="held-out file go_X.npz"):
+        select.main(["--candidates", scored, "--logits", logits, "--fit-candidates", other, *fit])
+    with pytest.raises(SystemExit, match="held-out file go_X.npz"):
+        plugin_options.main(["--out", str(tmp_path / "o.json"), "--x-checkpoint", scored, "--x-candidates", other, "--x-logits", logits])
+    (tmp_path / "l.json").unlink()
 
 
 def test_select_refuses_logits_of_other_shots(tmp_path):
@@ -364,6 +375,9 @@ def test_a_basis_without_a_checkpoint_uses_the_weight_rule_and_says_so():
     assert session.decode_shot(np.zeros(1728, np.uint8), np.zeros(936, np.uint8)).metrics["winner"] == "P2"
     with pytest.raises(ValueError, match="unknown options"):
         HierarchySession(fake_problem(), {"checkpoint": "typo.pt"}, hierarchy=stages)
+    for wrong in ({"rule": {"X": "converged"}}, {"rule": {"x": "weight", "Z": "weight"}}, {"rule": "weight", "checkpoints": {"z": "a.pt"}}):
+        with pytest.raises(ValueError, match="X.* and .Z"):                     # a missing basis or a mistyped key is an error
+            HierarchySession(fake_problem("Z"), wrong, hierarchy=stages)
     per_basis = {"rule": {"X": "converged", "Z": "weight"}}                    # one rule per memory basis
     assert HierarchySession(fake_problem("X"), per_basis, hierarchy=stages).rule == "converged"
     assert HierarchySession(fake_problem("Z"), per_basis, hierarchy=stages).rule == "weight"
@@ -564,6 +578,18 @@ def test_joint_member_decodes_the_listed_shots_and_refuses_a_foreign_selection(t
     np.savez(selection, shot=np.array([1]), data_sha256="0" * 64)
     with pytest.raises(SystemExit, match="was made from a data file"):
         joint_member.main([*command, "--selection", str(selection)])
+
+    # An empty list (every shot unanimous) gives a file with no rows, which the ensemble reads as "J on no shot".
+    np.savez(selection, shot=np.array([], int), data_sha256=data.sha256)
+    joint_member.main(["--data", str(shot_files["X"]), "--out", str(tmp_path / "none"), "--selection", str(selection)])
+    empty = arrays_of(tmp_path / "none" / "small_X.joint.npz")
+    assert empty["shot"].shape == (0,) and empty["predicted_J"].shape == (0, 12) and int(empty["shots_in_file"]) == SHOTS
+    np.savez(tmp_path / "cand.npz", truth=data.observables, data_sha256=data.sha256, basis="X", p=0.004,
+             **{f"predicted_{name}": data.observables for name in ("P1", "P2", "R")})
+    np.savez(tmp_path / "tcbp.npz", truth=data.observables, data_sha256=data.sha256, basis="X", p=0.004, predicted_T=data.observables)
+    rows = {row["key"]: row for row in ensemble.main(["--members", str(tmp_path / "cand.npz"), str(tmp_path / "tcbp.npz"),
+                                                      str(tmp_path / "none" / "small_X.joint.npz"), "--rule", "f"])}
+    assert int(rows["f"]["failed"].sum()) == 0 and int(rows["f"]["later"].sum()) == 0 and rows["J"]["shots"] == 0
     with pytest.raises(SystemExit, match="held-out"):
         joint_member.main(["--data", str(tmp_path / "go_X.npz"), "--shots", "0", "--out", str(tmp_path / "x")])
     with pytest.raises(SystemExit, match="has shots 0 to"):
@@ -668,9 +694,13 @@ def test_ensemble_command_selection_and_rule_choice(tmp_path, capsys):
     other, other_logits = write_ensemble(tmp_path / "validation", data_sha256="d" * 64)
     ensemble.main(["--members", *other, "--logits", other_logits, "--chosen-on", str(tmp_path / "train.json")])
     printed = capsys.readouterr().out
-    assert "chosen: c" in printed and "<- chosen on the training shots" in printed
+    assert "chosen: c" in printed and "<- chosen on the training shots" in printed and "rule chosen on the 7 shots of" in printed
     with pytest.raises(SystemExit, match="choose the rule on other shots"):
         ensemble.main(["--members", *files, "--logits", logits, "--chosen-on", str(tmp_path / "train.json")])
+    held = json.loads((tmp_path / "train.json").read_text()) | {"data_name": "test_X.npz", "data_sha256": "f" * 64}
+    (tmp_path / "held.json").write_text(json.dumps(held))
+    with pytest.raises(SystemExit, match="held-out file test_X.npz"):           # a rule is never chosen on held-out shots
+        ensemble.main(["--members", *other, "--logits", other_logits, "--chosen-on", str(tmp_path / "held.json")])
 
     # The per-shot results beside the numbers, and the kit's score per pair from an X file and a Z file.
     per_shot = arrays_of(tmp_path / "train.npz")
@@ -747,8 +777,8 @@ def test_plugin_options_take_the_network_rule_only_where_it_is_no_worse(tmp_path
                                    "--x-candidates", candidates_file, "--x-logits", good, "--z-checkpoint", str(tmp_path / "z.pt"),
                                    "--z-candidates", lost, "--z-logits", bad])
     printed = capsys.readouterr().out
-    assert "PLUGIN_RULE X network    (network 3 failures, converged 4, on 5 shots)" in printed
-    assert "PLUGIN_RULE Z converged    (network 1 failures, converged 0, on 1 shots)" in printed
+    assert "PLUGIN_RULE X network    (network 3 failures, converged 4, on 5 shots; logits of checkpoint step not recorded)" in printed
+    assert "PLUGIN_RULE Z converged    (network 1 failures, converged 0, on 1 shots; logits of checkpoint step not recorded)" in printed
     assert options == json.loads((tmp_path / "options.json").read_text()) == {
         "rule": {"X": "network", "Z": "converged"}, "seeds": [1, 1001], "device": "cpu", "torch_threads": 1,
         "checkpoints": {"X": str(tmp_path / "x.pt"), "Z": str(tmp_path / "z.pt")}}
@@ -756,6 +786,20 @@ def test_plugin_options_take_the_network_rule_only_where_it_is_no_worse(tmp_path
     assert HierarchySession(fake_problem("Z"), options, hierarchy=stages).rule == "converged"      # the plugin reads the file as written
     only_x = plugin_options.main(["--out", str(tmp_path / "x_only.json"), "--x-checkpoint", str(tmp_path / "x.pt")])
     assert only_x["rule"] == {"X": "converged", "Z": "converged"} and "no checkpoint was given" in capsys.readouterr().out
+
+
+def test_plugin_options_refuse_logits_of_another_checkpoint(tmp_path, capsys):
+    pytest.importorskip("torch")
+    checkpoint = tiny_checkpoint(tmp_path / "x.pt", "X")                       # its step is 0
+    candidates_file = write_candidates(tmp_path / "c.npz", HAND_MADE)
+    logits = write_logits(tmp_path / "l.npz", HAND_MADE_LOGITS)
+    command = ["--out", str(tmp_path / "o.json"), "--x-checkpoint", checkpoint, "--x-candidates", candidates_file, "--x-logits", logits]
+    (tmp_path / "l.json").write_text(json.dumps({"checkpoint_step": 0}))
+    plugin_options.main(command)
+    assert "logits of checkpoint step 0)" in capsys.readouterr().out
+    (tmp_path / "l.json").write_text(json.dumps({"checkpoint_step": 30000}))
+    with pytest.raises(SystemExit, match="Make the logits again"):
+        plugin_options.main(command)
 
 
 # ---------- the side-by-side mode ----------

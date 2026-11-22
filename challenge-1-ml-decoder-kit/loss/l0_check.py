@@ -7,7 +7,7 @@ usage (from challenge-1-ml-decoder-kit/):
    (circuit.sample, seed 1000, the same shot count): mean detector weight, the largest per-detector z-score,
    and the per-observable flip rate.
 2. Relay-BP failures on the Clifft shots (from the decode parts) against the kit's reference at p = 0.004
-   (README.md: relay-BP failures X = 45 of 10,000; the relay-BP authors: 53 of 10,000).
+   (README.md: relay-BP failures X = 45 of 10,000; baselines.log: 51; the relay-BP authors: 53 of 10,000).
 """
 import argparse
 import json
@@ -18,7 +18,8 @@ from circuit import sample
 from loss.lossmodel import kit_circuit, load_dataset
 from loss.summarize import load_parts, wilson
 
-KIT = {"kit README, relay-BP X": (45, 10000), "relay-BP authors, X": (53, 10000)}
+KIT = {"kit README, relay-BP X": (45, 10000), "baselines.log (teammate), relay-BP X": (51, 10000),
+       "relay-BP authors, X": (53, 10000), "the three pooled": (149, 30000)}
 
 
 def two_proportion_z(k1, n1, k2, n2):

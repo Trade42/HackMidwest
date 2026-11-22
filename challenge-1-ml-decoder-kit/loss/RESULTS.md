@@ -107,3 +107,32 @@ flock /home/sal/hackMidwest/dq/run/sim-d.lock nice -n 15 taskset -c 0-3 loss/run
 ```
 
 Results: `results/check_map_*.json`, `results/check_forced_*.json`; logs: `logs/check_map_*.log`, `logs/check_forced_*.log`.
+
+## L0: no loss (s = 0): Clifft's shots against Stim's and the kit's
+
+Dataset: X memory, p = 0.004, s = 0, 10,000 shots, seed 1000 (chunks of 2,000, seeds 1000 to 1004), with probes.
+Decoder: relay-BP at the kit's settings, a fresh decoder with seed 1 for every shot.
+
+| Check | Clifft (s = 0) | Reference | Verdict |
+|---|---|---|---|
+| mean detector weight per shot (1,728 detectors) | 232.78 | Stim, same circuit, 10,000 shots, seed 1000: 233.01 | z = −0.60 |
+| largest per-detector difference in firing rate | |z| = 3.64 over 1,728 detectors, none above 4 | (expected maximum of 1,728 normal z: about 3.4) | consistent |
+| observable flip rates (undecoded) | 0.493 to 0.507 | Stim: 0.491 to 0.501 | both fair coins, as the kit says |
+| relay-BP failures, X | **64 / 10,000 = 0.64% (95% Wilson 0.50–0.82%)**; 27 unconverged, mean 542 iterations | kit README 45 / 10,000; `baselines.log` 51 / 10,000; relay-BP authors 53 / 10,000; the three pooled 149 / 30,000 = 0.50% (0.42–0.58%) | z = 1.82, 1.22, 1.02; pooled z = 1.71 (two-sided p ≈ 0.09) |
+
+**L0 passes.** The per-shot detector statistics, which are far more precise than a failure count, match Stim's.
+The relay-BP failure count is 1.7σ above the pooled reference, which is within the statistical error; the
+brief's "about 0.5%" lies inside our interval.
+
+Clifft's sampling speed on this circuit (four threads, with probes, in `sample.py`): 400 shots/s at s = 0,
+301 shots/s at s = 1e-3. Single-thread speeds on one physical core are in L4.
+
+Commands:
+
+```sh
+loss/runs/L0_L1_s1e-3.sh          # samples the dataset, decodes it (parts of 2,500 shots, lanes A+D or D)
+python -m loss.l0_check --data $S/data/X_p0.004_s0_seed1000.npz --parts "$S/parts/L0_X_p0.004_s0/blind/*.npz" --out loss/results/L0_X_p0.004
+```
+
+`S=/home/sal/hackMidwest/orchestration/scratch/loss-gates`. Results: `results/L0_X_p0.004.json`,
+`results/L0_X_p0.004_s0_table.{json,md}`. Logs: `logs/L0_L1_s1e-3.log`, `logs/L0_check.log`.

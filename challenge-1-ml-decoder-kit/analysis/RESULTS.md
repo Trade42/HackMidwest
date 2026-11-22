@@ -14,6 +14,7 @@ Only what the tables below support. Relay-BP is the kit's baseline (80 / 60 / st
   - among 16 relay-BP candidates the right logical class is present for 79% of the converged-wrong failures, but the lowest weight picks it for only 49%, no better than one re-roll.
   - Joint decoding on all 1,728 detectors fixes 43 of 44 failures at p = 0.003 and 89 of 100 sampled at 0.004, at about 60 to 70 times the time on a typical shot. It broke 0 of 300 and 1 of 200 controls.
   - The relay-BP authors' own runs put joint decoding overall 2.5 times below separate decoding at p = 0.003, 1.3 times at 0.004, and above it at 0.005.
+  - At p = 0.005 the same pattern holds with lower fixes: a re-roll fixes 27%, a larger budget 37%, BP-OSD about 15% (breaking about 10% of controls), and the right class is among the 16 candidates for 79% of converged-wrong failures while the lowest weight finds it for 42%.
 - **G3, where the time goes.** The slowest 10% of shots take 48% to 71% of all iterations (p = 0.003 to 0.004).
   - At p = 0.004 the later legs must stay at 60 iterations.
   - Stopping after 3 solutions (80 / 60 / 3) cuts mean iterations 1.44 times with no measurable cost: 42 failed pairs against 51 of 5,000.
@@ -260,6 +261,37 @@ Both bases, on the 145 converged-wrong failures:
 - I3 passes its kill line: the right class is among relay-BP's candidates in 79% of the converged-wrong failures, far above 30%.
 - But weight does not find it. The lowest-weight and vote picks get 48% to 49%, no better than one re-roll (47%).
 - So the information is in the candidate set and the weight is the wrong score. A learned score over a few candidates is an opening this measures directly; no such score was trained or tested here.
+
+### Items 1 to 3 at p = 0.005, and the re-roll floor
+
+`analysis/steps.sh step7` (log `logs/g2_run_step7.log`), on luminaty, 8 processes, from 23:50 CST to 00:28 CST (05:50 to 06:28 UTC). F is a seeded 100 of relay-BP's 207 (X) and 197 (Z) failures (`--max-failed 0.005:100`), and C is 100 controls per basis. The 16-candidate runs used every converged-wrong failure in F and a seeded 5 of its unconverged ones per basis. "Other's failures on all shots" scales to the 5,000 G1 shots per basis.
+
+| decoder | basis | F | fixed: all / of unconverged / of converged-wrong | C | broken | 2 x 2: both wrong / only relay-BP / only other / both right | exact paired p | break rate [95% CP] | other's failures on all 5,000 shots, estimate [range], against relay-BP's | iterations mean F / C | ms mean F / C |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| re-roll (kit settings, fresh decoder) | X | 100 | 23 / 13 of 65 / 10 of 35 | 100 | 3 | 77 / 23 / 3 / 97 | 8.8e-5 | 0.030 [0.006, 0.085] | 303 [170, 584] vs 207 | 15,551 / 1,378 | 12,848 / 1,139 |
+| re-roll | Z | 100 | 30 / 13 of 64 / 17 of 36 | 100 | 1 | 70 / 30 / 1 / 99 | 3.0e-8 | 0.010 [0.000, 0.054] | 186 [119, 417] vs 197 | 15,401 / 1,800 | 13,385 / 1,554 |
+| stop after 20, 600 legs | X | 100 | 35 / 22 of 65 / 13 of 35 | 100 | 1 | 65 / 35 / 1 / 99 | 1.1e-9 | 0.010 [0.000, 0.054] | 182 [115, 415] vs 207 | 32,924 / 4,807 | 28,781 / 4,312 |
+| stop after 20, 600 legs | Z | 100 | 39 / 20 of 64 / 19 of 36 | 100 | 1 | 61 / 39 / 1 / 99 | 7.5e-11 | 0.010 [0.000, 0.054] | 168 [101, 401] vs 197 | 33,081 / 6,057 | 27,200 / 4,830 |
+| BP-OSD, order 10 (kit) | X | 100 | 14 / 8 of 65 / 6 of 35 | 100 | 9 | 86 / 14 / 9 / 91 | 0.40 | 0.090 [0.042, 0.164] | 609 [362, 977] vs 207 | 80 / 67 | 1,208 / 623 |
+| BP-OSD, order 10 | Z | 100 | 17 / 11 of 64 / 6 of 36 | 100 | 10 | 83 / 17 / 10 / 90 | 0.25 | 0.100 [0.049, 0.176] | 644 [382, 1,023] vs 197 | 80 / 70 | 1,182 / 759 |
+| BP-OSD, order 60 | X | 100 | 12 / 7 of 65 / 5 of 35 | 100 | 9 | 88 / 12 / 9 / 91 | 0.66 | 0.090 [0.042, 0.164] | 614 [367, 980] vs 207 | 80 / 67 | 1,203 / 633 |
+| BP-OSD, order 60 | Z | 100 | 17 / 11 of 64 / 6 of 36 | 100 | 10 | 83 / 17 / 10 / 90 | 0.25 | 0.100 [0.049, 0.176] | 644 [382, 1,023] vs 197 | 80 / 70 | 1,229 / 809 |
+
+| basis | set | shots | right class among the candidates | lowest weight right | vote right | no candidate | one distinct candidate | first leg converged: shots, any / lowest / vote right | first leg unconverged: shots, any / lowest / vote right |
+|---|---|---|---|---|---|---|---|---|---|
+| X | converged-wrong failures | 35 | 24 | 16 | 16 | 0 | 5 | 5: 0 / 0 / 0 | 30: 24 / 16 / 16 |
+| X | unconverged failures (seeded 5) | 5 | 4 | 4 | 4 | 1 | 0 | 0: – | 5: 4 / 4 / 4 |
+| X | control | 100 | 100 | 100 | 100 | 0 | 73 | 73: 73 / 73 / 73 | 27: 27 / 27 / 27 |
+| Z | converged-wrong failures | 36 | 32 | 14 | 14 | 0 | 2 | 2: 0 / 0 / 0 | 34: 32 / 14 / 14 |
+| Z | unconverged failures (seeded 5) | 5 | 3 | 3 | 3 | 1 | 1 | 0: – | 5: 3 / 3 / 3 |
+| Z | control | 100 | 100 | 100 | 100 | 0 | 70 | 70: 70 / 70 / 70 | 30: 30 / 30 / 30 |
+
+**What this says at p = 0.005:**
+
+- The re-roll floor is lower here: 53 of 200 failures (27%). Most failures are unconverged, and another draw rarely rescues them (26 of 129).
+- The larger budget fixes 74 of 200 (37%), 10 points above the floor again, at 3 to 4 times the work on a typical shot.
+- BP-OSD fixes 29 to 31 of 200 and breaks 19 of 200 controls (about 10%): it is the weaker decoder here, as the kit's README shows (it fails about 3 times as often at p = 0.005).
+- The 16 candidates hold the right class for 56 of the 71 converged-wrong failures (79%, 66% to 87%), exactly as at p = 0.004. The lowest weight picks it for only 30 (42%, 31% to 55%), and the vote for 30.
 
 ### Item 5: joint decoding of both check types
 

@@ -67,6 +67,10 @@ computes it (decoders.per_cycle_rate, 12 cycles).
 
 --write-selection <file> lists the shots where the always-on members are not unanimous: the
 shots for hierarchy.joint_member.
+
+--no-joint says that joint decoding was not run for this file. The rules with J are then
+scored with J on no shot (rule f becomes: T's answer wherever the three are not unanimous,
+which is TCBP-JOBS alone), instead of being left unmeasured.
 """
 import argparse
 import json
@@ -441,6 +445,7 @@ def main(argv=None):
     parser.add_argument("--chosen-on", nargs="+", help="the --save .json of OTHER shots (training files): marks the rule they choose")
     parser.add_argument("--save", help="write the numbers of the report to this .json file")
     parser.add_argument("--write-selection", help="write the shots where the always-on members are not unanimous, for joint_member")
+    parser.add_argument("--no-joint", action="store_true", help="joint decoding was not run for this file: score the rules with J on no shot")
     args = parser.parse_args(argv)
 
     if args.pair:
@@ -452,6 +457,12 @@ def main(argv=None):
     members, shots = load_members(args.members)
     if "P1" not in members or "P2" not in members:
         raise SystemExit("the ensemble needs P1 and P2 (a file of hierarchy.candidates) among --members")
+    if args.no_joint:
+        if "J" in members:
+            raise SystemExit("--no-joint says joint decoding was not run, and a member file holds J")
+        count = len(shots.truth)
+        members["J"] = Member("J", np.zeros((count, 12), np.uint8), np.zeros(count, bool), np.full(count, np.nan), np.full(count, np.nan),
+                              np.ones(count, bool), "no file: joint decoding was not run (--no-joint)", "none")
     network = load_network(args.logits, shots, args.network_ms) if args.logits else None
     chosen = (args.rule, "the frozen rule") if args.rule else None
     if args.chosen_on:

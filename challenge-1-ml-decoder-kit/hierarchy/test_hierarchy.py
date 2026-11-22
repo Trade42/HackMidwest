@@ -20,7 +20,7 @@ import pytest
 import scipy.sparse as sp
 
 from evaluation.adapters import Problem, create_session, validate_shot_result
-from hierarchy import candidates, compare, ensemble, joint_member, preflight, rules, select, tcbp_member
+from hierarchy import candidates, compare, ensemble, joint_member, plugin_options, preflight, rules, select, tcbp_member
 from hierarchy.plugin import HierarchySession, Network
 from hierarchy.rules import ORDER
 from hierarchy.stages import Candidate, kit_problem, load_shots, sha256_of
@@ -364,6 +364,9 @@ def test_a_basis_without_a_checkpoint_uses_the_weight_rule_and_says_so():
     assert session.decode_shot(np.zeros(1728, np.uint8), np.zeros(936, np.uint8)).metrics["winner"] == "P2"
     with pytest.raises(ValueError, match="unknown options"):
         HierarchySession(fake_problem(), {"checkpoint": "typo.pt"}, hierarchy=stages)
+    per_basis = {"rule": {"X": "converged", "Z": "weight"}}                    # one rule per memory basis
+    assert HierarchySession(fake_problem("X"), per_basis, hierarchy=stages).rule == "converged"
+    assert HierarchySession(fake_problem("Z"), per_basis, hierarchy=stages).rule == "weight"
     with pytest.raises(ValueError, match="rule must be"):
         HierarchySession(fake_problem(), {"rule": "majority"}, hierarchy=stages)
 
@@ -688,6 +691,14 @@ def test_ensemble_command_selection_and_rule_choice(tmp_path, capsys):
     assert "<- the marked rule" in capsys.readouterr().out and table["T"]["failed_pairs"] == 2
     with pytest.raises(SystemExit, match="an X file and of a Z file"):
         ensemble.main(["--pair", str(tmp_path / "z_f.npz"), str(tmp_path / "x_f.npz")])
+
+    # Without joint decoding rule f is TCBP-JOBS alone, if the command says that J was not run; otherwise it is left unmeasured.
+    rows = {row["key"]: row for row in ensemble.main(["--members", *files[:2], "--logits", logits, "--rule", "f", "--no-joint"])}
+    assert np.array_equal(rows["f"]["failed"], rows["T"]["failed"]) and "J exists on 0 of the 5" in rows["f"]["note"]
+    rows = {row["key"]: row for row in ensemble.main(["--members", *files[:2], "--logits", logits])}
+    assert "failed" not in rows["f"] and "no file for J" in rows["f"]["note"]
+    with pytest.raises(SystemExit, match="a member file holds J"):
+        ensemble.main(["--members", *files, "--no-joint"])
     with pytest.raises(SystemExit, match="Give one of them"):
         ensemble.main(["--members", *other, "--rule", "f", "--chosen-on", str(tmp_path / "train.json")])
     with pytest.raises(SystemExit, match="different data files"):
@@ -719,3 +730,29 @@ def test_preflight_refuses_before_it_decodes(tmp_path, shot_files):
     (tmp_path / "full" / "old.txt").write_text("left over")
     with pytest.raises(SystemExit, match="not empty"):
         preflight.main([*base[:6], "--out", str(tmp_path / "full"), "--tcbp-stand-in"])
+
+
+# ---------- plugin_options.py ----------
+
+def test_plugin_options_take_the_network_rule_only_where_it_is_no_worse(tmp_path, capsys):
+    """On the hand-made shots the network rule fails 3 times and the rule "converged" 4 times."""
+    candidates_file = write_candidates(tmp_path / "c.npz", HAND_MADE)
+    good = write_logits(tmp_path / "good.npz", HAND_MADE_LOGITS)
+    # One more shot where relay-BP is right and lightest, and a network that prefers a wrong answer there.
+    lost = write_candidates(tmp_path / "lost.npz", [((RIGHT, WRONG_A, WRONG_B), (5, 10, 20), ALL)])
+    bad = write_logits(tmp_path / "bad.npz", [16 * WRONG_A - 8.0])
+    for name in ("x.pt", "z.pt"):
+        (tmp_path / name).write_bytes(b"stands in for a checkpoint")
+    options = plugin_options.main(["--out", str(tmp_path / "options.json"), "--x-checkpoint", str(tmp_path / "x.pt"),
+                                   "--x-candidates", candidates_file, "--x-logits", good, "--z-checkpoint", str(tmp_path / "z.pt"),
+                                   "--z-candidates", lost, "--z-logits", bad])
+    printed = capsys.readouterr().out
+    assert "PLUGIN_RULE X network    (network 3 failures, converged 4, on 5 shots)" in printed
+    assert "PLUGIN_RULE Z converged    (network 1 failures, converged 0, on 1 shots)" in printed
+    assert options == json.loads((tmp_path / "options.json").read_text()) == {
+        "rule": {"X": "network", "Z": "converged"}, "seeds": [1, 1001], "device": "cpu", "torch_threads": 1,
+        "checkpoints": {"X": str(tmp_path / "x.pt"), "Z": str(tmp_path / "z.pt")}}
+    stages = StubHierarchy(candidate("P1", RIGHT, 9.0), candidate("P2", WRONG_A, 4.0), candidate("R", WRONG_B, 6.0))
+    assert HierarchySession(fake_problem("Z"), options, hierarchy=stages).rule == "converged"      # the plugin reads the file as written
+    only_x = plugin_options.main(["--out", str(tmp_path / "x_only.json"), "--x-checkpoint", str(tmp_path / "x.pt")])
+    assert only_x["rule"] == {"X": "converged", "Z": "converged"} and "no checkpoint was given" in capsys.readouterr().out

@@ -1,0 +1,68 @@
+{
+ "basis": "Z",
+ "seed": 102,
+ "shots": 1000,
+ "s": 0.001,
+ "in_flag_span": 1000,
+ "in_truth_span": 1000,
+ "independent": 884,
+ "fire_rate": {
+  "data: final readout": [
+   4313,
+   8725,
+   0.4943
+  ],
+  "data: first after loss (same run)": [
+   1392,
+   2828,
+   0.4922
+  ],
+  "data: first after loss (transition)": [
+   2840,
+   5644,
+   0.5032
+  ],
+  "data: later transition": [
+   23543,
+   47165,
+   0.4992
+  ],
+  "other check: hook k=1": [
+   347,
+   690,
+   0.5029
+  ],
+  "other check: hook k=2": [
+   347,
+   754,
+   0.4602
+  ],
+  "other check: hook k=3": [
+   387,
+   805,
+   0.4807
+  ],
+  "other check: hook k=4": [
+   389,
+   768,
+   0.5065
+  ],
+  "other check: hook k=5": [
+   367,
+   730,
+   0.5027
+  ],
+  "own check: measurement flip": [
+   2270,
+   4448,
+   0.5103
+  ]
+ },
+ "pair_both_fired": [
+  236,
+  884,
+  0.267
+ ],
+ "mean_lost_data_per_shot": 10.009,
+ "mean_check_losses_per_shot": 10.281
+}

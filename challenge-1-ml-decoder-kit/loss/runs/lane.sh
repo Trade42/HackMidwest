@@ -1,0 +1,69 @@
+# Shared helpers for the run scripts. Source it from challenge-1-ml-decoder-kit/.
+# Compute (brief): lanes A and D, at most 8 processes; one hold of sim-a.lock lasts at most about 20 minutes.
+# Each part takes lane A as well if it is free (8 workers on cores 0-7), else lane D alone (4 workers, cores 0-3).
+# A part's result does not depend on the worker count (every shot gets a fresh, fixed-seed decoder).
+set -euo pipefail
+export PYTHONDONTWRITEBYTECODE=1
+V=/home/sal/hackMidwest/orchestration/scratch/loss-gates/venv
+S=/home/sal/hackMidwest/orchestration/scratch/loss-gates
+RUN=/home/sal/hackMidwest/dq/run
+PY="$V/bin/python"
+
+# lanes CMD...   run CMD with WORKERS set to 8 (lanes A+D) or 4 (lane D), niced and pinned
+lanes() {
+  exec 8>"$RUN/sim-a.lock"
+  if flock -n 8; then
+    WORKERS=8 flock "$RUN/sim-d.lock" env WORKERS=8 nice -n 15 taskset -c 0-7 "$@"
+    flock -u 8
+  else
+    flock "$RUN/sim-d.lock" env WORKERS=4 nice -n 15 taskset -c 0-3 "$@"
+  fi
+  exec 8>&-
+  sleep 5
+}
+
+# LANE=D (default since 2026-11-22 05:10 UTC, when the orchestrator gave lane A back to the others): lane D only.
+# LANE=AD: each part takes lanes A+D if A is free, else D alone (see lanes).
+# LANE=A: each part takes lane A alone (4 workers, cores 4-7), for a second stream beside a lane-D stream.
+LANE=${LANE:-D}
+
+# part OUT DATA CONDITIONS START STOP   decode one part unless it exists or another stream has claimed it
+part() {
+  local out=$1 data=$2 conds=$3 start=$4 stop=$5
+  [ -f "$out" ] && { echo "keep $out"; return 0; }
+  mkdir -p "$(dirname "$out")"
+  mkdir "$out.claim" 2>/dev/null || { echo "claimed by another stream: $out"; return 0; }
+  local cmd="\"$PY\" -m loss.decode --data \"$data\" --conditions \"$conds\" --start $start --stop $stop --workers \$WORKERS --out \"$out.tmp.npz\""
+  if [ "$LANE" = A ]; then
+    flock "$RUN/sim-a.lock" env WORKERS=4 nice -n 15 taskset -c 4-7 bash -c "$cmd"
+    sleep 5
+  elif [ "$LANE" = D ]; then
+    flock "$RUN/sim-d.lock" env WORKERS=4 nice -n 15 taskset -c 0-3 bash -c "$cmd"
+    sleep 5
+  else
+    lanes bash -c "$cmd"
+  fi
+  mv "$out.tmp.npz" "$out"
+  rmdir "$out.claim"
+}
+
+# parts NAME DATA CONDITIONS STOP SIZE   decode shots 0..STOP in parts of SIZE (resumable)
+parts() {
+  local name=$1 data=$2 conds=$3 stop=$4 size=$5
+  for ((a = 0; a < stop; a += size)); do
+    local b=$((a + size < stop ? a + size : stop))
+    part "$S/parts/$name/$(printf %06d $a)-$(printf %06d $b).npz" "$data" "$conds" $a $b
+  done
+}
+
+# dataset OUT ARGS...   sample a dataset unless it exists (4 threads, on lane D, or lane A when LANE=A)
+dataset() {
+  local out=$1; shift
+  [ -f "$out" ] && { echo "keep $out"; return 0; }
+  if [ "$LANE" = A ]; then
+    flock "$RUN/sim-a.lock" nice -n 15 taskset -c 4-7 "$PY" -m loss.sample "$@" --threads 4 --out "$out.tmp.npz"
+  else
+    flock "$RUN/sim-d.lock" nice -n 15 taskset -c 0-3 "$PY" -m loss.sample "$@" --threads 4 --out "$out.tmp.npz"
+  fi
+  mv "$out.tmp.npz" "$out"
+}

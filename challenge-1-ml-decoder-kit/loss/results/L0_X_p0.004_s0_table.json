@@ -1,0 +1,41 @@
+{
+ "dataset": {
+  "file": "/home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s0_seed1000.npz",
+  "sha256": "34a7fd8c43ba1aa69210253c6691b6ead34167f7facd83d5cb18778208c620b8",
+  "basis": "X",
+  "p": 0.004,
+  "s": 0.0,
+  "shots": 10000,
+  "seed": 1000,
+  "chunk": 2000,
+  "probes": true,
+  "clifft": "0.13.0",
+  "lost_data_atoms_per_shot": 0.0,
+  "check_heralds_per_shot": 0.0
+ },
+ "reference": "blind",
+ "rows": [
+  {
+   "condition": "blind",
+   "shots": 10000,
+   "failures": 64,
+   "fail_fraction": 0.0064,
+   "wilson95": [
+    0.005015442791426394,
+    0.008163640406083566
+   ],
+   "per_cycle": 0.0005349042046196573,
+   "per_cycle95": [
+    0.0004189174243642846,
+    0.0006828621927065237
+   ],
+   "unconverged": 27,
+   "unconverged_but_right": 0,
+   "mean_iterations": 541.6084,
+   "mean_decode_ms": 480.9185247790534,
+   "median_decode_ms": 122.9236931540072,
+   "mean_build_ms": 12.997141723614186,
+   "mean_prior_ms": 0.040659982385113834
+  }
+ ]
+}

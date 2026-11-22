@@ -1,0 +1,12 @@
+data sha256 25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312
+T data sha256 25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312 | selector data sha256 25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312
+all four files' truth equals the data file's observables
+failures of 5,000: {'H': 70, 'fresh': 206, 'fresh(9f3f527)': 206, 'T': 91, 'R': 194, 'P1': 137, 'P2': 152, 'conv(every shot)': 109, 'ac': 108}
+hierarchy README publishes for p = 0.005 X: R 194, P1 137, T 91, ac 108
+H against fresh            : H  70, fresh 206; both  60, only H  10, only fresh 146, exact two-sided p = 4.11e-32
+H against T                : H  70, T  91; both  38, only H  32, only T  53, exact two-sided p = 0.0295
+H against conv(every shot) : H  70, conv(every shot) 109; both  46, only H  24, only conv(every shot)  63, exact two-sided p = 3.48e-05
+H against ac               : H  70, ac 108; both  46, only H  24, only ac  62, exact two-sided p = 5.08e-05
+H against R                : H  70, R 194; both  56, only H  14, only R 138, exact two-sided p = 8.46e-27
+H against P1               : H  70, P1 137; both  45, only H  25, only P1  92, exact two-sided p = 3.37e-10
+H against P2               : H  70, P2 152; both  53, only H  17, only P2  99, exact two-sided p = 2.96e-15

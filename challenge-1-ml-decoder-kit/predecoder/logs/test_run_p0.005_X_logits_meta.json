@@ -1,0 +1,36 @@
+{
+ "data": {
+  "path": "/home/sal/hackMidwest/worktrees/predecoder-test/challenge-1-ml-decoder-kit/data/p0.005/test_X.npz",
+  "sha256": "1b13521cddb2bf5e5d4c7f1e85a8ecaaa3c72a0b99754a3f76b4a5a4a912fc8b",
+  "basis": "X",
+  "p": 0.005,
+  "seed": 301,
+  "shots": 10000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 10000,
+ "columns": 8784,
+ "model": {
+  "head": "/home/sal/hackMidwest/orchestration/scratch/predecoder/test-run/head.pt",
+  "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+  "head_step": 30000,
+  "trunk": "/home/sal/hackMidwest/orchestration/scratch/predecoder/test-run/checkpoint_final_step120000.pt",
+  "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+  "trunk_step": 120000,
+  "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+  "device": "cpu",
+  "torch": "2.15.0+cpu",
+  "torch_threads": 12
+ },
+ "seconds_batched_total": 261.1117227077484,
+ "per_shot_seconds": {
+  "what": "network + head, one shot at a time, on the device named",
+  "shots": 200,
+  "mean": 0.01909783426905051,
+  "median": 0.019002933986485004,
+  "p99": 0.02162166280671953
+ },
+ "batch_one_against_batched_largest_logit_gap": 0.0,
+ "mean_probability_sum_per_shot": 59.017191796875,
+ "kit_prior_sum": 59.03634775352212
+}

@@ -1,0 +1,19 @@
+validation_X.npz: 5000 shots, p=0.004, arms ['kit', 'fresh']; head priors {'mode': 'linear', 'alpha': 1.0, 'eps': 1e-06}; 38 tasks to run in 4 processes (16 CPUs here, luminaty)
+  1 of 38 tasks done (kit from shot 1500), 346 s
+  2 of 38 tasks done (kit from shot 1000), 353 s
+  3 of 38 tasks done (kit from shot 0), 429 s
+  4 of 38 tasks done (kit from shot 500), 443 s
+  5 of 38 tasks done (kit from shot 2500), 621 s
+  6 of 38 tasks done (kit from shot 2000), 624 s
+  7 of 38 tasks done (kit from shot 3500), 638 s
+  8 of 38 tasks done (kit from shot 3000), 662 s
+  10 of 38 tasks done (fresh from shot 2100), 725 s
+  14 of 38 tasks done (kit from shot 4000), 822 s
+  16 of 38 tasks done (kit from shot 4500), 829 s
+  20 of 38 tasks done (fresh from shot 3200), 878 s
+  30 of 38 tasks done (fresh from shot 4200), 961 s
+relay-BP at the kit's settings; 1035 s. Time per shot: build + decode in these worker processes
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+kit           31    0.0062 [0.0044, 0.0088]          17    691       565      0.0     538.5    538.5   12777
+fresh         20    0.0040 [0.0026, 0.0062]          11    691       554     10.9     430.8    441.6   10541
+paired fresh against kit: both fail 15, only fresh 5, only kit 16, exact two-sided p = 0.0266

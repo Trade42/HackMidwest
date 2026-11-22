@@ -1,0 +1,5 @@
+validation_X.npz: 5000 shots, p=0.004, arms ['kit', 'fresh']; head priors {'mode': 'linear', 'alpha': 1.0, 'eps': 1e-06}; 52 tasks to run in 4 processes (16 CPUs here, luminaty)
+  10 of 52 tasks done (fresh from shot 900), 337 s
+  20 of 52 tasks done (fresh from shot 1900), 622 s
+/home/sal/.local/share/uv/python/cpython-3.12.15-linux-x86_64-gnu/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 6 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

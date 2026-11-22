@@ -1,0 +1,116 @@
+{
+ "data": {
+  "path": "C:\\Users\\salav\\Salavat\\hackMidwest\\repo-predecoder\\challenge-1-ml-decoder-kit\\data\\p0.005\\validation_X.npz",
+  "sha256": "25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312",
+  "basis": "X",
+  "p": 0.005,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 5000,
+ "relay": {
+  "alpha": 1.0,
+  "gamma0": 0.15,
+  "pre_iter": 80,
+  "num_sets": 300,
+  "set_max_iter": 60,
+  "gamma_dist_interval": [
+   -0.22628432386414646,
+   0.6216020925981884
+  ],
+  "stop_nconv": 5,
+  "seed_of_per_shot_decoders": 0
+ },
+ "head_priors": {
+  "mode": "logodds",
+  "alpha": 0.2,
+  "eps": 0.0001
+ },
+ "kit_arm": "one decoder built once per chunk of 5000 shots, decoding in file order",
+ "logits": {
+  "data": {
+   "path": "C:\\Users\\salav\\Salavat\\hackMidwest\\repo-predecoder\\challenge-1-ml-decoder-kit\\data\\p0.005\\validation_X.npz",
+   "sha256": "25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312",
+   "basis": "X",
+   "p": 0.005,
+   "seed": 201,
+   "shots": 5000,
+   "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+  },
+  "shots": 5000,
+  "columns": 8784,
+  "model": {
+   "head": "C:\\Users\\salav\\Salavat\\hackMidwest\\runs\\predecoder_X_s1\\head.pt",
+   "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+   "head_step": 30000,
+   "trunk": "C:\\Users\\salav\\Salavat\\hackMidwest\\runs\\cascade_X_s1\\checkpoint.pt",
+   "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+   "trunk_step": 120000,
+   "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+   "device": "cuda",
+   "torch": "2.14.1+cu130",
+   "torch_threads": 8
+  },
+  "seconds_batched_total": 11.076565027236938,
+  "per_shot_seconds": {
+   "what": "network + head, one shot at a time, on the device named",
+   "shots": 200,
+   "mean": 0.022086304500116966,
+   "median": 0.023576850013341755,
+   "p99": 0.02831744301598519
+  },
+  "batch_one_against_batched_largest_logit_gap": 0.00390625,
+  "mean_probability_sum_per_shot": 58.8728125,
+  "kit_prior_sum": 59.03634775352212
+ },
+ "arms": {
+  "fresh": {
+   "arm": "fresh",
+   "shots": 5000,
+   "failures": 206,
+   "share": 0.0412,
+   "wilson95": [
+    0.036034046894391616,
+    0.04707039642149738
+   ],
+   "unconverged": 131,
+   "hard": 1800,
+   "mean_iterations": 2366.8302,
+   "network_seconds_mean": 0.0,
+   "build_seconds_mean": 0.0038476495398906993,
+   "decode_seconds_mean": 0.6264452343185433,
+   "seconds_mean": 0.630292883858434,
+   "seconds_p99": 4.965253745950759
+  },
+  "head": {
+   "arm": "head",
+   "shots": 5000,
+   "failures": 70,
+   "share": 0.014,
+   "wilson95": [
+    0.011096433534321083,
+    0.017649772768037364
+   ],
+   "unconverged": 42,
+   "hard": 648,
+   "mean_iterations": 721.2428,
+   "network_seconds_mean": 0.022086304500116966,
+   "build_seconds_mean": 0.005025447419355624,
+   "decode_seconds_mean": 0.24983024580059573,
+   "seconds_mean": 0.2769419977200684,
+   "seconds_p99": 5.970508465498572
+  }
+ },
+ "pairs": {
+  "head_vs_fresh": {
+   "both": 60,
+   "only_head": 10,
+   "only_fresh": 146,
+   "p": 4.114231742614184e-32
+  }
+ },
+ "workers": 12,
+ "machine": "DESKTOP-GTQ8L2C",
+ "cpus": 16
+}

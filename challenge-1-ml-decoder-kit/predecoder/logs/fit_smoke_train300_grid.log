@@ -1,0 +1,16 @@
+fit on train_X.npz (train), the first 300 shots, p=0.004; relay-BP at the kit's settings, a decoder built per shot; 4 processes, 337 s
+mode      alpha      eps  failures  hard shots  mean iterations
+linear        0    1e-06         0          51            348.6
+linear      0.5   0.0001         2          12            257.2
+linear      0.5     0.01         2          15            332.1
+linear      0.8   0.0001         2          17            347.0
+linear      0.8     0.01         2          16            408.1
+linear        1   0.0001         3          18            390.2
+linear        1     0.01         2          16            459.3
+logodds     0.5   0.0001         0          11            157.7
+logodds     0.5     0.01         0          14            214.2
+logodds     0.8   0.0001         2          15            326.1
+logodds     0.8     0.01         2          19            346.4
+logodds       1   0.0001         3          18            390.2
+logodds       1     0.01         2          16            459.3
+chosen: mode logodds, alpha 0.5, eps 0.0001 (among the settings with at most the kit's failures + 2: fewest hard shots, then failures, then iterations; if none: fewest failures; the kit's priors are row 1)

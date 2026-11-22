@@ -1,0 +1,81 @@
+{
+ "data": {
+  "path": "/home/sal/hackMidwest/worktrees/predecoder/challenge-1-ml-decoder-kit/data/p0.004/validation_X.npz",
+  "sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d",
+  "basis": "X",
+  "p": 0.004,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 5000,
+ "relay": {
+  "alpha": 1.0,
+  "gamma0": 0.15,
+  "pre_iter": 80,
+  "num_sets": 300,
+  "set_max_iter": 60,
+  "gamma_dist_interval": [
+   -0.22628432386414646,
+   0.6216020925981884
+  ],
+  "stop_nconv": 5,
+  "seed_of_per_shot_decoders": 0
+ },
+ "head_priors": {
+  "mode": "linear",
+  "alpha": 1.0,
+  "eps": 1e-06
+ },
+ "kit_arm": "one decoder built once per chunk of 500 shots, decoding in file order",
+ "logits": null,
+ "arms": {
+  "kit": {
+   "arm": "kit",
+   "shots": 5000,
+   "failures": 31,
+   "share": 0.0062,
+   "wilson95": [
+    0.004371388386586492,
+    0.008786794066303633
+   ],
+   "unconverged": 17,
+   "hard": 691,
+   "mean_iterations": 564.9886,
+   "network_seconds_mean": 0.0,
+   "build_seconds_mean": 0.0,
+   "decode_seconds_mean": 0.5384924136088229,
+   "seconds_mean": 0.5384924136088229,
+   "seconds_p99": 12.776602696604153
+  },
+  "fresh": {
+   "arm": "fresh",
+   "shots": 5000,
+   "failures": 20,
+   "share": 0.004,
+   "wilson95": [
+    0.0025909427100415834,
+    0.006170617631460042
+   ],
+   "unconverged": 11,
+   "hard": 691,
+   "mean_iterations": 554.3214,
+   "network_seconds_mean": 0.0,
+   "build_seconds_mean": 0.010886815127823501,
+   "decode_seconds_mean": 0.4307581638053991,
+   "seconds_mean": 0.4416449789332226,
+   "seconds_p99": 10.541332373674992
+  }
+ },
+ "pairs": {
+  "fresh_vs_kit": {
+   "both": 15,
+   "only_fresh": 5,
+   "only_kit": 16,
+   "p": 0.02660369873046875
+  }
+ },
+ "workers": 4,
+ "machine": "luminaty",
+ "cpus": 16
+}

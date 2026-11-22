@@ -1,0 +1,10 @@
+head arm on this CPU, all 5000 shots: failures 79, unconverged 44, hard 629, mean iterations 732.1 | laptop: 70, 42, 648, 721.2
+decisions that differ from the laptop's head arm: 33 (newly wrong 21, newly right 12); predicted bits differ on 69; iterations differ on 4810
+H (CPU, 79) against fresh             (206): both  62, only H  17, only fresh 144, exact two-sided p = 2.98e-26
+H (laptop, 70) against fresh             (206): both  60, only H  10, only fresh 146, exact two-sided p = 4.11e-32
+H (CPU, 79) against T                 (91): both  38, only H  41, only T  53, exact two-sided p = 0.256
+H (laptop, 70) against T                 (91): both  38, only H  32, only T  53, exact two-sided p = 0.0295
+H (CPU, 79) against conv(every shot)  (109): both  46, only H  33, only conv(every shot)  63, exact two-sided p = 0.00288
+H (laptop, 70) against conv(every shot)  (109): both  46, only H  24, only conv(every shot)  63, exact two-sided p = 3.48e-05
+H (CPU, 79) against ac                (108): both  48, only H  31, only ac  60, exact two-sided p = 0.00311
+H (laptop, 70) against ac                (108): both  46, only H  24, only ac  62, exact two-sided p = 5.08e-05

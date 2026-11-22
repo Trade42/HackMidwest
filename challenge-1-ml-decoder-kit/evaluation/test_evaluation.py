@@ -48,6 +48,28 @@ def test_plugin_cannot_exclude_router_work_from_decode_timer():
         run_basis(Timed(), data)
 
 
+def test_kit_decode_and_full_shot_timers_are_separate():
+    from time import sleep
+
+    data = fixture_data("X", [[0, 0, 0]])
+
+    class FakeKit(KitSession):
+        def __init__(self):
+            pass
+
+        def before_shot(self, k):
+            sleep(.001)
+
+        def decode_shot(self, full, basis):
+            sleep(.001)
+            return ShotResult(np.zeros(12, dtype=np.uint8), decode_seconds=.0001)
+
+    result = run_basis(FakeKit(), data)
+    assert result["seconds"][0] == pytest.approx(.0001)
+    assert result["before_seconds"][0] >= .001
+    assert result["total_seconds"][0] > result["seconds"][0] + result["before_seconds"][0]
+
+
 def test_pair_failure_or_and_time_addition_match_kit():
     from decoders import per_cycle_rate
 
@@ -188,3 +210,5 @@ def test_runner_writes_auditable_paired_shots_for_each_decoder(monkeypatch, tmp_
             assert artifact["predictions_Z"][:, -1].tolist() == [1, 0]
             assert artifact["failed_pair"].tolist() == [True, True]
             assert np.allclose(artifact["seconds_pair"], artifact["seconds_X"] + artifact["seconds_Z"])
+            assert np.allclose(artifact["seconds_total_pair"],
+                               artifact["seconds_total_X"] + artifact["seconds_total_Z"])

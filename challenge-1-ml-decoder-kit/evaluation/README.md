@@ -57,6 +57,34 @@ separate. Batch throughput includes setup and Python loop overhead. Parent-proce
 peak RSS is labeled as such; it is not an aggregate worker-memory measurement.
 Unconverged results are still scored. A decoding exception fails the run.
 
+The evaluator also saves `seconds_total_X`, `seconds_total_Z`, and
+`seconds_total_pair` for **every** decoder. These time `before_shot` plus the full
+`decode_shot` call, including observable projection and router work, while leaving
+the kit-compatible decode timer in its original `seconds_*` fields. Use the total
+arrays for like-for-like percent latency comparisons. One-time construction is
+recorded separately and excluded from both per-shot timers.
+
+## Paired percent-gain report
+
+`baselines.log` is an aggregate run on different sampled shots. It cannot be the
+reference for an auditable percent-gain claim. After the p=0.004 baseline and
+frozen-router evaluations have each produced `summary.json` and `*_shots.npz` on
+the same saved X/Z test files, run:
+
+```sh
+.venv312/bin/python -m evaluation.compare_gain --reference-results results/eval_p0.004 --candidate-results results/router_eval_p0.004 --candidate-decoder evaluation.router:make_tiered_decoder --out results/gain_p0.004
+```
+
+This writes `comparison.json` and `comparison.csv`. It checks both test-file
+hashes, circuit identity, package and machine settings, all 12 prediction bits,
+failure masks, pair OR/addition, and the kit per-cycle score before calculating
+percent reductions. Logical gain uses the kit per-cycle rate; latency gain uses
+the new full per-shot pair timer. It reports candidate-only and reference-only
+failures, an exact discordant-pair sign test, and seeded paired-bootstrap
+intervals. At low failure counts the logical gain interval may be unavailable;
+a printed percent by itself is not evidence of a reliable improvement. Separate
+runs can still be affected by system-load drift.
+
 ## Decoder plugin interface
 
 Pass `--decoder my_module:make_decoder`. The module is imported only when selected.

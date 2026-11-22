@@ -21,6 +21,7 @@ THREAD_VARS = ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "VE
 SUMMARY_FIELDS = ("decoder", "p", "cycles", "shots_X", "shots_Z", "paired_shots", "failures_X",
                   "failures_Z", "failures_pair", "per_cycle_rate", "standard_error", "mean_pair_ms",
                   "median_pair_ms", "p99_pair_ms", "mean_pair_kit_ms", "setup_seconds", "before_shot_seconds",
+                  "mean_pair_total_ms", "median_pair_total_ms", "p99_pair_total_ms",
                   "decode_loop_seconds", "evaluation_wall_seconds", "batch_throughput_pairs_per_second",
                   "converged_fraction", "first_leg_converged_fraction", "fallback_fraction", "mean_iterations",
                   "threshold", "threshold_X", "threshold_Z", "artifacts")
@@ -31,6 +32,7 @@ def run_basis(session, data):
     n = len(data.detectors)
     predictions = np.empty((n, 12), dtype=np.uint8)
     seconds = np.empty(n, dtype=np.float64)
+    total_seconds = np.empty(n, dtype=np.float64)
     kit_seconds = np.full(n, np.nan, dtype=np.float64)
     before_seconds = np.zeros(n, dtype=np.float64)
     metrics = []
@@ -44,6 +46,9 @@ def run_basis(session, data):
         start = perf_counter()
         result = session.decode_shot(data.detectors[k], basis_input[k])
         elapsed = perf_counter() - start
+        # Keep the kit decode-only timer in `seconds`; record the complete
+        # per-shot path under a separate name for like-for-like comparisons.
+        total_seconds[k] = before_seconds[k] + elapsed
         predictions[k] = validate_shot_result(result)
         if isinstance(session, KitSession):
             seconds[k] = result.decode_seconds
@@ -57,7 +62,8 @@ def run_basis(session, data):
                 kit_seconds[k] = float(reported_kit)
         metrics.append(result.metrics)
     failed = np.any(predictions != data.observables, axis=1)
-    return {"predictions": predictions, "failed": failed, "seconds": seconds, "kit_seconds": kit_seconds,
+    return {"predictions": predictions, "failed": failed, "seconds": seconds,
+            "total_seconds": total_seconds, "kit_seconds": kit_seconds,
             "before_seconds": before_seconds, "metrics": metrics}
 
 
@@ -159,7 +165,7 @@ def evaluate(datasets, circuits, decoder_specs, out_dir, options=None, cycles=12
                                "bposd_seed": None, "bposd_seed_note": "kit factory does not set a seed",
                                "decoder_order": list(decoder_specs)},
                 "outcome_policy": "Every returned prediction is scored, including unconverged results; exceptions fail the run.",
-                "timing": "Kit adapters time decoder API calls before observable projection, as in the kit. Plugins default to timing their complete decode_shot, including router and fallback work. before_shot and setup are separate; batch throughput uses the complete evaluation wall time.",
+                "timing": "Existing seconds fields preserve the kit decoder-call timer for baselines. Separate total_seconds fields time before_shot plus the complete decode_shot call for every decoder, including projection, router, and fallback work; one-time construction is separate. Batch throughput uses complete evaluation wall time.",
                 "decoders": []}
     summary = []
     for index, spec in enumerate(decoder_specs, 1):
@@ -170,6 +176,7 @@ def evaluate(datasets, circuits, decoder_specs, out_dir, options=None, cycles=12
         results = {basis: run_basis(sessions[basis], test[basis]) for basis in "XZ"}
         loop_seconds = perf_counter() - start_loop
         failed_pair, seconds_pair, scored = score_pair(results["X"], results["Z"], cycles)
+        total_pair = results["X"]["total_seconds"] + results["Z"]["total_seconds"]
         wall_seconds = perf_counter() - start_wall
         stem = f"{index:02d}_{spec.replace(':', '_').replace('.', '_').replace('/', '_')}"
         artifact = stem + "_shots.npz"
@@ -178,6 +185,9 @@ def evaluate(datasets, circuits, decoder_specs, out_dir, options=None, cycles=12
                             failed_X=results["X"]["failed"], failed_Z=results["Z"]["failed"],
                             failed_pair=failed_pair, seconds_X=results["X"]["seconds"],
                             seconds_Z=results["Z"]["seconds"], seconds_pair=seconds_pair,
+                            seconds_total_X=results["X"]["total_seconds"],
+                            seconds_total_Z=results["Z"]["total_seconds"],
+                            seconds_total_pair=total_pair,
                             kit_seconds_X=results["X"]["kit_seconds"], kit_seconds_Z=results["Z"]["kit_seconds"],
                             before_shot_seconds_X=results["X"]["before_seconds"],
                             before_shot_seconds_Z=results["Z"]["before_seconds"])
@@ -191,6 +201,9 @@ def evaluate(datasets, circuits, decoder_specs, out_dir, options=None, cycles=12
                "shots_Z": len(test["Z"].detectors), "paired_shots": len(failed_pair), **scored,
                "mean_pair_kit_ms": float(np.mean(results["X"]["kit_seconds"] + results["Z"]["kit_seconds"]) * 1e3)
                if np.isfinite(results["X"]["kit_seconds"]).all() and np.isfinite(results["Z"]["kit_seconds"]).all() else None,
+               "mean_pair_total_ms": float(total_pair.mean() * 1e3),
+               "median_pair_total_ms": float(np.median(total_pair) * 1e3),
+               "p99_pair_total_ms": float(np.percentile(total_pair, 99) * 1e3),
                "setup_seconds": float(sum(s.setup_seconds for s in sessions.values())),
                "before_shot_seconds": float(sum(r["before_seconds"].sum() for r in results.values())),
                "decode_loop_seconds": loop_seconds, "evaluation_wall_seconds": wall_seconds,

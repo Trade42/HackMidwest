@@ -1,0 +1,12 @@
+new run | seed 1 | gross code, X memory, 12 cycles, detectors=all (1728 detectors, 67824 error mechanisms)
+model: width 256, depth 8, bottleneck 4, residual branch, 3556865 parameters | batch 128
+curriculum: 2000 steps at p=0.001, 12000 steps climbing in 12 jumps, then p=0.0055 | peak learning rate 0.001
+commit 9d955c2edbf81abcddb5b3476e1462a4487f4549 | torch 2.15.0+cu132
+speed: device cuda, mixed precision fp16, start-up 23 s
+step 0 of 400000 | training noise p=0.001 | no training yet | learning rate 1.00e-06
+  averaged weights on 5000 error-model shots per p (not Stim shots); 95% interval of a share: +-0.014 or less
+  p=0.001  shots wrong 0.9998 (always-0 0.9752)  bits right 0.4836 (always-0 0.6070)
+  p=0.002  shots wrong 0.9998 (always-0 0.9984)  bits right 0.4916 (always-0 0.5259)
+  p=0.003  shots wrong 0.9996 (always-0 0.9996)  bits right 0.4986 (always-0 0.5050)
+  p=0.004  shots wrong 1.0000 (always-0 0.9996)  bits right 0.4991 (always-0 0.5038)
+  p=0.005  shots wrong 0.9996 (always-0 0.9998)  bits right 0.5022 (always-0 0.4997)

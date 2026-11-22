@@ -241,6 +241,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
 | `findings` | Our decoder's rows on the test shots are not measured yet. TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000). | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
 | `framing` | not measured | `tables/test_ablation.md` |
+| `framing_slide` | pending: the ablation on the test shots has not landed. | `tables/test_ablation.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
 | `loss_aware_ratio` | 11.5 | `tables/loss.md` |
 | `loss_aware_share` | 4.4% | `tables/loss.md` |

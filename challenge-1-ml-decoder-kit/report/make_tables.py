@@ -435,7 +435,9 @@ def ladder_tables(combined):
                             ("further", f"{further:.1%}"), ("gap_closed", f"{gap:.0%}")):
             fact(f"abl_pooled_{name}", value, source)
         fact("framing", framing, source)
+        fact("framing_slide", framing, source)
     else:
+        fact("framing_slide", "pending: the ablation on the test shots has not landed.", source)
         for name in ("levels", "R", "aw", "a", "floor", "only_network", "only_weight", "p", "further", "gap_closed"):
             fact(f"abl_pooled_{name}", None, source)
         fact("framing", None, source)

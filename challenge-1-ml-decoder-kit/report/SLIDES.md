@@ -46,7 +46,9 @@ Source: `report/tables/exploration_p0.004.md`, the last table.
 - Alone it is far worse than relay-BP, so we never use it alone. We only ask it which of two or three given answers
   is more likely.
 - On 25,000 practice shots of X memory, the hierarchy fails <!--f:expl_X_C-->67<!--/f--> times with its best classical tie-break and <!--f:expl_X_N-->59<!--/f-->
-  times with the network (at training step <!--f:expl_X_N_step-->100,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times.
+  times with the network (at training step <!--f:expl_X_N_step-->100,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times. On these shots
+  the network's step is not significant (<!--f:expl_X_N_vs_C_only_network-->7<!--/f--> against <!--f:expl_X_N_vs_C_only_classical-->15<!--/f--> shots that only one rule fails,
+  p = <!--f:expl_X_N_vs_C_p-->0.13<!--/f-->): the test shots decide.
 
 Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 
@@ -57,7 +59,7 @@ Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 <!-- BEGIN table:test_sweep -->
 <!-- END table:test_sweep -->
 
-- <!--f:framing-->not measured<!--/f-->
+- <!--f:framing_slide-->pending: the ablation on the test shots has not landed.<!--/f-->
 - *Pending.* Our decoder against relay-BP at each p, as a paired count on the same 10,000 pairs.
 - *Pending.* Where TCBP-JOBS stands on the test shots. On the practice shots it is ahead of us (see the questions below).
 
@@ -105,10 +107,10 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 ## Questions a judge will ask, with honest answers
 
 **Whose gain is whose?**
-On the test shots: <!--f:framing-->not measured<!--/f--> The table `report/tables/test_ladder.md` has every rung. On the practice shots:
+On the test shots: <!--f:framing_slide-->pending: the ablation on the test shots has not landed.<!--/f--> The table `report/tables/test_ladder.md` has every rung. On the practice shots:
 PriorTilt alone already beats relay-BP on the practice shots, and that part is IonQ's. Our hierarchy adds to it: on
 <!--f:expl_pairs-->25,000<!--/f--> practice pairs at p = 0.004, relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its seed, and
-the hierarchy with its best classical tie-break <!--f:expl_pairs_C-->140<!--/f--> (only relay-BP fails <!--f:expl_pairs_C_only_relay-->128<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_C_only_ours-->23<!--/f-->). The neural tie-break adds a smaller step on top, measured on X memory
+the hierarchy with its best classical tie-break <!--f:expl_pairs_C-->140<!--/f--> (only relay-BP fails <!--f:expl_pairs_C_only_relay-->128<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_C_only_ours-->23<!--/f-->). The neural tie-break's step on top is smaller, and on these shots not significant, measured on X memory
 (<!--f:expl_X_C-->67<!--/f--> to <!--f:expl_X_N-->59<!--/f--> failures of 25,000 shots; only the network rule fails <!--f:expl_X_N_vs_C_only_network-->7<!--/f-->, only the classical rule <!--f:expl_X_N_vs_C_only_classical-->15<!--/f-->, exact p = <!--f:expl_X_N_vs_C_p-->0.13<!--/f-->). *Pending: the same split on the test shots.* Source:
 `report/tables/exploration_p0.004.md`.
 

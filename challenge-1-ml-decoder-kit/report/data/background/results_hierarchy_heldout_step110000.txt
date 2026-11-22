@@ -1,9 +1,0 @@
-﻿Hierarchy: network (checkpoint_step110000.pt) where confidence >= c, else the 571-rule. X memory, p = 0.005.
-  train_X sha256 cfa08c9113b77521f7ba249ddffc0fb94cda783989066dbfa22b380d1747b26b; validation_X sha256 25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312
-threshold fitted on train_X only (strict: no added failure on train): c = 4.97256
-  validation_X (held out): 5000 shots | coverage 16.36% (818 answered by the network) | failures hierarchy 107 (2.140%) against base 108 (2.160%) | discordant: hierarchy-only wrong 0, base-only wrong 1, exact two-sided p = 1 | mean ms/shot 533.0 (base alone 536.5; network 16.5 on every shot)
-  train_X (in sample, the fit): 20000 shots | coverage 16.43% (3287 answered by the network) | failures hierarchy 458 (2.290%) against base 463 (2.315%) | discordant: hierarchy-only wrong 0, base-only wrong 5, exact two-sided p = 0.0625 | mean ms/shot 586.3 (base alone 589.6; network 16.3 on every shot)
-threshold fitted on train_X only (loose: net change <= 0 on train): c = 2.17762
-  validation_X (held out): 5000 shots | coverage 57.76% (2888 answered by the network) | failures hierarchy 108 (2.160%) against base 108 (2.160%) | discordant: hierarchy-only wrong 7, base-only wrong 7, exact two-sided p = 1 | mean ms/shot 454.2 (base alone 536.5; network 16.5 on every shot)
-  train_X (in sample, the fit): 20000 shots | coverage 57.70% (11541 answered by the network) | failures hierarchy 463 (2.315%) against base 463 (2.315%) | discordant: hierarchy-only wrong 29, base-only wrong 29, exact two-sided p = 1 | mean ms/shot 501.3 (base alone 589.6; network 16.3 on every shot)
-The threshold is fitted on train_X and applied unchanged to validation_X; the network was never trained on Stim shots.

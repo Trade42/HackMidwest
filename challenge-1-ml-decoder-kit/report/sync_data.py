@@ -27,7 +27,7 @@ KIT = Path(__file__).resolve().parent.parent
 DATA = Path(__file__).resolve().parent / "data"
 RECORD = DATA / "sources.json"
 
-NETWORK_STEP = 100000   # the newest snapshot of the X network whose logits are copied; older copies are removed by hand
+NETWORK_STEP = 120000   # the newest snapshot of the X network whose logits are copied; older copies are removed by hand
 
 # (destination under report/data/, where from, path or pattern there, grows?)
 # "tree" is the working tree of this branch, relative to challenge-1-ml-decoder-kit/.
@@ -107,7 +107,7 @@ SOURCES = [
     ("background/", "tree", "ml_decoder/logs/predecoder_real2_p0.004_300_300_300_20.log", False),
     ("background/", "tree", "ml_decoder/logs/train_X_p0.0001_seed1.log", False),
     # "network first": the network answers where it is confident, else the hierarchy (p = 0.005, threshold fitted on train_X)
-    ("background/", "origin/laptop-artifacts", "priortilt/results_hierarchy_heldout_step*.txt", False),
+    ("background/", "origin/laptop-artifacts", f"priortilt/results_hierarchy_heldout_step{NETWORK_STEP}.txt", False),
     # the laptop's early plain-CNN runs: its table of the runs, and the logs of the two runs the report names
     ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/README.md", False),
     ("background/plain_cnn_runs/", "origin/laptop-artifacts", "plain_cnn_runs/x_4h.log", False),

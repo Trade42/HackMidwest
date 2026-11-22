@@ -79,7 +79,7 @@ recipe (arXiv:2604.08358), written by us from the paper's description and scaled
 per logical bit.
 
 **Its role.** Alone, the network is a poor decoder: at the last training report in our copy of its log it gets
-<!--f:net_X_wrong4-->4.2%<!--/f--> of X shots wrong at p = 0.004, where relay-BP gets <!--f:expl_X_R-->122<!--/f--> of 25,000 wrong on the exploration shots. It is not asked to decode.
+<!--f:net_X_wrong4-->3.8%<!--/f--> of X shots wrong at p = 0.004, where relay-BP gets <!--f:expl_X_R-->122<!--/f--> of 25,000 wrong on the exploration shots. It is not asked to decode.
 It is asked which of two or three given answers is more likely, on the few shots where the fast decoders disagree.
 That is an easier question, and one where the classical score is weak: among 16 relay-BP candidates the right answer
 is present on <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, and the lowest weight picks it on only <!--f:cand_lowest-->71<!--/f-->
@@ -123,9 +123,9 @@ At p = 0.004, on <!--f:expl_pairs-->25,000<!--/f--> pairs of the train and valid
 PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its random seed, our hierarchy <!--f:expl_pairs_C-->140<!--/f--> with its
 best tie-break that needs no learning, the lowest weight among the converged candidates (only relay-BP fails
 <!--f:expl_pairs_C_only_relay-->128<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_C_only_ours-->23<!--/f-->), and TCBP-JOBS <!--f:expl_pairs_T-->113<!--/f-->. On X memory, the
-neural tie-break (the network at training step <!--f:expl_X_N_step-->100,000<!--/f-->) fails <!--f:expl_X_N-->59<!--/f--> of 25,000 shots where that classical
-tie-break fails <!--f:expl_X_C-->67<!--/f--> (only the network rule fails <!--f:expl_X_N_vs_C_only_network-->7<!--/f--> shots, only the classical rule
-<!--f:expl_X_N_vs_C_only_classical-->15<!--/f-->, exact p = <!--f:expl_X_N_vs_C_p-->0.13<!--/f-->). The rules were chosen on these shots, which flatters them;
+neural tie-break (the network at training step <!--f:expl_X_N_step-->120,000<!--/f-->) fails <!--f:expl_X_N-->60<!--/f--> of 25,000 shots where that classical
+tie-break fails <!--f:expl_X_C-->67<!--/f--> (only the network rule fails <!--f:expl_X_N_vs_C_only_network-->8<!--/f--> shots, only the classical rule
+<!--f:expl_X_N_vs_C_only_classical-->15<!--/f-->, exact p = <!--f:expl_X_N_vs_C_p-->0.21<!--/f-->). The rules were chosen on these shots, which flatters them;
 the test table is the number to quote. Three things to take from it:
 
 - **PriorTilt is IonQ's decoder, not ours.** One run of it already fails less often than relay-BP, and by how much

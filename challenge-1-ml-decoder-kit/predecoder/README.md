@@ -605,9 +605,13 @@ head's priors 74 failures against the kit's 206 (only head 15, only fresh 147, p
 
 **The Z test** (test_Z p = 0.005, 10,000 shots, sha256 `b86ae320...`; one run from the detached
 checkout at `87b484a6` with the frozen knobs, the head arm first; `logs/test_run_p0.005_Z_head_arm.log`):
-relay-BP with the head's priors fails **132** (0.0132 [0.0111, 0.0156]); TCBP-JOBS 177 on the same
-shots; the frozen fallback rule 100 (it falls back on 73 shots; against T 76 / 24 / 101,
-p = 2.0e-12; `logs/fallback_test_Z_p0.005.log`).
+relay-BP with the head's priors fails **132** (0.0132 [0.0111, 0.0156]). The declared pair, with its
+fresh arm (`logs/test_run_p0.005_Z.log`, ended 16:29:13 UTC): the kit's priors fail 398 (0.0398
+[0.0361, 0.0438]); both 108, only the head 24, only the kit's priors 290, exact two-sided p = 3.6e-59;
+mean iterations 695 against 2,364. Secondaries (accuracy only; `logs/test_run_p0.005_Z_secondary.log`):
+TCBP-JOBS 177 (only H 56, only T 101, p = 0.0004), the evaluator's relay-bp row 427 (15 / 310). The
+frozen fallback rule 100 (it falls back on 73 shots; against T 76 / 24 / 101, p = 2.0e-12;
+`logs/fallback_test_Z_p0.005.log`).
 
 **The kit's score: pairs of an X and a Z shot** (shot k of each; a pair fails when either fails;
 `python -m predecoder.pair`, `logs/pair_test_p0.005.log`; every file checked against its test
@@ -698,8 +702,9 @@ Not tested, or not done:
 - **The held-out test files:** X at p = 0.005 once, on Sal's yes, after the declared gate at p = 0.004
   failed (above); then, under the registered extension written after that result
   (`logs/extension_registered_spec.md`), X at p = 0.004 once (`logs/test_run_p0.004_X.log`) and X at
-  p = 0.003 once (`logs/test_run_p0.003_X.log`), and Z at p = 0.005 once (`logs/test_run_p0.005_Z_head_arm.log`,
-  then its fresh arm). The head, its knobs and
+  p = 0.003 once (`logs/test_run_p0.003_X.log`), and Z at p = 0.005 once (the head arm,
+  `logs/test_run_p0.005_Z_head_arm.log`, then the fresh arm, `logs/test_run_p0.005_Z.log`, which reuses
+  the head arm's saved chunks). The head, its knobs and
   relay-BP were not changed after any result. The fallback rule was designed after the first test
   result and is labelled so wherever it appears.
 - **Z memory has a head** (above; from `ee359d7f`, which lets a head train on a Z network with light

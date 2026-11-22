@@ -95,12 +95,12 @@ shots) and with **generic** priors (the kit's uniform model). Two generic baseli
   (p = 0.01486 × factor);
 - **best p on train shots**: the kit's uniform model at the p that decodes best on 250 train shots of another seed
   (5100 at factor 0.8), found by a grid that is extended until its best point is inside it (`job.fit_generic`).
-  Done for BP-OSD at factor 0.8, and for relay-BP at 0.8 on 100 train shots (FIT_RELAY).
+  Done for BP-OSD at factor 0.8, and for relay-BP at 0.8 on 100 train shots (running).
 
 X memory, test seed 4100 (the shots of question 3), luminaty. "Only generic wrong" counts the shots that only the
 generic row gets wrong, "only matched wrong" the reverse; the p value is the exact two-sided sign test on them.
 
-PAIRED_TABLE
+*(The final paired table comes at handoff; the current snapshot is `results/X_tables.md`.)*
 
 **What it shows.**
 
@@ -109,7 +109,7 @@ PAIRED_TABLE
   uniform p and 613 at the same two-qubit error; 372 shots only the best generic picture gets wrong, 21 only the
   matched one.
 - **For relay-BP the wrong picture also costs work**: 5 to 8 times the iterations per shot, and many more shots that
-  never converge (ITER_LINE). Iterations do not depend on the machine.
+  never converge (numbers at handoff). Iterations do not depend on the machine.
 - **Why.** The matched picture knows that most faults are single readout-like events and that hook faults almost
   never happen (`logs/explain.log`): at factor 0.7 it expects 77 faults per shot, 59% of them readout-like and 0.2%
   that flip 5 or 6 detectors. The uniform picture at the same two-qubit error expects 122, 26% readout-like and

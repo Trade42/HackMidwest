@@ -42,3 +42,13 @@ step 8000 of 400000 | training noise p=0.00325 | mean training loss 0.1364 | lea
   p=0.004  shots wrong 0.4716 (always-0 0.9996)  bits right 0.8896 (always-0 0.5038)
   p=0.005  shots wrong 0.7806 (always-0 0.9998)  bits right 0.7522 (always-0 0.4997)
 speed: 260 shots/s in training, 0.493 s per step, report 44.0 s, peak GPU memory 7.87 GB in tensors and 8.30 GB held by PyTorch
+step 9636 of 400000 | training noise p=0.004 | mean training loss 0.2036 | learning rate 9.99e-04
+  averaged weights on 5000 error-model shots per p (not Stim shots); 95% interval of a share: +-0.014 or less
+  p=0.001  shots wrong 0.0024 (always-0 0.9752)  bits right 0.9998 (always-0 0.6070)
+  p=0.002  shots wrong 0.0212 (always-0 0.9984)  bits right 0.9972 (always-0 0.5259)
+  p=0.003  shots wrong 0.1300 (always-0 0.9996)  bits right 0.9781 (always-0 0.5050)
+  p=0.004  shots wrong 0.3892 (always-0 0.9996)  bits right 0.9151 (always-0 0.5038)
+  p=0.005  shots wrong 0.7184 (always-0 0.9998)  bits right 0.7891 (always-0 0.4997)
+speed: 211 shots/s in training, 0.605 s per step, report 37.2 s, peak GPU memory 7.87 GB in tensors and 8.30 GB held by PyTorch
+speed: stopped by the file /home/blakew3/mlBranchMidwest/runs/cascade_X_w256_s1/STOP at step 9636; continue with --resume /home/blakew3/mlBranchMidwest/runs/cascade_X_w256_s1/checkpoint.pt
+checkpoint: /home/blakew3/mlBranchMidwest/runs/cascade_X_w256_s1/checkpoint.pt at step 9636

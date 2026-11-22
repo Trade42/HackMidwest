@@ -1,0 +1,20 @@
+{"dataset": "/home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz", "sha256": "60c09da58402097fd70cca4e6044fc4affadcfbfbcbc9fb2227694e4642a9310", "basis": "X", "p": 0.004, "s": 0.001, "shots": 4000, "seed": 5300, "lost_data_atoms_per_shot": 10.081, "check_heralds_per_shot": 10.333, "sample_seconds": 4.7}
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 0..500 conditions ['starter', 'exact', 'oracle-round', 'starter-oracle-round', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 23s, failures so far starter=0 exact=1 oracle-round=0 starter-oracle-round=0 starter@0.5/stop1=0
+  100/500 shots, 37s, failures so far starter=2 exact=4 oracle-round=3 starter-oracle-round=3 starter@0.5/stop1=2
+  150/500 shots, 51s, failures so far starter=3 exact=4 oracle-round=3 starter-oracle-round=3 starter@0.5/stop1=3
+  200/500 shots, 68s, failures so far starter=6 exact=8 oracle-round=4 starter-oracle-round=5 starter@0.5/stop1=6
+  250/500 shots, 79s, failures so far starter=9 exact=8 oracle-round=4 starter-oracle-round=5 starter@0.5/stop1=10
+  300/500 shots, 96s, failures so far starter=11 exact=12 oracle-round=5 starter-oracle-round=6 starter@0.5/stop1=12
+  350/500 shots, 116s, failures so far starter=14 exact=16 oracle-round=7 starter-oracle-round=9 starter@0.5/stop1=15
+  400/500 shots, 135s, failures so far starter=16 exact=17 oracle-round=9 starter-oracle-round=10 starter@0.5/stop1=17
+  450/500 shots, 151s, failures so far starter=17 exact=17 oracle-round=12 starter-oracle-round=11 starter@0.5/stop1=19
+  500/500 shots, 183s, failures so far starter=22 exact=21 oracle-round=16 starter-oracle-round=14 starter@0.5/stop1=24
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/starter+exact+oracle-round+starter-oracle-round+startercap0.5_stop1/000000-000500.npz.tmp.npz in 183s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 500..1000 conditions ['starter', 'exact', 'oracle-round', 'starter-oracle-round', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 16s, failures so far starter=0 exact=0 oracle-round=0 starter-oracle-round=0 starter@0.5/stop1=0
+  100/500 shots, 26s, failures so far starter=0 exact=0 oracle-round=0 starter-oracle-round=0 starter@0.5/stop1=3
+  150/500 shots, 44s, failures so far starter=1 exact=2 oracle-round=1 starter-oracle-round=0 starter@0.5/stop1=4
+  200/500 shots, 55s, failures so far starter=5 exact=6 oracle-round=4 starter-oracle-round=3 starter@0.5/stop1=9
+  250/500 shots, 68s, failures so far starter=6 exact=7 oracle-round=4 starter-oracle-round=4 starter@0.5/stop1=10
+  300/500 shots, 77s, failures so far starter=6 exact=7 oracle-round=4 starter-oracle-round=4 starter@0.5/stop1=11

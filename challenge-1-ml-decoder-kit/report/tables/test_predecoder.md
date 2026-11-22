@@ -10,3 +10,12 @@
 | 0.003 | X | relay-BP with the head's priors (H) | not measured | not measured | not measured | not measured |
 
 Source: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.json` (copied from `predecoder/logs/`).
+
+**Not held out: the fallback rule, designed after the first test result; frozen on the validation file before this application; the rule was prompted by the X test shots at p = 0.005, so its X number there is post hoc, not held out.** The rule: for every shot, the answer of relay-BP with the head's priors (H) where that relay-BP converged (its own success flag, no truth), else TCBP-JOBS's answer (T). No knob, no threshold (`predecoder/logs/fallback_rule_frozen.md`). It is not an equal of the rows above.
+
+| p | Basis | What this number is | Shots that fall back to TCBP-JOBS | The rule fails (share, 95% interval) | H fails | TCBP-JOBS fails | Rule against TCBP-JOBS: both / only the rule / only TCBP-JOBS (exact p) | Rule against H: both / only the rule / only H (exact p) |
+|---|---|---|---|---|---|---|---|---|
+| 0.005 | X | post hoc: the rule was prompted by these same test shots, so this number is not held out | 90 of 10,000 | 107 (1.07%, 0.89% to 1.29%) | 151 | 186 | 91 / 16 / 95 (p = 8e-15) | 106 / 1 / 45 (p = 1e-12) |
+| 0.005 | Z | its clean test: the rule was frozen before the Z test file was opened | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
+
+Source: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`).

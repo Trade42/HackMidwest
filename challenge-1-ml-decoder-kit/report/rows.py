@@ -160,3 +160,11 @@ P_RAMP = {"0.003": "#86b6ef", "0.004": "#3987e5", "0.005": "#184f95"}
 PREDECODER_TEST = [("0.005", "X"), ("0.004", "X"), ("0.003", "X")]
 PREDECODER_LABEL = ("secondary (chosen after the declared gate at p = 0.004 failed), one basis at a time, accuracy only, not a pair score; "
                     "its times are not clean (a shared 12-worker pool on the team's PC), so iterations are shown instead")
+# The fallback rule (relay-BP with the head's priors where that relay-BP converged, else TCBP-JOBS), designed after the first test
+# result and frozen on the validation file before it was applied: (p, basis, what its number is). Shown apart from the held-out rows.
+PREDECODER_FALLBACK = [
+    ("0.005", "X", "post hoc: the rule was prompted by these same test shots, so this number is not held out"),
+    ("0.005", "Z", "its clean test: the rule was frozen before the Z test file was opened"),
+]
+PREDECODER_FALLBACK_LABEL = ("designed after the first test result; frozen on the validation file before this application; the rule was prompted "
+                             "by the X test shots at p = 0.005, so its X number there is post hoc, not held out")

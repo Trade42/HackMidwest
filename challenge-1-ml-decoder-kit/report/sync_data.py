@@ -135,6 +135,10 @@ SOURCES = [
     ("test/predecoder/", "tree", "predecoder/logs/test_run_p*_summary.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/test_run_p*_secondary.json", False),
     ("exploration/predecoder/", "tree", "predecoder/logs/compare_validation_X_summary.json", False),
+    # the fallback rule (H where its relay-BP converged, else TCBP-JOBS), designed after the first test result: its runs on the test files, and its validation
+    ("test/predecoder/", "tree", "predecoder/logs/fallback_test_*.json", False),
+    ("test/predecoder/", "tree", "predecoder/logs/fallback_test_*.log", False),
+    ("exploration/predecoder/", "tree", "predecoder/logs/fallback_validation_*.json", False),
 ]
 
 

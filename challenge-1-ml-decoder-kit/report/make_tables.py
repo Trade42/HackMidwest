@@ -27,7 +27,7 @@ import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, PREDECODER_LABEL, PREDECODER_TEST,
+from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
                          REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256)
 
 HERE = Path(__file__).resolve().parent
@@ -1801,6 +1801,56 @@ def predecoder_table(measured):
         fact(f"{n}_it_fresh", f"{arms['fresh']['mean_iterations']:,.0f}", source)
         fact(f"{n}_ratio", f"{arms['fresh']['failures'] / arms['head']['failures']:.1f}" if arms["head"]["failures"] else None, source)
         fact(f"{n}_it_ratio", f"{arms['fresh']['mean_iterations'] / arms['head']['mean_iterations']:.1f}", source)
+    fallback_lines = []
+    for p, basis, what in PREDECODER_FALLBACK:
+        n = f"fb{p[-1]}{basis}"
+        file = DATA / "test" / "predecoder" / f"fallback_test_{basis}_p{p}.json"
+        log = file.with_suffix(".log")
+        if not file.is_file():
+            fallback_lines.append([p, basis, what] + ["not measured yet"] * 6)
+            for name in ("rule", "H", "T", "back", "vs_T_only_rule", "vs_T_only_T", "vs_T_p", "vs_H_only_rule", "vs_H_only_H", "vs_H_p",
+                         "conv_shots", "conv_H", "conv_T", "back_H", "back_T"):
+                fact(f"{n}_{name}", None, source)
+            continue
+        record = json.loads(file.read_text(encoding="utf-8"))
+        if record["data"]["sha256"] != TEST_SHA256[p][basis] or record["data"]["basis"] != basis:
+            raise Mismatch(f"test/predecoder/{file.name}: not the team's test file")
+        failures, pairs, back, shots = record["failures"], record["pairs"], record["fallback_shots"], record["data"]["shots"]
+        held = DATA / "test" / "predecoder" / f"test_run_p{p}_{basis}_summary.json"
+        if held.is_file() and json.loads(held.read_text(encoding="utf-8"))["arms"]["head"]["failures"] != failures["H"]["failures"]:
+            raise Mismatch(f"test/predecoder/{file.name}: H fails {failures['H']['failures']} shots here and otherwise in the held-out run")
+        if measured[p].get("tcbp") is not None and measured[p]["tcbp"][f"failures_{basis}"] != failures["T"]["failures"]:
+            raise Mismatch(f"test/predecoder/{file.name}: TCBP-JOBS fails {failures['T']['failures']} shots here and otherwise in its row")
+        split = re.search(r"H fails (\d+) of its unconverged shots and (\d+) converged ones; T fails (\d+) of the shots that fall back",
+                          log.read_text(encoding="utf-8")) if log.is_file() else None
+        if split is None:
+            raise Mismatch(f"test/predecoder/{log.name}: no line splitting the failures by convergence")
+        back_h, conv_h, back_t = map(int, split.groups())
+        if conv_h + back_h != failures["H"]["failures"] or conv_h + back_t != failures["rule"]["failures"]:
+            raise Mismatch(f"test/predecoder/{log.name}: the split by convergence does not add up to the failures")
+        versus_t, versus_h = pairs["rule against T"], pairs["rule against H"]
+        low, high = stats.wilson(failures["rule"]["failures"], shots)
+        fallback_lines.append([p, basis, what, f"{back:,} of {shots:,}",
+                               f"{failures['rule']['failures']:,} ({failures['rule']['failures'] / shots:.2%}, {low:.2%} to {high:.2%})",
+                               f"{failures['H']['failures']:,}", f"{failures['T']['failures']:,}",
+                               f"{versus_t['both']} / {versus_t['only_rule']} / {versus_t['only_T']} (p = {stats.p_text(versus_t['p'])})",
+                               f"{versus_h['both']} / {versus_h['only_rule']} / {versus_h['only_H']} (p = {stats.p_text(versus_h['p'])})"])
+        records.append({"p": p, "basis": basis, "row": "fallback rule", "failures": failures["rule"]["failures"], "shots": shots,
+                        "wilson95_low": low, "wilson95_high": high, "fallback_shots": back, "post_hoc": basis == "X"})
+        for name, value in (("rule", failures["rule"]["failures"]), ("H", failures["H"]["failures"]), ("T", failures["T"]["failures"]), ("back", back),
+                            ("vs_T_only_rule", versus_t["only_rule"]), ("vs_T_only_T", versus_t["only_T"]), ("vs_T_p", stats.p_text(versus_t["p"])),
+                            ("vs_H_only_rule", versus_h["only_rule"]), ("vs_H_only_H", versus_h["only_H"]), ("vs_H_p", stats.p_text(versus_h["p"])),
+                            ("conv_shots", f"{shots - back:,}"), ("conv_H", conv_h), ("conv_T", failures["T"]["failures"] - back_t),
+                            ("back_H", back_h), ("back_T", back_t)):
+            fact(f"{n}_{name}", value, source)
+    validation = DATA / "exploration" / "predecoder" / "fallback_validation_X_p0.005.json"
+    record = json.loads(validation.read_text(encoding="utf-8")) if validation.is_file() else None
+    for name, value in (("rule", record and record["failures"]["rule"]["failures"]), ("T", record and record["failures"]["T"]["failures"]),
+                        ("H", record and record["failures"]["H"]["failures"]),
+                        ("only_rule", record and record["pairs"]["rule against T"]["only_rule"]),
+                        ("only_T", record and record["pairs"]["rule against T"]["only_T"]),
+                        ("p", record and stats.p_text(record["pairs"]["rule against T"]["p"])), ("back", record and record["fallback_shots"])):
+        fact(f"fbval_{name}", value, "data/exploration/predecoder/fallback_validation_X_p0.005.json")
     gate = DATA / "exploration" / "predecoder" / "compare_validation_X_summary.json"
     if gate.is_file():
         record = json.loads(gate.read_text(encoding="utf-8"))
@@ -1820,7 +1870,14 @@ def predecoder_table(measured):
                  "against their rows in this report.\n\n"
                  + markdown(["p", "Basis", "Decoder", "Failed shots", "Share (95% interval)", "H against it: both / only H / only it (exact p)",
                              "Mean BP iterations per shot; shots not converged"], lines)
-                 + "\n\nSource: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.json` (copied from `predecoder/logs/`).",
+                 + "\n\nSource: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.json` (copied from `predecoder/logs/`)."
+                 + f"\n\n**Not held out: the fallback rule, {PREDECODER_FALLBACK_LABEL}.** The rule: for every shot, the answer of relay-BP with "
+                 "the head's priors (H) where that relay-BP converged (its own success flag, no truth), else TCBP-JOBS's answer (T). No knob, no "
+                 "threshold (`predecoder/logs/fallback_rule_frozen.md`). It is not an equal of the rows above.\n\n"
+                 + markdown(["p", "Basis", "What this number is", "Shots that fall back to TCBP-JOBS", "The rule fails (share, 95% interval)",
+                             "H fails", "TCBP-JOBS fails", "Rule against TCBP-JOBS: both / only the rule / only TCBP-JOBS (exact p)",
+                             "Rule against H: both / only the rule / only H (exact p)"], fallback_lines)
+                 + "\n\nSource: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`).",
                  records)
 
 

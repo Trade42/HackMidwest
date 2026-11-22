@@ -320,6 +320,43 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
+| `fb5X_H` | 151 | `tables/test_predecoder.md` |
+| `fb5X_T` | 186 | `tables/test_predecoder.md` |
+| `fb5X_back` | 90 | `tables/test_predecoder.md` |
+| `fb5X_back_H` | 88 | `tables/test_predecoder.md` |
+| `fb5X_back_T` | 44 | `tables/test_predecoder.md` |
+| `fb5X_conv_H` | 63 | `tables/test_predecoder.md` |
+| `fb5X_conv_T` | 142 | `tables/test_predecoder.md` |
+| `fb5X_conv_shots` | 9,910 | `tables/test_predecoder.md` |
+| `fb5X_rule` | 107 | `tables/test_predecoder.md` |
+| `fb5X_vs_H_only_H` | 45 | `tables/test_predecoder.md` |
+| `fb5X_vs_H_only_rule` | 1 | `tables/test_predecoder.md` |
+| `fb5X_vs_H_p` | 1e-12 | `tables/test_predecoder.md` |
+| `fb5X_vs_T_only_T` | 95 | `tables/test_predecoder.md` |
+| `fb5X_vs_T_only_rule` | 16 | `tables/test_predecoder.md` |
+| `fb5X_vs_T_p` | 8e-15 | `tables/test_predecoder.md` |
+| `fb5Z_H` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_T` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_back` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_back_H` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_back_T` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_conv_H` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_conv_T` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_conv_shots` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_rule` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_H_only_H` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_H_only_rule` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_H_p` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_T_only_T` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_T_only_rule` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_T_p` | not measured | `tables/test_predecoder.md` |
+| `fbval_H` | 79 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_T` | 91 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_back` | 44 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_only_T` | 53 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_only_rule` | 12 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_p` | 3e-07 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_rule` | 50 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
 | `findings3` | At p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 85.3 ms per pair, or 28.9 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 4 in 22.7 ms per pair. | `tables/test_p0.003.md` |
 | `findings4` | At p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair, or 150 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 74 in 87.3 ms per pair. | `tables/test_p0.004.md` |
 | `findings5` | At p = 0.005 our decoder fails 479 of 10,000 pairs, relay-BP 845 (only ours fails 93, only relay-BP 459, exact p = 4e-59), in 825 ms per pair against relay-BP's 1,471 ms per pair, or 608 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 601 in 264 ms per pair. | `tables/test_p0.005.md` |

@@ -79,7 +79,7 @@ recipe (arXiv:2604.08358), written by us from the paper's description and scaled
 per logical bit.
 
 **Its role.** Alone, the network is a poor decoder: at the last training report in our copy of its log it gets
-<!--f:net_X_wrong4-->6.2%<!--/f--> of X shots wrong at p = 0.004, where relay-BP gets <!--f:expl_X_R-->122<!--/f--> of 25,000 wrong on the exploration shots. It is not asked to decode.
+<!--f:net_X_wrong4-->5.2%<!--/f--> of X shots wrong at p = 0.004, where relay-BP gets <!--f:expl_X_R-->122<!--/f--> of 25,000 wrong on the exploration shots. It is not asked to decode.
 It is asked which of two or three given answers is more likely, on the few shots where the fast decoders disagree.
 That is an easier question, and one where the classical score is weak: among 16 relay-BP candidates the right answer
 is present on <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, and the lowest weight picks it on only <!--f:cand_lowest-->71<!--/f-->

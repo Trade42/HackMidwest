@@ -1,6 +1,6 @@
 | Decoder | p = 0.003 | p = 0.004 | p = 0.005 |
 |---|---|---|---|
-| BP-OSD (kit baseline) | not measured | not measured | not measured |
+| BP-OSD (kit baseline) | not measured | 4.02e-03 ± 1.8e-04 · 472 pairs · 302 ms | not measured |
 | relay-BP (kit baseline) | not measured | not measured | not measured |
 | relay-BP with a learned router | not measured | not measured | not measured |
 | PriorTilt, one run | not measured | not measured | not measured |

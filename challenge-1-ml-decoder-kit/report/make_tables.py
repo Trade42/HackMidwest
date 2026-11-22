@@ -181,11 +181,11 @@ def where_text(row):
     return text
 
 
-def paired_text(row, key):
+def paired_text(row, key, reference=None):
     if key == REFERENCE:
         return "the reference"
     if row.get("paired") is None:
-        return "no per-shot file"
+        return "relay-BP not measured yet" if reference is None else "no per-shot file"
     paired = row["paired"]
     return f"{paired['both']} / {paired['row_only']} / {paired['reference_only']} (p = {stats.p_text(paired['p'])})"
 
@@ -209,12 +209,13 @@ def test_tables(measured):
             else:
                 timed = row["mean_ms"] is not None and row["median_ms"] is not None and not row.get("offline")
                 ratio = row["mean_ms"] / base_ms if timed and base_ms else None
-                ratio_text = "the reference" if key == REFERENCE and timed else f"{ratio:.2f}" if ratio is not None else NOT_MEASURED if timed else "not timed in one process"
+                ratio_text = ("the reference" if key == REFERENCE and timed else f"{ratio:.2f}" if ratio is not None
+                              else "relay-BP not measured yet" if timed and base is None else NOT_MEASURED if timed else "not timed in one process")
                 times = (NOT_MEASURED if row["mean_ms"] is None else f"{ms(row['mean_ms'])} / not timed per pair" if row["median_ms"] is None
                          else " / ".join(ms(row[name]) for name in ("mean_ms", "median_ms", "p99_ms")))
                 lines.append([decoder.label + row["label_note"], decoder.whose, f"{row['failures_X']}, {row['failures_Z']}",
                               f"{row['failures_pair']} of {row['shots']:,}", rate_text(row["rate"], row["error"]),
-                              interval_text(*row["interval"]), times, ratio_text, paired_text(row, key), where_text(row)])
+                              interval_text(*row["interval"]), times, ratio_text, paired_text(row, key, base), where_text(row)])
                 time_lines.append([p, decoder.label + row["label_note"], f"{row['failures_pair']} of {row['shots']:,}",
                                    "not timed in one process" if not timed else ms(row["mean_ms"]), ratio_text if timed else "",
                                    ms(row["median_ms"]) if timed else "", ms(row["p99_ms"]) if timed else "",

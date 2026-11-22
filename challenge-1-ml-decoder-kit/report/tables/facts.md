@@ -244,14 +244,14 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `loss_oracle_ratio` | 1.64 | `tables/loss.md` |
 | `loss_oracle_ratio_interval` | 1.42 to 1.94 | `tables/loss.md` |
 | `loss_oracle_share` | 2.7% | `tables/loss.md` |
-| `net_X_step` | 80,000 | `tables/networks.md` |
-| `net_X_wrong3` | 1.3% | `tables/networks.md` |
-| `net_X_wrong4` | 6.2% | `tables/networks.md` |
-| `net_X_wrong5` | 23.5% | `tables/networks.md` |
-| `net_Z_step` | 46,000 | `tables/networks.md` |
-| `net_Z_wrong3` | 1.3% | `tables/networks.md` |
-| `net_Z_wrong4` | 7.1% | `tables/networks.md` |
-| `net_Z_wrong5` | 25.1% | `tables/networks.md` |
+| `net_X_step` | 90,000 | `tables/networks.md` |
+| `net_X_wrong3` | 0.8% | `tables/networks.md` |
+| `net_X_wrong4` | 5.2% | `tables/networks.md` |
+| `net_X_wrong5` | 21.2% | `tables/networks.md` |
+| `net_Z_step` | 60,000 | `tables/networks.md` |
+| `net_Z_wrong3` | 1.1% | `tables/networks.md` |
+| `net_Z_wrong4` | 5.8% | `tables/networks.md` |
+| `net_Z_wrong5` | 22.1% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
 | `t3_bposd_both` | not measured | `tables/test_p0.003.md` |
 | `t3_bposd_error` | not measured | `tables/test_p0.003.md` |
@@ -371,18 +371,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_tcbp_wall_hours` | not measured | `tables/test_p0.003.md` |
 | `t3_tcbp_xz` | not measured | `tables/test_p0.003.md` |
 | `t4_bposd_both` | not measured | `tables/test_p0.004.md` |
-| `t4_bposd_error` | not measured | `tables/test_p0.004.md` |
-| `t4_bposd_mean_ms` | not measured | `tables/test_p0.004.md` |
-| `t4_bposd_median_ms` | not measured | `tables/test_p0.004.md` |
+| `t4_bposd_error` | 1.8e-04 | `tables/test_p0.004.md` |
+| `t4_bposd_mean_ms` | 302 | `tables/test_p0.004.md` |
+| `t4_bposd_median_ms` | 350 | `tables/test_p0.004.md` |
 | `t4_bposd_only_relay` | not measured | `tables/test_p0.004.md` |
 | `t4_bposd_only_this` | not measured | `tables/test_p0.004.md` |
-| `t4_bposd_p99_ms` | not measured | `tables/test_p0.004.md` |
+| `t4_bposd_p99_ms` | 863 | `tables/test_p0.004.md` |
 | `t4_bposd_paired_p` | not measured | `tables/test_p0.004.md` |
-| `t4_bposd_pairs` | not measured | `tables/test_p0.004.md` |
-| `t4_bposd_rate` | not measured | `tables/test_p0.004.md` |
+| `t4_bposd_pairs` | 472 | `tables/test_p0.004.md` |
+| `t4_bposd_rate` | 4.02e-03 | `tables/test_p0.004.md` |
 | `t4_bposd_time_ratio` | not measured | `tables/test_p0.004.md` |
-| `t4_bposd_wall_hours` | not measured | `tables/test_p0.004.md` |
-| `t4_bposd_xz` | not measured | `tables/test_p0.004.md` |
+| `t4_bposd_wall_hours` | 0.8 | `tables/test_p0.004.md` |
+| `t4_bposd_xz` | 230, 243 | `tables/test_p0.004.md` |
 | `t4_ensemble_both` | not measured | `tables/test_p0.004.md` |
 | `t4_ensemble_error` | not measured | `tables/test_p0.004.md` |
 | `t4_ensemble_mean_ms` | not measured | `tables/test_p0.004.md` |

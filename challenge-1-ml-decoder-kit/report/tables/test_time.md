@@ -11,7 +11,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.003 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | our ensemble (combined offline) | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured | not measured | not measured |
-| 0.004 | BP-OSD (kit baseline) | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.004 | BP-OSD (kit baseline) | 472 of 10,000 | 302 | relay-BP not measured yet | 350 | 863 | CPU, 1 core |
 | 0.004 | relay-BP (kit baseline) | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.004 | relay-BP with a learned router | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.004 | PriorTilt, one run | not measured | not measured | not measured | not measured | not measured | not measured |

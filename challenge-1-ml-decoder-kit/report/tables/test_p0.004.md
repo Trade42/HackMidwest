@@ -2,7 +2,7 @@ Test shots, p = 0.004: `data/p0.004/test_X.npz` and `test_Z.npz` (10,000 shots p
 
 | Decoder | Built by | Failures X, Z | Failed pairs | Rate per cycle ± error | 95% interval | Time per pair, ms: mean / median / p99 | Mean time ÷ relay-BP's | Against relay-BP, same pairs: both fail / only this row / only relay-BP (exact p) | Where it ran |
 |---|---|---|---|---|---|---|---|---|---|
-| BP-OSD (kit baseline) | the kit | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
+| BP-OSD (kit baseline) | the kit | 230, 243 | 472 of 10,000 | 4.02e-03 ± 1.8e-04 | 3.7e-03 to 4.4e-03 | 302 / 350 / 863 | relay-BP not measured yet | relay-BP not measured yet | CPU, 1 process, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 10.3 CPUs busy on average (at most 12.0), up to 9 evaluator rows at once, other work of ours at most: tcbp member 1, evaluate stim 1, the CPU quota held the notebook back for 69 s in all; server jobs started in that time: cpu/030-candidates-explore, ctl/050-preflight-dry-run, ctl/060-loss-tracker-replication, gpu/045-test-run-dry |
 | relay-BP (kit baseline) | the kit | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | relay-BP with a learned router | teammates | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | PriorTilt, one run | IonQ (arXiv:2611.13373) | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |

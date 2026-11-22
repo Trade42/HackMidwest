@@ -135,9 +135,12 @@ def cpu_monitor(path):
     if not path.is_file():
         return []
     lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
-    names = lines[0].lstrip("# ").replace("|", " ").split() if lines and lines[0].startswith("#") else []
+    header = next((line for line in lines if line.startswith("# time_utc")), "")      # the column names; other comment lines explain them
+    names = header.lstrip("# ").replace("|", " ").split()
     rows = []
-    for line in lines[1:]:
+    for line in lines:
+        if line.startswith("#"):
+            continue
         cells = line.replace("|", " ").split()
         if len(cells) != len(names):
             continue

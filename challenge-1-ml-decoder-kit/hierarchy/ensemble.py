@@ -26,6 +26,9 @@ the later stage: a rule runs them only on the shots it does not accept at once.
   c    as b, with J among the candidates on the shots where J exists
   d    the majority of P1, P2, T; if all three differ, the network picks among P1, P2, T, R
   e    as d, with J among the candidates on the shots where J exists
+  f    P1 where P1 = P2 = T; else J's answer where J converged, and T's answer where it did not   (no learning)
+  g    P1 where P1 = P2 = T; else the answer that most of J, T, P1, P2, R give; a tie goes to the network
+  gw   the same, with a tie going to the first of J, T, P1, P2, R that is in it                    (no learning)
 
 "The network picks" is part 1's score: the candidate whose 12 bits the network finds most
 likely (rules.network_score), among the candidates that decoded the shot. No rule has a fitted
@@ -66,6 +69,9 @@ RULES = [
     ("c", "as b, with J among the candidates where it exists", ALWAYS_ON, False, ("P1", "P2", "T", "R", "J"), "network"),
     ("d", "majority of P1, P2, T; all differ: the network among P1, P2, T, R", ALWAYS_ON, True, ("P1", "P2", "T", "R"), "network"),
     ("e", "as d, with J among the candidates where it exists", ALWAYS_ON, True, ("P1", "P2", "T", "R", "J"), "network"),
+    ("f", "P1 where P1 = P2 = T; else J where it converged, else T", ALWAYS_ON, False, ("J", "T"), "joint"),
+    ("g", "P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network", ALWAYS_ON, False, ("J", "T", "P1", "P2", "R"), "votes+network"),
+    ("gw", "P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order", ALWAYS_ON, False, ("J", "T", "P1", "P2", "R"), "votes"),
 ]
 ORACLES = [("R", "P1", "P2"), ("P1", "P2", "T"), ("P1", "P2", "T", "R"), ("P1", "P2", "T", "R", "J")]
 
@@ -77,6 +83,7 @@ class Member:
     covers: np.ndarray      # [shots] bool: the member decoded this shot
     seconds: np.ndarray     # [shots]; NaN where the file holds no time
     weight: np.ndarray      # [shots]; NaN where the file holds no weight
+    converged: np.ndarray   # [shots] bool: the correction reproduces the syndrome (True where the file does not say)
     source: str
     times_from: str
 
@@ -131,9 +138,10 @@ def load_members(paths):
                 raise SystemExit(f"member {name} is in two files: {members[name].source} and {path}")
             covers = np.zeros(count, bool)
             covers[rows] = arrays[f"ran_{name}"] if f"ran_{name}" in arrays else True
-            member = Member(name, np.zeros((count, 12), np.uint8), covers, np.full(count, np.nan), np.full(count, np.nan), path, times_from)
+            member = Member(name, np.zeros((count, 12), np.uint8), covers, np.full(count, np.nan), np.full(count, np.nan),
+                            np.ones(count, bool), path, times_from)
             member.predicted[rows] = arrays[f"predicted_{name}"]
-            for field in ("seconds", "weight"):
+            for field in ("seconds", "weight", "converged"):
                 if f"{field}_{name}" in arrays:
                     getattr(member, field)[rows] = arrays[f"{field}_{name}"]
             members[name] = member
@@ -166,20 +174,30 @@ def same(first, second):
 def later_stage_pick(pool, scorer, network):
     """Index [shots] into pool of the candidate the scorer prefers among those that decoded the shot (the first on a tie)."""
     predicted = np.stack([member.predicted for member in pool])
-    if scorer == "network":
+    covers = np.stack([member.covers for member in pool])
+    order = -np.arange(len(pool), dtype=float)[:, None] * np.ones(covers.shape[1])      # earlier in the pool is better
+    by_network = None
+    if "network" in scorer:
         own = bits_for_network(predicted, network.logits > 0, network.answer, network.model_from_kit)
-        score = network_score(own, network.logits)
-    else:
+        by_network = network_score(own, network.logits)
+    if scorer == "network":
+        score = by_network
+    elif scorer == "weight":
         score = -np.stack([member.weight for member in pool])
-    score = np.where(np.stack([member.covers for member in pool]), score, -np.inf)
-    return score.argmax(axis=0)
+    elif scorer == "joint":               # J where it decoded the shot and converged; otherwise T
+        score = np.stack([member.converged * 2.0 if member.name == "J" else np.full(covers.shape[1], float(member.name == "T"))
+                          for member in pool])
+    else:                                 # votes: how many candidates that decoded the shot give this same answer
+        votes = sum((covers[other] & (predicted == predicted[other][None]).all(axis=-1)) for other in range(len(pool))).astype(float)
+        score = votes * 1e6 + (by_network if scorer == "votes+network" else order)
+    return np.where(covers, score, -np.inf).argmax(axis=0)
 
 
 def apply(rule, members, network):
     """One rule on every shot: (answer [shots, 12], later [shots] bool, time [shots] in seconds or None, note)."""
     _, _, accept, majority, pool_names, scorer = rule
     missing = [name for name in accept if name not in members] + ([] if any(name in members for name in pool_names) else ["a candidate"])
-    if scorer == "network" and network is None:
+    if "network" in scorer and network is None:
         return None, None, None, "not measured: no logits"
     if missing or ("J" in pool_names and "J" not in members):
         return None, None, None, "not measured: no file for " + ", ".join(missing or ["J"])
@@ -202,7 +220,7 @@ def apply(rule, members, network):
     # Time: the always-on members on every shot; on the later-stage shots also the other candidates that decoded the shot.
     seconds = sum(members[name].seconds for name in accept)
     extra = sum(np.where(member.covers, member.seconds, 0.0) for member in pool if member.name not in accept)
-    if scorer == "network":
+    if "network" in scorer:
         extra = extra + (np.nan if network.ms is None else network.ms / 1e3)
     seconds = seconds + np.where(later, extra, 0.0)
     return answer, later, (None if np.isnan(seconds).any() else seconds), ""

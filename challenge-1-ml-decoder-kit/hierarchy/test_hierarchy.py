@@ -560,7 +560,7 @@ def test_joint_member_decodes_the_listed_shots_and_refuses_a_foreign_selection(t
 # ---------- ensemble.py ----------
 
 WRONG_C = np.eye(12, dtype=np.uint8)[2]
-# Six shots; the truth is "no bit flipped". Per shot: P1, P2, T, R, and J where joint decoding ran (None: it did not).
+# Seven shots; the truth is "no bit flipped". Per shot: P1, P2, T, R, and J where joint decoding ran (None: it did not).
 ENSEMBLE_SHOTS = [
     (RIGHT, RIGHT, RIGHT, WRONG_A, None),           # 0: the always-on members agree; relay-BP is never asked
     (WRONG_A, WRONG_A, RIGHT, RIGHT, RIGHT),        # 1: both PriorTilt runs agree on a wrong answer; T differs
@@ -568,12 +568,13 @@ ENSEMBLE_SHOTS = [
     (WRONG_A, RIGHT, RIGHT, WRONG_A, WRONG_B),      # 3: a two-to-one split with the right majority
     (WRONG_A, WRONG_B, WRONG_C, WRONG_A, RIGHT),    # 4: all three differ and are wrong; only J is right
     (RIGHT, RIGHT, RIGHT, RIGHT, None),             # 5: all right
+    (WRONG_A, RIGHT, RIGHT, WRONG_C, WRONG_A),      # 6: two votes for the right answer, two (J and P1) for a wrong one
 ]
-ENSEMBLE_LOGITS = [-8 * np.ones(12)] * 2 + [16 * WRONG_B - 8.0] + [-8 * np.ones(12)] * 3
+ENSEMBLE_LOGITS = [-8 * np.ones(12)] * 2 + [16 * WRONG_B - 8.0] + [-8 * np.ones(12)] * 4
 
 
 def write_ensemble(folder, data_sha256="c" * 64, tcbp_seconds=0.02):
-    """The member files of the six shots above, in the formats of candidates, tcbp_member, joint_member and evaluate_stim."""
+    """The member files of the seven shots above, in the formats of candidates, tcbp_member, joint_member and evaluate_stim."""
     folder.mkdir(exist_ok=True)
     count, truth = len(ENSEMBLE_SHOTS), np.zeros((len(ENSEMBLE_SHOTS), 12), np.uint8)
     column = lambda index: np.array([shot[index] for shot in ENSEMBLE_SHOTS], np.uint8)
@@ -596,24 +597,28 @@ def test_ensemble_rules_on_hand_made_members(tmp_path):
     network = ensemble.load_network(logits, shots, network_ms=10.0)
     rows = {row["key"]: row for row in ensemble.score(members, shots, network)}
     failed = {key: np.flatnonzero(row["failed"]).tolist() for key, row in rows.items()}
-    assert failed["P1"] == [1, 3, 4] and failed["P2"] == [1, 2, 4] and failed["T"] == [2, 4] and failed["R"] == [0, 2, 3, 4]
-    assert failed["J"] == [3] and rows["J"]["shots"] == 3 and not rows["J"]["whole"]       # J is scored on the shots it decoded
+    assert failed["P1"] == [1, 3, 4, 6] and failed["P2"] == [1, 2, 4] and failed["T"] == [2, 4] and failed["R"] == [0, 2, 3, 4, 6]
+    assert failed["J"] == [3, 6] and rows["J"]["shots"] == 4 and not rows["J"]["whole"]    # J is scored on the shots it decoded
     assert failed["a"] == [1, 2, 4]            # part 1: two agreeing wrong answers are accepted
-    assert failed["aw"] == [1, 3, 4]
+    assert failed["aw"] == [1, 3, 4, 6]
     assert failed["b"] == [2, 4]               # a split goes to the scorer, which follows the network
     assert failed["bw"] == [2, 4]
     assert failed["c"] == [2]                  # J is a candidate where it exists (shot 4) and is left out where it does not (shot 2)
     assert failed["d"] == [1, 2, 4]            # the majority accepts the two agreeing wrong answers of shot 1
     assert failed["e"] == [1, 2]
+    assert failed["f"] == [2, 3, 6]            # J's answer where J ran (wrong on shots 3 and 6), T's where it did not (wrong on shot 2)
+    assert failed["g"] == [2, 4]               # the votes; the two-to-two ties of shots 3 and 6 go to the network, which is right
+    assert failed["gw"] == [2, 4, 6]           # by order, the tie of shot 6 goes to J, which is wrong
     later = {key: np.flatnonzero(rows[key]["later"]).tolist() for key in "abcde"}
-    assert later == {"a": [2, 3, 4], "b": [1, 2, 3, 4], "c": [1, 2, 3, 4], "d": [2, 4], "e": [2, 4]}
-    assert rows["c"]["note"] == "J exists on 3 of the 4 later-stage shots"
+    assert later == {"a": [2, 3, 4, 6], "b": [1, 2, 3, 4, 6], "c": [1, 2, 3, 4, 6], "d": [2, 4], "e": [2, 4]}
+    assert rows["c"]["note"] == "J exists on 4 of the 5 later-stage shots"
     assert failed["oracle_R_P1_P2"] == [4] and failed["oracle_P1_P2_T_R"] == [4] and failed["oracle_P1_P2_T_R_J"] == []
     # Time: P1, P2 and T on every shot; relay-BP, the network and J (where it ran) on the later-stage shots.
-    assert rows["b"]["ms"] == pytest.approx((0.22 + 4 / 6 * 0.31) * 1e3)
-    assert rows["c"]["ms"] == pytest.approx((0.22 + (4 * 0.31 + 3 * 10) / 6) * 1e3)
-    assert rows["a"]["ms"] == pytest.approx((0.2 + 3 / 6 * 0.31) * 1e3)
-    assert ensemble.unanimous(members).tolist() == [True, False, False, False, False, True]
+    assert rows["b"]["ms"] == pytest.approx((0.22 + 5 / 7 * 0.31) * 1e3)
+    assert rows["c"]["ms"] == pytest.approx((0.22 + (5 * 0.31 + 4 * 10) / 7) * 1e3)
+    assert rows["a"]["ms"] == pytest.approx((0.2 + 4 / 7 * 0.31) * 1e3)
+    assert rows["f"]["ms"] == pytest.approx((0.22 + 4 * 10 / 7) * 1e3)             # J alone is the later stage of rule f
+    assert ensemble.unanimous(members).tolist() == [True, False, False, False, False, True, False]
 
     # Without times for T (batch mode) the rules that use T have no time, and the others keep theirs.
     files, logits = write_ensemble(tmp_path / "batch", tcbp_seconds=np.nan)
@@ -630,13 +635,13 @@ def test_ensemble_command_selection_and_rule_choice(tmp_path, capsys):
     ensemble.main(["--members", *files, "--logits", logits, "--save", str(tmp_path / "train.json"),
                    "--write-selection", str(tmp_path / "train.selection.npz")])
     printed = capsys.readouterr().out
-    assert "not unanimous on 4 shots" in printed and "against TCBP-JOBS alone" in printed and "ORACLE" in printed
+    assert "not unanimous on 5 shots" in printed and "against TCBP-JOBS alone" in printed and "ORACLE" in printed
     selection = arrays_of(tmp_path / "train.selection.npz")
-    assert selection["shot"].tolist() == [1, 2, 3, 4] and str(selection["data_sha256"]) == "c" * 64
+    assert selection["shot"].tolist() == [1, 2, 3, 4, 6] and str(selection["data_sha256"]) == "c" * 64
     assert selection["members"].tolist() == ["P1", "P2", "T"]
     saved = json.loads((tmp_path / "train.json").read_text())
     assert {row["key"]: row.get("failures") for row in saved["rows"] if row["kind"] == "rule"} == {
-        "a": 3, "aw": 3, "b": 2, "bw": 2, "c": 1, "d": 3, "e": 2}
+        "a": 3, "aw": 4, "b": 2, "bw": 2, "c": 1, "d": 3, "e": 2, "f": 3, "g": 2, "gw": 3}
     assert saved["rows"][4]["key"] == "J" and next(row for row in saved["rows"] if row["key"] == "c")["against_T"] == {
         "both": 1, "row_only": 0, "reference_only": 1, "p": 1.0}
 

@@ -121,3 +121,8 @@ plan /home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2/plan.json: tasks ['wrong-
   biased block 3800-3899 done, 2332 s; failures so far m 405, g 437, h 585 of 3900
   wrong-p block 3900-3999 done, 2352 s; failures so far m 68, g 75, h 24 of 4000
   si1000 block 3900-3999 done, 2370 s; failures so far m 7, g 13, h 2 of 4000
+  biased block 3900-3999 done, 2394 s; failures so far m 421, g 457, h 605 of 4000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2-7f44d46/decode/wrong-p/per_shot.npz: 4000 shots scored
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2-7f44d46/decode/si1000/per_shot.npz: 4000 shots scored
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2-7f44d46/decode/biased/per_shot.npz: 4000 shots scored
+done; 2394 s

@@ -35,3 +35,17 @@ NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
 evaluate wrong-p exit 0
 evaluate si1000 exit 0
 evaluate biased exit 0
+decode-many exit 0
+error: unexpected argument '-2' found
+
+  tip: to pass '-2' as a value, use '-- -2'
+
+Usage: tail [OPTION]... [FILE]...
+
+For more information, try '--help'.
+  biased block 3900-3999 done, 2394 s; failures so far m 421, g 457, h 605 of 4000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2-7f44d46/decode/wrong-p/per_shot.npz: 4000 shots scored
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2-7f44d46/decode/si1000/per_shot.npz: 4000 shots scored
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2-7f44d46/decode/biased/per_shot.npz: 4000 shots scored
+done; 2394 s
+Sun Nov 22 17:15:30 UTC 2026

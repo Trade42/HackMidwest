@@ -2809,7 +2809,7 @@ def readme_section(measured):
     value = lambda name: FACTS.get(name, (NOT_MEASURED,))[0]
     rate = lambda row: f"{stats.sci(row['rate'])} ± {stats.sci(row['error'], 1)}"
     lines = [README_BEGIN, "# ML-assisted decoding of the Gross code [[144, 12, 12]]", "",
-             "Our entry to Infleqtion's Challenge 1 at HackMidwest 2026; the challenge statement is in [CHALLENGE.md](CHALLENGE.md). "
+             "Our entry to Infleqtion's Challenge 1 at HackMidwest 2026, the main entry of this repository; the challenge statement is in [CHALLENGE.md](CHALLENGE.md). "
              "Every number on this page is written by `challenge-1-ml-decoder-kit/report/make_tables.py` from committed result files.", "",
              f"**In short.** A small neural network reads a shot's syndrome and tells NVIDIA's GPU decoder TCBP-JOBS which of the "
              f"{value('pre_columns')} possible faults to suspect in that shot. With these per-shot priors, TCBP-JOBS fails "
@@ -2820,7 +2820,7 @@ def readme_section(measured):
              f"seen** (no validation at p = 0.004 and 0.003); on {value('ptheld_shots')} fresh X shots at p = 0.005, simulated after it was "
              f"designed (exploration on new Stim shots), it fails {value('ptheld_TH')} against TCBP-JOBS's {value('ptheld_F')}. The decoder we "
              "froze before the test run is the first pipeline below (the table's row \"ours, frozen before the test run\").", ""]
-    lines += ["![Logical error rate per cycle against p](challenge-1-ml-decoder-kit/report/figures/ler_vs_p.png)", ""]
+    lines += ["![Logical error rate per cycle against p, with the predecoder and the TCBP version](challenge-1-ml-decoder-kit/report/figures/front_ler_vs_p.png)", ""]
     # the results table: the kit's pair score on the 10,000 test pairs per p
     def row_cells(key):
         cells = []
@@ -2838,7 +2838,7 @@ def readme_section(measured):
     table.append(["the predecoder with a fallback to TCBP-JOBS where its relay-BP does not converge", "ours; post hoc (designed after the first "
                   "test result)", f"X only: {value('fb3X_rule')} of 10,000 X shots", f"X only: {value('fb4X_rule')} of 10,000 X shots",
                   f"{value('pair_rule')} · {value('pair_rule_rate')}"])
-    table.append(["**the TCBP version: TCBP-JOBS with the network's per-shot priors**", f"**ours; {PTCBP_LABEL}**; {PTCBP_LOWP} 0.004 and 0.003",
+    table.append(["**the TCBP version: TCBP-JOBS with the network's per-shot priors**", f"**ours; {PTCBP_LABEL}**; no validation at p = 0.004 or 0.003",
                   f"{value('ptpair3_TH')} · {value('ptpair3_TH_rate')} (no claim: exact p = {value('ptpair3_p')} against TCBP-JOBS)",
                   f"**{value('ptpair4_TH')} · {value('ptpair4_TH_rate')}**", f"**{value('ptpair_TH')} · {value('ptpair_TH_rate')}**"])
     lines += ["## Results on the test shots", "",
@@ -2856,7 +2856,7 @@ def readme_section(measured):
     lines += ["## How we got here", "",
               f"1. **The first pipeline, frozen before the test run** (`hierarchy/`, `neural/`). Two runs of a fast decoder (IonQ's PriorTilt) settle "
               f"the shots they agree on; where they disagree, relay-BP joins and a neural network ({value('net_parameters')} parameters) picks the most "
-              f"likely of the answers. {value('findings5')} {value('net_timed_plain')}",
+              f"likely of the answers. {value('findings5')} {value('net_timed_plain')} (The offline ablation: [report/REPORT.md](challenge-1-ml-decoder-kit/report/REPORT.md), section 4, \"The ablation: what the learned part adds\".)",
               f"2. **The relay-BP predecoder** (`predecoder/`). A second output of the same network gives every one of the {value('pre_columns')} "
               f"fault columns a probability for this shot, and relay-BP decodes with those priors. {value('pre_pair')}",
               f"3. **The TCBP version** (`predecoder/README_tcbp.md`). The same per-shot priors given to TCBP-JOBS instead of relay-BP. "
@@ -2891,7 +2891,7 @@ def readme_section(measured):
               f"{value('ptheld_seed')}), simulated after the rule was frozen, it sends {value('ptheld_share')} of the shots down the fast path and "
               f"fails {value('ptheld_rule')} against the TCBP version's {value('ptheld_TH')}, in {value('ptheld_ms_rule')} ms mean per X shot "
               f"against {value('ptheld_ms_TH')}. Details: `predecoder/fastpath/README.md`.", "",
-              "![Accuracy against time on the test shots](challenge-1-ml-decoder-kit/report/figures/ler_vs_time.png)", ""]
+              "![X test failures against time per X shot at p = 0.005, the hardware in the legend](challenge-1-ml-decoder-kit/report/figures/front_x_vs_time.png)", ""]
     # robustness
     lines += ["## Robustness: other noise, and atom loss (exploration, on our own simulated shots)", "",
               f"- **Atom loss** (our own simplified loss model, X memory, p = 0.004): relay-BP that uses the loss flags fails "
@@ -2934,7 +2934,8 @@ def readme_section(measured):
               "| [`neutral_atom_noise/`](challenge-1-ml-decoder-kit/neutral_atom_noise/), [`loss/`](challenge-1-ml-decoder-kit/loss/), [`loss_tracker/`](challenge-1-ml-decoder-kit/loss_tracker/) | noise shaped like neutral-atom hardware, and atom loss |",
               "| [`selector/`](challenge-1-ml-decoder-kit/selector/), [`ml_decoder/`](challenge-1-ml-decoder-kit/ml_decoder/) | a learned selector; an ML-first decoder |",
               "| [`evaluation/`](challenge-1-ml-decoder-kit/evaluation/) | the team's evaluator and the teammates' learned router |",
-              "| [information.md](information.md) | everything we built and why |", "",
+              "| [information.md](information.md) | everything we built and why |",
+              "| [`challenge2/`](challenge2/) | the teammates' Challenge 2 work (Give Your LLM a Quantum Backend); see its README |", "",
               "The section below is the teammates' earlier technical review; current results are above.", README_END]
     return write("readme_section", "\n".join(lines))
 

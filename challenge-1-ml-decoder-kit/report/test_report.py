@@ -154,7 +154,7 @@ def test_scripts_on_a_stand_in(tmp_path):
     done = run("report.make_plots", data, tmp_path)
     assert done.returncode == 0, done.stderr
     first = {file.name: file.read_bytes() for file in (tmp_path / "figures").iterdir()}
-    assert len(first) == 12
+    assert len(first) == 16                     # 8 figures, png and svg (6 of the report, 2 of the front page)
     run("report.make_plots", data, tmp_path)                     # a second run gives the same files, byte for byte
     assert first == {file.name: file.read_bytes() for file in (tmp_path / "figures").iterdir()}
 

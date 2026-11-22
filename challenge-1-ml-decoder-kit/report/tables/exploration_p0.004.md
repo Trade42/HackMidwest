@@ -9,6 +9,7 @@
 | X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 30,000) | ours | 66 of 25,000 | 0.264% (0.208% to 0.336%) | in the laptop's table: not paired here | 118 |
 | X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 40,000) | ours | 65 of 25,000 | 0.260% (0.204% to 0.331%) | in the laptop's table: not paired here | 118 |
 | X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 50,000) | ours | 63 of 25,000 | 0.252% (0.197% to 0.322%) | in the laptop's table: not paired here | 118 |
+| X memory, 25,000 shots | our hierarchy, neural tie-break (network at training step 60,000) | ours | 62 of 25,000 | 0.248% (0.194% to 0.318%) | in the laptop's table: not paired here | 118 |
 | Z memory, 25,000 shots | relay-BP (kit baseline) | the kit | 123 of 25,000 | 0.492% (0.413% to 0.587%) | the reference | 171 |
 | Z memory, 25,000 shots | PriorTilt, seed A | IonQ | 106 of 25,000 | 0.424% (0.351% to 0.513%) | 63 / 43 / 60 (p = 0.11) | 55.6 |
 | Z memory, 25,000 shots | PriorTilt, seed B | IonQ | 107 of 25,000 | 0.428% (0.354% to 0.517%) | 63 / 44 / 60 (p = 0.14) | 57.1 |

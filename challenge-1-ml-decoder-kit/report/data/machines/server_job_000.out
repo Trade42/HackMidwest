@@ -1,0 +1,23 @@
+now: Sun Nov 22 06:03:45 UTC 2026
+uptime:  06:03:45 up 9 days,  9:43,  0 users,  load average: 11.32, 12.87, 12.24
+pid 1: Sun Nov 22 02:56:39 2026    03:07:05 tini -g -- start.sh start-notebook.sh
+oldest processes of this user:
+    PID                  STARTED     ELAPSED COMMAND
+    116 Sun Nov 22 02:56:40 2026    03:07:05 /opt/conda/bin/python3.13 /opt/conda/bin/jupyterhub-singleuser
+    170 Sun Nov 22 02:56:42 2026    03:07:02 /usr/lib/code-server/lib/node /usr/lib/code-server --disable-telemetry --auth password
+    190 Sun Nov 22 02:56:42 2026    03:07:02 /usr/lib/code-server/lib/node /usr/lib/code-server/out/node/entry
+    692 Sun Nov 22 02:56:44 2026    03:07:00 /usr/lib/code-server/lib/node /usr/lib/code-server/lib/vscode/out/bootstrap-fork --type=agentHost --logsPath /home/blakew3/.l
+    703 Sun Nov 22 02:56:44 2026    03:07:00 /usr/lib/code-server/lib/node --dns-result-order=ipv4first /usr/lib/code-server/lib/vscode/out/bootstrap-fork --type=extensio
+    717 Sun Nov 22 02:56:44 2026    03:07:00 /usr/lib/code-server/lib/vscode/node_modules/@github/copilot-sdk-linux-x64/prebuilds/linux-x64/copilot-runtime --headless --n
+    749 Sun Nov 22 02:56:44 2026    03:07:00 /usr/lib/code-server/lib/node /usr/lib/code-server/lib/vscode/out/bootstrap-fork --type=fileWatcher
+    765 Sun Nov 22 02:56:45 2026    03:06:59 /usr/lib/code-server/lib/node /usr/lib/code-server/lib/vscode/extensions/json-language-features/server/dist/node/jsonServerMa
+cpus visible: 12; cgroup cpu.max: 1200000 100000
+               total        used        free      shared  buff/cache   available
+Mem:             226          10         194           0          23         215
+harbor-cc.internal.ncsa.edu:/harbor/illinois/iccp/icrn/prod/blakew3  1.7P  195T  1.5P  12% /home/blakew3
+NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [Insufficient Permissions], [N/A]
+python: /home/blakew3/.conda/envs/cascade/bin/python Python 3.12.16
+runners: 52901 /bin/bash jobs/runner.sh cpu;52902 /bin/bash jobs/runner.sh gpu;
+loss chain alive (pid 32825): yes
+16:  sleep 60
+sync loop restarted with pid 54549: every 60 s from now

@@ -48,7 +48,7 @@ DECODERS = {decoder.key: decoder for decoder in [
             "a neural network picks among the candidates where the fast decodes disagree", "#eb6834", "^", ours=True),
     Decoder("ensemble", "our ensemble (combined offline)", "ours, ensemble", "ours",
             "the same network, choosing among more members", "#008300", "X", ours=True),
-    Decoder("tcbp", "TCBP-JOBS (NVIDIA, GPU)", "TCBP-JOBS (GPU)", "NVIDIA; run by teammates", "a model fitted to the error model at start-up", "#1baf7a", "P"),
+    Decoder("tcbp", "TCBP-JOBS (NVIDIA, GPU)", "TCBP-JOBS (GPU)", "NVIDIA; run by teammates", "a model it fits at start-up, per memory basis", "#1baf7a", "P"),
 ]}
 
 REFERENCE = "relay-bp"   # the paired counts are against this row

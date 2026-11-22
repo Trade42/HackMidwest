@@ -1,4 +1,8 @@
 s,machine,seed,condition,label,failures,shots,source,paired_reference,reference_only,row_only,ratio
+0.0002,ICRN server,5100,blind,loss-blind relay-BP (ignores the flags),81,3000,loss/server/L1_s2e-4_seed5100/tables.md,,,,
+0.0002,ICRN server,5100,starter,flag-aware relay-BP (the published method),160,20000,loss/server/L1_s2e-4_seed5100/tables.md,blind,63,5,3.52
+0.0005,ICRN server,5200,blind,loss-blind relay-BP (ignores the flags),109,800,loss/server/L1_s5e-4_seed5200/tables.md,,,,
+0.0005,ICRN server,5200,starter,flag-aware relay-BP (the published method),132,10000,loss/server/L1_s5e-4_seed5200/tables.md,blind,98,1,9.08
 0.0005,this PC,2200,blind,loss-blind relay-BP (ignores the flags),57,400,loss/pc/L1_X_p0.004_s5e-4.json,,,,
 0.0005,this PC,2200,starter,flag-aware relay-BP (the published method),29,2000,loss/pc/L1_X_p0.004_s5e-4.json,blind,53,1,11.4
 0.001,ICRN server,5300,starter,flag-aware relay-BP (the published method),162,4000,loss/server/L3_s1e-3_seed5300/tables.md,,,,

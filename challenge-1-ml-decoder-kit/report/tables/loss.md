@@ -2,6 +2,10 @@ X memory, p = 0.004, relay-BP at the kit's settings on shots simulated with Clif
 
 | s per atom per CX | Dataset | Decoder | Failures | Share of shots (95% interval) | Paired on the same shots |
 |---|---|---|---|---|---|
+| 0.0002 | ICRN server, seed 5100 | loss-blind relay-BP (ignores the flags) | 81 of 3,000 | 2.70% (2.18% to 3.34%) |  |
+| 0.0002 | ICRN server, seed 5100 | flag-aware relay-BP (the published method) | 160 of 20,000 | 0.80% (0.69% to 0.93%) | loss-blind only 63, this row only 5 (p = 8e-14); loss-blind ÷ this = 3.52 (2.53 to 5.43), on 3,000 shots |
+| 0.0005 | ICRN server, seed 5200 | loss-blind relay-BP (ignores the flags) | 109 of 800 | 13.63% (11.42% to 16.18%) |  |
+| 0.0005 | ICRN server, seed 5200 | flag-aware relay-BP (the published method) | 132 of 10,000 | 1.32% (1.11% to 1.56%) | loss-blind only 98, this row only 1 (p = 3e-28); loss-blind ÷ this = 9.08 (5.75 to 18.33), on 800 shots |
 | 0.0005 | this PC, seed 2200 | loss-blind relay-BP (ignores the flags) | 57 of 400 | 14.25% (11.16% to 18.02%) |  |
 | 0.0005 | this PC, seed 2200 | flag-aware relay-BP (the published method) | 29 of 2,000 | 1.45% (1.01% to 2.07%) | loss-blind only 53, this row only 1 (p = 6e-15); loss-blind ÷ this = 11.40 (5.90 to 53.00), on 400 shots |
 | 0.001 | ICRN server, seed 5300 | loss-blind relay-BP (ignores the flags) | not measured | not measured | not measured |

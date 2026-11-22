@@ -61,6 +61,7 @@ def evaluator_rows(folder):
                "circuit_sha256": {basis: metadata["circuits"][basis]["sha256"] for basis in "XZ"},
                "site": site, "workers": workers, "device": "CPU", "failed_pair": None, "seconds_pair": None,
                "peak_rss_mb": (entry.get("peak_parent_rss_bytes_after") or 0) / 2**20 or None,
+               "setup_seconds": summary.get("setup_seconds"),
                "settings": entry.get("configuration"), "plugin_options": metadata.get("plugin_options"),
                "source": str(folder.relative_to(DATA)) + "/summary.json", "per_shot_file": None}
         rate, error = stats.per_cycle_rate(summary["failures_pair"], shots)

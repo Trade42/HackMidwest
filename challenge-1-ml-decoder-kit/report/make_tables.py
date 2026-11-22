@@ -34,6 +34,15 @@ TABLES = Path(os.environ.get("REPORT_OUT") or HERE) / "tables"
 DOCUMENTS = [] if os.environ.get("REPORT_OUT") else [HERE / "REPORT.md", HERE / "SLIDES.md"]
 NOT_MEASURED = "not measured"
 
+# Single numbers that the prose of REPORT.md and SLIDES.md quotes. A document writes
+# <!--f:name-->value<!--/f--> and this script puts the current value between the two comments,
+# so a sentence can never keep a number that the files no longer support. tables/facts.md lists them all.
+FACTS = {}
+
+
+def fact(name, value, source):
+    FACTS[name] = (NOT_MEASURED if value is None else str(value), source)
+
 
 # ---------- small helpers ----------
 
@@ -163,6 +172,20 @@ def test_tables(measured):
                            "peak_rss_mb_parent": row.get("peak_rss_mb"), "source": row["source"],
                            "test_X_sha256": row["test_sha256"]["X"], "test_Z_sha256": row["test_sha256"]["Z"]}
             records.append(record)
+            short = f"t{p[-1]}_{key.replace('-', '_')}"          # t3, t4, t5 for p = 0.003, 0.004, 0.005
+            source = f"tables/test_p{p}.md"
+            paired = (row or {}).get("paired") or {}
+            fact(f"{short}_pairs", row and row["failures_pair"], source)
+            fact(f"{short}_xz", row and f"{row['failures_X']}, {row['failures_Z']}", source)
+            fact(f"{short}_rate", row and stats.sci(row["rate"]), source)
+            fact(f"{short}_error", row and stats.sci(row["error"], 1), source)
+            fact(f"{short}_mean_ms", row and row["mean_ms"] is not None and ms(row["mean_ms"]) or None, source)
+            fact(f"{short}_median_ms", row and row["median_ms"] is not None and ms(row["median_ms"]) or None, source)
+            fact(f"{short}_p99_ms", row and row["p99_ms"] is not None and ms(row["p99_ms"]) or None, source)
+            fact(f"{short}_both", paired.get("both"), source)
+            fact(f"{short}_only_this", paired.get("row_only"), source)
+            fact(f"{short}_only_relay", paired.get("reference_only"), source)
+            fact(f"{short}_paired_p", stats.p_text(paired["p"]) if paired else None, source)
         note = (f"Test shots, p = {p}: `data/p{p}/test_X.npz` and `test_Z.npz` (10,000 shots per basis, Stim seeds 301 and 302; "
                 f"sha256 `{TEST_SHA256[p]['X'][:12]}…` and `{TEST_SHA256[p]['Z'][:12]}…`). Every measured row decoded these two files.")
         texts[p] = write(f"test_p{p}", note + "\n\n" + markdown(header, lines), [r for r in records if r["p"] == p])
@@ -236,6 +259,8 @@ def tcbp_own_table():
         time = f"{ms(row['mean_ms'])} / {ms(row['p99_ms'])}" if usable else f"not usable: {why} (logged: {ms(row['mean_ms'])} / {ms(row['p99_ms'])})"
         lines.append([p, f"{row['failures_X']}, {row['failures_Z']}", f"{row['shots']:,} per basis, its own sample (seed {row['seed']})",
                       f"{stats.sci(row['rate_printed'])} ± {stats.sci(row['error_printed'], 1)}", time, f"`{row['source']}`"])
+        fact(f"tcbp_own{p[-1]}_rate", stats.sci(row["rate_printed"]), "tables/tcbp_own_shots.md")
+        fact(f"tcbp_own{p[-1]}_xz", f"{row['failures_X']}, {row['failures_Z']}", "tables/tcbp_own_shots.md")
         records.append({"p": p, **{k: row[k] for k in ("failures_X", "failures_Z", "shots", "rate_printed", "error_printed", "mean_ms", "p99_ms", "started", "host")},
                         "time_usable": usable, "why_not": why, "source": row["source"]})
     text = ("TCBP-JOBS as the teammates first ran it (`tcbp_jobs_baseline.py`, an NVIDIA A100 slice on the ICRN server). "
@@ -255,7 +280,8 @@ def exploration_table():
         return write("exploration_p0.004", NOT_MEASURED), {}
     facts, lines, records = {}, [], []
     rule = {basis: loaders.weight_rule(shots[basis]) for basis in "XZ"}
-    network = {step: loaders.network_rule_table(folder / f"results_network_select_step{step}.txt") for step in (30000, 40000, 50000)}
+    network = {int(re.search(r"step(\d+)", file.name).group(1)): loaders.network_rule_table(file)
+               for file in sorted(folder.glob("results_network_select_step*.txt"), key=lambda file: int(re.search(r"step(\d+)", file.name).group(1)))}
 
     def add(scope, label, failed, reference, seconds, whose):
         count, total = int(failed.sum()), len(failed)
@@ -316,8 +342,30 @@ def exploration_table():
                     f"{(mask & ~agreed).sum() / mask.sum():.1%}"]
                    for label, mask in (("all shots (X and Z memory)", np.ones(len(agreed), bool)), ("shots PriorTilt, seed A, gets wrong", first),
                                        ("shots still wrong after the lowest-weight tie-break", left))]
-    facts |= {"shots": len(agreed), "disagree": int((~agreed).sum()), "P1_wrong_disagree": int((first & ~agreed).sum()),
-              "left_agree": int((left & agreed).sum())}
+    source = "tables/exploration_p0.004.md"
+    fact("expl_shots", f"{len(agreed):,}", source)
+    fact("expl_disagree", int((~agreed).sum()), source)
+    fact("expl_disagree_share", f"{(~agreed).mean():.1%}", source)
+    fact("expl_one_run_wrong", int(first.sum()), source)
+    fact("expl_one_run_wrong_disagree", int((first & ~agreed).sum()), source)
+    fact("expl_left", int(left.sum()), source)
+    fact("expl_left_agree", int((left & agreed).sum()), source)
+    fact("expl_pairs", f"{len(pair['R']):,}", source)
+    for name in ("R", "P1", "P2", "W"):
+        fact(f"expl_pairs_{name}", facts[f"pairs_{name}"], source)
+        fact(f"expl_rate_{name}", stats.sci(facts[f"rate_{name}"]), source)
+    versus = stats.paired(pair["R"], pair["W"])
+    fact("expl_pairs_W_only_relay", versus["reference_only"], source)
+    fact("expl_pairs_W_only_ours", versus["row_only"], source)
+    fact("expl_pairs_W_p", stats.p_text(versus["p"]), source)
+    fact("expl_pairs_W_fewer", f"{1 - facts['pairs_W'] / facts['pairs_R']:.1%}", source)
+    for basis in "XZ":
+        for name in ("R", "P1", "P2", "W"):
+            fact(f"expl_{basis}_{name}", facts[f"{name}_{basis}"], source)
+    steps = sorted(int(key[1:-2]) for key in facts if key.startswith("N") and key.endswith("_X"))
+    if steps:
+        fact("expl_X_N", facts[f"N{steps[-1]}_X"], source)
+        fact("expl_X_N_step", f"{steps[-1]:,}", source)
     text = ("**Exploration shots, not test shots**: the team's train and validation files at p = 0.004 (`data/p0.004/train_*.npz`, "
             "`validation_*.npz`; 25,000 shots per basis). The rules were chosen on these same shots, which flatters them. "
             "Decoded on a laptop (Ryzen 9 8945HS) beside a GPU training: compare the times with each other only. "
@@ -359,6 +407,15 @@ def loss_table():
                             "failures": row["failures"], "shots": row["shots"], "source": row["source"],
                             "paired_reference": versus and versus["reference"], "reference_only": versus and versus["reference_only"],
                             "row_only": versus and versus["row_only"], "ratio": versus and versus["ratio"]})
+    for key, name in (("blind", "blind"), ("starter", "aware"), ("oracle-round", "oracle")):
+        row = pc.get((0.001, key))
+        fact(f"loss_{name}", row and f"{row['failures']} of {row['shots']:,}", "tables/loss.md")
+        fact(f"loss_{name}_share", row and f"{row['failures'] / row['shots']:.1%}", "tables/loss.md")
+    versus = (pc.get((0.001, "oracle-round")) or {}).get("paired_by_reference", {}).get("starter")
+    fact("loss_oracle_ratio", versus and f"{versus['ratio']:.2f}", "tables/loss.md")
+    fact("loss_oracle_ratio_interval", versus and f"{versus['ratio95'][0]:.2f} to {versus['ratio95'][1]:.2f}", "tables/loss.md")
+    versus = (pc.get((0.001, "starter")) or {}).get("paired_by_reference", {}).get("blind")
+    fact("loss_aware_ratio", versus and f"{versus['ratio']:.1f}", "tables/loss.md")
     text = ("X memory, p = 0.004, relay-BP at the kit's settings on shots simulated with Clifft under **our own simplified loss model** "
             "(after every CX each of its two atoms is lost with probability s; flags are perfect). It is not Infleqtion's hardware model. "
             "These are exploration numbers on shots made for this study; a shot here is one X-memory shot, not a pair. "
@@ -369,6 +426,95 @@ def loss_table():
     return write("loss", text, records)
 
 
+# ---------- the measurements behind the design, and what did not work ----------
+
+def background_table():
+    folder = DATA / "background"
+    lines = []
+
+    def add(what, result, file):
+        lines.append([what, result, f"`{file}`"])
+
+    file = folder / "g2_server_p0.004_summary.json"
+    if file.is_file():
+        found = json.loads(file.read_text(encoding="utf-8"))["candidates"]
+        wrong = [found[f"p0.004_{basis}"]["converged_wrong"] for basis in "XZ"]
+        shots, present, lowest = (sum(part[key] for part in wrong) for key in ("shots", "any_right", "lowest_right"))
+        for name, value in (("cand_shots", shots), ("cand_present", present), ("cand_lowest", lowest)):
+            fact(name, value, "tables/background.md")
+        add("Is the right answer among 16 relay-BP candidates (other random draws), on the shots where relay-BP settled on a wrong answer? p = 0.004",
+            f"it is among them on {present} of {shots} shots ({present / shots:.0%}); the lowest weight picks it on {lowest} ({lowest / shots:.0%}). "
+            "The information is in the candidates and weight is a poor score: room for a learned one", "background/g2_server_p0.004_summary.json")
+    file = folder / "g2_summary.json"
+    if file.is_file():
+        joint = json.loads(file.read_text(encoding="utf-8"))["tables"]["joint"]
+        for p in ("0.003", "0.004"):
+            parts = [joint[f"p{p}_{basis}"] for basis in "XZ"]
+            fixes, failures, breaks, controls = (sum(part[key] for part in parts) for key in ("fixes", "F", "breaks", "C"))
+            slow = sum(part["ms_C"]["mean"] for part in parts) / len(parts) / 1000
+            add(f"Joint decoding (X and Z checks together, relay-BP on all 1,728 detectors) on relay-BP's failures, p = {p}",
+                f"fixes {fixes} of {failures} failures and breaks {breaks} of {controls} shots relay-BP had right; about {slow:.0f} s per ordinary shot "
+                "on our PC (8 processes), far too slow to run on every shot", "background/g2_summary.json")
+    file = folder / "g3_frontier_p0.004.csv"
+    if file.is_file():
+        with file.open(encoding="utf-8") as stream:
+            schedules = {row["schedule"]: row for row in csv.DictReader(stream)}
+        kit = schedules["80/60/5"]
+        for name, words in (("80/60/3", "stopping relay-BP after 3 solutions instead of 5"), ("80/60/1", "stopping relay-BP at its first solution"),
+                            ("40/30/1", "a fast relay-BP schedule (first leg 40, later legs 30, stop at the first solution)")):
+            row = schedules[name]
+            add(f"A cheaper relay-BP: {words}; p = 0.004, the 5,000 validation pairs",
+                f"{row['pair_failures']} failed pairs against the kit's {kit['pair_failures']} (only the kit's fails {row['pair_only_kit_wrong']}, "
+                f"only this one {row['pair_only_this_wrong']}, p = {stats.p_text(float(row['pair_paired_p']))}), "
+                f"{float(row['speedup_vs_kit_mean_iterations']):.2f} times fewer iterations", "background/g3_frontier_p0.004.csv")
+    file = folder / "relay_schedule_paired_X_p0.004_5000_seed1.log"
+    if file.is_file():
+        text = file.read_text(encoding="utf-8")
+        counts = re.findall(r"kit    scoring:\s+(\d+) of (\d+) failures", text)
+        paired = re.search(r"kit    scoring: both fail (\d+), only A (\d+), only B (\d+), neither \d+\. Exact McNemar p = (\S+)", text)
+        add("The same fast schedule (40 / 30 / 1) as a fallback, X memory, p = 0.004, 5,000 shots sampled for that comparison",
+            f"{counts[1][0]} failures against the kit's {counts[0][0]} of {counts[0][1]} (only the kit's fails {paired.group(2)}, only the fast one "
+            f"{paired.group(3)}, p = {stats.p_text(float(paired.group(4)))})", "background/relay_schedule_paired_X_p0.004_5000_seed1.log")
+    file = folder / "predecoder_real2_p0.004_300_300_300_20.log"
+    if file.is_file():
+        rows = dict(re.findall(r"^  (no predecoder|bp picks, LLR >= 12|model, 99\.9% precise)\s+commits.*?failures (\d+/\d+)", file.read_text(encoding="utf-8"), re.M))
+        hard = dict(re.findall(r"^  (no predecoder|bp picks, LLR >= 12|model, 99\.0% precise)\s+commits.*?hard shots\s+(\S+)%", file.read_text(encoding="utf-8"), re.M))
+        add("A classic predecoder (commit to sure faults first, pass the rest to relay-BP), p = 0.004, 300 shots sampled for that study",
+            f"failures {rows['no predecoder']} without it, {rows['bp picks, LLR >= 12']} with BP's own confident picks, {rows['model, 99.9% precise']} with a "
+            f"trained model; hard shots {hard['no predecoder']}% without, {hard['bp picks, LLR >= 12']}% and {hard['model, 99.0% precise']}% with: no gain",
+            "background/predecoder_real2_p0.004_300_300_300_20.log")
+    file = folder / "train_X_p0.0001_seed1.log"
+    if file.is_file():
+        last = re.search(r"done: (\d+) shots.*?p=(\S+), \d+ DEM shots: (\S+)% of shots wrong \(always-0 guess (\S+)%\)", file.read_text(encoding="utf-8"))
+        add("A plain convolutional network that predicts the 12 logical bits (no structure of the code in it), 0.7 M parameters",
+            f"learns at very low noise only: at p = {last.group(2)} it has {last.group(3)}% of shots wrong after {int(last.group(1)):,} training shots "
+            f"(answering \"nothing flipped\" gets {last.group(4)}%); that is 30 to 50 times below the challenge's noise levels",
+            "background/train_X_p0.0001_seed1.log")
+    pc = loaders.loss_pc(DATA / "loss" / "pc")
+    base, exact, stop = (pc.get((0.001, key)) for key in ("starter", "exact", "starter@0.5/stop1"))
+    if base and exact and stop:
+        for row, words, verdict in ((exact, "exact weights for where a lost atom can have been", "no gain"),
+                                    (stop, "stopping relay-BP at its first solution", "more failures")):
+            versus = row["paired_by_reference"]["starter"]
+            add(f"Under loss (X memory, p = 0.004, s = 0.001, 4,000 shots): {words}",
+                f"{row['failures']} failures against the flag-aware decoder's {base['failures']} (only flag-aware fails {versus['reference_only']}, "
+                f"only this one {versus['row_only']}, p = {stats.p_text(versus['p'])}): {verdict}", row["source"])
+    tables = {int(re.search(r"step(\d+)", path.name).group(1)): loaders.network_rule_table(path)
+              for path in (DATA / "exploration" / "priortilt").glob("results_network_select_step*.txt")}
+    if tables:
+        steps = sorted(tables)
+        tie = ", ".join(str(tables[step]["rows"]["b. network breaks ties"][0]) for step in steps)
+        alone = ", ".join(f"{tables[step]['rows']['d. network alone'][0] / 25000:.1%}" for step in steps)
+        add("Longer training of the X network, as a tie-breaker (X memory, p = 0.004, 25,000 exploration shots)",
+            f"at training steps {', '.join(f'{step:,}' for step in steps)} the hierarchy fails {tie} shots, while the network alone goes from "
+            f"{alone.split(', ')[0]} to {alone.split(', ')[-1]} of shots wrong: the hard shots are hard for the network too",
+            "exploration/priortilt/results_network_select_step*.txt")
+    text = ("Measurements that decided the design, and what we tried that did not work. **All on exploration shots or on small studies made for "
+            "the purpose: none of this is a result on the test shots.** Each line names the copied file under `report/data/` it is read from.\n\n"
+            + markdown(["Question or attempt", "What was measured", "File"], lines))
+    return write("background", text)
+
+
 # ---------- the networks ----------
 
 def networks_table():
@@ -377,21 +523,26 @@ def networks_table():
     for name, where in (("cascade_X_s1", "a laptop GPU (RTX 4060, 8 GB)"), ("cascade_Z_s1", "the ICRN server (A100 slice, 20 GB)")):
         log = loaders.train_log(DATA / "networks" / f"{name}.train.log")
         if log is None or not log["reports"]:
-            lines.append([name] + [NOT_MEASURED] * 6)
+            lines.append([name] + [NOT_MEASURED] * 8)
             continue
         last = log["reports"][-1]
         wrong = " / ".join(f"{last['wrong'][p]:.1%}" for p in P_VALUES)
         speed = sorted(log["shots_per_second"])[len(log["shots_per_second"]) // 2]
         start = "the X network's weights, mirrored" if log["warm_start"] else "random weights"
         lines.append([f"{log['basis']} memory (`{name}`)", where, f"width {log['width']}, depth {log['depth']}, {log['parameters']:,} parameters",
-                      start, f"{last['step']:,} of {last['of']:,}", f"{last['step'] * log['batch']:,}", f"{speed:,.0f}", wrong])
+                      start, f"{last['step']:,} of {last['of']:,}", f"{last['step'] * log['batch']:,}", f"{speed:,.0f}",
+                      f"{last['step'] * log['batch'] / speed / 3600:.1f}", wrong])
+        fact(f"net_{log['basis']}_step", f"{last['step']:,}", "tables/networks.md")
+        fact("net_parameters", f"{log['parameters']:,}", "tables/networks.md")
+        for p in P_VALUES:
+            fact(f"net_{log['basis']}_wrong{p[-1]}", f"{last['wrong'][p]:.1%}", "tables/networks.md")
         records.append({"network": name, "basis": log["basis"], "machine": where, "parameters": log["parameters"], "last_step_in_log": last["step"],
                         "planned_steps": last["of"], "shots_seen": last["step"] * log["batch"], "median_shots_per_second": speed,
                         **{f"wrong_p{p}": last["wrong"][p] for p in P_VALUES}, "source": log["source"]})
     text = ("The two networks, from their training logs (`report/data/networks/*.train.log`). \"Shots wrong\" is the share of shots with at least "
             "one of the 12 logical bits wrong, on error-model shots drawn for the training report: a training diagnostic, not a result on Stim shots.\n\n"
             + markdown(["Network", "Trained on", "Size", "Started from", "Training step (last in the copied log)", "Shots seen",
-                        "Shots per second (median of the log)", "Shots wrong at p = 0.003 / 0.004 / 0.005"], lines))
+                        "Shots per second (median of the log)", "GPU hours so far (shots seen ÷ that speed)", "Shots wrong at p = 0.003 / 0.004 / 0.005"], lines))
     if scores:
         steps = sorted({step for step, _ in scores})
         files = [name for name in ("validation_X_p0.003", "train_X_p0.003", "validation_X_p0.004", "train_X_p0.004", "validation_X_p0.005", "train_X_p0.005")
@@ -401,6 +552,46 @@ def networks_table():
         text += ("\n\nThe X network alone, on the team's Stim shot files (exploration shots; `report/data/exploration/cascade_X_s1/SCORES.md`), "
                  "share of shots wrong:\n\n" + markdown(["Training step"] + [f"`{name}`" for name in files], score_lines))
     return write("networks", text, records)
+
+
+# ---------- resources ----------
+
+def resources_table(measured):
+    lines = []
+    for key, decoder in DECODERS.items():
+        rows = [measured[p][key] for p in P_VALUES]
+        if not any(rows):
+            lines.append([decoder.label, NOT_MEASURED, NOT_MEASURED, NOT_MEASURED, decoder.learned])
+            continue
+        first = next(row for row in rows if row)
+        memory = " / ".join(f"{row['peak_rss_mb']:,.0f}" if row and row.get("peak_rss_mb") else NOT_MEASURED for row in rows)
+        setup = " / ".join(f"{row['setup_seconds']:.1f}" if row and row.get("setup_seconds") is not None else NOT_MEASURED for row in rows)
+        lines.append([decoder.label, f"{first['device']}, {first['workers']} process, 1 thread", memory, setup, decoder.learned])
+    text = ("What each decoder needed for its row on the test shots. Memory is the peak resident memory of the evaluator's process (the decoder, "
+            "the shot file and Python together), as the evaluator records it; start-up is building the decoder for both bases, outside the per-shot time. "
+            "Values are for p = 0.003 / 0.004 / 0.005.\n\n"
+            + markdown(["Decoder", "Runs on", "Peak memory, MB", "Start-up, s", "What is learned in it"], lines))
+    machine = DATA / "machines" / "server_job_000.out"
+    if machine.is_file():
+        printed = machine.read_text(encoding="utf-8", errors="replace")
+        cpus = re.search(r"cgroup cpu\.max: (\d+) (\d+)", printed)
+        memory = re.search(r"^Mem:\s+(\d+)", printed, re.M)
+        gpu = re.search(r"^(NVIDIA [^,]+),", printed, re.M)
+        slice_ = re.search(r"/ (\d+)MiB", (DATA / "machines" / "server_nvidia-smi.txt").read_text(encoding="utf-8", errors="replace")
+                           .split("MIG devices")[-1]) if (DATA / "machines" / "server_nvidia-smi.txt").is_file() else None
+        if cpus and memory:
+            fact("server_cpus", int(cpus.group(1)) // int(cpus.group(2)), "data/machines/server_job_000.out")
+            fact("server_ram_gb", memory.group(1), "data/machines/server_job_000.out")
+            fact("server_gpu", gpu.group(1) if gpu else None, "data/machines/server_job_000.out")
+            fact("server_gpu_slice_mib", f"{int(slice_.group(1)):,}" if slice_ else None, "data/machines/server_nvidia-smi.txt")
+            text += (f"\n\nThe server (the team's ICRN notebook): {FACTS['server_cpus'][0]} CPUs by quota, {FACTS['server_ram_gb'][0]} GB of memory, "
+                     f"a slice of {FACTS['server_gpu_slice_mib'][0]} MiB of an {FACTS['server_gpu'][0]} "
+                     "(`report/data/machines/server_job_000.out`, `server_nvidia-smi.txt`).")
+    for p, file, _usable, _why in TCBP_OWN:
+        if (DATA / file).is_file():
+            fitted = re.findall(r"TCBP model fitted in (\S+) s", (DATA / file).read_text(encoding="utf-8", errors="replace"))
+            fact(f"tcbp_fit{p[-1]}_s", " and ".join(fitted) if fitted else None, f"data/{file}")
+    return write("resources", text)
 
 
 # ---------- the checks ----------
@@ -436,6 +627,10 @@ def inject(tables):
         missing = sorted(set(re.findall(r"<!-- BEGIN table:(\S+) -->", text)) - set(tables))
         if missing:
             raise Mismatch(f"{document.name} asks for tables that do not exist: {missing}")
+        unknown = sorted(set(re.findall(r"<!--f:(\w+)-->", text)) - set(FACTS))
+        if unknown:
+            raise Mismatch(f"{document.name} quotes facts that do not exist: {unknown}")
+        text = re.sub(r"<!--f:(\w+)-->.*?<!--/f-->", lambda found: f"<!--f:{found.group(1)}-->{FACTS[found.group(1)][0]}<!--/f-->", text, flags=re.S)
         document.write_text(text, encoding="utf-8")
 
 
@@ -449,8 +644,12 @@ def main(argv=None):
         exploration, _ = exploration_table()
         tables = {f"test_p{p}": per_p[p] for p in P_VALUES} | {
             "test_sweep": sweep, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
-            "loss": loss_table(), "networks": networks_table()}
+            "loss": loss_table(), "networks": networks_table(), "background": background_table(),
+            "resources": resources_table(measured)}
         tables["checks"] = checks_text(measured, extra, cross_checks)
+        write("facts", "Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there as `<!--f:name-->value<!--/f-->`), "
+                       "each with the generated table it is taken from.\n\n"
+              + markdown(["Name", "Value", "From"], [[f"`{name}`", value, f"`{source}`"] for name, (value, source) in sorted(FACTS.items())]))
         inject(tables)
     except Mismatch as problem:
         print(f"STOPPED: {problem}", file=sys.stderr)

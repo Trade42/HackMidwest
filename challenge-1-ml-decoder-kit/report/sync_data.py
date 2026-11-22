@@ -68,6 +68,17 @@ SOURCES = [
     ("loss/pc/", "tree", "loss/results/L3_*.json", False),
     ("loss/pc/", "tree", "loss/results/L4_timing.json", False),
     ("loss/server/", "origin/server-logs", "files/loss/*/tables.md", False),
+    # the machines: what the server printed about itself
+    ("machines/server_job_000.out", "origin/server-logs", "job_cpu_000-sync-and-uptime.out", False),
+    ("machines/server_nvidia-smi.txt", "origin/server-logs", "nvidia-smi.txt", True),
+    ("machines/cascade_X_s1_SHA256SUMS", "origin/laptop-artifacts", "cascade_X_s1/SHA256SUMS", True),
+    # the measurements behind the design, and what did not work (exploration shots)
+    ("background/", "tree", "analysis/results/g2_server_p0.004_summary.json", False),
+    ("background/", "tree", "analysis/results/g2_summary.json", False),
+    ("background/", "tree", "analysis/results/g3_frontier_p0.004.csv", False),
+    ("background/", "tree", "ml_decoder/logs/relay_schedule_paired_X_p0.004_5000_seed1.log", False),
+    ("background/", "tree", "ml_decoder/logs/predecoder_real2_p0.004_300_300_300_20.log", False),
+    ("background/", "tree", "ml_decoder/logs/train_X_p0.0001_seed1.log", False),
     ("loss/server/", "origin/server-logs", "files/loss/*/*.json", False),
 ]
 

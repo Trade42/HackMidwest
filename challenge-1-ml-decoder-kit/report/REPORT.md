@@ -56,8 +56,8 @@ flowchart TD
 4. **The ensemble** adds stronger members on the hard shots and lets the same network choose among all of them. It is
    combined offline from the members' saved answers; it is not one decoder timed in one process.
 
-Why this shape: on the exploration shots at p = 0.004 the two fast decodes disagree on 214 of 50,000 shots (0.4%),
-and those few shots hold 145 of the 208 failures of a single fast decode (exploration shots; the figure below and
+Why this shape: on the exploration shots at p = 0.004 the two fast decodes disagree on <!--f:expl_disagree-->214<!--/f--> of <!--f:expl_shots-->50,000<!--/f--> shots (<!--f:expl_disagree_share-->0.4%<!--/f-->),
+and those few shots hold <!--f:expl_one_run_wrong_disagree-->145<!--/f--> of the <!--f:expl_one_run_wrong-->208<!--/f--> failures of a single fast decode (exploration shots; the figure below and
 `report/tables/exploration_p0.004.md`). The expensive stage runs only there.
 
 ![Where the failures are](figures/where_failures.png)
@@ -166,9 +166,14 @@ gone. The challenge stresses this case.
   perfect. This is our simplified model, built from published figures (s = 2e-3 is about today's hardware by
   Infleqtion's paper arXiv:2408.08288). It is not Infleqtion's hardware model.
 
-## 6. What did not work
+## 6. What we measured before building, and what did not work
 
-*Pending: each item with its number and its file.*
+<!-- BEGIN table:background -->
+<!-- END table:background -->
+
+Two more attempts have no log in the repository, so no number of theirs is used anywhere in this report: a plain
+convolutional network of the first default size did not learn in a short first run on the laptop, and a smaller one
+learned at low noise only (`information.md`, section 9). The plain network that does have a log is in the table.
 
 ## 7. Where it falls short
 
@@ -176,14 +181,23 @@ gone. The challenge stresses this case.
 
 - **TCBP-JOBS is more accurate at p = 0.004 and 0.005** than relay-BP and than our three-candidate hierarchy, as
   measured so far (section 4).
-- **Agreeing but wrong.** On the exploration shots, 63 of the 162 shots the hierarchy still fails are shots where the
+- **Agreeing but wrong.** On the exploration shots, <!--f:expl_left_agree-->63<!--/f--> of the <!--f:expl_left-->162<!--/f--> shots the hierarchy still fails are shots where the
   two fast decodes agree on a wrong answer. No tie-break can fix those.
 - **The slowest shots get slower.** A hard shot pays for three decoders one after the other.
 - **Loss** is measured for X memory at p = 0.004 only, under our own loss model.
 
 ## 8. Resources
 
-*Pending: CPU cores, GPU, memory, model sizes and training cost, from the result files.*
+<!-- BEGIN table:resources -->
+<!-- END table:resources -->
+
+- **Our decoder needs no GPU.** PriorTilt and relay-BP run on one CPU core. The network has
+  <!--f:net_parameters-->893,697<!--/f--> parameters per memory basis and is called on the hard shots only.
+- **Training cost.** The table of section 3 gives, per network, the steps, the shots seen and the GPU hours so far.
+  Training shots are drawn from the kit's error model on the GPU, so there is no training set on disk.
+- **TCBP-JOBS** needs an NVIDIA GPU. Before it decodes, it fits a model per memory basis, which took
+  <!--f:tcbp_fit3_s-->54.5 and 54.8<!--/f--> s at p = 0.003 and <!--f:tcbp_fit4_s-->120.2 and 121.6<!--/f--> s at p = 0.004 in the teammates' runs
+  (`report/data/tcbp_own_shots/`).
 
 ## 9. How to reproduce
 

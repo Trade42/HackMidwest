@@ -4,6 +4,7 @@ p,decoder,label,built_by,measured,pairs,failures_X,failures_Z,failures_pair,rate
 0.005,router,relay-BP with a learned router,teammates,False,,,,,,,,,,,,,,,,,,,,,,,,,,
 0.005,priortilt,"PriorTilt, one run",IonQ (arXiv:2611.13373),False,,,,,,,,,,,,,,,,,,,,,,,,,,
 0.005,hierarchy-weight,"our hierarchy, lowest-weight tie-break",ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,
+0.005,hierarchy-converged,"our hierarchy, classical tie-break (lowest weight among the converged candidates)",ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,
 0.005,hierarchy,"our hierarchy, neural tie-break",ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,
 0.005,hierarchy-parallel,"our hierarchy, neural tie-break, the two fast decodes side by side on two cores",ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,
 0.005,ensemble,our ensemble (combined offline),ours,False,,,,,,,,,,,,,,,,,,,,,,,,,,

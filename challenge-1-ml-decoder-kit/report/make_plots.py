@@ -143,9 +143,9 @@ def series(measured):
 
 def missing_note(measured, own):
     absent = [DECODERS[key].label for key in DECODERS if not any(measured[p][key] is not None for p in P_VALUES)
-              and not (key == "tcbp" and own)]
+              and not (key == "tcbp" and own) and DECODERS[key].figures == "all"]
     partial = [f"{DECODERS[key].label} at p = {p}" for key in DECODERS for p in P_VALUES
-               if measured[p][key] is None and any(measured[q][key] is not None for q in P_VALUES)]
+               if measured[p][key] is None and any(measured[q][key] is not None for q in P_VALUES) and DECODERS[key].figures == "all"]
     parts = []
     if absent:
         parts.append("Not measured on the test shots: " + "; ".join(absent) + ".")
@@ -172,7 +172,9 @@ def ler_vs_p(measured):
         decoder = DECODERS[key]
         if not points:
             continue
-        hollow = key == "hierarchy-weight"
+        if decoder.figures != "all":
+            continue
+        hollow = key == "hierarchy-converged"
         xs = [float(p) + DODGE[key] for p, _ in points]
         # a row without a single failed pair has no rate to draw: it is drawn at the upper end of its interval, as a limit
         ys = [row["rate"] if row["failures_pair"] else row["interval"][1] for _, row in points]
@@ -226,9 +228,9 @@ def time_vs_p(measured):
     for key, points in lines.items():
         decoder = DECODERS[key]
         points = [(p, row) for p, row in points if row["mean_ms"] is not None and not row.get("offline") and row.get("time_clean", True)]   # timed in one process, not throttled
-        if not points:
+        if not points or decoder.figures == "none":
             continue
-        hollow = key == "hierarchy-weight"
+        hollow = key == "hierarchy-converged"
         xs, ys = [float(p) for p, _ in points], [row["mean_ms"] for _, row in points]
         axes.plot(xs, ys, color=decoder.colour, marker=decoder.marker, linestyle="--" if hollow else "-", zorder=3, **marker_style(decoder.colour, hollow))
         device = " (GPU)" if points[0][1]["device"] == "GPU" and "GPU" not in decoder.short else ""
@@ -270,9 +272,9 @@ def ler_vs_time(measured):
     for key, points in series(measured).items():
         decoder = DECODERS[key]
         points = [(p, row) for p, row in points if row["mean_ms"] is not None and row["rate"] > 0 and not row.get("offline") and row.get("time_clean", True)]
-        if not points:
+        if not points or decoder.figures == "none":
             continue
-        hollow = key == "hierarchy-weight"
+        hollow = key == "hierarchy-converged"
         xs, ys = [row["mean_ms"] for _, row in points], [row["rate"] for _, row in points]
         axes.plot(xs, ys, color=decoder.colour, marker=decoder.marker, linestyle="--" if hollow else "-", linewidth=1.6, zorder=3,
                   **marker_style(decoder.colour, hollow))

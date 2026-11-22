@@ -7,6 +7,7 @@ Test shots, p = 0.005: `data/p0.005/test_X.npz` and `test_Z.npz` (10,000 shots p
 | relay-BP with a learned router | teammates | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | PriorTilt, one run | IonQ (arXiv:2611.13373) | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | our hierarchy, lowest-weight tie-break | ours | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | ours | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | our hierarchy, neural tie-break | ours | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | ours | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | our ensemble (combined offline) | ours | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |

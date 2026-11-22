@@ -178,12 +178,13 @@ def load_test_rows(data=DATA):
                     used = row.get("rule")
                     if not used:
                         raise Mismatch(f"{folder}: the summary records no tie-break rule, so the row cannot be labelled")
-                    if spec.rule == "weight" and set(used.values()) != {"weight"}:
-                        raise Mismatch(f"{folder}: registered as the row without a network, but its summary records {used}")
+                    if spec.rule in ("weight", "converged") and set(used.values()) != {spec.rule}:
+                        raise Mismatch(f"{folder}: registered as the row with the {spec.rule} rule, but its summary records {used}")
                     if spec.rule == "network" and "network" not in used.values():
                         raise Mismatch(f"{folder}: registered as the row with the network, but its summary records {used}")
                     if spec.rule == "network" and set(used.values()) != {"network"}:
-                        row["label_note"] = " (" + ", ".join(f"{basis} memory: {'the network' if used[basis] == 'network' else 'lowest weight'}" for basis in "XZ") + ")"
+                        row["label_note"] = " (" + ", ".join(f"{basis} memory: " + {"network": "the network", "weight": "lowest weight",
+                                                                                     "converged": "lowest weight among the converged"}[used[basis]] for basis in "XZ") + ")"
                 run = None if row.get("offline") else log.get((p, spec.folder.format(p=p).removeprefix(f"eval_p{p}_")))
                 attach_run(row, run, monitor, jobs)
                 retime = folder.with_name(folder.name + RETIME)

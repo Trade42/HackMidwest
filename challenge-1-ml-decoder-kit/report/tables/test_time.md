@@ -7,6 +7,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.003 | relay-BP with a learned router | 6 of 10,000 | 42.5 (not clean) | time not clean | 9.5 | 627 | CPU, 1 core |
 | 0.003 | PriorTilt, one run | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.003 | our ensemble (combined offline) | not measured | not measured | not measured | not measured | not measured | not measured |
@@ -16,6 +17,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.004 | relay-BP with a learned router | 87 of 10,000 | 315 | 0.99 | 15.0 | 6,865 | CPU, 1 core |
 | 0.004 | PriorTilt, one run | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.004 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.004 | our ensemble (combined offline) | not measured | not measured | not measured | not measured | not measured | not measured |
@@ -25,6 +27,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.005 | relay-BP with a learned router | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.005 | PriorTilt, one run | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.005 | our ensemble (combined offline) | not measured | not measured | not measured | not measured | not measured | not measured |

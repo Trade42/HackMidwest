@@ -7,6 +7,7 @@ What each decoder needed for its row on the test shots. Memory is the peak resid
 | relay-BP with a learned router | CPU, 1 process, 1 thread | 284 / 284 / not measured | 0.0 / 0.0 / not measured | a logistic model decides when relay-BP's first answer is enough |
 | PriorTilt, one run | not measured | not measured | not measured | 14 parameters, fitted by its authors |
 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | nothing of ours (PriorTilt's parameters are its authors') |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | nothing of ours (PriorTilt's parameters are its authors') |
 | our hierarchy, neural tie-break | not measured | not measured | not measured | a neural network picks among the candidates where the fast decodes disagree |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured | the same decoder as the row above; only the wall time differs |
 | our ensemble (combined offline) | not measured | not measured | not measured | only the rules that use the network have a learned part: see the rule named in the row |

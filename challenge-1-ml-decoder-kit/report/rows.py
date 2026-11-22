@@ -30,6 +30,7 @@ class Decoder:
     colour: str
     marker: str
     ours: bool = False
+    figures: str = "all"   # "all"; "time": only in the time figures (its answers equal another row's); "none": tables only
 
 
 # Colours: the eight-hue categorical order of the dataviz palette, validated for adjacent
@@ -42,12 +43,14 @@ DECODERS = {decoder.key: decoder for decoder in [
             "a logistic model decides when relay-BP's first answer is enough", "#e87ba4", "D"),
     Decoder("priortilt", "PriorTilt, one run", "PriorTilt (IonQ)", "IonQ (arXiv:2611.13373)",
             "14 parameters, fitted by its authors", "#6250d6", "v"),
-    Decoder("hierarchy-weight", "our hierarchy, lowest-weight tie-break", "ours, no network", "ours",
+    Decoder("hierarchy-weight", "our hierarchy, lowest-weight tie-break", "ours, lowest weight", "ours",
+            "nothing of ours (PriorTilt's parameters are its authors')", "#eb6834", "^", ours=True, figures="none"),
+    Decoder("hierarchy-converged", "our hierarchy, classical tie-break (lowest weight among the converged candidates)", "ours, no network", "ours",
             "nothing of ours (PriorTilt's parameters are its authors')", "#eb6834", "^", ours=True),
     Decoder("hierarchy", "our hierarchy, neural tie-break", "ours", "ours",
             "a neural network picks among the candidates where the fast decodes disagree", "#eb6834", "^", ours=True),
     Decoder("hierarchy-parallel", "our hierarchy, neural tie-break, the two fast decodes side by side on two cores", "ours, 2 cores", "ours",
-            "the same decoder as the row above; only the wall time differs", "#e34948", ">", ours=True),
+            "the same decoder as the row above; only the wall time differs", "#e34948", ">", ours=True, figures="time"),
     Decoder("ensemble", "our ensemble (combined offline)", "ours, ensemble", "ours",
             "only the rules that use the network have a learned part: see the rule named in the row", "#008300", "X", ours=True),
     Decoder("tcbp", "TCBP-JOBS (NVIDIA, GPU)", "TCBP-JOBS (GPU)", "NVIDIA; run by teammates", "a model it fits at start-up, per memory basis", "#1baf7a", "P"),
@@ -74,6 +77,7 @@ TEST_ROWS = [
     TestRow("router", "eval_p{p}_router", "evaluator"),
     TestRow("priortilt", "eval_p{p}_priortilt", "evaluator", member="P1"),
     TestRow("hierarchy-weight", "eval_p{p}_hierarchy-weight", "evaluator", rule="weight", member="aw"),
+    TestRow("hierarchy-converged", "eval_p{p}_hierarchy-converged", "evaluator", rule="converged", member="ac"),
     TestRow("hierarchy", "eval_p{p}_hierarchy", "evaluator", rule="network"),
     TestRow("hierarchy-parallel", "eval_p{p}_hierarchy-parallel", "evaluator", rule="network", cores=2),
     TestRow("ensemble", "ensemble_p{p}", "ensemble"),
@@ -101,6 +105,9 @@ COMPARISONS = [
     ("priortilt", "relay-bp"),
     ("hierarchy-weight", "priortilt"),
     ("hierarchy-weight", "relay-bp"),
+    ("hierarchy", "hierarchy-converged"),
+    ("hierarchy-converged", "priortilt"),
+    ("hierarchy-converged", "relay-bp"),
     ("hierarchy", "hierarchy-weight"),
     ("hierarchy", "relay-bp"),
     ("hierarchy", "tcbp"),

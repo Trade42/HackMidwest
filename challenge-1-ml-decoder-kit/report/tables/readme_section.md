@@ -12,6 +12,7 @@ fails 57.7%, and an ORACLE told when each atom was lost fails 1.64 times fewer s
 | relay-BP with a learned router | 5.00e-05 ± 2.0e-05, 42.5 ms | 7.28e-04 ± 7.8e-05, 315 ms | not measured |
 | PriorTilt, one run | not measured | not measured | not measured |
 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured |
 | our hierarchy, neural tie-break | not measured | not measured | not measured |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured |
 | our ensemble (combined offline) | not measured | not measured | not measured |

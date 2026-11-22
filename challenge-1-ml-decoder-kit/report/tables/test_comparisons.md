@@ -6,6 +6,9 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.003 | PriorTilt, one run | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, lowest-weight tie-break | PriorTilt, one run | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, lowest-weight tie-break | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
+| 0.003 | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured |
+| 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | PriorTilt, one run | not measured | not measured | not measured | not measured |
+| 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, neural tie-break | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.003 | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |
@@ -16,6 +19,9 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.004 | PriorTilt, one run | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, lowest-weight tie-break | PriorTilt, one run | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, lowest-weight tie-break | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
+| 0.004 | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured |
+| 0.004 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | PriorTilt, one run | not measured | not measured | not measured | not measured |
+| 0.004 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, neural tie-break | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.004 | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |
@@ -26,6 +32,9 @@ Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and
 | 0.005 | PriorTilt, one run | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, lowest-weight tie-break | PriorTilt, one run | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, lowest-weight tie-break | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
+| 0.005 | our hierarchy, neural tie-break | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured |
+| 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | PriorTilt, one run | not measured | not measured | not measured | not measured |
+| 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, neural tie-break | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, neural tie-break | relay-BP (kit baseline) | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, neural tie-break | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured |

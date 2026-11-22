@@ -69,7 +69,7 @@ here, so this says nothing either way.
 
 ### p = 0.005: the procedure, written down before the fit
 
-Written at 08:45 UTC, before any p = 0.005 model existed.
+Written at 08:39 UTC (commit ab38a66), before any p = 0.005 model existed.
 
 1. **Fit** `models/p0.005.json` with the pool T, P1, P2, R (no joint decoding at p = 0.005), on every
    training file that has all four members:

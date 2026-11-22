@@ -234,3 +234,13 @@ def test_evaluate_needs_every_always_on_member(tmp_path):
     M.save(fixed_model(), model_path)
     with pytest.raises(SystemExit):
         E.main(["--model", str(model_path), "--x", str(x[0])])
+
+
+def test_evaluate_on_held_out_files_needs_the_frozen_sha(tmp_path):
+    x, _ = make_members(tmp_path, stem="test", with_joint=False)
+    model_path = tmp_path / "model.json"
+    sha = M.save(fixed_model(pool=("T", "P1", "P2", "R")), model_path)
+    with pytest.raises(SystemExit, match="expect-sha256"):
+        E.main(["--model", str(model_path), "--x", *map(str, x)])
+    results = E.main(["--model", str(model_path), "--expect-sha256", sha, "--x", *map(str, x)])
+    assert results["X"]["shots"] == 80

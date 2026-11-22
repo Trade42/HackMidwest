@@ -6,7 +6,8 @@ Run from challenge-1-ml-decoder-kit/:
       --x <member files of the X data file> --z <member files of the Z data file> \\
       --save <out folder>/<name>
 
-This only applies a model; it never fits one. It works on any shots, the test shots included.
+This only applies a model; it never fits one. It works on any shots, the test shots included; on a
+held-out file (`test_*`, `go_*`, or under `clean/`) it needs --expect-sha256, the frozen model's sha256.
 
 For each basis it prints, on the same shots: the selector, TCBP-JOBS alone, the ensemble's rule
 f and its vote gw (scored by hierarchy.ensemble), the hand-written rules ac and bw, each member
@@ -37,6 +38,7 @@ import numpy as np
 from hierarchy.ensemble import Shots, score
 from hierarchy.rules import paired_test, wilson_interval
 from selector import features as F
+from selector import fit as FIT
 from selector import model as M
 
 COMPARED = ("T", "f", "gw")
@@ -178,6 +180,9 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if not args.x and not args.z:
         raise SystemExit("give --x and/or --z")
+    held_out = [path for path in (args.x or []) + (args.z or []) if FIT.HELD_OUT.search("/" + Path(path).name) or FIT.CLEAN.search(path)]
+    if held_out and not args.expect_sha256:
+        raise SystemExit(f"{held_out[0]} is a held-out file: on held-out shots give --expect-sha256 of the frozen model file")
     sha = M.sha256_of(args.model)
     if args.expect_sha256 and sha != args.expect_sha256:
         raise SystemExit(f"the model file {args.model} has sha256 {sha}, not {args.expect_sha256}")

@@ -104,3 +104,190 @@ ORACLE (needs the truth): a perfect choice among P1, P2, T                      
 ORACLE (needs the truth): a perfect choice among P1, P2, T, R                     10     0    11   p = 0.000977
 
 wrote /home/blakew3/mlBranchMidwest/runs/test/sel_p0.004/test_Z.selection.npz: 44 shots where P1, P2, T are not unanimous
+X memory, p = 0.004, 10000 shots of the data file with sha256 53a7cee301600d36f3dad806a88f59ad6d84b681044b2548268c2ea9b5689e94
+  R   from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.004/test_X.chunks.npz: 10000 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P1  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.004/test_X.chunks.npz: 10000 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P2  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.004/test_X.chunks.npz: 10000 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  T   from /home/blakew3/mlBranchMidwest/runs/test/tcbp_p0.004/test_X.tcbp.npz: 10000 shots; times: AMD EPYC-Milan Processor
+  J   from /home/blakew3/mlBranchMidwest/runs/test/joint_p0.004/test_X.joint.npz: 49 shots; times: 4 process(es) on AMD EPYC-Milan Processor
+  network: time per call 8.6 ms (batch-one mean on GPU NVIDIA A100-SXM4-80GB MIG 2g.20gb)
+the always-on members present (P1, P2, T) are not unanimous on 49 shots (0.490%)
+
+row                                                                            failures     of     rate  95% Wilson interval    later stage on   ms/shot
+R alone                                                                              42  10000   0.420%  [0.311%, 0.567%]                         158.6
+P1 alone                                                                             37  10000   0.370%  [0.269%, 0.510%]                          43.4
+P2 alone                                                                             33  10000   0.330%  [0.235%, 0.463%]                          43.5
+T alone                                                                              20  10000   0.200%  [0.130%, 0.309%]                           3.9
+J alone (on the shots it decoded)                                                     4     49   8.163%  [3.220%, 19.189%]                       23812.7
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                       25  10000   0.250%  [0.169%, 0.369%]          39 (0.39%)     101.9
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                            26  10000   0.260%  [0.177%, 0.381%]          39 (0.39%)     101.8
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2        24  10000   0.240%  [0.161%, 0.357%]          39 (0.39%)     101.8
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                         20  10000   0.200%  [0.130%, 0.309%]          49 (0.49%)     109.4
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                     25  10000   0.250%  [0.169%, 0.369%]          49 (0.49%)     109.4
+c: as b, with J among the candidates where it exists                                 19  10000   0.190%  [0.122%, 0.297%]          49 (0.49%)     226.1   (J exists on 49 of the 49 later-stage shots)
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R                 19  10000   0.190%  [0.122%, 0.297%]          12 (0.12%)      97.3
+e: as d, with J among the candidates where it exists                                 18  10000   0.180%  [0.114%, 0.284%]          12 (0.12%)     131.4   (J exists on 12 of the 12 later-stage shots)
+f: P1 where P1 = P2 = T; else J where it converged, else T                            8  10000   0.080%  [0.041%, 0.158%]          49 (0.49%)     207.5   <- the frozen rule   (J exists on 49 of the 49 later-stage shots)
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R        8  10000   0.080%  [0.041%, 0.158%]          49 (0.49%)     226.1   (J exists on 49 of the 49 later-stage shots)
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network            13  10000   0.130%  [0.076%, 0.222%]          49 (0.49%)     226.1   (J exists on 49 of the 49 later-stage shots)
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order            11  10000   0.110%  [0.061%, 0.197%]          49 (0.49%)     226.1   (J exists on 49 of the 49 later-stage shots)
+ORACLE (needs the truth): a perfect choice among R, P1, P2                           14  10000   0.140%  [0.083%, 0.235%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T                           11  10000   0.110%  [0.061%, 0.197%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                        10  10000   0.100%  [0.054%, 0.184%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                      6  10000   0.060%  [0.028%, 0.131%]                              
+ms/shot: the sum of the decode calls a row makes, averaged over all shots; empty where a file holds no time per shot.
+Each time is from the machine named above for its member: times from different machines are added here, so read them as a rough cost.
+
+against relay-BP alone on the same shots: both fail, the row only, relay-BP alone only, exact two-sided p (binomial on the discordant shots)
+P1 alone                                                                          20    17    22   p = 0.522
+P2 alone                                                                          16    17    26   p = 0.222
+T alone                                                                           15     5    27   p = 0.000113
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                    17     8    25   p = 0.00455
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                         20     6    22   p = 0.00372
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2     18     6    24   p = 0.00143
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                      14     6    28   p = 0.000195
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                  20     5    22   p = 0.00151
+c: as b, with J among the candidates where it exists                              13     6    29   p = 0.000117
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R              14     5    28   p = 6.62e-05
+e: as d, with J among the candidates where it exists                              13     5    29   p = 3.86e-05
+f: P1 where P1 = P2 = T; else J where it converged, else T                         6     2    36   p = 5.4e-09
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R     7     1    35   p = 1.08e-09
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network         12     1    30   p = 2.98e-08
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order         10     1    32   p = 7.92e-09
+ORACLE (needs the truth): a perfect choice among R, P1, P2                        14     0    28   p = 7.45e-09
+ORACLE (needs the truth): a perfect choice among P1, P2, T                        10     1    32   p = 7.92e-09
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                     10     0    32   p = 4.66e-10
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                   6     0    36   p = 2.91e-11
+
+against TCBP-JOBS alone on the same shots: both fail, the row only, TCBP-JOBS alone only, exact two-sided p (binomial on the discordant shots)
+R alone                                                                           15    27     5   p = 0.000113
+P1 alone                                                                          13    24     7   p = 0.00333
+P2 alone                                                                          12    21     8   p = 0.0241
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                    13    12     7   p = 0.359
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                         13    13     7   p = 0.263
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2     12    12     8   p = 0.503
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                      13     7     7   p = 1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                  20     5     0   p = 0.0625
+c: as b, with J among the candidates where it exists                              12     7     8   p = 1
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R              14     5     6   p = 1
+e: as d, with J among the candidates where it exists                              13     5     7   p = 0.774
+f: P1 where P1 = P2 = T; else J where it converged, else T                         8     0    12   p = 0.000488
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R     7     1    13   p = 0.00183
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network         12     1     8   p = 0.0391
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order         10     1    10   p = 0.0117
+ORACLE (needs the truth): a perfect choice among R, P1, P2                        10     4    10   p = 0.18
+ORACLE (needs the truth): a perfect choice among P1, P2, T                        11     0     9   p = 0.00391
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                     10     0    10   p = 0.00195
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                   6     0    14   p = 0.000122
+
+the network's own increment: a rule with the network against the same rule without learning, on the same candidates
+  a against aw: failures 25 against 26; both fail 21, only a fails 4, only aw fails 5; exact two-sided p = 1
+  a against ac: failures 25 against 24; both fail 20, only a fails 5, only ac fails 4; exact two-sided p = 1
+  b against bw: failures 20 against 25; both fail 14, only b fails 6, only bw fails 11; exact two-sided p = 0.332
+  h against f: failures 8 against 8; both fail 7, only h fails 1, only f fails 1; exact two-sided p = 1
+  g against gw: failures 13 against 11; both fail 11, only g fails 2, only gw fails 0; exact two-sided p = 0.5
+Z memory, p = 0.004, 10000 shots of the data file with sha256 b61c1325de8852385d19ee5ce4eb41ea939b668f83fb3e994ce0f590218b3d56
+  R   from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.004/test_Z.chunks.npz: 10000 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P1  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.004/test_Z.chunks.npz: 10000 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  P2  from /home/blakew3/mlBranchMidwest/runs/test/cand_p0.004/test_Z.chunks.npz: 10000 shots; times: 2 process(es) on AMD EPYC-Milan Processor
+  T   from /home/blakew3/mlBranchMidwest/runs/test/tcbp_p0.004/test_Z.tcbp.npz: 10000 shots; times: AMD EPYC-Milan Processor
+  J   from /home/blakew3/mlBranchMidwest/runs/test/joint_p0.004/test_Z.joint.npz: 44 shots; times: 4 process(es) on AMD EPYC-Milan Processor
+  network: time per call 8.4 ms (batch-one mean on GPU NVIDIA A100-SXM4-80GB MIG 2g.20gb)
+the always-on members present (P1, P2, T) are not unanimous on 44 shots (0.440%)
+
+row                                                                            failures     of     rate  95% Wilson interval    later stage on   ms/shot
+R alone                                                                              48  10000   0.480%  [0.362%, 0.636%]                         162.8
+P1 alone                                                                             34  10000   0.340%  [0.243%, 0.475%]                          45.8
+P2 alone                                                                             33  10000   0.330%  [0.235%, 0.463%]                          44.9
+T alone                                                                              21  10000   0.210%  [0.137%, 0.321%]                           3.9
+J alone (on the shots it decoded)                                                     4     44   9.091%  [3.592%, 21.159%]                       25149.7
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                       25  10000   0.250%  [0.169%, 0.369%]          36 (0.36%)     106.3
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                            31  10000   0.310%  [0.218%, 0.440%]          36 (0.36%)     106.3
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2        29  10000   0.290%  [0.202%, 0.416%]          36 (0.36%)     106.3
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                         17  10000   0.170%  [0.106%, 0.272%]          44 (0.44%)     114.1
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                     24  10000   0.240%  [0.161%, 0.357%]          44 (0.44%)     114.0
+c: as b, with J among the candidates where it exists                                 17  10000   0.170%  [0.106%, 0.272%]          44 (0.44%)     224.7   (J exists on 44 of the 44 later-stage shots)
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R                 20  10000   0.200%  [0.130%, 0.309%]          15 (0.15%)     102.4
+e: as d, with J among the candidates where it exists                                 19  10000   0.190%  [0.122%, 0.297%]          15 (0.15%)     151.1   (J exists on 15 of the 15 later-stage shots)
+f: P1 where P1 = P2 = T; else J where it converged, else T                            8  10000   0.080%  [0.041%, 0.158%]          44 (0.44%)     205.3   <- the frozen rule   (J exists on 44 of the 44 later-stage shots)
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R        8  10000   0.080%  [0.041%, 0.158%]          44 (0.44%)     224.7   (J exists on 44 of the 44 later-stage shots)
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network            12  10000   0.120%  [0.069%, 0.210%]          44 (0.44%)     224.7   (J exists on 44 of the 44 later-stage shots)
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order             9  10000   0.090%  [0.047%, 0.171%]          44 (0.44%)     224.7   (J exists on 44 of the 44 later-stage shots)
+ORACLE (needs the truth): a perfect choice among R, P1, P2                           19  10000   0.190%  [0.122%, 0.297%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T                           11  10000   0.110%  [0.061%, 0.197%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                        10  10000   0.100%  [0.054%, 0.184%]                              
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                      6  10000   0.060%  [0.028%, 0.131%]                              
+ms/shot: the sum of the decode calls a row makes, averaged over all shots; empty where a file holds no time per shot.
+Each time is from the machine named above for its member: times from different machines are added here, so read them as a rough cost.
+
+against relay-BP alone on the same shots: both fail, the row only, relay-BP alone only, exact two-sided p (binomial on the discordant shots)
+P1 alone                                                                          26     8    22   p = 0.0161
+P2 alone                                                                          19    14    29   p = 0.0315
+T alone                                                                           12     9    36   p = 6.57e-05
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                    21     4    27   p = 3.4e-05
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                         24     7    24   p = 0.00333
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2     22     7    26   p = 0.00132
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                      14     3    34   p = 1.23e-07
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                  16     8    32   p = 0.000182
+c: as b, with J among the candidates where it exists                              13     4    35   p = 3.35e-07
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R              14     6    34   p = 8.36e-06
+e: as d, with J among the candidates where it exists                              13     6    35   p = 4.87e-06
+f: P1 where P1 = P2 = T; else J where it converged, else T                         6     2    42   p = 1.13e-10
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R     6     2    42   p = 1.13e-10
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network         11     1    37   p = 2.84e-10
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order          8     1    40   p = 3.82e-11
+ORACLE (needs the truth): a perfect choice among R, P1, P2                        19     0    29   p = 3.73e-09
+ORACLE (needs the truth): a perfect choice among P1, P2, T                        10     1    38   p = 1.46e-10
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                     10     0    38   p = 7.28e-12
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                   6     0    42   p = 4.55e-13
+
+against TCBP-JOBS alone on the same shots: both fail, the row only, TCBP-JOBS alone only, exact two-sided p (binomial on the discordant shots)
+R alone                                                                           12    36     9   p = 6.57e-05
+P1 alone                                                                          13    21     8   p = 0.0241
+P2 alone                                                                          15    18     6   p = 0.0227
+a: P1 where P1 = P2; else the network among R, P1, P2 (part 1)                    12    13     9   p = 0.523
+aw: P1 where P1 = P2; else the lowest weight of R, P1, P2                         16    15     5   p = 0.0414
+ac: P1 where P1 = P2; else the lowest weight among the converged of R, P1, P2     16    13     5   p = 0.0963
+b: P1 where P1 = P2 = T; else the network among P1, P2, T, R                      12     5     9   p = 0.424
+bw: P1 where P1 = P2 = T; else the lowest weight of P1, P2, T, R                  20     4     1   p = 0.375
+c: as b, with J among the candidates where it exists                              11     6    10   p = 0.454
+d: majority of P1, P2, T; all differ: the network among P1, P2, T, R              15     5     6   p = 1
+e: as d, with J among the candidates where it exists                              14     5     7   p = 0.774
+f: P1 where P1 = P2 = T; else J where it converged, else T                         7     1    14   p = 0.000977
+h: P1 where P1 = P2 = T; else J where it converged, else the network among T, P1, P2, R     7     1    14   p = 0.000977
+g: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: the network         10     2    11   p = 0.0225
+gw: P1 where P1 = P2 = T; else most of J, T, P1, P2, R; a tie: that order          7     2    14   p = 0.00418
+ORACLE (needs the truth): a perfect choice among R, P1, P2                        10     9    11   p = 0.824
+ORACLE (needs the truth): a perfect choice among P1, P2, T                        11     0    10   p = 0.00195
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R                     10     0    11   p = 0.000977
+ORACLE (needs the truth): a perfect choice among P1, P2, T, R, J                   6     0    15   p = 6.1e-05
+
+the network's own increment: a rule with the network against the same rule without learning, on the same candidates
+  a against aw: failures 25 against 31; both fail 22, only a fails 3, only aw fails 9; exact two-sided p = 0.146
+  a against ac: failures 25 against 29; both fail 22, only a fails 3, only ac fails 7; exact two-sided p = 0.344
+  b against bw: failures 17 against 24; both fail 12, only b fails 5, only bw fails 12; exact two-sided p = 0.143
+  h against f: failures 8 against 8; both fail 8, only h fails 0, only f fails 0; exact two-sided p = 1
+  g against gw: failures 12 against 9; both fail 9, only g fails 3, only gw fails 0; exact two-sided p = 0.25
+p = 0.004, 10000 pairs: shot k of X (data sha256 53a7cee301600d36f3dad806a88f59ad6d84b681044b2548268c2ea9b5689e94) with shot k of Z (b61c1325de8852385d19ee5ce4eb41ea939b668f83fb3e994ce0f590218b3d56)
+row                      failures [X Z]  failed pairs   rate per cycle
+R                               [42 48]            90  7.53e-04 +- 7.9e-05
+P1                              [37 34]            71  5.94e-04 +- 7.0e-05
+P2                              [33 33]            66  5.52e-04 +- 6.8e-05
+T                               [20 21]            41  3.42e-04 +- 5.3e-05
+a                               [25 25]            50  4.18e-04 +- 5.9e-05
+aw                              [26 31]            57  4.76e-04 +- 6.3e-05
+ac                              [24 29]            53  4.43e-04 +- 6.1e-05
+b                               [20 17]            37  3.09e-04 +- 5.1e-05
+bw                              [25 24]            49  4.09e-04 +- 5.8e-05
+c                               [19 17]            36  3.00e-04 +- 5.0e-05
+d                               [19 20]            39  3.26e-04 +- 5.2e-05
+e                               [18 19]            37  3.09e-04 +- 5.1e-05
+f                                 [8 8]            16  1.33e-04 +- 3.3e-05   <- the marked rule
+h                                 [8 8]            16  1.33e-04 +- 3.3e-05
+g                               [13 12]            25  2.09e-04 +- 4.2e-05
+gw                               [11 9]            20  1.67e-04 +- 3.7e-05
+oracle_R_P1_P2                  [14 19]            33  2.75e-04 +- 4.8e-05
+oracle_P1_P2_T                  [11 11]            22  1.84e-04 +- 3.9e-05
+oracle_P1_P2_T_R                [10 10]            20  1.67e-04 +- 3.7e-05
+oracle_P1_P2_T_R_J                [6 6]            12  1.00e-04 +- 2.9e-05
+ensemble of p = 0.004: exit 0

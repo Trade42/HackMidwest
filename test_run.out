@@ -1,1 +1,4 @@
 2026-11-22T09:40:41Z TEST RUN DRIVER START: frozen fd3aed3c0d1f2e9e8bd181bd22c9853a19e2dfc5, rule f, X checkpoint 2f752e9367f80e1180711ded6b6ca854a5c0c147:cascade_X_s1/checkpoint_final_step120000.pt
+2026-11-22T09:42:09Z 0. frozen checkout: fd3aed3 integration: merge hierarchy at 45b50a92; hierarchy/ and neural/ equal 921f2e8f8e05eff4ca3f60b565e48bbc08d42628; the evaluator, the kit and the shot files equal the baseline rows' checkout
+2026-11-22T09:42:16Z 1. X checkpoint: sha256 d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933
+2026-11-22T09:42:16Z 1. waiting for the Z training to end (it is stopped at 2026-11-22 10:20:00 UTC if it still runs); process 51025: python -m neural.train --out /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1 --resume /home/blakew3/mlBranchMidwest/runs/cascade_Z_s1/checkpoint.pt --steps 100000 --lr-decay-steps 100000 

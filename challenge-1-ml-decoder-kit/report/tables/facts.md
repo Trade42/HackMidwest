@@ -320,7 +320,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
-| `findings3` | At p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair, or 28.9 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 4 in 22.7 ms per pair. | `tables/test_p0.003.md` |
+| `findings3` | At p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 85.3 ms per pair, or 28.9 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 4 in 22.7 ms per pair. | `tables/test_p0.003.md` |
 | `findings4` | At p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair, or 150 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 74 in 87.3 ms per pair. | `tables/test_p0.004.md` |
 | `findings5` | At p = 0.005 our decoder fails 479 of 10,000 pairs, relay-BP 845 (only ours fails 93, only relay-BP 459, exact p = 4e-59), in 825 ms per pair against relay-BP's 1,471 ms per pair, or 608 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 601 in 264 ms per pair. | `tables/test_p0.005.md` |
 | `framing` | On the test shots (one offline decode of each shot, the same candidates for every rung; p = 0.003, 0.004, 0.005 together), relay-BP fails 889 pairs, PriorTilt run once (IonQ's decoder) 672, and our decoder as frozen (two PriorTilt runs, relay-BP where they disagree, the neural tie-break) 544; a perfect tie-break would fail 429. Of the drop from relay-BP to our decoder, 63% is already there with PriorTilt run once; the hierarchy around it gives the rest. As an ablation, with the best hand-written tie-break (lowest weight among the converged candidates) in place of the network, the hierarchy fails 525 (only the network rule fails 87 pairs, only the hand-written rule 68, exact p = 0.15): the network is no better than the hand-written rule. | `tables/test_ablation.md` |
@@ -375,7 +375,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `loss_oracle_ratio_interval` | 1.42 to 1.94 | `tables/loss.md` |
 | `loss_oracle_share` | 2.7% | `tables/loss.md` |
 | `max_beside` | 9 | `tables/test_p<p>.md` |
-| `max_throttle` | 2.5% | `tables/test_p<p>.md` |
+| `max_throttle` | 0.4% | `tables/test_p<p>.md` |
 | `net_X_step` | 120,000 | `tables/networks.md` |
 | `net_X_wrong3` | 0.5% | `tables/networks.md` |
 | `net_X_wrong4` | 3.8% | `tables/networks.md` |
@@ -405,22 +405,22 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `slide3_title` | The network is a poor decoder alone, and as a tie-break it is no better than the best hand-written rule | `tables/test_ablation.md` |
 | `slide4_relay` | Failed pairs of 10,000, ours against relay-BP on the same pairs: p = 0.003: 3 against 5 (exact p = 0.50); p = 0.004: 44 against 83 (exact p = 3e-06); p = 0.005: 479 against 845 (exact p = 4e-59). | `tables/test_p<p>.md` |
 | `slide4_title` | On the test shots our decoder fails fewer pairs than relay-BP at p = 0.004 and 0.005, and as many within the error at p = 0.003; it is level with TCBP-JOBS at p = 0.003 and 0.004, and behind it at p = 0.005 | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md` |
-| `slide5_lines` | p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 88.0 and 579; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514; p = 0.005: ours 825 ms mean and 9,885 ms at the 99th percentile, relay-BP 1,471 and 8,270. | `tables/test_time.md` |
-| `slide5_title` | Our decoder takes 0.52 to 0.68 of relay-BP's mean time per pair on one core and 0.33 to 0.47 with its two fast decodes on two cores | `tables/test_time.md` |
+| `slide5_lines` | p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 85.3 and 557; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514; p = 0.005: ours 825 ms mean and 9,885 ms at the 99th percentile, relay-BP 1,471 and 8,270. | `tables/test_time.md` |
+| `slide5_title` | Our decoder takes 0.54 to 0.68 of relay-BP's mean time per pair on one core and 0.34 to 0.47 with its two fast decodes on two cores | `tables/test_time.md` |
 | `split3_hierarchy_disagree` | 2 | `tables/time_split.md` |
 | `split4_hierarchy_disagree` | 90 | `tables/time_split.md` |
 | `split5_hierarchy_disagree` | 609 | `tables/time_split.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |
-| `t3_bposd_mean_ms` | 129 | `tables/test_p0.003.md` |
-| `t3_bposd_median_ms` | 18.2 | `tables/test_p0.003.md` |
+| `t3_bposd_mean_ms` | 131 | `tables/test_p0.003.md` |
+| `t3_bposd_median_ms` | 18.7 | `tables/test_p0.003.md` |
 | `t3_bposd_only_relay` | 0 | `tables/test_p0.003.md` |
 | `t3_bposd_only_this` | 55 | `tables/test_p0.003.md` |
-| `t3_bposd_p99_ms` | 792 | `tables/test_p0.003.md` |
+| `t3_bposd_p99_ms` | 800 | `tables/test_p0.003.md` |
 | `t3_bposd_paired_p` | 6e-17 | `tables/test_p0.003.md` |
 | `t3_bposd_pairs` | 60 | `tables/test_p0.003.md` |
 | `t3_bposd_rate` | 5.01e-04 | `tables/test_p0.003.md` |
-| `t3_bposd_time_ratio` | 1.46 | `tables/test_p0.003.md` |
+| `t3_bposd_time_ratio` | 1.54 | `tables/test_p0.003.md` |
 | `t3_bposd_wall_hours` | 0.4 | `tables/test_p0.003.md` |
 | `t3_bposd_xz` | 26, 34 | `tables/test_p0.003.md` |
 | `t3_ensemble_both` | 2 | `tables/test_p0.003.md` |
@@ -447,7 +447,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_hierarchy_converged_paired_p` | 1.00 | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_pairs` | 4 | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_rate` | 3.33e-05 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_time_ratio` | 0.53 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_time_ratio` | 0.54 | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_wall_hours` | 0.1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_xz` | 2, 2 | `tables/test_p0.003.md` |
 | `t3_hierarchy_error` | 1.4e-05 | `tables/test_p0.003.md` |
@@ -468,11 +468,11 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_hierarchy_parallel_paired_p` | 0.50 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_pairs` | 3 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_rate` | 2.50e-05 | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_time_ratio` | 0.33 | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_time_ratio` | 0.34 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_wall_hours` | 0.1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_xz` | 1, 2 | `tables/test_p0.003.md` |
 | `t3_hierarchy_rate` | 2.50e-05 | `tables/test_p0.003.md` |
-| `t3_hierarchy_time_ratio` | 0.52 | `tables/test_p0.003.md` |
+| `t3_hierarchy_time_ratio` | 0.54 | `tables/test_p0.003.md` |
 | `t3_hierarchy_wall_hours` | 0.1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_both` | 2 | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_error` | 1.4e-05 | `tables/test_p0.003.md` |
@@ -498,16 +498,16 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_priortilt_paired_p` | 1.00 | `tables/test_p0.003.md` |
 | `t3_priortilt_pairs` | 4 | `tables/test_p0.003.md` |
 | `t3_priortilt_rate` | 3.33e-05 | `tables/test_p0.003.md` |
-| `t3_priortilt_time_ratio` | 0.26 | `tables/test_p0.003.md` |
+| `t3_priortilt_time_ratio` | 0.27 | `tables/test_p0.003.md` |
 | `t3_priortilt_wall_hours` | 0.1 | `tables/test_p0.003.md` |
 | `t3_priortilt_xz` | 2, 2 | `tables/test_p0.003.md` |
 | `t3_relay_bp_both` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_error` | 1.9e-05 | `tables/test_p0.003.md` |
-| `t3_relay_bp_mean_ms` | 88.0 | `tables/test_p0.003.md` |
-| `t3_relay_bp_median_ms` | 54.0 | `tables/test_p0.003.md` |
+| `t3_relay_bp_mean_ms` | 85.3 | `tables/test_p0.003.md` |
+| `t3_relay_bp_median_ms` | 52.5 | `tables/test_p0.003.md` |
 | `t3_relay_bp_only_relay` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_only_this` | not measured | `tables/test_p0.003.md` |
-| `t3_relay_bp_p99_ms` | 579 | `tables/test_p0.003.md` |
+| `t3_relay_bp_p99_ms` | 557 | `tables/test_p0.003.md` |
 | `t3_relay_bp_paired_p` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_pairs` | 5 | `tables/test_p0.003.md` |
 | `t3_relay_bp_rate` | 4.17e-05 | `tables/test_p0.003.md` |
@@ -516,11 +516,11 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_relay_bp_xz` | 2, 3 | `tables/test_p0.003.md` |
 | `t3_router_both` | 4 | `tables/test_p0.003.md` |
 | `t3_router_error` | 2.0e-05 | `tables/test_p0.003.md` |
-| `t3_router_mean_ms` | 42.5 | `tables/test_p0.003.md` |
-| `t3_router_median_ms` | 9.5 | `tables/test_p0.003.md` |
+| `t3_router_mean_ms` | 41.0 | `tables/test_p0.003.md` |
+| `t3_router_median_ms` | 9.3 | `tables/test_p0.003.md` |
 | `t3_router_only_relay` | 1 | `tables/test_p0.003.md` |
 | `t3_router_only_this` | 2 | `tables/test_p0.003.md` |
-| `t3_router_p99_ms` | 627 | `tables/test_p0.003.md` |
+| `t3_router_p99_ms` | 604 | `tables/test_p0.003.md` |
 | `t3_router_paired_p` | 1.00 | `tables/test_p0.003.md` |
 | `t3_router_pairs` | 6 | `tables/test_p0.003.md` |
 | `t3_router_rate` | 5.00e-05 | `tables/test_p0.003.md` |

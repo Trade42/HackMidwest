@@ -7,8 +7,8 @@ fails 57.7%; our loss-time tracker, which estimates from the syndrome when each 
 
 | Decoder | p = 0.003 | p = 0.004 | p = 0.005 |
 |---|---|---|---|
-| BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05, 129 ms | 4.02e-03 ± 1.8e-04, 302 ms | 2.30e-02 ± 4.6e-04, 581 ms |
-| relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05, 88.0 ms | 6.94e-04 ± 7.6e-05, 319 ms | 7.33e-03 ± 2.5e-04, 1,471 ms |
+| BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05, 131 ms | 4.02e-03 ± 1.8e-04, 302 ms | 2.30e-02 ± 4.6e-04, 581 ms |
+| relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05, 85.3 ms | 6.94e-04 ± 7.6e-05, 319 ms | 7.33e-03 ± 2.5e-04, 1,471 ms |
 | PriorTilt, one run | 3.33e-05 ± 1.7e-05, 22.7 ms | 6.19e-04 ± 7.2e-05, 87.3 ms | 5.15e-03 ± 2.1e-04, 264 ms |
 | our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05, 45.7 ms | 3.67e-04 ± 5.5e-05, 216 ms | 4.08e-03 ± 1.9e-04, 825 ms |
 | TCBP-JOBS (NVIDIA, GPU) | 2.50e-05 ± 1.4e-05, 3.9 ms | 3.42e-04 ± 5.3e-05, 7.8 ms | 3.05e-03 ± 1.6e-04, 16.9 ms |

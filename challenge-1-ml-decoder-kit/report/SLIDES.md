@@ -64,9 +64,9 @@ Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
 <!-- BEGIN table:test_sweep_slide -->
 | Decoder | p = 0.003 | p = 0.004 | p = 0.005 |
 |---|---|---|---|
-| BP-OSD | 60 · 129 ms | 472 · 302 ms | 2,433 · 581 ms |
-| relay-BP | 5 · 88.0 ms | 83 · 319 ms | 845 · 1,471 ms |
-| router (teammates) | 6 · 42.5 ms | 87 · 315 ms | 807 · 1,928 ms |
+| BP-OSD | 60 · 131 ms | 472 · 302 ms | 2,433 · 581 ms |
+| relay-BP | 5 · 85.3 ms | 83 · 319 ms | 845 · 1,471 ms |
+| router (teammates) | 6 · 41.0 ms | 87 · 315 ms | 807 · 1,928 ms |
 | PriorTilt (IonQ) | 4 · 22.7 ms | 74 · 87.3 ms | 601 · 264 ms |
 | ours, 1 core | 3 · 45.7 ms | 44 · 216 ms | 479 · 825 ms |
 | ours, 2 cores | 3 · 28.9 ms | 44 · 150 ms | 479 · 608 ms |
@@ -80,12 +80,12 @@ Failed pairs of 10,000 test pairs · mean time per pair. "Offline": combined fro
 - <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, test p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, test p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, test p = 1e-11). TCBP-JOBS against relay-BP's timed row: 3 against 5 at p = 0.003 (test p = 0.62), 41 against 83 at p = 0.004 (test p = 4e-07), 360 against 845 at p = 0.005 (test p = 1e-101).<!--/f-->
 - At p = 0.003 every good decoder fails only a handful of pairs in 10,000, so nothing separates there.
 
-## Slide 5. <!--f:slide5_title-->Our decoder takes 0.52 to 0.68 of relay-BP's mean time per pair on one core and 0.33 to 0.47 with its two fast decodes on two cores<!--/f-->
+## Slide 5. <!--f:slide5_title-->Our decoder takes 0.54 to 0.68 of relay-BP's mean time per pair on one core and 0.34 to 0.47 with its two fast decodes on two cores<!--/f-->
 
 **Show:** `figures/time_vs_p.png`, then `figures/ler_vs_time.png`.
 
 - Every time is per pair (an X shot and a Z shot), with every stage counted, one process per row on the same server.
-- <!--f:slide5_lines-->p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 88.0 and 579; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514; p = 0.005: ours 825 ms mean and 9,885 ms at the 99th percentile, relay-BP 1,471 and 8,270.<!--/f-->
+- <!--f:slide5_lines-->p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 85.3 and 557; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514; p = 0.005: ours 825 ms mean and 9,885 ms at the 99th percentile, relay-BP 1,471 and 8,270.<!--/f-->
 - TCBP-JOBS runs on a GPU and its timer covers the decode call alone: its time is shown, not compared as a ratio.
 
 ## Slide 6. With atom loss, the flags matter most, and knowing when an atom was lost is worth more still
@@ -143,7 +143,7 @@ Each CPU row ran through the same evaluator, in one process with one thread, on 
 the whole decode of a pair, with every stage and rerun. The table says which other rows ran beside each row. Times
 from other machines (a teammate's Mac, our laptop) are in separate tables and are not compared. TCBP-JOBS runs on a
 GPU: its time is shown and marked, and it is a different kind of machine. Up to <!--f:max_beside-->9<!--/f--> evaluator rows ran side by side
-on the server, and the CPU quota throttled each row for at most <!--f:max_throttle-->2.5%<!--/f--> of its time (the table gives every row's figure).
+on the server, and the CPU quota throttled each row for at most <!--f:max_throttle-->0.4%<!--/f--> of its time (the table gives every row's figure).
 
 **What does the loss model assume?**
 After every two-qubit gate each of its two atoms is lost with a fixed probability. A lost check atom is flagged at
@@ -158,7 +158,7 @@ for a pair of atoms; the top of our range, 2e-3 per atom, is half of that, by ou
 **"Another team is at 0.3 times the baseline's time." How do you compare?**
 A time ratio means nothing without the accuracy beside it: stopping relay-BP at its first answer is several times
 faster and fails more (`report/tables/background.md`). Our mean time divided by relay-BP's, on the same server and
-the same test pairs: <!--f:t3_hierarchy_time_ratio-->0.52<!--/f--> at p = 0.003, <!--f:t4_hierarchy_time_ratio-->0.68<!--/f--> at p = 0.004,
+the same test pairs: <!--f:t3_hierarchy_time_ratio-->0.54<!--/f--> at p = 0.003, <!--f:t4_hierarchy_time_ratio-->0.68<!--/f--> at p = 0.004,
 <!--f:t5_hierarchy_time_ratio-->0.56<!--/f--> at p = 0.005, with <!--f:t3_hierarchy_pairs-->3<!--/f-->, <!--f:t4_hierarchy_pairs-->44<!--/f--> and <!--f:t5_hierarchy_pairs-->479<!--/f--> failed pairs
 against relay-BP's <!--f:t3_relay_bp_pairs-->5<!--/f-->, <!--f:t4_relay_bp_pairs-->83<!--/f--> and <!--f:t5_relay_bp_pairs-->845<!--/f-->. The table `report/tables/test_time.md`
 puts every ratio beside its failures.

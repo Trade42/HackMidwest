@@ -2,14 +2,14 @@ Times on the test shots, each beside the row's failures, so that a time is never
 
 | p | Decoder | Failed pairs | Mean time per pair, ms | Mean time ÷ relay-BP's | Median, ms | 99th percentile, ms | Runs on |
 |---|---|---|---|---|---|---|---|
-| 0.003 | BP-OSD (kit baseline) | 60 of 10,000 | 129 | 1.46 | 18.2 | 792 | CPU, 1 core |
-| 0.003 | relay-BP (kit baseline) | 5 of 10,000 | 88.0 | the reference | 54.0 | 579 | CPU, 1 core |
-| 0.003 | relay-BP with a learned router | 6 of 10,000 | 42.5 | 0.48 | 9.5 | 627 | CPU, 1 core |
-| 0.003 | PriorTilt, one run | 4 of 10,000 | 22.7 | 0.26 | 7.2 | 188 | CPU, 1 core |
+| 0.003 | BP-OSD (kit baseline) | 60 of 10,000 | 131 | 1.54 | 18.7 | 800 | CPU, 1 core |
+| 0.003 | relay-BP (kit baseline) | 5 of 10,000 | 85.3 | the reference | 52.5 | 557 | CPU, 1 core |
+| 0.003 | relay-BP with a learned router | 6 of 10,000 | 41.0 | 0.48 | 9.3 | 604 | CPU, 1 core |
+| 0.003 | PriorTilt, one run | 4 of 10,000 | 22.7 | 0.27 | 7.2 | 188 | CPU, 1 core |
 | 0.003 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 3 of 10,000 | not timed in one process |  |  |  |  |
-| 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 4 of 10,000 | 46.3 | 0.53 | 14.4 | 399 | CPU, 1 core |
-| 0.003 | our hierarchy, neural tie-break | 3 of 10,000 | 45.7 | 0.52 | 14.2 | 395 | CPU, 1 core |
-| 0.003 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 3 of 10,000 | 28.9 | 0.33 | 7.8 | 245 | CPU, 2 cores |
+| 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 4 of 10,000 | 46.3 | 0.54 | 14.4 | 399 | CPU, 1 core |
+| 0.003 | our hierarchy, neural tie-break | 3 of 10,000 | 45.7 | 0.54 | 14.2 | 395 | CPU, 1 core |
+| 0.003 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 3 of 10,000 | 28.9 | 0.34 | 7.8 | 245 | CPU, 2 cores |
 | 0.003 | our ensemble (combined offline) (rule f, frozen on the training shots: where PriorTilt twice and TCBP-JOBS agree, that answer; elsewhere joint decoding where it converged, else TCBP-JOBS; joint decoding ran on 5 of the 5 disputed shots) | 2 of 10,000 | not timed in one process |  |  |  |  |
 | 0.003 | TCBP-JOBS (NVIDIA, GPU) | 3 of 10,000 | 3.9 | not comparable: another device and timer | 3.8 | 15.0 | GPU |
 | 0.004 | BP-OSD (kit baseline) | 472 of 10,000 | 302 | 0.94 | 350 | 863 | CPU, 1 core |

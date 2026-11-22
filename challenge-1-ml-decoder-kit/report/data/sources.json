@@ -1014,13 +1014,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "413837a186a9dd4d8f62f0a57d05d3a9877255b4",
-  "copied_utc": "2026-11-22 13:07",
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `413837a186a9`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "ba70816fa9c83258f5801843b80322f484503dadedde343a3e24edae286dd2fc"
+  "sha256": "c4a3391fd438a9ac53966bd97385e230be17ccdacc2adc992dca451cfef7f9b6"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -1209,6 +1209,17 @@
   "path": "results/mac/router_eval_p0.004/summary.json",
   "sha256": "fddefd21a061cfe5a84f971afcf4ddcbdbc1f3a3897f19c997883de504575559"
  },
+ "test/clean_retime.out": {
+  "branch": "origin/server-logs",
+  "bytes": 1300,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/clean_retime.out",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `clean_retime.out`",
+  "grows": true,
+  "path": "clean_retime.out",
+  "sha256": "c869391f5a4faf73a7e0f6590a2995d8570ee4d64b727c58955d2353807b2211"
+ },
  "test/clean_rows.out": {
   "branch": "origin/server-logs",
   "bytes": 3253,
@@ -1222,14 +1233,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 21341,
-  "commit": "413837a186a9dd4d8f62f0a57d05d3a9877255b4",
-  "copied_utc": "2026-11-22 13:07",
+  "bytes": 22583,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `413837a186a9`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "3ae3d36eede4635b95425ae1a47c36720c0c20cf1f3ee1b4300f51727bea0015"
+  "sha256": "ed74274728a840b1596425a5b4a1ca32a4e2dae5689b72eb06846ec731e81f0c"
  },
  "test/ensemble_p0.003/test_X.json": {
   "branch": "origin/server-logs",
@@ -1395,6 +1406,39 @@
   "grows": false,
   "path": "files/clean/eval_p0.003_bposd/summary.json",
   "sha256": "9d9a7cf256f3a99132c9b0cc87bfbe010a53a886cfe5a2b5f47bd5ea65b2b185"
+ },
+ "test/eval_p0.003_bposd_retime/01_bposd_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 428278,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/eval_p0.003_bposd_retime/01_bposd_shots.npz",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `files/clean/eval_p0.003_bposd_retime/01_bposd_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_bposd_retime/01_bposd_shots.npz",
+  "sha256": "92109b5770841563a7960757584111bd90d9f361d92821524f06c9a1d4cb93b1"
+ },
+ "test/eval_p0.003_bposd_retime/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 788,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/eval_p0.003_bposd_retime/summary.csv",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `files/clean/eval_p0.003_bposd_retime/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_bposd_retime/summary.csv",
+  "sha256": "838422f128b82d9c2e0c1bd0b8c55b38e522508b52d2b8c4bc88433c9c973c2b"
+ },
+ "test/eval_p0.003_bposd_retime/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 4789,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/eval_p0.003_bposd_retime/summary.json",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `files/clean/eval_p0.003_bposd_retime/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_bposd_retime/summary.json",
+  "sha256": "d8c7cd3e3af6b117584b8b6c58d2c8bb49d5219605ecee92b6f9c32a93357fac"
  },
  "test/eval_p0.003_hierarchy-converged/01_hierarchy_plugin_make_decoder_shots.npz": {
   "branch": "origin/server-logs",
@@ -1573,6 +1617,39 @@
   "path": "files/clean/eval_p0.003_relay-bp/summary.json",
   "sha256": "ae76e5f40662d909dbc6cc4f58e3e5c9ea34eaa61072a439aa2a3e776b149c12"
  },
+ "test/eval_p0.003_relay-bp_retime/01_relay-bp_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 429050,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/eval_p0.003_relay-bp_retime/01_relay-bp_shots.npz",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `files/clean/eval_p0.003_relay-bp_retime/01_relay-bp_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_relay-bp_retime/01_relay-bp_shots.npz",
+  "sha256": "5e2154a90a040764f304e12c58f0ac6d20393e9469e8ba3ea66bc2d3987a757e"
+ },
+ "test/eval_p0.003_relay-bp_retime/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 788,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/eval_p0.003_relay-bp_retime/summary.csv",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `files/clean/eval_p0.003_relay-bp_retime/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_relay-bp_retime/summary.csv",
+  "sha256": "dab0c4bdb1effb7252140395923abbed9cb697132e9afefd391eec1b975b662e"
+ },
+ "test/eval_p0.003_relay-bp_retime/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 5023,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/eval_p0.003_relay-bp_retime/summary.json",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `files/clean/eval_p0.003_relay-bp_retime/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_relay-bp_retime/summary.json",
+  "sha256": "e08c47372094245267e6c20339d58716d435c79a953b63282487c36137ab4eed"
+ },
  "test/eval_p0.003_router/01_evaluation_router_make_tiered_decoder_shots.npz": {
   "branch": "origin/server-logs",
   "bytes": 403598,
@@ -1605,6 +1682,39 @@
   "grows": false,
   "path": "files/clean/eval_p0.003_router/summary.json",
   "sha256": "8c8fba80ca7b4d2dabd2554bb420101989761214f4e26eb7245981458277e0cc"
+ },
+ "test/eval_p0.003_router_retime/01_evaluation_router_make_tiered_decoder_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 402392,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/eval_p0.003_router_retime/01_evaluation_router_make_tiered_decoder_shots.npz",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `files/clean/eval_p0.003_router_retime/01_evaluation_router_make_tiered_decoder_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_router_retime/01_evaluation_router_make_tiered_decoder_shots.npz",
+  "sha256": "4df2ee32e07d57674f1c3fed6fad29d9ecfd9dcb27c2e7cfb52dd4f58b192dd7"
+ },
+ "test/eval_p0.003_router_retime/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 915,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/eval_p0.003_router_retime/summary.csv",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `files/clean/eval_p0.003_router_retime/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_router_retime/summary.csv",
+  "sha256": "2fec45c8eae091940254c6263042e19c790a733d335d1c76603e743074e4815c"
+ },
+ "test/eval_p0.003_router_retime/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 6507,
+  "commit": "e854f99767f0c6bd101fce97157d2e237adf8391",
+  "copied_utc": "2026-11-22 13:30",
+  "file": "test/eval_p0.003_router_retime/summary.json",
+  "from": "branch `server-logs` at commit `e854f99767f0`, `files/clean/eval_p0.003_router_retime/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_router_retime/summary.json",
+  "sha256": "2f243e90419efa1ecd5691bf9cf71f9fc1091383671e6f15f8ce9d4a033d6b83"
  },
  "test/eval_p0.004_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",

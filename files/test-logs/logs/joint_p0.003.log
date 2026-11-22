@@ -1,0 +1,18 @@
+5 shot(s) to decode on 4 process(es); 0 kept from an earlier run
+test_X.npz shot 5346: right, converged, 720 iterations, 2 s
+test_Z.npz shot 4753: right, converged, 695 iterations, 2 s
+test_X.npz shot 3400: right, converged, 1244 iterations, 4 s
+test_Z.npz shot 8544: right, converged, 509 iterations, 1 s
+test_Z.npz shot 2082: right, converged, 5379 iterations, 15 s
+
+saved /home/blakew3/mlBranchMidwest/runs/test/joint_p0.003/test_X.joint.npz
+test_X.npz: X memory, p = 0.003, 2 listed shots of 10000, data sha256 f7bc181399a0a8fd1324950c98a8419c0082d7c34940c03dfb34c9e2cefc1ff3
+  joint relay-BP on the listed shots: failures 0 of 2  0.0% [0.0%, 65.8%] (a hard subset: not a rate for the whole file); unconverged 0; iterations mean 982
+  time per listed shot, the decode call alone on a fresh decoder: mean 2.9 s, median 2.9 s, largest 3.6 s; building the decoder: mean 0.07 s; 4 process(es) side by side on AMD EPYC-Milan Processor
+
+saved /home/blakew3/mlBranchMidwest/runs/test/joint_p0.003/test_Z.joint.npz
+test_Z.npz: Z memory, p = 0.003, 3 listed shots of 10000, data sha256 f5ac5b336f4155870fd8a6792ad61e21d5d76f04e05a9c09419879b6512e7f49
+  joint relay-BP on the listed shots: failures 0 of 3  0.0% [0.0%, 56.1%] (a hard subset: not a rate for the whole file); unconverged 0; iterations mean 2194
+  time per listed shot, the decode call alone on a fresh decoder: mean 6.2 s, median 2.2 s, largest 15.0 s; building the decoder: mean 0.06 s; 4 process(es) side by side on AMD EPYC-Milan Processor
+
+wall time of this run: 22 s

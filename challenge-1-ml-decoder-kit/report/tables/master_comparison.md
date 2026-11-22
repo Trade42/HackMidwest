@@ -18,5 +18,9 @@
 | TCBP-JOBS in place of relay-BP in our hierarchy (the ensemble's rule d) | `hierarchy/ensemble.py` | after-test ablation, offline from saved answers, no time | 2 pairs (X 1) · offline | 39 pairs (X 19) · offline | 403 pairs (X 204) · offline |
 | the predecoder: relay-BP with the head's priors (X memory only) | `predecoder/` | secondary: chosen after the predecoder's p = 0.004 gate failed |  |  | X: 151 shots · 212 ms per X shot (validation sample) |
 | the predecoder: relay-BP with the head's priors (X memory only) | `predecoder/` | registered extension, run after the X p = 0.005 test result | X: 2 shots · 52.9 ms per X shot (validation sample) | X: 15 shots · 94.0 ms per X shot (validation sample) |  |
+| the predecoder: relay-BP with the head's priors (Z memory only) | `predecoder/` | registered extension, run after the X p = 0.005 test result |  |  | Z: 132 shots |
+| the predecoder in both bases, the kit's pair score | `predecoder/` | registered extension, run after the X p = 0.005 test result |  |  | 281 pairs |
 | the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | post hoc: designed after the first test result |  | X: 10 shots | X: 107 shots |
+| the predecoder with the fallback to TCBP-JOBS (Z memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened |  |  | Z: 100 shots |
 | the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened | X: 1 shot |  |  |
+| the predecoder with the fallback, the kit's pair score | `predecoder/fallback.py` | post hoc: designed after the first test result |  |  | 206 pairs |

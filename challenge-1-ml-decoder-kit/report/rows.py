@@ -172,7 +172,7 @@ PREDECODER_LABEL = ("secondary (chosen after the declared gate at p = 0.004 fail
 # result and frozen on the validation file before it was applied: (p, basis, what its number is). Shown apart from the held-out rows.
 PREDECODER_FALLBACK = [
     ("0.005", "X", "post hoc: the rule was prompted by these same test shots, so this number is not held out"),
-    ("0.005", "Z", "its clean test, " + EXTENSION + "; the rule was frozen before the Z test file was opened"),
+    ("0.005", "Z", "its clean test: designed after the first test result, frozen (14:32 UTC) before the Z test file was opened (15:44 UTC); " + EXTENSION),
     ("0.004", "X", "post hoc: the rule was designed after the first test result, and this test file was opened (for H) before the rule "
                    "was frozen; " + EXTENSION),
     ("0.003", "X", "the rule was designed after the first test result and frozen (14:32 UTC) before this test file was opened (14:56 UTC); "

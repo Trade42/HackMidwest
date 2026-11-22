@@ -1923,13 +1923,18 @@ def predecoder_table(measured):
         n = f"pre{p[-1]}{basis}"
         mark = f" [{mark}]" if mark else ""
         files = [DATA / "test" / "predecoder" / f"test_run_p{p}_{basis}_{kind}.json" for kind in ("summary", "secondary")]
-        if not all(file.is_file() for file in files):
+        head_only = DATA / "test" / "predecoder" / f"test_run_p{p}_{basis}_head_arm_summary.json"
+        if not files[0].is_file() and head_only.is_file():     # the head arm lands first; the full summary and the secondary rows follow
+            files[0] = head_only
+        if not files[0].is_file():
             lines.append([p, basis, "relay-BP with the head's priors (H)" + mark] + [NOT_MEASURED] * 4)
             for name in ("H", "fresh", "T", "R", "vs_fresh_only_H", "vs_fresh_only_other", "vs_fresh_p", "vs_T_only_H", "vs_T_only_other", "vs_T_p",
                          "vs_R_only_H", "vs_R_only_other", "vs_R_p", "it_H", "it_fresh", "ratio", "it_ratio"):
                 fact(f"{n}_{name}", None, source)
             continue
-        summary, secondary = (json.loads(file.read_text(encoding="utf-8")) for file in files)
+        summary = json.loads(files[0].read_text(encoding="utf-8"))
+        secondary = (json.loads(files[1].read_text(encoding="utf-8")) if files[1].is_file()
+                     else {"data": summary["data"], "failures": {"H (relay-BP, the head's priors)": {"failures": summary["arms"]["head"]["failures"]}}, "pairs": {}})
         for record in (summary, secondary):
             if record["data"]["sha256"] != TEST_SHA256[p][basis] or record["data"]["basis"] != basis or abs(record["data"]["p"] - float(p)) > 1e-12:
                 raise Mismatch(f"test/predecoder, p = {p}, {basis}: not the team's test file (sha256 {record['data']['sha256'][:12]})")
@@ -1944,6 +1949,8 @@ def predecoder_table(measured):
             raise Mismatch(f"test/predecoder, p = {p}, {basis}: the summary and the secondary file give other failures")
         for start, report_key, words in (("T ", "tcbp", "TCBP-JOBS"), ("R ", REFERENCE, "relay-BP's timed row")):
             row = measured[p].get(report_key)
+            if key(failures, start) is None:
+                continue
             if row is not None and row[f"failures_{basis}"] != failures[key(failures, start)]["failures"]:
                 raise Mismatch(f"test/predecoder, p = {p}, {basis}: {words} fails {failures[key(failures, start)]['failures']} shots there and "
                                f"{row[f'failures_{basis}']} in this report's row on the same shots")
@@ -1951,9 +1958,10 @@ def predecoder_table(measured):
         rows = [("H", "relay-BP with the head's priors, a decoder built per shot (H; ours)" + mark, arms["head"]["failures"], None, arms["head"]),
                 ("fresh", "relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit)",
                  arms["fresh"]["failures"] if has_fresh else None, theirs, arms["fresh"] if has_fresh else None),
-                ("T", "TCBP-JOBS (NVIDIA, GPU; its row of this report)", failures[key(failures, "T ")]["failures"], pairs[key(pairs, "H against T")], None),
-                ("R", "relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report)", failures[key(failures, "R ")]["failures"],
-                 pairs[key(pairs, "H against R")], None)]
+                ("T", "TCBP-JOBS (NVIDIA, GPU; its row of this report)", failures[key(failures, "T ")]["failures"] if key(failures, "T ") else None,
+                 pairs[key(pairs, "H against T")] if key(pairs, "H against T") else None, None),
+                ("R", "relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report)",
+                 failures[key(failures, "R ")]["failures"] if key(failures, "R ") else None, pairs[key(pairs, "H against R")] if key(pairs, "H against R") else None, None)]
         for short, label, count, paired, arm in rows:
             if count is None:
                 lines.append([p, basis, label] + ["not measured yet"] * 4)
@@ -2094,7 +2102,8 @@ def predecoder_table(measured):
           + (f"; the fallback rule, post hoc on its X half, fails {value('pair_rule')} (against TCBP-JOBS: only the rule "
              f"{value('pair_rule_vs_T_only_mine')}, only TCBP-JOBS {value('pair_rule_vs_T_only_other')}, exact p = {value('pair_rule_vs_T_p')})"
              if value("pair_rule") != NOT_MEASURED else "") + ". This pair score is part of the registered extension, not a held-out result, "
-          "and it is not in the pair-scored tables of our decoder."), source)
+          "and it is not in the pair-scored tables of our decoder; accuracy only (its times come from a shared pool on the team's PC); TCBP-JOBS's "
+          "counts come from its stored test file and carry its fit's spread (above)."), source)
     validation = DATA / "exploration" / "predecoder" / "fallback_validation_X_p0.005.json"
     record = json.loads(validation.read_text(encoding="utf-8")) if validation.is_file() else None
     for name, value in (("rule", record and record["failures"]["rule"]["failures"]), ("T", record and record["failures"]["T"]["failures"]),
@@ -2130,7 +2139,8 @@ def predecoder_table(measured):
                              "H fails", "TCBP-JOBS fails", "Rule against TCBP-JOBS: both / only the rule / only TCBP-JOBS (exact p)",
                              "Rule against H: both / only the rule / only H (exact p)"], fallback_lines)
                  + "\n\nSource: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`)."
-                 + f"\n\n**The pair score at p = 0.005: {EXTENSION}; the fallback rule's half on X is post hoc.** The kit's score: a pair of an X shot "
+                 + f"\n\n**The pair score at p = 0.005: {EXTENSION}; the fallback rule's half on X is post hoc (designed after the first test result), "
+                 "its half on Z clean; accuracy only.** The kit's score: a pair of an X shot "
                  "and a Z shot fails when either fails. Not a held-out result, and not in the pair-scored tables of our decoder. TCBP-JOBS's and "
                  "relay-BP's counts are checked against their rows in this report.\n\n"
                  + markdown(["Decoder", "Failures X, Z", "Failed pairs", "Rate per cycle ± error",

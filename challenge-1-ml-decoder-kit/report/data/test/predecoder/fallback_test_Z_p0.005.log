@@ -1,0 +1,10 @@
+check: ours: truth equals the file's: yes
+check: TCBP-JOBS: data_sha256 equals the file's: yes
+check: TCBP-JOBS: truth equals the file's: yes
+test_Z.npz (sha256 b86ae320d13f...), 10000 shots; the rule: H where relay-BP with the head's priors converged, else T. It falls back to T on 73 shots.
+  H       132 failures, 0.0132 [0.0111, 0.0156]
+  T       177 failures, 0.0177 [0.0153, 0.0205]
+  rule    100 failures, 0.0100 [0.0082, 0.0121]
+  H fails 73 of its unconverged shots and 59 converged ones; T fails 41 of the shots that fall back
+  the rule against T: both fail 76, only the rule 24, only T 101, exact two-sided p = 1.97e-12
+  the rule against H: both fail 100, only the rule 0, only H 32, exact two-sided p = 4.66e-10

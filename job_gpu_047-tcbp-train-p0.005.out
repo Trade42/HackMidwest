@@ -23,3 +23,4 @@ WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 whi
     shots 0 to 4095 decoded
     shots 4096 to 8191 decoded
     shots 8192 to 12287 decoded
+    shots 12288 to 16383 decoded

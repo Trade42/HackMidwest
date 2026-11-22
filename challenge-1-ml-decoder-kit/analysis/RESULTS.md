@@ -194,3 +194,27 @@ Both bases together: joint decoding fixed **43 of relay-BP's 44 failures** (98%,
 - Joint decoding fixes almost every shot separate relay-BP fails: all 16 unconverged failures and 27 of the 28 converged-wrong ones.
 - Joint decoding on every shot costs about 60 times the time and, by the authors' rows, fails about 2.5 times less than separate decoding.
 - A cheaper design runs separate relay-BP first and joint decoding only on the shots it flags. Every unconverged failure is flagged for free, and joint decoding fixed all 16 of them; these are 36% of the failures. The converged-wrong failures (64%) would need a router to find them, and that router is not measured here.
+
+**Our joint runs at p = 0.004** (`analysis/steps.sh step5`, log `logs/g2_run_step5.log`). This is a seeded subsample of 50 of relay-BP's failures and 100 of the control shots per basis (`--caps joint@0.004=50/100/all`): a joint shot here takes 1 to 5 minutes, too long for all 490.
+
+| setting | basis | F | fixed: all / of unconverged / of converged-wrong | C | broken | 2 x 2: both wrong / only relay-BP / only joint / both right | exact paired p | break rate, 95% upper bound | iterations on F: mean / median | on C: mean / median | ms on F: mean / median | on C: mean / median |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| (a) kit settings | X | 50 | 45 / 15 of 16 / 30 of 34 | 100 | 0 | 5 / 45 / 0 / 100 | 5.7e-14 | 0 of 100, at most 3.6% | 8,987 / 6,224 | 1,893 / 798 | 134,028 / 91,670 | 28,221 / 11,684 |
+| (a) kit settings | Z | 50 | 44 / 12 of 16 / 32 of 34 | 100 | 1 | 6 / 44 / 1 / 99 | 2.6e-12 | 1 of 100, at most 5.4% | 9,307 / 7,658 | 2,310 / 924 | 135,460 / 115,024 | 33,470 / 14,064 |
+| (b) 600 legs | X | 50 | 46 / 15 of 16 / 31 of 34 | 100 | 0 | 4 / 46 / 0 / 100 | 2.8e-14 | 0 of 100, at most 3.6% | 13,871 / 6,224 | 2,124 / 798 | 211,403 / 91,670 | 32,047 / 11,684 |
+| (b) 600 legs | Z | 50 | 45 / 13 of 16 / 32 of 34 | 100 | 0 | 5 / 45 / 0 / 100 | 5.7e-14 | 0 of 100, at most 3.6% | 13,187 / 7,658 | 2,591 / 924 | 192,631 / 115,024 | 38,041 / 14,064 |
+
+Both bases together:
+
+- **(a) fixed 89 of 100 failures** (exact 95% interval 81% to 94%) and broke 1 of 200 controls (at most 2.8%).
+- **(b) fixed 91 of 100** (84% to 96%) and broke none (at most 1.8%). The extra legs fixed 2 more failures and undid (a)'s one break.
+- Of the unconverged failures, (a) fixed 27 of 32 (84%, 67% to 95%).
+- (b) was decoded on 47 shots: 39 at or above (a)'s 17,760-iteration floor, and 8 check shots below it. All 8 check shots gave (a)'s correction and iteration count exactly.
+
+In G1 at p = 0.004 the kit's separate relay-BP took a mean of 404 and 466 ms per shot here (8 processes). Joint decoding takes about 30 s on a control shot (70 times as long) and over 2 minutes on a failed one.
+
+**What this says at p = 0.004:**
+
+- Joint decoding still fixes nearly 9 in 10 of separate relay-BP's failures, but its own failures now show: 1 break in 200 controls.
+- The authors' rows put joint decoding's overall rate only about 1.3 times below separate decoding here. That fits a joint decoder failing about 0.6% of the shots separate relay-BP gets right, which a 200-shot control can neither show nor exclude.
+- As a fallback after separate decoding, it would fix most of the flagged failures: 84% of the unconverged ones.

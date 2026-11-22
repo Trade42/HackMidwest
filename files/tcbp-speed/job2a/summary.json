@@ -39,12 +39,7 @@
    "torch_threads": 12
   }
  },
- "threads": {
-  "OMP_NUM_THREADS": "1",
-  "OPENBLAS_NUM_THREADS": "1",
-  "MKL_NUM_THREADS": "1",
-  "NUMEXPR_NUM_THREADS": "1"
- },
+ "threads": {},
  "model_seconds": 58.0723734049825,
  "facts": {
   "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
@@ -113,7 +108,7 @@
    "py-spy": null
   }
  },
- "seconds": 68.83463072776794,
+ "seconds": 207.40888929367065,
  "profile": {
   "cprofile": {
    "shots": 50,
@@ -203,5 +198,216 @@
     }
    }
   }
- }
+ },
+ "arms_run": [
+  "dense",
+  "csr",
+  "csr_after"
+ ],
+ "sparse_dtypes": {
+  "csr": "uint8",
+  "csr_after": "uint8"
+ },
+ "free_modes": {
+  "dense": "inline",
+  "csr": "inline",
+  "csr_after": "after"
+ },
+ "check": {
+  "dense": {
+   "failures": 3,
+   "not_reproduced": 0,
+   "flag_not_converged": 787,
+   "ms": {
+    "seconds_priors": {
+     "n": 1000,
+     "mean": 0.19323163572698832,
+     "median": 0.1862004864960909,
+     "p90": 0.22817006101831794,
+     "p99": 0.3176019818056375,
+     "max": 0.4822890041396022
+    },
+    "seconds_build": {
+     "n": 1000,
+     "mean": 42.68788843485527,
+     "median": 42.248695506714284,
+     "p90": 43.9078850322403,
+     "p99": 48.27604743069969,
+     "max": 264.7060990566388
+    },
+    "seconds_decode": {
+     "n": 1000,
+     "mean": 2.8701976778684184,
+     "median": 2.4135439889505506,
+     "p90": 4.464187764097006,
+     "p99": 15.255455372389404,
+     "max": 40.51126807462424
+    },
+    "seconds_free": {
+     "n": 1000,
+     "mean": 4.6276148174656555,
+     "median": 4.594269033987075,
+     "p90": 4.676128958817571,
+     "p99": 5.493588674580678,
+     "max": 8.82518501020968
+    },
+    "seconds_total": {
+     "n": 1000,
+     "mean": 50.37893256591633,
+     "median": 49.48987701209262,
+     "p90": 53.21562435710803,
+     "p99": 64.1810258931946,
+     "max": 272.3516409751028
+    },
+    "seconds_answer": {
+     "n": 1000,
+     "mean": 50.37893256591633,
+     "median": 49.48987701209262,
+     "p90": 53.21562435710803,
+     "p99": 64.1810258931946,
+     "max": 272.3516409751028
+    }
+   },
+   "wall_ms_per_shot": 50.58229896076955
+  },
+  "csr": {
+   "failures": 3,
+   "not_reproduced": 0,
+   "flag_not_converged": 787,
+   "ms": {
+    "seconds_priors": {
+     "n": 1000,
+     "mean": 0.17434873734600842,
+     "median": 0.16685453010722995,
+     "p90": 0.20758317550644279,
+     "p99": 0.28759658685885364,
+     "max": 0.40549400728195906
+    },
+    "seconds_build": {
+     "n": 1000,
+     "mean": 35.381432815105654,
+     "median": 34.92375649511814,
+     "p90": 37.628747907001525,
+     "p99": 40.531522465171285,
+     "max": 44.262851937673986
+    },
+    "seconds_decode": {
+     "n": 1000,
+     "mean": 3.092613645712845,
+     "median": 2.5274479994550347,
+     "p90": 4.934876144398004,
+     "p99": 15.946394173661242,
+     "max": 40.002471068874
+    },
+    "seconds_free": {
+     "n": 1000,
+     "mean": 4.644399076816626,
+     "median": 4.589849966578186,
+     "p90": 4.6943608787842095,
+     "p99": 5.545358250383288,
+     "max": 9.052449953742325
+    },
+    "seconds_total": {
+     "n": 1000,
+     "mean": 43.292794274981134,
+     "median": 42.632172524463385,
+     "p90": 46.36551475850865,
+     "p99": 57.88079748977906,
+     "max": 79.00215301197022
+    },
+    "seconds_answer": {
+     "n": 1000,
+     "mean": 43.292794274981134,
+     "median": 42.632172524463385,
+     "p90": 46.36551475850865,
+     "p99": 57.88079748977906,
+     "max": 79.00215301197022
+    }
+   },
+   "bits_differ": 0,
+   "faults_differ": 0,
+   "corrections_differ": 0,
+   "same_as_dense": true,
+   "wall_ms_per_shot": 43.462386335013434
+  },
+  "csr_after": {
+   "failures": 3,
+   "not_reproduced": 0,
+   "flag_not_converged": 787,
+   "ms": {
+    "seconds_priors": {
+     "n": 1000,
+     "mean": 0.17604685213882476,
+     "median": 0.16717996913939714,
+     "p90": 0.2138660755008459,
+     "p99": 0.3091791353654116,
+     "max": 0.41586393490433693
+    },
+    "seconds_build": {
+     "n": 1000,
+     "mean": 35.84515773598105,
+     "median": 35.15697951661423,
+     "p90": 37.8421641071327,
+     "p99": 41.55316771240904,
+     "max": 238.95669204648584
+    },
+    "seconds_decode": {
+     "n": 1000,
+     "mean": 3.1265489199431613,
+     "median": 2.5497899623587728,
+     "p90": 4.981789260637015,
+     "p99": 15.577390908729285,
+     "max": 39.544338011182845
+    },
+    "seconds_free": {
+     "n": 1000,
+     "mean": 4.638351418310776,
+     "median": 4.585225542541593,
+     "p90": 4.709710308816284,
+     "p99": 5.531095773912966,
+     "max": 8.824571035802364
+    },
+    "seconds_total": {
+     "n": 1000,
+     "mean": 43.79516868607607,
+     "median": 42.92204702505842,
+     "p90": 46.92674654070288,
+     "p99": 58.21270476211794,
+     "max": 246.69780395925045
+    },
+    "seconds_answer": {
+     "n": 1000,
+     "mean": 39.15681726776529,
+     "median": 38.24828448705375,
+     "p90": 42.25609285058454,
+     "p99": 53.49647801485844,
+     "max": 242.09051101934165
+    }
+   },
+   "bits_differ": 0,
+   "faults_differ": 0,
+   "corrections_differ": 0,
+   "same_as_dense": true,
+   "wall_ms_per_shot": 43.968900877051055,
+   "against_csr": {
+    "wall_ms_per_shot_difference": 0.5065145420376211,
+    "answer_ms_difference": -4.135977007215843,
+    "parts_ms_difference": {
+     "priors": 0.001698114792816341,
+     "build": 0.46372492087539285,
+     "decode": 0.03393527423031628
+    },
+    "verdict": "NO GAIN"
+   }
+  }
+ },
+ "rule": "fixed before job 2 ran: an arm that moves the free is a gain over csr only if its wall time per shot (its blocks' wall time over its shots, a thread arm's block ending when its thread has freed every decoder) is below csr's in the same process; its time to answer is reported beside it",
+ "capped_in_check": {
+  "what": "counted over every arm's decodes",
+  "shots": 864,
+  "columns": 1041
+ },
+ "model_option_unchanged": true,
+ "repeatable": null,
+ "timer": "seconds_total: one perf_counter timer around the shot's priors (shot_priors and the 0.5 cap), tcbp.decode_one (get_decoder with the shot's priors, decode(), the cut to 0/1) and freeing the decoder; one process, shots one at a time, the GPU shared with whatever else runs on it. seconds_answer: the same timer stopped when the answer is in the caller's hands (inline arms: after the free; csr_after and csr_thread: before it). wall_ms_per_shot: the arm's blocks' wall time over its shots, scoring included (the same for every arm), a thread arm's drain included"
 }

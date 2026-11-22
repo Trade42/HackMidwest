@@ -5,3 +5,5 @@ PYT=/home/blakew3/.conda/envs/cascade/bin/python
 Sun Nov 22 15:34:37 UTC 2026
 name, memory.used [MiB], utilization.gpu [%]
 NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
+evaluate fp32 exit 0
+diff exit 0

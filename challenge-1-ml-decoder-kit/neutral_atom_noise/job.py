@@ -87,7 +87,8 @@ def fit_generic(factor, decoder, flags, args, out, deadline):
 def _train_point(train, base, multiplier, decoder, flags, args, out, deadline):
     """Decode the train shots with the kit's uniform model at multiplier x base. Returns its grid entry."""
     priors = f"uniform:{multiplier * base:.6g}"
-    decode_all(train, args.train_shots, decoder, priors, flags, args, out / "train", deadline)
+    shots = min(args.train_first or args.train_shots, args.train_shots)
+    decode_all(train, shots, decoder, priors, flags, args, out / "train", deadline)
     row = load_results(out / "train")[(train.name, decoder, priors, flags)]
     return {"multiplier": multiplier, "p": float(priors.removeprefix("uniform:")), "priors": priors,
             "failures": int(row["failed"].sum()), "shots": len(row["failed"]),
@@ -102,6 +103,8 @@ def main():
     parser.add_argument("--seed", type=int, required=True, help="seed of the test shots")
     parser.add_argument("--train-shots", type=int, default=250, help="a multiple of --part")
     parser.add_argument("--train-seed", type=int, default=None, help="seed of the train shots (default: seed + 1000)")
+    parser.add_argument("--train-first", type=int, default=None, help="fit on only the first N train shots (for a "
+                        "costly decoder); a multiple of the part size")
     parser.add_argument("--grid", default="0.35,0.5,0.7,1", help="multipliers of the generic-2q p tried by generic-fit")
     parser.add_argument("--decoders", default="relay,bposd")
     parser.add_argument("--rows", default="matched,generic-2q,generic-fit")

@@ -67,7 +67,8 @@ q1_generic_bposd()  { stream q1_generic_bposd --factors 0.8,0.9,0.7 --decoders b
 q1_generic_relay()  { stream q1_generic_relay --factors 0.9 --decoders relay --rows generic-2q --first 250 &&
                       stream q1_generic_relay --factors 0.8 --decoders relay --rows generic-2q --first 500; }
 q1_fit_bposd()      { stream q1_fit_bposd --factors 0.8 --decoders bposd --rows generic-fit; }
-q1_fit_relay()      { stream q1_fit_relay --factors 0.8 --decoders relay --rows generic-fit --first 500; }
+q1_fit_relay()      { stream q1_fit_relay --factors 0.8 --decoders relay --rows generic-fit --first 500 --train-first 100 \
+                        --grid 0.5,0.7,1,1.4; }
 
 # Question 2 (loss), X memory at factor 0.4 (atom loss 1e-3 per atom per CX, the rate loss/ studied most), its own
 # folder and seeds. Flag-aware (loss/'s `starter`, the published recipe) with matched and with generic Pauli priors;

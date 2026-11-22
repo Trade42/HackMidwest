@@ -28,3 +28,17 @@ name, memory.used [MiB], utilization.gpu [%]
 NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
 evaluate si1000-p0.006 exit 0
 evaluate si1000-p0.008 exit 0
+decode-many exit 0
+error: unexpected argument '-2' found
+
+  tip: to pass '-2' as a value, use '-- -2'
+
+Usage: tail [OPTION]... [FILE]...
+
+For more information, try '--help'.
+  si1000-p0.006 block 2900-2999 done, 1584 s; failures so far m 303, g 546, h 273 of 3000
+  si1000-p0.008 block 2900-2999 done, 1611 s; failures so far m 2172, g 2560, h 2060 of 3000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2b-0a780d7/decode/si1000-p0.006/per_shot.npz: 3000 shots scored
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2b-0a780d7/decode/si1000-p0.008/per_shot.npz: 3000 shots scored
+done; 1611 s
+Sun Nov 22 17:21:22 UTC 2026

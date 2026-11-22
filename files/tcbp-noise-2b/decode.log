@@ -59,3 +59,9 @@ plan /home/blakew3/mlBranchMidwest/runs/tcbp-noise/in2b/plan.json: tasks ['si100
   si1000-p0.006 block 2700-2799 done, 1488 s; failures so far m 282, g 515, h 258 of 2800
   si1000-p0.008 block 2700-2799 done, 1516 s; failures so far m 2031, g 2393, h 1927 of 2800
   si1000-p0.006 block 2800-2899 done, 1536 s; failures so far m 291, g 531, h 265 of 2900
+  si1000-p0.008 block 2800-2899 done, 1564 s; failures so far m 2102, g 2476, h 1993 of 2900
+  si1000-p0.006 block 2900-2999 done, 1584 s; failures so far m 303, g 546, h 273 of 3000
+  si1000-p0.008 block 2900-2999 done, 1611 s; failures so far m 2172, g 2560, h 2060 of 3000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2b-0a780d7/decode/si1000-p0.006/per_shot.npz: 3000 shots scored
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-noise/out2b-0a780d7/decode/si1000-p0.008/per_shot.npz: 3000 shots scored
+done; 1611 s

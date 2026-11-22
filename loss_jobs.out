@@ -18,3 +18,26 @@ decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 
   200/500 shots, 55s, failures so far starter=5 exact=6 oracle-round=4 starter-oracle-round=3 starter@0.5/stop1=9
   250/500 shots, 68s, failures so far starter=6 exact=7 oracle-round=4 starter-oracle-round=4 starter@0.5/stop1=10
   300/500 shots, 77s, failures so far starter=6 exact=7 oracle-round=4 starter-oracle-round=4 starter@0.5/stop1=11
+  350/500 shots, 97s, failures so far starter=8 exact=9 oracle-round=5 starter-oracle-round=5 starter@0.5/stop1=13
+  400/500 shots, 114s, failures so far starter=9 exact=11 oracle-round=6 starter-oracle-round=6 starter@0.5/stop1=16
+  450/500 shots, 126s, failures so far starter=11 exact=14 oracle-round=7 starter-oracle-round=10 starter@0.5/stop1=18
+  500/500 shots, 161s, failures so far starter=16 exact=19 oracle-round=10 starter-oracle-round=14 starter@0.5/stop1=24
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/starter+exact+oracle-round+starter-oracle-round+startercap0.5_stop1/000500-001000.npz.tmp.npz in 161s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 1000..1500 conditions ['starter', 'exact', 'oracle-round', 'starter-oracle-round', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 10s, failures so far starter=0 exact=0 oracle-round=0 starter-oracle-round=0 starter@0.5/stop1=0
+  100/500 shots, 26s, failures so far starter=0 exact=1 oracle-round=0 starter-oracle-round=0 starter@0.5/stop1=0
+  150/500 shots, 37s, failures so far starter=3 exact=5 oracle-round=0 starter-oracle-round=0 starter@0.5/stop1=3
+  200/500 shots, 55s, failures so far starter=5 exact=7 oracle-round=1 starter-oracle-round=1 starter@0.5/stop1=5
+  250/500 shots, 63s, failures so far starter=7 exact=9 oracle-round=1 starter-oracle-round=2 starter@0.5/stop1=7
+  300/500 shots, 75s, failures so far starter=8 exact=11 oracle-round=1 starter-oracle-round=2 starter@0.5/stop1=8
+  350/500 shots, 88s, failures so far starter=9 exact=12 oracle-round=1 starter-oracle-round=2 starter@0.5/stop1=9
+  400/500 shots, 101s, failures so far starter=13 exact=16 oracle-round=2 starter-oracle-round=3 starter@0.5/stop1=13
+  450/500 shots, 119s, failures so far starter=16 exact=18 oracle-round=4 starter-oracle-round=5 starter@0.5/stop1=16
+  500/500 shots, 157s, failures so far starter=24 exact=25 oracle-round=7 starter-oracle-round=9 starter@0.5/stop1=24
+wrote /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/parts/starter+exact+oracle-round+starter-oracle-round+startercap0.5_stop1/001000-001500.npz.tmp.npz in 157s
+decode /home/blakew3/mlBranchMidwest/runs/loss/L3_s1e-3_seed5300/data.npz shots 1500..2000 conditions ['starter', 'exact', 'oracle-round', 'starter-oracle-round', 'starter@0.5/stop1'] workers 10
+  50/500 shots, 22s, failures so far starter=0 exact=0 oracle-round=0 starter-oracle-round=0 starter@0.5/stop1=0
+  100/500 shots, 41s, failures so far starter=3 exact=7 oracle-round=2 starter-oracle-round=1 starter@0.5/stop1=3
+  150/500 shots, 55s, failures so far starter=4 exact=7 oracle-round=3 starter-oracle-round=3 starter@0.5/stop1=4
+  200/500 shots, 63s, failures so far starter=5 exact=9 oracle-round=4 starter-oracle-round=3 starter@0.5/stop1=5
+  250/500 shots, 72s, failures so far starter=5 exact=9 oracle-round=4 starter-oracle-round=4 starter@0.5/stop1=5

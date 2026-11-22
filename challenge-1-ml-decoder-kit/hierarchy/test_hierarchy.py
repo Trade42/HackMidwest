@@ -20,7 +20,7 @@ import pytest
 import scipy.sparse as sp
 
 from evaluation.adapters import Problem, create_session, validate_shot_result
-from hierarchy import candidates, compare, ensemble, joint_member, plugin_options, preflight, rules, select, tcbp_member
+from hierarchy import candidates, compare, ensemble, joint_member, parallel_check, plugin_options, preflight, rules, select, tcbp_member
 from hierarchy.plugin import HierarchySession, Network
 from hierarchy.rules import ORDER
 from hierarchy.stages import Candidate, kit_problem, load_shots, sha256_of
@@ -756,3 +756,20 @@ def test_plugin_options_take_the_network_rule_only_where_it_is_no_worse(tmp_path
     assert HierarchySession(fake_problem("Z"), options, hierarchy=stages).rule == "converged"      # the plugin reads the file as written
     only_x = plugin_options.main(["--out", str(tmp_path / "x_only.json"), "--x-checkpoint", str(tmp_path / "x.pt")])
     assert only_x["rule"] == {"X": "converged", "Z": "converged"} and "no checkpoint was given" in capsys.readouterr().out
+
+
+# ---------- the side-by-side mode ----------
+
+@needs_priortilt
+def test_side_by_side_mode_gives_the_sequential_answers(tmp_path, shot_files, capsys):
+    """P2 in a helper process: the same bits, flags, weights and iteration counts as one process, on both bases."""
+    options = tmp_path / "options.json"
+    options.write_text(json.dumps({"rule": "converged", **QUICK_OPTIONS}))
+    assert parallel_check.main(["--x", str(shot_files["X"]), "--z", str(shot_files["Z"]), "--shots", str(SHOTS), "--options", str(options)]) == 0
+    printed = capsys.readouterr().out
+    assert printed.count("shots where the two modes differ: 0") == 2 and "gives the sequential answers on every shot" in printed
+    assert "relay-BP and the rule ran on 0;" not in printed            # the quick budgets leave escalated shots in both files
+    session = create_session("hierarchy.plugin:make_decoder", kit_problem("X", 0.004), {"rule": "weight", "parallel": True, **QUICK_OPTIONS})
+    assert "side by side" in session.settings["parallel"] and session.hierarchy.process.is_alive()
+    session.hierarchy.close()
+    assert not session.hierarchy.process.is_alive()

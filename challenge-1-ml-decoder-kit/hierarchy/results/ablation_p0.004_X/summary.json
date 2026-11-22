@@ -1,0 +1,145 @@
+{
+  "what": "the network's increment as part 1's tie-breaker, held out: 80,000 fresh X shots at p = 0.004, decoded in session mode as the plugin decodes",
+  "shots": 80000,
+  "data": {
+    "files": [
+      "fresh_X_s9401.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9401",
+      "fresh_X_s9402.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9402",
+      "fresh_X_s9403.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9403",
+      "fresh_X_s9404.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9404",
+      "fresh_X_s9405.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9405",
+      "fresh_X_s9406.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9406",
+      "fresh_X_s9407.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9407",
+      "fresh_X_s9408.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9408",
+      "fresh_X_s9409.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9409",
+      "fresh_X_s9410.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9410",
+      "fresh_X_s9411.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9411",
+      "fresh_X_s9412.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9412",
+      "fresh_X_s9413.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9413",
+      "fresh_X_s9414.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9414",
+      "fresh_X_s9415.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9415",
+      "fresh_X_s9416.npz: python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 9416"
+    ],
+    "sha256": [
+      "3638060fe71fc20cf8814acb6d99f757be73d4eda35e284807330186461841f2",
+      "779256e01e62f5518433ff3c35b21aca167447894ae4b448c769bc78ae9128f4",
+      "b685dce8b5ee5eb3b22594fdadff05f2e3a1b79788eb0ee0e47315833bf32e3d",
+      "c3667a76c7ad066724688f416b5da7f4874a8caf35cb49ca7bf98e802e04df41",
+      "d47b317b7f4a4474f242585106aaa4fcf7ed03aa8c4afe08d105c03d16adc5e9",
+      "1cb6a7437b6b2edff9a825b76517e8b3f83392681f3ebc31da63963ae2f3fce5",
+      "411642386b78ec4bb0337046b4ee8dc17db7cbb83392cd5df554b5f0ed2d14f4",
+      "60a44c03d4f43df56a4b6271558764370b6cc877c22a12fd5690d09e10213f12",
+      "fde5e8467ffa76f78351c1b4850e05d05a8d5866ed76658bf9f7d1e496580457",
+      "53519a9db182186dde185ce883b53b468900c6588e04253ffc7055a1df389519",
+      "88a8c92f31e169b34adb22f18cc8702f2aa6f19ebdd05e88de801fa954ef7362",
+      "4d31625b7690696c45a200e22f2742b10aef04a6d2a6e4159bfc348f4aa414bd",
+      "cdb27d700655336c906219c585b3b1e59ab13d1951a4900aa7bd4319d528ad8c",
+      "39b20ef97d6371eb058cc73a8c0de86956caa1169548ea4f616fff5bf8b01bd7",
+      "f9fc1fcd5adff72df1d3045d631dea311529d101fafef9902d497ed4da48673a",
+      "e6d951c43f6064d544aa60ccb9d8a80e8eb96d989cf58edd661114dbca195381"
+    ],
+    "made_on": "luminaty, 2026-11-22 06:54 UTC; the shot files are not in the repository"
+  },
+  "decode": {
+    "command": "python -m hierarchy.candidates --mode session --processes 4 (lane C, 06:54 to 08:55 UTC)",
+    "commit": "d632d9c9afcc5f5d44f4364a56df5a6e9275c8de",
+    "note": "stages.Stage, stages.Hierarchy and candidates.py decode the same at the frozen 921f2e8: since d632d9c only ParallelHierarchy was added to stages.py"
+  },
+  "network": {
+    "checkpoint": "cascade_X_s1/checkpoint_final_step120000.pt (laptop-artifacts 2f752e9)",
+    "step": 120000,
+    "sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+    "logits": "neural.evaluate_stim's evaluate at batch one on luminaty's CPU, 2 threads (lane C, 09:38 to 10:21 UTC)"
+  },
+  "p1_p2_differ": 366,
+  "rows": {
+    "failed_P1: P1 alone": {
+      "failures": 357,
+      "wilson_95": [
+        0.004023820944149645,
+        0.004948766444047672
+      ]
+    },
+    "failed_P2: P2 alone": {
+      "failures": 348,
+      "wilson_95": [
+        0.003917151406027024,
+        0.004830446785754626
+      ]
+    },
+    "failed_aw: P1; where P2 differs, the lowest weight of R, P1, P2": {
+      "failures": 298,
+      "wilson_95": [
+        0.003326027833507844,
+        0.004171630378186778
+      ]
+    },
+    "failed_ac: P1; where P2 differs, the lowest weight among the converged": {
+      "failures": 253,
+      "wilson_95": [
+        0.00279656223696829,
+        0.0035761499926480044
+      ]
+    },
+    "failed_a: P1; where P2 differs, the network's most likely": {
+      "failures": 237,
+      "wilson_95": [
+        0.0026090126221773205,
+        0.0033637188138111243
+      ]
+    },
+    "failed_perfect_tie_break: P1; where P2 differs, a perfect choice (needs the truth)": {
+      "failures": 187,
+      "wilson_95": [
+        0.002025917131724461,
+        0.002696874324176954
+      ]
+    }
+  },
+  "paired": {
+    "a against aw": {
+      "both_fail": 211,
+      "first_only": 26,
+      "second_only": 87,
+      "p_exact_two_sided": 7.117169991723721e-09
+    },
+    "a against ac": {
+      "both_fail": 198,
+      "first_only": 39,
+      "second_only": 55,
+      "p_exact_two_sided": 0.12137111297242903
+    }
+  },
+  "network_first": {
+    "c_train": {
+      "answered": 0.80405,
+      "failures": 242,
+      "wilson_95": [
+        0.0026675777279459964,
+        0.0034301477060511513
+      ],
+      "paired_against_a": {
+        "both_fail": 210,
+        "first_only": 32,
+        "second_only": 27,
+        "p_exact_two_sided": 0.6029232012571504
+      }
+    },
+    "c_procedure": {
+      "answered": 0.7660125,
+      "failures": 229,
+      "wilson_95": [
+        0.0025153961749562093,
+        0.0032573448642183108
+      ],
+      "paired_against_a": {
+        "both_fail": 212,
+        "first_only": 17,
+        "second_only": 25,
+        "p_exact_two_sided": 0.27995623852893914
+      }
+    },
+    "fitted_on": "p = 0.004 train_X (c_train) or train_X + validation_X (c_procedure): the laptop's step-8b candidates and the same checkpoint's logits (laptop-artifacts aabbb61)",
+    "note": "offline, branch network-first: on the shots the network leaves to the hierarchy the frozen run's PriorTilt draws are used"
+  }
+}

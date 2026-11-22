@@ -28,6 +28,10 @@ team's best single decoder. The head was not retrained. The knobs were refitted 
 - **Latency on the A100, one shot at a time, one process:** network and head 9.4 ms (float32), building TCBP-JOBS with
   the shot's priors 42.6 ms, decoding 3.8 ms; about 56 ms mean in all. Building is the cost: cudaq-qec 0.9.0 cannot
   change a built decoder's priors. Running the network on the GPU changed no outcome on 1,000 validation shots.
+- **The same decoder, built faster** (tcbp-speed, a separate branch; section "tcbp-speed" below): with H handed to
+  `get_decoder` as a scipy sparse matrix made once (`--h-format csr`), the build takes 34.0 ms instead of 41.2 ms in
+  the same run. The 12 bits, the faults and the whole corrections were the same on all 1,000 validation shots tried.
+  The registered numbers above were made with the dense path and are unchanged.
 
 **Erratum.** `logs/tcbp_test_registered_spec.md` says "Written 2026-11-22 15:52 UTC" and cites dq-orch-6's decision as
 "15:49 UTC". Both true times are 15:42 UTC. The spec's commit, `dad4fd50`, is dated 15:42:59 UTC, before any test number
@@ -40,6 +44,8 @@ committed in `26dcea76` at 15:04:38 UTC. Each was committed before the numbers i
 |------|--------------|
 | `tcbp.py` | `decode`: TCBP-JOBS with one decoder built per shot from that shot's priors (arms `fresh`: the kit's priors; `head`: the head's). `fit`: the knob fit on train subsets. `score`: the counts and paired tests, on this PC, from the per-shot files. `probe`: prints a built decoder's interface |
 | `test_tcbp.py` | tests without a GPU: the kit's relay-BP stands in for TCBP-JOBS behind the same calls |
+| `tcbp_speed.py` | tcbp-speed: `run` (server) times the build's parts and checks that H as a scipy matrix gives the same answers as the dense path; `report` (any machine) prints its tables and compares it with another run |
+| `test_tcbp_speed.py` | its tests without a GPU (plumbing only: the stand-in ignores H's form) |
 | `logs/tcbp_declarations.md` | what was fixed before each number: the fit, the arms, the test run |
 
 ## How it works
@@ -65,7 +71,7 @@ GPU, `--decoder relay` runs every TCBP step with relay-BP as a stand-in, for the
 
 ```sh
 # tests (no GPU: relay-BP stands in for TCBP-JOBS)
-python -m pytest -p no:cacheprovider predecoder/test_tcbp.py
+python -m pytest -p no:cacheprovider predecoder/test_tcbp.py predecoder/test_tcbp_speed.py
 
 # 0. what a built decoder offers (the search for a cheaper path than one decoder per shot)
 python -m predecoder.tcbp probe --data data/p0.005/validation_X.npz
@@ -96,6 +102,13 @@ python -m predecoder.tcbp decode --data data/p0.005/test_X.npz --logits <test lo
     --settings predecoder/logs/fit_tcbp_X_p0.005.json --arms head fresh --batch-check --out <folder> --final
 python -m predecoder.tcbp pair --final --data-x data/p0.005/test_X.npz --data-z data/p0.005/test_Z.npz \
     --ours-x <X per_shot.npz> --ours-z <Z per_shot.npz> --tcbp-x <test_X.tcbp.npz> --tcbp-z <test_Z.tcbp.npz>
+# 8. tcbp-speed: the build's parts, and H as a scipy matrix checked against the dense path (TCBP env, GPU) ...
+python -m predecoder.tcbp_speed run --data data/p0.005/validation_X.npz --logits <logits_validation> \
+    --settings predecoder/logs/fit_tcbp_X_p0.005.json --limit 1000 --out <folder>
+# ... its tables, and its arms against step 4's head arm (any machine; no decoder runs)
+python -m predecoder.tcbp_speed report --summary <folder>/summary.json --per-shot <folder>/check_per_shot.npz \
+    --reference <step 4 folder>/per_shot.npz
+# the faster build in any tcbp.py command (decode, fit, probe): add --h-format csr
 ```
 
 The exact server scripts are the orchestrator's: `server-jobs/gpu/060`, `070`, `075`, `080`, `ctl/130` and
@@ -298,6 +311,100 @@ Paired over the 10,000 pairs: both fail 91, only TH 41, only TCBP-JOBS 269, exac
 times fewer pairs.** This is the registered run 3 (designed after the test results were seen; a separate branch). The
 Z knobs were not fitted for Z.
 
+### tcbp-speed: the same decoder, built 7 ms faster (a separate branch; validation)
+
+Branch `tcbp-speed`, code at `e5354788`. Server job `ctl/160-tcbp-speed-1.sh` on `integration` (the orchestrator's),
+run 2026-11-22 18:00:52 to 18:05:24 UTC; outputs on `server-logs` under `files/tcbp-speed/`, copies in
+`logs/tcbp_speed_job1*`. Machine: NVIDIA A100-SXM4-80GB, MIG slice 2g.20gb. One process, 1 CPU thread
+(`OMP_NUM_THREADS=1` and the like), cudaq-qec 0.9.0 (cudaqx `9043634b`), preset `tcbp-jobs` with no overrides. One
+model fit (54.1 s) was shared by every arm.
+
+**What changed: only the form in which H is handed to `get_decoder`.**
+
+- The registered runs give the dense uint8 array (936 x 8,784, 8.2 MB). cudaq-qec's docstring says that a dense array
+  is copied into a dense tensor and converted to sparse storage on every call.
+- `--h-format csr` (or `csc`) gives instead a scipy sparse matrix, made once per run from the same array
+  (`tcbp.h_matrix`, checked to hold exactly its 30,672 ones in canonical form).
+- The model, the options, the priors and the decoder are the same.
+- The default stays `dense`, so the registered commands, their part files and their numbers are unchanged.
+
+**The same answers.** The check used the first 1,000 shots of `data/p0.005/validation_X.npz` (seed 201). The priors
+were the head's, with the frozen knobs of `logs/fit_tcbp_X_p0.005.json` (log-odds, alpha 0.4, eps 1e-4), capped at
+0.5. The logits were the CPU float32 bytes of jobs 3 and 4 (laptop-artifacts `64163747`, every row's hash checked).
+Every shot was decoded by four arms: dense, CSR, CSC and dense again. They took turns in blocks of 100 shots, in an
+order that rotated from block to block.
+
+| arm, the same 1,000 shots | failures | 12 bits differ from dense | faults differ | whole correction (8,784 bits) differs |
+|------|---:|---:|---:|---:|
+| dense (the registered path) | 3 | - | - | - |
+| dense again | 3 | 0 | 0 | 0 |
+| **CSR** | 3 | **0** | **0** | **0** |
+| CSC | 3 | 0 | 0 | 0 |
+
+- Every correction reproduces its syndrome.
+- Dense equals dense again, so the decoder is repeatable within the run, and "the same" means something.
+- All four arms also equal job 3's head arm on all 1,000 shots, bits and faults (`tcbp_speed report`,
+  `logs/tcbp_speed_job1_report_vs_job3.json`). Job 3 is another run with another model fit.
+
+**Time per shot.** Shots ran one at a time. One timer wraps the shot's whole cost: the priors (the head's logits mixed
+with the kit's and capped), the build, the decode, and freeing the decoder. The network and head (9.4 ms, job 4) are
+not included. Times are in ms.
+
+| arm | total, mean | median | p99 | priors | build | decode | free |
+|------|---:|---:|---:|---:|---:|---:|---:|
+| dense | 48.7 | 48.2 | 60.6 | 0.16 | 41.2 | 2.7 | 4.6 |
+| dense again | 48.6 | 48.1 | 59.9 | 0.16 | 41.2 | 2.7 | 4.6 |
+| **CSR** | **41.7** | 41.0 | 53.7 | 0.16 | **34.0** | 2.7 | 4.8 |
+| CSC | 41.8 | 41.0 | 54.3 | 0.16 | 34.4 | 2.7 | 4.6 |
+
+- CSR saves 7.2 ms of the build (17 %) and 7.0 ms of the shot (14 %).
+- The registered runs' timers (build 42.6 + decode 3.8 ms) left out freeing the decoder, which takes 4.6 ms. Under those
+  timers, the build and decode here come to 43.9 ms with dense and 36.7 ms with CSR.
+- Adding the network's 9.4 ms (job 4, a separate timer) gives about 46 ms per X shot with CSR, against about 53 ms with
+  dense, without the free. With the free, it is about 51 against 58 ms.
+
+**Where the build's time goes.** These are timing probes only: 50 builds each, after one untimed build, with the
+priors of shots 0 to 49 (`logs/tcbp_speed_job1_summary.json`, `profile.variants`). Times are mean ms.
+
+| what is built | H dense | H CSR | free |
+|------|---:|---:|---:|
+| `tcbp-jobs` (the decoder of every number here) | 41.4 | 33.9 | 4.5 |
+| `tcbp-jobs`, the model given as a file path | 43.8 | 36.3 | 4.5 |
+| `bp10-minllr-jobs` (JOBS, no TCBP model) | 40.5 | 33.6 | 4.6 |
+| `tcbp` (the model, BP only: no OSD, no JOBS) | 10.6 | 3.5 | 0.7 |
+| `bp60` (bare BP, no model) | 9.6 | 2.6 | 0.6 |
+
+- **A dense H costs about 7 ms in every decoder** (dense minus CSR: 7.5, 7.5, 6.9, 7.1, 7.0 ms).
+  - The form of the sparse matrix makes no difference: CSR in uint8, int32, float64 or bool, and CSC, all take 33.8 to
+    34.1 ms.
+  - For scale, converting this dense H to sparse in Python (`np.nonzero` or scipy) takes 26 to 27 ms. So the conversion
+    inside cudaq-qec is faster than Python's, but it still costs 7 ms on every build.
+- **JOBS's set-up is most of what remains: about 30 ms** (33.9 ms against `tcbp`'s 3.5 ms, with CSR). It is about the
+  same with or without the TCBP model (33.6 against 33.9 ms).
+  - The model costs under 1 ms (`tcbp` 3.5 against `bp60` 2.6, which also differ in iterations), and it is 2,538 bytes.
+  - Freeing a decoder with JOBS takes 4.5 ms; one without, 0.6 ms.
+- **That set-up happens inside the plugin's C++, which Python cannot reach.**
+  - cProfile of 50 shots (`logs/tcbp_speed_job1_profile_dense.txt`) sees only the one `get_decoder` call: 2.08 of the
+    2.52 s.
+  - No native profiler (nsys, ncu, perf, py-spy) is on the server's path.
+  - Giving the model as a file path is 2.4 ms slower, not faster.
+
+**Not shown, and caveats.**
+
+- The equal answers are shown on 1,000 validation X shots at p = 0.005, with the head's priors. Not shown: Z, other p,
+  the kit's priors, and the test files.
+- A sparse H goes through another constructor of the plugin ("sparse" rather than "dense", in its own error messages).
+  1,000 shots with equal whole corrections are evidence, not a proof, that the two agree on every shot.
+- The registered numbers (validation, test, the pair score) were made with the dense path and were not rerun.
+- The GPU is a MIG slice that other jobs may share. The arms took turns, so any load slowed all of them alike.
+- **A built decoder's priors still cannot be changed in place.** The Python `Decoder` of 0.9.0 offers no way to do it
+  (job 1).
+  - The plugin's binary in the PyPI wheel `cudaq_qec_cu13` 0.9.0 was read on luminaty and never run, and it may not be
+    the server's exact build.
+  - It holds an internal `set_priors`, and the message "the JOBS column costs are fixed at construction".
+  - It exports no such function, so this was not tried.
+- Not tried: options that change the decoder (batch sizes, thread counts, JOBS's own settings).
+
 ## What was not done, and what is not tested
 
 - **The head was not retrained for TCBP-JOBS.** It is relay-BP's head (trained only on error-model shots with the
@@ -324,7 +431,8 @@ Z knobs were not fitted for Z.
 - **The latency** is three timers (network, build, decode), each measured one shot at a time in one process on the
   A100, sometimes with another TCBP-JOBS process beside it on the GPU. The p99 of the sum was not measured as one
   timer.
-- Not tried: passing H to `get_decoder` as a scipy sparse matrix, which may build faster; a batch decode with
+- Not tried: passing H to `get_decoder` as a scipy sparse matrix, which may build faster (tried since: "tcbp-speed"
+  above, 7 ms faster with the same answers on 1,000 validation shots); a batch decode with
   per-shot priors (cudaq-qec 0.9.0 has none); the test file at p = 0.005 with GPU logits (the registered run uses
   the CPU bytes).
 - The part caches of `tcbp.py` are keyed without the logits' precision (the auditor's note); every run here used a

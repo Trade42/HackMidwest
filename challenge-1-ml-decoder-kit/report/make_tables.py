@@ -2628,7 +2628,10 @@ def predecoder_tcbp_table(measured):
                          f"its one held-out check, declared in `predecoder/fastpath/CRITERION_4.md`), the frozen C9 **{held['verdict']}**: "
                          f"{held['failures']['rule']} failures against the TCBP version's {held['failures']['TH']} (both {paired['both']}, "
                          f"{paired['added']} added, {paired['only_TH']} removed, exact p = {stats.p_text(paired['exact_p'])}), TCBP-JOBS alone "
-                         f"{held['failures']['F']}; {held['fast_fraction']:.1%} of the shots on the fast path; {ms(today['rule_mean'])} ms mean against "
+                         f"{held['failures']['F']}; {held['fast_fraction']:.1%} of the shots on the fast path"
+                         + (f" (the 95% upper bound on added failures per fast-path shot is {held['added_rate_upper_95_on_fast_shots']:.4f}: no loss is "
+                            "detectable at this resolution)" if held.get("added_rate_upper_95_on_fast_shots") is not None else "")
+                         + f"; {ms(today['rule_mean'])} ms mean against "
                          f"{ms(today['TH_alone_mean'])} for the TCBP version alone ({1 - today['rule_mean'] / today['TH_alone_mean']:.0%} lower), 99th "
                          f"percentile {ms(today['rule_p99'])} against {ms(today['TH_alone_p99'])}, with today's component times (the network as a CUDA "
                          f"graph, {ms(today['network_ms'])} ms; TCBP-JOBS's decode times from per-shot builds on a shared GPU)")

@@ -1,0 +1,235 @@
+# fpga_router as committed at 6723626 (stand-in weights, 300 vectors), run on luminaty (Ryzen 7 7730U, Linux) on 2026-11-22T07:06Z
+# tools: OSS CAD Suite 2026-11-21 (linux-x64), unpacked in user space; sha256 of the tgz da62ff9cd16a69fc23607f3430459a3ca405561063e93910bf71d99012bb59e2
+# Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod)
+# Yosys 0.71+77 (git sha1 11d972c20, Release, Clang /usr/bin/clang++ 21.1.8)
+# Icarus Verilog version 14.0 (devel) (s20260301-1253-gc20d73fe3-dirty)
+# g++ (GCC) 16.2.1 20260810
+
+$ verilator --binary --timing -Wno-fatal --top-module tb_router -I. --Mdir <scratch>/obj_standin tb_router.v router_top.v router_core.v router_frontend.v uart_rx.v uart_tx.v
+- V e r i l a t i o n   R e p o r t: Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod)
+(binary already built by the same command a few minutes earlier: 8 modules, built in 33.7 s)
+
+$ <scratch>/obj_standin/Vtb_router
+PASS: 300 shots match the Python model bit for bit
+- tb_router.v:60: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.055 devel
+- Verilator: $finish at 31ms; walltime 4.189 s; speed 7.409 ms/s
+- Verilator: cpu 3.799 s on 1 threads; allocated 4 MB
+
+# Icarus Verilog was tried as a second simulator: its run on the 300 vectors had not finished after 4 minutes and was stopped (no result).
+
+$ yosys -p "read_verilog -I. router_top.v router_core.v router_frontend.v uart_rx.v uart_tx.v; synth_xilinx -family xc7 -top router_top; stat"
+(the last section of Yosys's printout: the whole design, after synth_xilinx for the Xilinx 7 series; not placed and routed)
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+     1188 router_top
+      522 $paramod$854202ad64bf9c46483109b2872aa345043f9b24\router_core
+      510 $paramod\router_frontend\XW=s32'00000000000000000000000000010000
+       33 $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+       39 $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+
+        +----------Count including submodules.
+        | 
+     1634 wires
+     4993 wire bits
+       59 public wires
+     1832 public wire bits
+       29 ports
+      653 port bits
+        - memories
+        - memory bits
+        - processes
+     1188 cells
+        1   BUFG
+       16   DSP48E1
+        2   IBUF
+       47   INV
+       69   LUT2
+      209   LUT3
+      111   LUT4
+      430   LUT5
+      286   LUT6
+       17   OBUF
+      114 submodules
+        1   $paramod$854202ad64bf9c46483109b2872aa345043f9b24\router_core
+        1   $paramod\router_frontend\XW=s32'00000000000000000000000000010000
+        1   $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+        1   $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+       14   CARRY4
+       96   FDRE
+
+   Estimated number of LCs:       1036
+
+6.55. Executing CHECK pass (checking for obvious problems).
+Checking module $paramod$854202ad64bf9c46483109b2872aa345043f9b24\router_core...
+Checking module $paramod\router_frontend\XW=s32'00000000000000000000000000010000...
+Checking module $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100...
+Checking module $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100...
+Checking module router_top...
+Found and reported 0 problems.
+
+7. Printing statistics.
+
+=== $paramod$854202ad64bf9c46483109b2872aa345043f9b24\router_core ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      755 wires
+     2727 wire bits
+       12 public wires
+     1052 public wire bits
+        8 ports
+      341 port bits
+      756 cells
+       46   CARRY4
+       16   DSP48E1
+      188   FDRE
+       26   LUT2
+      148   LUT3
+       67   LUT4
+      163   LUT5
+      102   LUT6
+
+=== $paramod\router_frontend\XW=s32'00000000000000000000000000010000 ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      520 wires
+     1366 wire bits
+        8 public wires
+      277 public wire bits
+        6 ports
+      268 port bits
+      787 cells
+       10   CARRY4
+      266   FDRE
+        6   INV
+       28   LUT2
+       47   LUT3
+       32   LUT4
+      256   LUT5
+      141   LUT6
+        1   MUXF7
+
+=== $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100 ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       82 wires
+      136 wire bits
+       10 public wires
+       36 public wire bits
+        5 ports
+       12 port bits
+       70 cells
+        5   CARRY4
+       27   FDRE
+        5   FDSE
+       16   INV
+        4   LUT2
+        3   LUT3
+        1   LUT4
+        5   LUT5
+        4   LUT6
+
+=== $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100 ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       85 wires
+      129 wire bits
+        9 public wires
+       42 public wire bits
+        6 ports
+       13 port bits
+       73 cells
+        5   CARRY4
+       21   FDRE
+        8   FDSE
+       18   INV
+        2   LUT2
+       10   LUT3
+        4   LUT4
+        3   LUT5
+        2   LUT6
+
+=== router_top ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      192 wires
+      635 wire bits
+       20 public wires
+      425 public wire bits
+        4 ports
+       19 port bits
+      194 cells
+        1   BUFG
+       14   CARRY4
+       96   FDRE
+        2   IBUF
+        7   INV
+        9   LUT2
+        1   LUT3
+        7   LUT4
+        3   LUT5
+       37   LUT6
+       17   OBUF
+        4 submodules
+        1   $paramod$854202ad64bf9c46483109b2872aa345043f9b24\router_core
+        1   $paramod\router_frontend\XW=s32'00000000000000000000000000010000
+        1   $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+        1   $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+     1880 router_top
+      756 $paramod$854202ad64bf9c46483109b2872aa345043f9b24\router_core
+      787 $paramod\router_frontend\XW=s32'00000000000000000000000000010000
+       70 $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+       73 $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+
+        +----------Count including submodules.
+        | 
+     1634 wires
+     4993 wire bits
+       59 public wires
+     1832 public wire bits
+       29 ports
+      653 port bits
+        - memories
+        - memory bits
+        - processes
+     1880 cells
+        1   BUFG
+       80   CARRY4
+       16   DSP48E1
+      598   FDRE
+       13   FDSE
+        2   IBUF
+       47   INV
+       69   LUT2
+      209   LUT3
+      111   LUT4
+      430   LUT5
+      286   LUT6
+        1   MUXF7
+       17   OBUF
+        4 submodules
+        1   $paramod$854202ad64bf9c46483109b2872aa345043f9b24\router_core
+        1   $paramod\router_frontend\XW=s32'00000000000000000000000000010000
+        1   $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+        1   $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+
+End of script. Logfile hash: 4921b84cfc, time: 27.85s, user: 15.55s, system: 1.82s, MEM: 188.61 MB peak
+Yosys 0.71+77 (git sha1 11d972c20, Release, Clang /usr/bin/clang++ 21.1.8)
+Time spent: 33% 5x abc9_exe (8 sec), 21% 31x read_verilog (5 sec), ...
+
+real	0m27.977s
+user	0m24.240s
+sys	0m2.046s

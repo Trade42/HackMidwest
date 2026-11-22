@@ -20,7 +20,14 @@ should find the answer sooner and fail less.
   average; fewer on 4,758 of the 5,000 shots), the shots whose first leg fails fall from 691 to
   163, and the slowest 1% of shots take 2.1 s instead of 10.5 s.
 
-Details, commands and logs for every number are under "Numbers".
+- **At p = 0.005 the same head and knobs give a large gain** (a secondary result: the knobs
+  were fitted at p = 0.004 and not changed): 70 failures against 206 on 5,000 validation
+  shots, 2.9 times fewer (only the head's 10 against only the kit's priors' 146, p = 4e-32),
+  with 3.3 times fewer iterations. At p = 0.003 neither fails much: 2 against 0 (p = 0.5).
+
+Whether the p = 0.005 result earns one run on the held-out test shots is Sal's decision: the
+gate fixed in advance was p = 0.004, and it did not pass. Details, commands and logs for every
+number are under "Numbers".
 
 | file | what it does |
 |------|--------------|
@@ -375,3 +382,72 @@ and T (TCBP-JOBS) from the server's `files/tcbp_p0.004/validation_X.tcbp.npz`.
   under one seed and than relay-BP, but none of that was the pre-registered question, and the
   member counts here come from other runs on the same file. It suggests H as a member of the
   ensemble; that is not built here (`hierarchy/` is not ours to change).
+
+### At p = 0.005 and p = 0.003 (secondary results, knobs fitted at p = 0.004)
+
+Run by the orchestrator on the laptop (RTX 4060 Laptop GPU for the network and head; its CPU
+for relay-BP; Windows) at commit `1bf0e7b`, with the same head, trunk and frozen knobs
+(`logs/fit_X_p0.004.json`), on the team's validation files. Per-shot files on
+`origin/laptop-artifacts` at `7bd45b9`, `predecoder/{fresh,head}_validation_p0.00{5,3}/`;
+summaries in `logs/laptop_*_summary.json`. Re-derived here from the per-shot predictions
+against the data files' observables: the counts agree.
+
+    python -m predecoder.evaluate --head <head.pt> --trunk <final X checkpoint> --data data\p0.005\validation_X.npz --out <logits> --device cuda
+    python -m predecoder.compare --data data\p0.005\validation_X.npz --arms fresh --workers 3 --out <folder>          # at 372d050
+    python -m predecoder.compare --data data\p0.005\validation_X.npz --logits <logits> --settings predecoder\logs\fit_X_p0.004.json \
+        --arms fresh head --workers 12 --out <the same folder>                                                         # at 1bf0e7b
+
+| p | arm | failures of 5,000 | share, 95% interval | unconverged | hard shots | mean iterations |
+|---|---|---|---|---|---|---|
+| 0.005 | the kit's priors, per shot | 206 | 0.0412 [0.0360, 0.0471] | 131 | 1,800 | 2,367 |
+| 0.005 | **the head's priors** | **70** | 0.0140 [0.0111, 0.0176] | 42 | 648 | 721 |
+| 0.003 | the kit's priors, per shot | 0 | 0 [0, 0.0008] | 0 | 163 | 133 |
+| 0.003 | the head's priors | 2 | 0.0004 [0.0001, 0.0015] | 1 | 20 | 58 |
+
+Paired: at p = 0.005 both fail 60, only the head 10, only the kit's priors 146, exact two-sided
+p = 4.1e-32. At p = 0.003 only the head fails, on 2 shots (p = 0.5): one does not converge
+(18,080 iterations) and one converges to a wrong answer; the kit's priors solved both.
+
+- The gain grows with the noise: none shown at 0.003 (both near zero), 20 to 14 at 0.004 (not
+  significant), 206 to 70 at 0.005. At higher noise BP's fixed priors are furthest from the
+  truth of a shot, and the head has most to tell it.
+- The network and head take 22.1 ms per shot one at a time on the laptop's GPU (20.6 ms at
+  p = 0.003). The decode times of the two arms come from runs with different numbers of
+  processes (3 and 12) on a shared machine and are not compared here; the iterations are.
+- These knobs were never fitted at 0.005 or 0.003, and nothing was changed after these
+  numbers were seen.
+
+## What is tested, what is not, and what is left
+
+`test_predecoder.py`, 18 tests (`python -m pytest -p no:cacheprovider test_kit.py neural predecoder`:
+92 pass, `logs/pytest_kit_neural_predecoder.log`):
+
+- the mapping: on 200 sampled shots H x fired columns = the basis detectors and L x them = the
+  observables, the merged priors equal the kit's, a flipped column breaks the check, and the
+  map is the same at p = 0.003 and 0.005;
+- the head: 122 shapes of 72 columns; untrained, it gives exactly the kit's priors; a torus shift
+  of the shot moves its output with the columns (to 1e-9), and the kit's priors have that symmetry;
+- the priors: mixing and clipping; relay-BP really reads them (told the true faults it converges
+  in its first leg, with fewer iterations); a decoder built per shot repeats itself;
+- the plugin: the truth-shuffle test (the observables permuted between shots change no
+  prediction), the priors relay-BP is built with are the head's mixed and clipped ones, a basis
+  without a head runs the kit's relay-BP;
+- the scripts end to end on a few shots: train, evaluate, compare (three arms; the counts add
+  up), subset and the weighted fit, calibration, the candidate counts, and the refusal of
+  held-out files.
+
+Not tested, or not done:
+
+- **The held-out test files were not used** (the kill line at p = 0.004 did not pass). A run on
+  them, at p = 0.005 or at all, is Sal's call; if it is made, it should run from commit
+  `1bf0e7b` with `logs/fit_X_p0.004.json`, the head and trunk named above, and nothing else
+  changed.
+- **Z memory has no head.** The plugin decodes Z with the kit's relay-BP, so a pair score from
+  the evaluator would mix the two. A Z head needs a Z network (`--logicals light` changes the
+  observables, which `mapping.py` does not handle yet).
+- The GPU path of `train.py` has no test here (this PC has no GPU); it ran on the laptop.
+- BP-OSD with the head's priors (the brief's optional variant) was not tried.
+- The head as a member of `hierarchy/`'s ensemble is only a diagnostic table above; no rule
+  was built or fitted with it.
+- Latencies: the per-shot times above come from busy machines with different process counts;
+  only the iteration counts compare cleanly.

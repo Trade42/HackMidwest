@@ -203,3 +203,15 @@ def test_a_per_shot_file_that_disagrees_is_refused(tmp_path):
     np.savez(file, **arrays)
     done = run("report.make_tables", data, tmp_path)
     assert done.returncode == 1 and "disagrees with summary.json" in done.stderr
+
+
+def test_the_documents_hold_the_generated_tables():
+    """Each table block of the committed documents holds exactly the table file make_tables wrote."""
+    import re
+    for name in ("REPORT.md", "APPENDIX.md", "SLIDES.md"):
+        text = (REPORT / name).read_text(encoding="utf-8")
+        blocks = re.findall(r"<!-- BEGIN table:(\S+) -->\n(.*?)<!-- END table:\1 -->", text, re.S)
+        assert len(blocks) == text.count("<!-- BEGIN table:"), name
+        for table, body in blocks:
+            assert body.strip(), f"{name}: the table {table} is empty"
+            assert body.rstrip("\n") == (REPORT / "tables" / f"{table}.md").read_text(encoding="utf-8").rstrip("\n"), f"{name}: {table}"

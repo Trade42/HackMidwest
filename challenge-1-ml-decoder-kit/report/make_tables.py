@@ -467,13 +467,15 @@ def ladder_tables(combined):
         if priortilt_share is not None:
             head += (f"Of the drop from relay-BP to our decoder, {priortilt_share:.0%} is already there with PriorTilt run once; the hierarchy around it "
                      f"gives the rest. ")
-        arm = f"As an ablation, with the best hand-written tie-break ({pooled['rule']}) in place of the network, the hierarchy fails {pooled['aw']}: "
+        arm = (f"As an ablation, with the best hand-written tie-break ({pooled['rule']}) in place of the network, the hierarchy fails {pooled['aw']} "
+               f"(only the network rule fails {plural(pooled['only_network'])}, only the hand-written rule {pooled['only_weight']}, "
+               f"exact p = {stats.p_text(p_value)}): ")
         if verdict == "better":
-            framing = head + arm + (f"the network adds a further {further:.1%}, closing {gap:.0%} of the gap to a perfect tie-break. " + counts)
+            framing = head + arm + f"the network adds a further {further:.1%}, closing {gap:.0%} of the gap to a perfect tie-break."
         elif verdict == "worse":
-            framing = head + arm + "the network does worse than the hand-written rule on the test shots. " + counts
+            framing = head + arm + "the network does worse than the hand-written rule on the test shots."
         else:
-            framing = head + arm + "the network is no better than the hand-written rule (no significant difference). " + counts
+            framing = head + arm + "the network is no better than the hand-written rule."
         for name, value in (("levels", levels), ("R", pooled["R"]), ("P1", pooled["P1"]), ("aw", pooled["aw"]), ("a", pooled["a"]),
                             ("floor", pooled["floor"]), ("only_network", pooled["only_network"]), ("only_weight", pooled["only_weight"]),
                             ("p", stats.p_text(p_value)), ("further", f"{further:.1%}"), ("gap_closed", f"{gap:.0%}"),
@@ -1460,7 +1462,7 @@ def time_words(row):
 
 def findings(measured):
     """The paragraph "what the numbers say" of REPORT.md: the framing, our decoder against relay-BP at each p, and TCBP-JOBS."""
-    parts = [] if FACTS.get("framing", (NOT_MEASURED,))[0] == NOT_MEASURED else [FACTS["framing"][0]]
+    parts = []
     sentences = []
     for p in P_VALUES:
         ours, relay = measured[p].get("hierarchy"), measured[p].get(REFERENCE)
@@ -1474,21 +1476,18 @@ def findings(measured):
         mine, theirs = time_words(ours), time_words(relay)
         if mine:
             text += f", in {mine}" + (f" against relay-BP's {theirs}" if theirs else "")
-        priortilt = measured[p].get("priortilt")
-        if priortilt is not None:
-            text += (f"; PriorTilt run once fails {priortilt['failures_pair']}"
-                     + (f" in {time_words(priortilt)}" if time_words(priortilt) else " (offline, no time)"))
         parallel = measured[p].get("hierarchy-parallel")
         if time_words(parallel):
-            text += f"; with its two fast decodes side by side on two cores, {time_words(parallel)}"
+            text += f", or {time_words(parallel)} with its two fast decodes side by side on two cores"
+        priortilt = measured[p].get("priortilt")
+        if priortilt is not None and not priortilt.get("offline") and time_words(priortilt):
+            text += f"; PriorTilt run once fails {priortilt['failures_pair']} in {time_words(priortilt)}"
         sentences.append(text)
     if sentences:
-        parts.append("On the test shots, " + "; ".join(sentences) + ".")
+        parts.append("Timed rows, against relay-BP's timed row (one decoder through all 10,000 shots): " + "; ".join(sentences) + ".")
     else:
         parts.append("Our decoder's rows on the test shots are not measured yet.")
-    parts.append(FACTS["tcbp_statement"][0])
-    parts.append(FACTS["ensemble_statement"][0])
-    fact("findings", " ".join(parts), "tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md")
+    fact("findings", " ".join(parts), "tables/test_p0.003.md, test_p0.004.md, test_p0.005.md")
 
 
 def ensemble_statement(measured, combined):
@@ -1624,8 +1623,11 @@ def inject(tables):
             continue
         text = document.read_text(encoding="utf-8")
         for name, table in tables.items():
-            pattern = re.compile(rf"(<!-- BEGIN table:{re.escape(name)} -->\n).*?(\n<!-- END table:{re.escape(name)} -->)", re.S)
-            text = pattern.sub(lambda found: found.group(1) + table + found.group(2), text)
+            pattern = re.compile(rf"(<!-- BEGIN table:{re.escape(name)} -->\n)(?:.*?\n)?(<!-- END table:{re.escape(name)} -->)", re.S)
+            text = pattern.sub(lambda found: found.group(1) + table.rstrip("\n") + "\n" + found.group(2), text)
+        empty = re.findall(r"<!-- BEGIN table:(\S+) -->\n<!-- END table:", text)
+        if empty:
+            raise Mismatch(f"{document.name}: tables left empty: {empty}")
         missing = sorted(set(re.findall(r"<!-- BEGIN table:(\S+) -->", text)) - set(tables))
         if missing:
             raise Mismatch(f"{document.name} asks for tables that do not exist: {missing}")

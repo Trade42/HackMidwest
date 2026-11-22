@@ -1,1 +1,9 @@
 2026-11-22T14:01:28Z NOML: the hierarchy without the network, after TEST RUN END; frozen fd3aed3c0d1f2e9e8bd181bd22c9853a19e2dfc5 [CPUs in use 0.2, tokens 0, throttled so far 4845.0 s, load 2.69]
+2026-11-22T16:19:40Z NOML ROWS END. Exit codes:
+  eval_p0.005_hierarchy-converged: 0
+  eval_p0.005_hierarchy-converged-parallel: 0
+  eval_p0.005_hierarchy-weight: 0
+  eval_p0.004_hierarchy-converged-parallel: 0
+  eval_p0.004_hierarchy-weight: 0
+  eval_p0.003_hierarchy-converged-parallel: 0
+  eval_p0.003_hierarchy-weight: 0

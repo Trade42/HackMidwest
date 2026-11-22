@@ -12,4 +12,3 @@ parts X_p0.004_s5e-4/blind $D/X_p0.004_s5e-4_seed2200.npz blind 400 100
 parts X_p0.004_s5e-4/aware $D/X_p0.004_s5e-4_seed2200.npz starter,starter@0.5/stop1 5000 1000
 parts X_p0.004_s2e-4/blind $D/X_p0.004_s2e-4_seed2100.npz blind 1500 500
 parts X_p0.004_s2e-4/aware $D/X_p0.004_s2e-4_seed2100.npz starter,starter@0.5/stop1 8000 2000
-loss/runs/L5_flicker.sh

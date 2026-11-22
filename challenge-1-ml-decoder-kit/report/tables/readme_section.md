@@ -1,7 +1,7 @@
 ## Our part: a hierarchical decoder with a learned tie-breaker, and a study of atom loss
 
 Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural
-network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). The hierarchy is the result (5 failed pairs for relay-BP, 3 for the hierarchy, over p = 0.003); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 3 pairs and the network 4; only the network rule fails 1 pairs, only the classical rule 0, exact p = 1.00.
+network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). The hierarchy is the result (5 failed pairs for relay-BP, 3 for the hierarchy, over p = 0.003); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 3 pairs and the network 4; only the network rule fails 1 pair, only the classical rule 0, exact p = 1.00.
 Under atom loss (our own simplified model), relay-BP with the loss flags fails 4.4% of shots where a loss-blind one
 fails 57.7%, and an ORACLE told when each atom was lost fails 1.64 times fewer still: the ceiling for a loss-time tracker (`loss/`).
 

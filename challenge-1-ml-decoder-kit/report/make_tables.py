@@ -432,8 +432,9 @@ def ladder_tables(combined):
         discordant = pooled["only_network"] + pooled["only_weight"]
         p_value = float(binomtest(pooled["only_network"], discordant).pvalue) if discordant else 1.0
         levels = ", ".join(pooled["levels"])
-        counts = (f"The classical tie-break ({pooled['rule']}) fails {pooled['aw']} pairs and the network {pooled['a']}; only the network rule fails "
-                  f"{pooled['only_network']} pairs, only the classical rule {pooled['only_weight']}, exact p = {stats.p_text(p_value)}.")
+        plural = lambda count: f"{count} pair" + ("" if count == 1 else "s")
+        counts = (f"The classical tie-break ({pooled['rule']}) fails {plural(pooled['aw'])} and the network {pooled['a']}; only the network rule fails "
+                  f"{plural(pooled['only_network'])}, only the classical rule {pooled['only_weight']}, exact p = {stats.p_text(p_value)}.")
         ablation.append([levels + " together", "pairs (the kit's score)", "", pooled["aw"], pooled["a"],
                          f"{pooled['only_network']} / {pooled['only_weight']}", stats.p_text(p_value)])
         further = 1 - pooled["a"] / pooled["aw"] if pooled["aw"] else 0.0

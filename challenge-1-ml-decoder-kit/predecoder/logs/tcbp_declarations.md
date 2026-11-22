@@ -67,3 +67,22 @@ from the head were involved.
   from job 1, so that model fit is no confound in head against fresh. `--batch-check` also decodes the kit's priors
   with one decoder built once and `decode_batch` on the same model. Fresh against batch then measures batch against
   one shot at a time, and job 1's fresh against job 3's fresh measures one model fit against another.
+
+## 2b. The arm for the test run: (a), on Sal's word (recorded 2026-11-22 15:40 UTC)
+
+The orchestrator (dq-orch-6) relayed Sal, 15:36 UTC, verbatim: "but like why are we even using relay bp!!! didnt i say we
+just use tcbp for everything that relay bp was used for." Arm (b2) contains relay-BP, so **(a) TH, TCBP-JOBS with the
+head's priors, is the arm for the test run.** (b2) is computed and reported beside it, but it is not a candidate.
+What was known when this was written:
+- the head arm's count on validation_X p = 0.005, from job 3's log: 33 of 5,000;
+- the same run's fresh arm: 100 of 5,000.
+(b2)'s validation number had not been computed, and the per-shot file had not yet arrived. The kill line of §2
+(TH against the stored TCBP-JOBS file, 91, paired, exact two-sided p < 0.05) is read on the per-shot file before the
+test run is registered.
+
+## 3. The test runs (15:52 UTC)
+
+Registered in `logs/tcbp_test_registered_spec.md` before any number of them exists. Z (run 3) is one job with a gate
+inside it (dq-orch-6, 15:49 UTC): X's frozen knobs, no Z fit; validation_Z first; test_Z only if validation_Z beats
+the stored TCBP-JOBS validation_Z file, paired, p < 0.05; then the pair score against TCBP-JOBS's 360. The Z head's
+logits (from dq-predecoder) are recorded here, with their sha256, when they arrive:

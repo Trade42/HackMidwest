@@ -501,6 +501,11 @@ def score_command(args):
         if not np.array_equal(relay["truth"], truth):
             raise SystemExit(f"{args.relay_head} was not made from {args.data}")
         arms["relay-BP, head priors per shot (H)"] = check("H", relay["predicted_head"], relay["failed_head"] > 0)
+        if args.tcbp:
+            with np.load(args.tcbp) as file:
+                stored = file["predicted_T"][:shots]
+            frozen = np.where((relay["converged_head"] > 0)[:, None], relay["predicted_head"], stored)
+            arms["the frozen fallback rule: H where H converged, else T (stored)"] = check("rule", frozen)
         if "predicted_head" in ours:
             converged = relay["converged_head"] > 0
             chosen = np.where(converged[:, None], relay["predicted_head"], ours["predicted_head"])

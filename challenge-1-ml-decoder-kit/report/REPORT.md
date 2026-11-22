@@ -84,7 +84,9 @@ shots wrong and <!--f:netalone4_Z-->4.3%<!--/f--> of Z-memory shots, where relay
 It is asked which of two or three given answers is more likely, on the few shots where the fast decoders disagree.
 That is an easier question, and one where the classical score is weak: among 16 relay-BP candidates the right answer
 is present on <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, and the lowest weight picks it on only <!--f:cand_lowest-->71<!--/f-->
-(exploration shots; `APPENDIX.md`, "What we measured before building").
+(exploration shots; `APPENDIX.md`, "What we measured before building"). How it turned out: the network clearly beats the
+lowest weight, and on the test shots it is <!--f:abl_verdict-->level with<!--/f--> the best hand-written rule (lowest weight among the candidates
+that converged): <!--f:abl_pooled_a-->494<!--/f--> against <!--f:abl_pooled_aw-->472<!--/f--> failed pairs (section 4, the ablation).
 
 ![The two networks while they train](figures/learning_curves.png)
 

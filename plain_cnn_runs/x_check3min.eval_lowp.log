@@ -1,0 +1,2 @@
+﻿X memory on cuda: 8784 faults, 0.7 M parameters
+p=0.0005: 23.90% of shots wrong, 96.26% of bits right (always-0 guess 73.20%) | p=0.001: 62.84% of shots wrong, 86.17% of bits right (always-0 guess 60.71%) | p=0.002: 95.20% of shots wrong, 65.71% of bits right (always-0 guess 52.34%) | p=0.003: 99.65% of shots wrong, 54.78% of bits right (always-0 guess 50.72%)

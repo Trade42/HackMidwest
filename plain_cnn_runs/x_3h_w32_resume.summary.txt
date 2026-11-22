@@ -1,0 +1,7 @@
+started 2026-11-21T20:27:46.4812637-06:00 pid=36280 args: --basis X --resume C:\Users\salav\Salavat\hackMidwest\runs\x_1h_w32.resumecopy.pt --p-train 0.003,0.004,0.005 --hours 3 --batch 256 --p-report 0.0005,0.001,0.002,0.003,0.004,0.005 --out C:\Users\salav\Salavat\hackMidwest\runs\x_3h_w32_resume.model_X.pt
+python pid=35988
+ended   2026-11-21T20:50:52.5486442-06:00
+exit    -1
+wall    1,386.1 s
+gpu mem baseline 0 MiB, peak 504 MiB (nvidia-smi memory.used, whole GPU, every 2 s, 689 samples)
+gpu util mean 95% over busy samples, max temp 76.48 C

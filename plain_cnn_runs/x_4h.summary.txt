@@ -1,0 +1,7 @@
+started 2026-11-21T18:31:13.8768900-06:00 pid=35224 args: --basis X --hours 4 --out model_X.pt
+python pid=18552
+ended   2026-11-21T19:26:48.4323047-06:00
+exit    -1
+wall    3,334.6 s
+gpu mem baseline 0 MiB, peak 4966 MiB (nvidia-smi memory.used, whole GPU, every 2 s, 1658 samples)
+gpu util mean 100% over busy samples, max temp 78.37 C

@@ -1,0 +1,7 @@
+started 2026-11-21T19:27:11.7737276-06:00 pid=26924 args: --basis X --hours 1 --width 32 --depth 2 --batch 256 --p-report 0.0005,0.001,0.002,0.003,0.004,0.005 --out C:\Users\salav\Salavat\hackMidwest\runs\x_1h_w32.model_X.pt
+python pid=8144
+ended   2026-11-21T20:27:26.7926684-06:00
+exit    0
+wall    3,615.0 s
+gpu mem baseline 0 MiB, peak 272 MiB (nvidia-smi memory.used, whole GPU, every 2 s, 1799 samples)
+gpu util mean 51% over busy samples, max temp 74.3 C

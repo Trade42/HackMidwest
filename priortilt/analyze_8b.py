@@ -78,6 +78,9 @@ def rules(m):
         "majority (ties: lowest weight)": (pred[majority, rows], sec.sum(axis=0)),
         "P1 unless P1 != P2, then lowest weight": (pred[p1_unless, rows], sec[1] + sec[2] + np.where(p1_p2, 0, sec[0])),
         "extra: lowest weight among converged": (pred[lowest_conv, rows], sec.sum(axis=0)),
+        # R is run only where P1 and P2 disagree; there, the lowest weight among the converged candidates
+        "P1 unless P1 != P2, then lowest weight among converged": (
+            pred[np.where(p1_p2, 1, lowest_conv), rows], sec[1] + sec[2] + np.where(p1_p2, 0, sec[0])),
     }
     return out, (r_p1 & p1_p2)
 

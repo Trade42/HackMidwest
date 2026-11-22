@@ -1,0 +1,8 @@
+started 2026-11-21T18:27:23.3759040-06:00 pid=33052 args: --basis X --minutes 3 --width 32 --depth 2 --batch 256
+python pid=35180
+ended   2026-11-21T18:30:37 (log mtime; summary step crashed on an nvidia-smi '[Unknown Error]' field, filled in by hand)
+exit    0 (no stderr)
+wall    193.8 s job (about 12 s DEM setup, 180 s training, final report)
+gpu mem baseline 0 MiB, peak 211 MiB (nvidia-smi memory.used, every 2 s, 93 samples)
+gpu util mean 51% over busy samples, max temp 69 C
+model moved to runs\x_check3min.model_X.pt

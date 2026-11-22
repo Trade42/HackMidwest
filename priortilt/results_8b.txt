@@ -10,6 +10,7 @@
      majority (ties: lowest weight)               73  0.292%   271.1 ms
      P1 unless P1 != P2, then lowest weight       77  0.308%   118.0 ms
      extra: lowest weight among converged         68  0.272%   271.1 ms
+     P1 unless P1 != P2, then lowest weight among converged   67  0.268%   118.0 ms
   unconverged: R 57, P1 29, P2 18 | data sha256 b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d, 98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc
 basis Z (validation_Z + train_Z): 25000 shots
   a. P1 against P2: both fail 64, P1 only 42, P2 only 43, both right 24851 (McNemar exact p = 1)
@@ -23,6 +24,7 @@ basis Z (validation_Z + train_Z): 25000 shots
      majority (ties: lowest weight)               85  0.340%   283.6 ms
      P1 unless P1 != P2, then lowest weight       85  0.340%   130.6 ms
      extra: lowest weight among converged         81  0.324%   283.6 ms
+     P1 unless P1 != P2, then lowest weight among converged   73  0.292%   130.6 ms
   unconverged: R 45, P1 29, P2 37 | data sha256 843c4daf24e2b56c5988670550bbcdbac8f50b18dbb9d24beb64969146cb8e20, 14dce11586fa51256f476224d0fe3965e0562f2d8f68cba6192883a65fb6b24a
 pooled (validation_X + train_X + validation_Z + train_Z): 50000 shots
   a. P1 against P2: both fail 120, P1 only 88, P2 only 69, both right 49723 (McNemar exact p = 0.151)
@@ -36,4 +38,5 @@ pooled (validation_X + train_X + validation_Z + train_Z): 50000 shots
      majority (ties: lowest weight)              158  0.316%   277.4 ms
      P1 unless P1 != P2, then lowest weight      162  0.324%   124.3 ms
      extra: lowest weight among converged        149  0.298%   277.4 ms
+     P1 unless P1 != P2, then lowest weight among converged  140  0.280%   124.3 ms
   unconverged: R 102, P1 58, P2 55 | data sha256 all

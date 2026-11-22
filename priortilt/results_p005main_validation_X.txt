@@ -10,7 +10,9 @@
      majority (ties: lowest weight)              130  2.600%  1267.7 ms
      P1 unless P1 != P2, then lowest weight      129  2.580%   536.5 ms
      extra: lowest weight among converged        109  2.180%  1267.7 ms
+     P1 unless P1 != P2, then lowest weight among converged  108  2.160%   536.5 ms
   unconverged: R 121, P1 41, P2 34 | data sha256 25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312
+=== network selection, step 40000
 X memory, p = 0.005, 5000 shots (validation_X, results_p005main); network = checkpoint_step40000.pt; network batch-one latency 17.8 ms (beside the trainer)
 not-all-equal set: 242 shots; with at least one right candidate: 188; all three wrong: 75
 rule                                         failures   error   right pick when one existed (not-all-equal set)   ms/shot
@@ -33,6 +35,7 @@ inside the network's most confident shots (confidence = smallest |logit| of the 
   top  25% (1250 shots): network fails 14, R fails 4, P1 fails 1, P2 fails 3
   top  50% (2500 shots): network fails 348, R fails 19, P1 fails 12, P2 fails 17
 Constants C, and any threshold read here, are fitted to these shots.
+=== network selection, step 50000
 X memory, p = 0.005, 5000 shots (validation_X, results_p005main); network = checkpoint_step50000.pt; network batch-one latency 17.7 ms (beside the trainer)
 not-all-equal set: 242 shots; with at least one right candidate: 188; all three wrong: 75
 rule                                         failures   error   right pick when one existed (not-all-equal set)   ms/shot
@@ -55,6 +58,7 @@ inside the network's most confident shots (confidence = smallest |logit| of the 
   top  25% (1250 shots): network fails 10, R fails 5, P1 fails 2, P2 fails 5
   top  50% (2500 shots): network fails 115, R fails 13, P1 fails 5, P2 fails 9
 Constants C, and any threshold read here, are fitted to these shots.
+=== network selection, step 60000
 X memory, p = 0.005, 5000 shots (validation_X, results_p005main); network = checkpoint_step60000.pt; network batch-one latency 17.7 ms (beside the trainer)
 not-all-equal set: 242 shots; with at least one right candidate: 188; all three wrong: 75
 rule                                         failures   error   right pick when one existed (not-all-equal set)   ms/shot

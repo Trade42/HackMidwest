@@ -95,6 +95,36 @@
    "factor": 0.7,
    "uniform_p": null,
    "loss": false,
+   "decoder": "relay",
+   "priors": "generic-2q",
+   "flags": null,
+   "picture": "generic, same two-qubit error (p = 0.0104)",
+   "shots": 50,
+   "failures": 2,
+   "fraction": 0.04,
+   "wilson_low": 0.011038884228173514,
+   "wilson_high": 0.13460090793615148,
+   "per_cycle": 0.003396053198917559,
+   "unconverged": 2,
+   "mean_iterations": 2801.02,
+   "median_iterations": 464.5,
+   "mean_ms": 2255.672031166032,
+   "shots_file": "X_f0.7_seed4100.npz",
+   "seed": 4100,
+   "shots_sha256": "f0d885fdfbdbc183eee7f75e079e23e3a09cbef84492f6967dda8c4325c55609",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "X",
+   "factor": 0.7,
+   "uniform_p": null,
+   "loss": false,
    "decoder": "bposd",
    "priors": "matched",
    "flags": null,
@@ -512,6 +542,27 @@
   }
  ],
  "paired": [
+  {
+   "basis": "X",
+   "factor": 0.7,
+   "uniform_p": null,
+   "loss": false,
+   "decoder": "relay",
+   "flags": null,
+   "generic": "generic, same two-qubit error (p = 0.0104)",
+   "generic_priors": "generic-2q",
+   "shots": 50,
+   "a_failures": 2,
+   "b_failures": 0,
+   "only_a": 2,
+   "only_b": 0,
+   "p": 0.5,
+   "iterations_generic": 2801.02,
+   "iterations_matched": 635.62,
+   "unconverged_generic": 2,
+   "unconverged_matched": 0,
+   "better_generic": true
+  },
   {
    "basis": "X",
    "factor": 0.7,

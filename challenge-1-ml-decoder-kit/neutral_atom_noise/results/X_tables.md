@@ -3,6 +3,7 @@
 | X | 0.6 | relay-BP | matched | 2 / 2000 | 0.10% (0.027%–0.36%) | 8.34e-05 | 0 | 156 | 155 |
 | X | 0.6 | BP-OSD | matched | 5 / 2000 | 0.25% (0.11%–0.58%) | 2.09e-04 | 558 | 38 | 319 |
 | X | 0.7 | relay-BP | matched | 13 / 2000 | 0.65% (0.38%–1.11%) | 5.43e-04 | 4 | 398 | 255 |
+| X | 0.7 | relay-BP | generic, same two-qubit error (p = 0.0104) | 2 / 50 | 4.00% (1.10%–13.46%) | 3.40e-03 | 2 | 2801 | 2256 |
 | X | 0.7 | BP-OSD | matched | 31 / 2000 | 1.55% (1.09%–2.19%) | 1.30e-03 | 840 | 49 | 456 |
 | X | 0.7 | BP-OSD | generic, same two-qubit error (p = 0.0104) | 227 / 2000 | 11.35% (10.03%–12.81%) | 9.99e-03 | 1681 | 74 | 1193 |
 | X | 0.8 | relay-BP | matched | 39 / 2000 | 1.95% (1.43%–2.65%) | 1.64e-03 | 18 | 978 | 787 |
@@ -22,6 +23,7 @@ Paired, on the same shots (the generic row against the matched row of its point;
 
 | Basis | Factor | Decoder | Generic picture | Shots | Failures: generic, matched | Only generic wrong | Only matched wrong | Exact sign test p | Mean iterations: generic ÷ matched | Unconverged: generic, matched |
 |---|---|---|---|---|---|---|---|---|---|---|
+| X | 0.7 | relay-BP | **generic, same two-qubit error (p = 0.0104)** | 50 | 2, 0 | 2 | 0 | 0.5 | 2801 ÷ 636 = 4.4 | 2, 0 |
 | X | 0.7 | BP-OSD | **generic, same two-qubit error (p = 0.0104)** | 2000 | 227, 31 | 202 | 6 | 5.2e-52 | 74 ÷ 49 = 1.5 | 1681, 840 |
 | X | 0.8 | relay-BP | generic, same two-qubit error (p = 0.0119) | 500 | 112, 9 | 104 | 1 | 5.2e-30 | 8413 ÷ 1113 = 7.6 | 102, 4 |
 | X | 0.8 | relay-BP | **generic, best p on train shots (p = 0.0457)** | 500 | 65, 9 | 57 | 1 | 4.1e-16 | 4626 ÷ 1113 = 4.2 | 54, 4 |

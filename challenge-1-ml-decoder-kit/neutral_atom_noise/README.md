@@ -53,6 +53,23 @@ every rate set to the kit's uniform p, our circuit and its error model equal the
 matrix. Between two rows of a table the only thing that differs is the list of probabilities the decoder is
 given.
 
+## What the tables show
+
+A "failure" is a run of 12 rounds after which at least one of the 12 stored logical bits comes out wrong. All
+numbers are for X memory; every comparison is on the same shots.
+
+1. **Knowing the shape cuts failures several times over.** At factor 0.8 (0.8 of the published rates), on the
+   same 2,000 shots BP-OSD fails 91 times with matched priors and 442 times with the best generic picture we could
+   fit; relay-BP, on 500 shots, 9 times against 65. Shots that only the matched decoder gets wrong are rare (21 and
+   1). The wrong picture also makes relay-BP work about 4 times harder per shot. The generic picture's mistake is
+   specific: it expects faults that spread from one check atom onto several data atoms ("hook" faults), and this
+   hardware hardly makes them.
+2. **What loss flags add** (question 2): *(running; see RESULTS.md, question 2)*
+3. **Where the code starts to work.** With matched priors relay-BP fails 0.1% of runs at factor 0.6, 2% at 0.8,
+   6% at 0.9 and 17% at factor 1. So the code works from about 0.9 of the published rates down. **The published
+   figures themselves sit just above that range, and today's machine further above it**, because this model leaves
+   out atom loss, leakage, atom moves and the mid-circuit readout their machine does not yet have.
+
 ## What the tables do not show
 
 - **A model, not a machine.** The figures come from Infleqtion's papers; the model is ours. Where a paper gives no

@@ -1,0 +1,97 @@
+{
+ "rates": [
+  {
+   "basis": "Z",
+   "factor": 0.7,
+   "uniform_p": null,
+   "loss": false,
+   "decoder": "relay",
+   "priors": "matched",
+   "flags": null,
+   "picture": "matched",
+   "shots": 2000,
+   "failures": 3,
+   "fraction": 0.0015,
+   "wilson_low": 0.0005102635796742398,
+   "wilson_high": 0.004401032589829253,
+   "per_cycle": 0.00012508601994698498,
+   "unconverged": 1,
+   "mean_iterations": 193.0235,
+   "median_iterations": 80.5,
+   "mean_ms": 148.40251164254732,
+   "shots_file": "Z_f0.7_seed4200.npz",
+   "seed": 4200,
+   "shots_sha256": "f4190da2df2c11f2e2a45f8266affd28151436de7a2746815f79d00a9b9b152d",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "Z",
+   "factor": 0.7,
+   "uniform_p": null,
+   "loss": false,
+   "decoder": "bposd",
+   "priors": "matched",
+   "flags": null,
+   "picture": "matched",
+   "shots": 2000,
+   "failures": 14,
+   "fraction": 0.007,
+   "wilson_low": 0.004174346039251089,
+   "wilson_high": 0.011715862609826587,
+   "per_cycle": 0.0005852132739561089,
+   "unconverged": 788,
+   "mean_iterations": 45.689,
+   "median_iterations": 38.0,
+   "mean_ms": 416.28627861943096,
+   "shots_file": "Z_f0.7_seed4200.npz",
+   "seed": 4200,
+   "shots_sha256": "f4190da2df2c11f2e2a45f8266affd28151436de7a2746815f79d00a9b9b152d",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  },
+  {
+   "basis": "Z",
+   "factor": 0.8,
+   "uniform_p": null,
+   "loss": false,
+   "decoder": "relay",
+   "priors": "matched",
+   "flags": null,
+   "picture": "matched",
+   "shots": 2000,
+   "failures": 13,
+   "fraction": 0.0065,
+   "wilson_low": 0.003802596478352303,
+   "wilson_high": 0.011089529218036812,
+   "per_cycle": 0.0005432871152698526,
+   "unconverged": 2,
+   "mean_iterations": 422.192,
+   "median_iterations": 110.0,
+   "mean_ms": 297.07792859198526,
+   "shots_file": "Z_f0.8_seed4200.npz",
+   "seed": 4200,
+   "shots_sha256": "6810ee9bda124bd122e78d23f971147f84126881e1577e8384c1850427b0ba73",
+   "shots_machine": "luminaty",
+   "decode_machines": [
+    "luminaty"
+   ],
+   "workers": [
+    4
+   ]
+  }
+ ],
+ "paired": [],
+ "flags": [],
+ "fit": {}
+}

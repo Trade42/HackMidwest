@@ -1,0 +1,14 @@
+Log file: /home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/results/tcbp-jobs_p0.004_shots10000_seed1_20261122_041245_602502+0000.log
+Started: 2026-11-22T04:12:45.605246+00:00
+Host: jupyter-blakew3
+Command: /home/blakew3/envs/decoder-py312/bin/python tcbp_jobs_baseline.py --p 0.004 --shots 10000 --seed 1
+Traceback (most recent call last):
+  File "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/tcbp_jobs_baseline.py", line 147, in main
+    run(args)
+  File "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/tcbp_jobs_baseline.py", line 111, in run
+    decoder, fit, build = tcbp_jobs(ex.H, ex.priors, args.preset, overrides)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/tcbp_jobs_baseline.py", line 72, in tcbp_jobs
+    import cudaq_qec as qec
+ModuleNotFoundError: No module named 'cudaq_qec'
+Total wall time (includes setup and fitting): 7.032 s

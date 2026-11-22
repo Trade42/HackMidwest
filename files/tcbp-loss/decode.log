@@ -35,3 +35,11 @@ files ['X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz', 'X_f0.6_loss_s
   late block f0.4 500-599 done, 567 s; failures so far bh 58 of 600
   late block f0.6 500-599 done, 576 s; failures so far bh 416 of 600
   late block f0.4 600-699 done, 583 s; failures so far bh 65 of 700
+  late block f0.6 600-699 done, 592 s; failures so far bh 491 of 700
+  late block f0.4 700-799 done, 599 s; failures so far bh 75 of 800
+  late block f0.6 700-799 done, 608 s; failures so far bh 568 of 800
+  late block f0.4 800-899 done, 615 s; failures so far bh 85 of 900
+  late block f0.6 800-899 done, 625 s; failures so far bh 634 of 900
+  late block f0.4 900-999 done, 631 s; failures so far bh 93 of 1000
+  late block f0.6 900-999 done, 641 s; failures so far bh 706 of 1000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-loss/out-211cfbb/decode: f0.4 main 1000 late 1000, f0.6 main 1000 late 1000; 641 s

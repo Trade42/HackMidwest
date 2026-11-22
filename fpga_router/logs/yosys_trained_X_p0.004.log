@@ -1,5 +1,6 @@
-# $ yosys -p "read_verilog -Itrained_X_p0.004 router_top.v router_core.v router_frontend.v uart_rx.v uart_tx.v; synth_xilinx -family xc7 -top router_top; stat"
-# Yosys 0.71+77, Xilinx 7 series, not placed and routed. The last section of its printout:
+# fpga_router as committed now (with the EASY_ITER rule; EASY_ITER = 0 in standin/), weights of trained_X_p0.004/, 2026-11-22T10:54Z, luminaty
+# Yosys 0.71+77, Xilinx 7 series, not placed and routed. From fpga_router/:
+$ yosys -p "read_verilog -Itrained_X_p0.004 router_top.v router_core.v router_frontend.v uart_rx.v uart_tx.v; synth_xilinx -family xc7 -top router_top; stat"
 
 === design hierarchy ===
 
@@ -44,4 +45,4 @@
         1   $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
         1   $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
 
-Warnings: 483 unique messages, 27073 total
+

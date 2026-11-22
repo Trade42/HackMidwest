@@ -40,11 +40,16 @@ Simulated (Verilator 5.055), from fpga_router/:
   80 ns. The serial link costs far more: 123 bytes x 10 bits / 115,200 baud = 10.7 ms in, 6 bytes = 0.52 ms out.
   These cover the router alone, not relay-BP, which runs on the host.
 
-Synthesised (Yosys synth_xilinx -family xc7, not placed and routed; the XC7S50 has 32,600 LUTs, 65,200 flip-flops,
-120 DSP slices and 75 blocks of 36 Kb, per AMD's DS180):
-  stand-in weights   1,105 LUTs, 611 flip-flops, 16 DSP48E1, no block RAM        logs/baseline_as_committed.log
-  trained weights    1,145 LUTs (+1 SRL16E), 662 flip-flops, 15 DSP48E1, none   logs/yosys_trained_X_p0.004.log
-  (LUTs = LUT2..LUT6 cells; flip-flops = FDRE + FDSE. One trained weight is a power of two, so Yosys used a shift.)
+Synthesised (Yosys 0.71+77, synth_xilinx for the Xilinx 7 series, not placed and routed; the XC7S50 has 32,600 LUTs,
+65,200 flip-flops, 120 DSP slices and 75 blocks of 36 Kb, per AMD's DS180). From fpga_router/, with FOLDER = standin
+or trained_X_p0.004:
+  yosys -p "read_verilog -IFOLDER router_top.v router_core.v router_frontend.v uart_rx.v uart_tx.v; synth_xilinx -family xc7 -top router_top; stat"
+  as merged with PR #1, stand-in weights    1,105 LUTs, 611 flip-flops, 16 DSP48E1, no block RAM
+                                             logs/baseline_as_committed.log (then the weights were in this folder: -I.)
+  now, stand-in weights (-Istandin)         1,106 LUTs (+1 SRL16E), 611 flip-flops, 16 DSP48E1, none   logs/yosys_standin.log
+  now, trained weights (-Itrained_X_p0.004) 1,145 LUTs (+1 SRL16E), 662 flip-flops, 15 DSP48E1, none   logs/yosys_trained_X_p0.004.log
+  (LUTs = LUT1..LUT6 cells; flip-flops = FDRE + FDSE. The easy-shot rule adds the SRL16E, a 3-clock delay of one bit.
+  One trained weight is a power of two, so Yosys used a shift instead of a DSP slice.)
 
 The trained router (python train_router.py ../challenge-1-ml-decoder-kit 0.004 X trained_X_p0.004;
 logs/train_X_p0.004.log, trained_X_p0.004/report.json). X memory, p = 0.004; train = data/p0.004/train_X.npz

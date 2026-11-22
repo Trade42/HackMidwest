@@ -1,0 +1,48 @@
+# fpga_router as committed now (with the EASY_ITER rule; EASY_ITER = 0 in standin/), weights of standin/, 2026-11-22T10:53Z, luminaty
+# Yosys 0.71+77, Xilinx 7 series, not placed and routed. From fpga_router/:
+$ yosys -p "read_verilog -Istandin router_top.v router_core.v router_frontend.v uart_rx.v uart_tx.v; synth_xilinx -family xc7 -top router_top; stat"
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+     1882 router_top
+      758 $paramod$854202ad64bf9c46483109b2872aa345043f9b24\router_core
+      787 $paramod\router_frontend\XW=s32'00000000000000000000000000010000
+       70 $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+       73 $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+
+        +----------Count including submodules.
+        | 
+     1638 wires
+     5015 wire bits
+       62 public wires
+     1852 public wire bits
+       30 ports
+      654 port bits
+        - memories
+        - memory bits
+        - processes
+     1882 cells
+        1   BUFG
+       80   CARRY4
+       16   DSP48E1
+      598   FDRE
+       13   FDSE
+        2   IBUF
+       47   INV
+       70   LUT2
+      209   LUT3
+      111   LUT4
+      430   LUT5
+      286   LUT6
+        1   MUXF7
+       17   OBUF
+        1   SRL16E
+        4 submodules
+        1   $paramod$854202ad64bf9c46483109b2872aa345043f9b24\router_core
+        1   $paramod\router_frontend\XW=s32'00000000000000000000000000010000
+        1   $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+        1   $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+
+

@@ -11,8 +11,8 @@ Everything comes from one branch: `git fetch origin fpga && git switch fpga` (or
 
 `fpga_board/vivado/urbana_router.xdc` puts `led[8]` on B18 and `led[9]` on A18. RealDigital's own constraints file
 for the Urbana (version V2I1 of 2023-01-03, https://www.realdigital.org/downloads/1f07b1146ec59e165634a5b6c782a17d.txt,
-lines 38-39) has LED 8 on **C17** and LED 9 on **B18**, and A18 is a ground pin of the chip, so Vivado cannot write a
-bitstream with the file as it is. Change those two lines to:
+lines 38-39) has LED 8 on **C17** and LED 9 on **B18**, and A18 is a ground pin of the chip, so Vivado is expected to
+refuse to write a bitstream with the file as it is (expected, not run: there is no Vivado on luminaty). Change those two lines to:
 
 ```
 set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS33} [get_ports {led[8]}]

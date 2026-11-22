@@ -66,7 +66,7 @@ class Run:
     config: dict
     device: torch.device
     model: CascadeDecoder
-    ema_model: CascadeDecoder
+    averaged_model: CascadeDecoder                 # filled from `average` when it is asked for: see ema_model
     optimizer: torch.optim.Optimizer
     scaler: torch.amp.GradScaler
     sampler: DemSampler
@@ -75,6 +75,32 @@ class Run:
     history: list = field(default_factory=list)    # one entry per report
     loss_sum: float = 0.0                          # training loss since the last report
     loss_steps: int = 0
+    average: torch.Tensor = None                   # the moving average of all weights, as one long vector
+    weights: list = None                           # the model's tensors that the average follows
+
+    @property
+    def ema_model(self):
+        """The decoder with the averaged weights.
+
+        The average is kept as one vector, so that a training step updates it with one
+        operation instead of one per tensor. Here it is written into a model. The counters of
+        the normalisation layers (not floating point) are copied from the trained model.
+        """
+        with torch.no_grad():
+            start = 0
+            for tensor in float_tensors(self.averaged_model):
+                tensor.copy_(self.average[start:start + tensor.numel()].view_as(tensor))
+                start += tensor.numel()
+            current = self.model.state_dict()
+            for name, tensor in self.averaged_model.state_dict().items():
+                if not tensor.dtype.is_floating_point:
+                    tensor.copy_(current[name])
+        return self.averaged_model
+
+    def start_average(self, model):
+        """Begin the moving average at the weights of `model`."""
+        self.weights = float_tensors(self.model)
+        self.average = flat(float_tensors(model)).clone()
 
     @property
     def amp_dtype(self):
@@ -83,6 +109,16 @@ class Run:
         if choice == "auto":
             choice = "fp16" if self.device.type == "cuda" else "off"
         return {"fp16": torch.float16, "bf16": torch.bfloat16, "off": None}[choice]
+
+
+def float_tensors(model):
+    """The weights and the normalisation statistics of a model, in a fixed order."""
+    return [tensor for tensor in model.state_dict().values() if tensor.dtype.is_floating_point]
+
+
+def flat(tensors):
+    """One long vector of all the numbers in a list of tensors."""
+    return torch.cat([tensor.reshape(-1) for tensor in tensors])
 
 
 # ---------- schedules: plain functions of the step ----------
@@ -136,6 +172,7 @@ def new_run(config, device):
     sampler = DemSampler(config["code"], config["basis"], config["rounds"], config["detectors"], levels, device)
     run = Run(config, device, model, deepcopy(model), optimizer, None, sampler, torch.Generator(device=device))
     run.scaler = torch.amp.GradScaler(device.type, enabled=run.amp_dtype == torch.float16)
+    run.start_average(model)
     return run
 
 
@@ -158,7 +195,8 @@ def load_checkpoint(path, device, changes=None):
     state = torch.load(path, map_location="cpu", weights_only=True)
     run = new_run(DEFAULTS | state["config"] | (changes or {}), device)   # DEFAULTS fills settings newer than the file
     run.model.load_state_dict(state["model"])
-    run.ema_model.load_state_dict(state["ema_model"])
+    run.averaged_model.load_state_dict(state["ema_model"])
+    run.start_average(run.averaged_model)
     for group in state["optimizer"]["param_groups"]:      # the file may come from a CPU, or from code before "fused"
         group["fused"] = run.optimizer.defaults["fused"]
     run.optimizer.load_state_dict(state["optimizer"])
@@ -217,16 +255,11 @@ def update_average(run):
     """Move the averaged weights a little towards the current ones.
 
     The decay starts small and rises to config["ema"], so that the average of a short run is
-    not stuck at the initial weights. Counters (not floating point) are copied.
+    not stuck at the initial weights.
     """
     decay = min(run.config["ema"], run.step / (run.step + 9))
     with torch.no_grad():
-        current = run.model.state_dict()
-        for name, averaged in run.ema_model.state_dict().items():
-            if averaged.dtype.is_floating_point:
-                averaged.lerp_(current[name], 1 - decay)
-            else:
-                averaged.copy_(current[name])
+        run.average.lerp_(flat(run.weights), 1 - decay)
 
 
 def predict(model, detectors, amp_dtype=None):

@@ -21,6 +21,9 @@ Run every command from `challenge-1-ml-decoder-kit/`.
 | `candidates.py` | decodes a saved shot file with all three decoders and saves every answer |
 | `select.py` | scores the rules offline on such files, alone or with the network's logits |
 | `compare.py` | checks that two candidate files agree shot for shot (two machines, two runs) |
+| `tcbp_member.py` | part 2: TCBP-JOBS (the teammates' GPU decoder) on saved shot files |
+| `joint_member.py` | part 2: joint relay-BP on listed shots |
+| `ensemble.py` | part 2: the members' answers combined offline by one rule |
 | `stages.py` | the three decoders on the kit's problem, and the order they run in |
 | `rules.py` | how a rule chooses; shared by the plugin and by `select.py` |
 | `test_hierarchy.py` | tests |
@@ -324,6 +327,77 @@ relay-BP's 31 failures on this file are now measured on three machines.
 (a plumbing check on validation shots, network rule for X, weight rule for Z; the plugin's
 predictions must equal `select.py` on the session-mode candidates of the same shots, on every
 shot): not measured at the time of writing.
+
+## The ensemble (part 2)
+
+**This part is combined offline from per-shot files. Its time is a sum of stage times taken
+from those files, possibly from different machines. It is not one decoder timed in one
+process, as part 1's row from the team's evaluator is.**
+
+**Why.** The teammates run NVIDIA's TCBP-JOBS (a GPU decoder, `../tcbp_jobs_baseline.py`) as
+a reference. On our exploration shots at p = 0.004 it fails less often than part 1's decoder
+(numbers below). Three candidates cannot pass it: part 1's floor with a perfect tie-breaker
+is 50 failures in 25,000 X shots. What can is more members whose mistakes differ, and a good
+choice among them. The claim under test: **the ensemble fails fewer shots than TCBP-JOBS
+alone, on the same shots.**
+
+**The members.**
+
+| name | decoder | runs on | made by |
+|---|---|---|---|
+| P1, P2 | PriorTilt under two seeds | every shot | `candidates.py` |
+| T | TCBP-JOBS, preset `tcbp-jobs` | every shot | `tcbp_member.py` |
+| R | relay-BP, the kit's settings | the shots a rule does not accept at once | `candidates.py` |
+| J | joint relay-BP: the kit's relay-BP on all 1,728 detectors and all about 68,000 mechanisms, a fresh decoder per shot (gate G2's "joint") | the shots where P1, P2 and T are not unanimous | `joint_member.py` |
+| the network | `neural/`, one per basis | the same shots | `neural.evaluate_stim --save` |
+
+**The rules** (`ensemble.py`; none has a fitted number):
+
+| rule | accepts at once | otherwise |
+|---|---|---|
+| a | P1 = P2 | the network picks among R, P1, P2 (part 1's rule) |
+| aw | P1 = P2 | the lowest weight of R, P1, P2 (part 1 without learning) |
+| b | P1 = P2 = T | the network picks among P1, P2, T, R |
+| bw | P1 = P2 = T | the lowest weight of P1, P2, T, R (no learning) |
+| c | P1 = P2 = T | the network picks among P1, P2, T, R and, where it exists, J |
+| d | two of P1, P2, T agree (the majority answers) | the network picks among P1, P2, T, R |
+| e | two of P1, P2, T agree | the network picks among P1, P2, T, R and, where it exists, J |
+
+"The network picks" is part 1's score, among the candidates that decoded the shot. What is
+learned: the network's weights, as in part 1. The rule is chosen on the `train_*` files and
+reported on the `validation_*` files; the tool refuses to mark a rule chosen on the file it
+scores (`--chosen-on`).
+
+**Commands.** `tcbp_member.py` runs in the teammates' TCBP environment (Linux, an NVIDIA
+GPU, `pip install cudaq-qec`; it imports neither torch nor PriorTilt). Everything else runs
+in the environment of part 1.
+
+```sh
+# 1. every member that decodes every shot
+python -m hierarchy.candidates --data data/p0.004 --out runs/cand_p0.004 --processes 12
+<TCBP python> -m hierarchy.tcbp_member --data data/p0.004 --out runs/tcbp_p0.004 --batch      # serial (no --batch) for a time per shot
+python -m neural.evaluate_stim --checkpoint <X checkpoint> --data data/p0.004/validation_X.npz --save runs/net/validation_X
+
+# 2. per shot file: the shots where P1, P2 and T are not unanimous, then joint relay-BP on them
+python -m hierarchy.ensemble --members runs/cand_p0.004/validation_X.chunks.npz runs/tcbp_p0.004/validation_X.tcbp.npz \
+    --write-selection runs/sel_p0.004/validation_X.selection.npz
+python -m hierarchy.joint_member --data data/p0.004/validation_X.npz \
+    --selection runs/sel_p0.004/validation_X.selection.npz --out runs/joint_p0.004 --processes 12
+
+# 3. the tables: the training file first, then the validation file with the rule the training file chooses
+python -m hierarchy.ensemble --members runs/cand_p0.004/train_X.chunks.npz runs/tcbp_p0.004/train_X.tcbp.npz \
+    runs/joint_p0.004/train_X.joint.npz --logits runs/net/train_X.npz --save runs/ens/train_X.json
+python -m hierarchy.ensemble --members runs/cand_p0.004/validation_X.chunks.npz runs/tcbp_p0.004/validation_X.tcbp.npz \
+    runs/joint_p0.004/validation_X.joint.npz --logits runs/net/validation_X.npz --chosen-on runs/ens/train_X.json runs/ens/train_Z.json
+```
+
+`tcbp_member.py --decoder relay` is a plumbing mode without a GPU: the kit's relay-BP stands
+in behind the same two calls, and the output is named `*.relay-plumbing.npz`. A file named
+`test_*` or `go_*` needs `--final` in `candidates.py`, `tcbp_member.py`, `joint_member.py`
+and `neural.evaluate_stim`.
+
+**Numbers.** Not measured at the time of writing: the members' files are being made on the
+server.
 
 ## Physics checks
 

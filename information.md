@@ -492,8 +492,8 @@ row, the ensemble, the loss-time tracker, the predecoder and its TCBP version wi
 report with its plots and its table of every method, the reproduce script and the slides. Left:
 
 1. Retrain the network's small head for each new noise picture and with atom loss (the Z head took about 25 minutes
-   on a laptop GPU). The kit-trained head was tried, unchanged, on the neutral-atom model, on five more noise
-   pictures and with atom loss (exploration, after the test results; `neutral_atom_noise/RESULTS.md` has every arm):
+   on a laptop GPU). The kit-trained head was tried, unchanged, on the neutral-atom model, on three more noise
+   pictures (one of them at two more strengths) and with atom loss (exploration, after the test results; `neutral_atom_noise/RESULTS.md` has every arm):
    it helps on some, is behind the true noise's priors on others, and hurts on Z-biased noise.
 2. The TCBP version with atom loss: the loss flags already enter its per-shot build (tried as exploration, same file);
    a head trained with loss, and the loss tracker's estimate in place of the flags alone, are not tried.

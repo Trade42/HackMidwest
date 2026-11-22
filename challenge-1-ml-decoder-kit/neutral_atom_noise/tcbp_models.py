@@ -160,14 +160,42 @@ def prepare_command(args):
     print(f"wrote {out / 'plan.json'}")
 
 
+def prepare_si1000_command(args):
+    """Extra SI1000 strengths (phase 2b): one task per p, each with its own seed, and a plan of them."""
+    out = Path(args.out)
+    tasks = []
+    for p, seed in zip(args.p, args.seed, strict=True):
+        noise = si1000_noise(p)
+        circuit = with_noise(stim.Circuit.from_file(GROSS_CIRCUITS[BASIS]), noise)
+        detectors, observables = sample(circuit, args.shots, seed)
+        matched, fired = matched_priors_of(circuit)
+        p_generic = round(noise.two_qubit_error(), 7)
+        tasks.append(write_task(out, f"si1000-p{p:g}", detectors, observables, seed, p_generic,
+                                uniform_priors(BASIS, p_generic), matched, fired,
+                                {"model": "SI1000, Gidney et al., Quantum 5, 605 (2021), Table 2", "p": p,
+                                 "noise": noise.as_dict(),
+                                 "left_out": "one-qubit-gate noise (no such gates), resonator idle 2p",
+                                 "stim": stim.__version__}))
+    plan = {"tasks": [{"name": t["task"], "data": f"{t['task']}/{t['converted']}", "generic": f"{t['task']}/priors_generic.npy",
+                       "matched": f"{t['task']}/priors_matched.npy", "transfer": f"{t['task']}/transfer.json"} for t in tasks]}
+    with open(out / "plan.json", "w") as file:
+        json.dump(plan, file, indent=1)
+    print(f"wrote {out / 'plan.json'}")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
     prepare = sub.add_parser("prepare")
     prepare.add_argument("--validation", required=True)
     prepare.add_argument("--out", required=True)
+    extra = sub.add_parser("prepare-si1000")
+    extra.add_argument("--p", type=float, nargs="+", required=True)
+    extra.add_argument("--seed", type=int, nargs="+", required=True)
+    extra.add_argument("--shots", type=int, default=3000)
+    extra.add_argument("--out", required=True)
     args = parser.parse_args(argv)
-    prepare_command(args)
+    {"prepare": prepare_command, "prepare-si1000": prepare_si1000_command}[args.command](args)
 
 
 if __name__ == "__main__":

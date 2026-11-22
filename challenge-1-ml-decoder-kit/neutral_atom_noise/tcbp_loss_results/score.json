@@ -1,0 +1,257 @@
+{
+ "label": "exploration, after the main test results; a separate branch",
+ "files": {
+  "f0.4": {
+   "shots_file": "/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise/runs/X_loss_seed6100/shots/X_f0.4_loss_seed6100.npz",
+   "shots_sha256": "9c225b77e7e5a2913267843ed0e2e11518403fa2e47afcb462eeb2a7600d92fd",
+   "scored_main": 1000,
+   "scored_late": 1000,
+   "rows": {
+    "bm": {
+     "shots": 1000,
+     "failures": 49,
+     "wilson95": [
+      0.037261034647360615,
+      0.06419070150661013
+     ]
+    },
+    "fm": {
+     "shots": 1000,
+     "failures": 0,
+     "wilson95": [
+      2.168404344971009e-19,
+      0.0038267584855551234
+     ]
+    },
+    "fh": {
+     "shots": 1000,
+     "failures": 5,
+     "wilson95": [
+      0.0021375355273244596,
+      0.011650955373375113
+     ]
+    },
+    "bh": {
+     "shots": 1000,
+     "failures": 93,
+     "wilson95": [
+      0.07652372564174531,
+      0.11259125576549656
+     ]
+    },
+    "relay matched + starter": {
+     "shots": 1000,
+     "failures": 0,
+     "wilson95": [
+      2.168404344971009e-19,
+      0.0038267584855551234
+     ]
+    },
+    "relay matched blind": {
+     "shots": 300,
+     "failures": 18,
+     "wilson95": [
+      0.038286369524692054,
+      0.09283944515290843
+     ]
+    },
+    "relay generic-2q + starter": {
+     "shots": 1000,
+     "failures": 3,
+     "wilson95": [
+      0.0010207838811386186,
+      0.008783014053503173
+     ]
+    }
+   },
+   "pairs": [
+    {
+     "a": "fm",
+     "b": "bm",
+     "shots": 1000,
+     "failures_a": 0,
+     "failures_b": 49,
+     "only_a": 0,
+     "only_b": 49,
+     "sign_test_p": 3.552713678800501e-15
+    },
+    {
+     "a": "fh",
+     "b": "fm",
+     "shots": 1000,
+     "failures_a": 5,
+     "failures_b": 0,
+     "only_a": 5,
+     "only_b": 0,
+     "sign_test_p": 0.0625
+    },
+    {
+     "a": "fh",
+     "b": "bh",
+     "shots": 1000,
+     "failures_a": 5,
+     "failures_b": 93,
+     "only_a": 0,
+     "only_b": 88,
+     "sign_test_p": 6.462348535570529e-27
+    },
+    {
+     "a": "fm",
+     "b": "relay matched + starter",
+     "shots": 1000,
+     "failures_a": 0,
+     "failures_b": 0,
+     "only_a": 0,
+     "only_b": 0,
+     "sign_test_p": 1.0
+    },
+    {
+     "a": "bm",
+     "b": "relay matched blind",
+     "shots": 300,
+     "failures_a": 14,
+     "failures_b": 18,
+     "only_a": 3,
+     "only_b": 7,
+     "sign_test_p": 0.34375
+    },
+    {
+     "a": "fh",
+     "b": "relay generic-2q + starter",
+     "shots": 1000,
+     "failures_a": 5,
+     "failures_b": 3,
+     "only_a": 3,
+     "only_b": 1,
+     "sign_test_p": 0.625
+    }
+   ]
+  },
+  "f0.6": {
+   "shots_file": "/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise/runs/X_loss_seed6100/shots/X_f0.6_loss_seed6100.npz",
+   "shots_sha256": "bcdcfdf177d27910b3096a2c1948034e6731fc876d68c861847864361c1e2282",
+   "scored_main": 1000,
+   "scored_late": 1000,
+   "rows": {
+    "bm": {
+     "shots": 1000,
+     "failures": 562,
+     "wilson95": [
+      0.5310701383860444,
+      0.5924553435617469
+     ]
+    },
+    "fm": {
+     "shots": 1000,
+     "failures": 37,
+     "wilson95": [
+      0.026961180875554734,
+      0.05058239748206931
+     ]
+    },
+    "fh": {
+     "shots": 1000,
+     "failures": 242,
+     "wilson95": [
+      0.2164742872986182,
+      0.26950032007992825
+     ]
+    },
+    "bh": {
+     "shots": 1000,
+     "failures": 706,
+     "wilson95": [
+      0.677017384524264,
+      0.7334059909796873
+     ]
+    },
+    "relay matched + starter": {
+     "shots": 1000,
+     "failures": 60,
+     "wilson95": [
+      0.04689647267593196,
+      0.07647107479135655
+     ]
+    },
+    "relay matched blind": {
+     "shots": 100,
+     "failures": 62,
+     "wilson95": [
+      0.5220975529551107,
+      0.7090240074752127
+     ]
+    },
+    "relay generic-2q + starter": {
+     "shots": 150,
+     "failures": 47,
+     "wilson95": [
+      0.24454914102020436,
+      0.3914397502105443
+     ]
+    }
+   },
+   "pairs": [
+    {
+     "a": "fm",
+     "b": "bm",
+     "shots": 1000,
+     "failures_a": 37,
+     "failures_b": 562,
+     "only_a": 2,
+     "only_b": 527,
+     "sign_test_p": 1.5953902492432132e-154
+    },
+    {
+     "a": "fh",
+     "b": "fm",
+     "shots": 1000,
+     "failures_a": 242,
+     "failures_b": 37,
+     "only_a": 208,
+     "only_b": 3,
+     "sign_test_p": 9.515816854066277e-58
+    },
+    {
+     "a": "fh",
+     "b": "bh",
+     "shots": 1000,
+     "failures_a": 242,
+     "failures_b": 706,
+     "only_a": 4,
+     "only_b": 468,
+     "sign_test_p": 3.377584685035798e-133
+    },
+    {
+     "a": "fm",
+     "b": "relay matched + starter",
+     "shots": 1000,
+     "failures_a": 37,
+     "failures_b": 60,
+     "only_a": 9,
+     "only_b": 32,
+     "sign_test_p": 0.000430857042374555
+    },
+    {
+     "a": "bm",
+     "b": "relay matched blind",
+     "shots": 100,
+     "failures_a": 62,
+     "failures_b": 62,
+     "only_a": 6,
+     "only_b": 6,
+     "sign_test_p": 1.0
+    },
+    {
+     "a": "fh",
+     "b": "relay generic-2q + starter",
+     "shots": 150,
+     "failures_a": 44,
+     "failures_b": 47,
+     "only_a": 8,
+     "only_b": 11,
+     "sign_test_p": 0.6476058959960938
+    }
+   ]
+  }
+ }
+}

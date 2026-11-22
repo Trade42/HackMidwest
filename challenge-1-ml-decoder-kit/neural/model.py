@@ -1,0 +1,175 @@
+"""A convolutional decoder that follows the code's own connections, after arXiv:2604.08358 ("Cascade").
+
+Input: the detection events of one memory experiment. Output: one logit per logical
+observable; a positive logit predicts that the observable flipped.
+
+The network keeps a vector of `width` numbers on every check, in every round.
+1. Embedding. Every detection event (0 or 1) becomes a learned vector at its check and round.
+   A place without a detector gets a third learned vector.
+2. `depth` residual blocks. A block narrows the vectors to width / 4, lets every data qubit
+   collect from its six checks, lets every check collect from its six data qubits, and widens
+   the vectors again. A collecting step (`Hop`) has one weight matrix per neighbour and per time
+   offset, used at every position of the torus: a convolution on the code's graph.
+3. Readout. One more step collects on the data qubits. The average over the data qubits that a
+   logical observable reads, and over time, goes through one small network that all observables
+   share.
+
+All tensors keep the channel last: [shots, rounds, nodes, channels].
+"""
+import torch
+from torch import nn
+from torch.nn import functional as F
+
+from neural.graph import build_graph
+
+EVENT_CODES = 3   # per check type: no event, event, no detector at this place
+
+
+class Norm(nn.BatchNorm1d):
+    """Batch normalisation over every axis but the last."""
+
+    def forward(self, x):
+        return super().forward(x.reshape(-1, x.shape[-1])).reshape(x.shape)
+
+
+class Hop(nn.Module):
+    """One step of message passing between checks and data qubits.
+
+    Every target node adds up a linear map of each of its neighbours. The maps differ by
+    neighbour slot, by time offset and by the target's block (X or Z check, left or right data
+    qubit), and are the same at every position of the torus.
+
+    There are two time offsets. The "same" maps act between a data qubit in cycle c and a check
+    in round c, the "after" maps between cycle c and round c + 1. One Linear layer per block of
+    targets reads the six neighbours side by side and returns both results side by side, so it
+    holds 6 x 2 weight matrices.
+    """
+
+    def __init__(self, neighbours, width_in, width_out):
+        super().__init__()
+        targets, slots = neighbours.shape
+        self.register_buffer("neighbours", neighbours.reshape(2, targets // 2 * slots), persistent=False)
+        self.targets_per_block = targets // 2
+        self.linears = nn.ModuleList(nn.Linear(slots * width_in, 2 * width_out) for _ in range(2))
+
+    def messages(self, x):
+        """[..., sources, c] -> (same, after), each [..., targets, c']."""
+        results = []
+        for neighbours, linear in zip(self.neighbours, self.linears, strict=True):
+            side_by_side = x.index_select(-2, neighbours).reshape(*x.shape[:-2], self.targets_per_block, -1)
+            results.append(linear(side_by_side))
+        return torch.cat(results, dim=-2).chunk(2, dim=-1)
+
+    def checks_to_data(self, checks):
+        """[shots, R + 1, checks, c] -> [shots, R, data, c']: cycle c collects from rounds c and c + 1."""
+        same, after = self.messages(checks)
+        return same[:, :-1] + after[:, 1:]
+
+    def data_to_checks(self, data):
+        """[shots, R, data, c] -> [shots, R + 1, checks, c']: round r collects from cycles r and r - 1."""
+        same, after = self.messages(data)
+        # Round 0 has no earlier cycle and round R has no cycle of its own.
+        return torch.cat([same[:, :1], same[:, 1:] + after[:, :-1], after[:, -1:]], dim=1)
+
+
+class Block(nn.Module):
+    """A bottleneck residual block. Normalisation and SiLU come before every linear step."""
+
+    def __init__(self, check_neighbours, data_neighbours, width, bottleneck, branch_scale, scale_skip):
+        super().__init__()
+        narrow = width // bottleneck
+        self.branch_scale, self.scale_skip = branch_scale, scale_skip
+        self.norm_in, self.down = Norm(width), nn.Linear(width, narrow)
+        self.norm_checks, self.to_data = Norm(narrow), Hop(data_neighbours, narrow, narrow)
+        self.norm_data, self.to_checks = Norm(narrow), Hop(check_neighbours, narrow, narrow)
+        self.norm_out, self.up = Norm(narrow), nn.Linear(narrow, width)
+
+    def forward(self, checks):
+        x = self.down(F.silu(self.norm_in(checks)))
+        x = self.to_data.checks_to_data(F.silu(self.norm_checks(x)))
+        x = self.to_checks.data_to_checks(F.silu(self.norm_data(x)))
+        x = self.up(F.silu(self.norm_out(x)))
+        checks = checks.to(x.dtype)   # under mixed precision the whole stream is then half precision
+        if self.scale_skip:
+            return self.branch_scale * checks + x
+        return checks + self.branch_scale * x
+
+
+class CascadeDecoder(nn.Module):
+    """Detection events -> one logit per logical observable.
+
+    detectors="all": the input is every detector of the circuit, in circuit order (1,728 for
+    the Gross code). detectors="basis": the input is the detectors on checks of the memory basis,
+    in the order of circuit.detector_ids (936). The network is the same in both cases: with
+    "basis", the other checks carry the "no detector" vector in every round.
+
+    residual="branch" computes x + f(x) / sqrt(2 depth). residual="skip" computes
+    x / sqrt(2 depth) + f(x), the other reading of the paper's block figure.
+    """
+
+    def __init__(self, code="gross", basis="X", rounds=None, detectors="all", width=128, depth=8,
+                 bottleneck=4, residual="branch"):
+        super().__init__()
+        if detectors not in ("all", "basis") or residual not in ("branch", "skip"):
+            raise ValueError("detectors is 'all' or 'basis'; residual is 'branch' or 'skip'")
+        if width % bottleneck:
+            raise ValueError("width must be a multiple of the bottleneck factor")
+        graph = build_graph(code, basis, rounds)
+        self.config = {"code": code, "basis": basis, "rounds": graph.rounds, "detectors": detectors,
+                       "width": width, "depth": depth, "bottleneck": bottleneck, "residual": residual}
+        self.rounds, self.checks = graph.rounds + 1, 2 * graph.n2
+
+        inputs = torch.arange(graph.num_detectors) if detectors == "all" else torch.from_numpy(graph.basis_detectors)
+        place = torch.from_numpy(graph.detector_round * self.checks + graph.detector_check)
+        check_type = torch.arange(self.checks) // graph.n2
+        self.num_inputs = len(inputs)
+        self.register_buffer("input_place", place[inputs], persistent=False)                       # where every input bit goes
+        self.register_buffer("input_code", EVENT_CODES * check_type[place[inputs] % self.checks], persistent=False)
+        self.register_buffer("empty_code", (EVENT_CODES * check_type + 2).repeat(self.rounds), persistent=False)
+        support = torch.from_numpy(graph.observable_support).float()
+        self.register_buffer("pool", support / support.sum(dim=1, keepdim=True), persistent=False)   # [observables, data]
+
+        check_neighbours = torch.from_numpy(graph.check_neighbours)
+        data_neighbours = torch.from_numpy(graph.data_neighbours)
+        self.embedding = nn.Embedding(2 * EVENT_CODES, width)
+        self.blocks = nn.ModuleList(
+            Block(check_neighbours, data_neighbours, width, bottleneck, (2 * depth) ** -0.5, residual == "skip")
+            for _ in range(depth))
+        self.norm = Norm(width)
+        self.to_data = Hop(data_neighbours, width, width)
+        self.head = nn.Sequential(nn.Linear(width, 2 * width), nn.SiLU(), nn.Linear(2 * width, 1))
+
+    def embed(self, detectors):
+        """[shots, inputs] of 0/1 -> [shots, rounds, checks, width]."""
+        if detectors.shape[1] != self.num_inputs:
+            raise ValueError(f"expected {self.num_inputs} detector bits per shot, got {detectors.shape[1]}")
+        codes = self.empty_code.repeat(len(detectors), 1)
+        codes[:, self.input_place] = self.input_code + detectors.long()
+        return self.embedding(codes).reshape(len(detectors), self.rounds, self.checks, -1)
+
+    def features(self, detectors):
+        """The vectors on the checks after the last block: [shots, rounds, checks, width]."""
+        x = self.embed(detectors)
+        for block in self.blocks:
+            x = block(x)
+        return x
+
+    def readout(self, features):
+        """[shots, rounds, checks, width] -> [shots, observables] logits.
+
+        The paper scatters to the data qubits and then averages over a logical operator's
+        support. Both steps are linear, so the average over time is taken first: the result is
+        the same and the scatter runs on one time slice instead of all of them.
+        """
+        x = F.silu(self.norm(features))
+        averaged = torch.stack([x[:, :-1].mean(dim=1), x[:, 1:].mean(dim=1)], dim=1)   # the rounds c, and the rounds c + 1
+        data = self.to_data.checks_to_data(averaged).squeeze(1)             # [shots, data, width]
+        pooled = torch.matmul(self.pool.to(data.dtype), data)              # [shots, observables, width]
+        return self.head(pooled).squeeze(-1)
+
+    def forward(self, detectors):
+        return self.readout(self.features(detectors))
+
+
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters())

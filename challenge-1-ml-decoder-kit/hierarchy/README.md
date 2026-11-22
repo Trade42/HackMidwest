@@ -32,10 +32,11 @@ What the numbers support, and what they do not:
 - The hierarchy fails clearly less often than relay-BP, in less mean time (paired tests below).
 - The ensemble fails less often than TCBP-JOBS alone on the same shots (11 against 25; paired
   p = 0.008 on X and 0.03 on Z). The rule that does it uses joint decoding and no network.
-- **The network's own gain is not established.** As tie-breaker it beats the plain
-  lowest-weight rule (62 against 77 failures on 25,000 X shots, paired p = 0.006), but against
-  the best rule without learning ("converged") it is level (62 against 67, p = 0.40), and the
-  young Z network is behind it (83 against 73). The test run prints this comparison, paired.
+- **The network's own gain is clear against the plain weight rule and small against the best
+  rule without learning.** On 80,000 fresh X shots held out for this, with the final X
+  network: the network rule fails 237 times, the plain lowest-weight rule 298 (paired 26
+  against 87, p = 7e-9) and the "converged" rule 253 (39 against 55, p = 0.12). The test run
+  prints the same comparison, paired, on the test shots.
 
 Run every command from `challenge-1-ml-decoder-kit/`.
 
@@ -635,10 +636,46 @@ learning, paired; X network of step 60,000, Z network of step 22,000):
 | a against ac (lowest weight among the converged) | 62 against 67; 9 / 14; p = 0.40 | 83 against 73; 19 / 9; p = 0.087 |
 | h against f, 25,000 shots per basis | 30 against 28; 4 / 2 | 30 against 30; 3 / 3 |
 
-So the network beats the simplest rule on X and is not better than the best hand-written
-rule on either basis yet. The plugin therefore takes the network per basis only by the
-frozen procedure of part 1, with the final checkpoints. A larger held-out set for this
-comparison (80,000 fresh X shots) is being decoded; see `HANDOFF.md`.
+On these files the network beat the simplest rule on X and was not better than the best
+hand-written rule. The plugin therefore takes the network per basis only by the frozen
+procedure of part 1; with the final checkpoints it chose the network for both bases (X: 60
+against 67 for "converged"; Z: 68 against 73).
+
+### The network's increment on 80,000 fresh shots (the ablation set)
+
+Made for this comparison and used for nothing else: 16 files of 5,000 X shots at p = 0.004
+from the kit's `make_dataset.py`, seeds 9401 to 9416, made on this PC (sha256 in
+`scratch/hierarchy/ablation/data_sha256.txt`; the files are not in the repository). Decoded
+by `candidates.py --mode session` exactly as the plugin decodes (4 processes on lane C,
+06:54 to 08:55 UTC); the final X network (step 120,000, sha256
+`d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933`) read every shot on this
+PC's CPU (`neural.evaluate_stim`'s `evaluate` at batch one; its logits on p = 0.004 train_X
+equal the laptop GPU's to 0.007, with the same bits on all 20,000 shots).
+
+```sh
+python -m hierarchy.select --candidates <the 16 .session.npz> --logits <their 16 logits .npz, same order>
+```
+
+The run's output is in `hierarchy/results/ablation_p0.004_X/`: `summary.json` (every number
+below, with the commands, the checkpoint and the sha256 of the 16 shot files), `per_shot.npz`
+(per shot of the 80,000: `failed_P1`, `failed_P2`, `failed_aw`, `failed_ac`, `failed_a`,
+`failed_perfect_tie_break`, `p1_p2_differ`, the network's own failure and confidence, and the
+network-first columns; with the sha256 of every shot, candidate and logits file),
+`select_printout.txt` (`select.py`'s printout) and `data_sha256.txt`.
+
+| the rule where P1 and P2 differ (366 shots of 80,000) | failures of 80,000 | rate, 95% Wilson interval | right pick where some candidate is right (302 shots) |
+|---|---|---|---|
+| P1 alone / P2 alone | 357 / 348 | | |
+| "weight": the lowest weight of R, P1, P2 | 298 | 0.37% [0.33, 0.42] | 191 |
+| "converged": the lowest weight among the converged | 253 | 0.32% [0.28, 0.36] | 236 |
+| **"network": the final network's most likely** | **237** | **0.30% [0.26, 0.34]** | **252** |
+| a perfect tie-breaker (needs the truth) | 187 | 0.23% [0.20, 0.27] | 302 |
+
+Paired on the same shots: the network rule against "weight": both fail 211, the network rule
+alone 26, "weight" alone 87 (exact two-sided p = 7e-9); against "converged": both 198, 39
+against 55 (p = 0.12). The learned tie-breaker closes a quarter of the gap between the best
+hand-written rule and a perfect choice (16 of 66 failures). Relay-BP alone is not measured on
+these files: in session mode it decodes only the 366 shots where the seeds differ.
 
 Commands (A = a checkout of `laptop-artifacts`, F = a checkout of `server-logs`'s `files/`):
 
@@ -786,9 +823,9 @@ They use the first 24 shots of the committed `train_*` files and small iteration
 ## Next
 
 1. **The one run on the test shots**, by the commands above, after the preflight has passed.
-2. **The network's increment on a larger held-out set.** 80,000 fresh X shots at p = 0.004
-   are being decoded for it (see `HANDOFF.md`). On today's evidence the learned tie-breaker
-   is not better than the best rule without learning.
+2. **A better tie-breaker.** On 80,000 fresh shots the network is 16 failures ahead of the
+   best rule without learning and 50 behind a perfect choice. The same set holds the answer
+   for any new rule; the Z basis has no such set yet.
 3. **Joint decoding at p = 0.005** on the shots where the members disagree. Not measured: it
    is slow there, and worse than separate decoding as a decoder of every shot. As an arbiter
    on a few percent of the shots it may still help; rule f needs it to differ from TCBP-JOBS.

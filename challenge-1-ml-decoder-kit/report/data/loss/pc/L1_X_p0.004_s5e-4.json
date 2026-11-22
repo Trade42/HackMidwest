@@ -1,0 +1,107 @@
+{
+ "dataset": {
+  "file": "/home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s5e-4_seed2200.npz",
+  "sha256": "318cc463218072218a0dba4f86d9de26d8ca8cb6a2ee3b3c0b7742692284056a",
+  "basis": "X",
+  "p": 0.004,
+  "s": 0.0005,
+  "shots": 20000,
+  "seed": 2200,
+  "chunk": 2000,
+  "probes": true,
+  "clifft": "0.13.0",
+  "lost_data_atoms_per_shot": 5.1136,
+  "check_heralds_per_shot": 5.1708
+ },
+ "reference": "blind",
+ "rows": [
+  {
+   "condition": "blind",
+   "shots": 400,
+   "failures": 57,
+   "fail_fraction": 0.1425,
+   "wilson95": [
+    0.11163831432544614,
+    0.18016297622985067
+   ],
+   "per_cycle": 0.01272946121485774,
+   "per_cycle95": [
+    0.009816196450960879,
+    0.016417875644306523
+   ],
+   "unconverged": 45,
+   "unconverged_but_right": 0,
+   "mean_iterations": 5761.595,
+   "mean_decode_ms": 4570.126785606844,
+   "median_decode_ms": 887.3156639747322,
+   "mean_build_ms": 11.769845876842737,
+   "mean_prior_ms": 0.03485144465230405
+  },
+  {
+   "condition": "starter",
+   "shots": 2000,
+   "failures": 29,
+   "fail_fraction": 0.0145,
+   "wilson95": [
+    0.010114677318310235,
+    0.020746775621095875
+   ],
+   "per_cycle": 0.0012164389034315937,
+   "per_cycle95": [
+    0.0008468227628901648,
+    0.0017455592145584342
+   ],
+   "unconverged": 15,
+   "unconverged_but_right": 0,
+   "mean_iterations": 1117.3895,
+   "mean_decode_ms": 941.6500398148783,
+   "median_decode_ms": 157.78895607218146,
+   "mean_build_ms": 12.307409533997998,
+   "mean_prior_ms": 0.45223920536227524,
+   "paired_shots": 400,
+   "ref_failures": 57,
+   "cond_failures": 5,
+   "ref_only": 53,
+   "cond_only": 1,
+   "sign_test_p": 6.106226635438361e-15,
+   "ratio_ref_over_cond": 11.4,
+   "ratio95": [
+    5.9,
+    53.0
+   ]
+  },
+  {
+   "condition": "starter@0.5/stop1",
+   "shots": 2000,
+   "failures": 36,
+   "fail_fraction": 0.018,
+   "wilson95": [
+    0.013029991411288699,
+    0.024818042196937343
+   ],
+   "per_cycle": 0.0015125192070827298,
+   "per_cycle95": [
+    0.0010923717975109826,
+    0.0020920753873482356
+   ],
+   "unconverged": 15,
+   "unconverged_but_right": 0,
+   "mean_iterations": 405.8805,
+   "mean_decode_ms": 333.7388622898143,
+   "median_decode_ms": 21.29711350426078,
+   "mean_build_ms": 12.191770028788596,
+   "mean_prior_ms": 0.44372085528448224,
+   "paired_shots": 400,
+   "ref_failures": 57,
+   "cond_failures": 5,
+   "ref_only": 53,
+   "cond_only": 1,
+   "sign_test_p": 6.106226635438361e-15,
+   "ratio_ref_over_cond": 11.4,
+   "ratio95": [
+    5.9,
+    53.0
+   ]
+  }
+ ]
+}

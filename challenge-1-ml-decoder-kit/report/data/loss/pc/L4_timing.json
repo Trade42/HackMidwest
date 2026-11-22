@@ -1,0 +1,143 @@
+{
+ "machine": "AMD Ryzen 7 7730U, one process on CPU 0 (sibling CPU 1 idle), nice 15, other lanes busy",
+ "loss_data": {
+  "basis": "X",
+  "p": 0.004,
+  "s": 0.001,
+  "shots": 20000,
+  "seed": 2300,
+  "chunk": 2000,
+  "probes": true,
+  "clifft": "0.13.0"
+ },
+ "clean_data": {
+  "basis": "X",
+  "p": 0.004,
+  "s": 0.0,
+  "shots": 10000,
+  "seed": 1000,
+  "chunk": 2000,
+  "probes": true,
+  "clifft": "0.13.0"
+ },
+ "relay_build_lossless": {
+  "n": 30,
+  "mean_ms": 7.807947648689151,
+  "median_ms": 7.416838780045509,
+  "p95_ms": 9.885043837130064,
+  "max_ms": 10.873644147068262
+ },
+ "prior_build_starter": {
+  "n": 200,
+  "mean_ms": 0.26148485485464334,
+  "median_ms": 0.2544899471104145,
+  "p95_ms": 0.3570246277377008,
+  "max_ms": 0.6315726786851883
+ },
+ "relay_build_flag_aware": {
+  "n": 30,
+  "mean_ms": 8.123043257122239,
+  "median_ms": 7.369583938270807,
+  "p95_ms": 10.904683102853596,
+  "max_ms": 10.975116863846779
+ },
+ "relay_methods": [
+  "decode",
+  "decode_batch",
+  "decode_detailed",
+  "decode_detailed_batch"
+ ],
+ "bposd_build": {
+  "n": 5,
+  "mean_ms": 113.02815936505795,
+  "median_ms": 112.57269978523254,
+  "p95_ms": 117.65709929168224,
+  "max_ms": 118.33469616249204
+ },
+ "bposd_update_channel_probs": {
+  "n": 30,
+  "mean_ms": 1.722427426526944,
+  "median_ms": 1.725311391055584,
+  "p95_ms": 1.7775787971913815,
+  "max_ms": 1.818192657083273
+ },
+ "bposd_update_equals_rebuild": {
+  "shots": 20,
+  "identical_outputs": 20
+ },
+ "bposd_decode_after_update": {
+  "n": 20,
+  "mean_ms": 647.9770998470485,
+  "median_ms": 730.6588294450194,
+  "p95_ms": 1345.6967931007966,
+  "max_ms": 1384.7391339950264
+ },
+ "bposd_decode_fresh": {
+  "n": 20,
+  "mean_ms": 633.2260838709772,
+  "median_ms": 754.3853134848177,
+  "p95_ms": 1348.0739255668598,
+  "max_ms": 1560.1245420984924
+ },
+ "relay_decode_static_lossless_shots": {
+  "n": 100,
+  "mean_ms": 570.693368348293,
+  "median_ms": 75.70970640517771,
+  "p95_ms": 1457.6085053384236,
+  "max_ms": 10597.503422293812
+ },
+ "relay_build_plus_decode_lossless_shots": {
+  "n": 100,
+  "mean_ms": 624.5253158174455,
+  "median_ms": 96.12894547171891,
+  "p95_ms": 1205.9283031150674,
+  "max_ms": 12020.745313726366
+ },
+ "relay_flag_aware_loss_shots": {
+  "priors": {
+   "n": 30,
+   "mean_ms": 0.508760397012035,
+   "median_ms": 0.4635679069906473,
+   "p95_ms": 0.8306179195642468,
+   "max_ms": 0.9494386613368988
+  },
+  "build": {
+   "n": 30,
+   "mean_ms": 7.934184341380994,
+   "median_ms": 7.504261564463377,
+   "p95_ms": 11.056309472769497,
+   "max_ms": 11.436907108873129
+  },
+  "decode": {
+   "n": 30,
+   "mean_ms": 1776.1415247650195,
+   "median_ms": 238.75705036334693,
+   "p95_ms": 10650.139683089217,
+   "max_ms": 11092.752823606133
+  },
+  "total": {
+   "n": 30,
+   "mean_ms": 1784.5844695034127,
+   "median_ms": 248.40852129273117,
+   "p95_ms": 10657.920125592498,
+   "max_ms": 11100.699101574719
+  }
+ },
+ "clifft": {
+  "s=0, probes=False": {
+   "shots": 1000,
+   "seconds": 4.537314016837627,
+   "shots_per_second": 220.39470847489864
+  },
+  "s=0.001, probes=False": {
+   "shots": 1000,
+   "seconds": 5.657179094851017,
+   "shots_per_second": 176.76654446209207
+  },
+  "s=0.001, probes=True": {
+   "shots": 1000,
+   "seconds": 6.156832248903811,
+   "shots_per_second": 162.42118667079882
+  }
+ }
+}

@@ -1,0 +1,9 @@
+p,decoder,label,built_by,measured
+0.004,bposd,BP-OSD (kit baseline),the kit,False
+0.004,relay-bp,relay-BP (kit baseline),the kit,False
+0.004,router,relay-BP with a learned router,teammates,False
+0.004,priortilt,"PriorTilt, one run",IonQ (arXiv:2611.13373),False
+0.004,hierarchy-weight,"our hierarchy, lowest-weight tie-break",ours,False
+0.004,hierarchy,"our hierarchy, neural tie-break",ours,False
+0.004,ensemble,our ensemble (combined offline),ours,False
+0.004,tcbp,"TCBP-JOBS (NVIDIA, GPU)",NVIDIA; run by teammates,False

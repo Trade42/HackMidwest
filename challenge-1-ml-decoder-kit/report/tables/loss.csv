@@ -1,0 +1,10 @@
+s,machine,seed,condition,label,failures,shots,source,paired_reference,reference_only,row_only,ratio
+0.0005,this PC,2200,blind,loss-blind relay-BP (ignores the flags),57,400,loss/pc/L1_X_p0.004_s5e-4.json,,,,
+0.0005,this PC,2200,starter,flag-aware relay-BP (the published method),29,2000,loss/pc/L1_X_p0.004_s5e-4.json,blind,53,1,11.4
+0.001,ICRN server,5300,starter,flag-aware relay-BP (the published method),162,4000,loss/server/L3_s1e-3_seed5300/tables.md,,,,
+0.001,ICRN server,5300,oracle-round,"ORACLE: told the true loss round (a ceiling, not a decoder)",96,4000,loss/server/L3_s1e-3_seed5300/tables.md,starter,90,24,1.69
+0.001,this PC,2300,blind,loss-blind relay-BP (ignores the flags),173,300,loss/pc/L1_X_p0.004_s1e-3.json,,,,
+0.001,this PC,2300,starter,flag-aware relay-BP (the published method),176,4000,loss/pc/L1_X_p0.004_s1e-3.json,blind,158,0,11.533333333333333
+0.001,this PC,2300,oracle-round,"ORACLE: told the true loss round (a ceiling, not a decoder)",107,4000,loss/pc/L3_X_p0.004_s1e-3.json,starter,94,25,1.644859813084112
+0.002,this PC,2400,blind,loss-blind relay-BP (ignores the flags),148,150,loss/pc/L1_X_p0.004_s2e-3.json,,,,
+0.002,this PC,2400,starter,flag-aware relay-BP (the published method),173,750,loss/pc/L1_X_p0.004_s2e-3.json,blind,115,0,4.484848484848484

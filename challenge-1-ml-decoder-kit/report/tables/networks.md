@@ -1,0 +1,15 @@
+The two networks, from their training logs (`report/data/networks/*.train.log`). "Shots wrong" is the share of shots with at least one of the 12 logical bits wrong, on error-model shots drawn for the training report: a training diagnostic, not a result on Stim shots.
+
+| Network | Trained on | Size | Started from | Training step (last in the copied log) | Shots seen | Shots per second (median of the log) | Shots wrong at p = 0.003 / 0.004 / 0.005 |
+|---|---|---|---|---|---|---|---|
+| X memory (`cascade_X_s1`) | a laptop GPU (RTX 4060, 8 GB) | width 128, depth 8, 893,697 parameters | random weights | 50,000 of 230,000 | 6,400,000 | 724 | 3.9% / 14.9% / 38.9% |
+| Z memory (`cascade_Z_s1`) | the ICRN server (A100 slice, 20 GB) | width 128, depth 8, 893,697 parameters | the X network's weights, mirrored | 20,000 of 100,000 | 2,560,000 | 876 | 3.0% / 13.8% / 37.8% |
+
+The X network alone, on the team's Stim shot files (exploration shots; `report/data/exploration/cascade_X_s1/SCORES.md`), share of shots wrong:
+
+| Training step | `validation_X_p0.003` | `train_X_p0.003` | `validation_X_p0.004` | `train_X_p0.004` | `validation_X_p0.005` | `train_X_p0.005` |
+|---|---|---|---|---|---|---|
+| 20,000 |  |  | 42.12% of 5,000 |  |  |  |
+| 30,000 |  |  | 26.60% of 5,000 | 27.00% of 20,000 |  |  |
+| 40,000 | 6.16% of 5,000 | 6.10% of 20,000 | 21.86% of 5,000 | 21.66% of 20,000 | 47.54% of 5,000 | 48.62% of 20,000 |
+| 50,000 | 3.66% of 5,000 | 3.96% of 20,000 | 16.04% of 5,000 | 15.43% of 20,000 | 38.88% of 5,000 | 39.13% of 20,000 |

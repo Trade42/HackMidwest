@@ -1,0 +1,4 @@
+p,failures_X,failures_Z,shots,rate_printed,error_printed,mean_ms,p99_ms,started,host,time_usable,why_not,source
+0.003,2,3,10000,4.17e-05,1.9e-05,4.3,15.0,2026-11-22T00:52:15.441484+00:00,jupyter-blakew3,True,,tcbp_own_shots/tcbp-jobs_p0.003_shots10000_seed1_20261122_005215_437826+0000.log
+0.004,18,23,10000,0.000342,5.3e-05,42.9,109.0,2026-11-22T04:34:26.151682+00:00,jupyter-blakew3,False,the GPU was shared with a network training of ours,tcbp_own_shots/tcbp-jobs_p0.004_shots10000_seed1_20261122_043426_147901+0000.log
+0.005,192,188,10000,0.0032,0.00016,81.7,201.0,2026-11-22T05:02:03.543108+00:00,jupyter-blakew3,False,the GPU was shared with a network training of ours,tcbp_own_shots/tcbp-jobs_p0.005_shots10000_seed1_20261122_050203_539870+0000.log

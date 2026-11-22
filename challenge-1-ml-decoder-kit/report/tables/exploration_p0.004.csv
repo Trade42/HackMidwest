@@ -1,0 +1,16 @@
+shots,row,built_by,failures,of,both_fail,only_this_row,only_relay_bp,exact_p,mean_ms_per_shot,rate_per_cycle,kit_error,mean_ms_per_pair
+"X memory, 25,000 shots",relay-BP (kit baseline),the kit,122,25000,,,,,166.7277121279156,,,
+"X memory, 25,000 shots","PriorTilt, seed A",IonQ,102,25000,55,47,67,0.0746925300797661,52.04381309223827,,,
+"X memory, 25,000 shots","PriorTilt, seed B",IonQ,82,25000,52,30,70,7.85013964559367e-05,52.359531231997536,,,
+"X memory, 25,000 shots","our hierarchy, lowest-weight tie-break",ours,77,25000,61,16,61,2.4176312825015983e-07,118.01307613225188,,,
+"X memory, 25,000 shots","hierarchy, network step 30000",ours,66,25000,,,,,118.1,,,
+"X memory, 25,000 shots","hierarchy, network step 40000",ours,65,25000,,,,,118.1,,,
+"X memory, 25,000 shots","hierarchy, network step 50000",ours,63,25000,,,,,118.1,,,
+"Z memory, 25,000 shots",relay-BP (kit baseline),the kit,123,25000,,,,,170.85747731599957,,,
+"Z memory, 25,000 shots","PriorTilt, seed A",IonQ,106,25000,63,43,60,0.11446824201255819,55.6371070520021,,,
+"Z memory, 25,000 shots","PriorTilt, seed B",IonQ,107,25000,63,44,60,0.1409562882123081,57.12101209660526,,,
+"Z memory, 25,000 shots","our hierarchy, lowest-weight tie-break",ours,85,25000,73,12,50,1.2143807700186297e-06,130.59296989259312,,,
+"25,000 pairs",relay-BP (kit baseline),the kit,245,25000,,,,,,0.0008203579934723537,5.240457181587832e-05,337.5851894439151
+"25,000 pairs","PriorTilt, seed A",IonQ,207,25000,118,89,127,0.011643515917883691,,0.0006926324863079092,4.8137499829681296e-05,107.68092014424037
+"25,000 pairs","PriorTilt, seed B",IonQ,188,25000,115,73,130,7.67247097309549e-05,,0.0006288370121895204,4.5859911207868365e-05,109.48054332860279
+"25,000 pairs","our hierarchy, lowest-weight tie-break",ours,162,25000,134,28,111,6.813312267265689e-13,,0.0005416104712648862,4.255144914477871e-05,248.60604602484497

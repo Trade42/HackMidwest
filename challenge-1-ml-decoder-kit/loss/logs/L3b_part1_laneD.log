@@ -1,0 +1,48 @@
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 0..500 conditions ['starter-oracle-round'] workers 4
+  50/500 shots, 32s, failures so far starter-oracle-round=0
+  100/500 shots, 56s, failures so far starter-oracle-round=4
+  150/500 shots, 81s, failures so far starter-oracle-round=7
+  200/500 shots, 103s, failures so far starter-oracle-round=10
+  250/500 shots, 129s, failures so far starter-oracle-round=12
+  300/500 shots, 148s, failures so far starter-oracle-round=12
+  350/500 shots, 166s, failures so far starter-oracle-round=14
+  400/500 shots, 185s, failures so far starter-oracle-round=15
+  450/500 shots, 205s, failures so far starter-oracle-round=15
+  500/500 shots, 218s, failures so far starter-oracle-round=16
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/oracle-starter/000000-000500.npz.tmp.npz in 218s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 500..1000 conditions ['starter-oracle-round'] workers 4
+  50/500 shots, 22s, failures so far starter-oracle-round=0
+  100/500 shots, 46s, failures so far starter-oracle-round=2
+  150/500 shots, 70s, failures so far starter-oracle-round=4
+  200/500 shots, 82s, failures so far starter-oracle-round=4
+  250/500 shots, 102s, failures so far starter-oracle-round=4
+  300/500 shots, 127s, failures so far starter-oracle-round=5
+  350/500 shots, 152s, failures so far starter-oracle-round=8
+  400/500 shots, 171s, failures so far starter-oracle-round=9
+  450/500 shots, 198s, failures so far starter-oracle-round=9
+  500/500 shots, 224s, failures so far starter-oracle-round=11
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/oracle-starter/000500-001000.npz.tmp.npz in 224s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 1000..1500 conditions ['starter-oracle-round'] workers 4
+  50/500 shots, 36s, failures so far starter-oracle-round=0
+  100/500 shots, 51s, failures so far starter-oracle-round=2
+  150/500 shots, 83s, failures so far starter-oracle-round=3
+  200/500 shots, 104s, failures so far starter-oracle-round=4
+  250/500 shots, 143s, failures so far starter-oracle-round=6
+  300/500 shots, 171s, failures so far starter-oracle-round=9
+  350/500 shots, 179s, failures so far starter-oracle-round=9
+  400/500 shots, 198s, failures so far starter-oracle-round=9
+  450/500 shots, 224s, failures so far starter-oracle-round=11
+  500/500 shots, 257s, failures so far starter-oracle-round=13
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/oracle-starter/001000-001500.npz.tmp.npz in 257s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 1500..2000 conditions ['starter-oracle-round'] workers 4
+  50/500 shots, 54s, failures so far starter-oracle-round=2
+  100/500 shots, 64s, failures so far starter-oracle-round=4
+  150/500 shots, 87s, failures so far starter-oracle-round=5
+  200/500 shots, 113s, failures so far starter-oracle-round=8
+  250/500 shots, 133s, failures so far starter-oracle-round=9
+  300/500 shots, 155s, failures so far starter-oracle-round=9
+  350/500 shots, 183s, failures so far starter-oracle-round=10
+  400/500 shots, 196s, failures so far starter-oracle-round=10
+  450/500 shots, 215s, failures so far starter-oracle-round=10
+  500/500 shots, 248s, failures so far starter-oracle-round=13
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s1e-3/oracle-starter/001500-002000.npz.tmp.npz in 248s

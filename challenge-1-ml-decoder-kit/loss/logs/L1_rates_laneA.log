@@ -1,0 +1,19 @@
+{"file": "/home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-3_seed2400.npz.tmp.npz", "sha256": "e9eed3c8fad2719a120358c0884cc5937b284cc0eb1a8f6b63b8f4eeb8d86474", "basis": "X", "p": 0.004, "s": 0.002, "shots": 20000, "seed": 2400, "chunk": 2000, "probes": true, "clifft": "0.13.0", "sample_seconds": 74.1, "threads": 4, "shots_per_second": 269.8, "lost_data_atoms_per_shot": 19.286, "shots_with_no_lost_data_atom": 0, "check_heralds_per_shot": 20.64, "detector_weight_per_shot": 477.15}
+{"file": "/home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s5e-4_seed2200.npz.tmp.npz", "sha256": "318cc463218072218a0dba4f86d9de26d8ca8cb6a2ee3b3c0b7742692284056a", "basis": "X", "p": 0.004, "s": 0.0005, "shots": 20000, "seed": 2200, "chunk": 2000, "probes": true, "clifft": "0.13.0", "sample_seconds": 80.4, "threads": 4, "shots_per_second": 248.9, "lost_data_atoms_per_shot": 5.114, "shots_with_no_lost_data_atom": 97, "check_heralds_per_shot": 5.171, "detector_weight_per_shot": 308.67}
+{"file": "/home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-4_seed2100.npz.tmp.npz", "sha256": "797d4d06f9e12f9f5a0c70b3a823827f1fd1cccf9f141ff37fdc2f0eb186f2ce", "basis": "X", "p": 0.004, "s": 0.0002, "shots": 20000, "seed": 2100, "chunk": 2000, "probes": true, "clifft": "0.13.0", "sample_seconds": 92.8, "threads": 4, "shots_per_second": 215.5, "lost_data_atoms_per_shot": 2.065, "shots_with_no_lost_data_atom": 2519, "check_heralds_per_shot": 2.083, "detector_weight_per_shot": 264.66}
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-3_seed2400.npz shots 0..50 conditions ['blind'] workers 4
+  50/50 shots, 332s, failures so far blind=50
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/blind/000000-000050.npz.tmp.npz in 332s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-3_seed2400.npz shots 50..100 conditions ['blind'] workers 4
+  50/50 shots, 327s, failures so far blind=48
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/blind/000050-000100.npz.tmp.npz in 327s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-3_seed2400.npz shots 100..150 conditions ['blind'] workers 4
+  50/50 shots, 350s, failures so far blind=50
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/blind/000100-000150.npz.tmp.npz in 350s
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s2e-3_seed2400.npz shots 0..250 conditions ['starter', 'starter@0.5/stop1'] workers 4
+  50/250 shots, 152s, failures so far starter=6 starter@0.5/stop1=6
+  100/250 shots, 293s, failures so far starter=21 starter@0.5/stop1=21
+  150/250 shots, 500s, failures so far starter=33 starter@0.5/stop1=35
+  200/250 shots, 639s, failures so far starter=40 starter@0.5/stop1=43
+  250/250 shots, 830s, failures so far starter=49 starter@0.5/stop1=54
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-gates/parts/X_p0.004_s2e-3/aware/000000-000250.npz.tmp.npz in 831s

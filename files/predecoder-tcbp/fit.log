@@ -140,3 +140,9 @@ fit of the knobs for tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/N
     train_X_T_right alpha 0.05: 200 of 2000 shots, build 43.3 ms, decode 6.8 ms mean (last 200: 43.3 + 6.8 ms), 11 s; priors capped at 0.5 so far on 15052 shots, 495062 columns
     train_X_T_right alpha 0.05: 400 of 2000 shots, build 43.4 ms, decode 7.3 ms mean (last 200: 43.4 + 7.7 ms), 22 s; priors capped at 0.5 so far on 15052 shots, 495062 columns
     train_X_T_right alpha 0.05: 600 of 2000 shots, build 43.3 ms, decode 6.8 ms mean (last 200: 43.0 + 6.0 ms), 33 s; priors capped at 0.5 so far on 15052 shots, 495062 columns
+    train_X_T_right alpha 0.05: 800 of 2000 shots, build 43.2 ms, decode 6.7 ms mean (last 200: 42.9 + 6.2 ms), 44 s; priors capped at 0.5 so far on 15052 shots, 495062 columns
+    train_X_T_right alpha 0.05: 1000 of 2000 shots, build 42.9 ms, decode 6.6 ms mean (last 200: 41.7 + 6.2 ms), 55 s; priors capped at 0.5 so far on 15052 shots, 495062 columns
+    train_X_T_right alpha 0.05: 1200 of 2000 shots, build 42.8 ms, decode 6.7 ms mean (last 200: 42.7 + 7.3 ms), 66 s; priors capped at 0.5 so far on 15052 shots, 495062 columns
+    train_X_T_right alpha 0.05: 1400 of 2000 shots, build 42.7 ms, decode 6.8 ms mean (last 200: 42.1 + 7.0 ms), 77 s; priors capped at 0.5 so far on 15052 shots, 495062 columns
+    train_X_T_right alpha 0.05: 1600 of 2000 shots, build 42.6 ms, decode 6.7 ms mean (last 200: 41.7 + 6.5 ms), 87 s; priors capped at 0.5 so far on 15052 shots, 495062 columns
+    train_X_T_right alpha 0.05: 1800 of 2000 shots, build 42.5 ms, decode 6.7 ms mean (last 200: 41.8 + 6.4 ms), 98 s; priors capped at 0.5 so far on 15052 shots, 495062 columns

@@ -4,3 +4,5 @@ validation_X.npz: 5000 shots, p=0.005, arms ['head', 'fresh'], decoder tcbp-jobs
   model fitted in 61.0 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: 1000 of 5000 shots, 112 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: 2000 of 5000 shots, 164 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 3000 of 5000 shots, 216 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 4000 of 5000 shots, 268 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]

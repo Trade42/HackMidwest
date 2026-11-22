@@ -11,7 +11,15 @@ used, but its flag-aware decoder does use them, through the hook columns. So L2 
 starter's map, plus the one missing piece, the exact location weights. That piece includes a loss inside a run of
 same-role CX, which the starter leaves out. The orchestrator agreed to this by message, 2026-11-22.
 
-<!-- TABLES BELOW ARE FILLED IN AS THE RUNS FINISH -->
+**In short** (X memory, p = 0.004; details and intervals below). At s = 1e-3 per atom per CX (10 lost data atoms
+per shot), relay-BP on lossless priors fails 58% of shots; with the heralds (the starter's map) 4.4%; told the
+true loss round (ORACLE) 2.7%. So the heralds cut failures 11.5×, and a perfect loss-round tracker could cut
+them 1.64× more (95% 1.42–1.94): L3 passes the brief's 1.5 on the point estimate. Lossless: 0.64%.
+
+**How far it got.** Done: L0; the map checks; L1 at 5e-4 (partly), 1e-3 and 2e-3; L3; L4; one L2 piece.
+Moved by the orchestrator: L1 at 2e-4 and the rest of 5e-4 to server jobs B and C, L2's other pieces to
+server job D, the slot-level oracle and a replication of L3 to server job A, and L5 to the task
+`loss-tracker`. Server tables are not in this file yet: HANDOFF.md lists them.
 
 ## The loss model (our assumption)
 
@@ -162,6 +170,41 @@ decode passes them to the prior builder for those rows only; for every other row
 would fail). A shot fails when any of the 12 observables is wrong; an unconverged shot is scored on the
 decoder's output like any other, and the tables count how many unconverged shots were still right.
 
+## L1: blind against flag-aware, X memory, p = 0.004
+
+Each loss rate has its own dataset of 20,000 sampled shots (seeds and sha256 under "Datasets"). Blind decodes a
+first prefix, sized for about 100 failures; flag-aware decodes a longer prefix of the same shots. The paired
+columns compare the two on the shots both decoded.
+
+| s per atom per CX | lost data atoms per shot | check heralds per shot | blind: failures / shots (95% Wilson) | flag-aware (`starter`): failures / shots (95% Wilson) | flag-aware, stop at first solution | paired shots: blind-only / aware-only | blind ÷ flag-aware (95% bootstrap) | unconverged: blind, flag-aware |
+|---|---|---|---|---|---|---|---|---|
+| 2e-4 | 2.07 | 2.08 | unmeasured here: server job B | unmeasured here: server job B | unmeasured here: server job B | | | |
+| 5e-4 | 5.11 | 5.17 | 57 / 400 = 14.25% (11.16–18.02) | 29 / 2,000 = 1.45% (1.01–2.07) | 36 / 2,000 = 1.80% (1.30–2.48) | 400: 53 / 1 | 11.4 (5.9–53.0) | 45 of 400, 15 of 2,000 |
+| 1e-3 | 9.99 | 10.36 | 173 / 300 = 57.67% (52.01–63.13) | 176 / 4,000 = 4.40% (3.81–5.08) | 200 / 4,000 = 5.00% (4.37–5.72) | 300: 158 / 0 | 11.5 (7.6–22.0) | 161 of 300, 108 of 4,000 |
+| 2e-3 | 19.29 | 20.64 | 148 / 150 = 98.67% (95.27–99.63) | 173 / 750 = 23.07% (20.19–26.21) | 186 / 750 = 24.80% (21.84–28.01) | 150: 115 / 0 | 4.5 (3.4–6.2) | 147 of 150, 151 of 750 |
+
+Rates per cycle (1 − (1 − P)^(1/12)) for the flag-aware decoder: 1.22e-3 (5e-4), 3.74e-3 (1e-3), 2.16e-2 (2e-3);
+for blind: 1.27e-2, 6.91e-2, 0.30. Lossless at the same p (L0): 5.35e-4.
+
+**How far it got.** On this PC, s = 5e-4 stopped at 400 blind and 2,000 flag-aware shots (29 flag-aware
+failures: fewer than the brief's 100). s = 2e-4 has its dataset but no decodes. The orchestrator stopped both
+at 2026-11-22 06:00 UTC because server jobs B (s = 2e-4: 3,000 blind, 20,000 flag-aware shots, seeds
+5100–5109) and C (s = 5e-4: 800 blind, 10,000 flag-aware, seeds 5200–5204) measure them on far more shots. Their
+tables come from a second machine and are not yet in this file (see HANDOFF.md).
+
+Shots only the flag-aware decoder fails: 1, 0 and 0, against 53, 158 and 115 that only blind fails. The heralds
+never cost a shot in a way that matters.
+
+Stopping at the first solution costs failures at every rate (36 against 29, 200 against 176, 186 against 173).
+On the 4,000 shots at 1e-3 the paired count is 34 against 10 (sign test p = 0.0004). It does not change the
+unconverged count, so the extra failures are converged shots that settle on the wrong logical class. It saves
+56% of the iterations at 1e-3.
+
+Per-rate tables: `results/L1_X_p0.004_s{5e-4,1e-3,2e-3}.{json,md}`; the combined table:
+`results/L1_combined.md`. Commands: `loss/runs/L0_L1_s1e-3.sh` (1e-3), `loss/runs/L1_rates.sh` (the other
+rates; it ran as a lane-A stream (`LANE=A`), then on lane D), `loss/runs/summarize.sh`. Logs:
+`logs/L0_L1_s1e-3.log`, `logs/L1_rates_laneA.log`, `logs/L1_L4_L3b_L2_laneD.log`.
+
 ## L3: the oracle on the loss time (s = 1e-3)
 
 Dataset: X memory, p = 0.004, s = 1e-3, 20,000 shots sampled, seed 2300 (chunks 2300 to 2309), sha256
@@ -184,12 +227,97 @@ Paired, on the same 4,000 shots:
 | A = `exact`, B = `starter` | 189, 176 | 59 / 46 | p = 0.24 | 1.07 (0.96–1.20) |
 | A = `starter@0.5/stop1`, B = `starter` | 200, 176 | 34 / 10 | p = 0.0004 | 1.14 (1.05–1.22) |
 
-**The gate.** The brief's pass mark is a cut by 1.5 or more; below 1.2, the tracker idea stops. The round-level
-ORACLE cuts the failures by 1.64 against the starter's flag-aware decoder and by 1.77 against the decoder with
-the same map. Both point estimates pass 1.5. The interval against the starter reaches down to 1.42, so 1.5 is
-likely but not certain; 1.2 is excluded by a wide margin. These are oracle numbers: a ceiling for any tracker
-of the loss round, not a decoder result.
+The oracle built on the starter's own map (ORACLE `starter-oracle-round`: one column per cycle, uniform hooks,
+the true loss round in place of the uniform guess), on the first 2,000 of the same shots:
 
-Commands: `loss/runs/L0_L1_s1e-3.sh` (decodes), `loss/runs/summarize.sh` (tables). Results:
-`results/L3_X_p0.004_s1e-3.{json,md}` (reference `exact`), `results/L3_starter_X_p0.004_s1e-3.{json,md}`
-(reference `starter`). Log: `logs/L0_L1_s1e-3.log`.
+| Comparison, first 2,000 shots | Failures | Shots only A fails / only B fails | Sign test | A ÷ B (95% bootstrap) |
+|---|---|---|---|---|
+| A = `starter`, B = ORACLE `starter-oracle-round` (same map, only the loss time differs) | 81, 53 | 42 / 14 | p = 0.0002 | **1.53 (1.22–1.97)** |
+| A = ORACLE `oracle-round`, B = ORACLE `starter-oracle-round` | 51, 53 | 14 / 16 | p = 0.86 | 0.96 (0.78–1.19) |
+
+So the two round-level oracles are equally good, and on these 2,000 shots the starter goes from 81 failures
+to 51 or 53 with the true loss round: 1.5 to 1.6.
+
+**The gate.** The brief's pass mark is a cut by 1.5 or more; below 1.2, the tracker idea stops. The round-level
+ORACLE cuts the failures by 1.64 against the starter's flag-aware decoder (4,000 shots) and by 1.77 against the
+decoder with the same map. On the starter's own map it cuts them by 1.53 (2,000 shots). Every point estimate
+passes 1.5. The intervals reach down to 1.42 and 1.22, so 1.5 is likely but not certain; 1.2 is excluded on the
+4,000 shots. **L3 passes on the point estimate: the tracker idea goes on.** These are oracle numbers, a ceiling
+for any tracker of the loss round, not decoder results. The slot-level oracle (the true loss CX) and a second
+set of 4,000 shots are server job A (seed 5300), not yet in this file.
+
+Two more observations. The oracle also converges faster: 1,655 mean iterations against 2,339, and 63
+unconverged shots against 108. And the exact location weights do not beat the starter's rounder ones
+(189 against 176 failures, p = 0.24).
+
+Commands: `loss/runs/L0_L1_s1e-3.sh` and `loss/runs/L3b_s1e-3.sh` (decodes), `loss/runs/summarize.sh`
+(tables). Results: `results/L3_X_p0.004_s1e-3.{json,md}` (reference `exact`),
+`results/L3_starter_X_p0.004_s1e-3.{json,md}` (reference `starter`), `results/L3_oracles_X_p0.004_s1e-3.{json,md}`.
+Logs: `logs/L0_L1_s1e-3.log`, `logs/L3b_part1_laneD.log`.
+
+## L2: the flag-to-prior map, piece by piece (s = 1e-3)
+
+How far it got: one of the five comparisons is measured on this PC; the rest is server job D (below).
+
+| Piece | Status in the starter | Measured here (4,000 shots of the L3 dataset) | Keep (20% fewer failures)? |
+|---|---|---|---|
+| final-readout flip at 0.5 | in the starter | leave-one-out (`starter-nofinal`): server job D | to come |
+| hook columns of flagged check atoms of the other basis | in the starter (its docstring says otherwise) | leave-one-out (`starter-nohook`): server job D | to come |
+| lossless priors wherever no flag fired | in the starter | leave-one-out (`starter-ratebase`): server job D | to come |
+| location weights (geometric, exact P(lost before), the columns inside a run) | **missing from the starter** | `exact` 189 against `starter` 176 failures; 59 / 46 discordant, p = 0.24; ratio 0.93 (0.83–1.04) | **no**: it does not lower the failures |
+| cap on a raised prior: 0.5, 0.4, 0.25 | 0.5 | `exact@0.4`, `oracle-round@0.4`, `exact@0.25`, `oracle-round@0.25`: server job D | to come |
+
+The local L2 runs (`loss/runs/L2_s1e-3.sh`, 500 shots) were not reached: the orchestrator moved L2 to server
+job D, on the 4,000 shots of job A (seed 5300), 1,000 shots per condition.
+
+## L4: what per-shot priors cost
+
+L4_PLACEHOLDER
+
+## L5: the flicker table
+
+Moved to the next task, `loss-tracker`, by the orchestrator (2026-11-22, 05:40 UTC). `loss/flicker.py` is
+written and tested, and `loss/runs/L5_flicker.sh` names the command, but this task did not run it. One pilot run on
+200 shots (s = 1e-3, seed 999, not a result) showed what to expect. Neighbouring detectors fired at 0.12 to 0.19
+before the loss round and at about 0.5 from the round after it, in X and Z checks alike.
+
+## Datasets (in /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/, not committed)
+
+All: X memory, p = 0.004, 20,000 shots (10,000 for L0), Clifft 0.13.0, probes on, chunks of 2,000 shots with
+seeds seed, seed + 1, ... (`loss/sample.py`).
+
+| File | s | Seed | Lost data atoms per shot | Check heralds per shot | sha256 |
+|---|---|---|---|---|---|
+| `X_p0.004_s0_seed1000.npz` | 0 | 1000 | 0 | 0 | `34a7fd8c43ba1aa69210253c6691b6ead34167f7facd83d5cb18778208c620b8` |
+| `X_p0.004_s2e-4_seed2100.npz` | 2e-4 | 2100 | 2.07 | 2.08 | `797d4d06f9e12f9f5a0c70b3a823827f1fd1cccf9f141ff37fdc2f0eb186f2ce` |
+| `X_p0.004_s5e-4_seed2200.npz` | 5e-4 | 2200 | 5.11 | 5.17 | `318cc463218072218a0dba4f86d9de26d8ca8cb6a2ee3b3c0b7742692284056a` |
+| `X_p0.004_s1e-3_seed2300.npz` | 1e-3 | 2300 | 9.99 | 10.36 | `378ee22c9cdf1f25ac44a72f68931f925c67e529ecb65485326afe44b4c3d532` |
+| `X_p0.004_s2e-3_seed2400.npz` | 2e-3 | 2400 | 19.29 | 20.64 | `e9eed3c8fad2719a120358c0884cc5937b284cc0eb1a8f6b63b8f4eeb8d86474` |
+
+The expected numbers per shot, 144 (1 − (1 − s)^72) lost data atoms and 1,728 (1 − (1 − s)^6) check heralds,
+are 2.06/2.07, 5.09/5.18, 10.01/10.34 and 19.33/20.63: the measured ones agree, which confirms that s is per atom
+per CX. The per-shot decode results are in `scratch/loss-gates/parts/` (one file per part; `summarize.py`
+reads them).
+
+**Reproducibility.** Every shot and condition gets a fresh relay-BP decoder with seed 1, so a result depends only
+on the shot and the condition. Checked: 12 shots rerun with 1 worker give the same failures, convergence,
+iterations and wrong-observable masks as the run with 4 workers. Clifft's shots do not depend on its thread
+count, and the probes do not change them. The bootstrap uses seed 0. Rerunning a command gives the same table.
+
+## What this says
+
+- **Loss without its flags is ruinous for relay-BP.** On lossless priors, relay-BP fails 14% of the shots at
+  s = 5e-4 (5 lost data atoms per shot), 58% at 1e-3 and 99% at 2e-3, mostly by not converging. Without loss
+  it fails 0.64%.
+- **The heralds give most of it back.** With the starter's flag-aware priors the failures fall to 1.45%, 4.4% and
+  23%: 11.4×, 11.5× and 4.5× fewer on paired shots. A loss-aware decoder never lost a shot that blind got right
+  (1, 0 and 0 such shots). Loss still costs: 4.4% at 1e-3 is 7 times the lossless 0.64%.
+- **Knowing when each data atom was lost is worth about 1.6×** at s = 1e-3. ORACLE: 176 → 107 failures with the
+  true loss round, interval 1.42–1.94. This is the ceiling for a tracker of the loss round, and it clears the
+  brief's 1.5 on the point estimate.
+- **Not worth it:** the exact location weights (no gain over the starter's rounder ones), and stopping relay-BP at
+  its first solution (14% more failures under loss).
+- **The map from a loss to the decoder's columns is exact in the simulator.** It held for every shot tested,
+  observables included, in both bases. The one exception to the 1/2 rate is in Z memory (0.7% of data losses).
+- **Not measured here:** Z memory decoding, p = 0.003 and 0.005, L2's leave-one-out and cap sweep (server job
+  D), L1 at 2e-4 and the rest of 5e-4 (server jobs B, C), and the flicker table (task `loss-tracker`).

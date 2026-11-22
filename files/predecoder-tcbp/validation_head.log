@@ -1,0 +1,3 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+validation_X.npz: 5000 shots, p=0.005, arms ['head', 'fresh'], decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}; head priors {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}

@@ -7,8 +7,8 @@ TCBP-JOBS (the nv-qldpc-decoder of cudaq-qec, the teammates' strongest decoder,
 
 TCBP-JOBS takes its priors only when a decoder is built (`error_rate_vec`), so every shot gets
 a decoder of its own. Its model (`nv_qldpc.init_tcbp_model(H)`) does not depend on the priors:
-it is fitted once per run and shared by every shot's decoder. Building one decoder takes about
-51 ms on the server's A100, and that time is counted in the shot's latency.
+it is fitted once per run (54 to 88 s) and shared by every shot's decoder. Building one decoder
+takes 41 to 43 ms on the server's A100, and that time is counted in the shot's latency.
 
 Run from challenge-1-ml-decoder-kit/, in the teammates' TCBP environment (Linux, an NVIDIA GPU,
 cudaq-qec 0.9.0). Torch is not needed: the logits come from predecoder.evaluate, run before in
@@ -18,7 +18,7 @@ an environment with torch, and are read from its output folder.
              fresh   the kit's priors           (TCBP-JOBS alone, but built per shot and decoded one shot at a time)
              head    the head's priors, mixed and clipped by the knobs of --settings
            python -m predecoder.tcbp decode --data data/p0.005/validation_X.npz --logits <folder> \\
-               --settings predecoder/logs/fit_tcbp_X_p0.004.json --arms fresh head --out <folder>
+               --settings predecoder/logs/fit_tcbp_X_p0.005.json --arms fresh head --out <folder>
 
   fit      the knobs, on TRAIN shot files only (the subsets of predecoder.subset made from
            TCBP-JOBS's own failures: --per-shot <train_X.tcbp.npz> --arm T):

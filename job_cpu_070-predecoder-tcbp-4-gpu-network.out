@@ -7,3 +7,4 @@ name, memory.used [MiB], utilization.gpu [%]
 NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]
 evaluate fp32 exit 0
 diff exit 0
+decode exit 0

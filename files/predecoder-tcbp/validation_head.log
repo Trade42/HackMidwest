@@ -9,3 +9,4 @@ validation_X.npz: 5000 shots, p=0.005, arms ['head', 'fresh'], decoder tcbp-jobs
   head: 5000 of 5000 shots, 318 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: failures 33 of 5000, 0.0066 [0.0047, 0.0093]; not reproduced 0; flagged not converged 3863; build 42.3 ms + decode 3.8 ms mean, p99 64 ms
   fresh: 1000 of 5000 shots, 373 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 2000 of 5000 shots, 449 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]

@@ -1,0 +1,91 @@
+{
+ "data": {
+  "path": "/home/blakew3/mlBranchMidwest/pred-lat-e96cc02/challenge-1-ml-decoder-kit/data/p0.003/validation_X.npz",
+  "sha256": "455311ff7f2c7fa8359af83c09e96d75eb791dd0105bebb66ff56bd016aaa4e8",
+  "basis": "X",
+  "p": 0.003,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 1000,
+ "relay": {
+  "alpha": 1.0,
+  "gamma0": 0.15,
+  "pre_iter": 80,
+  "num_sets": 300,
+  "set_max_iter": 60,
+  "gamma_dist_interval": [
+   -0.22628432386414646,
+   0.6216020925981884
+  ],
+  "stop_nconv": 5,
+  "seed_of_per_shot_decoders": 0
+ },
+ "head_priors": {
+  "mode": "logodds",
+  "alpha": 0.2,
+  "eps": 0.0001
+ },
+ "kit_arm": "one decoder built once per chunk of 1000 shots, decoding in file order",
+ "logits": {
+  "data": {
+   "path": "/home/blakew3/mlBranchMidwest/pred-lat-e96cc02/challenge-1-ml-decoder-kit/data/p0.003/validation_X.npz",
+   "sha256": "455311ff7f2c7fa8359af83c09e96d75eb791dd0105bebb66ff56bd016aaa4e8",
+   "basis": "X",
+   "p": 0.003,
+   "seed": 201,
+   "shots": 5000,
+   "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+  },
+  "shots": 1000,
+  "columns": 8784,
+  "model": {
+   "head": "/home/blakew3/mlBranchMidwest/runs/predecoder/latency_validation_X_p0.005/head_X.pt",
+   "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+   "head_step": 30000,
+   "trunk": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt",
+   "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+   "trunk_step": 120000,
+   "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+   "device": "cpu",
+   "torch": "2.15.0+cu132",
+   "torch_threads": 1
+  },
+  "seconds_batched_total": 58.85838270187378,
+  "per_shot_seconds": {
+   "what": "network + head, one shot at a time, on the device named",
+   "shots": 1000,
+   "mean": 0.02640150083589833,
+   "median": 0.026333627989515662,
+   "p99": 0.027452729321084914
+  },
+  "batch_one_against_batched_largest_logit_gap": 0.0,
+  "mean_probability_sum_per_shot": 35.2136953125,
+  "kit_prior_sum": 35.54888178481392
+ },
+ "arms": {
+  "head": {
+   "arm": "head",
+   "shots": 1000,
+   "failures": 1,
+   "share": 0.001,
+   "wilson95": [
+    0.00017654636867653686,
+    0.005642558659926143
+   ],
+   "unconverged": 1,
+   "hard": 4,
+   "mean_iterations": 70.756,
+   "network_seconds_mean": 0.02640150083589833,
+   "build_seconds_mean": 0.004423524719546549,
+   "decode_seconds_mean": 0.02210961347864941,
+   "seconds_mean": 0.052934639034094275,
+   "seconds_p99": 0.08307133603154215
+  }
+ },
+ "pairs": {},
+ "workers": 1,
+ "machine": "jupyter-blakew3",
+ "cpus": 24
+}

@@ -29,4 +29,6 @@ Rules the scripts enforce:
 - A row of a test table must name the team's saved test files by sha256, or the run stops.
 - Each evaluator row is re-counted from its per-shot file (failures of X, of Z, pairs; the rate per cycle; the times
   per pair), and the run stops if that disagrees with the evaluator's own summary.
-- Test shots and exploration shots never share a table.
+- Test shots and exploration shots never share a table, with one exception: `tables/operating_rule.md`, an operating rule
+  chosen after the test results, puts test-shot failures beside the predecoder's time on exploration shots, and every row
+  names where its time comes from.

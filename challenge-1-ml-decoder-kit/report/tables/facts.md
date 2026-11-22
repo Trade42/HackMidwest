@@ -432,6 +432,54 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `lad5_aw_rate` | 4.50e-03 | `tables/test_ladder.md` |
 | `lad5_floor_pairs` | 386 | `tables/test_ladder.md` |
 | `lad5_floor_rate` | 3.28e-03 | `tables/test_ladder.md` |
+| `lat3_bp_mean` | 26.5 | `tables/predecoder_latency.md` |
+| `lat3_bp_median` | 19.0 | `tables/predecoder_latency.md` |
+| `lat3_bp_p99` | 56.7 | `tables/predecoder_latency.md` |
+| `lat3_conv` | 999 | `tables/predecoder_latency.md` |
+| `lat3_conv_ms` | 21.0 | `tables/predecoder_latency.md` |
+| `lat3_net_mean` | 26.4 | `tables/predecoder_latency.md` |
+| `lat3_net_median` | 26.3 | `tables/predecoder_latency.md` |
+| `lat3_net_p99` | 27.5 | `tables/predecoder_latency.md` |
+| `lat3_relay_pair` | 85.3 | `tables/predecoder_latency.md` |
+| `lat3_relay_x` | 44.3 | `tables/predecoder_latency.md` |
+| `lat3_shots` | 1,000 | `tables/predecoder_latency.md` |
+| `lat3_tcbp_x` | 2.0 | `tables/predecoder_latency.md` |
+| `lat3_total` | 52.9 | `tables/predecoder_latency.md` |
+| `lat3_unconv` | 1 | `tables/predecoder_latency.md` |
+| `lat3_unconv_ms` | 5,515 | `tables/predecoder_latency.md` |
+| `lat3_unconv_share` | 0.1% | `tables/predecoder_latency.md` |
+| `lat4_bp_mean` | 67.3 | `tables/predecoder_latency.md` |
+| `lat4_bp_median` | 23.1 | `tables/predecoder_latency.md` |
+| `lat4_bp_p99` | 631 | `tables/predecoder_latency.md` |
+| `lat4_conv` | 997 | `tables/predecoder_latency.md` |
+| `lat4_conv_ms` | 51.0 | `tables/predecoder_latency.md` |
+| `lat4_net_mean` | 26.7 | `tables/predecoder_latency.md` |
+| `lat4_net_median` | 26.6 | `tables/predecoder_latency.md` |
+| `lat4_net_p99` | 27.3 | `tables/predecoder_latency.md` |
+| `lat4_relay_pair` | 319 | `tables/predecoder_latency.md` |
+| `lat4_relay_x` | 156 | `tables/predecoder_latency.md` |
+| `lat4_shots` | 1,000 | `tables/predecoder_latency.md` |
+| `lat4_tcbp_x` | 3.9 | `tables/predecoder_latency.md` |
+| `lat4_total` | 94.0 | `tables/predecoder_latency.md` |
+| `lat4_unconv` | 3 | `tables/predecoder_latency.md` |
+| `lat4_unconv_ms` | 5,512 | `tables/predecoder_latency.md` |
+| `lat4_unconv_share` | 0.3% | `tables/predecoder_latency.md` |
+| `lat5_bp_mean` | 185 | `tables/predecoder_latency.md` |
+| `lat5_bp_median` | 30.1 | `tables/predecoder_latency.md` |
+| `lat5_bp_p99` | 5,467 | `tables/predecoder_latency.md` |
+| `lat5_conv` | 992 | `tables/predecoder_latency.md` |
+| `lat5_conv_ms` | 142 | `tables/predecoder_latency.md` |
+| `lat5_net_mean` | 26.8 | `tables/predecoder_latency.md` |
+| `lat5_net_median` | 26.7 | `tables/predecoder_latency.md` |
+| `lat5_net_p99` | 28.0 | `tables/predecoder_latency.md` |
+| `lat5_relay_pair` | 1,471 | `tables/predecoder_latency.md` |
+| `lat5_relay_x` | 760 | `tables/predecoder_latency.md` |
+| `lat5_shots` | 1,000 | `tables/predecoder_latency.md` |
+| `lat5_tcbp_x` | 8.7 | `tables/predecoder_latency.md` |
+| `lat5_total` | 212 | `tables/predecoder_latency.md` |
+| `lat5_unconv` | 8 | `tables/predecoder_latency.md` |
+| `lat5_unconv_ms` | 5,544 | `tables/predecoder_latency.md` |
+| `lat5_unconv_share` | 0.8% | `tables/predecoder_latency.md` |
 | `lat_bp_mean` | 185 | `tables/predecoder_latency.md` |
 | `lat_bp_median` | 30.1 | `tables/predecoder_latency.md` |
 | `lat_bp_p99` | 5,467 | `tables/predecoder_latency.md` |
@@ -541,6 +589,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `ntall_weight_only_net` | 5 | `tables/test_network_timed.md` |
 | `ntall_weight_p` | 0.002 | `tables/test_network_timed.md` |
 | `ntall_weight_verdict` | better than | `tables/test_network_timed.md` |
+| `op3_choice` | our pipeline | `tables/operating_rule.md` |
+| `op4_choice` | the predecoder with the fallback | `tables/operating_rule.md` |
+| `op5_choice` | the predecoder with the fallback | `tables/operating_rule.md` |
+| `op_statement` | Which method at which noise level (an operating rule chosen after the test results were seen, from the measured rows; not a frozen decoder): at p = 0.003, our pipeline (1 X failure, 23.7 ms per X shot; level on failures with the predecoder with the fallback, and faster); at p = 0.004, the predecoder with the fallback (10 X failures, 94.0 ms per X shot); at p = 0.005, the predecoder with the fallback (107 X failures, 212 ms per X shot). The counts are of 10,000 X test shots and are not paired (the predecoder's per-shot answers are not in the repository), so a difference of a few shots is within the noise; the times come from other runs on other shots and are a guide, not a paired measurement; the fallback needs a GPU for TCBP-JOBS. | `tables/operating_rule.md` |
 | `pair_H` | not measured | `tables/test_predecoder.md` |
 | `pair_H_vs_R_only_mine` | not measured | `tables/test_predecoder.md` |
 | `pair_H_vs_R_only_other` | not measured | `tables/test_predecoder.md` |

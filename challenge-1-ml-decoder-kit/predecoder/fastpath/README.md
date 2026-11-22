@@ -138,6 +138,9 @@ failures shot for shot.** But it is weak, and it should not go into the pipeline
   (F's p99 is 76.7 ms) and then the whole TCBP version.
   - Not declared, a diagnostic: if F's decode could be stopped at 5.51 ms, the rule would cost 35.2 ms mean and
     68.3 ms p99. Whether cudaq-qec 0.9.0 can stop a decode was not tested.
+- **F's times were not measured as a pipeline would run it.** They come from job 3, where F was built fresh for each
+  shot and the GPU was shared with the knob fit's last rows. Neither the 12.8 ms mean nor the 5.51 ms threshold was
+  measured on a decoder built once and running alone.
 - **The threshold is a time in ms, measured on one run.** In job 1, F's decodes on the same shots were faster
   (median 5.4 ms against job 3's 7.2; rank correlation 0.78). At the same 5.51 ms, job 1 would send 51% of the shots
   to F and add 1 failure. An iteration count would not depend on the machine or the load, but no file stores one.
@@ -152,3 +155,31 @@ failures shot for shot.** But it is weak, and it should not go into the pipeline
 
 Round 2 in one line: the only check with a real saving is F's own decode time. It saves 15% of the mean and costs a
 worse p99, with a threshold in ms that does not carry from one run to another.
+
+## Round 3 at p = 0.005: the head's own confidence (`CRITERION_3.md`)
+
+Exploration, after the test results; a separate branch. Declared (`cbfbfbcd`, 18:40:33 UTC by the commit) before
+any number about these features, not even their range. **This is the third look at the same 5,000 shots**, so a pass
+here is weaker evidence than a pass in round 1. Command: round 2's, with `--round3 --out predecoder/fastpath/result3_p0.005.json`
+(output `result3_p0.005.json`, `result3_p0.005.log`).
+
+| check, at its t* | fast path | failures (both / only rule / only TH) | mean ms | p99 ms | 95% bound on added per fast shot |
+|---|---|---|---|---|---|
+| TH alone | 0% | 33 | 51.1 | 63.1 | (TH's own rate 0.0066) |
+| C6 F's decode time <= 5.51 ms (round 2's choice) | 40.1% | 33 (33 / 0 / 0) | 43.4 | 102.9 | 0.0015 |
+| C8 upward prior move <= 225.3 | 23.5% | 33 (33 / 0 / 0) | 42.8 | 63.1 | 0.0026 |
+| **C9 the head's entropy <= 69.1 bits (chosen)** | **35.4%** | **33 (33 / 0 / 0)** | **38.8** | **63.1** | **0.0017** |
+
+- **C9 is chosen by the criterion over every check of rounds 1 to 3: 38.8 ms mean, against 51.1 ms for TH alone
+  (24% lower). Its p99 is TH's own, 63.1 ms, and its failures are TH's 33, shot for shot.** C9 is the sum over the
+  8,784 columns of the binary entropy of the head's raw probability. A shot the network is sure about, either way,
+  goes to F after the network; the rest go to the TCBP version. The network has already run, so a hard shot pays no
+  more than TH alone.
+- **The diagnostics:**
+  - the half split: t picked on the even shots (70.6) adds 1 failure on the odd shots; picked on the odd shots
+    (69.1), it adds 0 on the even ones;
+  - the other model fits of F: job 1's fresh arm and the stored file both add 0 at t*.
+  So on new shots expect C9 to add about 0 to 2 failures per 5,000. The threshold is on the edge, like every other.
+- C8 (upward moves only) also passes, at 42.8 ms. C9 sends more shots to the fast path for the same cost per shot.
+- The 95% bound for 0 added failures among the fast shots (3 / fast shots, for C9 3 / 1,771 = 0.0017) is below TH's
+  own failure rate (0.0066), but not far below it.

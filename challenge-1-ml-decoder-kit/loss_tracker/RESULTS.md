@@ -329,8 +329,8 @@ What this says:
 
 ## How the frozen decoder is chosen
 
-Written at 06:52 UTC (commit `1a41df1`), before the variant runs finished. The lines marked 07:02 were added then
-(committed at 07:11, `b926c22`), before the full-validation scores of the 1-sweep and 4-sweep explain versions and
+Written at 06:52 UTC (commit `1972fbc` on `integration`; its author time 06:52 UTC survives the rebases), before the variant runs finished. The lines marked 07:02 were added then
+(commit `a4f6c95`, author time 07:11 UTC), before the full-validation scores of the 1-sweep and 4-sweep explain versions and
 the last 1,000 shots of the variants were read. What had been seen by then: the first 500 shots of every variant;
 the explain version's score with 2 sweeps; and a 400-shot development run of an earlier, faulty build in which
 2 and 4 sweeps differed by 0.001.

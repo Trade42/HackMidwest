@@ -50,9 +50,9 @@ case "${1:?step}" in
         --out $R/g2_selection_p0.003.npz | tee $L/g2_select_p0.003.log
     $LOCK $PY -m analysis.g2_headroom run --selection $R/g2_selection_p0.003.npz --data $P003 --cache "$S/cache" \
         --processes 8 --only joint joint600 --log $L/g2_run_step4.log ;;
-  step5)      # G2 item 5 at p = 0.004 on a seeded sample: 25 failures and 50 controls per basis
+  step5)      # G2 item 5 at p = 0.004 on a seeded sample: 50 failures and 100 controls per basis
     $LOCK $PY -m analysis.g2_headroom run --selection $R/g2_selection_p0.004.npz --data $P004 --cache "$S/cache" \
-        --processes 8 --only joint joint600 --caps "${CAPS:-joint@0.004=25/50/all,joint600@0.004=25/50/all}" \
+        --processes 8 --only joint joint600 --caps "${CAPS:-joint@0.004=50/100/all,joint600@0.004=50/100/all}" \
         --log $L/g2_run_step5.log ;;
   step6)      # G1 at p = 0.005: the first 5,000 shots of each exploration file
     $LOCK $PY -m analysis.g1_relay_failures run --data $P005 --cache "$S/cache" --processes 8 --max-shots 5000 \
@@ -64,7 +64,7 @@ case "${1:?step}" in
         --caps "${CAPS7:-cand16@0.004=all/all/10,cand16@0.005=all/all/10}" --log $L/g2_run_step7.log ;;
   summarize-g2)
     $PY -m analysis.g2_headroom summarize --selection $R/g2_selection_p0.00[345].npz --data $P004 $P003 $P005 \
-        --cache "$S/cache" --caps "${CAPS:-joint@0.004=25/50/all,joint600@0.004=25/50/all},${CAPS7:-cand16@0.004=all/all/10,cand16@0.005=all/all/10}" \
+        --cache "$S/cache" --caps "${CAPS:-joint@0.004=50/100/all,joint600@0.004=50/100/all},${CAPS7:-cand16@0.004=all/all/10,cand16@0.005=all/all/10}" \
         --out $R | tee $L/g2_summary.log ;;
   step8)      # G3: the 16-schedule frontier on the validation files at p = 0.004
     $LOCK $PY -m analysis.g3_schedules run --data $D004/validation_X.npz $D004/validation_Z.npz --cache "$S/cache" \

@@ -4,6 +4,10 @@ bposd10   p0.004_X  F  122 fixes   43 (unconv 21/55, conv-wrong 22/67)  C  122 b
 bposd10   p0.004_Z  F  123 fixes   36 (unconv 11/45, conv-wrong 25/78)  C  123 breaks   4  paired p 1.9e-07  est. failures on all 896 [298, 2116] vs relay 123
 bposd_hi  p0.004_X  F  122 fixes   43 (unconv 21/55, conv-wrong 22/67)  C  122 breaks   2  paired p 5.9e-11  est. failures on all 487 [117, 1531] vs relay 122
 bposd_hi  p0.004_Z  F  123 fixes   38 (unconv 12/45, conv-wrong 26/78)  C  123 breaks   4  paired p 5.7e-08  est. failures on all 894 [296, 2114] vs relay 123
+joint     p0.003_X  F   23 fixes   23 (unconv 7/7, conv-wrong 16/16)  C  150 breaks   0  paired p 2.4e-07  est. failures on all 0 [0, 1217] vs relay 23
+joint     p0.003_Z  F   21 fixes   20 (unconv 9/9, conv-wrong 11/12)  C  150 breaks   0  paired p 1.9e-06  est. failures on all 1 [0, 1219] vs relay 21
+joint600  p0.003_X  F   23 fixes   23 (unconv 7/7, conv-wrong 16/16)  C  150 breaks   0  paired p 2.4e-07  est. failures on all 0 [0, 1217] vs relay 23
+joint600  p0.003_Z  F   21 fixes   20 (unconv 9/9, conv-wrong 11/12)  C  150 breaks   0  paired p 1.9e-06  est. failures on all 1 [0, 1219] vs relay 21
 tesseract p0.004_X  F  122 fixes   43 (unconv 21/55, conv-wrong 22/67)  C  122 breaks   2  paired p 5.9e-11  est. failures on all 487 [117, 1531] vs relay 122
 tesseract p0.004_Z  F  123 fixes   37 (unconv 11/45, conv-wrong 26/78)  C  123 breaks   4  paired p 1e-07  est. failures on all 895 [297, 2115] vs relay 123
 
@@ -15,5 +19,11 @@ tesseract p0.004_Z  F  123 fixes   37 (unconv 11/45, conv-wrong 26/78)  C  123 b
 | bposd10 | 0.004 | Z | 123 | 36 / 11 of 45 / 25 of 78 | 123 | 4 | 87 / 36 / 4 / 119 | 1.9e-07 | 0.033 [0.009, 0.081] | 896 [298, 2116] vs 123 | 79 / 52 | 1214 / 419 |
 | bposd_hi | 0.004 | X | 122 | 43 / 21 of 55 / 22 of 67 | 122 | 2 | 79 / 43 / 2 / 120 | 5.9e-11 | 0.016 [0.002, 0.058] | 487 [117, 1531] vs 122 | 79 / 53 | 1331 / 519 |
 | bposd_hi | 0.004 | Z | 123 | 38 / 12 of 45 / 26 of 78 | 123 | 4 | 85 / 38 / 4 / 119 | 5.7e-08 | 0.033 [0.009, 0.081] | 894 [296, 2114] vs 123 | 79 / 52 | 1245 / 441 |
+| joint | 0.003 | X | 23 | 23 / 7 of 7 / 16 of 16 | 150 | 0 | 0 / 23 / 0 / 150 | 2.4e-07 | 0.000 [0.000, 0.024] | 0 [0, 1217] vs 23 | 2411 / 658 | 31765 / 9006 |
+| joint | 0.003 | Z | 21 | 20 / 9 of 9 / 11 of 12 | 150 | 0 | 1 / 20 / 0 / 150 | 1.9e-06 | 0.000 [0.000, 0.024] | 1 [0, 1219] vs 21 | 4065 / 519 | 60706 / 7681 |
+| joint600 | 0.003 | X | 23 | 23 / 7 of 7 / 16 of 16 | 150 | 0 | 0 / 23 / 0 / 150 | 2.4e-07 | 0.000 [0.000, 0.024] | 0 [0, 1217] vs 23 | 3193 / 756 | 34812 / 9593 |
+| joint600 | 0.003 | Z | 21 | 20 / 9 of 9 / 11 of 12 | 150 | 0 | 1 / 20 / 0 / 150 | 1.9e-06 | 0.000 [0.000, 0.024] | 1 [0, 1219] vs 21 | 4922 / 519 | 61899 / 7675 |
 | tesseract | 0.004 | X | 122 | 43 / 21 of 55 / 22 of 67 | 122 | 2 | 79 / 43 / 2 / 120 | 5.9e-11 | 0.016 [0.002, 0.058] | 487 [117, 1531] vs 122 | 0 / 0 | 3743 / 571 |
 | tesseract | 0.004 | Z | 123 | 37 / 11 of 45 / 26 of 78 | 123 | 4 | 86 / 37 / 4 / 119 | 1e-07 | 0.033 [0.009, 0.081] | 895 [297, 2115] vs 123 | 0 / 0 | 3676 / 577 |
+
+joint600 check: {'run': 7, 'below_floor_decoded': 4, 'below_floor_identical': 4, 'floor_iterations': 17760}

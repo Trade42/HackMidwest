@@ -8,3 +8,10 @@ fit on f0.8-seed5800-train (X_f0.8_seed5800_kitformat_p0.0326371.npz, 1500 train
     fit m: 800 of 1500 shots, build 45.3 ms, decode 7.1 ms mean (last 200: 44.7 + 6.4 ms), 47 s; priors capped at 0.5 so far on 0 shots, 0 columns
     fit m: 1000 of 1500 shots, build 45.3 ms, decode 7.0 ms mean (last 200: 45.1 + 6.6 ms), 59 s; priors capped at 0.5 so far on 0 shots, 0 columns
     fit m: 1200 of 1500 shots, build 45.4 ms, decode 6.9 ms mean (last 200: 45.9 + 6.7 ms), 71 s; priors capped at 0.5 so far on 0 shots, 0 columns
+    fit m: 1400 of 1500 shots, build 45.9 ms, decode 7.0 ms mean (last 200: 49.3 + 7.4 ms), 83 s; priors capped at 0.5 so far on 0 shots, 0 columns
+  m: failures 13 of 1500, not reproduced 0, flagged 1279, capped 0, 53 ms; 144 s
+    fit alpha0.1_eps0.0001: 200 of 1500 shots, build 46.9 ms, decode 6.6 ms mean (last 200: 46.9 + 6.6 ms), 12 s; priors capped at 0.5 so far on 0 shots, 0 columns
+    fit alpha0.1_eps0.0001: 400 of 1500 shots, build 46.2 ms, decode 6.7 ms mean (last 200: 45.4 + 6.9 ms), 24 s; priors capped at 0.5 so far on 0 shots, 0 columns
+    fit alpha0.1_eps0.0001: 600 of 1500 shots, build 45.9 ms, decode 6.8 ms mean (last 200: 45.3 + 6.9 ms), 36 s; priors capped at 0.5 so far on 0 shots, 0 columns
+    fit alpha0.1_eps0.0001: 800 of 1500 shots, build 45.8 ms, decode 6.6 ms mean (last 200: 45.7 + 5.8 ms), 48 s; priors capped at 0.5 so far on 0 shots, 0 columns
+    fit alpha0.1_eps0.0001: 1000 of 1500 shots, build 45.8 ms, decode 6.5 ms mean (last 200: 45.5 + 6.0 ms), 59 s; priors capped at 0.5 so far on 0 shots, 0 columns

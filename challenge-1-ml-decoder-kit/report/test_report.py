@@ -77,14 +77,15 @@ def test_every_copied_file_matches_its_record():
 
 
 def test_the_top_readme_holds_the_generated_section():
-    """Once our section is appended to the top-level README.md, it must be the generated one, and nothing above it may change."""
-    from report.make_tables import README_HEADING
+    """The top-level README.md starts with the generated front page; below it, the teammates' review is unchanged (pinned by sha256)."""
+    from report.make_tables import README_BEGIN, README_END, TEAMMATES_HEADING
     readme = (KIT.parent / "README.md").read_text(encoding="utf-8")
-    if README_HEADING not in readme:
-        pytest.skip("our section is not appended yet")
-    section = (REPORT / "tables" / "readme_section.md").read_text(encoding="utf-8")
-    assert readme.endswith("\n\n" + section)
-    assert len(section.rstrip("\n").split("\n")) <= 25
+    section = (REPORT / "tables" / "readme_section.md").read_text(encoding="utf-8").rstrip("\n")
+    assert section.startswith(README_BEGIN) and section.endswith(README_END)
+    assert readme.startswith(section) and readme[len(section):].startswith("\n\n" + TEAMMATES_HEADING)
+    teammates = readme[readme.index(TEAMMATES_HEADING):]
+    assert hashlib.sha256(teammates.encode("utf-8")).hexdigest() == "2d6026b2271973922c240a76ad5de7eae433b20c1218e90406f86e2759276d59"
+    assert (KIT.parent / "CHALLENGE.md").is_file() and "(CHALLENGE.md)" in section
 
 
 def stand_in(folder):
@@ -153,7 +154,7 @@ def test_scripts_on_a_stand_in(tmp_path):
     done = run("report.make_plots", data, tmp_path)
     assert done.returncode == 0, done.stderr
     first = {file.name: file.read_bytes() for file in (tmp_path / "figures").iterdir()}
-    assert len(first) == 12
+    assert len(first) == 16                     # 8 figures, png and svg (6 of the report, 2 of the front page)
     run("report.make_plots", data, tmp_path)                     # a second run gives the same files, byte for byte
     assert first == {file.name: file.read_bytes() for file in (tmp_path / "figures").iterdir()}
 
@@ -249,7 +250,9 @@ def test_the_predecoder_rows_are_labelled_and_match_their_files():
             continue                        # a head arm that landed before its fresh arm
         pair = summary["pairs"]["head_vs_fresh"]
         assert f"| {pair['both']} / {pair['only_head']} / {pair['only_fresh']} (p = {stats.p_text(pair['p'])}) |" in table
-    for name in ("test_sweep", "test_p0.005", "test_comparisons", "readme_section"):
+    from report.rows import PTCBP_LABEL
+    assert PTCBP_LABEL in (REPORT / "tables" / "readme_section.md").read_text(encoding="utf-8")   # the front page names the TCBP version with its label
+    for name in ("test_sweep", "test_p0.005", "test_comparisons"):
         assert "head's priors" not in (REPORT / "tables" / f"{name}.md").read_text(encoding="utf-8")
 
 

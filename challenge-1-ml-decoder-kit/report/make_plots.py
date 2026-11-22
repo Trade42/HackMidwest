@@ -12,6 +12,8 @@ It writes report/figures/<name>.png and <name>.svg, one figure per file:
   loss              share of failed shots against the loss rate: loss-blind, flag-aware, ORACLE, tracker
   learning_curves   the two networks: share of shots wrong against the training step
   where_failures    how often the two fast decodes agree, and where the failures are
+  front_ler_vs_p    the README's front page: the error rate against p with the predecoder and the TCBP version
+  front_x_vs_time   the README's front page: X failures against time per X shot at p = 0.005, the hardware in the legend
 
 A decoder keeps its colour and marker in every figure (report/rows.py). A row that is not
 measured is not drawn, and the figure says so under the plot. Running the script twice gives
@@ -483,12 +485,139 @@ def where_failures(combined, measured):
     return save(figure, "where_failures")
 
 
+# ---------- 7. the front page's two figures (the top-level README.md) ----------
+
+def generated_facts():
+    """The single numbers make_tables.py wrote to tables/facts.md (run make_tables first): name -> value text."""
+    file = FIGURES.parent / "tables" / "facts.md"   # REPORT_OUT in the tests, else report/
+    if not file.is_file():
+        raise Mismatch("tables/facts.md is missing: run python -m report.make_tables first")
+    facts = {}
+    for line in file.read_text(encoding="utf-8").splitlines():
+        cells = [cell.strip() for cell in line.split(" | ")]
+        if len(cells) >= 3 and cells[0].startswith("| `"):
+            facts[cells[0][3:-1]] = cells[1]
+    return facts
+
+
+def number(text):
+    try:
+        return float(text.replace(",", "").removeprefix("about "))
+    except (AttributeError, ValueError):
+        return None
+
+
+TH_COLOUR, PRE_COLOUR = "#b8224f", "#7a5c00"
+
+
+def front_ler_vs_p(measured):
+    figure, axes = new_figure("Logical error rate per cycle on the test shots",
+                              "the kit's score: 10,000 pairs of an X and a Z shot per noise level; bars: 95% interval; lower is better", size=(16, 7.6))
+    figure.subplots_adjust(left=0.085, right=0.6)
+    values = []
+
+    def draw(xs, failures, label, colour, marker, style="-", hollow=False):
+        rates = [stats.per_cycle_rate(f, 10000)[0] for f in failures]
+        bounds = [stats.per_cycle_interval(f, 10000) for f in failures]
+        axes.errorbar(xs, rates, yerr=[[r - b[0] for r, b in zip(rates, bounds)], [b[1] - r for r, b in zip(rates, bounds)]], color=colour,
+                      marker=marker, linestyle=style, capsize=4, elinewidth=1.6, zorder=3, label=label, markersize=19 if marker == "*" else 11,
+                      **marker_style(colour, hollow))
+        values.extend(rates + [b[0] for b in bounds if b[0] > 0] + [b[1] for b in bounds])
+
+    shown = (("bposd", "BP-OSD (the kit's baseline)"), ("relay-bp", "relay-BP (the kit's baseline)"), ("router", "relay-BP with a learned router (teammates)"),
+             ("tcbp", "TCBP-JOBS alone (NVIDIA's GPU decoder)"), ("hierarchy", "our first pipeline, frozen before the test run"))
+    for index, (key, label) in enumerate(shown):
+        points = [(p, measured[p][key]) for p in P_VALUES if measured[p].get(key) is not None and not measured[p][key].get("offline")]
+        if points:
+            draw([float(p) + (index - 3) * 0.000018 for p, _ in points], [row["failures_pair"] for _, row in points], label,
+                 DECODERS[key].colour, DECODERS[key].marker)
+    pair = DATA / "test" / "predecoder" / "pair_test_p0.005.json"
+    if pair.is_file():
+        draw([0.005 + 0.000054], [json.loads(pair.read_text(encoding="utf-8"))["decoders"]["H"]["failed_pairs"]],
+             "ours: the relay-BP predecoder (p = 0.005 only; secondary)", PRE_COLOUR, "h")
+    ths = []
+    for p in P_VALUES:
+        file = DATA / "test" / "predecoder_tcbp" / f"tcbp_pair_test_p{p}.json"
+        if file.is_file():
+            ths.append((float(p) + 0.000072, json.loads(file.read_text(encoding="utf-8"))["TH"]["failed_pairs"]))
+    if ths:
+        draw([x for x, _ in ths], [f for _, f in ths], "ours: the TCBP version (designed after\nthe test results were seen)", TH_COLOUR, "*")
+    axes.set_yscale("log")
+    if values:
+        axes.set_ylim(10 ** np.floor(np.log10(min(values)) - 0.05), 10 ** np.ceil(np.log10(max(values)) + 0.05))
+    axes.yaxis.set_major_formatter(FuncFormatter(power_label))
+    axes.yaxis.set_minor_formatter(NullFormatter())
+    axes.set_ylabel("logical error rate per cycle")
+    p_axis(axes)
+    axes.legend(loc="upper left", bbox_to_anchor=(1.01, 1.0), fontsize=12, frameon=False, borderaxespad=0)
+    low = DATA / "test" / "predecoder_tcbp" / "tcbp_pair_test_p0.003.json"
+    low = json.loads(low.read_text(encoding="utf-8")) if low.is_file() else None
+    footnote(figure, "Every point is the same 10,000 test pairs at its p. The TCBP version: its knobs were fitted on X memory at p = 0.005 and applied "
+                     "unchanged elsewhere, so there is no validation at p = 0.004 and 0.003"
+                     + (f"; at p = 0.003 it fails {low['TH']['failed_pairs']} pair(s) against TCBP-JOBS's {low['T']['failed_pairs']}, too few for a claim"
+                        if low else "") + ". The relay-BP predecoder was scored as pairs at p = 0.005 only. TCBP-JOBS's counts carry the spread of its model fit.")
+    return save(figure, "front_ler_vs_p")
+
+
+def front_x_vs_time(measured):
+    facts = generated_facts()
+    figure, axes = new_figure("Accuracy against time per X shot at p = 0.005",
+                              "the 10,000 X-memory test shots; mean time per X shot; lower and further left is better", size=(16, 7.6))
+    figure.subplots_adjust(left=0.085, right=0.56)
+    points = []
+    cpu = "CPU, 1 process (team's server)"
+    for key, label in (("bposd", "BP-OSD (kit)"), ("relay-bp", "relay-BP (kit)"), ("router", "router (teammates)"), ("priortilt", "PriorTilt (IonQ)"),
+                       ("hierarchy", "our first pipeline"), ("hierarchy-parallel", "our first pipeline, 2 cores")):
+        row = measured["0.005"].get(key)
+        seconds = None
+        if row is not None and row.get("per_shot_file"):
+            with np.load(DATA / row["per_shot_file"], allow_pickle=False) as file:
+                seconds = float(file["seconds_total_X"].mean()) if "seconds_total_X" in file.files else None
+        if seconds is not None:
+            where = cpu.replace("1 process", "1 process, 2 cores") if key == "hierarchy-parallel" else cpu
+            points.append((seconds * 1e3, row["failures_X"], f"{label}: {where}", DECODERS[key].colour, DECODERS[key].marker, False))
+    tcbp = measured["0.005"].get("tcbp")
+    if tcbp is not None and number(facts.get("lat_tcbp_x")) is not None:
+        points.append((number(facts["lat_tcbp_x"]), tcbp["failures_X"], "TCBP-JOBS alone (NVIDIA): A100 slice, the decode call only",
+                       DECODERS["tcbp"].colour, DECODERS["tcbp"].marker, False))
+    if number(facts.get("lat_total")) is not None and number(facts.get("pre5X_H")) is not None:
+        points.append((number(facts["lat_total"]), number(facts["pre5X_H"]), "ours, relay-BP predecoder: CPU, 1 thread (time on 1,000 validation shots)",
+                       PRE_COLOUR, "h", False))
+    if number(facts.get("pttime_total")) is not None and number(facts.get("ptt5X_TH")) is not None:
+        points.append((number(facts["pttime_total"]), number(facts["ptt5X_TH"]), "ours, the TCBP version: A100 slice, network + build + decode\n"
+                       "(as registered; not a clean timing)", TH_COLOUR, "*", False))
+        if number(facts.get("ptspeed_new")) is not None:
+            points.append((number(facts["ptspeed_new"]), number(facts["ptt5X_TH"]), "the same after the speed work (parts timed alone on\n"
+                           "1,000 validation shots; same answers there)", TH_COLOUR, "*", True))
+    for x, y, label, colour, marker, hollow in points:
+        axes.plot([x], [y], marker=marker, color=colour, linestyle="none", markersize=20 if marker == "*" else 12, label=label, zorder=3,
+                  **marker_style(colour, hollow))
+    axes.set_xscale("log")
+    axes.set_yscale("log")
+    if points:
+        xs, ys = [x for x, *_ in points], [y for _, y, *_ in points]
+        axes.set_xlim(10 ** np.floor(np.log10(min(xs)) - 0.02), 10 ** np.ceil(np.log10(max(xs)) + 0.02))
+        axes.set_ylim(10 ** np.floor(np.log10(min(ys)) - 0.05), 10 ** np.ceil(np.log10(max(ys)) + 0.05))
+    axes.xaxis.set_major_formatter(FuncFormatter(ms_label))
+    axes.xaxis.set_minor_formatter(NullFormatter())
+    axes.yaxis.set_major_formatter(FuncFormatter(lambda value, _position=None: f"{value:g}"))
+    axes.yaxis.set_minor_formatter(NullFormatter())
+    axes.set_xlabel("mean time per X shot (log scale)")
+    axes.set_ylabel("X test shots failed, of 10,000")
+    axes.legend(loc="upper left", bbox_to_anchor=(1.01, 1.0), fontsize=11, frameon=False, borderaxespad=0, labelspacing=0.9)
+    footnote(figure, "CPU and GPU times come from different machines and timers: read them as orders of magnitude, not as equals. The CPU rows time "
+                     "the whole decode of each test X shot in one process. The predecoder's and the TCBP version's failures are on the test shots, "
+                     "their times on validation shots where marked. The TCBP version was designed after the test results were seen.")
+    return save(figure, "front_x_vs_time")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.parse_args(argv)
     try:
         measured, _, combined = load_test_rows()
-        names = [ler_vs_p(measured), time_vs_p(measured), ler_vs_time(measured), loss(), learning_curves(), where_failures(combined, measured)]
+        names = [ler_vs_p(measured), time_vs_p(measured), ler_vs_time(measured), loss(), learning_curves(), where_failures(combined, measured),
+                 front_ler_vs_p(measured), front_x_vs_time(measured)]
     except Mismatch as problem:
         print(f"STOPPED: {problem}", file=sys.stderr)
         return 1

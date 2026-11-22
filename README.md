@@ -1,135 +1,106 @@
-<img width="2172" height="724" alt="qubits-and-gradients" src="assets/qubits-and-gradients.png" />
+<!-- BEGIN our front page: written by challenge-1-ml-decoder-kit/report/make_tables.py from committed result files; edit it there -->
+# ML-assisted decoding of the Gross code [[144, 12, 12]]
 
-# Infleqtion Challenge: Qubits & Gradients
+Our entry to Infleqtion's Challenge 1 at HackMidwest 2026, the main entry of this repository; the challenge statement is in [CHALLENGE.md](CHALLENGE.md). Every number on this page is written by `challenge-1-ml-decoder-kit/report/make_tables.py` from committed result files.
 
-Quantum computation and machine learning are two rapidly emerging fields that have largely evolved in parallel, but their respective capabilities also create opportunities for them to advance one another. Quantum computers have the potential to offer more efficient modeling of contextual relationships. Meanwhile, new machine learning techniques can help address current challenges in quantum computing by bolstering quantum error correction (QEC) decoders.
+**In short.** A small neural network reads a shot's syndrome and tells NVIDIA's GPU decoder TCBP-JOBS which of the 8,784 possible faults to suspect in that shot. With these per-shot priors, TCBP-JOBS fails **132 of 10,000 test pairs at p = 0.005** (1.11e-03 ± 9.6e-05 per cycle), against 360 with its fixed priors (3.05e-03 ± 1.6e-04) and 845 for the kit's relay-BP (7.33e-03 ± 2.5e-04); at p = 0.004 10 against 41 and 83; at p = 0.003 1 against 3 and 5 (too few to claim anything). **This version was designed after the test results were seen** (no validation at p = 0.004 and 0.003); on 5,000 fresh X shots at p = 0.005, simulated after it was designed (exploration on new Stim shots), it fails 48 against TCBP-JOBS's 112. The decoder we froze before the test run is the first pipeline below (the table's row "ours, frozen before the test run").
 
-For this hackathon, choose one of two challenges exploring the intersection of these two fields. We anticipate the first challenge to require some prerequisite knowledge of QEC, whereas the second challenge is more beginner-friendly.
+![Logical error rate per cycle against p, with the predecoder and the TCBP version](challenge-1-ml-decoder-kit/report/figures/front_ler_vs_p.png)
 
----
+## Results on the test shots
 
-# Challenge 1: ML-Assisted QEC Decoding
+The kit's score on the team's saved test files (Stim circuit shots, seeds 301 and 302): failed pairs of 10,000 (a pair is shot k of X memory and shot k of Z memory, and fails when either fails) · logical error rate per cycle ± the kit's error. Every row decodes the same shots. The label says what kind of number it is; rows of different labels are not equals.
 
-## Challenge
+| Method | Label | p = 0.003 | p = 0.004 | p = 0.005 |
+|---|---|---|---|---|
+| BP-OSD (kit baseline) | the kit's baseline | 60 · 5.01e-04 ± 6.5e-05 | 472 · 4.02e-03 ± 1.8e-04 | 2,433 · 2.30e-02 ± 4.6e-04 |
+| relay-BP (kit baseline) | the kit's baseline | 5 · 4.17e-05 ± 1.9e-05 | 83 · 6.94e-04 ± 7.6e-05 | 845 · 7.33e-03 ± 2.5e-04 |
+| relay-BP with a learned router | the teammates' (pre-registered) | 6 · 5.00e-05 ± 2.0e-05 | 87 · 7.28e-04 ± 7.8e-05 | 807 · 6.99e-03 ± 2.5e-04 |
+| PriorTilt, one run | IonQ's decoder (pre-registered) | 4 · 3.33e-05 ± 1.7e-05 | 74 · 6.19e-04 ± 7.2e-05 | 601 · 5.15e-03 ± 2.1e-04 |
+| TCBP-JOBS (NVIDIA, GPU) | NVIDIA's decoder (pre-registered) | 3 · 2.50e-05 ± 1.4e-05 | 41 · 3.42e-04 ± 5.3e-05 | 360 · 3.05e-03 ± 1.6e-04 |
+| our hierarchy, neural tie-break | **ours, frozen before the test run** (pre-registered) | 3 · 2.50e-05 ± 1.4e-05 | 44 · 3.67e-04 ± 5.5e-05 | 479 · 4.08e-03 ± 1.9e-04 |
+| the relay-BP predecoder: relay-BP with the network's per-shot priors | ours; secondary at p = 0.005 (chosen after its own gate failed), the rest a registered extension run after it | X only: 2 of 10,000 X shots | X only: 15 of 10,000 X shots | 281 · 2.37e-03 ± 1.4e-04 |
+| the predecoder with a fallback to TCBP-JOBS where its relay-BP does not converge | ours; post hoc (designed after the first test result) | X only: 1 of 10,000 X shots | X only: 10 of 10,000 X shots | 206 · 1.73e-03 ± 1.2e-04 |
+| **the TCBP version: TCBP-JOBS with the network's per-shot priors** | **ours; designed after the test results were seen; formerly a separate branch (predecoder-tcbp)**; no validation at p = 0.004 or 0.003 | 1 · 8.33e-06 ± 8.3e-06 (no claim: exact p = 0.50 against TCBP-JOBS) | **10 · 8.34e-05 ± 2.6e-05** | **132 · 1.11e-03 ± 9.6e-05** |
 
-QEC decoders must identify and correct errors quickly. They must also stay accurate. Powerful decoders can be computationally expensive. Simpler decoders may be faster but less accurate.
+Paired on the same pairs, the TCBP version against TCBP-JOBS alone: only the TCBP version fails 41 and only TCBP-JOBS 269 at p = 0.005 (exact p = 3e-42); 4 and 35 at p = 0.004 (exact p = 3e-07). TCBP-JOBS fits its model when it starts, and three fits on the same validation shots fail 91, 96 and 100, so its counts carry about ±5%. Every method with its label, its X failures and its time per pair: [report/tables/master_comparison.md](challenge-1-ml-decoder-kit/report/tables/master_comparison.md).
 
-For this challenge, teams will work with the Gross code, a quantum low-density parity-check (qLDPC) code in the bivariate bicycle family. Its parameters are `[[144, 12, 12]]` — 12 logical qubits in 144 data qubits, with a code distance of 12.
+## How we got here
 
-This challenge focuses on using machine learning to improve decoding, especially in the presence of qubit loss in addition to conventional Pauli errors. These error mechanisms are relevant to neutral-atom hardware where information about loss may be available to the decoder.
+1. **The first pipeline, frozen before the test run** (`hierarchy/`, `neural/`). Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural network (893,697 parameters) picks the most likely of the answers. At p = 0.005 our decoder fails 479 of 10,000 pairs, relay-BP 845 (only ours fails 93, only relay-BP 459, exact p = 4e-59), in 825 ms per pair against relay-BP's 1,471 ms per pair, or 608 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 601 in 264 ms per pair. In plain words: on the timed rows the network does not do measurably more than a good hand-written rule, and on one core its time is within 4% of the rule's at every p, the size of the run-to-run spread of these rows, so it costs no time the timer can see. The gain over relay-BP is PriorTilt's and the hierarchy's, as in the offline ablation above. (The offline ablation: [report/REPORT.md](challenge-1-ml-decoder-kit/report/REPORT.md), section 4, "The ablation: what the learned part adds".)
+2. **The relay-BP predecoder** (`predecoder/`). A second output of the same network gives every one of the 8,784 fault columns a probability for this shot, and relay-BP decodes with those priors. Scored as the kit scores (a pair of an X and a Z shot fails when either fails), at p = 0.005: relay-BP with the head's priors fails 281 pairs, a logical error rate of 2.37e-03 ± 1.4e-04 per cycle, against TCBP-JOBS's 360 (3.05e-03 ± 1.6e-04) (only H 114, only TCBP-JOBS 193, exact p = 8e-06) and relay-BP's 845 (exact p = 6e-131); the fallback rule, post hoc on its X half, fails 206, 1.73e-03 ± 1.2e-04 per cycle (against TCBP-JOBS: only the rule 39, only TCBP-JOBS 193, exact p = 1e-25). This pair score is part of the registered extension, not a held-out result, and it is not in the pair-scored tables of our decoder; accuracy only (its times come from a shared pool on the team's PC); TCBP-JOBS's counts come from its stored test file and carry its fit's spread (above).
+3. **The TCBP version** (`predecoder/README_tcbp.md`). The same per-shot priors given to TCBP-JOBS instead of relay-BP. On the test shots (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); decoded one basis at a time; its knobs were fitted on X at p = 0.005 and applied unchanged to Z and at p = 0.004 and 0.003, no validation at these p): X at p = 0.005, TH fails 72 against TCBP-JOBS's 186 (only TH 22, only TCBP-JOBS 136, exact p = 3e-21; the same run's kit-priors arm fails 186); X at p = 0.004, TH fails 4 against TCBP-JOBS's 20 (only TH 2, only TCBP-JOBS 18, exact p = 4e-04); X at p = 0.003, TH fails 0 against TCBP-JOBS's 1 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim); Z at p = 0.005, TH fails 61 against TCBP-JOBS's 177 (only TH 20, only TCBP-JOBS 136, exact p = 2e-22); Z at p = 0.004, TH fails 6 against TCBP-JOBS's 21 (only TH 2, only TCBP-JOBS 17, exact p = 7e-04); Z at p = 0.003, TH fails 1 against TCBP-JOBS's 2 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim). Scored as the kit scores (a pair fails when its X or its Z shot fails), TH's failed pairs of 10,000 against TCBP-JOBS's: at p = 0.005, 132 against TCBP-JOBS's 360 (1.11e-03 ± 9.6e-05 against 3.05e-03 ± 1.6e-04 per cycle; only TH 41, only TCBP-JOBS 269, exact p = 3e-42; relay-BP 845, 7.33e-03 ± 2.5e-04); at p = 0.004 (no validation at these p), 10 against TCBP-JOBS's 41 (8.34e-05 ± 2.6e-05 against 3.42e-04 ± 5.3e-05 per cycle; only TH 4, only TCBP-JOBS 35, exact p = 3e-07); at p = 0.003 (no validation at these p), 1 against TCBP-JOBS's 3 (8.33e-06 ± 8.3e-06 against 2.50e-05 ± 1.4e-05 per cycle; only TH 0, only TCBP-JOBS 2, exact p = 0.50: no claim). TCBP-JOBS's stored counts carry its fit's spread (above).
+4. Also tried, none of them replacing the above: Our ensemble, combined offline from saved answers with its rule frozen beforehand (where two PriorTilt runs and TCBP-JOBS agree, that answer; otherwise joint decoding of both check types, the slow decoder of the measurements before building): at p = 0.003 2 against TCBP-JOBS's 3 failed pairs (only the ensemble fails 0, only TCBP-JOBS 1, exact p = 1.00; joint decoding ran on 5 disputed shots, about 5 s each); at p = 0.004 16 against TCBP-JOBS's 41 failed pairs (only the ensemble fails 1, only TCBP-JOBS 26, exact p = 4e-07; joint decoding ran on 93 disputed shots, about 24 s each); at p = 0.005 joint decoding was not run, so the ensemble fails exactly TCBP-JOBS's 360 pairs. Its members are NVIDIA's, IonQ's and the kit's; the rule is ours, and it has no time measured as one decoder. A learned selector among these decoders' answers (`selector/`) fails 353 pairs at p = 0.005 against TCBP-JOBS's 360 (exact p = 0.41): its declared line was not met.
 
-## Task
+## Speed
 
-Build an ML-assisted decoder that improves an existing QEC decoder. Start with the BP-OSD and relay-BP decoders as baselines and examine whether a machine-learning approach can improve its accuracy, speed, or ability to handle loss.
+Mean time per X shot in ms (one X-memory decode; a pair is an X shot and a Z shot). CPU and GPU times are on different machines and timers and do not compare as equals.
 
-**We have provided a possible scaffolding for this decoder comparison [here](challenge-1-ml-decoder-kit.zip). Download the zip file and follow its setup instructions before implementing your decoder.**
+| Method | Where and how timed | p = 0.003 | p = 0.004 | p = 0.005 |
+|---|---|---|---|---|
+| BP-OSD (kit baseline) | CPU, one process, the team's server; the whole decode | 62.7 | 143 | 286 |
+| relay-BP (kit baseline) | CPU, one process, the team's server; the whole decode | 44.3 | 156 | 760 |
+| relay-BP with a learned router | CPU, one process, the team's server; the whole decode | 20.8 | 153 | 996 |
+| our hierarchy, neural tie-break | CPU, one process, the team's server; the whole decode | 23.7 | 104 | 420 |
+| TCBP-JOBS (NVIDIA, GPU) | an A100 GPU slice; the decode call alone | 2.0 | 3.9 | 8.7 |
+| the relay-BP predecoder | the team's server, one process, one thread; network and decode; 1,000 validation shots | 52.9 | 94.0 | 212 |
+| the TCBP version, as registered | an A100 slice shared with another job (not a clean timing); network on validation shots | not measured | not measured | 55.8 |
+| the TCBP version after the speed work | the A100 slice; each part timed alone on 1,000 validation shots | not measured | not measured | about 38 |
+| the TCBP version with the fast path | the A100 slice; 5,000 fresh X shots; its own time model, in which the TCBP version alone takes 46.2 | not measured | not measured | 33.5 |
 
-One approach is hierarchical decoding: use a fast first-stage decoder for simpler error patterns and pass harder cases to a stronger decoder. Machine learning could help identify likely errors, make use of loss information, or decide when a result should be passed to the next stage.
+After the speed work (branch `tcbp-speed`; exploration shots: the first 1,000 validation X shots at p = 0.005 on the A100, each part timed alone, not one end-to-end timer), the same decoder takes about 38 ms per X shot instead of about 52 measured the same way on the same shots: the network as a CUDA graph 1.7 ms instead of 8.3, TCBP-JOBS built with H as a scipy CSR matrix 34.0 instead of 41.2, its decode 2.7; freeing the decoder adds 4.6 to 4.8 ms before the next shot. The answers were the same on all 1,000 shots checked. The registered time (55.8 ms, jobs 4 and 5) is another measurement, on other shots; the test numbers were made with the registered path and were not rerun.
 
-The goal is to see whether your decoder can outperform the baseline, particularly when loss information is available.
+**A fast path for easy shots** (exploration after the test results): when the network is confident, the shot goes to TCBP-JOBS with fixed priors, built once; the rest to the TCBP version. On 5,000 fresh X shots at p = 0.005 (seed 2026112251), simulated after the rule was frozen, it sends 35.3% of the shots down the fast path and fails 48 against the TCBP version's 48, in 33.5 ms mean per X shot against 46.2. Details: `predecoder/fastpath/README.md`.
 
-## Requirements
+![X test failures against time per X shot at p = 0.005, the hardware in the legend](challenge-1-ml-decoder-kit/report/figures/front_x_vs_time.png)
 
-- Set up the code and baseline decoders. Download the [decoder kit](challenge-1-ml-decoder-kit.zip) and run the BP-OSD and relay-BP decoders, then reproduce their baseline performance before making changes.
-- Simulate memory experiments with noise. Use heralding information, such as loss-detection flags, where available.
-- Build your ML-assisted decoder. Use syndrome information and, where applicable, loss information. You can build a standalone decoder or add a learned component to an existing decoding pipeline.
-- Compare your decoder against the baseline approaches under the same noise conditions.
+## Robustness: other noise, and atom loss (exploration, on our own simulated shots)
 
-## Possible Approaches
+- **Atom loss** (our own simplified loss model, X memory, p = 0.004): relay-BP that uses the loss flags fails 4.4% of shots where a loss-blind one fails 57.7%; our loss-time tracker, which estimates from the syndrome when each atom was lost, recovers 58% (38% to 78%) of what knowing the true loss time would add (`loss/`, `loss_tracker/`, [report/tables/loss.md](challenge-1-ml-decoder-kit/report/tables/loss.md)).
+- **Noise shaped like neutral-atom hardware** (a model built from Infleqtion's published figures, not Infleqtion's noise model; `neutral_atom_noise/RESULTS.md`): decoders that know the shape of the noise fail several times less than with the kit's uniform priors. The TCBP version's network helps on some noise pictures and hurts on others (Z-biased noise), and under atom loss it does not make up for not knowing the shape.
+- **The head retrained on that noise** makes TCBP-JOBS worse on its own base: 27 failures against 8 for the matched priors alone (run 1; exploration).
 
-Some possible directions:
+## Resources
 
-- **[Learned predecoders](https://github.com/NVIDIA/ising-decoding):** Train a model to recognize common error patterns and resolve them before passing the remaining syndrome to a stronger decoder.
-- **Confidence-based routing:** Predict whether a decoding result is reliable enough to accept or should be sent to a stronger decoder.
-- **Belief propagation:** Use BP as a partial decoder, resolving confident corrections before passing the remaining syndrome onward.
-- **CNNs or graph neural networks:** Use neural networks to identify patterns in syndrome data, potentially using the structure of the code or its Tanner graph.
-- **Leakage tracking:** Use temporal models, such as hidden Markov models, to identify leakage events and inform decoding.
+- The network: 893,697 parameters, trained on a laptop GPU (RTX 4060, 8 GB) for X memory and on an A100 slice for Z memory ([report/tables/networks.md](challenge-1-ml-decoder-kit/report/tables/networks.md)).
+- The first pipeline runs on one CPU core; the TCBP version needs an NVIDIA GPU (cudaq-qec 0.9.0) and builds one decoder per shot, which is most of its time.
+- Peak memory and start-up time of each row: [report/tables/resources.md](challenge-1-ml-decoder-kit/report/tables/resources.md).
 
-> **Note:** You do not need to implement a hierarchical decoder. These are possible ways to approach the problem, not a required set of methods.
+## Reproduce
 
-## Experiments and Metrics
+From `challenge-1-ml-decoder-kit/`, with Python 3.12 and its `requirements.txt` (the full list and the order: [report/REPRODUCE.md](challenge-1-ml-decoder-kit/report/REPRODUCE.md)):
 
-Compare your decoder with the BP-OSD and relay-BP baselines using the same test data and noise conditions. While more experiments are encouraged for a more thorough analysis, we *require* one for this challenge:
+```sh
+python -m pytest -p no:cacheprovider report     # the report's tests
+sh report/reproduce_ours.sh smoke                # our decoder and relay-BP on a few shots, through the team's evaluator
+sh report/reproduce_ours.sh report               # every table and figure, and this page, from report/data/
+```
 
-- A sweep of your decoder across the physical error rates `[0.003, 0.004, 0.005]`.
+The TCBP-JOBS steps need Linux, an NVIDIA GPU and `cudaq-qec` 0.9.0 (`predecoder/README_tcbp.md`); training the network needs a GPU.
 
-Required metrics to report include logical error rate, decoding latency*, and decoder resource requirements. In your evaluation, discuss where your approach works well and where it falls short.
+## Where it falls short
 
-\*This is where hierarchical decoding approaches really shine!
+- The TCBP version was designed after the test results were seen, its two knobs were fitted on X memory at p = 0.005 only and applied unchanged to Z and to the lower p (no validation at these p); its only fresh check is the 5,000 new X shots above.
+- TCBP-JOBS's answers vary from one model fit to the next (see the results), so every count of it, and of the TCBP version, carries that spread.
+- Building TCBP-JOBS for every shot costs 34.0 ms of the TCBP version's time even after the speed work; cudaq-qec 0.9.0 cannot change a built decoder's priors.
+- In the first pipeline the network is no better than the best hand-written tie-break on the test shots.
+- Our pipeline under atom loss was not tested on the kit's shots; the loss and neutral-atom studies use our own simulated shots.
 
-## Deliverables
+## Where things are
 
-- A working decoder, the code used to generate training and test data, and the script for reproducing evaluation results on GitHub.
-- A comparison of your decoder to the baselines, including at least one plot of logical error rate or decoding time.
-- A short presentation or demo explaining the approach and results.
+| Folder | What |
+|---|---|
+| [`report/`](challenge-1-ml-decoder-kit/report/) | the write-up ([REPORT.md](challenge-1-ml-decoder-kit/report/REPORT.md)), every table and figure, made by scripts from `report/data/` |
+| [`predecoder/`](challenge-1-ml-decoder-kit/predecoder/) | the network's per-shot priors, the relay-BP predecoder, the TCBP version (`README_tcbp.md`) and its fast path (`fastpath/`) |
+| [`hierarchy/`](challenge-1-ml-decoder-kit/hierarchy/), [`neural/`](challenge-1-ml-decoder-kit/neural/) | the first pipeline and its network |
+| [`neutral_atom_noise/`](challenge-1-ml-decoder-kit/neutral_atom_noise/), [`loss/`](challenge-1-ml-decoder-kit/loss/), [`loss_tracker/`](challenge-1-ml-decoder-kit/loss_tracker/) | noise shaped like neutral-atom hardware, and atom loss |
+| [`selector/`](challenge-1-ml-decoder-kit/selector/), [`ml_decoder/`](challenge-1-ml-decoder-kit/ml_decoder/) | a learned selector; an ML-first decoder |
+| [`evaluation/`](challenge-1-ml-decoder-kit/evaluation/) | the team's evaluator and the teammates' learned router |
+| [information.md](information.md) | everything we built and why |
+| [`challenge2/`](challenge2/) | the teammates' Challenge 2 work (Give Your LLM a Quantum Backend); see its README |
 
-## Stretch Goals
-
-- Train a router to decide when to accept a first-stage result or invoke a stronger decoder.
-- Test the approach on a second QEC code or code family.
-- Run the decoder on sliding syndrome windows.
-- Study how performance changes with code distance.
-- Estimate the hardware cost of the decoder, such as GPU resource usage or latency.
-
-## Recommended Tools
-
-A few open-source tools may be useful for this Challenge:
-
-- **[qLDPC](https://github.com/qLDPCOrg/qLDPC):** A library for working with quantum error-correcting codes. It can be used for code construction and related QEC workflows.
-- **[clifft](https://github.com/unitaryfoundation/clifft/releases/tag/v0.13.0):** A non-Clifford simulation tool extended from [Stim](https://github.com/quantumlib/stim) for quantum error correction and decoding workflows that support leakage, loss, etc.
-
----
-
-# Challenge 2: Give Your LLM a Quantum Backend
-
-## Challenge
-
-Language models use classical machine-learning methods for tasks like processing language, representing context, and handling memory and reasoning. This challenge asks whether quantum computing could play a useful role in any part of this process.
-
-## Task
-
-Develop a pipeline that integrates quantum computing or information processing into a sequence or language modeling task. This requires you to identify stages within a classical machine learning workflow that could benefit from quantum information processing, and develop a quantum backend that can execute those tasks.
-
-For example, you could explore how quantum contextuality could be used to represent relationships between tokens, encode word sequences with quantum states and quantum circuits, or formulate an ML subproblem as a QUBO or related optimization problem to generate candidate solutions. However, don't feel required to tie your project to any of these.
-
-We're keeping this challenge deliberately open-ended, so feel free to think outside the box, get creative, and surprise us!
-
-## Requirements
-
-- Use an existing or custom language model for a language-modeling or sequence-processing task.
-- Identify a part of the workflow where quantum computing or quantum information processing could be useful.
-- Implement a backend that sends this part of the computation to a quantum simulator or hardware and returns results to the application.
-- Use at least one quantum algorithm or information-processing technique.
-- Demonstrate the full workflow, from input to final output.
-
-## Experiments and Metrics
-
-Evaluate your application using metrics that make sense for the task. These must include accuracy, execution time, and resource requirements. Additional metrics can include solution quality/sampling diversity, circuit depth, and/or qubit count.
-
-## Deliverables
-
-- Your working application that connects a language or sequence model to a quantum backend, with the workflow uploaded to GitHub.
-- An evaluation using appropriate metrics.
-- A short presentation or demo highlighting your approach and results.
-
-## Stretch Goals
-
-- Use Superstaq to optimize circuits for execution on available hardware.
-- Support multiple quantum hardware platforms or simulators.
-- Route tasks between classical and quantum backends based on problem characteristics or estimated execution costs.
-- Build a workflow where quantum outputs influence later language-model processing.
-- Compare the quantum approach with a classical baseline.
-
----
-
-# Shared Expectations
-
-- Be prepared to explain why you chose your approach and what role quantum computing or machine learning plays in it.
-- Results should be clear and reproducible, and the corresponding GitHub codebase should follow best coding practices.
-- You can use existing libraries and tools rather than implementing everything from scratch.
-- AI use is encouraged — but be prepared to explain your implementation!
-
----
+The section below is the teammates' earlier technical review; current results are above.
+<!-- END our front page -->
 
 # This repository: Challenge 1 implementation and technical review
 
@@ -218,26 +189,3 @@ Both are held-out **paired saved-shot** comparisons within their respective site
 ## Reproduction and completion criteria
 
 Run from `challenge-1-ml-decoder-kit/` in a Python 3.12 environment with its `requirements.txt` installed; Relay-BP also needs Rust when built from source. Use the [kit setup instructions](challenge-1-ml-decoder-kit/README.md#setup) and the [evaluation stage guide](challenge-1-ml-decoder-kit/evaluation/README.md). The saved-shot order is **dataset → router features → validation-frozen router → baseline/control evaluate → candidate evaluate → paired compare → plot**. For a fresh site output, `MIDQ_PY=/path/to/python ./exec.sh 0.005 delta` runs the last three evaluation stages after validating both router models. Existing output directories are protected against overwrite, so give each new run its own output path. The final comparison should include all three required physical rates, both memory bases, logical rate, full per-shot latency including fallback, resource measurements, and a plot. Record the exact code revision, NPZ hashes, model hashes, package versions, and machine for each run. Test a loss-aware pipeline separately once its simulator, herald representation, priors, and paired baseline are integrated.
-
-## Our part: a hierarchical decoder with a learned tie-breaker, and a study of atom loss
-
-Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural
-network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`), though on the test shots that network is no better than the best hand-written tie-break, so the gain over relay-BP is PriorTilt's and the hierarchy's. On the test shots our decoder fails fewer pairs than relay-BP at p = 0.004 and 0.005, and as many within the error at p = 0.003; it is level with TCBP-JOBS at p = 0.003 and 0.004, and behind it at p = 0.005; our ensemble rule, frozen beforehand and combined offline from the saved answers of NVIDIA's, IonQ's and the kit's decoders, with no time measured as one decoder, fails 2 pairs against TCBP-JOBS's 3 at p = 0.003 (only the ensemble 0, only TCBP-JOBS 1, exact p = 1.00; joint decoding on 5 disputed shots, about 5 s each), fails 16 pairs against TCBP-JOBS's 41 at p = 0.004 (only the ensemble 1, only TCBP-JOBS 26, exact p = 4e-07; joint decoding on 93 disputed shots, about 24 s each), and equals TCBP-JOBS at p = 0.005 (joint decoding not run).
-Under atom loss (our own simplified model), relay-BP with the loss flags fails 4.4% of shots where a loss-blind one
-fails 57.7%; our loss-time tracker, which estimates from the syndrome when each atom was lost, recovers 58% (38% to 78%) of what knowing the true loss time would add (`loss/`, `loss_tracker/`).
-
-Every version we built is in one table, each number with its label ([report/tables/master_comparison.md](challenge-1-ml-decoder-kit/report/tables/master_comparison.md)): the frozen hierarchy above (pre-registered); the same hierarchy with a hand-written tie-break in place of the network (`hierarchy/`; the best hand-written rule pre-registered as timed rows at p = 0.003 and 0.004 and offline at 0.005, plain lowest weight pre-registered offline at every p; their other timed rows after-test ablations); TCBP-JOBS in place of relay-BP in it (an after-test ablation); a learned predecoder that gives relay-BP per-shot priors from the network (`predecoder/`; X memory at p = 0.005 a secondary result, chosen after its own gate failed, and the other rows a registered extension run after it) and its fallback to TCBP-JOBS where relay-BP does not converge (`predecoder/fallback.py`; designed after the first test result); and TCBP-JOBS given the same per-shot priors (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); its pair logical error rate at p = 0.005 is 1.11e-03 ± 9.6e-05 per cycle against TCBP-JOBS's 3.05e-03 ± 1.6e-04, and at p = 0.004 (no validation at these p) 8.34e-05 ± 2.6e-05 against 3.42e-04 ± 5.3e-05; about 38 ms per X shot after the speed work, timed in parts on validation shots); a learned selector among the ensemble's members (`selector/`; frozen on validation, its line not met on the test shots); and, on its own simulated shots, noise shaped like neutral-atom hardware (`neutral_atom_noise/`; exploration, the kit's decoders, and the TCBP version, whose head retrained on that noise makes it worse on its own base: 27 failures against 8 in run 1). None of these rows replaces the frozen decoder.
-
-| Decoder | p = 0.003 | p = 0.004 | p = 0.005 |
-|---|---|---|---|
-| BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05, 131 ms | 4.02e-03 ± 1.8e-04, 302 ms | 2.30e-02 ± 4.6e-04, 581 ms |
-| relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05, 85.3 ms | 6.94e-04 ± 7.6e-05, 319 ms | 7.33e-03 ± 2.5e-04, 1,471 ms |
-| PriorTilt, one run | 3.33e-05 ± 1.7e-05, 22.7 ms | 6.19e-04 ± 7.2e-05, 87.3 ms | 5.15e-03 ± 2.1e-04, 264 ms |
-| our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05, 45.7 ms | 3.67e-04 ± 5.5e-05, 216 ms | 4.08e-03 ± 1.9e-04, 825 ms |
-| TCBP-JOBS (NVIDIA, GPU) | 2.50e-05 ± 1.4e-05, 3.9 ms | 3.42e-04 ± 5.3e-05, 7.8 ms | 3.05e-03 ± 1.6e-04, 16.9 ms |
-
-Test shots (10,000 pairs per p): logical error rate per cycle ± the kit's error, mean time per pair (CPU rows: the whole decode of a pair in one process; TCBP-JOBS: a GPU decode call alone, not comparable with the CPU rows). Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, exact p = 1e-11). TCBP-JOBS against relay-BP's timed row: 3 against 5 at p = 0.003 (exact p = 0.62), 41 against 83 at p = 0.004 (exact p = 4e-07), 360 against 845 at p = 0.005 (exact p = 1e-101). TCBP-JOBS fits its model when it starts, and three fits on the same validation shots fail 91, 96 and 100, so its counts carry about ±5%.
-
-![Logical error rate per cycle against p](challenge-1-ml-decoder-kit/report/figures/ler_vs_p.png)
-
-Write-up, with every table made by a script from committed files: [report/REPORT.md](challenge-1-ml-decoder-kit/report/REPORT.md). Everything we built and why: [information.md](information.md).

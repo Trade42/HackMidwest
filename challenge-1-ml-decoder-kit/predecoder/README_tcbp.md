@@ -2,7 +2,9 @@
 
 **A separate branch** (`predecoder-tcbp`, from `predecoder` at `e96cc020`). Sal, 14:39 UTC: "i do want to force to use
 tcbp since its just better than relay bp ... we should retrain fully for the tcbp instead of the relay bp and change our
-pipeline". It merges nowhere unless Sal says so.
+pipeline". It was built as a separate branch. On Sal's word ("once results are in you can bring the tcbp version into
+main as well", about 15:47 UTC) it was merged into `main` by PR #9 at 16:28:53 UTC, after the X test results. The Z
+rows below came after that merge.
 
 **The idea.** The head (`head.py`, unchanged, sha256 `38ab667e...`) reads the network's view of a shot and gives every
 column of H a probability that it fired in that shot. `priors.py` mixes those probabilities with the kit's priors, using
@@ -19,7 +21,10 @@ team's best single decoder. The head was not retrained. The knobs were refitted 
   - p = 0.005: TH **72** of 10,000, against **186** for TCBP-JOBS alone (22 against 136, p = 2.9e-21), 151 for
     relay-BP with the head's priors, and 107 for the fallback rule;
   - p = 0.004: TH **4** against 20 (p = 0.0004);
-  - p = 0.003: 0 against 1, no claim.
+  - p = 0.003: 0 against 1, no claim;
+  - Z at p = 0.005 (X's knobs, no Z fit): TH **61** against 177 (p = 2.2e-22);
+  - **the kit's pair score at p = 0.005: 132 failed pairs of 10,000 against TCBP-JOBS's 360 (p = 3.0e-42), a rate per
+    cycle of 1.11e-3 against 3.05e-3.**
 - **Latency on the A100, one shot at a time, one process:** network and head 9.4 ms (float32), building TCBP-JOBS with
   the shot's priors 42.6 ms, decoding 3.8 ms; about 56 ms mean in all. Building is the cost: cudaq-qec 0.9.0 cannot
   change a built decoder's priors. Running the network on the GPU changed no outcome on 1,000 validation shots.
@@ -262,10 +267,29 @@ process each. Scored here with `tcbp score --final`; logs `logs/tcbp_test_X_p0.0
 
 The gain holds at p = 0.004: 5 times fewer failures. At p = 0.003 both are near zero, so no claim can be made there.
 
-**Z memory and the pair score:** job ctl/140 (Z at p = 0.005, with X's knobs and the gate inside the job). Results
-below when they land.
+**Z memory at p = 0.005, and the kit's pair score** (run 3 of the spec; server job ctl/140, at `76521b78`, after the merge
+into main). The Z head (`083147d2...`, dq-predecoder's) was used with X's knobs unchanged: there was no Z fit. Its
+logits are dq-predecoder's CPU float32 bytes (validation `db786d0a...`, test `576849a5...`); every decoded row's hash
+equals luminaty's files. The gate inside the job: test_Z was opened only if validation_Z beat the stored TCBP-JOBS
+file, paired, p < 0.05.
 
-(Z rows filled in as they arrive)
+| file | TH failures | TCBP-JOBS alone, stored | both, only TH, only T | exact p | build + decode, mean (p99) |
+|---|---|---|---|---|---|
+| `validation_Z.npz`, 5,000, sha256 `24f12efa...` (the gate: **GO**) | 35, 0.0070 [0.0050, 0.0097] | 97, 0.0194 [0.0159, 0.0236] | 24, 11, 73 | 2.3e-12 | 42.2 + 10.8 ms (84 ms) |
+| `test_Z.npz`, 10,000, sha256 `b86ae320...` | **61**, 0.0061 [0.0048, 0.0078] | 177, 0.0177 [0.0153, 0.0205] | 41, 20, 136 | **2.2e-22** | 41.3 + 4.7 ms (69 ms) |
+
+**The kit's score: pairs of shot k of X and shot k of Z at p = 0.005** (`python -m predecoder.tcbp pair --final ...`,
+`logs/tcbp_pair_test_p0.005.{json,log}`; a pair fails when either shot fails; the rate per cycle is `1 - (1 - P)^(1/12)`
+with its error from `decoders.per_cycle_rate`):
+
+| decoder | failed pairs of 10,000 [X Z] | share, 95% interval | rate per cycle |
+|---|---|---|---|
+| **TH: TCBP-JOBS with the head's priors** | **132** [72 61] | 0.0132 [0.0111, 0.0156] | **1.11e-3 ± 0.10e-3** |
+| TCBP-JOBS alone (the stored files) | 360 [186 177] | 0.0360 [0.0325, 0.0398] | 3.05e-3 ± 0.16e-3 |
+
+Paired over the 10,000 pairs: both fail 91, only TH 41, only TCBP-JOBS 269, exact two-sided p = 3.0e-42. **TH fails 2.7
+times fewer pairs.** This is the registered run 3 (designed after the test results were seen; a separate branch). The
+Z knobs were not fitted for Z.
 
 ## What was not done, and what is not tested
 

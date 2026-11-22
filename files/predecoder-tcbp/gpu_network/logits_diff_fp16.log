@@ -1,0 +1,1 @@
+1000 shots: the float16 logits differ on 1000 rows and 2936919 of 8784000 entries; largest gap 1.79 (cpu  against cuda float16 autocast)

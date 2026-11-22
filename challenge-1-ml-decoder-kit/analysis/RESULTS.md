@@ -36,6 +36,8 @@ A Stim seed does not give the same shots on every machine, so every dataset is n
 
 The exploration sets were made with the kit's `make_dataset.py` (`analysis/steps.sh datasets`, stim 1.16.0). They are not committed: they sit in `/home/sal/hackMidwest/orchestration/scratch/gates/data/`.
 
+Since this task was briefed, `main` gained the team's own shot files at the other two noise levels (commit `80b9b48`): `data/p0.003/` and `data/p0.005/`, each with train (20,000), validation (5,000) and held-out test (10,000) files for X and Z. They are not the exploration sets used here, which came from other seeds (9103 to 9106) and are named by their sha256 above. Nothing here opened them.
+
 **Shot cuts, against the brief's aims:** the brief aimed at 100,000 shots per basis at p = 0.003 and 20,000 at 0.005. Its lanes were cut from 12 to 8 processes, and this CPU turned out about 2.7 times slower per process under full load than on one core. So p = 0.003 uses the first 50,000 shots of each file (the orchestrator's suggested cut) and p = 0.005 the first 5,000 (about 200 failures per basis, still above the brief's 100).
 
 ## How every run is made reproducible
@@ -145,6 +147,53 @@ The ms are per shot inside the decode call, a fresh decoder per shot (its constr
 Tesseract's X row equals BP-OSD's in every count, which was checked shot by shot because it looked like a bug. It is not one: the two agree on the failed flag on 204 of the 244 X shots and differ on the other 40 (`agreement` in `results/g2_summary.json`). Tesseract's correction is lighter than BP-OSD's on 193 of the 244 shots, yet it fixes no more of relay-BP's failures.
 
 **Item 4, the Tesseract probe** (`analysis/tesseract_probe.py`, `results/tesseract_probe.json`). `pip install tesseract-decoder` installed version 0.1.1.dev20261117025421 here. It took the kit's 936-detector problem as a DEM built from H, L and the priors, with one error per column; building the decoder took 0.3 s. It decoded the first 3 failed validation_X shots in 3.9 to 5.7 s each (under the 60 s limit) and got all 3 wrong. Its corrections there were heavier than relay-BP's (sum of log-odds 322 against 314, 280 against 251, 302 against 299). Its settings were the package defaults (`det_beam=5`, `pqlimit=200000`, `no_revisit_dets=True`); no larger beam was tried within the 30-minute box. The first probe run crashed: numpy 2 wrote `np.float64(...)` into the DEM text. It was fixed and run again alone, as the 8th process beside step 2's 7.
+
+### Items 1 and 2 at p = 0.004 (run on another machine)
+
+**Where it ran.** These ran on the ICRN server (`jupyter-blakew3`, AMD EPYC-Milan, 10 processes), right after the G3 frontier:
+
+- the commit: `ed3fd35`;
+- the command: `PYTHONDONTWRITEBYTECODE=1 python -m analysis.remote g2 --data-dir <the p = 0.004 folder of main> --out ~/mlBranchMidwest/runs/gates_g2 --processes 10`.
+
+Its machine check was again identical to luminaty's. Its stdout is `logs/server_g2_p0.004.log` (from `server-logs`, commit `2e883a3`). Its summaries are `results/g2_server_p0.004_summary.json` and `results/g2_server_p0.004_tables.csv`. Their `ms_label` field wrongly says "8 processes on luminaty": that text was hard-coded at `ed3fd35`, and is a parameter now. The milliseconds in those two files and below are the server's, with 10 processes. The shots are the committed selection, all 245 failures and 245 controls. The candidates covered all 145 converged-wrong failures and a seeded 10 of the unconverged failures per basis.
+
+**Item 1, a larger budget:** relay-BP with `stop_nconv=20` and `num_sets=600`, seed 0, a fresh decoder per shot.
+
+| decoder | basis | F | fixed: all / of unconverged / of converged-wrong | C | broken | 2 x 2: both wrong / only relay-BP / only other / both right | exact paired p | break rate [95% CP] | iterations mean on F / C | ms mean on F / C (server) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| stop after 20, 600 legs | X | 122 | 65 / 27 of 55 / 38 of 67 | 122 | 0 | 57 / 65 / 0 / 122 | 5.4e-20 | 0.000 [0.000, 0.030] | 29,220 / 1,654 | 9,611 / 530 |
+| stop after 20, 600 legs | Z | 123 | 64 / 23 of 45 / 41 of 78 | 123 | 1 | 59 / 64 / 1 / 122 | 3.6e-18 | 0.008 [0.000, 0.044] | 27,075 / 2,340 | 8,769 / 747 |
+
+- It fixes 129 of 245 failures (53%, 95% interval 46% to 59%), against the re-roll floor's 108 (44%, 38% to 51%) on the same shots.
+- On the controls it takes 1,654 and 2,340 mean iterations, against the kit settings' 373 and 752 in the re-roll. That is 3 to 4 times the work on a typical shot.
+- On the failures its median is 35,960 of the 36,080-iteration budget: most of them never reach 20 solutions.
+
+**Item 2, several candidates:** relay-BP at `stop_nconv=1` under seeds 1 to 16, each on a fresh decoder. A candidate is a converged correction; distinct candidates are told apart by their correction. The lowest-weight pick and the vote by class (each distinct candidate adds exp(-weight), with weight the sum of log((1 - prior) / prior)) use no truth. The truth only scores them.
+
+| basis | set | shots | right class among the candidates | lowest weight right | vote right | no candidate | one distinct candidate | first leg converged: shots, any / lowest / vote right | first leg unconverged: shots, any / lowest / vote right |
+|---|---|---|---|---|---|---|---|---|---|
+| X | converged-wrong failures | 67 | 50 | 34 | 33 | 0 | 12 | 12: 3 / 3 / 3 | 55: 47 / 31 / 30 |
+| X | unconverged failures (seeded 10) | 10 | 9 | 8 | 8 | 0 | 0 | 0: – | 10: 9 / 8 / 8 |
+| X | control | 122 | 122 | 122 | 122 | 0 | 109 | 109: 109 / 109 / 109 | 13: 13 / 13 / 13 |
+| Z | converged-wrong failures | 78 | 64 | 37 | 36 | 0 | 9 | 9: 2 / 2 / 2 | 69: 62 / 35 / 34 |
+| Z | unconverged failures (seeded 10) | 10 | 7 | 6 | 6 | 0 | 2 | 0: – | 10: 7 / 6 / 6 |
+| Z | control | 123 | 123 | 122 | 122 | 0 | 105 | 105: 105 / 105 / 105 | 18: 18 / 17 / 17 |
+
+Both bases, on the 145 converged-wrong failures:
+
+- **The right class is among the 16 candidates in 114 (79%, 71% to 85%).**
+- **The lowest-weight candidate has it in 71 (49%, 41% to 57%), and the vote in 69 (48%).** A single re-roll on a fresh decoder fixes 68 of the same 145 (47%, 39% to 55%).
+- The median shot has 16 distinct candidates in 2 classes.
+- Where the first leg converged (21 shots), all 16 seeds return the first leg's solution, because the first leg draws no random numbers. So those shots have one candidate each, and it is right in only 5.
+- On the controls, the lowest-weight pick broke 0 of 122 (X) and 1 of 123 (Z).
+- All 20 sampled unconverged failures had at least one candidate (median 6 distinct), and the right class was among them in 16.
+
+**What items 1 and 2 say at p = 0.004:**
+
+- More of the same budget fixes about 10 percentage points more than a free re-roll (53% against 44%), at 3 to 4 times the work on typical shots.
+- I3 passes its kill line: the right class is among relay-BP's candidates in 79% of the converged-wrong failures, far above 30%.
+- But weight does not find it. The lowest-weight and vote picks get 48% to 49%, no better than one re-roll (47%).
+- So the information is in the candidate set and the weight is the wrong score. A learned score over a few candidates is an opening this measures directly; no such score was trained or tested here.
 
 ### Item 5: joint decoding of both check types
 

@@ -301,6 +301,33 @@ def decode_command(args):
               f"{row['wilson95'][1]:.4f}]; not reproduced {row['not_reproduced']}; flagged not converged "
               f"{row['flag_not_converged']}; build {row['build_ms_mean']:.1f} ms + decode {row['decode_ms_mean']:.1f} ms mean, "
               f"p99 {row['build_decode_ms_p99']:.0f} ms", flush=True)
+    if args.batch_check:
+        # The stored TCBP-JOBS files come from one decoder built once and run with decode_batch. The same decoder,
+        # built here from this run's model, separates "batch against one shot at a time" from "another model fit".
+        from tcbp_jobs_baseline import hard
+
+        decoder = builder.build(problem.priors)
+        errors = []
+        for first in range(0, shots, 4096):
+            batch = np.ascontiguousarray(syndromes[first:first + 4096], dtype=np.uint8)
+            if args.decoder == "relay":
+                errors.append(np.stack([hard(decoder.decode(s).result) for s in batch]))
+            else:
+                errors.append(hard(decoder.decode_batch(batch).result))
+        errors = np.concatenate(errors).astype(np.uint8)
+        per_shot["predicted_batch"] = np.asarray((problem.L @ errors.T) % 2, np.uint8).T
+        per_shot["n_faults_batch"] = errors.sum(axis=1)
+        per_shot["failed_batch"] = (per_shot["predicted_batch"] != truth).any(axis=1)
+        results["batch"] = {"failures": int(per_shot["failed_batch"].sum()), "shots": shots,
+                            "what": "one decoder built once with the kit's priors, this run's model, decode_batch"}
+        line = f"  batch check (kit's priors, built once, decode_batch, this run's model): failures {results['batch']['failures']}"
+        if "fresh" in args.arms:
+            differ = (per_shot["predicted_batch"] != per_shot["predicted_fresh"]).any(axis=1)
+            results["batch"]["bits_differ_from_fresh"] = int(differ.sum())
+            results["batch"]["faults_differ_from_fresh"] = int((per_shot["n_faults_batch"] != per_shot["n_faults_fresh"]).sum())
+            line += (f"; its 12 bits differ from the fresh arm's on {int(differ.sum())} shots, its number of faults on "
+                     f"{results['batch']['faults_differ_from_fresh']}")
+        print(line, flush=True)
     np.savez_compressed(out / "per_shot.npz", **per_shot)
     with open(out / "summary.json", "w") as file:
         json.dump({"data": data.identity(), "shots": shots, "decoder": args.decoder, "version": version, "preset": args.preset,
@@ -439,6 +466,9 @@ def score_command(args):
     for arm in ("head", "fresh"):
         if f"predicted_{arm}" in ours:
             arms[f"TCBP-JOBS, {arm} priors per shot"] = check(arm, ours[f"predicted_{arm}"], ours[f"failed_{arm}"] > 0)
+    if "predicted_batch" in ours:
+        arms["TCBP-JOBS, the kit's priors, built once, decode_batch (same run)"] = check("batch", ours["predicted_batch"],
+                                                                                         ours["failed_batch"])
     if args.tcbp:
         with np.load(args.tcbp) as file:
             if str(file["data_sha256"]) != data.sha256:
@@ -504,6 +534,8 @@ def main(argv=None):
             sub.add_argument("--settings", help="the fit file of this tool (or of priors.py)")
             sub.add_argument("--arms", nargs="+", choices=("fresh", "head"), default=["head"])
             sub.add_argument("--limit", type=int)
+            sub.add_argument("--batch-check", action="store_true",
+                             help="also decode the shots with one decoder built once (the kit's priors), decode_batch")
             sub.add_argument("--out", required=True)
     sub = commands.add_parser("score")
     sub.add_argument("--data", required=True)

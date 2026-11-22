@@ -68,7 +68,7 @@ def test_decode_with_the_stand_in_gives_relay_bp_answers(tmp_path, monkeypatch):
     build = tcbp.Builder.build
     monkeypatch.setattr(tcbp.Builder, "build", lambda self, priors: seen.append(np.array(priors)) or build(self, priors))
     tcbp.main(["decode", "--decoder", "relay", "--data", str(shots), "--logits", logits, "--settings", str(settings),
-               "--arms", "fresh", "head", "--out", str(tmp_path / "out")])
+               "--arms", "fresh", "head", "--batch-check", "--out", str(tmp_path / "out")])
     with np.load(tmp_path / "out" / "per_shot.npz") as file:
         result = {key: file[key] for key in file.files}
     data = load_dataset(shots)
@@ -82,10 +82,11 @@ def test_decode_with_the_stand_in_gives_relay_bp_answers(tmp_path, monkeypatch):
         assert np.array_equal(result["predicted_head"][k], head.predicted)
         assert result["flag_head"][k] == head.converged
         assert result["logits_hash_head"][k] == tcbp.row_hash(raw[k]) and result["logits_hash_fresh"][k] == 0
-    # one warm-up, 3 fresh, 3 head; the head's priors are the mixed and clipped ones
-    assert len(seen) == 7 and np.array_equal(seen[4], shot_priors(raw[0], problem.priors, 0.3, 1e-4, "logodds"))
+    # one warm-up, 3 fresh, 3 head, 1 for the batch check; the head's priors are the mixed and clipped ones
+    assert len(seen) == 8 and np.array_equal(seen[4], shot_priors(raw[0], problem.priors, 0.3, 1e-4, "logodds"))
     assert np.array_equal(seen[1], problem.priors)
     assert (result["failed_head"] > 0).tolist() == (result["predicted_head"] != data.observables).any(axis=1).tolist()
+    assert np.array_equal(result["predicted_batch"], result["predicted_fresh"])     # relay-BP built once, seed 0: the same
 
     # score: the stored TCBP file and a relay per-shot file, read beside it
     stored = tmp_path / "validation_X.tcbp.npz"

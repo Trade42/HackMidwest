@@ -26,4 +26,32 @@
   before a validation number exists.
 - The chosen knobs are committed in `predecoder/logs/fit_tcbp_X_p0.005.json` before any validation decode.
 
-## 2. The validation arms (to be completed after the fit and before any validation number: (a), and (b1) or (b2))
+## 2. The validation arms (declared 2026-11-22 15:06 UTC; no number of TCBP-JOBS with the head's priors exists yet; the fit is running)
+
+What was known when this was written: job 1 (server, 14:54 to 14:59 UTC) decoded `data/p0.005/validation_X.npz` with
+TCBP-JOBS and the kit's priors, one decoder built per shot, using `decode()`. It fails 96, against the stored file's 91
+(decoder built once, `decode_batch`). The two disagree on 44 shots' bits (only per-shot 17, only stored 12, p = 0.46).
+The decoder's own `converged` flag is False on 4,858 of the 5,000 shots, even when the answer is right. No priors
+from the head were involved.
+
+- **Arm (a), TH:** TCBP-JOBS with the head's priors (the knobs frozen by section 1), one decoder per shot, `decode()`.
+- **Arm (b2):** H where H converged, else TH. H is relay-BP with the head's priors (the luminaty CPU float32 run of
+  `logs/validation_X_p0.005_cpu_head_arm.log`: 79 failures, 44 unconverged; per-shot file
+  `scratch/predecoder/runs/val_p0.005_cpu/compare/per_shot.npz`). TH's priors use the same logits bytes (sha256
+  `14eea54d...`). This is the frozen fallback rule (`logs/fallback_rule_frozen.md`) with T replaced by TH.
+  (b1), "TH where its flag says converged, else H", is not used: that flag is False on 97% of shots, so (b1) would be
+  H almost everywhere.
+- **The choice:** the arm with fewer failures on these 5,000 validation shots, with a tie going to (a). It is then
+  frozen for the test run. Choosing the better of two arms on the same shots favours the chosen arm slightly, and
+  that is stated beside its numbers.
+- **The kill line (the brief's):** the chosen arm fails fewer shots than TCBP-JOBS alone, the stored file
+  (`files/tcbp_p0.005/validation_X.tcbp.npz`, 91), paired, exact two-sided p < 0.05. Reported beside it, whatever they
+  show:
+  - the chosen arm against the kit's-priors arm decoded per shot in the same run, with the same model ("fresh", the
+    like-for-like control);
+  - against H (79);
+  - against the frozen fallback 'H where converged, else T' (50).
+- **Job 3** decodes fresh and head in one process on one model. The fresh arm is decoded again rather than reused
+  from job 1, so that model fit is no confound in head against fresh. `--batch-check` also decodes the kit's priors
+  with one decoder built once and `decode_batch` on the same model. Fresh against batch then measures batch against
+  one shot at a time, and job 1's fresh against job 3's fresh measures one model fit against another.

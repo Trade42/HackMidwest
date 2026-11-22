@@ -35,7 +35,47 @@ RESULTS: (filled in below as they arrive)
 
 ## Commands
 
-(filled in)
+Run from `challenge-1-ml-decoder-kit/`. The network steps need torch (`neural/`'s environment). The TCBP-JOBS steps
+need the teammates' TCBP environment (Linux, an NVIDIA GPU, `pip install cudaq-qec` 0.9.0) and no torch. Without a
+GPU, `--decoder relay` runs every TCBP step with relay-BP as a stand-in, for the plumbing only.
+
+```sh
+# tests (no GPU: relay-BP stands in for TCBP-JOBS)
+python -m pytest -p no:cacheprovider predecoder/test_tcbp.py
+
+# 0. what a built decoder offers (the search for a cheaper path than one decoder per shot)
+python -m predecoder.tcbp probe --data data/p0.005/validation_X.npz
+
+# 1. the train subsets: the shots the stored TCBP-JOBS run fails, and 2,000 it gets right
+python -m predecoder.subset --data data/p0.005/train_X.npz --per-shot <server-logs: files/tcbp_p0.005/train_X.tcbp.npz> \
+    --arm T --right 2000 --seed 5 --out <subsets>
+# 2. the head's logits on them, and on the validation file (torch; CPU float32 is the reference)
+python -m predecoder.evaluate --head <head.pt 38ab667e...> --trunk <final X trunk d8d1c70f...> \
+    --data <subsets>/train_X_T_failed.npz --out <logits_failed> --device cpu --threads 4 --time-shots 0
+python -m predecoder.evaluate ... --data <subsets>/train_X_T_right.npz --out <logits_right> ...
+python -m predecoder.evaluate ... --data data/p0.005/validation_X.npz --out <logits_validation> ...
+# 3. the knob fit (TCBP env, GPU); this made logs/fit_tcbp_X_p0.005_full.json
+python -m predecoder.tcbp fit --data <subsets>/train_X_T_failed.npz <subsets>/train_X_T_right.npz --weights 1 9.805 \
+    --logits <logits_failed> <logits_right> --out fit_tcbp_X_p0.005.json
+# 4. validation: the head's priors, the kit's priors, and the batch check, on one model
+python -m predecoder.tcbp decode --data data/p0.005/validation_X.npz --logits <logits_validation> \
+    --settings predecoder/logs/fit_tcbp_X_p0.005.json --arms head fresh --batch-check --out <folder>
+# 5. score it (any machine; no decoder runs)
+python -m predecoder.tcbp score --data data/p0.005/validation_X.npz --tcbp-head <folder>/per_shot.npz \
+    --tcbp <files/tcbp_p0.005/validation_X.tcbp.npz> --relay-head <predecoder.compare head arm per_shot.npz> --logits <logits_validation>
+# 6. the network on the GPU in float32, timed one shot at a time, and its logits against the CPU's
+python -m predecoder.evaluate ... --data data/p0.005/validation_X.npz --limit 1000 --device cuda --precision fp32 \
+    --threads 1 --time-shots 1000 --out <gpu logits>
+python -m predecoder.tcbp logits-diff --a <logits_validation> --b <gpu logits> --limit 1000
+# 7. the registered test runs (once each, --final), then the kit's pair score
+python -m predecoder.tcbp decode --data data/p0.005/test_X.npz --logits <test logits> \
+    --settings predecoder/logs/fit_tcbp_X_p0.005.json --arms head fresh --batch-check --out <folder> --final
+python -m predecoder.tcbp pair --final --data-x data/p0.005/test_X.npz --data-z data/p0.005/test_Z.npz \
+    --ours-x <X per_shot.npz> --ours-z <Z per_shot.npz> --tcbp-x <test_X.tcbp.npz> --tcbp-z <test_Z.tcbp.npz>
+```
+
+The exact server scripts are the orchestrator's: `server-jobs/gpu/060`, `070`, `075`, `080`, `ctl/130` and
+`cpu/070`, `080` on `integration`. Their outputs are on `server-logs` under `files/predecoder-tcbp/`.
 
 ## Numbers
 
@@ -160,6 +200,24 @@ cpu/070 at `8c25c16d`. Logs: `logs/tcbp_job4_gpu_*`.
 
 (test rows filled in as they arrive)
 
-## What was not done
+## What was not done, and what is not tested
 
-(filled in)
+- **The head was not retrained for TCBP-JOBS.** It is relay-BP's head (trained only on error-model shots with the
+  fired columns as labels, so it does not depend on the decoder). Only the two knobs were refitted.
+- **One knob fit, X at p = 0.005.** It is applied unchanged at p = 0.004 and 0.003, and to Z, where there is no fit.
+- **TCBP-JOBS's model fit is not repeatable.** Every run fits its own model. With the kit's priors, three fits gave
+  91, 96 and 100 failures on the same 5,000 shots. So each number here belongs to its run's model, and comparisons
+  with stored files mix two fits. With the head's priors the outcome looked much steadier: two fits agreed on all of
+  the first 1,000 validation shots (job 3 against job 4).
+- **Priors capped at 0.5** (JOBS refuses more). With the chosen knobs (alpha 0.4), the cap changed 1,836 columns on
+  1,528 of the 5,000 validation shots, about one column per capped shot. Over the whole fit grid it changed 495,062
+  columns in 15,052 of 28,680 decodes, most of them at the high alphas, where the head's confident columns pass 0.5
+  more often. Whether a JOBS-legal mapping other than a cap would do better was not tried.
+- **The latency** is three timers (network, build, decode), each measured one shot at a time in one process on the
+  A100, sometimes with another TCBP-JOBS process beside it on the GPU. The p99 of the sum was not measured as one
+  timer.
+- Not tried: passing H to `get_decoder` as a scipy sparse matrix, which may build faster; a batch decode with
+  per-shot priors (cudaq-qec 0.9.0 has none); the test file at p = 0.005 with GPU logits (the registered run uses
+  the CPU bytes).
+- The part caches of `tcbp.py` are keyed without the logits' precision (the auditor's note); every run here used a
+  fresh output folder.

@@ -54,7 +54,7 @@ def shot_files(tmp_path_factory):
     return paths
 
 
-def tiny_checkpoint(path, basis, detectors="all"):
+def tiny_checkpoint(path, basis, detectors="all", logicals="kit"):
     """An untrained network in the format neural.train.load_decoder reads, made with neural's own model class."""
     import torch
 
@@ -62,7 +62,7 @@ def tiny_checkpoint(path, basis, detectors="all"):
     from neural.model import CascadeDecoder
 
     torch.manual_seed(7)
-    model = CascadeDecoder(code="gross", basis=basis, detectors=detectors, width=8, depth=1)
+    model = CascadeDecoder(code="gross", basis=basis, detectors=detectors, width=8, depth=1, logicals=logicals)
     torch.save({"config": train.DEFAULTS | model.config | {"seed": 7}, "step": 0,
                 "ema_model": model.state_dict(), "commit": "made by test_hierarchy"}, path)
     return str(path)
@@ -93,14 +93,15 @@ class StubHierarchy:
 
 
 class StubNetwork:
-    """A network that is sure of one 12-bit answer, and remembers what it was shown."""
+    """A network on the kit's observables that is sure of one 12-bit answer, and remembers what it was shown."""
+    model_from_kit = None
 
     def __init__(self, favourite, strength=8.0):
         self.logits, self.seen = np.where(np.array(favourite) == 1, strength, -strength), []
 
     def __call__(self, full, basis):
         self.seen.append(np.array(full))
-        return self.logits
+        return self.logits, (self.logits > 0).astype(np.uint8)
 
 
 def write_candidates(path, shots, data_sha256="a" * 64, session=False):
@@ -121,7 +122,8 @@ def write_candidates(path, shots, data_sha256="a" * 64, session=False):
 
 def write_logits(path, logits, observables=None):
     logits = np.array(logits, np.float32)
-    np.savez(path, logits=logits, observables=np.zeros((len(logits), 12), np.uint8) if observables is None else observables)
+    np.savez(path, logits=logits, predictions=(logits > 0).astype(np.uint8),
+             observables=np.zeros((len(logits), 12), np.uint8) if observables is None else observables)
     return str(path)
 
 
@@ -192,9 +194,10 @@ def failures(rows):
 
 def test_select_scores_every_rule_on_hand_made_candidates(tmp_path):
     pool, sources = select.load_candidates([write_candidates(tmp_path / "c.npz", HAND_MADE)])
-    logits, network_ms, _ = select.load_logits([write_logits(tmp_path / "l.npz", HAND_MADE_LOGITS)], pool, sources)
-    assert network_ms is None                                                   # no .json beside the logits
-    rows = select.score(pool, logits, network_ms=10.0, constants=[(1.0, "given")])
+    network = select.load_logits([write_logits(tmp_path / "l.npz", HAND_MADE_LOGITS)], pool, sources)
+    assert network.ms is None                                                   # no .json beside the logits
+    network.ms = 10.0
+    rows = select.score(pool, network, constants=[(1.0, "given")])
     assert failures(rows) == {"R": 2, "P1": 3, "P2": 3, "weight": 4, "converged": 3, "network": 3,
                               "network_C1": 4, "perfect": 1, "perfect_tie_break": 2}
     by_key = {row.key: row for row in rows}
@@ -212,8 +215,7 @@ def test_select_scores_every_rule_on_hand_made_candidates(tmp_path):
 
 def test_select_marks_what_a_session_file_cannot_measure(tmp_path):
     pool, sources = select.load_candidates([write_candidates(tmp_path / "s.npz", HAND_MADE, session=True)])
-    logits, _, _ = select.load_logits([write_logits(tmp_path / "l.npz", HAND_MADE_LOGITS)], pool, sources)
-    rows = select.score(pool, logits)
+    rows = select.score(pool, select.load_logits([write_logits(tmp_path / "l.npz", HAND_MADE_LOGITS)], pool, sources))
     assert failures(rows) == {"R": None, "P1": 3, "P2": 3, "weight": 4, "converged": None, "network": 3,
                               "perfect": None, "perfect_tie_break": 2}
     assert "relay-BP ran on 3 of 5 shots" in rows[0].note
@@ -329,6 +331,7 @@ def test_stub_network_picks_the_candidate_it_prefers(favourite):
     assert result.metrics["winner"] == favourite and result.metrics["stage"] == "network" and result.metrics["fallback_used"]
     assert stages.third_calls == 1 and len(network.seen) == 1 and np.array_equal(network.seen[0], full)   # the shot's bits, once
     assert result.metrics["logits"] == network.logits.tolist() and result.metrics["iterations"] == 30
+    assert result.metrics["network_answer"] == answers[favourite].tolist()
     assert result.metrics["predicted_R"] == answers["R"].tolist() and result.metrics["converged_R"] is True
     json.dumps(result.metrics)                          # the evaluator writes the metrics as JSON
 
@@ -359,27 +362,50 @@ def test_a_basis_without_a_checkpoint_uses_the_weight_rule_and_says_so():
         HierarchySession(fake_problem(), {"rule": "majority"}, hierarchy=stages)
 
 
-@pytest.mark.parametrize("detectors", ["all", "basis"])
-def test_network_reads_the_shot_and_nothing_else(tmp_path, detectors):
+@pytest.mark.parametrize("basis, detectors, logicals", [("X", "all", "kit"), ("X", "basis", "kit"), ("Z", "all", "light")])
+def test_network_reads_the_shot_and_nothing_else(tmp_path, basis, detectors, logicals):
     torch = pytest.importorskip("torch")
     from neural.train import load_decoder
 
     torch.set_num_threads(1)
-    checkpoint = tiny_checkpoint(tmp_path / "x.pt", "X", detectors)
-    network = Network(checkpoint, fake_problem("X"))
+    checkpoint = tiny_checkpoint(tmp_path / "net.pt", basis, detectors, logicals)
+    network = Network(checkpoint, fake_problem(basis))
     random = np.random.default_rng(3)
-    full, basis = random.integers(0, 2, 1728, dtype=np.uint8), random.integers(0, 2, 936, dtype=np.uint8)
+    full, part = random.integers(0, 2, 1728, dtype=np.uint8), random.integers(0, 2, 936, dtype=np.uint8)
     model, _ = load_decoder(checkpoint)
+    shot = torch.from_numpy((full if detectors == "all" else part)[None])
     with torch.no_grad():
-        direct = model(torch.from_numpy((full if detectors == "all" else basis)[None])).numpy()[0]
-    assert network(full, basis) == pytest.approx(direct, abs=1e-6)
-    assert network.record["reads_detectors"] == detectors and network.record["step"] == 0 and len(network.record["sha256"]) == 64
-    with pytest.raises(ValueError, match="decodes X memory"):
-        Network(checkpoint, fake_problem("Z"))
+        direct = model(shot)
+    logits, answer = network(full, part)
+    assert logits == pytest.approx(direct.numpy()[0], abs=1e-6)
+    assert np.array_equal(answer, model.kit_bits(shot, direct > 0).numpy()[0])
+    assert network.record["reads_detectors"] == detectors and network.record["logical_operators"] == logicals
+    assert network.record["step"] == 0 and len(network.record["sha256"]) == 64
+    with pytest.raises(ValueError, match=f"decodes {basis} memory"):
+        Network(checkpoint, fake_problem("Z" if basis == "X" else "X"))
+
+    # A candidate's bits in the network's own operators give back the candidate's kit bits
+    # through neural/'s own conversion, for any 12 bits.
+    kit_candidates = random.integers(0, 2, (5, 1, 12), dtype=np.uint8)
+    own = rules.bits_for_network(kit_candidates, (logits > 0)[None], answer[None], network.model_from_kit)
+    assert (network.model_from_kit is None) == (logicals == "kit")
+    for candidate, bits in zip(kit_candidates[:, 0], own[:, 0], strict=True):
+        assert np.array_equal(model.kit_bits(shot, torch.from_numpy(bits[None])).numpy()[0], candidate)
+    if logicals == "light":
+        assert not np.array_equal(own, kit_candidates)      # these operators are not the kit's
+
+
+@pytest.fixture(scope="module")
+def session_candidates(tmp_path_factory, shot_files):
+    """The small shot files decoded the way a session decodes them, with the quick budgets."""
+    out = tmp_path_factory.mktemp("session")
+    candidates.main(["--data", str(shot_files["X"]), str(shot_files["Z"]), "--out", str(out), "--mode", "session",
+                     "--processes", "1", *QUICK])
+    return {basis: out / f"small_{basis}.session.npz" for basis in "XZ"}
 
 
 @needs_priortilt
-def test_plugin_through_the_evaluator_equals_select_on_session_candidates(tmp_path, shot_files, monkeypatch):
+def test_plugin_through_the_evaluator_equals_select_on_session_candidates(tmp_path, shot_files, session_candidates, monkeypatch):
     """The whole chain on 24 shots per basis: the network rule for X, the weight rule for Z, which has no checkpoint."""
     torch = pytest.importorskip("torch")
     from evaluation import evaluate
@@ -398,20 +424,16 @@ def test_plugin_through_the_evaluator_equals_select_on_session_candidates(tmp_pa
     assert settings["X"]["rule"] == "network" and settings["X"]["network"]["checkpoint"] == checkpoint
     assert settings["Z"]["rule"] == "weight" and "no checkpoint" in settings["Z"]["rule_note"]
     assert settings["X"]["decoders"]["P1"]["seed"] == 1 and settings["X"]["decoders"]["P2"]["seed"] == 1001
+    assert 0 < summary["decoders"][0]["summary"]["fallback_fraction"] < 1
     shots_file = tmp_path / "eval" / "01_hierarchy_plugin_make_decoder_shots.npz"
     metrics = json.loads((tmp_path / "eval" / "01_hierarchy_plugin_make_decoder_metrics.json").read_text())
 
-    out = tmp_path / "session"
-    candidates.main(["--data", str(shot_files["X"]), str(shot_files["Z"]), "--out", str(out), "--mode", "session",
-                     "--processes", "1", *QUICK])
     evaluate_stim.main(["--checkpoint", checkpoint, "--data", str(shot_files["X"]), "--latency-shots", "3", "--threads", "1",
                         "--save", str(tmp_path / "logits_X")])
     for basis, rule in (("X", "network"), ("Z", "weight")):
-        pool, sources = select.load_candidates([out / f"small_{basis}.session.npz"])
-        logits, network_ms = None, None
-        if basis == "X":
-            logits, network_ms, _ = select.load_logits([str(tmp_path / "logits_X.npz")], pool, sources)
-        rows = select.score(pool, logits, network_ms)
+        pool, sources = select.load_candidates([session_candidates[basis]])
+        network = select.load_logits([str(tmp_path / "logits_X.npz")], pool, sources) if basis == "X" else None
+        rows = select.score(pool, network)
         assert select.check_evaluator(shots_file, rows, rule, sources) == 0
         ran = pool["ran"][ORDER.index("R")]
         assert 0 < ran.sum() < SHOTS                    # the quick budgets leave both kinds of shot in the file
@@ -419,10 +441,32 @@ def test_plugin_through_the_evaluator_equals_select_on_session_candidates(tmp_pa
         assert {shot["stage"] for shot in metrics[basis]} == {"agree", rule}
         if basis == "X":                                # the plugin's batch-one logits equal the offline ones
             online = np.array([shot["logits"] for shot in metrics[basis] if not shot["agreed"]])
-            assert online == pytest.approx(logits[ran], abs=1e-4)
+            assert online == pytest.approx(network.logits[ran], abs=1e-4)
+            assert network.ms > 0 and "from the .json beside the logits" in network.where
 
-    # The plugin also passes the evaluator's own checks when it is made through create_session.
-    session = create_session("hierarchy.plugin:make_decoder", kit_problem("Z", 0.004), {"rule": "weight", **QUICK_OPTIONS})
+
+@needs_priortilt
+def test_plugin_with_a_network_on_other_logical_operators_equals_select(tmp_path, shot_files, session_candidates):
+    """Z memory with a `--logicals light` network: the session made by the evaluator's create_session against select.py."""
+    torch = pytest.importorskip("torch")
+    from neural import evaluate_stim
+
+    torch.set_num_threads(1)
+    checkpoint = tiny_checkpoint(tmp_path / "z.pt", "Z", logicals="light")
+    session = create_session("hierarchy.plugin:make_decoder", kit_problem("Z", 0.004),
+                             {"rule": "network", "checkpoints": {"Z": checkpoint}, "torch_threads": 1, **QUICK_OPTIONS})
+    assert session.setup_seconds > 0 and session.settings["network"]["logical_operators"] == "light"
+    json.dumps(session.settings)
     data = load_shots(shot_files["Z"])
-    result = session.decode_shot(data.detectors[0], data.basis_input[0])
-    assert validate_shot_result(result).shape == (12,) and session.setup_seconds >= 0 and isinstance(session.settings, dict)
+    results = [session.decode_shot(full, part) for full, part in zip(data.detectors, data.basis_input, strict=True)]
+    answers = np.stack([validate_shot_result(result) for result in results])
+
+    evaluate_stim.main(["--checkpoint", checkpoint, "--data", str(shot_files["Z"]), "--latency-shots", "3", "--threads", "1",
+                        "--save", str(tmp_path / "logits_Z")])
+    pool, sources = select.load_candidates([session_candidates["Z"]])
+    network = select.load_logits([str(tmp_path / "logits_Z.npz")], pool, sources)
+    by_key = {row.key: row for row in select.score(pool, network)}
+    assert np.array_equal(answers, by_key["network"].predicted)
+    asked = [not result.metrics["agreed"] for result in results]
+    assert asked == pool["ran"][ORDER.index("R")].tolist() and any(asked)
+    assert not np.array_equal(network.candidates, pool["predicted"])       # the candidates were turned into the light operators

@@ -21,6 +21,10 @@ The three decoders read the 936 basis bits. The network reads the shot's detecto
 1,728, or the 936 if the checkpoint was trained on those) and nothing else. It is loaded once,
 when the session is made. The truth never reaches a session.
 
+A network trained with `--logicals light` (neural/, used for Z memory) predicts 12 other
+logical operators than the kit's. Its 12 logits are then compared with each candidate's bits
+in those operators (rules.bits_for_network), so the rule is the same for both kinds of network.
+
 Options (a JSON object; every key is optional):
 
   rule            "network" (default) or "weight"
@@ -42,7 +46,7 @@ from time import perf_counter
 import numpy as np
 
 from evaluation.adapters import ShotResult
-from hierarchy.rules import ORDER, lowest_weight, most_likely
+from hierarchy.rules import ORDER, bits_for_network, lowest_weight, most_likely
 from hierarchy.stages import DEFAULT_SEEDS, Hierarchy, decoder_settings, problem_sha256, sha256_of
 
 OPTIONS = {"rule", "checkpoints", "seeds", "constant", "device", "torch_threads", "priortilt_repo",
@@ -51,19 +55,25 @@ RULES = ("network", "weight")
 
 
 class Network:
-    """The neural decoder of one memory basis, loaded once. Calling it gives the 12 logits of one shot."""
+    """The neural decoder of one memory basis, loaded once.
+
+    Calling it with one shot gives (logits, kit bits): the 12 logits of the network's own
+    logical operators, and the kit's 12 observable bits of the network's answer.
+    model_from_kit turns kit bits into the network's bits (rules.bits_for_network); it is None
+    when the network was trained on the kit's observables.
+    """
 
     def __init__(self, checkpoint, problem, device="cpu", threads=None):
         import torch
 
-        from neural.evaluate_stim import decode
+        from neural.graph import gf2_inverse
         from neural.train import load_decoder     # the checkpoint is read by neural/'s own loader
 
         if threads:
             torch.set_num_threads(int(threads))
         if device == "auto":
             device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.device, self.decode = torch.device(device), decode
+        self.torch, self.device = torch, torch.device(device)
         self.model, saved = load_decoder(checkpoint, self.device)
         config = saved["config"]
         if config["basis"] != problem.basis:
@@ -72,15 +82,22 @@ class Network:
         if self.model.num_inputs not in (self.all_bits, self.basis_bits):
             raise ValueError(f"{checkpoint} reads {self.model.num_inputs} detector bits; the shots have "
                              f"{self.all_bits}, of which {self.basis_bits} on {problem.basis} checks")
+        self.model_from_kit = None
+        if config["logicals"] != "kit":
+            self.model_from_kit = gf2_inverse(self.model.kit_from_model.cpu().numpy().astype(np.uint8))
         self.record = {"checkpoint": str(checkpoint), "sha256": sha256_of(checkpoint), "step": saved["step"],
                        "commit": saved["commit"], "training_seed": config["seed"], "reads_detectors": config["detectors"],
-                       "width": config["width"], "depth": config["depth"], "device": str(self.device),
-                       "torch": torch.__version__, "torch_threads": torch.get_num_threads()}
+                       "logical_operators": config["logicals"], "width": config["width"], "depth": config["depth"],
+                       "device": str(self.device), "torch": torch.__version__, "torch_threads": torch.get_num_threads()}
         self(np.zeros(self.all_bits, np.uint8), np.zeros(self.basis_bits, np.uint8))   # so the first real call pays no one-time cost
 
     def __call__(self, full, basis):
         bits = full if self.model.num_inputs == self.all_bits else basis
-        return self.decode(self.model, np.ascontiguousarray(bits, dtype=np.uint8)[None], self.device)[0]
+        with self.torch.no_grad():
+            shot = self.torch.from_numpy(np.ascontiguousarray(bits, dtype=np.uint8)[None]).to(self.device)
+            logits = self.model(shot).float()
+            kit_bits = self.model.kit_bits(shot, logits > 0)      # neural/'s own change to the kit's observables
+        return logits.cpu().numpy()[0], kit_bits.cpu().numpy()[0]
 
 
 class HierarchySession:
@@ -142,9 +159,12 @@ class HierarchySession:
         extra = {f"predicted_{candidate.name}": candidate.predicted.tolist() for candidate in candidates}
         if self.rule == "network":
             start = perf_counter()
-            logits = np.asarray(self.network(full, syndrome), np.float64)
-            extra |= {"seconds_network": perf_counter() - start, "logits": logits.tolist()}
-            choice = int(most_likely(predicted, logits[None], weight, self.constant)[0])
+            logits, network_answer = self.network(full, syndrome)
+            logits, network_answer = np.asarray(logits, np.float64), np.asarray(network_answer, np.uint8)
+            extra |= {"seconds_network": perf_counter() - start, "logits": logits.tolist(),
+                      "network_answer": network_answer.tolist()}
+            in_its_bits = bits_for_network(predicted, (logits > 0)[None], network_answer[None], self.network.model_from_kit)
+            choice = int(most_likely(in_its_bits, logits[None], weight, self.constant)[0])
         else:
             choice = int(lowest_weight(weight)[0])
         return ShotResult(candidates[choice].predicted, self._metrics(self.rule, candidates[choice], candidates, extra))

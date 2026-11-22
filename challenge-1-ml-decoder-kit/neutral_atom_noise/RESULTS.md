@@ -709,12 +709,14 @@ All 10 blocks finished by 18:41 UTC, 233 s after the model fit, so all 1,000 sho
 
 What this shows:
 
-- **Retraining the head on this noise helps a lot against the kit-trained head.** It cuts TCBP-JOBS's failures 4.4
-  times: 27 against 119, with only one shot that r fails and h gets right.
-- **But the retrained head does not beat the true error model: it is worse.** r fails 27 shots, m fails 8, and 20 of
-  the 21 discordant shots go against r (p = 2e-5). By the declared claim rule, the retrained head does not add to the
-  matched priors here. Per-shot priors from this head mislead TCBP-JOBS on some shots that the fixed true priors
-  decode correctly.
+- **The retrained head makes its own base worse.** r and m share the matched base and differ only by the head: r fails
+  27 shots, m fails 8, and 20 of the 21 discordant shots go against r (p = 2e-5). By the declared claim rule, the
+  retrained head does not add to the matched priors here. Its per-shot priors mislead TCBP-JOBS on shots that the
+  fixed true priors decode correctly. The kit head did the opposite on its own base in phase 1: 957 failures to 209.
+- **r against h compares two pipelines, not two heads.** They differ in the head and in the base, so the 27 against
+  119 (93 against 1 discordant shots) is not a gain from retraining. The matched base alone does better still: m
+  against h is 8 against 119. The head-alone comparison, the retrained head against the kit head on the same matched
+  base (r vs hm), is in run 2.
 - **Why, not tested here.** Three candidates, none measured:
   - the knobs (alpha 0.4 was fitted for the kit head on the kit's noise);
   - the head's confident false columns (about 9 per shot above 0.5);

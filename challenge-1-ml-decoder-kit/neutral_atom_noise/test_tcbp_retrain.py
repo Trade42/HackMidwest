@@ -135,3 +135,12 @@ def test_the_refit_then_the_rf_arm(setup, tmp_path):
     pairs = json.loads((tmp_path / "score.json").read_text())["tasks"]["small"]["pairs"]
     assert (pairs[0]["kind"], pairs[0]["a"], pairs[0]["b"]) == ("primary", "rf", "m")
     assert ("rf", "r") in [(q["a"], q["b"]) for q in pairs if q["kind"] == "secondary"]
+
+
+def test_the_fit_rule_breaks_ties_as_declared():
+    row = lambda alpha, eps, f, nr=0, fl=0: {"alpha": alpha, "eps": eps, "failures": f, "not_reproduced": nr, "flag_not_converged": fl}
+    rows = [row(0.4, 1e-4, 9), row(0.2, 1e-6, 9), row(0.2, 1e-4, 9), row(1.0, 1e-4, 8, nr=1)]
+    assert min(rows, key=tcbp_retrain.fit_key) == row(1.0, 1e-4, 8, nr=1)            # fewest failures first
+    rows = rows[:3]
+    assert min(rows, key=tcbp_retrain.fit_key) == row(0.2, 1e-4, 9)                  # then smaller alpha, then larger eps
+    assert min([row(0.1, 1e-4, 9, fl=5), row(0.6, 1e-4, 9, fl=4)], key=tcbp_retrain.fit_key)["alpha"] == 0.6

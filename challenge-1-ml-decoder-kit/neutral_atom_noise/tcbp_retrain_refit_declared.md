@@ -1,6 +1,6 @@
 # The retrained head's knobs refitted on train shots, then one test: declared before any number
 
-**Label: exploration, task tcbp-retrain (branch `tcbp-retrain`).** Written 2026-11-22 at about 19:00 UTC. The
+**Label: exploration, task tcbp-retrain (branch `tcbp-retrain`).** Written 2026-11-22 before 18:49 UTC (pushed in `2144eac3` at 18:49:20; this time corrected afterwards). The
 orchestrator `dq-orch-6` asked for it for Sal ("Sal wants accuracy pushed"). At that time:
 - no decode of the two files below existed;
 - run 1 of `tcbp_retrain_declared.md` was known: r 27, m 8, h 119 of 1,000; the retrained head at alpha 0.4 is worse

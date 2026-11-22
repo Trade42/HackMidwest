@@ -1,0 +1,25 @@
+# $ python train_router.py ../challenge-1-ml-decoder-kit 0.004 X trained_X_p0.004   (run from fpga_router/, the kit venv, numpy 2.5.5, scipy 1.18.1)
+X memory, p = 0.004. Train: 20000 shots (Stim seed 101), 2760 hard, 120 of them wrong. Validation: 5000 shots (seed 201), 691 hard, 36 of them wrong; 3 easy shots are wrong and no router sees them.
+check: the fit of this script on their 17 features gives their frozen weights to within 4.4e-16
+check: their frozen threshold lies 5 floating-point steps below the lowest wrong shot's risk as computed here
+
+Each model at its own threshold: the highest one that accepts no wrong hard validation shot.
+The threshold is chosen on the validation shots, so 'wrong accepted = 0' there is by construction;
+the train columns show the same threshold on the shots the weights were fitted on.
+model                                                                       AUC | validation, 691 hard: escalated accepted wrong-accepted | train, 2760 hard: escalated accepted wrong-accepted
+A  the teammates' frozen model: 17 features, floats                       0.797 |                          683        8              0 |                        2715       45              0
+B  16 features (theirs without the converged flag), floats                0.821 |                          638       53              0 |                        2530      230              1
+C  the board's 16 whole-number features, float weights                    0.822 |                          640       51              0 |                        2535      225              1
+D  the board's model: 16 whole numbers, 16-bit weights, FRAC = 17         0.822 |                          639       52              0 |                        2533      227              1
+
+Same decision, the board's model (D) and the teammates' (A): 647 of 691 hard validation shots (both escalate 639, both accept 8, only theirs escalates 44, only the board's escalates 0);
+  4956 of 5000 validation shots when the easy ones, which both accept by the same rule, are counted.
+Against the label (wrong = the first solution's 12 logical bits are wrong):
+  A, validation_hard:   691 shots | wrong and escalated  36 | wrong and accepted   0 | right and escalated  647 | right and accepted    8
+  A, validation_all :  5000 shots | wrong and escalated  36 | wrong and accepted   3 | right and escalated  647 | right and accepted 4314
+  D, validation_hard:   691 shots | wrong and escalated  36 | wrong and accepted   0 | right and escalated  603 | right and accepted   52
+  D, validation_all :  5000 shots | wrong and escalated  36 | wrong and accepted   3 | right and escalated  603 | right and accepted 4358
+
+FRAC = 17 bits. Largest logit error from rounding: 0.0525. Verdicts changed: 1 of 5000
+wrote router_params.vh, vectors.mem (5000 shots, 129 bytes each), tb_vectors.vh. Escalated: 12.8%
+wrote trained_X_p0.004/model.npz and trained_X_p0.004/report.json

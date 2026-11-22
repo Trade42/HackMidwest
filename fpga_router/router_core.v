@@ -1,5 +1,6 @@
 // Learned router: score = BIAS + sum over k of W[k] * x[k]. The shot escalates when score > thresh.
 // x[k] are unsigned XW-bit features, W[k] signed WW-bit weights. Latency: 4 clocks from in_valid to out_valid.
+// in_gate travels with in_valid: with in_gate = 0 the shot is never escalated, whatever its score.
 module router_core #(
     parameter integer N  = 16,                       // number of features, a multiple of 4
     parameter integer XW = 16,
@@ -11,6 +12,7 @@ module router_core #(
     input  wire                 clk,
     input  wire                 rst,
     input  wire                 in_valid,
+    input  wire                 in_gate,             // 0 = accept this shot without asking the model
     input  wire [N*XW-1:0]      x_flat,              // feature k at bits [k*XW +: XW]
     input  wire signed [AW-1:0] thresh,
     output reg                  out_valid,
@@ -24,7 +26,7 @@ module router_core #(
     reg [N*PW-1:0]      prod;
     reg [G*SW-1:0]      part;
     reg signed [AW-1:0] acc, total;
-    reg [2:0]           valid;
+    reg [2:0]           valid, gate;
 
     always @(posedge clk) begin : multiply           // stage 1: N multipliers
         integer k;
@@ -49,7 +51,8 @@ module router_core #(
     always @(posedge clk) begin
         total    <= acc;
         score    <= total;                           // stage 4: compare
-        escalate <= (total > thresh);
+        escalate <= (total > thresh) && gate[2];
+        gate     <= {gate[1:0], in_gate};
         if (rst) begin
             valid <= 3'b000; out_valid <= 1'b0;
         end else begin

@@ -1,0 +1,31 @@
+# fpga_board at 134de6e: its Python checks, luminaty, 2026-11-22T07:24Z. Python 3.12.15, numpy 2.5.5, scipy 1.18.1 (a venv in scratch, not the tracked .venv312)
+$ python tools/verify_reference.py --model ../challenge-1-ml-decoder-kit/results/router_p0.004/model_X.json --features ../challenge-1-ml-decoder-kit/results/router_p0.004/validation_X.npz --generated generated
+5000 saved shots: software escalates 683, fixed hardware escalates 683, mismatches 0
+
+$ python tools/board_demo.py export --model .../router_p0.004/model_X.json --features .../router_p0.004/validation_X.npz --data .../data/p0.004/validation_X.npz --out <scratch>/regen_X_p0.004 --uart-vectors 32
+{  "basis": "X",  "p": 0.004,  "shots": 5000,  "easy": 4309,  "escalated_fixed": 683,  "float_fixed_verdict_flips": 0,  "fractional_bits": 20,  "model_sha256": "469d032009143adc75ff7bf007b5373d6cd9755302fb5ffd7e64cbb6197eb11d",  "original_shots_sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d",  "uart_vectors": 32,  "packet_bytes": 124,  "reply_bytes": 8}
+byte-for-byte comparison of the re-export with the committed generated/:
+  core_vectors.mem: identical
+  expected.bin: identical
+  manifest.json: identical
+  packets.bin: identical
+  router_params.svh: identical
+  tb_meta.svh: identical
+  uart_vectors.mem: identical
+
+# The exporter on the other five frozen models, into scratch (nothing written into fpga_board/), then verify_reference.py on each:
+$ python tools/board_demo.py export --model .../router_p0.003/model_X.json --features .../router_p0.003/validation_X.npz --data .../data/p0.003/validation_X.npz --out <scratch>/regen_X_p0.003
+   {'basis': 'X', 'p': 0.003, 'shots': 5000, 'easy': 4837, 'escalated_fixed': 131, 'float_fixed_verdict_flips': 0, 'fractional_bits': 19}
+  verify_reference.py: 5000 saved shots: software escalates 131, fixed hardware escalates 131, mismatches 0 
+$ python tools/board_demo.py export --model .../router_p0.003/model_Z.json --features .../router_p0.003/validation_Z.npz --data .../data/p0.003/validation_Z.npz --out <scratch>/regen_Z_p0.003
+   {'basis': 'Z', 'p': 0.003, 'shots': 5000, 'easy': 4835, 'escalated_fixed': 138, 'float_fixed_verdict_flips': 1, 'fractional_bits': 20}
+  verify_reference.py: 5000 saved shots: software escalates 139, fixed hardware escalates 138, mismatches 1 first mismatch indices: [4358] 
+$ python tools/board_demo.py export --model .../router_p0.004/model_Z.json --features .../router_p0.004/validation_Z.npz --data .../data/p0.004/validation_Z.npz --out <scratch>/regen_Z_p0.004
+   {'basis': 'Z', 'p': 0.004, 'shots': 5000, 'easy': 4320, 'escalated_fixed': 637, 'float_fixed_verdict_flips': 0, 'fractional_bits': 20}
+  verify_reference.py: 5000 saved shots: software escalates 637, fixed hardware escalates 637, mismatches 0 
+$ python tools/board_demo.py export --model .../router_p0.005/model_X.json --features .../router_p0.005/validation_X.npz --data .../data/p0.005/validation_X.npz --out <scratch>/regen_X_p0.005
+   {'basis': 'X', 'p': 0.005, 'shots': 5000, 'easy': 3201, 'escalated_fixed': 1765, 'float_fixed_verdict_flips': 0, 'fractional_bits': 20}
+  verify_reference.py: 5000 saved shots: software escalates 1765, fixed hardware escalates 1765, mismatches 0 
+$ python tools/board_demo.py export --model .../router_p0.005/model_Z.json --features .../router_p0.005/validation_Z.npz --data .../data/p0.005/validation_Z.npz --out <scratch>/regen_Z_p0.005
+   {'basis': 'Z', 'p': 0.005, 'shots': 5000, 'easy': 3188, 'escalated_fixed': 1807, 'float_fixed_verdict_flips': 1, 'fractional_bits': 20}
+  verify_reference.py: 5000 saved shots: software escalates 1807, fixed hardware escalates 1807, mismatches 0 

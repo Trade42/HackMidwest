@@ -1,0 +1,191 @@
+{
+  "cycles": 12,
+  "p": 0.005,
+  "circuits": {
+    "X": {
+      "path": "/Users/gjimb/Projects/HackMidwest/challenge-1-ml-decoder-kit/circuits/gross_X_r12_p0.001.stim",
+      "sha256": "d5e86451e36a799eceeb805aeea00bc9bce79c0d883ed454e4e2b3f44f5c5e4c"
+    },
+    "Z": {
+      "path": "/Users/gjimb/Projects/HackMidwest/challenge-1-ml-decoder-kit/circuits/gross_Z_r12_p0.001.stim",
+      "sha256": "4ea8774901c63a476f4337d5d9b6c54c08eefd22f24036198f8333750f16c300"
+    }
+  },
+  "plugin_options": {
+    "router_models": {
+      "X": "results/router_p0.005/model_X.json",
+      "Z": "results/router_p0.005/model_Z.json"
+    }
+  },
+  "datasets": {
+    "test": {
+      "X": {
+        "path": "/Users/gjimb/Projects/HackMidwest/challenge-1-ml-decoder-kit/data/p0.005/test_X.npz",
+        "sha256": "1b13521cddb2bf5e5d4c7f1e85a8ecaaa3c72a0b99754a3f76b4a5a4a912fc8b",
+        "basis": "X",
+        "p": 0.005,
+        "seed": 301,
+        "shots": 10000,
+        "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+      },
+      "Z": {
+        "path": "/Users/gjimb/Projects/HackMidwest/challenge-1-ml-decoder-kit/data/p0.005/test_Z.npz",
+        "sha256": "b86ae320d13fa555d8358fe399156d28d4e52b01fabf8eafa1b30e60bdcd0cef",
+        "basis": "Z",
+        "p": 0.005,
+        "seed": 302,
+        "shots": 10000,
+        "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+      }
+    }
+  },
+  "package_versions": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "matplotlib": "3.11.2"
+  },
+  "machine": {
+    "system": "Darwin",
+    "release": "25.6.0",
+    "machine": "arm64",
+    "processor": "arm",
+    "python": "3.12.16",
+    "cpu_count": 10,
+    "workers": 1,
+    "thread_environment": {
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "MKL_NUM_THREADS": null,
+      "VECLIB_MAXIMUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": null,
+      "RAYON_NUM_THREADS": null
+    },
+    "native_decoder_threads": "not exposed by the installed decoder API",
+    "resource_note": "ru_maxrss is peak memory of this parent process only; it excludes other workers"
+  },
+  "randomness": {
+    "dataset_seeds": {
+      "test": {
+        "X": 301,
+        "Z": 302
+      }
+    },
+    "relay_bp_seed": 0,
+    "relay_bp_seed_source": "installed API default; kit factory leaves it unset",
+    "bposd_seed": null,
+    "bposd_seed_note": "kit factory does not set a seed",
+    "decoder_order": [
+      "evaluation.router:make_tiered_decoder"
+    ]
+  },
+  "outcome_policy": "Every returned prediction is scored, including unconverged results; exceptions fail the run.",
+  "timing": "Existing seconds fields preserve the kit decoder-call timer for baselines. Separate total_seconds fields time before_shot plus the complete decode_shot call for every decoder, including projection, router, and fallback work; one-time construction is separate. Batch throughput uses complete evaluation wall time.",
+  "decoders": [
+    {
+      "name": "evaluation.router:make_tiered_decoder",
+      "configuration": {
+        "X": {
+          "first_solution": {
+            "alpha": 1.0,
+            "gamma0": 0.15,
+            "pre_iter": 80,
+            "num_sets": 300,
+            "set_max_iter": 60,
+            "gamma_dist_interval": [
+              -0.22628432386414646,
+              0.6216020925981884
+            ],
+            "stop_nconv": 1
+          },
+          "fallback": {
+            "alpha": 1.0,
+            "gamma0": 0.15,
+            "pre_iter": 80,
+            "num_sets": 300,
+            "set_max_iter": 60,
+            "gamma_dist_interval": [
+              -0.22628432386414646,
+              0.6216020925981884
+            ],
+            "stop_nconv": 5
+          },
+          "router_sha256": "aed63f3e3ae84e0e038fccef1a92030d0a0d653a970a9891dc1182d6bc88b935",
+          "risk_threshold": 0.017256486774596794,
+          "routing_rule": "risk > threshold"
+        },
+        "Z": {
+          "first_solution": {
+            "alpha": 1.0,
+            "gamma0": 0.15,
+            "pre_iter": 80,
+            "num_sets": 300,
+            "set_max_iter": 60,
+            "gamma_dist_interval": [
+              -0.22628432386414646,
+              0.6216020925981884
+            ],
+            "stop_nconv": 1
+          },
+          "fallback": {
+            "alpha": 1.0,
+            "gamma0": 0.15,
+            "pre_iter": 80,
+            "num_sets": 300,
+            "set_max_iter": 60,
+            "gamma_dist_interval": [
+              -0.22628432386414646,
+              0.6216020925981884
+            ],
+            "stop_nconv": 5
+          },
+          "router_sha256": "31297e9f55963eedf2ebf8d7c72da0a4d8f7a2338a8884d6a617b63ce5f379ec",
+          "risk_threshold": 0.015176407643603554,
+          "routing_rule": "risk > threshold"
+        }
+      },
+      "setup_seconds_by_basis": {
+        "X": 0.008499833988025784,
+        "Z": 0.004426750005222857
+      },
+      "peak_parent_rss_bytes_before": 322781184,
+      "peak_parent_rss_bytes_after": 324206592,
+      "shot_metrics": "01_evaluation_router_make_tiered_decoder_metrics.json",
+      "summary": {
+        "decoder": "evaluation.router:make_tiered_decoder",
+        "p": 0.005,
+        "cycles": 12,
+        "shots_X": 10000,
+        "shots_Z": 10000,
+        "paired_shots": 10000,
+        "failures_X": 417,
+        "failures_Z": 407,
+        "failures_pair": 813,
+        "per_cycle_rate": 0.007041396683252765,
+        "standard_error": 0.0002464910610424642,
+        "mean_pair_ms": 767.8983627617476,
+        "median_pair_ms": 122.06949992105365,
+        "p99_pair_ms": 5030.930035951316,
+        "mean_pair_kit_ms": 767.6912392703234,
+        "mean_pair_total_ms": 767.8983627617476,
+        "median_pair_total_ms": 122.06949992105365,
+        "p99_pair_total_ms": 5030.930035951316,
+        "setup_seconds": 0.012926583993248641,
+        "before_shot_seconds": 0.0,
+        "decode_loop_seconds": 7679.237138041994,
+        "evaluation_wall_seconds": 7679.7022662500385,
+        "batch_throughput_pairs_per_second": 1.3021338136957425,
+        "converged_fraction": 0.9751,
+        "first_leg_converged_fraction": 0.63895,
+        "fallback_fraction": 0.35665,
+        "mean_iterations": 3134.99305,
+        "threshold": null,
+        "threshold_X": 0.017256486774596794,
+        "threshold_Z": 0.015176407643603554,
+        "artifacts": "01_evaluation_router_make_tiered_decoder_shots.npz"
+      }
+    }
+  ]
+}

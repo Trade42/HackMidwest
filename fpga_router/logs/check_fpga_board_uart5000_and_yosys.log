@@ -1,0 +1,67 @@
+# fpga_board at 134de6e: its own tb_uart.sv, unchanged, on all 5,000 validation shots instead of 32.
+# The vectors come from its own exporter with --uart-vectors 5000, written to a scratch folder; router_params.svh,
+# core_vectors.mem, expected.bin and packets.bin of that export are identical to the committed generated/.
+# luminaty, 2026-11-22T07:26Z, Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod)
+$ python tools/board_demo.py export ... --out <scratch>/uart5000/generated --uart-vectors 5000
+$ cd <scratch>/uart5000 && verilator --binary --timing -Wno-fatal --top-module tb_uart -Igenerated <fpga_board>/tb/tb_uart.sv <fpga_board>/rtl/{router_top,router_frontend,router_core,uart_rx,uart_tx}.sv && ./obj_dir/Vtb_uart
+localparam integer NCORE = 5000;
+localparam integer NUART = 5000;
+PASS UART: 5000 original saved shots, byte-exact replies
+- /home/sal/hackMidwest/worktrees/fpga/fpga_board/tb/tb_uart.sv:70: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.055 devel
+- Verilator: $finish at 529ms; walltime 62.241 s; speed 8.498 ms/s
+- Verilator: cpu 59.010 s on 1 threads; allocated 5 MB
+
+real	1m2.247s
+user	0m58.862s
+sys	0m0.153s
+
+# Its Yosys line, exactly as its README gives it (from fpga_board/):
+$ yosys -Q -T -p 'read_verilog -sv -Igenerated rtl/router_core.sv rtl/router_frontend.sv rtl/router_top.sv rtl/uart_rx.sv rtl/uart_tx.sv; synth_xilinx -family xc7 -top router_top; stat'
+Yosys 0.71+77 (git sha1 11d972c20, Release, Clang /usr/bin/clang++ 21.1.8)
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+     1861 router_top
+      743 $paramod$3086f2cad902031db3ccafcc553aa30625a777af\router_core
+       70 $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+       77 $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+      737 router_frontend
+
+        +----------Count including submodules.
+        | 
+     1921 wires
+     5159 wire bits
+       73 public wires
+     1949 public wire bits
+       28 ports
+      661 port bits
+        - memories
+        - memory bits
+        - processes
+     1861 cells
+        1   BUFG
+       96   CARRY4
+       17   DSP48E1
+      675   FDRE
+       13   FDSE
+        2   IBUF
+       49   INV
+      194   LUT2
+      146   LUT3
+       90   LUT4
+      298   LUT5
+      255   LUT6
+        8   MUXF7
+       17   OBUF
+        4 submodules
+        1   $paramod$3086f2cad902031db3ccafcc553aa30625a777af\router_core
+        1   $paramod\uart_rx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+        1   $paramod\uart_tx\CLKS_PER_BIT=s32'00000000000000000000001101100100
+        1   router_frontend
+
+
+      2 Warning: Replacing memory \group_sum with list of registers. See rtl/router_core.sv:42, rtl/router_core.sv:39
+      2 Warning: Replacing memory \partial with list of registers. See rtl/router_core.sv:49
+      2 Warning: Replacing memory \product with list of registers. See rtl/router_core.sv:31

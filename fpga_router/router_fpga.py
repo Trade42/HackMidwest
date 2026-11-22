@@ -3,10 +3,15 @@
   python router_fpga.py shots  KIT_DIR P N_SHOTS OUT.npz      real shots from the kit -> syndromes, BP statistics, labels
   python router_fpga.py export MODEL.npz SHOTS.npz [OUT_DIR]  weights -> router_params.vh, shots -> vectors.mem
   python router_fpga.py send   PORT MODEL.npz SHOTS.npz       run the shots through the board and compare bit for bit
+  python router_fpga.py sendmem PORT VECTORS.mem [N]          the same from a vectors.mem file (first N shots): numpy and pyserial
   python router_fpga.py standin SHOTS.npz MODEL.npz          made-up weights, to test the hardware before router v1 exists
+
+The trained router is made by train_router.py, which calls export_arrays() below.
 
 MODEL.npz holds a logistic model that predicts "the first relay-BP solution is wrong":
   coef (16,), intercept (), mean (16,), scale (16,), threshold ()    threshold is a probability; above it the shot escalates
+  optional: thresh_fixed ()   the threshold as the integer the board compares with; it then replaces `threshold`
+            easy_iter ()      shots with 1 to easy_iter iterations are accepted without asking the model (0 or absent: no such rule)
 From scikit-learn: np.savez("router_v1.npz", coef=clf.coef_[0], intercept=clf.intercept_[0],
                             mean=scaler.mean_, scale=scaler.scale_, threshold=0.2)
 The model must be trained on features(...) below, as integers, or the board and the laptop will disagree.
@@ -39,25 +44,41 @@ def packets(syndrome, iterations, weight, mean_abs_post):
 
 
 def quantize(model):
-    """Fold the scaler into the weights and round to fixed point. Returns W (16 ints), BIAS, THRESH, FRAC."""
+    """Fold the scaler into the weights and round to fixed point. Returns W (16 ints), BIAS, THRESH, FRAC, (w, b), EASY_ITER."""
     w = np.asarray(model["coef"], float) / np.asarray(model["scale"], float)
     b = float(model["intercept"]) - float(np.sum(w * np.asarray(model["mean"], float)))
-    t = float(model["threshold"])
     frac = int(min(24, np.floor(np.log2((2 ** (WW - 1) - 1) / max(np.abs(w).max(), 1e-12)))))
     W = np.round(w * 2 ** frac).astype(np.int64)
-    BIAS, THRESH = int(round(b * 2 ** frac)), int(round(np.log(t / (1 - t)) * 2 ** frac))
-    assert np.abs(W).max() < 2 ** (WW - 1) and abs(BIAS) < 2 ** (AW - 2) and abs(THRESH) < 2 ** (AW - 2)
-    return W, BIAS, THRESH, frac, (w, b)
+    BIAS = int(round(b * 2 ** frac))
+    if "thresh_fixed" in model:                      # chosen on the board's own integer scores: no rounding in between
+        THRESH = int(model["thresh_fixed"])
+    else:
+        t = float(model["threshold"])
+        THRESH = int(round(np.log(t / (1 - t)) * 2 ** frac))
+    easy = int(model["easy_iter"]) if "easy_iter" in model else 0
+    assert np.abs(W).max() < 2 ** (WW - 1) and abs(BIAS) < 2 ** (AW - 2) and abs(THRESH) < 2 ** (AW - 2) and 0 <= easy < 2 ** XW
+    return W, BIAS, THRESH, frac, (w, b), easy
 
 
 def score_fixed(x, W, BIAS):
     return np.asarray(x, np.int64) @ W + BIAS
 
 
-def replies(score, THRESH):
+def verdict(x, score, THRESH, easy_iter=0):
+    """1 = escalate, as the board decides it: the score is above the threshold and the shot is not an easy one.
+
+    A shot is easy when its iteration count (feature 13) is 1 to easy_iter: relay-BP's first leg found the solution.
+    With easy_iter = 0 no shot is easy.
+    """
+    it = np.asarray(x, np.int64)[..., ROUNDS]
+    hard = (it == 0) | (it > easy_iter)
+    return (np.asarray(score) > THRESH) & hard
+
+
+def replies(score, escalate):
     """(shots, 6) bytes: the 40-bit score, little endian, then 1 if the shot escalates."""
     u = np.asarray(score, np.int64) & (2 ** AW - 1)
-    return np.stack([u >> 8 * k & 255 for k in range(5)] + [(np.asarray(score) > THRESH).astype(np.int64)], -1).astype(np.uint8)
+    return np.stack([u >> 8 * k & 255 for k in range(5)] + [np.asarray(escalate).astype(np.int64)], -1).astype(np.uint8)
 
 
 def hexs(v, bits):
@@ -91,13 +112,22 @@ def cmd_shots(kit, p, n, out):
 
 
 def cmd_export(model_file, shots_file, out_dir="."):
-    model, d = np.load(model_file), np.load(shots_file)
-    W, BIAS, THRESH, frac, (w, b) = quantize(model)
+    export_arrays(np.load(model_file), np.load(shots_file), out_dir)
+
+
+def export_arrays(model, d, out_dir="."):
+    """model and d are mappings with the entries of MODEL.npz and SHOTS.npz. Returns (x, fixed scores, verdicts)."""
+    W, BIAS, THRESH, frac, (w, b), easy = quantize(model)
     args = (d["syndrome"], d["iterations"], d["weight"], d["mean_abs_post"])
     x = features(*args)
     fixed, flt = score_fixed(x, W, BIAS), x @ w + b
-    t = float(model["threshold"])
-    flips = int(((fixed > THRESH) != (flt > np.log(t / (1 - t)))).sum())
+    esc = verdict(x, fixed, THRESH, easy)
+    if "thresh_fixed" in model:
+        t_float = THRESH / 2 ** frac                # the unrounded weights against the same threshold
+    else:
+        t = float(model["threshold"])
+        t_float = np.log(t / (1 - t))               # the unrounded weights against the unrounded threshold
+    flips = int((esc != verdict(x, flt, t_float, easy)).sum())
     print(f"FRAC = {frac} bits. Largest logit error from rounding: {np.abs(fixed / 2 ** frac - flt).max():.4f}. Verdicts changed: {flips} of {len(x)}")
     with open(f"{out_dir}/router_params.vh", "w") as f:
         f.write("// Generated by router_fpga.py export. Do not edit by hand.\n")
@@ -105,12 +135,14 @@ def cmd_export(model_file, shots_file, out_dir="."):
         f.write(f"localparam [{N_FEAT * WW - 1}:0] W_FLAT = {{" + ", ".join(f"{WW}'h{hexs(v, WW)}" for v in W[::-1]) + "};\n")
         f.write(f"localparam signed [{AW - 1}:0] BIAS = {AW}'sh{hexs(BIAS, AW)};\n")
         f.write(f"localparam signed [{AW - 1}:0] THRESH = {AW}'sh{hexs(THRESH, AW)};\n")
-    vec = np.concatenate([packets(*args), replies(fixed, THRESH)], -1)
+        f.write(f"localparam [{XW - 1}:0] EASY_ITER = {XW}'d{easy};\n")
+    vec = np.concatenate([packets(*args), replies(fixed, esc)], -1)
     with open(f"{out_dir}/vectors.mem", "w") as f:
         f.writelines(" ".join(f"{v:02x}" for v in row) + "\n" for row in vec)
     with open(f"{out_dir}/tb_vectors.vh", "w") as f:
         f.write(f"localparam integer NVEC = {len(vec)};\n")
-    print(f"wrote router_params.vh, vectors.mem ({len(vec)} shots, {vec.shape[1]} bytes each), tb_vectors.vh. Escalated: {(fixed > THRESH).mean():.1%}")
+    print(f"wrote router_params.vh, vectors.mem ({len(vec)} shots, {vec.shape[1]} bytes each), tb_vectors.vh. Escalated: {esc.mean():.1%}")
+    return x, fixed, esc
 
 
 def cmd_standin(shots_file, out):
@@ -125,9 +157,11 @@ def cmd_send(port, model_file, shots_file):
     import time
     import serial                                   # pip install pyserial
     model, d = np.load(model_file), np.load(shots_file)
-    W, BIAS, THRESH, _, _ = quantize(model)
+    W, BIAS, THRESH, _, _, easy = quantize(model)
     args = (d["syndrome"], d["iterations"], d["weight"], d["mean_abs_post"])
-    pk, want = packets(*args), replies(score_fixed(features(*args), W, BIAS), THRESH)
+    x = features(*args)
+    fixed = score_fixed(x, W, BIAS)
+    pk, want = packets(*args), replies(fixed, verdict(x, fixed, THRESH, easy))
     bad, t0 = 0, time.perf_counter()
     with serial.Serial(port, 115200, timeout=1) as link:
         for k in range(len(pk)):
@@ -135,6 +169,69 @@ def cmd_send(port, model_file, shots_file):
             got = link.read(REPLY_BYTES)
             bad += got != want[k].tobytes()
     print(f"{len(pk)} shots, {bad} mismatches, {(time.perf_counter() - t0) / len(pk) * 1e3:.1f} ms per shot over UART")
+
+
+def read_mem(mem_file):
+    """vectors.mem -> (packets, expected replies) as lists of bytes objects."""
+    rows = [bytes(int(v, 16) for v in line.split()) for line in open(mem_file) if line.strip()]
+    assert rows and all(len(r) == PACKET_BYTES + REPLY_BYTES for r in rows), "not a vectors.mem of this design"
+    return [r[:PACKET_BYTES] for r in rows], [r[PACKET_BYTES:] for r in rows]
+
+
+def features_from_packets(pk):
+    """The 16 features from the packet bytes, as the board's front end computes them: popcounts and the tail."""
+    a = np.frombuffer(b"".join(pk), np.uint8).reshape(len(pk), PACKET_BYTES)
+    bits = np.unpackbits(a[:, :ROUNDS * CHECKS // 8], axis=1, bitorder="little").reshape(len(pk), ROUNDS, CHECKS)
+    tail = a[:, ROUNDS * CHECKS // 8:].astype(np.int64)
+    return np.concatenate([bits.sum(-1), tail[:, 0::2] + 256 * tail[:, 1::2]], -1)
+
+
+def check_mem(mem_file, model_file):
+    """Recompute every expected reply of a vectors.mem from its packets and MODEL.npz. Returns the shots that differ."""
+    pk, want = read_mem(mem_file)
+    W, BIAS, THRESH, _, _, easy = quantize(np.load(model_file))
+    x = features_from_packets(pk)
+    score = score_fixed(x, W, BIAS)
+    mine = replies(score, verdict(x, score, THRESH, easy))
+    return [k for k in range(len(pk)) if mine[k].tobytes() != want[k]]
+
+
+def cmd_sendmem(port, mem_file, limit=None):
+    """Send the packets of a vectors.mem file to the board and compare every reply with the Python fixed-point model.
+
+    The expected replies are those of the file. When model.npz lies beside the file, every one of them is first
+    recomputed here from its packet with the fixed-point model (check_mem), so the comparison is with the model and
+    not only with a file. The board must hold the bitstream built from the router_params.vh of the same folder.
+    """
+    import os
+    import time
+    import serial                                   # pip install pyserial
+    pk, want = read_mem(mem_file)
+    model_file = os.path.join(os.path.dirname(os.path.abspath(mem_file)), "model.npz")
+    if os.path.exists(model_file):
+        differ = check_mem(mem_file, model_file)
+        print(f"{model_file}: the fixed-point model gives the file's reply on {len(pk) - len(differ)} of {len(pk)} shots")
+        assert not differ, f"the file and the model disagree on shots {differ[:10]}: rebuild the folder with train_router.py"
+    else:
+        print(f"no model.npz beside {mem_file}: the replies are compared with the file only")
+    if limit:
+        pk, want = pk[:int(limit)], want[:int(limit)]
+    bad, short, escalated, t0 = 0, 0, 0, time.perf_counter()
+    with serial.Serial(port, 115200, timeout=1) as link:
+        time.sleep(0.05)                            # longer than the board's 20 ms resync: a half-received packet is dropped
+        link.reset_input_buffer()
+        for k in range(len(pk)):
+            link.write(pk[k])
+            got = link.read(REPLY_BYTES)
+            short += len(got) != REPLY_BYTES
+            bad += got != want[k]
+            escalated += len(got) == REPLY_BYTES and got[5] == 1
+            if got != want[k] and bad <= 5:
+                print(f"shot {k}: got {got.hex(' ')}, want {want[k].hex(' ')}")
+    seconds = time.perf_counter() - t0
+    print(f"{len(pk)} shots, {bad} mismatches ({short} replies short or missing), {escalated} escalated, "
+          f"{seconds / len(pk) * 1e3:.1f} ms per shot over UART (the link, not the logic)")
+    print("PASS: the board's replies equal the file's" if bad == 0 else "FAIL")
 
 
 if __name__ == "__main__":
@@ -145,5 +242,7 @@ if __name__ == "__main__":
         cmd_export(*a)
     elif cmd == "send":
         cmd_send(*a)
+    elif cmd == "sendmem":
+        cmd_sendmem(*a)
     elif cmd == "standin":
         cmd_standin(*a)

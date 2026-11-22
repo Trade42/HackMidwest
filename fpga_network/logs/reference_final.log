@@ -1,0 +1,4 @@
+# 2026-11-22T10:50Z, luminaty, the FINAL checkpoint (step 120,000) with its real calibration (logs/calibration_final.json)
+$ python fpga_network/reference.py --checkpoint <x_final_step120000.pt> --calibration logs/calibration_final.json --run w12p --shots 20
+the widest possible sum of products, with sign: 37 bits (b1.in); float64 holds 53 exactly, so the torch version computes whole numbers exactly on any shot
+run w12p ((12, 12, 16) bits for weights, values, stream), checkpoint step 120000, the first 20 shots of validation_X.npz: integer reference equal to the torch fixed-point logits on 20 of 20 shots (all 12 logits, as whole numbers at 2^-20)

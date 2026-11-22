@@ -1,0 +1,10 @@
+build/
+.venv/
+__pycache__/
+*.vvp
+*.jou
+*.log
+*.str
+*.pb
+*.wdb
+*.vcd

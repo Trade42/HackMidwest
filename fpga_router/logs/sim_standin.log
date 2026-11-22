@@ -1,0 +1,13 @@
+# ./sim.sh standin, after the RTL change that adds the easy-shot rule (EASY_ITER = 0 in standin/: the rule is off), 2026-11-22, luminaty
+$ verilator --binary --timing -Wno-fatal --top-module tb_router -Istandin (router_params.vh) -Istandin (tb_vectors.vh) tb_router.v router_top.v router_core.v router_frontend.v uart_rx.v uart_tx.v
+Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod)
+sha256 of the weights and the vectors:
+1d25c6e605d69c49e5c96cae3063fa9f5ff4f1049898636a7e93ec567059f16f  standin/router_params.vh
+5b51308764c3904a3346bb17523210870a035e1376c8336b0d1d81dfe62bf605  standin/vectors.mem
+$ (cd standin && Vtb_router)
+PASS: 300 shots match the Python model bit for bit
+latency, clocks, counted on 300 verdicts: last byte handed over by uart_rx -> verdict valid = 5; -> start bit of the reply on txd = 8; shots on which a count differed = 0
+- tb_router.v:84: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.055 devel
+- Verilator: $finish at 31ms; walltime 2.960 s; speed 10.485 ms/s
+- Verilator: cpu 2.935 s on 1 threads; allocated 4 MB

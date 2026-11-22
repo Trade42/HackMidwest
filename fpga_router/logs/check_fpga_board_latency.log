@@ -1,0 +1,5 @@
+# from fpga_board/ at 134de6e, luminaty, 2026-11-22T07:27Z, Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod)
+$ verilator --binary --timing -Wno-fatal -Wno-WIDTH --top-module tb_latency -Igenerated --Mdir <scratch>/vl_latency ../fpga_router/check_fpga_board/tb_latency.sv rtl/router_top.sv rtl/router_frontend.sv rtl/router_core.sv rtl/uart_rx.sv rtl/uart_tx.sv && <scratch>/vl_latency/Vtb_latency
+fpga_board latency, clocks, on 32 packets: last byte handed over by uart_rx -> core out_valid = 5; -> start bit of the reply on txd = 8; packets on which a count differed = 0
+- ../fpga_router/check_fpga_board/tb_latency.sv:51: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.055 devel

@@ -1,0 +1,77 @@
+# Why 14 of 5,000 answers change at 16 bits (final checkpoint, step 120,000; run w16; luminaty, 2026-11-22).
+# 1. the changed shots, and whether they saturate anything (run inline with fixed_point.py and widths.make_net):
+shots whose 12 bits differ at 16 bits: [4, 22, 783, 862, 1142, 1464, 1703, 1885, 2349, 2386, 2458, 3714, 3851, 4364]
+shot 4: flipped bits [0], float logits there [0.003], fixed [-0.005]; saturated values 0 {}
+shot 22: flipped bits [11], float logits there [-0.011], fixed [0.011]; saturated values 0 {}
+shot 783: flipped bits [4], float logits there [0.003], fixed [-0.05]; saturated values 0 {}
+shot 862: flipped bits [8], float logits there [-0.079], fixed [0.06]; saturated values 0 {}
+shot 1142: flipped bits [3], float logits there [0.006], fixed [-0.01]; saturated values 0 {}
+shot 1464: flipped bits [6], float logits there [0.001], fixed [-0.009]; saturated values 0 {}
+shot 1703: flipped bits [9], float logits there [0.005], fixed [-0.008]; saturated values 0 {}
+shot 1885: flipped bits [8], float logits there [0.009], fixed [-0.008]; saturated values 0 {}
+shot 2349: flipped bits [8], float logits there [0.013], fixed [-0.01]; saturated values 0 {}
+shot 2386: flipped bits [1], float logits there [0.006], fixed [-0.008]; saturated values 0 {}
+shot 2458: flipped bits [8], float logits there [0.017], fixed [-0.005]; saturated values 0 {}
+shot 3714: flipped bits [8], float logits there [0.235], fixed [-1.841]; saturated values 0 {}
+shot 3851: flipped bits [2], float logits there [-1.539], fixed [1.622]; saturated values 0 {}
+shot 4364: flipped bits [6], float logits there [-0.012], fixed [0.002]; saturated values 0 {}
+of the first 300 shots, 4 have a saturated value
+
+# 2. the difference between the float and the 16-bit network, tensor by tensor, on two large changes and one small one:
+shot 3714: logits float [-7.588, 7.909, 8.442, -9.669, -7.839, 8.856, -2.336, 0.614, 0.239, 0.292, -1.298, -6.452]
+         fixed [-7.459, 7.982, 8.371, -9.359, -7.76, 8.501, -1.95, 1.167, -1.841, 1.877, -2.128, -6.471]
+   s0      largest |float - fixed|   0.00006 =      0.5 steps of 2^-13 (largest value 3.76)
+   s1      largest |float - fixed|   0.00046 =      1.9 steps of 2^-12 (largest value 4.11)
+   s2      largest |float - fixed|   0.00171 =      7.0 steps of 2^-12 (largest value 4.39)
+   s3      largest |float - fixed|   0.00186 =      7.6 steps of 2^-12 (largest value 5.10)
+   s4      largest |float - fixed|   0.00329 =      6.7 steps of 2^-11 (largest value 6.51)
+   s5      largest |float - fixed|   0.00508 =     10.4 steps of 2^-11 (largest value 10.26)
+   s6      largest |float - fixed|   0.02412 =     24.7 steps of 2^-10 (largest value 17.94)
+   s7      largest |float - fixed|   0.26953 =    138.0 steps of 2^-9 (largest value 24.33)
+   s8      largest |float - fixed|   5.15765 =   2640.7 steps of 2^-9 (largest value 34.11)
+   r.sum   largest |float - fixed|   4.56819 =   2338.9 steps of 2^-9 (largest value 27.01)
+   r.data  largest |float - fixed|  15.34625 =   1964.3 steps of 2^-7 (largest value 92.43)
+   r.pool  largest |float - fixed|   1.61261 =   1651.3 steps of 2^-10 (largest value 30.44)
+shot 3851: logits float [-9.244, 9.881, -1.536, 8.751, -9.281, 8.183, 9.682, 9.651, -5.879, 9.053, -7.468, -8.228]
+         fixed [-9.182, 9.628, 1.622, 8.673, -8.953, 8.144, 9.423, 9.376, -5.352, 8.484, -7.486, -7.78]
+   s0      largest |float - fixed|   0.00006 =      0.5 steps of 2^-13 (largest value 3.76)
+   s1      largest |float - fixed|   0.00049 =      2.0 steps of 2^-12 (largest value 4.25)
+   s2      largest |float - fixed|   0.00138 =      5.7 steps of 2^-12 (largest value 4.60)
+   s3      largest |float - fixed|   0.00186 =      7.6 steps of 2^-12 (largest value 5.42)
+   s4      largest |float - fixed|   0.00290 =      5.9 steps of 2^-11 (largest value 5.99)
+   s5      largest |float - fixed|   0.00491 =     10.1 steps of 2^-11 (largest value 9.81)
+   s6      largest |float - fixed|   0.04059 =     41.6 steps of 2^-10 (largest value 20.06)
+   s7      largest |float - fixed|   0.42370 =    216.9 steps of 2^-9 (largest value 27.29)
+   s8      largest |float - fixed|   5.04382 =   2582.4 steps of 2^-9 (largest value 30.49)
+   r.sum   largest |float - fixed|   6.56081 =   3359.1 steps of 2^-9 (largest value 39.05)
+   r.data  largest |float - fixed|  12.40453 =   1587.8 steps of 2^-7 (largest value 144.48)
+   r.pool  largest |float - fixed|   1.40798 =   1441.8 steps of 2^-10 (largest value 29.43)
+shot 4: logits float [0.003, -2.217, 1.976, 0.528, 0.924, 1.13, 2.204, 2.441, -4.009, 3.82, -3.732, -3.622]
+         fixed [-0.005, -2.22, 1.969, 0.509, 0.914, 1.11, 2.18, 2.438, -4.024, 3.822, -3.749, -3.645]
+   s0      largest |float - fixed|   0.00006 =      0.5 steps of 2^-13 (largest value 3.76)
+   s1      largest |float - fixed|   0.00040 =      1.6 steps of 2^-12 (largest value 4.19)
+   s2      largest |float - fixed|   0.00147 =      6.0 steps of 2^-12 (largest value 4.33)
+   s3      largest |float - fixed|   0.00221 =      9.0 steps of 2^-12 (largest value 5.68)
+   s4      largest |float - fixed|   0.00307 =      6.3 steps of 2^-11 (largest value 6.31)
+   s5      largest |float - fixed|   0.00484 =      9.9 steps of 2^-11 (largest value 9.26)
+   s6      largest |float - fixed|   0.01661 =     17.0 steps of 2^-10 (largest value 20.23)
+   s7      largest |float - fixed|   0.01977 =     10.1 steps of 2^-9 (largest value 26.21)
+   s8      largest |float - fixed|   0.05515 =     28.2 steps of 2^-9 (largest value 32.30)
+   r.sum   largest |float - fixed|   0.10172 =     52.1 steps of 2^-9 (largest value 30.50)
+   r.data  largest |float - fixed|   0.09525 =     12.2 steps of 2^-7 (largest value 90.75)
+   r.pool  largest |float - fixed|   0.02273 =     23.3 steps of 2^-10 (largest value 23.14)
+
+# 3. the float network alone, nudged by at most 0.0005 after block 1 (no rounding anywhere):
+The float network (no rounding anywhere), with every value of the stream after block 1 moved by a uniform random
+amount of at most 0.0005 (the size of the 16-bit rounding there); 5 random draws per shot; largest |logit change|:
+  shot  3714: largest |logit change| over 5 draws 3.843 (median of the 5: 3.113); bits flipped in 2 draws: [3, 1]
+  shot  3851: largest |logit change| over 5 draws 6.159 (median of the 5: 2.262); bits flipped in 2 draws: [0, 0]
+  shot     4: largest |logit change| over 5 draws 0.012 (median of the 5: 0.010); bits flipped in 2 draws: [0, 0]
+  shot    22: largest |logit change| over 5 draws 0.518 (median of the 5: 0.144); bits flipped in 2 draws: [0, 1]
+  shot   100: largest |logit change| over 5 draws 0.002 (median of the 5: 0.002); bits flipped in 2 draws: [0, 0]
+  shot   200: largest |logit change| over 5 draws 0.001 (median of the 5: 0.001); bits flipped in 2 draws: [0, 0]
+
+# Reading: 12 of the 14 changed shots have a float logit within 0.08 of zero (rounding at the boundary); the other two
+# (3714, 3851) saturate nothing, the difference grows smoothly block by block, and the float network itself swings their
+# logits by 3 to 6 under a nudge of the size of the 16-bit rounding. That is the network's sensitivity on those shots,
+# not an error of the arithmetic.

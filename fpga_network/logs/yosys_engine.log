@@ -1,0 +1,41 @@
+# The engine alone (memories are ports), Yosys 0.71+77, Xilinx 7 series, not placed and routed. luminaty, 2026-11-22,
+# the engine as committed with this log (writes and normalisation pipelined, one value per clock).
+# $ yosys -p "read_verilog nn_engine.v; chparam -set WA 15 -set CA 11 -set TA 22 -set GA 12 nn_engine; synth_xilinx -family xc7 -top nn_engine -noiopad; stat"   (from fpga_network/rtl/)
+# The parameters are the testbench's (tb_engine.v): 32 lanes, 16-bit values and weights, 48-bit sums.
+# Warnings and messages of the run (register arrays turned into flip-flops; ABC's message is about a sub-netlist
+# without logic, and synthesis completed):
+Warning: Replacing memory \sh with list of registers. See nn_engine.v:201
+Warning: Replacing memory \f with list of registers. See nn_engine.v:179
+Warning: Replacing memory \acc with list of registers. See nn_engine.v:162
+Warning: Replacing memory \sh with list of registers. See nn_engine.v:201
+Warning: Replacing memory \f with list of registers. See nn_engine.v:179
+Warning: Replacing memory \acc with list of registers. See nn_engine.v:162
+ABC: Warning: The network is combinational.
+ABC: Error: Abc_FrameUpdateGia(): Transformation has failed.
+Warnings: 3 unique messages, 6 total
+
+=== nn_engine ===
+
+        +----------Local Count, excluding submodules.
+        | 
+    13986 wires
+    38263 wire bits
+      151 public wires
+     5972 public wire bits
+       26 ports
+     3269 port bits
+    12194 cells
+        1   BUFG
+      542   CARRY4
+       73   DSP48E1
+     2809   FDRE
+      253   INV
+     1479   LUT2
+      924   LUT3
+     1235   LUT4
+     3758   LUT5
+     1067   LUT6
+       36   MUXF7
+       17   MUXF8
+
+Warnings: 3 unique messages, 6 total

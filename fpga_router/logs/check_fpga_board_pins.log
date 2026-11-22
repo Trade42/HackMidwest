@@ -1,0 +1,48 @@
+# The pins of both constraints files against RealDigital's master Urbana file and the chip's package pin list (luminaty, 2026-11-22).
+# master: https://www.realdigital.org/downloads/1f07b1146ec59e165634a5b6c782a17d.txt, sha256 cffacac8a62db03721e2c155e4be7c7d04c9775ab6eae773078cf9742c063f48, first line: # URBANA BOARD CONSTRAINTS V2I1 1/3/2023
+# package pins: https://raw.githubusercontent.com/openXC7/prjxray-db/master/spartan7/xc7s50csga324-1/package_pins.csv, sha256 0c8dd2e217feaa7ef948d77fda96ffe010309499ad2fdb8745be2d8253264b63
+# The master names the UART from the USB chip's side: its UART_TXD (B16) is the FPGA's input, its UART_RXD (A16) the FPGA's output.
+
+fpga_board/vivado/urbana_router.xdc
+  clk_100mhz  N15  LVCMOS33   master CLK_100MHZ N15  LVCMOS33   agrees   package: IO_L12P_T1_MRCC_14
+  uart_rxd    B16  LVCMOS33   master UART_TXD   B16  LVCMOS33   agrees   package: IO_L4P_T0_15
+  uart_txd    A16  LVCMOS33   master UART_RXD   A16  LVCMOS33   agrees   package: IO_L4N_T0_15
+  led[0]      C13  LVCMOS33   master LED[0]     C13  LVCMOS33   agrees   package: IO_L6P_T0_15
+  led[1]      C14  LVCMOS33   master LED[1]     C14  LVCMOS33   agrees   package: IO_L6N_T0_VREF_15
+  led[2]      D14  LVCMOS33   master LED[2]     D14  LVCMOS33   agrees   package: IO_L12P_T1_MRCC_15
+  led[3]      D15  LVCMOS33   master LED[3]     D15  LVCMOS33   agrees   package: IO_L12N_T1_MRCC_15
+  led[4]      D16  LVCMOS33   master LED[4]     D16  LVCMOS33   agrees   package: IO_L9P_T1_DQS_AD3P_15
+  led[5]      F18  LVCMOS33   master LED[5]     F18  LVCMOS33   agrees   package: IO_L16P_T2_15
+  led[6]      E17  LVCMOS33   master LED[6]     E17  LVCMOS33   agrees   package: IO_L10N_T1_AD11N_15
+  led[7]      D17  LVCMOS33   master LED[7]     D17  LVCMOS33   agrees   package: IO_L9N_T1_DQS_AD3N_15
+  led[8]      B18  LVCMOS33   master LED[8]     C17  LVCMOS33   DIFFERS   package: IO_L8N_T1_AD10N_15
+  led[9]      A18  LVCMOS33   master LED[9]     B18  LVCMOS33   DIFFERS   package: NOT AN I/O PIN
+  led[10]     A17  LVCMOS33   master LED[10]    A17  LVCMOS33   agrees   package: IO_L7N_T1_AD2N_15
+  led[11]     B17  LVCMOS33   master LED[11]    B17  LVCMOS33   agrees   package: IO_L7P_T1_AD2P_15
+  led[12]     C18  LVCMOS33   master LED[12]    C18  LVCMOS33   agrees   package: IO_L11N_T1_SRCC_15
+  led[13]     D18  LVCMOS33   master LED[13]    D18  LVCMOS33   agrees   package: IO_L11P_T1_SRCC_15
+  led[14]     E18  LVCMOS33   master LED[14]    E18  LVCMOS33   agrees   package: IO_L16N_T2_15
+  led[15]     G17  LVCMOS33   master LED[15]    G17  LVCMOS33   agrees   package: IO_L14N_T2_SRCC_15
+  2 pins differ
+
+fpga_router/urbana_router.xdc
+  clk_100mhz  N15  LVCMOS33   master CLK_100MHZ N15  LVCMOS33   agrees   package: IO_L12P_T1_MRCC_14
+  uart_rxd    B16  LVCMOS33   master UART_TXD   B16  LVCMOS33   agrees   package: IO_L4P_T0_15
+  uart_txd    A16  LVCMOS33   master UART_RXD   A16  LVCMOS33   agrees   package: IO_L4N_T0_15
+  led[0]      C13  LVCMOS33   master LED[0]     C13  LVCMOS33   agrees   package: IO_L6P_T0_15
+  led[1]      C14  LVCMOS33   master LED[1]     C14  LVCMOS33   agrees   package: IO_L6N_T0_VREF_15
+  led[2]      D14  LVCMOS33   master LED[2]     D14  LVCMOS33   agrees   package: IO_L12P_T1_MRCC_15
+  led[3]      D15  LVCMOS33   master LED[3]     D15  LVCMOS33   agrees   package: IO_L12N_T1_MRCC_15
+  led[4]      D16  LVCMOS33   master LED[4]     D16  LVCMOS33   agrees   package: IO_L9P_T1_DQS_AD3P_15
+  led[5]      F18  LVCMOS33   master LED[5]     F18  LVCMOS33   agrees   package: IO_L16P_T2_15
+  led[6]      E17  LVCMOS33   master LED[6]     E17  LVCMOS33   agrees   package: IO_L10N_T1_AD11N_15
+  led[7]      D17  LVCMOS33   master LED[7]     D17  LVCMOS33   agrees   package: IO_L9N_T1_DQS_AD3N_15
+  led[8]      C17  LVCMOS33   master LED[8]     C17  LVCMOS33   agrees   package: IO_L8P_T1_AD10P_15
+  led[9]      B18  LVCMOS33   master LED[9]     B18  LVCMOS33   agrees   package: IO_L8N_T1_AD10N_15
+  led[10]     A17  LVCMOS33   master LED[10]    A17  LVCMOS33   agrees   package: IO_L7N_T1_AD2N_15
+  led[11]     B17  LVCMOS33   master LED[11]    B17  LVCMOS33   agrees   package: IO_L7P_T1_AD2P_15
+  led[12]     C18  LVCMOS33   master LED[12]    C18  LVCMOS33   agrees   package: IO_L11N_T1_SRCC_15
+  led[13]     D18  LVCMOS33   master LED[13]    D18  LVCMOS33   agrees   package: IO_L11P_T1_SRCC_15
+  led[14]     E18  LVCMOS33   master LED[14]    E18  LVCMOS33   agrees   package: IO_L16N_T2_15
+  led[15]     G17  LVCMOS33   master LED[15]    G17  LVCMOS33   agrees   package: IO_L14N_T2_SRCC_15
+  0 pins differ

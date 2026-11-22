@@ -1,0 +1,7 @@
+# 2026-11-22T09:31Z, luminaty, the real calibration of step 70,000 (logs/calibration_step70000.json: the first 200 shots of train_X.npz)
+$ python fpga_network/reference.py --checkpoint <x_step70000.pt> --calibration logs/calibration_step70000.json --run w16 --shots 20
+the widest possible sum of products, with sign: 40 bits (b1.in); float64 holds 53 exactly, so the torch version computes whole numbers exactly on any shot
+run w16 ((16, 16, 16) bits for weights, values, stream), checkpoint step 70000, the first 20 shots of validation_X.npz: integer reference equal to the torch fixed-point logits on 20 of 20 shots (all 12 logits, as whole numbers at 2^-21)
+$ python fpga_network/reference.py --checkpoint <x_step70000.pt> --calibration logs/calibration_step70000.json --run w8p --shots 20
+the widest possible sum of products, with sign: 35 bits (h2); float64 holds 53 exactly, so the torch version computes whole numbers exactly on any shot
+run w8p ((8, 8, 16) bits for weights, values, stream), checkpoint step 70000, the first 20 shots of validation_X.npz: integer reference equal to the torch fixed-point logits on 20 of 20 shots (all 12 logits, as whole numbers at 2^-21)

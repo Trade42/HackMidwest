@@ -1005,6 +1005,18 @@ def background_table():
                 f"the network answers {coverage}% of the shots; {ours} failures against the hierarchy's {base} (only network-first fails {only_ours}, only the "
                 f"hierarchy {only_base}, p = {p_value}); {time} against {base_time} ms per shot on the laptop beside a GPU training: no gain in accuracy",
                 f"background/{file.name}")
+    file = DATA / "exploration" / "ablation_80k" / "summary.json"
+    if file.is_file():
+        table = json.loads(file.read_text(encoding="utf-8"))
+        base = next(value["failures"] for key, value in table["rows"].items() if key.startswith("failed_a:"))
+        for key, words in (("c_procedure", "c fitted on train_X and validation_X"), ("c_train", "c fitted on train_X only")):
+            entry = table.get("network_first", {}).get(key)
+            if entry:
+                paired = entry["paired_against_a"]
+                add(f"\"Network first\" at p = 0.004 ({words}), on the {table['shots']:,} fresh X shots of the ablation at scale, never used for a fit",
+                    f"the network answers {entry['answered']:.0%} of the shots; {entry['failures']} failures against the hierarchy's {base} with the neural "
+                    f"tie-break (only network-first fails {paired['first_only']}, only the hierarchy {paired['second_only']}, p = {stats.p_text(paired['p_exact_two_sided'])}): "
+                    "level in accuracy", "exploration/ablation_80k/summary.json")
     file = DATA / "loss" / "tracker" / "accuracy_val_learned.json"
     if file.is_file():
         versions = json.loads(file.read_text(encoding="utf-8"))["versions"]

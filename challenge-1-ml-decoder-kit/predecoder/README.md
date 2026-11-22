@@ -21,9 +21,13 @@ should find the answer sooner and fail less.
   163, and the slowest 1% of shots need 2,012 iterations or more instead of 13,940.
 
 - **At p = 0.005 the same head and knobs give a large gain** (a secondary result: the knobs
-  were fitted at p = 0.004 and not changed): 70 failures against 206 on 5,000 validation
-  shots, 2.9 times fewer (only the head's 10 against only the kit's priors' 146, p = 4e-32),
-  with 3.3 times fewer iterations. At p = 0.003 neither fails much: 2 against 0 (p = 0.5).
+  were fitted at p = 0.004 and not changed). With the network run on a CPU in 32-bit floats,
+  the reproducible setting, relay-BP with the head's priors fails **79** of 5,000 validation
+  shots against **206** with the kit's priors, 2.6 times fewer (only the head's 17 against only
+  the kit's priors' 144, p = 3e-26), with 3.2 times fewer iterations. The laptop's run, with
+  the network on its GPU in 16-bit floats, gave 70 (10 against 146); its logits were not kept,
+  so that 70 cannot be checked, and the gap shows how much a count moves with the last digits
+  of the priors. At p = 0.003 neither fails much: 2 against 0 (p = 0.5).
 
 Whether the p = 0.005 result earns one run on the held-out test shots is Sal's decision: the
 gate fixed in advance was p = 0.004, and it did not pass. Details, commands and logs for every
@@ -113,6 +117,8 @@ the kit's priors, paired, with p < 0.05 (head against fresh; reported also again
 ## Commands
 
 These are the commands that made the numbers below, in order (placeholders in angle brackets).
+The environment is the kit's `requirements.txt` plus torch (on a machine without a GPU, from the
+CPU index: `pip install torch --index-url https://download.pytorch.org/whl/cpu`), as for `neural/`.
 
 ```sh
 # tests (about 4 minutes on 4 CPU threads)
@@ -176,12 +182,13 @@ BP as they are, which made BP worse on train shots.
 
 **If Sal decides on one run on the held-out test shots** (written before any test result
 exists; the declared gate at p = 0.004 did not pass, so this is his call). From commit `1bf0e7b`,
-the commit the validation results came from, with nothing changed; the logits on the device the
-p = 0.005 validation result used (a GPU):
+the commit the validation results came from, with nothing changed; the logits on a CPU in 32-bit
+floats, the setting of the headline numbers, which a second machine reproduces byte for byte
+(the reviewer's logits at p = 0.004 equal ours):
 
 ```sh
 python -m predecoder.evaluate --head <head.pt, sha256 38ab667e...> --trunk <final X checkpoint, sha256 d8d1c70f...> \
-    --data data/p0.005/test_X.npz --out <logits_test> --device cuda --final
+    --data data/p0.005/test_X.npz --out <logits_test> --device cpu --threads 4 --final
 python -m predecoder.compare --data data/p0.005/test_X.npz --logits <logits_test> --settings predecoder/logs/fit_X_p0.004.json \
     --arms kit fresh head --kit-chunk 500 --workers <cores> --out <test compare folder> --final
 ```
@@ -307,6 +314,10 @@ commit `c694bcd`, 09:35 to 10:14 UTC; `logs/train_gpu_predecoder_X_s1.log`):
 - The head: `predecoder_X_s1/head.pt` on `origin/laptop-artifacts` (commit `ed20439`), 269,971 bytes,
   sha256 `38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d`. Not in this branch (a checkpoint).
 - 30,000 steps of 64 fresh error-model shots (1.9 million shots), 0.072 s per step, 1.19 GB of GPU memory.
+- `logs/train_gpu_predecoder_X_s1_SHA256SUMS` lists `train.log` as `3808aff4...`: the hash of the
+  laptop's file, with Windows line endings. The copies in git (here and on `laptop-artifacts`)
+  have Unix line endings and hash to `98619458011ad437abe0e07bb5e9db45e374808b52b5577137aad1e21d4f97f7`;
+  the content is the same.
 
 Held-out error-model shots in the trainer's reports (500 per p, the same in every report; not Stim shots):
 
@@ -355,11 +366,18 @@ iteration counts), `logs/compare_validation_X_summary.json`.
     python -m predecoder.compare --data data/p0.004/validation_X.npz --logits <logits of validation_X> \
         --settings predecoder/logs/fit_X_p0.004.json --arms kit fresh head --kit-chunk 500 --workers 4 --out <folder>
 
-| arm | failures | share, 95% interval | unconverged | hard shots | mean iterations | p99 iterations | build + decode, mean | p99 | with network and head, mean |
+| arm | failures | share, 95% interval | unconverged | hard shots | mean iterations | p99 iterations | build + decode, mean | build + decode, p99 | adding the network and head's mean time |
 |---|---|---|---|---|---|---|---|---|---|
 | kit's priors, built once | 31 | 0.0062 [0.0044, 0.0088] | 17 | 691 | 565 | 13,982 | 538 ms | 12.8 s | (no network) |
 | kit's priors, built per shot ("fresh") | 20 | 0.0040 [0.0026, 0.0062] | 11 | 691 | 554 | 13,940 | 442 ms | 10.5 s | (no network) |
-| **the head's priors, built per shot** | **14** | 0.0028 [0.0017, 0.0047] | 8 | 163 | 189 | 2,012 | 189 ms | 2.1 s | 359 ms |
+| **the head's priors, built per shot** | **14** | 0.0028 [0.0017, 0.0047] | 8 | 163 | 189 | 2,012 | 189 ms | 1.95 s | 359 ms mean |
+
+The last column adds the network and head's mean time per shot (170 ms here) to every shot; it
+is not a per-shot tail. The network's own per-shot p99 on this busy CPU is 1.47 s
+(`logs/evaluate_head_final_p0.004.log`), so the head arm's whole per-shot tail here was not
+measured; the tail is stated in iterations, which do not depend on the machine. The reviewer
+re-decoded this file on the same PC: the head arm (logits byte-identical to ours) and a 532-shot
+part of the fresh arm give the same rows (`reports/predecoder-review.md`, section 0).
 
 | pair (same shots) | both fail | only the first | only the second | exact two-sided p | fewer iterations: first / second / equal |
 |---|---|---|---|---|---|
@@ -409,38 +427,66 @@ and T (TCBP-JOBS) from the server's `files/tcbp_p0.004/validation_X.tcbp.npz`.
 - R, P1, P2 and T all fail 9 shots; H is right on 3 of them. A perfect choice among the members
   would fail 9 shots; with H among them, 6.
 - P1, P2 and T agree on a wrong answer on 4 shots; H is right on 2 of them.
-- H is as good as the best single member (TCBP-JOBS) on these shots, and better than PriorTilt
-  under one seed and than relay-BP, but none of that was the pre-registered question, and the
-  member counts here come from other runs on the same file. It suggests H as a member of the
-  ensemble; that is not built here (`hierarchy/` is not ours to change).
+- H cannot be told apart from the best single member, TCBP-JOBS (7 against 9, p = 0.80), and
+  fails less than PriorTilt under one seed and than relay-BP. None of that was the
+  pre-registered question, and the member counts here come from other runs on the same file.
+  It suggests H as a member of the ensemble; that is not built here (`hierarchy/` is not ours
+  to change).
+- At p = 0.005 the reviewer made the same comparison (`logs/review_full_cpu_p0.005.log`,
+  `logs/review_paired_p0.005.log`). With this CPU's logits H fails 79 against TCBP-JOBS's 91:
+  41 against 53, p = 0.26, **no claim**. Against the hierarchy's converged rule (108 or 109,
+  by its two readings) H is ahead on both devices (p = 0.003 with the CPU's logits). These are
+  the reviewer's numbers, a diagnostic beside the hierarchy, not a result of this folder.
 
 ### At p = 0.005 and p = 0.003 (secondary results, knobs fitted at p = 0.004)
 
-Run by the orchestrator on the laptop (RTX 4060 Laptop GPU for the network and head; its CPU
-for relay-BP; Windows) at commit `1bf0e7b`, with the same head, trunk and frozen knobs
-(`logs/fit_X_p0.004.json`), on the team's validation files. Per-shot files on
-`origin/laptop-artifacts` at `7bd45b9`, `predecoder/{fresh,head}_validation_p0.00{5,3}/`;
-summaries in `logs/laptop_*_summary.json`. Re-derived here from the per-shot predictions
-against the data files' observables: the counts agree.
+The same head, trunk and frozen knobs (`logs/fit_X_p0.004.json`) on the team's validation
+files, at commit `1bf0e7b`, by two runs:
+
+- **the reference: this PC's CPU, the network in 32-bit floats.** The reviewer's full decode of
+  the p = 0.005 file (`reports/predecoder-review.md`, section 3; `logs/review_full_cpu_p0.005.log`):
+  `predecoder.evaluate --device cpu`, then the head arm of `predecoder.compare`, 4 processes.
+  Its fresh arm was re-decoded on 516 shots, which hold all 206 failures of the laptop's fresh
+  arm, and equals the laptop's on every row (relay-BP is bit-exact across the two machines), so
+  the fresh count is the laptop's.
+- **the laptop: the network on its GPU (RTX 4060 Laptop, autocast to 16-bit floats), relay-BP
+  on its CPU** (Windows), run by the orchestrator. Per-shot files on `origin/laptop-artifacts` at
+  `7bd45b9`, `predecoder/{fresh,head}_validation_p0.00{5,3}/`; summaries in
+  `logs/laptop_*_summary.json`; the counts re-derived here from the per-shot predictions against
+  the data files' observables. Its logits (88 MB per file) were not committed.
 
     python -m predecoder.evaluate --head <head.pt> --trunk <final X checkpoint> --data data\p0.005\validation_X.npz --out <logits> --device cuda
     python -m predecoder.compare --data data\p0.005\validation_X.npz --arms fresh --workers 3 --out <folder>          # at 372d050
     python -m predecoder.compare --data data\p0.005\validation_X.npz --logits <logits> --settings predecoder\logs\fit_X_p0.004.json \
         --arms fresh head --workers 12 --out <the same folder>                                                         # at 1bf0e7b
 
-| p | arm | failures of 5,000 | share, 95% interval | unconverged | hard shots | mean iterations |
-|---|---|---|---|---|---|---|
-| 0.005 | the kit's priors, per shot | 206 | 0.0412 [0.0360, 0.0471] | 131 | 1,800 | 2,367 |
-| 0.005 | **the head's priors** | **70** | 0.0140 [0.0111, 0.0176] | 42 | 648 | 721 |
-| 0.003 | the kit's priors, per shot | 0 | 0 [0, 0.0008] | 0 | 163 | 133 |
-| 0.003 | the head's priors | 2 | 0.0004 [0.0001, 0.0015] | 1 | 20 | 58 |
+| p | arm | the network on | failures of 5,000 | share, 95% interval | unconverged | hard shots | mean iterations |
+|---|---|---|---|---|---|---|---|
+| 0.005 | the kit's priors, per shot | (no network) | 206 | 0.0412 [0.0360, 0.0471] | 131 | 1,800 | 2,367 |
+| 0.005 | **the head's priors** | **this PC's CPU, 32-bit (the reference)** | **79** | 0.0158 [0.0127, 0.0196] | 44 | 629 | 732 |
+| 0.005 | the head's priors | the laptop's GPU, 16-bit | 70 | 0.0140 [0.0111, 0.0176] | 42 | 648 | 721 |
+| 0.003 | the kit's priors, per shot | (no network) | 0 | 0 [0, 0.0008] | 0 | 163 | 133 |
+| 0.003 | the head's priors | the laptop's GPU, 16-bit | 2 | 0.0004 [0.0001, 0.0015] | 1 | 20 | 58 |
 
-Paired: at p = 0.005 both fail 60, only the head 10, only the kit's priors 146, exact two-sided
-p = 4.1e-32. At p = 0.003 only the head fails, on 2 shots (p = 0.5): one does not converge
-(18,080 iterations) and one converges to a wrong answer; the kit's priors solved both.
+Paired at p = 0.005, the head against the kit's priors: with the CPU's logits both fail 62, only
+the head 17, only the kit's priors 144, exact two-sided p = 3.0e-26; with the laptop's, 60, 10,
+146, p = 4.1e-32. At p = 0.003 (the laptop's run only) only the head fails, on 2 shots (p = 0.5):
+one does not converge (18,080 iterations) and one converges to a wrong answer; the kit's priors
+solved both.
+
+**Why the two p = 0.005 runs differ.** The two sets of logits differ only in the arithmetic of
+the network (16-bit on the GPU, 32-bit on the CPU), yet 33 of the 5,000 shots change outcome
+(21 newly wrong on the CPU, 12 newly right; p = 0.16 for the lean) and iteration counts differ
+on 4,810. 25 of the 33 shots run past 16,900 iterations in one of the two runs, 21 of them to
+relay-BP's cap of 18,080: these are shots on the edge, where relay-BP's long search goes either
+way on the smallest change of its priors. The network in 16-bit on this CPU (the reviewer's
+check, `logs/review_fp16_changed_p0.005.log`) fails 16 of the 33 and agrees with the laptop on
+only 13, so no device is "the right one". This is the same size of effect as relay-BP's own
+random draws (31 against 20 at p = 0.004). The CPU number is the headline because a second
+machine gets it back.
 
 - The gain grows with the noise: none shown at 0.003 (both near zero), 20 to 14 at 0.004 (not
-  significant), 206 to 70 at 0.005. At higher noise BP's fixed priors are furthest from the
+  significant), 206 to 79 at 0.005 (70 on the laptop). At higher noise BP's fixed priors are furthest from the
   truth of a shot, and the head has most to tell it.
 - The network and head take 22.1 ms per shot one at a time on the laptop's GPU (20.6 ms at
   p = 0.003). The decode times of the two arms come from runs with different numbers of
@@ -472,8 +518,8 @@ Not tested, or not done:
 
 - **The held-out test files were not used** (the kill line at p = 0.004 did not pass). A run on
   them, at p = 0.005 or at all, is Sal's call; if it is made, it should run from commit
-  `1bf0e7b` with `logs/fit_X_p0.004.json`, the head and trunk named above, and nothing else
-  changed.
+  `1bf0e7b` with `logs/fit_X_p0.004.json`, the head and trunk named above, the network on a
+  CPU in 32-bit floats (the commands are under "Commands"), and nothing else changed.
 - **Z memory has no head.** The plugin decodes Z with the kit's relay-BP, so a pair score from
   the evaluator would mix the two. A Z head needs a Z network (`--logicals light` changes the
   observables, which `mapping.py` does not handle yet).

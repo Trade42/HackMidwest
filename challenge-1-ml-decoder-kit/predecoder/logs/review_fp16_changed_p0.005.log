@@ -1,0 +1,8 @@
+changed shots: 33
+validation_X_p005_changed.npz: 33 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder-review/runs/logits_changed_fp16/logits.npy (7 s in batches of 32 on cpu)
+the head's probabilities sum to 67.8 per shot (the kit's priors: 59.0)
+validation_X_p005_changed.npz: 33 shots, p=0.005, arms ['head']; head priors {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}; 9 tasks to run in 4 processes (16 CPUs here, luminaty)
+relay-BP at the kit's settings; 74 s. Time per shot: build + decode in these worker processes, plus the network and head (0.0 ms mean, cpu, from predecoder.evaluate)
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+head          16    0.4848 [0.3250, 0.6478]          11     31     14369      7.4    7216.5   7223.9    9742
+exit 0

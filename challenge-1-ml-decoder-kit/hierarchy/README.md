@@ -436,6 +436,71 @@ relay-BP and the rule ran on 0.49% of the shots; mean time per pair 235 ms on th
 (inflated, not a result). The session-mode counts (20 and 17) differ from the chunk-mode
 counts of the same rules on the same shots (17 and 15): same decoders, other random draws.
 
+## Network first (branch `network-first`; an extra row, not part of the frozen decoder)
+
+**This is on its own branch, built after the freeze at 921f2e8. The frozen decoder, its test
+run and its rows are not changed by it.**
+
+**The idea.** The structured network is often very sure, and where it is very sure it is
+rarely wrong: on the laptop's 25,000 p = 0.004 X exploration shots its most confident half
+holds 3 failures, where relay-BP holds 6, P1 11 and P2 5. The network costs one call (about
+16 ms on a GPU, 20 to 50 ms on one CPU thread), less than the two PriorTilt decodes.
+
+**The rule.** The plugin option `network_first` `{"X": c_X, "Z": c_Z}`. Per shot, the network
+reads the shot first. If its confidence, the smallest |logit| of its 12 outputs (as
+`neural.evaluate_stim` defines it), is at least the basis' threshold, its own answer is
+returned and nothing else runs. Otherwise the frozen hierarchy runs as it is, with the same
+rule per basis; where that rule is "network", the logits of the first call are reused. All of
+it is inside `decode_shot`, so the evaluator times it. `null` for a basis switches the stage
+off there; without the option the plugin is the frozen one.
+
+**The threshold, by a procedure fixed before any test shot** (`plugin_options.py
+--network-first`): on the p = 0.004 train and validation files of the basis, with the final
+checkpoint's logits, the smallest c at which the rule fails no more often than the basis'
+chosen rule on the same shots; none (the network never answers alone) if no c does. The same
+c at every p. It prints `NETWORK_FIRST X 2.57202    (the network answers 73.9% of 25000 shots;
+failures 62 with it, 62 without)`.
+
+```sh
+python -m hierarchy.plugin_options --network-first --out runs/hierarchy_options_network_first.json \
+    --x-checkpoint <X final> --x-candidates <validation_X and train_X candidates> --x-logits <their logits, same order> \
+    --z-checkpoint <Z final> --z-candidates <validation_Z and train_Z candidates> --z-logits <their logits, same order>
+python -m evaluation.evaluate --test-x <X shots> --test-z <Z shots> --decoder hierarchy.plugin:make_decoder \
+    --plugin-options runs/hierarchy_options_network_first.json --out <new folder>
+```
+
+**On exploration shots** (p = 0.004; X: the laptop's step-8b candidates and the step-90,000
+network; Z: the same with the server's step-22,000 Z network, light operators; the frozen
+rule per basis is the one `plugin_options.py` chooses, "network" for X and "converged" for Z):
+
+| | X | Z |
+|---|---|---|
+| **in-sample**: c chosen on train + validation (25,000 shots), scored on them | c = 2.572; the network answers 73.9%; failures 62 with the stage, 62 without (paired: 11 / 11, p = 1) | c = 3.571; answers 29.4%; 73 with, 73 without (1 / 1) |
+| **held out**: c fitted on train (20,000), reported on validation (5,000) | c = 2.386; answers 76.2%; **19 with, 14 without** (paired: network-first only 6, frozen only 1; p = 0.125) | c = 3.609; answers 27.7%; 11 with, 12 without (0 / 1) |
+| mean time per shot, laptop decode times plus the network's batch-one time | 84.7 ms against 118.1 ms (on the shots it answers: 16.0 ms against 66.8 ms) | 133.8 ms against 130.6 ms |
+
+What this says: the threshold procedure is break-even by construction on the shots it is fitted
+on, and on the one held-out X file it was worse by 5 failures in 5,000 (not significant). On X
+train and X validation the network behaves differently enough that a more conservative
+threshold does not fix it (at 50% coverage, chosen on train: validation 15 against 14). The
+80,000-shot ablation set (`HANDOFF.md`) gives the held-out answer with ten times the shots.
+The time gain is real on X, where the network can answer three quarters of the shots, and
+nil on Z with the young Z network.
+
+**Checked with the real evaluator, on this PC** (the first 200 shots of each p = 0.004
+validation file; X step 90,000 on one CPU thread; rules X "network", Z "converged"; lane A,
+other jobs beside it):
+
+| run | X | Z |
+|---|---|---|
+| this branch, option absent, and with `{"X": null, "Z": null}` | the bits and every metric field (all but times) equal to 921f2e8's on all 200 shots | equal on all 200 |
+| this branch, `{"X": 2.572, "Z": null}` | the network answers 152 shots, all of them right; there 72 ms per shot against 154 ms for 921f2e8 on the same shots; mean 389 ms against 446 ms; failures 2 against 1 | equal to 921f2e8 (no Z stage) |
+
+The one extra X failure is on a shot the network did not answer. It comes from a property of
+the stage, not from the network: PriorTilt and relay-BP keep their random state from shot to
+shot, and with the stage on they see only the shots the network leaves to them, so their
+random draws differ from the frozen run's from the first answered shot on. Failure counts of
+the remaining shots are therefore not paired draw for draw with the frozen run's.
 ## The ensemble (part 2)
 
 **This part is combined offline from per-shot files. Its time is a sum of stage times taken

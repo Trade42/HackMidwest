@@ -81,6 +81,9 @@ numbers are for X memory; every comparison is on the same shots.
    957 with the kit's generic priors at BP-OSD's fitted p. That generic p was weak for TCBP-JOBS (BP-OSD itself fails 442 at
    it), so the network's gain over it is overstated. Knowing the shape is still worth about 8 times more than the network.
 
+5. **Exploration, after the main results: the TCBP pipeline with atom loss** (TCBP-JOBS, RESULTS.md, 1,000 shots of each loss file).
+   The flags help TCBP-JOBS as much as relay-BP (matched: 49 to 0 failures at f0.4, 562 to 37 at f0.6), and the network on a generic base with the flags (5 and 242) does not make up for knowing the noise's shape (matched + flags); the head's own effect is unmeasured.
+
 ## What the tables do not show
 
 - **A model, not a machine.** The figures come from Infleqtion's papers; the model is ours. Where a paper gives no

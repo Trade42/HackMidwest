@@ -364,7 +364,9 @@ The server's files are on the branch `server-logs` at `58b6e2d2`, under `files/t
 
 ## What was not done
 
-- **PriorTilt** with matched priors (the brief's optional decoder) and **the network**: not run.
+- **PriorTilt** with matched priors (the brief's optional decoder): not run. **The network** was not run in the
+  tables above. It ran only in the TCBP exploration (its section above: one file, X memory, factor 0.8), and
+  there it was not retrained on this noise.
 - **The fitted generic p** was run for BP-OSD at factors 0.8 and 0.9 and for relay-BP at 0.8 only; not for relay-BP
   at 0.7 and 0.9, BP-OSD at 0.7, Z memory, or any row with loss. Those comparisons are against the generic baseline
   at the same two-qubit error, which overstates the noise, and the tables name it.
@@ -410,3 +412,110 @@ sha256 are in `logs/shots.log` and in the first lines of each log. Every row of 
 
 **Per-shot outcomes.** `results/<table>_per_shot.npz` holds, for every row, whether each shot failed and converged,
 and its iterations, so every count and paired test above can be recomputed without decoding.
+
+## Exploration: the TCBP pipeline with atom loss (TCBP-JOBS, task tcbp-loss)
+
+**Exploration, after the main test results; a separate branch.** Declared before any number in
+[`tcbp_loss_declared.md`](tcbp_loss_declared.md) (commit `d733437b`). Question 2's X loss shot files (Clifft
+through `loss/`, flags perfect, seed 6100): `X_f0.4_loss_seed6100.npz` (sha256 `9c225b77...`) and
+`X_f0.6_loss_seed6100.npz` (sha256 `bcdcfdf1...`), 2,000 shots each, **the declared prefix: the first 1,000 shots of
+each**. These are the same shots as question 2's relay-BP rows above. The decoder is TCBP-JOBS (cudaq-qec 0.9.0,
+preset `tcbp-jobs`, one decoder built per shot), run in server job `ctl/150` on the team's A100, one process, one CPU
+thread, one fitted model for both files. Every arm finished every block before the 17:35 UTC stop, so all
+1,000 shots of each file are scored in all four arms.
+
+- **bm, matched, loss-blind:** `priors.matched_priors` of the file's Pauli noise, capped at 0.5. This is `loss/`'s
+  `blind` vector, the one behind the relay-BP blind rows.
+- **fm, matched + flags:** the same vector with `loss/`'s `starter` flag raise for each shot (the recipe of
+  question 2), XOR-combined `P = (1 - (1 - 2 base) prod(1 - 2 v)) / 2`, capped at 0.5.
+- **fh, head + flags, the TCBP version with loss information:** the TCBP pipeline's network and head at the frozen
+  knobs (log-odds, alpha 0.4, eps 1e-4; no refit). The network's p input and the mixing base are both the file's
+  generic-2q p (0.0059563 at f0.4, 0.0089274 at f0.6). The same flag raise goes on top of the head's per-shot vector,
+  then the 0.5 cap. **The network never saw a lost atom.**
+- **bh, head, loss-blind:** fh without the raise.
+
+**f0.4** (loss 0.0010 per CX; 1,000 shots, all four arms):
+
+| Row | Shots | Failures | 95% Wilson | A100 ms per shot (build + decode) |
+|---|---|---|---|---|
+| TCBP-JOBS, matched, loss-blind (bm) | 1,000 | 49 | 3.7% to 6.4% | 56 |
+| TCBP-JOBS, matched + flags (fm) | 1,000 | **0** | 0.0% to 0.4% | 50 |
+| TCBP-JOBS, head + flags (fh) | 1,000 | **5** | 0.2% to 1.2% | 52 |
+| TCBP-JOBS, head, loss-blind (bh) | 1,000 | 93 | 7.7% to 11.3% | 56 |
+| relay-BP, matched + flags (question 2) | 1,000 | 0 | 0.0% to 0.4% | not comparable (luminaty) |
+| relay-BP, matched, loss-blind (question 2) | 300 | 18 | 3.8% to 9.3% | not comparable |
+| relay-BP, generic-2q + flags (question 2) | 1,000 | 3 | 0.1% to 0.9% | not comparable |
+
+**f0.6** (loss 0.0015 per CX; 1,000 shots, all four arms):
+
+| Row | Shots | Failures | 95% Wilson | A100 ms per shot (build + decode) |
+|---|---|---|---|---|
+| TCBP-JOBS, matched, loss-blind (bm) | 1,000 | 562 | 53.1% to 59.2% | 72 |
+| TCBP-JOBS, matched + flags (fm) | 1,000 | **37** | 2.7% to 5.1% | 63 |
+| TCBP-JOBS, head + flags (fh) | 1,000 | **242** | 21.6% to 26.9% | 81 |
+| TCBP-JOBS, head, loss-blind (bh) | 1,000 | 706 | 67.7% to 73.3% | 88 |
+| relay-BP, matched + flags (question 2) | 1,000 | 60 | 4.7% to 7.6% | not comparable (luminaty) |
+| relay-BP, matched, loss-blind (question 2) | 100 | 62 | 52.2% to 70.9% | not comparable |
+| relay-BP, generic-2q + flags (question 2) | 150 | 47 | 24.5% to 39.1% | not comparable |
+
+The A100 times are TCBP-JOBS's build + decode only, one process, one CPU thread. **The network is not included:** add
+its 11.0 ms (f0.4) and 10.1 ms (f0.6) per shot, measured one shot at a time in float32, and the prior computation,
+to the fh and bh times. Whether the GPU slice was shared with another job (cpu/100) during the run is unknown.
+
+| Pair (same shots) | File | Shots | Failures | Only the first fails | Only the second fails | Sign test p |
+|---|---|---|---|---|---|---|
+| fm vs bm (what the flags add) | f0.4 | 1,000 | 0, 49 | 0 | 49 | 4e-15 |
+| fm vs bm | f0.6 | 1,000 | 37, 562 | 2 | 527 | 2e-154 |
+| fh vs fm (the network on top of matched + flags) | f0.4 | 1,000 | 5, 0 | 5 | 0 | 0.06 |
+| fh vs fm | f0.6 | 1,000 | 242, 37 | 208 | 3 | 1e-57 |
+| fh vs bh (what the flags add on top of the head) | f0.4 | 1,000 | 5, 93 | 0 | 88 | 6e-27 |
+| fh vs bh | f0.6 | 1,000 | 242, 706 | 4 | 468 | 3e-133 |
+| fm vs relay-BP matched + flags | f0.4 | 1,000 | 0, 0 | 0 | 0 | 1 |
+| fm vs relay-BP matched + flags | f0.6 | 1,000 | 37, 60 | 9 | 32 | 0.0004 |
+| bm vs relay-BP matched, blind | f0.4 | 300 | 14, 18 | 3 | 7 | 0.34 |
+| bm vs relay-BP matched, blind | f0.6 | 100 | 62, 62 | 6 | 6 | 1 |
+| fh vs relay-BP generic-2q + flags | f0.4 | 1,000 | 5, 3 | 3 | 1 | 0.62 |
+| fh vs relay-BP generic-2q + flags | f0.6 | 150 | 44, 47 | 8 | 11 | 0.65 |
+
+What this shows:
+
+- **The flags help TCBP-JOBS as much as they help relay-BP, as declared.** With matched priors, the flags take
+  TCBP-JOBS from 49 failures to 0 at f0.4 and from 562 to 37 at f0.6. In 1,000 shots of each file, a shot was lost by
+  using the flags only twice. With the flags, TCBP-JOBS beats relay-BP at f0.6 (37 against 60, p = 0.0004). Without
+  them the two are level (62 against 62 on the 100 shots relay-BP decoded blind).
+- **The flags also rescue the head.** Without them the head's priors fail 93 (f0.4) and 706 (f0.6) shots. With them
+  they fail 5 and 242. The flag raise works on top of the head's per-shot priors in the same per-shot build, at no
+  extra TCBP-JOBS cost (52 and 81 ms against 56 and 88 ms, network not included).
+- **The TCBP version with loss information (fh) is behind matched + flags (fm).** It is close at f0.4 (5 against 0,
+  p = 0.06) and far behind at f0.6 (242 against 37, p = 1e-57). As declared, this pair compares the network on a
+  generic base with no network on the matched base, so it is not the head alone. fh is level with relay-BP's generic-2q +
+  flags row on the same shots (5 against 3 at f0.4; 44 against 47 of 150 at f0.6). **So here the network, which never
+  saw a lost atom, did not make up for not knowing the noise's shape.**
+- **bh is worse than bm**, 93 against 49 and 706 against 562. This pair was not declared, and it mixes the head with
+  the generic-versus-matched base, so it is a description, not a test. Whether the head misleads around lost atoms
+  (the declared worry) is not shown by it.
+- **Not measured:** TCBP-JOBS with the generic-2q base + flags and no network. That arm would separate the head's
+  effect from the base's.
+- **Checks:**
+  - Every correction of every arm reproduces its syndrome (H e = s on all 8,000 decodes).
+  - TCBP-JOBS took the matched vector's 1e-9 floor (no fallback).
+  - The 0.5 cap is applied inside `tcbp_loss.combine`, before `predecoder.tcbp`'s counter, so the counter's 0 does not
+    count the capped columns; their number is unmeasured.
+  - fh and bh read the same logits rows on every shot (row hashes).
+  - Before the job, the shipped raise on the matched base equalled `loss/`'s `starter` vector on all 2,000 shots to
+    1.1e-16, and bm's vector equalled `loss/`'s `blind` vector exactly.
+  - The network ran in float32 on the A100: 11.0 and 10.1 ms per shot, one shot at a time. Its probabilities sum to
+    80.5 (f0.4) and 115.6 (f0.6) per shot; the kit's priors at the base p sum to 70.2 and 104.7.
+
+Files (all in [`tcbp_loss_results/`](tcbp_loss_results/)):
+- `decode.log`, `evaluate_f0.4.log` and `evaluate_f0.6.log`: the server's logs;
+- `per_shot_f0.4.npz` and `per_shot_f0.6.npz`: every arm's outcome per shot;
+- `summary.json`: the server's summary;
+- `job_ctl_150.sh.txt`: the job;
+- `score.json`: the tables above, rebuilt here with `python -m neutral_atom_noise.tcbp_loss score --decoded
+  neutral_atom_noise/tcbp_loss_results --shots <X_f0.4_loss_seed6100.npz> <X_f0.6_loss_seed6100.npz> --results
+  <runs/X_loss_seed6100>/results --out <json>`.
+
+The inputs were made with `python -m neutral_atom_noise.tcbp_loss convert --shots <both files> --prefix 1000 --out
+<folder>` and went to the server through `laptop-artifacts` at `0b5d6d83` (`tcbp-loss/`). The server's files are on
+the branch `server-logs` at `891f3854`, under `files/tcbp-loss/`.

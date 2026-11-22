@@ -54,7 +54,7 @@ today's hardware further above factor 1.
 | Rows of one point decode the same shot file | enforced | `summarize.py` refuses to pair rows whose shot files differ (sha256) |
 | A shot fails when any of the 12 observables is wrong; unconverged shots are scored on the decoder's output | by construction | `run._decode` |
 | The truth reaches no decoder: a decoder gets the 936 X-check detector bits (and, with loss, the heralds); the observables are compared after decoding | by construction | `run._decode`; the loss shot files hold no loss times (`clifft_text(..., probes=False)`) |
-| Our loss loop equals `python -m loss.job` (`starter`) on the kit's noise: shots bit-identical, decoding identical shot for shot | pass on 12 shots in the suite; 100-shot run to come | `test_our_loss_loop_equals_*`, `loss_check.py` |
+| Our loss loop equals `python -m loss.job` (`starter`) on the kit's noise: shots bit-identical, decoding identical shot for shot | pass on 12 shots in the suite, and on 100 shots at p = 0.004, s = 10⁻³, seed 5300 (luminaty, lane C, 11:04 UTC): shots, heralds and decoding all equal, 3 failures each | `test_our_loss_loop_equals_*`, `loss_check.py`, `logs/loss_check.log` |
 | Clifft (used for loss) samples our circuit like Stim at loss 0 | pass | `test_clifft_samples_our_circuit_like_stim_*` |
 | Our loop on the kit's own noise gives the kit's failure rates | pass, both decoders (two seeds for relay-BP; table below) | `runs/lane_b.sh reference`, `checks`; `logs/reference.log`, `logs/checks.log` |
 | A lost atom's partner keeps its own error in Clifft (our one-atom channels), unlike under a two-atom channel | pass | `test_the_partner_of_a_lost_atom_keeps_*` |
@@ -88,7 +88,41 @@ Every number in the tables below comes from the logged runs.
 
 ## Question 1: what knowing the shape buys
 
-To come.
+The same shots, decoded twice by each decoder: with **matched** priors (the error model of the circuit that made the
+shots) and with **generic** priors (the kit's uniform model). Two generic baselines, as the brief asks:
+
+- **same two-qubit error**: the kit's uniform model at the p whose two-qubit error equals the model's total
+  (p = 0.01486 × factor);
+- **best p on train shots**: the kit's uniform model at the p that decodes best on 250 train shots of another seed
+  (5100 at factor 0.8), found by a grid that is extended until its best point is inside it (`job.fit_generic`).
+  Done for BP-OSD at factor 0.8, and for relay-BP at 0.8 on 100 train shots (FIT_RELAY).
+
+X memory, test seed 4100 (the shots of question 3), luminaty. "Only generic wrong" counts the shots that only the
+generic row gets wrong, "only matched wrong" the reverse; the p value is the exact two-sided sign test on them.
+
+PAIRED_TABLE
+
+**What it shows.**
+
+- **Knowing the shape cuts failures several times over, at every factor and for both decoders**, and the shots it
+  loses are rare: at factor 0.8, BP-OSD with matched priors fails 91 of 2,000 shots, against 442 with the best
+  uniform p and 613 at the same two-qubit error; 372 shots only the best generic picture gets wrong, 21 only the
+  matched one.
+- **For relay-BP the wrong picture also costs work**: 5 to 8 times the iterations per shot, and many more shots that
+  never converge (ITER_LINE). Iterations do not depend on the machine.
+- **Why.** The matched picture knows that most faults are single readout-like events and that hook faults almost
+  never happen (`logs/explain.log`): at factor 0.7 it expects 77 faults per shot, 59% of them readout-like and 0.2%
+  that flip 5 or 6 detectors. The uniform picture at the same two-qubit error expects 122, 26% readout-like and
+  7.9% of the 5-or-6 kind; it rates 5,256 of the 8,784 kinds of fault at least 20 times likelier than they are.
+- **The best uniform p is not the true strength.** For BP-OSD at factor 0.8 the best uniform p on train shots is
+  about 2 to 4 times the same-two-qubit-error p (train failures, of 250: 89 at 1×, 77 at 1.4×, 75 at 1.96×, 58 at
+  2.74×, 61 at 3.84×; `results/X_fit.json`). The control above shows that BP-OSD does not prefer inflated priors on
+  the kit's own noise, so this too is the shape at work. A decoder told only "the noise is about this strong" is
+  hard to tune by hand.
+
+**What it does not show.** The matched priors are exact: they come from the very model that made the shots. On real
+hardware they would come from calibration and would be only approximately right, so the gain here is the ceiling
+of what knowing the shape can give, not what a calibrated decoder would get.
 
 ## Question 3: where the code starts to work
 
@@ -124,7 +158,7 @@ larger, and then factor 1 would sit further above the range.
 
 **Why the factor reaches so far.** At factor 0.7 the two-qubit error is 1.04% per CX, 2.6 times the kit's
 p = 0.004; yet relay-BP fails 0.65% of shots, close to the kit's 0.45% at p = 0.004 (the kit's `README.md`; our
-reference above: 0.15%). A phase error on a CZ arrives on the kit's CX as Z on the control and X on the target;
+reference above, two seeds: 0.38%). A phase error on a CZ arrives on the kit's CX as Z on the control and X on the target;
 neither spreads through the rest of the check's gates, so this noise makes almost no "hook" faults (one check atom
 spreading its fault onto several data atoms). In the matched picture 0.2% of the expected faults flip 5 or 6
 detectors, against 7.9% in the kit's uniform picture (`logs/explain.log`). Noise of this shape is easier for this

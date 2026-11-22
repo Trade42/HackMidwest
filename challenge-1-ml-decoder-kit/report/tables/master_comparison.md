@@ -9,7 +9,7 @@
 | our hierarchy, lowest-weight tie-break | `hierarchy/` | after-test ablation | 4 pairs (X 2) · 46.9 ms per pair | 60 pairs (X 27) · 215 ms per pair |  |
 | our hierarchy, lowest-weight tie-break | `hierarchy/` | pre-registered (the test run), offline decode, no time |  |  | 527 pairs (X 269) · offline |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | `hierarchy/` | pre-registered (the test run) | 4 pairs (X 2) · 46.3 ms per pair | 52 pairs (X 25) · 218 ms per pair |  |
-| our hierarchy, classical tie-break (lowest weight among the converged candidates) | `hierarchy/` | pre-registered (the test run), offline decode, no time |  |  | 469 pairs (X 241) · offline |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | `hierarchy/` | after-test ablation |  |  | 481 pairs (X 239) · 815 ms per pair |
 | our hierarchy, neural tie-break | `hierarchy/`, `neural/` | pre-registered (the test run) | 3 pairs (X 1) · 45.7 ms per pair | 44 pairs (X 18) · 216 ms per pair | 479 pairs (X 245) · 825 ms per pair |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | `hierarchy/`, `neural/` | pre-registered (the test run) | 3 pairs (X 1) · 28.9 ms per pair | 44 pairs (X 18) · 150 ms per pair | 479 pairs (X 245) · 608 ms per pair |
 | our ensemble (combined offline) | `hierarchy/ensemble.py` | pre-registered (the test run), offline decode, no time | 2 pairs (X 1) · offline | 16 pairs (X 8) · offline | 360 pairs (X 186) · offline |

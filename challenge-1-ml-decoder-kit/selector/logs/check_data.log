@@ -1,9 +1,10 @@
-# 2026-11-22T08:38:55Z on luminaty, from challenge-1-ml-decoder-kit/ at commit abac6fa; M = the folder of selector/get_members.sh, A = $M/laptop-artifacts/priortilt, F = $M/server-logs/files, O = an output folder
+# 2026-11-22T09:08:49Z on luminaty, from challenge-1-ml-decoder-kit/ at commit 9ed2447; M = the folder of selector/get_members.sh, A = $M/laptop-artifacts/priortilt, F = $M/server-logs/files, O = an output folder
 $ python -m selector.check_data $M
 98c0afeb2a0b6b27...  data/p0.004/train_X.npz  <-  $M/laptop-artifacts/priortilt/results_8b/selector_train_X.npz  (records no name)
 14dce11586fa5125...  data/p0.004/train_Z.npz  <-  $M/laptop-artifacts/priortilt/results_8b/selector_train_Z.npz  (records no name)
 b00ee09c35ed088a...  data/p0.004/validation_X.npz  <-  $M/laptop-artifacts/priortilt/results_8b/selector_validation_X.npz  (records no name)
 843c4daf24e2b56c...  data/p0.004/validation_Z.npz  <-  $M/laptop-artifacts/priortilt/results_8b/selector_validation_Z.npz  (records no name)
+cfa08c9113b77521...  data/p0.005/train_X.npz  <-  $M/laptop-artifacts/priortilt/results_p005main/selector_train_X.npz  (records no name)
 25e9ce8e28714c98...  data/p0.005/validation_X.npz  <-  $M/laptop-artifacts/priortilt/results_p005main/selector_validation_X.npz  (records no name)
 09240f1a17533d61...  data/p0.003/train_X.npz  <-  $M/server-logs/files/hier/cand_p0.003/train_X.chunks.npz  (records train_X.npz)
 269377e57eae2cd7...  data/p0.003/train_Z.npz  <-  $M/server-logs/files/hier/cand_p0.003/train_Z.chunks.npz  (records train_Z.npz)
@@ -23,6 +24,8 @@ b00ee09c35ed088a...  data/p0.004/validation_X.npz  <-  $M/server-logs/files/join
 14dce11586fa5125...  data/p0.004/train_Z.npz  <-  $M/server-logs/files/tcbp_p0.004/train_Z.tcbp.npz  (records train_Z.npz)
 b00ee09c35ed088a...  data/p0.004/validation_X.npz  <-  $M/server-logs/files/tcbp_p0.004/validation_X.tcbp.npz  (records validation_X.npz)
 843c4daf24e2b56c...  data/p0.004/validation_Z.npz  <-  $M/server-logs/files/tcbp_p0.004/validation_Z.tcbp.npz  (records validation_Z.npz)
+cfa08c9113b77521...  data/p0.005/train_X.npz  <-  $M/server-logs/files/tcbp_p0.005/train_X.tcbp.npz  (records train_X.npz)
+d3ff1f8f69b3c36e...  data/p0.005/train_Z.npz  <-  $M/server-logs/files/tcbp_p0.005/train_Z.tcbp.npz  (records train_Z.npz)
 25e9ce8e28714c98...  data/p0.005/validation_X.npz  <-  $M/server-logs/files/tcbp_p0.005/validation_X.tcbp.npz  (records validation_X.npz)
 24f12efa48d92b7a...  data/p0.005/validation_Z.npz  <-  $M/server-logs/files/tcbp_p0.005/validation_Z.tcbp.npz  (records validation_Z.npz)
-25 of 25 member files name a committed train or validation data file
+28 of 28 member files name a committed train or validation data file

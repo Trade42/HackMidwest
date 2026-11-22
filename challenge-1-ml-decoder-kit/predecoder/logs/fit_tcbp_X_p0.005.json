@@ -1,0 +1,108 @@
+{
+ "chosen": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "what": "The knobs for TCBP-JOBS with the head's priors, frozen at 15:28 UTC on 2026-11-22, before any validation decode with them. They come from the rows of the fit's log (server job gpu/075, predecoder.tcbp fit at 83563dbe, mirrored as files/predecoder-tcbp/fit.log on server-logs), by the rule declared in logs/tcbp_declarations.md section 1. The declared grid (alpha 0.1 to 0.7) was complete, and its choice, 0.4, is inside it, so the extension rows (0.8, 0.9, 1.0, 0.05), still decoding, cannot join. The tool's own JSON is added beside this file when the run ends, and must choose the same.",
+ "data": {
+  "failed": "train_X_T_failed.npz (390 shots: every shot of data/p0.005/train_X.npz that the stored TCBP-JOBS run fails), sha256 de0257a8...",
+  "right": "train_X_T_right.npz (2,000 of the 19,610 right shots, seed 5), sha256 4fa61670...",
+  "weights": [
+   1,
+   9.805
+  ]
+ },
+ "prior_cap": 0.5,
+ "rule": "lowest weighted failures (failed shots left wrong + right shots broken x 9.805); then fewer weighted unreproduced syndromes; then fewer weighted decoder-flagged non-convergences; then the smaller alpha",
+ "rows": [
+  {
+   "mode": "linear",
+   "alpha": 0.0,
+   "eps": 1e-06,
+   "failures": [
+    341,
+    5
+   ],
+   "score": 390.025,
+   "control": true
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.1,
+   "eps": 0.0001,
+   "failures": [
+    175,
+    3
+   ],
+   "score": 204.415,
+   "control": false
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.2,
+   "eps": 0.0001,
+   "failures": [
+    134,
+    3
+   ],
+   "score": 163.415,
+   "control": false
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.3,
+   "eps": 0.0001,
+   "failures": [
+    119,
+    5
+   ],
+   "score": 168.025,
+   "control": false
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.4,
+   "eps": 0.0001,
+   "failures": [
+    107,
+    5
+   ],
+   "score": 156.025,
+   "control": false
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.5,
+   "eps": 0.0001,
+   "failures": [
+    104,
+    6
+   ],
+   "score": 162.83,
+   "control": false
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.6,
+   "eps": 0.0001,
+   "failures": [
+    111,
+    7
+   ],
+   "score": 179.635,
+   "control": false
+  },
+  {
+   "mode": "logodds",
+   "alpha": 0.7,
+   "eps": 0.0001,
+   "failures": [
+    112,
+    9
+   ],
+   "score": 200.245,
+   "control": false
+  }
+ ]
+}

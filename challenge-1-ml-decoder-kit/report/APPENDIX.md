@@ -691,5 +691,13 @@ Source: `report/data/test/predecoder/pair_test_p0.005.{json,log}` (`predecoder.p
 | 0.003 | X | 0 of 10,000 | 1 | 0 / 0 / 1 (p = 1.00) | not run (X at p = 0.005 only) |  |
 | 0.005 | Z | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
 
-Source: `report/data/exploration/predecoder_tcbp/` (branch `predecoder-tcbp` at `dad4fd50`) and `report/data/test/predecoder_tcbp/`.
+**Its time per X shot: not a clean timing.** An A100 MIG slice, one process, one shot at a time, 1 CPU thread; server job 5 ran beside job 6, another TCBP-JOBS process on the same slice (`runner_gpu.out`, `runner_cpu.out`); the network's time is from validation shots. Per X shot, not per pair; ms: mean / median / 99th percentile. For scale: TCBP-JOBS alone takes 8.7 ms per X shot (a GPU decode call), relay-BP's timed row 760, and the relay-BP predecoder 212 (`predecoder_latency.md`).
+
+| Part | Mean | Median | 99th percentile | Shots |
+|---|---|---|---|---|
+| the network and the head on the A100, 32-bit floats | 9.4 | 8.5 | 19.8 | the first 1,000 validation X shots at p = 0.005 (exploration shots; server job 4) |
+| TCBP-JOBS built with the head's priors and run, per shot | 46.4 | 44.6 | 69.2 | the 10,000 test X shots at p = 0.005 (server job 5; build 42.6, decode 3.8 ms on average) |
+| the two together | 55.8 |  |  |  |
+
+Source: `report/data/exploration/predecoder_tcbp/` (branch `predecoder-tcbp` at `dad4fd50`; job 4 from `server-logs`) and `report/data/test/predecoder_tcbp/` (job 5 from `server-logs`).
 <!-- END table:predecoder_tcbp -->

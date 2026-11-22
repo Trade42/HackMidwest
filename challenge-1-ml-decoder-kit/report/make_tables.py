@@ -2409,6 +2409,31 @@ def predecoder_tcbp_table(measured):
                             ("vs_T_only_TH", declared["only_first"]), ("vs_T_only_T", declared["only_second"]), ("vs_T_p", stats.p_text(declared["p"])),
                             ("vs_fresh_p", fresh and stats.p_text(fresh["p"]))):
             fact(f"{n}_{name}", value, source)
+    time_lines = []
+    network_file = DATA / "exploration" / "predecoder_tcbp" / "gpu_network_decode_val1000_fp32_summary.json"
+    job5_file = DATA / "test" / "predecoder_tcbp" / "job5_test_X_p0.005_summary.json"
+    if network_file.is_file() and job5_file.is_file():
+        network = json.loads(network_file.read_text(encoding="utf-8"))
+        job5 = json.loads(job5_file.read_text(encoding="utf-8"))
+        if job5["data"]["sha256"] != TEST_SHA256["0.005"]["X"] or network["data"]["basis"] != "X" or network["data"]["seed"] != 201:
+            raise Mismatch("predecoder_tcbp timing: not the files they should be (test X at p = 0.005; validation X)")
+        if job5["arms"]["head"]["failures"] != int(FACTS["ptt5X_TH"][0]):
+            raise Mismatch("predecoder_tcbp timing: job 5's head arm fails otherwise than its score file")
+        per = network["logits"]["per_shot_seconds"]
+        head = job5["arms"]["head"]
+        total = per["mean"] * 1e3 + head["build_decode_ms_mean"]
+        time_lines = [["the network and the head on the A100, 32-bit floats", ms(per["mean"] * 1e3), ms(per["median"] * 1e3), ms(per["p99"] * 1e3),
+                       f"the first {per['shots']:,} validation X shots at p = 0.005 (exploration shots; server job 4)"],
+                      ["TCBP-JOBS built with the head's priors and run, per shot", ms(head["build_decode_ms_mean"]), ms(head["build_decode_ms_median"]),
+                       ms(head["build_decode_ms_p99"]), f"the 10,000 test X shots at p = 0.005 (server job 5; build {ms(head['build_ms_mean'])}, decode "
+                                                        f"{ms(head['decode_ms_mean'])} ms on average)"],
+                      ["the two together", ms(total), "", "", ""]]
+        for name, value in (("net", ms(per["mean"] * 1e3)), ("bd", ms(head["build_decode_ms_mean"])), ("build", ms(head["build_ms_mean"])),
+                            ("decode", ms(head["decode_ms_mean"])), ("total", ms(total))):
+            fact(f"pttime_{name}", value, source)
+    else:
+        for name in ("net", "bd", "build", "decode", "total"):
+            fact(f"pttime_{name}", None, source)
     landed = [(p, basis) for p, basis in PTCBP_TEST if FACTS[f"ptt{p[-1]}{basis}_TH"][0] != NOT_MEASURED]
     fact("ptt_statement", landed and ("On the test shots (" + PTCBP_LABEL + "; one basis at a time, accuracy only; its knobs were fitted at p = 0.005 and "
          "applied unchanged at the lower p, with no validation there): " + "; ".join(
@@ -2446,7 +2471,14 @@ def predecoder_tcbp_table(measured):
                              "TH against it, the declared pair: both / only TH / only TCBP-JOBS (exact p)",
                              "TCBP-JOBS with the kit's priors in the same run (the like-for-like control) fails", "TH against that control (exact p)"],
                             test_lines)
-                 + "\n\nSource: `report/data/exploration/predecoder_tcbp/` (branch `predecoder-tcbp` at `dad4fd50`) and `report/data/test/predecoder_tcbp/`.")
+                 + ("\n\n**Its time per X shot: not a clean timing.** An A100 MIG slice, one process, one shot at a time, 1 CPU thread; server job 5 "
+                    "ran beside job 6, another TCBP-JOBS process on the same slice (`runner_gpu.out`, `runner_cpu.out`); the network's time is from "
+                    "validation shots. Per X shot, not per pair; ms: mean / median / 99th percentile. For scale: TCBP-JOBS alone takes "
+                    f"{FACTS['lat5_tcbp_x'][0]} ms per X shot (a GPU decode call), relay-BP's timed row {FACTS['lat5_relay_x'][0]}, and the relay-BP "
+                    f"predecoder {FACTS['lat5_total'][0]} (`predecoder_latency.md`).\n\n"
+                    + markdown(["Part", "Mean", "Median", "99th percentile", "Shots"], time_lines) if time_lines else "")
+                 + "\n\nSource: `report/data/exploration/predecoder_tcbp/` (branch `predecoder-tcbp` at `dad4fd50`; job 4 from `server-logs`) and "
+                   "`report/data/test/predecoder_tcbp/` (job 5 from `server-logs`).")
 
 
 def ours_at(measured, p):

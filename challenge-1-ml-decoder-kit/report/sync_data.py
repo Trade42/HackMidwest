@@ -155,6 +155,10 @@ SOURCES = [
     ("test/predecoder_tcbp/", "tree", "predecoder/logs/tcbp_test_*_score.json", False),
     ("test/predecoder_tcbp/", "tree", "predecoder/logs/tcbp_test_*_summary.json", False),
     ("test/predecoder_tcbp/", "tree", "predecoder/logs/tcbp_pair_test_*.json", False),
+    # its time per X shot: the network on the A100 (job 4, validation shots) and TCBP-JOBS's build and decode on the test X shots at p = 0.005 (job 5)
+    ("exploration/predecoder_tcbp/gpu_network_decode_val1000_fp32_summary.json", "origin/server-logs",
+     "files/predecoder-tcbp/gpu_network/decode_val1000_fp32_summary.json", False),
+    ("test/predecoder_tcbp/job5_test_X_p0.005_summary.json", "origin/server-logs", "files/predecoder-tcbp/test_X_p0.005/summary.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.json", False),
     ("test/predecoder/", "tree", "predecoder/logs/pair_test_p*.log", False),
 ]

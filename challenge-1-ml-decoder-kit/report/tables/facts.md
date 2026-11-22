@@ -719,6 +719,11 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `ptt5Z_vs_T_p` | not measured | `tables/predecoder_tcbp.md` |
 | `ptt5Z_vs_fresh_p` | not measured | `tables/predecoder_tcbp.md` |
 | `ptt_statement` | On the test shots (designed after the test results were seen; formerly a separate branch (predecoder-tcbp); one basis at a time, accuracy only; its knobs were fitted at p = 0.005 and applied unchanged at the lower p, with no validation there): X at p = 0.005, TH fails 72 against TCBP-JOBS's 186 (only TH 22, only TCBP-JOBS 136, exact p = 3e-21; the same run's kit-priors arm fails 186); X at p = 0.004, TH fails 4 against TCBP-JOBS's 20 (only TH 2, only TCBP-JOBS 18, exact p = 4e-04); X at p = 0.003, TH fails 0 against TCBP-JOBS's 1 (only TH 0, only TCBP-JOBS 1, exact p = 1.00: no claim). TCBP-JOBS's stored counts carry its fit's spread (above). | `tables/predecoder_tcbp.md` |
+| `pttime_bd` | 46.4 | `tables/predecoder_tcbp.md` |
+| `pttime_build` | 42.6 | `tables/predecoder_tcbp.md` |
+| `pttime_decode` | 3.8 | `tables/predecoder_tcbp.md` |
+| `pttime_net` | 9.4 | `tables/predecoder_tcbp.md` |
+| `pttime_total` | 55.8 | `tables/predecoder_tcbp.md` |
 | `ptv_H` | 79 | `tables/predecoder_tcbp.md` |
 | `ptv_H_only_TH` | 4 | `tables/predecoder_tcbp.md` |
 | `ptv_H_only_other` | 50 | `tables/predecoder_tcbp.md` |

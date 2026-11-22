@@ -1014,13 +1014,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "bbabe524798b9173a9b1e4784f04b06f675bacf9",
-  "copied_utc": "2026-11-22 12:10",
+  "commit": "a59709ec71d2922822d7a5dd9f58027fdc60b066",
+  "copied_utc": "2026-11-22 12:11",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `bbabe524798b`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `a59709ec71d2`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "01eade375ea13eb5d4fd2668bd222e23589907682e85907b15b7cc4f55a40f5d"
+  "sha256": "2f695b30b8f3018f6ce4804dd73f535e3c5ae6f6b6ae0a54b443103c2d860267"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -1222,14 +1222,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 18221,
-  "commit": "bbabe524798b9173a9b1e4784f04b06f675bacf9",
-  "copied_utc": "2026-11-22 12:10",
+  "bytes": 18276,
+  "commit": "a59709ec71d2922822d7a5dd9f58027fdc60b066",
+  "copied_utc": "2026-11-22 12:11",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `bbabe524798b`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `a59709ec71d2`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "832526fdd2077b3fc2c89e424d3f69c3a343e176a3012ccf00e221c9dea18284"
+  "sha256": "b9c913e33e2bdb94ce3c0e241ed524ff153ae69360a79827678643de3750f2a8"
  },
  "test/ensemble_p0.003/test_X.json": {
   "branch": "origin/server-logs",

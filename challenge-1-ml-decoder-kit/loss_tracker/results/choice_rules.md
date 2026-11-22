@@ -1,4 +1,10 @@
-## How the frozen decoder is chosen (written at 06:52 UTC, before the variant runs finished; the lines marked 07:02 were added then, before the 4-sweep version's score and the last 1,000 shots of the variants were read)
+## How the frozen decoder is chosen
+
+Written at 06:52 UTC (commit `1a41df1`), before the variant runs finished. The lines marked 07:02 were added then
+(committed at 07:11, `b926c22`), before the full-validation scores of the 1-sweep and 4-sweep explain versions and
+the last 1,000 shots of the variants were read. What had been seen by then: the first 500 shots of every variant;
+the explain version's score with 2 sweeps; and a 400-shot development run of an earlier, faulty build in which
+2 and 4 sweeps differed by 0.001.
 
 1. **The tracker version** is the one with the best mean log P(true round) on the 4,000 validation shots (step 2).
    - (07:02) Versions within 0.005 nats of each other are a tie, and the one with fewer sweeps is taken.

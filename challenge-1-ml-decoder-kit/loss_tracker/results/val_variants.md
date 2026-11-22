@@ -1,0 +1,27 @@
+## Validation (seed 7200), shots 0 to 1,499; the variants with the tracker version order1_coupled2
+Every condition on the same 1500 shots.
+
+### reference exact
+
+| condition | failures / shots | fail fraction (95% Wilson) | per cycle | unconverged (of them right) | mean iterations | paired shots: exact fails, cond fails | exact-only / cond-only (sign test) | exact ÷ cond (95% bootstrap) |
+|---|---|---|---|---|---|---|---|---|
+| exact | 69 / 1500 | 0.0460 (0.0365–0.0578) | 3.92e-03 | 40 (0) | 2560 | reference |  |  |
+| tracker | 45 / 1500 | 0.0300 (0.0225–0.0399) | 2.54e-03 | 27 (0) | 2026 | 1500: 69, 45 | 33 / 9 (p=0.00027) | 1.53 (1.24–1.97) |
+| tracker-T2 | 48 / 1500 | 0.0320 (0.0242–0.0422) | 2.71e-03 | 25 (0) | 2108 | 1500: 69, 48 | 29 / 8 (p=0.00075) | 1.44 (1.18–1.81) |
+| tracker-T0.5 | 52 / 1500 | 0.0347 (0.0265–0.0452) | 2.94e-03 | 30 (0) | 2100 | 1500: 69, 52 | 30 / 13 (p=0.014) | 1.33 (1.07–1.66) |
+| tracker-hard0.6 | 51 / 1500 | 0.0340 (0.0260–0.0444) | 2.88e-03 | 26 (0) | 2005 | 1500: 69, 51 | 31 / 13 (p=0.0096) | 1.35 (1.10–1.70) |
+| tracker-slot | 48 / 1500 | 0.0320 (0.0242–0.0422) | 2.71e-03 | 30 (1) | 2101 | 1500: 69, 48 | 31 / 10 (p=0.0015) | 1.44 (1.17–1.82) |
+| oracle-round | 31 / 1500 | 0.0207 (0.0146–0.0292) | 1.74e-03 | 14 (0) | 1528 | 1500: 69, 31 | 43 / 5 (p=1.4e-08) | 2.23 (1.69–3.09) |
+| tracker>exact | 40 / 1500 | 0.0267 (0.0196–0.0361) | 2.25e-03 | 19 (0) | 2344 | 1500: 69, 40 | 33 / 4 (p=1.1e-06) | 1.73 (1.40–2.23) |
+
+
+### The share of the oracle's gain
+
+| condition | reference | failures: reference, condition, ORACLE | share of the gain recovered (95% bootstrap) |
+|---|---|---|---|
+| tracker | exact | 69, 45, 31 | 0.63 (0.36–0.93) |
+| tracker-T2 | exact | 69, 48, 31 | 0.55 (0.30–0.81) |
+| tracker-T0.5 | exact | 69, 52, 31 | 0.45 (0.14–0.72) |
+| tracker-hard0.6 | exact | 69, 51, 31 | 0.47 (0.17–0.74) |
+| tracker-slot | exact | 69, 48, 31 | 0.55 (0.28–0.83) |
+| tracker>exact | exact | 69, 40, 31 | 0.76 (0.53–1.06) |

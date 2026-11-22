@@ -1,0 +1,8 @@
+decode /home/sal/hackMidwest/orchestration/scratch/loss-gates/data/X_p0.004_s1e-3_seed2300.npz shots 0..500 conditions ['plumb-oracle-round'] workers 4 post None
+  100/500 shots, 67s, failures so far plumb-oracle-round=1
+  200/500 shots, 107s, failures so far plumb-oracle-round=5
+  300/500 shots, 148s, failures so far plumb-oracle-round=8
+  400/500 shots, 185s, failures so far plumb-oracle-round=10
+  500/500 shots, 221s, failures so far plumb-oracle-round=12
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/plumbing/000000-000500.npz.tmp.npz in 221s
+{"shots_compared": 500, "my_failures": 12, "their_failures": 12, "shots_with_equal_failed": 500, "shots_with_equal_converged": 500, "shots_with_equal_iterations": 500, "shots_with_equal_wrong_mask": 500, "passed": true}

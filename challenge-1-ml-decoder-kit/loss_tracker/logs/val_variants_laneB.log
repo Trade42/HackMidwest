@@ -1,0 +1,5 @@
+decode /home/sal/hackMidwest/orchestration/scratch/loss-tracker/data/val_X_p0.004_s1e-3_seed7200.npz shots 1000..1250 conditions ['tracker-T2', 'tracker-T0.5', 'tracker-hard0.6', 'tracker-slot'] workers 4 post /home/sal/hackMidwest/orchestration/scratch/loss-tracker/post/val_order1_coupled2.npz
+  100/250 shots, 191s, failures so far tracker-T2=2 tracker-T0.5=3 tracker-hard0.6=3 tracker-slot=3
+  200/250 shots, 435s, failures so far tracker-T2=4 tracker-T0.5=7 tracker-hard0.6=8 tracker-slot=8
+  250/250 shots, 531s, failures so far tracker-T2=7 tracker-T0.5=8 tracker-hard0.6=8 tracker-slot=11
+wrote /home/sal/hackMidwest/orchestration/scratch/loss-tracker/parts/val/variants/001000-001250.npz.tmp.npz in 531s

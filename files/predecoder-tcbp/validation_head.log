@@ -12,3 +12,6 @@ validation_X.npz: 5000 shots, p=0.005, arms ['head', 'fresh'], decoder tcbp-jobs
   fresh: 2000 of 5000 shots, 449 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   fresh: 3000 of 5000 shots, 507 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   fresh: 4000 of 5000 shots, 563 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: 5000 of 5000 shots, 618 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  fresh: failures 100 of 5000, 0.0200 [0.0165, 0.0243]; not reproduced 0; flagged not converged 4858; build 42.1 ms + decode 12.9 ms mean, p99 119 ms
+WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 while decoding 4096 syndromes. Set bp_batch_size > 1 at construction to decode syndromes in parallel.

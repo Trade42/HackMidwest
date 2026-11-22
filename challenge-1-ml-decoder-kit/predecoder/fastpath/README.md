@@ -235,3 +235,45 @@ What it says:
   a small fast share. C2 and the absolute moves (C3-C5) add failures.
 - At p = 0.004 the criterion chooses C2 (64% fast, 24.2 ms mean, against TH's 53.8). It was chosen on 12 F-only
   shots and is not frozen: its half split adds 2 one way.
+
+## The one held-out check of the frozen C9 (`CRITERION_4.md`)
+
+Exploration, after the test results; a separate branch. C9 was frozen, and the check declared, in `7bcd7058`
+(18:43:49 UTC). That was before the shots existed. The scorer `holdout.py` (no free parameter) was committed in
+`37ba94c7` before the decode.
+- **Shots:** `make_dataset.py --basis X --p 0.005 --shots 5000 --seed 2026112251`, a seed not used before today.
+  The file is `holdout_X_p0.005_s2026112251.npz`, sha256 `c62d6efb...`; a dataset, kept in
+  `orchestration/scratch/tcbp-fastpath/holdout/` and not committed.
+- **Logits:** luminaty's CPU, float32, 16 threads in lanes A-D (165 s); logits.npy `491cbf81...`.
+- **Decode:** server job ctl/190 (`orchestration/scratch/tcbp-fastpath/job2_holdout_X_p0.005.sh.txt`, main `e6c2a5a0`,
+  the frozen knobs; A100, 1 process; 18:48:11 to 19:00:09 UTC; `server-logs` `45955604`). F built once equals F built
+  per shot on all 5,000 shots, and every logits row's hash equals luminaty's file.
+
+    PYTHONPATH=. python predecoder/fastpath/holdout.py --data <holdout_X_p0.005_s2026112251.npz> \
+        --arms <server-logs: files/tcbp-fastpath/holdout_X_p0.005_per_shot.npz> --logits <logits_holdout> \
+        --out predecoder/fastpath/result_holdout_p0.005.json
+
+| on the 5,000 held-out shots | failures, share [95%] | fast path | mean ms | p99 ms |
+|---|---|---|---|---|
+| TH alone (the TCBP version) | 48, 0.0096 [0.0073, 0.0127] | 0% | 46.2 | 67.6 |
+| **the frozen C9 rule** | **48, 0.0096 [0.0073, 0.0127]** | **35.3%** | **33.5** | **68.2** |
+| F alone (TCBP-JOBS, kit priors, built once) | 112, 0.0224 | 100% | | |
+
+The times use today's A100 components (dq-orch-6, 18:43 UTC): network as a CUDA graph 1.7 ms, priors 0.16, CSR build
+34.0, free 4.6, and this job's per-shot decodes (TH 5.8 ms mean, F 12.8 ms). With round 2's 9.4 ms network: 41.2
+against 53.9 ms.
+
+**Verdict, by the declared rule: holds with a cost.** Paired against TH: both fail 47, only the rule 1, only TH 1
+(exact p = 1.0). The rule fails the same number of shots as the TCBP version, 48. Of the 79 shots where only F
+fails, 78 went to TH. The one that did not, shot 4999 (entropy 60.8 bits), is far below the threshold, not at its edge.
+The next F-only shot is at 88.1 bits. The fast share, 35.3%, matches validation's 35.4%.
+
+**In one line:** on fresh shots at p = 0.005, the frozen rule keeps the TCBP version's accuracy (48 against 48) at
+28% less mean time (33.5 against 46.2 ms), with the same p99.
+
+What is still open:
+- **The rule is for p = 0.005 only.** Its threshold does not carry to p = 0.004 (2 added there).
+- F's decode times come from a decoder built per shot on a shared GPU. A server run of F built once, decoded one shot
+  at a time and alone, would give the times a pipeline would see.
+- Z memory has no fast path. A Z rule would need its own threshold, chosen on validation_Z.
+- Every number here is X memory at p = 0.005 (and 0.004).

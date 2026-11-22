@@ -14,8 +14,9 @@ For each X shot at p = 0.005:
 
 On validation (`result3_p0.005.json`): 35.4% of the shots take the fast path, with 0 added failures (TH's 33, shot
 for shot). The mean is 38.8 ms against 51.1 ms for TH alone, and the p99 is the same 63.1 ms (round 2's 9.4 ms
-network). It is being checked once on fresh shots (seed 2026112251, `CRITERION_4.md`); see the README for the
-result.
+network). **The held-out check** (fresh Stim shots, seed 2026112251, `CRITERION_4.md`; `result_holdout_p0.005.json`):
+holds with a cost. 48 failures against TH's 48 (1 added, 1 removed, p = 1.0); 35.3% of shots on the fast path;
+33.5 ms mean against 46.2 ms for TH alone, p99 68.2 against 67.6 (today's component times, network 1.7 ms).
 
 **For p = 0.005 only.** Applied unchanged at p = 0.004 (`README.md`, "p = 0.004 validation"), 69.1 bits sends 87.5% of
 the shots to F and adds 2 failures. A deployment needs a threshold per p, or one scaled with p. At p = 0.004 the
@@ -35,5 +36,6 @@ mean. Every threshold sits on the edge of these shots. C9's half split adds 1 fa
 
 ## Recommendation (kept apart from the choice)
 
-Do not put C9 into the pipeline on validation alone. Wait for the held-out result in the README. If it holds, the
-saving is real: about a quarter of the mean time, at the same p99.
+On the held-out shots the saving held: 28% of the mean time, at the same accuracy and p99. If it goes into the
+pipeline, it should go in for X at p = 0.005 only. Before that, F's time should be measured on a decoder built once
+and running alone. A Z rule, or one for another p, needs its own threshold fitted on that p's validation shots.

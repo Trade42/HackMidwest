@@ -180,3 +180,7 @@ PREDECODER_FALLBACK = [
 ]
 PREDECODER_FALLBACK_LABEL = ("designed after the first test result; frozen on the validation file before this application; the rule was prompted "
                              "by the X test shots at p = 0.005, so its X number there is post hoc, not held out")
+# The fallback rule paired against our pipeline's X answers on the same test shots, as the PR #7 review counted it from the predecoder's
+# per-shot file (kept in the orchestration scratch, not in the repository): p = 0.004 both 7 / only the rule 3 / only the pipeline 11,
+# exact p = 0.057; p = 0.005 87 / 20 / 158, exact p = 8e-28. Only the verdict is quoted in the operating rule.
+OPERATING_PAIRED = {"0.004": "not a significant difference", "0.005": "a significant difference"}

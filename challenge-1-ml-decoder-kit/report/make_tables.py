@@ -27,7 +27,7 @@ import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, EXTENSION, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
+from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, EXTENSION, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, OPERATING_PAIRED, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
                          REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256)
 
 HERE = Path(__file__).resolve().parent
@@ -2217,7 +2217,8 @@ def operating_rule_table(measured):
                             "validation sample (exploration shots)"))
         if FACTS[f"fb{n}X_rule"][0] != NOT_MEASURED and lat_ok:
             extra = lat("unconv_frac") * (lat("tcbp_x_s") or 0)
-            options.append(("the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU)", int(FACTS[f"fb{n}X_rule"][0]),
+            options.append(("the predecoder with the fallback (TCBP-JOBS where its relay-BP did not converge; needs a GPU; the rule was designed after "
+                             "the first test result: post hoc at p = 0.005 and 0.004)", int(FACTS[f"fb{n}X_rule"][0]),
                             lat("total_s") + extra, f"validation sample, plus TCBP-JOBS's GPU decode on the {lat('unconv_share')} of shots that fall back"))
         for label, failures, seconds, where in options:
             lines.append([p, label, f"{failures} of 10,000", ms(seconds * 1e3), where])
@@ -2230,14 +2231,21 @@ def operating_rule_table(measured):
             best = min((option for option in one_core if option[1] == fewest), key=lambda option: option[2])
             tied = [option[0] for option in one_core if option[1] == fewest and option is not best]
             name = best[0].split(" (")[0]
-            choice.append(f"at p = {p}, {name} ({best[1]} X failure{'' if best[1] == 1 else 's'}, {ms(best[2] * 1e3)} ms per X shot"
-                          + (f"; level on failures with {', '.join(t.split(' (')[0] for t in tied)}, and faster" if tied else "") + ")")
+            pipeline = next((option for option in one_core if option[0].startswith("our pipeline")), None)
+            if pipeline is not None and best is not pipeline and p in OPERATING_PAIRED:
+                choice.append(f"at p = {p}, {name} ({best[1]} X failures against our pipeline's {pipeline[1]}, {OPERATING_PAIRED[p]}, at "
+                              f"{ms(best[2] * 1e3)} against {ms(pipeline[2] * 1e3)} ms per X shot)")
+            else:
+                choice.append(f"at p = {p}, {name} ({best[1]} X failure{'' if best[1] == 1 else 's'}, {ms(best[2] * 1e3)} ms per X shot"
+                              + (f"; level on failures with {', '.join(t.split(' (')[0] for t in tied)}, and faster" if tied else "") + ")")
             fact(f"op{n}_choice", name, source)
         else:
             fact(f"op{n}_choice", None, source)
     statement = ("Which method at which noise level (" + OPERATING + "): " + "; ".join(choice) + ". The counts are of 10,000 X test shots and are not "
-                 "paired (the predecoder's per-shot answers are not in the repository), so a difference of a few shots is within the noise; the times "
-                 "come from other runs on other shots and are a guide, not a paired measurement; the fallback needs a GPU for TCBP-JOBS.") if choice else None
+                 "paired here (the predecoder's per-shot answers are not in the repository; the two verdicts against our pipeline are the review's paired "
+                 "count on that file), so a difference of a few shots is within the noise; the times "
+                 "come from other runs on other shots and are a guide, not a paired measurement; the fallback needs a GPU for TCBP-JOBS; the fallback rule "
+                 "was designed after the first test result, so its counts at p = 0.005 and 0.004 are post hoc, not held out.") if choice else None
     fact("op_statement", statement, source)
     return write("operating_rule",
                  f"**Which method at which noise level: {OPERATING}.** X memory only: failures of the 10,000 X test shots at each p, and the mean time "

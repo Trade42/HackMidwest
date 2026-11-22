@@ -252,3 +252,6 @@ Temperature on the evidence (1 = as fitted; the tracker alone, before any decodi
 For scale, the uniform guess: mean P(true round) 0.083, mean log P -2.485.
 decode /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/data.npz shots 0..500 conditions ['tracker'] workers 4 post /home/blakew3/mlBranchMidwest/runs/loss_tracker/rep_seed7310_coupled2/post.npz
   100/500 shots, 22s, failures so far tracker=2
+  200/500 shots, 49s, failures so far tracker=5
+  300/500 shots, 62s, failures so far tracker=8
+  400/500 shots, 77s, failures so far tracker=11

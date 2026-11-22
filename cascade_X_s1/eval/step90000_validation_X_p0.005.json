@@ -1,0 +1,134 @@
+{
+  "basis": "X",
+  "shots": 5000,
+  "failures": 1029,
+  "failure_fraction": 0.2058,
+  "failure_interval": [
+    0.19482188084242502,
+    0.21722983498916726
+  ],
+  "per_cycle": 0.01901848573126974,
+  "per_cycle_interval": [
+    0.017895584319859825,
+    0.020202812023940253
+  ],
+  "always_zero_failures": 4999,
+  "bits_right": 0.9459666666666666,
+  "always_zero_bits_right": 0.49978333333333336,
+  "confidence_sweep": [
+    {
+      "kept_fraction": 0.1,
+      "threshold": 5.074411869049072,
+      "shots_kept": 500,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.007624340580914838
+      ],
+      "shots_rest": 4500,
+      "failures_rest": 1029
+    },
+    {
+      "kept_fraction": 0.25,
+      "threshold": 4.236924648284912,
+      "shots_kept": 1250,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.0030637516841430902
+      ],
+      "shots_rest": 3750,
+      "failures_rest": 1029
+    },
+    {
+      "kept_fraction": 0.5,
+      "threshold": 2.3180911540985107,
+      "shots_kept": 2500,
+      "failures_kept": 4,
+      "failure_fraction_kept": 0.0016,
+      "failure_interval_kept": [
+        0.0006223791974497157,
+        0.004106937365024135
+      ],
+      "shots_rest": 2500,
+      "failures_rest": 1025
+    },
+    {
+      "kept_fraction": 0.75,
+      "threshold": 0.741512656211853,
+      "shots_kept": 3750,
+      "failures_kept": 108,
+      "failure_fraction_kept": 0.0288,
+      "failure_interval_kept": [
+        0.023910426704263223,
+        0.03465396960532738
+      ],
+      "shots_rest": 1250,
+      "failures_rest": 921
+    },
+    {
+      "kept_fraction": 0.9,
+      "threshold": 0.10970553755760193,
+      "shots_kept": 4500,
+      "failures_kept": 580,
+      "failure_fraction_kept": 0.1288888888888889,
+      "failure_interval_kept": [
+        0.11941439605956869,
+        0.13899644488739066
+      ],
+      "shots_rest": 500,
+      "failures_rest": 449
+    },
+    {
+      "kept_fraction": 0.95,
+      "threshold": 0.04540954530239105,
+      "shots_kept": 4750,
+      "failures_kept": 802,
+      "failure_fraction_kept": 0.1688421052631579,
+      "failure_interval_kept": [
+        0.158457366687519,
+        0.17976204445364755
+      ],
+      "shots_rest": 250,
+      "failures_rest": 227
+    },
+    {
+      "kept_fraction": 0.99,
+      "threshold": 0.0065425485372543335,
+      "shots_kept": 4950,
+      "failures_kept": 983,
+      "failure_fraction_kept": 0.1985858585858586,
+      "failure_interval_kept": [
+        0.18770801064395687,
+        0.20993117002658007
+      ],
+      "shots_rest": 50,
+      "failures_rest": 46
+    },
+    {
+      "kept_fraction": 1.0,
+      "threshold": 8.569657802581787e-05,
+      "shots_kept": 5000,
+      "failures_kept": 1029,
+      "failure_fraction_kept": 0.2058,
+      "failure_interval_kept": [
+        0.19482188084242502,
+        0.21722983498916726
+      ],
+      "shots_rest": 0,
+      "failures_rest": 0
+    }
+  ],
+  "latency_ms_mean": 16.740014003007673,
+  "latency_ms_median": 16.610650054644793,
+  "latency_ms_p99": 20.091712989378717,
+  "latency_shots": 200,
+  "device": "GPU NVIDIA GeForce RTX 4060 Laptop GPU",
+  "checkpoint_step": 90000,
+  "checkpoint_commit": "7ff6a68b95916773a67d209959c92b04c2254cd1",
+  "detectors_read": "all",
+  "training_seed": 1,
+  "data": "C:\\Users\\salav\\Salavat\\hackMidwest\\runs\\data_main_8f1e767\\p0.005\\validation_X.npz (Stim circuit shots, p=0.005, seed 201, basis X)"
+}

@@ -24,8 +24,8 @@ Source: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.j
 |---|---|---|---|---|---|---|---|---|
 | 0.005 | X | post hoc: the rule was prompted by these same test shots, so this number is not held out | 90 of 10,000 | 107 (1.07%, 0.89% to 1.29%) | 151 | 186 | 91 / 16 / 95 (p = 8e-15) | 106 / 1 / 45 (p = 1e-12) |
 | 0.005 | Z | its clean test, run after the p = 0.005 X test result (the registered extension); the rule was frozen before the Z test file was opened | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
-| 0.004 | X | post hoc: the rule was designed after the first test result, and frozen before it was applied here; run after the p = 0.005 X test result (the registered extension) | 12 of 10,000 | 10 (0.10%, 0.05% to 0.18%) | 15 | 20 | 8 / 2 / 12 (p = 0.013) | 10 / 0 / 5 (p = 0.062) |
-| 0.003 | X | post hoc: the rule was designed after the first test result, and frozen before it was applied here; run after the p = 0.005 X test result (the registered extension) | 1 of 10,000 | 1 (0.01%, 0.00% to 0.06%) | 2 | 1 | 1 / 0 / 0 (p = 1.00) | 1 / 0 / 1 (p = 1.00) |
+| 0.004 | X | post hoc: the rule was designed after the first test result, and this test file was opened (for H) before the rule was frozen; run after the p = 0.005 X test result (the registered extension) | 12 of 10,000 | 10 (0.10%, 0.05% to 0.18%) | 15 | 20 | 8 / 2 / 12 (p = 0.013) | 10 / 0 / 5 (p = 0.062) |
+| 0.003 | X | the rule was designed after the first test result and frozen (14:32 UTC) before this test file was opened (14:56 UTC); run after the p = 0.005 X test result (the registered extension) | 1 of 10,000 | 1 (0.01%, 0.00% to 0.06%) | 2 | 1 | 1 / 0 / 0 (p = 1.00) | 1 / 0 / 1 (p = 1.00) |
 
 Source: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`).
 

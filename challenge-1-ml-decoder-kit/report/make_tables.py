@@ -2293,7 +2293,8 @@ LABELS = {"pre": "pre-registered (the test run)", "pre-offline": "pre-registered
           "extension": "registered extension, run after the X p = 0.005 test result",
           "post hoc": "post hoc: designed after the first test result",
           "after-design": "designed after the first test result; frozen before this file was opened",
-          "ptcbp": "designed after the test results were seen; formerly a separate branch"}
+          "ptcbp": "designed after the test results were seen; formerly a separate branch",
+          "selector": "frozen on validation shots, run once on the test shots; its declared line (fewer failed pairs than TCBP-JOBS, paired) not met"}
 
 
 def master_table(measured, combined):
@@ -2353,6 +2354,21 @@ def master_table(measured, combined):
     if FACTS.get("ptpair_TH", (NOT_MEASURED,))[0] != NOT_MEASURED:
         put("TCBP-JOBS with the head's priors, the kit's pair score", "`predecoder/` (formerly branch `predecoder-tcbp`)", "ptcbp", "0.005",
             f"{FACTS['ptpair_TH'][0]} pairs (TCBP-JOBS's stored file: {FACTS['ptpair_T'][0]})")
+    selector = DATA / "background" / "selector_README.md"
+    found = re.search(r"It failed (\d+) of 10,000 pairs, against TCBP-JOBS's (\d+): paired,\s+(\d+) against (\d+), p = (\d+(?:\.\d+)?)",
+                      selector.read_text(encoding="utf-8")) if selector.is_file() else None
+    if found:
+        mine, theirs, only_mine, only_theirs, p_value = found.groups()
+        tcbp = measured["0.005"].get("tcbp")
+        if tcbp is not None and int(theirs) != tcbp["failures_pair"]:
+            raise Mismatch("background/selector_README.md: TCBP-JOBS's failed pairs differ from its row")
+        put("a learned selector among the ensemble's members", "`selector/`", "selector", "0.005",
+            f"{int(mine):,} pairs (against TCBP-JOBS's {int(theirs):,}: only the selector {only_mine}, only TCBP-JOBS {only_theirs}, exact p = {p_value})")
+        fact("sel_pairs", mine, "data/background/selector_README.md")
+        fact("sel_p", p_value, "data/background/selector_README.md")
+    else:
+        fact("sel_pairs", None, "data/background/selector_README.md")
+        fact("sel_p", None, "data/background/selector_README.md")
     lines = [[method, folder, label] + [cells.get(p, "") for p in P_VALUES] for (method, folder, label), cells in groups.items()]
     return write("master_comparison",
                  "**Every method we ran on the test shots, in one table.** Each cell is that method's own measured row: failed pairs of 10,000 (the kit's "
@@ -2360,7 +2376,10 @@ def master_table(measured, combined):
                  "that basis. The **Label** says what kind of number it is; rows of different labels are not equals, so this table picks no best method. "
                  "Times: one process on the team's server unless the cell says otherwise; TCBP-JOBS's is a GPU decode call; the predecoder's is a clean "
                  "one-thread sample on 1,000 validation shots (exploration shots). The paired tests are in the tables each row comes from.\n\n"
-                 + markdown(["Method", "Folder", "Label"] + [f"p = {p}" for p in P_VALUES], lines))
+                 + markdown(["Method", "Folder", "Label"] + [f"p = {p}" for p in P_VALUES], lines)
+                 + "\n\nNot in this table, because it decodes its own simulated shots, not the saved test files: `neutral_atom_noise/` (exploration; "
+                   "a noise model built from Infleqtion's published figures, not Infleqtion's noise model, decoded with the kit's relay-BP and BP-OSD; "
+                   "`neutral_atom_noise/RESULTS.md`).")
 
 
 def predecoder_tcbp_table(measured):
@@ -2594,7 +2613,9 @@ def readme_section(measured):
              "(`predecoder/`; X memory at p = 0.005 a secondary result, chosen after its own gate failed, and the other rows a registered extension run "
              "after it) and its fallback to TCBP-JOBS where relay-BP does not converge (`predecoder/fallback.py`; designed after the first test result)"
              + ("; and TCBP-JOBS given the same per-shot priors (" + PTCBP_LABEL + ")" if FACTS.get("ptv_TH", (NOT_MEASURED,))[0] != NOT_MEASURED else "")
-             + ". None of these after-test rows replaces the frozen decoder.",
+             + "; a learned selector among the ensemble's members (`selector/`; frozen on validation, its line not met on the test shots); and, on its "
+               "own simulated shots, noise shaped like neutral-atom hardware (`neutral_atom_noise/`; exploration, the kit's decoders). None of these "
+               "rows replaces the frozen decoder.",
              ""]
     header = ["Decoder"] + [f"p = {p}" for p in P_VALUES]
     table = []

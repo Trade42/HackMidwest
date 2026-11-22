@@ -36,6 +36,9 @@ Every method in one table first (each row's label says what kind of number it is
 | the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened | X: 1 shot |  |  |
 | the predecoder with the fallback, the kit's pair score | `predecoder/fallback.py` | post hoc: designed after the first test result |  |  | 206 pairs |
 | TCBP-JOBS with the head's priors (X memory only) | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch | X: 0 shots | X: 4 shots | X: 72 shots (same-run control, the kit's priors: 186) |
+| a learned selector among the ensemble's members | `selector/` | frozen on validation shots, run once on the test shots; its declared line (fewer failed pairs than TCBP-JOBS, paired) not met |  |  | 353 pairs (against TCBP-JOBS's 360: only the selector 23, only TCBP-JOBS 30, exact p = 0.41) |
+
+Not in this table, because it decodes its own simulated shots, not the saved test files: `neutral_atom_noise/` (exploration; a noise model built from Infleqtion's published figures, not Infleqtion's noise model, decoded with the kit's relay-BP and BP-OSD; `neutral_atom_noise/RESULTS.md`).
 <!-- END table:master_comparison -->
 
 <!-- BEGIN table:test_p0.003 -->

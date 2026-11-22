@@ -755,6 +755,8 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `rule_Z_network` | 68 | `data/test/test_run.out` |
 | `rule_Z_shots` | 25,000 | `data/test/test_run.out` |
 | `rule_Z_step` | 100,000 | `data/test/test_run.out` |
+| `sel_p` | 0.41 | `data/background/selector_README.md` |
+| `sel_pairs` | 353 | `data/background/selector_README.md` |
 | `slide3_close` | So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it. | `tables/test_ablation.md` |
 | `slide3_title` | The network is a poor decoder alone, and as a tie-break it is no better than the best hand-written rule | `tables/test_ablation.md` |
 | `slide4_relay` | Failed pairs of 10,000, ours against relay-BP on the same pairs: p = 0.003: 3 against 5 (exact p = 0.50); p = 0.004: 44 against 83 (exact p = 3e-06); p = 0.005: 479 against 845 (exact p = 4e-59). | `tables/test_p<p>.md` |

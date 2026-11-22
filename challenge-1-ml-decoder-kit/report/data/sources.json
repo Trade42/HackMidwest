@@ -32,6 +32,17 @@
   "path": "analysis/results/g3_frontier_p0.004.csv",
   "sha256": "b4cfac61ed00219af59c8eb999e99978fc63233ddf0df3c9ea5bed109102a185"
  },
+ "background/neutral_atom_noise_RESULTS.md": {
+  "branch": "tree",
+  "bytes": 30140,
+  "commit": "f51aabdf895b875dacca9bdc12008a8502d6bfaf",
+  "copied_utc": "2026-11-22 16:32",
+  "file": "background/neutral_atom_noise_RESULTS.md",
+  "from": "this branch, `challenge-1-ml-decoder-kit/neutral_atom_noise/RESULTS.md` (last changed in commit `f51aabdf895b`)",
+  "grows": false,
+  "path": "neutral_atom_noise/RESULTS.md",
+  "sha256": "202a46b270fb030aebad8ed6616060ade75ebda50defa1d40e062db8d1da6151"
+ },
  "background/plain_cnn_runs/README.md": {
   "branch": "origin/laptop-artifacts",
   "bytes": 2114,
@@ -108,6 +119,17 @@
   "grows": false,
   "path": "priortilt/results_hierarchy_heldout_step120000.txt",
   "sha256": "cedc75e25f17d71db2510e540194581645c255d9b590bccc36e6ab586fe26a49"
+ },
+ "background/selector_README.md": {
+  "branch": "tree",
+  "bytes": 22572,
+  "commit": "f70537ff16a2d803109b23b98f98f0e3522593ae",
+  "copied_utc": "2026-11-22 16:32",
+  "file": "background/selector_README.md",
+  "from": "this branch, `challenge-1-ml-decoder-kit/selector/README.md` (last changed in commit `f70537ff16a2`)",
+  "grows": false,
+  "path": "selector/README.md",
+  "sha256": "9d3f5da18bd7c4c2a358425ce3063c8a69ebb8c2483525e63981776d42a1b769"
  },
  "background/train_X_p0.0001_seed1.log": {
   "branch": "tree",

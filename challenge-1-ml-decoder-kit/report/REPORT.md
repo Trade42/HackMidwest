@@ -355,6 +355,9 @@ row comes from.
 | the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened | X: 1 shot |  |  |
 | the predecoder with the fallback, the kit's pair score | `predecoder/fallback.py` | post hoc: designed after the first test result |  |  | 206 pairs |
 | TCBP-JOBS with the head's priors (X memory only) | `predecoder/` (formerly branch `predecoder-tcbp`) | designed after the test results were seen; formerly a separate branch | X: 0 shots | X: 4 shots | X: 72 shots (same-run control, the kit's priors: 186) |
+| a learned selector among the ensemble's members | `selector/` | frozen on validation shots, run once on the test shots; its declared line (fewer failed pairs than TCBP-JOBS, paired) not met |  |  | 353 pairs (against TCBP-JOBS's 360: only the selector 23, only TCBP-JOBS 30, exact p = 0.41) |
+
+Not in this table, because it decodes its own simulated shots, not the saved test files: `neutral_atom_noise/` (exploration; a noise model built from Infleqtion's published figures, not Infleqtion's noise model, decoded with the kit's relay-BP and BP-OSD; `neutral_atom_noise/RESULTS.md`).
 <!-- END table:master_comparison -->
 
 ### On the exploration shots (not test shots)
@@ -445,17 +448,17 @@ record of them (`report/data/background/plain_cnn_runs/`).
 - **The network** is small and was trained for hours, not days; the Z network started later than the X network.
 - **Loss** is measured for X memory at p = 0.004 only, under our own loss model.
 - **Our pipeline under atom loss is not tested.** The loss results (`loss/`, `loss_tracker/`) were decoded with the
-  kit's relay-BP and BP-OSD, and so were the neutral-atom noise results on the branch `infleqtion-noise`. The TCBP
+  kit's relay-BP and BP-OSD, and so were the neutral-atom noise results (`neutral_atom_noise/`). The TCBP
   version is the natural place for loss: it already builds a decoder for each shot from per-shot priors, so
   loss-aware priors (the flag conditioning of `loss/`, the loss tracker's posterior) could enter with no extra build.
   Its network was trained without loss.
 - **A dependency with a licence.** PriorTilt is CC BY-NC-SA 4.0 (non-commercial); none of its code is in this
   repository.
-- **Work outside this submission.** Three further studies live on branches of this repository that are not merged
-  into `integration` or `main`, so no number from them is quoted anywhere in this report: `infleqtion-noise`
-  (decoding under a noise model built from Infleqtion's published figures, with and without loss), `learned-selector`
-  (a learned choice among the ensemble's members) and `fpga` (a hardware estimate of the tie-break network, in
-  simulation).
+- **Work outside this submission.** One further study lives on a branch that is not merged, so no number from it is
+  quoted here: `fpga` (a hardware estimate of the tie-break network, in simulation). Two others were merged at the
+  end into their own folders: `selector/` (a learned choice among the ensemble's members; on the test shots it did
+  not meet its declared line, see the master table) and `neutral_atom_noise/` (decoding under a noise model built
+  from Infleqtion's published figures, on its own simulated shots; `neutral_atom_noise/RESULTS.md`).
 
 ## 8. Resources
 

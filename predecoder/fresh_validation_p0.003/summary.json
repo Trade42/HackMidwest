@@ -1,0 +1,56 @@
+{
+ "data": {
+  "path": "C:\\Users\\salav\\Salavat\\hackMidwest\\repo-predecoder\\challenge-1-ml-decoder-kit\\data\\p0.003\\validation_X.npz",
+  "sha256": "455311ff7f2c7fa8359af83c09e96d75eb791dd0105bebb66ff56bd016aaa4e8",
+  "basis": "X",
+  "p": 0.003,
+  "seed": 201,
+  "shots": 5000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "shots": 5000,
+ "relay": {
+  "alpha": 1.0,
+  "gamma0": 0.15,
+  "pre_iter": 80,
+  "num_sets": 300,
+  "set_max_iter": 60,
+  "gamma_dist_interval": [
+   -0.22628432386414646,
+   0.6216020925981884
+  ],
+  "stop_nconv": 5,
+  "seed_of_per_shot_decoders": 0
+ },
+ "head_priors": {
+  "mode": "linear",
+  "alpha": 1.0,
+  "eps": 1e-06
+ },
+ "kit_arm": "one decoder built once per chunk of 5000 shots, decoding in file order",
+ "logits": null,
+ "arms": {
+  "fresh": {
+   "arm": "fresh",
+   "shots": 5000,
+   "failures": 0,
+   "share": 0.0,
+   "wilson95": [
+    5.421010862427522e-20,
+    0.0007677019571588966
+   ],
+   "unconverged": 0,
+   "hard": 163,
+   "mean_iterations": 132.9694,
+   "network_seconds_mean": 0.0,
+   "build_seconds_mean": 0.00389696094004903,
+   "decode_seconds_mean": 0.035207195159443656,
+   "seconds_mean": 0.039104156099492686,
+   "seconds_p99": 0.3120710379944652
+  }
+ },
+ "pairs": {},
+ "workers": 3,
+ "machine": "DESKTOP-GTQ8L2C",
+ "cpus": 16
+}

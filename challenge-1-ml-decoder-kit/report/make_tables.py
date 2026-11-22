@@ -536,6 +536,7 @@ def exploration_table():
                                                 [f"step{step}_validation_X_p0.004.npz", f"step{step}_train_X_p0.004.npz"], s["truth"])
                 if logits is not None:
                     recomputed[step] = loaders.network_rule(s, logits)
+            facts["recomputed_steps"] = sorted(recomputed)
             for step, table in network.items():
                 if table and "b. network breaks ties" in table["rows"]:
                     count, time = table["rows"]["b. network breaks ties"]
@@ -628,7 +629,8 @@ def exploration_table():
     for basis in "XZ":
         for name in ("R", "P1", "P2", "W", "C"):
             fact(f"expl_{basis}_{name}", facts[f"{name}_{basis}"], source)
-    steps = sorted(int(key[1:-2]) for key in facts if key.startswith("N") and key.endswith("_X"))
+    # the network's count is quoted for the snapshot whose logits are copied, so that its paired counts are of the same snapshot
+    steps = [step for step in facts.get("recomputed_steps", []) if f"N{step}_X" in facts]
     if steps:
         fact("expl_X_N", facts[f"N{steps[-1]}_X"], source)
         fact("expl_X_N_step", f"{steps[-1]:,}", source)

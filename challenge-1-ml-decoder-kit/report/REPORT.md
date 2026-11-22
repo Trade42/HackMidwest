@@ -79,7 +79,7 @@ recipe (arXiv:2604.08358), written by us from the paper's description and scaled
 per logical bit.
 
 **Its role.** Alone, the network is a poor decoder: at the last training report in our copy of its log it gets
-<!--f:net_X_wrong4-->9.7%<!--/f--> of X shots wrong at p = 0.004, where relay-BP gets <!--f:expl_X_R-->122<!--/f--> of 25,000 wrong on the exploration shots. It is not asked to decode.
+<!--f:net_X_wrong4-->6.2%<!--/f--> of X shots wrong at p = 0.004, where relay-BP gets <!--f:expl_X_R-->122<!--/f--> of 25,000 wrong on the exploration shots. It is not asked to decode.
 It is asked which of two or three given answers is more likely, on the few shots where the fast decoders disagree.
 That is an easier question, and one where the classical score is weak: among 16 relay-BP candidates the right answer
 is present on <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, and the lowest weight picks it on only <!--f:cand_lowest-->71<!--/f-->
@@ -214,7 +214,18 @@ record of them (`report/data/background/plain_cnn_runs/`).
   <!--f:tcbp_fit3_s-->54.5 and 54.8<!--/f--> s at p = 0.003 and <!--f:tcbp_fit4_s-->120.2 and 121.6<!--/f--> s at p = 0.004 in the teammates' runs
   (`report/data/tcbp_own_shots/`).
 
-## 9. How to reproduce
+## 9. How it was checked
+
+- **By the scripts, on every run** (`APPENDIX.md`, section I): every row of a test table names the team's test files
+  by sha256; each evaluator row is re-counted from its per-shot file; the rate per cycle is recomputed from the pairs;
+  the times are per pair and recomputed from the per-shot timer.
+- **By an independent review of `hierarchy/`** (a separate session that did not write it; verdict APPROVE, no
+  blocking or major finding). It tested that the truth cannot reach a choice: with the truth shuffled between shots,
+  the plugin and every offline rule returned exactly the same predictions. It also checked that nothing the decoder
+  does for a shot is outside the evaluator's timer: building the decoders and loading the network are counted as
+  set-up, apart from the per-shot time.
+
+## 10. How to reproduce
 
 `REPRODUCE.md` has every command from a fresh clone, and says what was run where. The tables and figures alone:
 

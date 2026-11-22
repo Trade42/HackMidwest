@@ -35,10 +35,11 @@ NETWORK_STEP = 70000   # the newest snapshot of the X network whose logits are c
 # the first * on is appended to the destination.
 SOURCES = [
     # the timed rows on the saved TEST shots, from the team's server (evaluation.evaluate, one process per row)
-    ("test/", "origin/server-logs", "files/clean/*/summary.json", False),
-    ("test/", "origin/server-logs", "files/clean/*/summary.csv", False),
-    ("test/", "origin/server-logs", "files/clean/*/*_shots.npz", False),
-    ("test/", "origin/server-logs", "files/clean/*/*.tcbp.npz", False),
+    # only the registered row folders (eval_p<p>_<row>, tcbp_p<p>, ensemble_p<p>): a rehearsal on validation shots is never copied here
+    ("test/", "origin/server-logs", "files/clean/eval_p*/summary.json", False),
+    ("test/", "origin/server-logs", "files/clean/eval_p*/summary.csv", False),
+    ("test/", "origin/server-logs", "files/clean/eval_p*/*_shots.npz", False),
+    ("test/", "origin/server-logs", "files/clean/tcbp_p*/test_*.tcbp.npz", False),
     ("test/", "origin/server-logs", "files/clean/ensemble_p*/test_*.npz", False),
     ("test/", "origin/server-logs", "files/clean/ensemble_p*/test_*.json", False),
     ("test/cpu_monitor.out", "origin/server-logs", "cpu_monitor.out", True),

@@ -1,0 +1,3 @@
+X_f0.8_seed4800_kitformat_p0.0326371.npz: 4000 shots, logits of 8784 columns in /home/blakew3/mlBranchMidwest/runs/tcbp-retrain-full/out-cb739fb/logits/f0.8-seed4800/retrained/logits.npy (10 s in batches of 32 on cuda)
+network + head, one shot at a time on cuda (1 threads), 100 shots: mean 8.7 ms, median 8.3 ms, p99 16.0 ms; batch one against batched: largest logit gap 1.56e-02
+the head's probabilities sum to 86.9 per shot (the kit's priors: 367.0; the head's base, --base-priors: 87.4)

@@ -4,3 +4,4 @@ validation_X.npz: 5000 shots, p=0.005, arms ['fresh']; head priors {'mode': 'lin
   10 of 50 tasks done (fresh from shot 800), 198 s
   20 of 50 tasks done (fresh from shot 1900), 329 s
   30 of 50 tasks done (fresh from shot 3000), 444 s
+  40 of 50 tasks done (fresh from shot 4100), 557 s

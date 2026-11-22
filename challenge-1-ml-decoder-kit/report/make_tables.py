@@ -2593,6 +2593,7 @@ def predecoder_tcbp_table(measured):
     # stated with it: the TCBP version alone is job 1's one CSR timer (priors, build, decode, free) plus the eager network's 9.4 ms.
     fast_file = DATA / "exploration" / "predecoder_tcbp" / "fastpath" / "result3_p0.005.json"
     low_file = DATA / "exploration" / "predecoder_tcbp" / "fastpath" / "result3_p0.004.json"
+    held_file = DATA / "exploration" / "predecoder_tcbp" / "fastpath" / "result_holdout_p0.005.json"
     if fast_file.is_file():
         fast = json.loads(fast_file.read_text(encoding="utf-8"))
         rows = {row["check"] or row["rule"]: row for row in fast["rows"]}
@@ -2615,6 +2616,22 @@ def predecoder_tcbp_table(measured):
                         f"C9's frozen threshold adds {carried['added']} failures, so it is a rule for p = 0.005 only; the criterion picks the syndrome weight "
                         f"there ({chosen['fast_fraction']:.1%} fast, {ms(chosen['mean_ms'])} ms mean against {ms(low_alone['mean_ms'])} for the TCBP version "
                         f"alone, 0 added), not frozen (picked on one half of the shots, it adds {max(half)} on the other).")
+        held_text = (" (its one held-out check, declared in `predecoder/fastpath/CRITERION_4.md`, is pending)", "; not confirmed on fresh shots")
+        if held_file.is_file():
+            held = json.loads(held_file.read_text(encoding="utf-8"))
+            paired, today = held["paired_vs_TH"], held["times_today"]
+            if held["rule"]["check"] != c9["check"] or held["rule"]["t"] != c9["t"] or held["data"]["p"] != 0.005 \
+                    or held["data"]["sha256"] == fast["data"]["sha256"] or held["failures"]["rule"] != paired["both"] + paired["added"] \
+                    or held["failures"]["TH"] != paired["both"] + paired["only_TH"]:
+                raise Mismatch("exploration/predecoder_tcbp/fastpath/result_holdout_p0.005.json: not C9's frozen rule on fresh shots, or its counts disagree")
+            held_text = ("", f". On fresh shots made after the rule was frozen ({held['data']['shots']:,} X shots at p = 0.005, seed {held['data']['seed']}; "
+                         f"its one held-out check, declared in `predecoder/fastpath/CRITERION_4.md`), the frozen C9 **{held['verdict']}**: "
+                         f"{held['failures']['rule']} failures against the TCBP version's {held['failures']['TH']} (both {paired['both']}, "
+                         f"{paired['added']} added, {paired['only_TH']} removed, exact p = {stats.p_text(paired['exact_p'])}), TCBP-JOBS alone "
+                         f"{held['failures']['F']}; {held['fast_fraction']:.1%} of the shots on the fast path; {ms(today['rule_mean'])} ms mean against "
+                         f"{ms(today['TH_alone_mean'])} for the TCBP version alone ({1 - today['rule_mean'] / today['TH_alone_mean']:.0%} lower), 99th "
+                         f"percentile {ms(today['rule_p99'])} against {ms(today['TH_alone_p99'])}, with today's component times (the network as a CUDA "
+                         f"graph, {ms(today['network_ms'])} ms; TCBP-JOBS's decode times from per-shot builds on a shared GPU). A rule for p = 0.005 only")
         fact("ptfast_statement",
              "A fast path for easy shots (`predecoder/fastpath/`, branch `tcbp-fastpath`; exploration after the test results, on the 5,000 validation X "
              "shots at p = 0.005; no test file opened): a check sends a shot to TCBP-JOBS with the kit's priors, built once, and the rest to the TCBP "
@@ -2624,9 +2641,8 @@ def predecoder_tcbp_table(measured):
              f"saves {ms(alone['mean_ms'] - c2['mean_ms'])} ms ({ms(c2['mean_ms'])}), and TCBP-JOBS's own decode time (round 2) saves more "
              f"({ms(c6['mean_ms'])} ms mean) but worsens the 99th percentile ({ms(c6['p99_ms'])} against {ms(alone['p99_ms'])} ms), with a threshold in ms that "
              f"does not carry from one run to another. The head's entropy (C9, round 3) sends {c9['fast_fraction']:.1%} of the shots to the fast path with "
-             f"{c9['only_rule']} added failures, {ms(c9['mean_ms'])} ms mean and the same 99th percentile ({ms(c9['p99_ms'])} ms): a third look at the same "
-             "validation shots; not confirmed on fresh shots (its one held-out check, declared in `predecoder/fastpath/CRITERION_4.md`, is pending)." + low_text,
-             source)
+             f"{c9['only_rule']} added failures, {ms(c9['mean_ms'])} ms mean and the same 99th percentile ({ms(c9['p99_ms'])} ms) on validation: a third look at the "
+             "same validation shots" + held_text[1] + held_text[0] + "." + low_text, source)
     else:
         fact("ptfast_statement", None, source)
 

@@ -292,7 +292,14 @@ def test_the_tcbp_version_speed_table_is_recomputed_from_its_files():
     facts = (REPORT / "tables" / "facts.md").read_text(encoding="utf-8")
     assert f"| `ptspeed_new` | {new:.0f} |" in facts and f"| `ptspeed_old` | {old:.0f} |" in facts
     statement = next(line for line in facts.splitlines() if line.startswith("| `ptfast_statement` |"))
-    assert "a third look at the same validation shots; not confirmed on fresh shots" in statement
+    assert "a third look at the same validation shots" in statement
+    held = REPORT / "data" / "exploration" / "predecoder_tcbp" / "fastpath" / "result_holdout_p0.005.json"
+    if held.is_file():
+        verdict = json.loads(held.read_text())
+        assert f"the frozen C9 **{verdict['verdict']}**: {verdict['failures']['rule']} failures against the TCBP version's {verdict['failures']['TH']}" in statement
+        assert "not confirmed on fresh shots" not in statement and "is pending" not in statement
+    else:
+        assert "not confirmed on fresh shots" in statement
     retrain = next(line for line in facts.splitlines() if line.startswith("| `ptretrain_statement` |"))
     score = json.loads((REPORT / "data" / "exploration" / "predecoder_tcbp" / "retrain" / "run1_score.json").read_text())
     rows = next(iter(score["tasks"].values()))["rows"]

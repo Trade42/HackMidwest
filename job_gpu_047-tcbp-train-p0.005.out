@@ -24,3 +24,10 @@ WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 whi
     shots 4096 to 8191 decoded
     shots 8192 to 12287 decoded
     shots 12288 to 16383 decoded
+    shots 16384 to 19999 decoded
+  failures 358 of 20000  1.790%  95% Wilson interval [1.615%, 1.983%]; the correction does not reproduce the syndrome on 0 shots
+  decode_batch: no time per shot; 645.9 s for the file
+  decoded a second time, 0 of the first 256 shots change their 12 bits
+  saved /home/blakew3/mlBranchMidwest/runs/tcbp_p0.005/train_Z.tcbp.npz
+batch run exit 0
+Sun Nov 22 08:44:45 UTC 2026

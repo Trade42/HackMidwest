@@ -169,3 +169,11 @@ Z_OUT=$S/runs/Z_seed4200
 z_matched()   { BASIS=Z OUT=$Z_OUT SEED=4200 stream z_memory --factors 0.7,0.8 --decoders relay,bposd --rows matched; }
 z_generic()   { BASIS=Z OUT=$Z_OUT SEED=4200 stream z_memory --factors 0.8 --decoders bposd --rows generic-2q &&
                 BASIS=Z OUT=$Z_OUT SEED=4200 stream z_memory --factors 0.8 --decoders relay --rows generic-2q --first 500; }
+
+# Lane B after relay-BP's fit (11:28 UTC): relay-BP generic at 0.7 (500 shots), question 2's no-flags row widened at
+# 0.4 (300 shots) and added at 0.6 (100 shots).
+lane_b2() {
+  REPEAT=1 stream q1_generic_relay --factors 0.7 --decoders relay --rows generic-2q --first 500
+  FIRST=300 REPEAT=1 q2_blind
+  OUT=$LOSS_OUT SEED=6100 REPEAT=1 stream q2_loss --loss --factors 0.6 --decoders relay --rows blind/matched --first 100
+}

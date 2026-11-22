@@ -46,8 +46,11 @@ FIELDS = ("predicted", "converged", "iterations", "weight", "seconds")
 
 # ---------- reading ----------
 
-def load_candidates(paths):
-    """The candidates of one or more files as one set: arrays [candidates, shots, ...] and a description per file."""
+def load_candidates(paths, basis=None):
+    """The candidates of one or more files as one set: arrays [candidates, shots, ...] and a description per file.
+
+    basis names the memory basis of files that do not say it (the laptop's selector files).
+    """
     parts, sources = [], []
     for path in paths:
         with np.load(path, allow_pickle=False) as file:
@@ -58,7 +61,7 @@ def load_candidates(paths):
             if "ran_R" in file.files:          # in session mode relay-BP runs only where P1 and P2 differ
                 part["ran"][R] = file["ran_R"]
             sources.append({"path": str(path), "shots": shots, "data_sha256": str(file["data_sha256"]),
-                            "basis": str(file["basis"]) if "basis" in file.files else None, "about": _about(file)})
+                            "basis": str(file["basis"]) if "basis" in file.files else basis, "about": _about(file)})
         parts.append(part)
     pool = {key: np.concatenate([part[key] for part in parts], axis=0 if key == "truth" else 1) for key in parts[0]}
     pool["weight"] = np.where(pool["ran"], pool["weight"], np.inf)
@@ -305,6 +308,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--candidates", nargs="+", required=True, help="files of hierarchy.candidates, scored as one set")
     parser.add_argument("--logits", nargs="+", help="per candidates file: the .npz of neural.evaluate_stim --save on the same shots")
+    parser.add_argument("--basis", choices=["X", "Z"], help="the memory basis of candidate files that do not say it (the laptop's)")
     parser.add_argument("--network-ms", type=float, help="the network's time per call, where the .json beside the logits is missing")
     parser.add_argument("--constant", type=float, action="append", default=[],
                         help="score 'network minus weight / C' with this C; it must come from other shots than these")
@@ -316,7 +320,7 @@ def main(argv=None):
     parser.add_argument("--save", help="write the numbers of the report to this .json file")
     args = parser.parse_args(argv)
 
-    pool, sources = load_candidates(args.candidates)
+    pool, sources = load_candidates(args.candidates, args.basis)
     network, network_note = None, None
     if args.logits:
         network = load_logits(args.logits, pool, sources)

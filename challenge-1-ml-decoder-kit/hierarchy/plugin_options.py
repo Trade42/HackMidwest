@@ -34,8 +34,8 @@ def choose(basis, candidates, logits):
     """(rule, line) for one basis: "network" if it fails no more often than "converged" on these shots."""
     if not candidates or not logits:
         return "converged", f"PLUGIN_RULE {basis} converged    (no candidates or logits were given for this basis)"
-    pool, sources = select.load_candidates(candidates)
-    if any(source["basis"] not in (None, basis) for source in sources):
+    pool, sources = select.load_candidates(candidates, basis)
+    if any(source["basis"] != basis for source in sources):
         raise SystemExit(f"a candidates file given for {basis} holds another basis")
     by_key = {row.key: row for row in select.score(pool, select.load_logits(logits, pool, sources))}
     network, converged = int(by_key["network"].failed.sum()), int(by_key["weight_converged"].failed.sum())

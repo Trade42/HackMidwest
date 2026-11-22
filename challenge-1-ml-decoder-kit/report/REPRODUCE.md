@@ -93,8 +93,10 @@ PriorTilt runs, relay-BP where it runs, the network and the rule.
 | `report/reproduce_ours.sh row <p> bposd` | BP-OSD, the kit's settings | **not run here**; measured on the server |
 | `report/reproduce_ours.sh row <p> relay-bp` | relay-BP, the kit's settings (about 5 hours at p = 0.005) | **not run here**; measured on the server |
 | `report/reproduce_ours.sh row <p> router` | the teammates' router with their frozen models (`results/router_p<p>/model_{X,Z}.json`) | **not run here**; measured on the server |
-| `report/reproduce_ours.sh row <p> hierarchy-weight` | our hierarchy with the tie-break by lowest weight (no network, no torch needed) | pending |
-| `report/reproduce_ours.sh row <p> hierarchy` | our hierarchy with the neural tie-break (needs step 4) | pending |
+| `report/reproduce_ours.sh row <p> priortilt` | PriorTilt run once (IonQ's decoder), the first seed of our decoder | **not run here**; measured on the server |
+| `report/reproduce_ours.sh row <p> hierarchy` | our decoder: the hierarchy with the neural tie-break (needs step 4) | **not run here**; measured on the server |
+| `report/reproduce_ours.sh row <p> hierarchy-parallel` | the same decoder with its two PriorTilt runs side by side (two cores) | **not run here**; measured on the server |
+| `report/reproduce_ours.sh row <p> hierarchy-converged` | the hierarchy with the best hand-written tie-break, the ablation arm (no network, no torch needed) | **not run here**; measured on the server |
 
 What a `row` command runs, written out for our decoder:
 
@@ -104,7 +106,12 @@ python -m evaluation.evaluate --test-x data/p0.004/test_X.npz --test-z data/p0.0
     --out runs/clean/eval_p0.004_hierarchy
 ```
 
-with `hierarchy_options.json` holding `{"rule": "network", "checkpoints": {"X": ..., "Z": ...}, "seeds": [1, 1001], "device": "cpu", "torch_threads": 1}`.
+with `hierarchy_options.json` holding `{"rule": {"X": "network", "Z": "network"}, "seeds": [1, 1001], "checkpoints": {"X": ..., "Z": ...}, "device": "cpu", "torch_threads": 1}`,
+the options the test run used (each row's `summary.json` under `report/data/test/` records them as `plugin_options`;
+only the checkpoints' paths differ, since the server's copies were checked by sha256 against the files of step 4).
+
+The ensemble rows are not made by this script: they are combined offline by `hierarchy.ensemble` from the members'
+per-shot files (`hierarchy/README.md` has the commands), and `report/data/test/ensemble_p<p>/` holds the result.
 
 - The counts of a row depend little on the machine, but not nothing. Relay-BP and PriorTilt gave the same answers
   shot for shot on three x86 machines: our Linux PC, a Windows laptop and the Linux server (`analysis/RESULTS.md`,

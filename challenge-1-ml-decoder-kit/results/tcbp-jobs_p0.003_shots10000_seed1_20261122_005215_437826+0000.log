@@ -1,0 +1,12 @@
+Log file: /home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/results/tcbp-jobs_p0.003_shots10000_seed1_20261122_005215_437826+0000.log
+Started: 2026-11-22T00:52:15.441484+00:00
+Host: jupyter-blakew3
+Command: /opt/conda/bin/python tcbp_jobs_baseline.py --p 0.003 --shots 10000
+/opt/conda/lib/python3.13/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+X memory: H is 936 x 8784, TCBP model fitted in 54.5 s, decoder built in 49 ms
+Z memory: H is 936 x 8784, TCBP model fitted in 54.8 s, decoder built in 45 ms
+10000 shots at p=0.003, 12 cycles, failures listed as [X Z], serial decode
+tcbp-jobs  failures [2 3] of 10000  per cycle 4.17e-05 +- 1.9e-05  mean 4.3 ms  p99 15 ms
+Run completed successfully.
+Total wall time (includes setup and fitting): 155.616 s

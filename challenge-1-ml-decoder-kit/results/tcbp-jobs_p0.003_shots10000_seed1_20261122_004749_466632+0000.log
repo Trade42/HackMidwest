@@ -1,0 +1,14 @@
+Log file: /home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/results/tcbp-jobs_p0.003_shots10000_seed1_20261122_004749_466632+0000.log
+Started: 2026-11-22T00:47:49.472187+00:00
+Host: jupyter-blakew3
+Command: /opt/conda/bin/python tcbp_jobs_baseline.py --p 0.003 --shots 10000
+Traceback (most recent call last):
+  File "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/tcbp_jobs_baseline.py", line 147, in main
+    run(args)
+    ~~~^^^^^^
+  File "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/tcbp_jobs_baseline.py", line 99, in run
+    from baseline import memory_experiments
+  File "/home/blakew3/HackMidwest/challenge-1-ml-decoder-kit/baseline.py", line 16, in <module>
+    import scipy.sparse as sp
+ModuleNotFoundError: No module named 'scipy'
+Total wall time (includes setup and fitting): 0.020 s

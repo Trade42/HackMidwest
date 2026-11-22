@@ -78,10 +78,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c3_hierarchy_vs_relay_bp_only_first` | 0 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_relay_bp_only_second` | 2 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_relay_bp_p` | 0.50 | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_tcbp_both` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_tcbp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_tcbp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_tcbp_p` | not measured | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_tcbp_both` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_tcbp_only_first` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_tcbp_only_second` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_tcbp_p` | 1.00 | `tables/test_comparisons.md` |
 | `c3_hierarchy_weight_vs_priortilt_both` | not measured | `tables/test_comparisons.md` |
 | `c3_hierarchy_weight_vs_priortilt_only_first` | not measured | `tables/test_comparisons.md` |
 | `c3_hierarchy_weight_vs_priortilt_only_second` | not measured | `tables/test_comparisons.md` |
@@ -98,10 +98,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c3_router_vs_relay_bp_only_first` | 2 | `tables/test_comparisons.md` |
 | `c3_router_vs_relay_bp_only_second` | 1 | `tables/test_comparisons.md` |
 | `c3_router_vs_relay_bp_p` | 1.00 | `tables/test_comparisons.md` |
-| `c3_tcbp_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
-| `c3_tcbp_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_tcbp_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_tcbp_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
+| `c3_tcbp_vs_relay_bp_both` | 2 | `tables/test_comparisons.md` |
+| `c3_tcbp_vs_relay_bp_only_first` | 1 | `tables/test_comparisons.md` |
+| `c3_tcbp_vs_relay_bp_only_second` | 3 | `tables/test_comparisons.md` |
+| `c3_tcbp_vs_relay_bp_p` | 0.62 | `tables/test_comparisons.md` |
 | `c4_ensemble_vs_hierarchy_both` | not measured | `tables/test_comparisons.md` |
 | `c4_ensemble_vs_hierarchy_only_first` | not measured | `tables/test_comparisons.md` |
 | `c4_ensemble_vs_hierarchy_only_second` | not measured | `tables/test_comparisons.md` |
@@ -298,7 +298,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
-| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row). TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000). | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
+| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row). The two fail equally many pairs at p = 0.003. | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
 | `framing` | not measured | `tables/test_ablation.md` |
 | `framing_slide` | pending: the ablation on the test shots has not landed. | `tables/test_ablation.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
@@ -448,19 +448,19 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_router_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_router_wall_hours` | 0.1 | `tables/test_p0.003.md` |
 | `t3_router_xz` | 3, 3 | `tables/test_p0.003.md` |
-| `t3_tcbp_both` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_error` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_mean_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_median_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_only_relay` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_only_this` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_p99_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_pairs` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_tcbp_both` | 2 | `tables/test_p0.003.md` |
+| `t3_tcbp_error` | 1.4e-05 | `tables/test_p0.003.md` |
+| `t3_tcbp_mean_ms` | 3.9 | `tables/test_p0.003.md` |
+| `t3_tcbp_median_ms` | 3.8 | `tables/test_p0.003.md` |
+| `t3_tcbp_only_relay` | 3 | `tables/test_p0.003.md` |
+| `t3_tcbp_only_this` | 1 | `tables/test_p0.003.md` |
+| `t3_tcbp_p99_ms` | 15.0 | `tables/test_p0.003.md` |
+| `t3_tcbp_paired_p` | 0.62 | `tables/test_p0.003.md` |
+| `t3_tcbp_pairs` | 3 | `tables/test_p0.003.md` |
+| `t3_tcbp_rate` | 2.50e-05 | `tables/test_p0.003.md` |
 | `t3_tcbp_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_tcbp_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_tcbp_xz` | not measured | `tables/test_p0.003.md` |
+| `t3_tcbp_xz` | 1, 2 | `tables/test_p0.003.md` |
 | `t4_bposd_both` | 60 | `tables/test_p0.004.md` |
 | `t4_bposd_error` | 1.8e-04 | `tables/test_p0.004.md` |
 | `t4_bposd_mean_ms` | 302 | `tables/test_p0.004.md` |
@@ -730,7 +730,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `tcbp_own4_xz` | 18, 23 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_rate` | 3.20e-03 | `tables/tcbp_own_shots.md` |
 | `tcbp_own5_xz` | 192, 188 | `tables/tcbp_own_shots.md` |
-| `tcbp_statement` | TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000). | `tables/test_all.md, tables/exploration_p0.004.md` |
+| `tcbp_statement` | The two fail equally many pairs at p = 0.003. | `tables/test_all.md, tables/exploration_p0.004.md` |
 | `test_frozen_commit` | fd3aed3c0d1f | `data/test/test_run.out` |
 | `trk_atoms` | 39,909 | `data/loss/tracker/accuracy_test.json` |
 | `trk_exact` | 196 of 4,000 | `data/loss/tracker/test.json` |

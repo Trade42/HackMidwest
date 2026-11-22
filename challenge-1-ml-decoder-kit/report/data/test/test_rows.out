@@ -26,3 +26,11 @@
 2026-11-22T10:32:20Z START eval_p0.003_hierarchy-parallel: weight 2, pid 220548; before it: tokens 8, CPUs in use 8.6, throttled so far 4838.0 s
 2026-11-22T10:32:26Z START tcbp_p0.003 (serial mode). GPU processes: none: the GPU is idle [CPUs in use 8.6, tokens 10, throttled so far 4838.0 s, load 12.66]
 2026-11-22T10:33:16Z END eval_p0.003_hierarchy exit 0: row p=0.003 hierarchy exit 0: hierarchy.plugin:make_decoder,1,2,3,2.50034381590325e-05,1.4436707608145305e-05,45.73510396284983 [CPUs in use 9.7, tokens 10, throttled so far 4838.4 s, load 13.45]
+2026-11-22T10:35:12Z END tcbp_p0.003 exit 0:   failures 1 of 10000  0.010%  95% Wilson interval [0.002%, 0.057%]; the correction does not reproduce the syndrome on 0 shots   failures 2 of 10000  0.020%  95% Wilson interval [0.005%, 0.073%]; the correction does not  [CPUs in use 8.9, tokens 9, throttled so far 4839.0 s, load 14.15]
+2026-11-22T10:35:12Z START net_p0.005
+2026-11-22T10:35:43Z END net_p0.005 exit 0: X memory: failures 1885 of 10000 (always-0 would fail 9999) Z memory: failures 1810 of 10000 (always-0 would fail 9999) 
+2026-11-22T10:35:43Z START net_p0.004
+2026-11-22T10:36:14Z END net_p0.004 exit 0: X memory: failures 420 of 10000 (always-0 would fail 9993) Z memory: failures 434 of 10000 (always-0 would fail 9998) 
+2026-11-22T10:36:14Z START net_p0.003
+2026-11-22T10:36:45Z END net_p0.003 exit 0: X memory: failures 64 of 10000 (always-0 would fail 9996) Z memory: failures 59 of 10000 (always-0 would fail 9992) 
+2026-11-22T10:37:01Z START cand_p0.004: weight 2, pid 224632; before it: tokens 8, CPUs in use 8.5, throttled so far 4839.1 s

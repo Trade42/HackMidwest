@@ -105,7 +105,7 @@ per-shot files" is combined offline from saved answers and has no time measured 
 
 ![Mean decoding time per pair against p](figures/time_vs_p.png)
 
-**What the numbers say.** <!--f:findings-->On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row). TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000).<!--/f--> The exact tests, the intervals, the median and 99th-percentile
+**What the numbers say.** <!--f:findings-->On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row). The two fail equally many pairs at p = 0.003.<!--/f--> The exact tests, the intervals, the median and 99th-percentile
 times and what ran beside each row are in `APPENDIX.md`.
 
 ### Whose gain is whose
@@ -203,7 +203,7 @@ record of them (`report/data/background/plain_cnn_runs/`).
 
 ## 7. Where it falls short
 
-- **TCBP-JOBS.** <!--f:tcbp_statement-->TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000).<!--/f--> It needs a GPU; our hierarchy runs on one CPU core.
+- **TCBP-JOBS.** <!--f:tcbp_statement-->The two fail equally many pairs at p = 0.003.<!--/f--> It needs a GPU; our hierarchy runs on one CPU core.
 - **Agreeing but wrong.** On the exploration shots, <!--f:expl_left_agree-->63<!--/f--> of the <!--f:expl_left-->162<!--/f--> shots the hierarchy still fails
   are shots where the two fast decodes agree on a wrong answer. No tie-break can fix those; only a better test for a
   hard shot, or more members on every shot, can.

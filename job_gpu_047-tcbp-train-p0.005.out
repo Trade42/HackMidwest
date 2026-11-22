@@ -8,3 +8,4 @@ train_X.npz: X memory, p = 0.005, 20000 shots, data sha256 cfa08c9113b77521f7ba2
   model fitted in 117.5 s, decoder built in 58 ms
 WARNING: nv-qldpc-decoder decode_batch() called with default bp_batch_size=1 while decoding 4096 syndromes. Set bp_batch_size > 1 at construction to decode syndromes in parallel.
     shots 0 to 4095 decoded
+    shots 4096 to 8191 decoded

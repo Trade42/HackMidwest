@@ -6,3 +6,7 @@ plan /home/blakew3/mlBranchMidwest/runs/tcbp-retrain-refit/in/plan_test.json: ta
   f0.8-seed4900 block 100-199 done, 86 s; failures so far m 2, r 6, rf 2 of 200
   f0.8-seed4900 block 200-299 done, 101 s; failures so far m 2, r 8, rf 2 of 300
   f0.8-seed4900 block 300-399 done, 117 s; failures so far m 3, r 10, rf 3 of 400
+  f0.8-seed4900 block 400-499 done, 133 s; failures so far m 5, r 15, rf 6 of 500
+  f0.8-seed4900 block 500-599 done, 148 s; failures so far m 6, r 18, rf 7 of 600
+  f0.8-seed4900 block 600-699 done, 164 s; failures so far m 7, r 22, rf 8 of 700
+  f0.8-seed4900 block 700-799 done, 180 s; failures so far m 7, r 27, rf 8 of 800

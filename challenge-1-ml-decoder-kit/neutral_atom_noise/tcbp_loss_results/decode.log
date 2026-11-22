@@ -1,0 +1,45 @@
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+files ['X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz', 'X_f0.6_loss_seed6100_first1000_kitformat_p0.0089274.npz'], [1000, 1000] shots, p [0.0059563, 0.0089274] (the network's p input and the head's mixing base); decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs; head knobs {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, cap 0.5; stop at 2026-11-22T17:35:00Z; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
+  model fitted in 65.5 s
+  main block f0.4 0-99 done, 83 s; failures so far bm 5, fm 0, fh 1 of 100
+  main block f0.6 0-99 done, 108 s; failures so far bm 62, fm 7, fh 30 of 100
+  main block f0.4 100-199 done, 125 s; failures so far bm 11, fm 0, fh 2 of 200
+  main block f0.6 100-199 done, 149 s; failures so far bm 116, fm 8, fh 52 of 200
+  main block f0.4 200-299 done, 167 s; failures so far bm 14, fm 0, fh 4 of 300
+  main block f0.6 200-299 done, 191 s; failures so far bm 169, fm 15, fh 73 of 300
+  main block f0.4 300-399 done, 208 s; failures so far bm 19, fm 0, fh 4 of 400
+  main block f0.6 300-399 done, 232 s; failures so far bm 219, fm 19, fh 95 of 400
+  main block f0.4 400-499 done, 250 s; failures so far bm 26, fm 0, fh 4 of 500
+  main block f0.6 400-499 done, 273 s; failures so far bm 276, fm 22, fh 120 of 500
+  main block f0.4 500-599 done, 291 s; failures so far bm 30, fm 0, fh 4 of 600
+  main block f0.6 500-599 done, 314 s; failures so far bm 333, fm 22, fh 141 of 600
+  main block f0.4 600-699 done, 333 s; failures so far bm 35, fm 0, fh 4 of 700
+  main block f0.6 600-699 done, 356 s; failures so far bm 389, fm 25, fh 172 of 700
+  main block f0.4 700-799 done, 374 s; failures so far bm 41, fm 0, fh 5 of 800
+  main block f0.6 700-799 done, 398 s; failures so far bm 446, fm 27, fh 196 of 800
+  main block f0.4 800-899 done, 415 s; failures so far bm 45, fm 0, fh 5 of 900
+  main block f0.6 800-899 done, 439 s; failures so far bm 504, fm 32, fh 219 of 900
+  main block f0.4 900-999 done, 457 s; failures so far bm 49, fm 0, fh 5 of 1000
+  main block f0.6 900-999 done, 480 s; failures so far bm 562, fm 37, fh 242 of 1000
+  late block f0.4 0-99 done, 486 s; failures so far bh 12 of 100
+  late block f0.6 0-99 done, 496 s; failures so far bh 70 of 100
+  late block f0.4 100-199 done, 503 s; failures so far bh 24 of 200
+  late block f0.6 100-199 done, 513 s; failures so far bh 136 of 200
+  late block f0.4 200-299 done, 519 s; failures so far bh 30 of 300
+  late block f0.6 200-299 done, 528 s; failures so far bh 205 of 300
+  late block f0.4 300-399 done, 535 s; failures so far bh 39 of 400
+  late block f0.6 300-399 done, 544 s; failures so far bh 270 of 400
+  late block f0.4 400-499 done, 550 s; failures so far bh 54 of 500
+  late block f0.6 400-499 done, 560 s; failures so far bh 342 of 500
+  late block f0.4 500-599 done, 567 s; failures so far bh 58 of 600
+  late block f0.6 500-599 done, 576 s; failures so far bh 416 of 600
+  late block f0.4 600-699 done, 583 s; failures so far bh 65 of 700
+  late block f0.6 600-699 done, 592 s; failures so far bh 491 of 700
+  late block f0.4 700-799 done, 599 s; failures so far bh 75 of 800
+  late block f0.6 700-799 done, 608 s; failures so far bh 568 of 800
+  late block f0.4 800-899 done, 615 s; failures so far bh 85 of 900
+  late block f0.6 800-899 done, 625 s; failures so far bh 634 of 900
+  late block f0.4 900-999 done, 631 s; failures so far bh 93 of 1000
+  late block f0.6 900-999 done, 641 s; failures so far bh 706 of 1000
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-loss/out-211cfbb/decode: f0.4 main 1000 late 1000, f0.6 main 1000 late 1000; 641 s

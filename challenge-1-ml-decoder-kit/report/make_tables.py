@@ -366,11 +366,25 @@ def test_tables(measured):
                 time = f"{ms(row['mean_ms'])} ms" if row["mean_ms"] is not None else "time " + NOT_MEASURED
                 cells.append(f"{rate_text(row['rate'], row['error'])} · {row['failures_pair']} pairs · {time}")
         lines.append([DECODERS[key].label] + cells)
+    slide_lines = []
+    for key in ("bposd", "relay-bp", "router", "priortilt", "hierarchy", "hierarchy-parallel", "tcbp", "ensemble"):
+        cells = []
+        for p in P_VALUES:
+            row = measured[p][key]
+            if row is None:
+                cells.append(NOT_MEASURED)
+            elif row.get("offline"):
+                cells.append(f"{row['failures_pair']:,} · offline")
+            else:
+                cells.append(f"{row['failures_pair']:,} · {ms(row['mean_ms'])} ms" if row["mean_ms"] is not None else f"{row['failures_pair']:,}")
+        slide_lines.append([DECODERS[key].short + (", 1 core" if key == "hierarchy" else "")] + cells)
+    sweep_slide = write("test_sweep_slide", markdown(["Decoder"] + [f"p = {p}" for p in P_VALUES], slide_lines)
+          + "\n\nFailed pairs of 10,000 test pairs · mean time per pair. \"Offline\": combined from saved answers, no time. TCBP-JOBS runs on a GPU.")
     sweep = write("test_sweep", markdown(["Decoder"] + [f"p = {p}" for p in P_VALUES], lines)
                   + "\n\nEach cell: logical error rate per cycle ± the kit's error · failed pairs of 10,000 · mean time per pair. \"Offline\" marks a "
                     "row combined from saved per-shot answers, with no time measured in one process. "
                     "Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.")
-    return texts, sweep
+    return texts, (sweep, sweep_slide)
 
 
 def pair_text(paired):
@@ -1444,6 +1458,15 @@ def tcbp_statement(measured):
                          f"exact p = {stats.p_text(paired['p'])}{significant}")
             clauses.append(text + ")")
         text = "Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: " + "; ".join(clauses) + "."
+        against_relay = []
+        for p in P_VALUES:
+            tcbp, relay = measured[p]["tcbp"], measured[p].get(REFERENCE)
+            if tcbp is None or relay is None or tcbp["failed_pair"] is None:
+                continue
+            paired = stats.paired(relay["failed_pair"], tcbp["failed_pair"])
+            against_relay.append(f"{tcbp['failures_pair']} against {relay['failures_pair']} at p = {p} (exact p = {stats.p_text(paired['p'])})")
+        if against_relay:
+            text += " TCBP-JOBS against relay-BP's timed row: " + ", ".join(against_relay) + "."
     elif FACTS.get("expl_pairs_T", (NOT_MEASURED,))[0] != NOT_MEASURED:
         text = (f"TCBP-JOBS, NVIDIA's GPU decoder, is not measured against our decoder on the test shots yet; on the exploration shots at p = 0.004 "
                 f"TCBP-JOBS fails fewer pairs than our hierarchy ({value('expl_pairs_T')} against {value('expl_pairs_C')} of {value('expl_pairs')}).")
@@ -1644,12 +1667,12 @@ def main(argv=None):
     parser.parse_args(argv)
     try:
         measured, extra, combined = load_test_rows()
-        per_p, sweep = test_tables(measured)
+        per_p, (sweep, sweep_slide) = test_tables(measured)
         ladder, ablated = ladder_tables(combined)
         earlier, cross_checks = earlier_table(measured)
         exploration, _ = exploration_table()
         tables = {f"test_p{p}": per_p[p] for p in P_VALUES} | {"test_time": per_p["time"]} | {
-            "test_sweep": sweep, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
+            "test_sweep": sweep, "test_sweep_slide": sweep_slide, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
             "test_comparisons": comparisons_table(measured), "test_ladder": ladder, "test_ablation": ablated,
             "where_failures": failure_split_table(combined, measured), "exploration_p0.005": exploration_p5_table(), "time_split": time_split_table(measured),
             "exploration_ensemble": exploration_ensemble_table(), "ablation_80k": ablation_80k_table(),

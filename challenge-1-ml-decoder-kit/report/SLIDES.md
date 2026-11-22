@@ -5,8 +5,6 @@ number is in a generated table (`report/tables/`) or a file under `report/data/`
 "Practice shots" below means the exploration shots (the team's train and validation files): numbers on them are not
 results on the test shots, and the slides say so each time.
 
-> **Status:** a draft. Slides 4, 5 and 7 are finished when the rows on the test shots have landed.
-
 Words used, each with its meaning:
 
 - **Decoder:** the program that reads which parity checks fired and says which of the 12 stored bits flipped.
@@ -62,25 +60,23 @@ Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
 
 **Show:** the table below and `figures/ler_vs_p.png`.
 
-<!-- BEGIN table:test_sweep -->
+<!-- BEGIN table:test_sweep_slide -->
 | Decoder | p = 0.003 | p = 0.004 | p = 0.005 |
 |---|---|---|---|
-| BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05 · 60 pairs · 129 ms | 4.02e-03 ± 1.8e-04 · 472 pairs · 302 ms | 2.30e-02 ± 4.6e-04 · 2433 pairs · 581 ms |
-| relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05 · 5 pairs · 88.0 ms | 6.94e-04 ± 7.6e-05 · 83 pairs · 319 ms | 7.33e-03 ± 2.5e-04 · 845 pairs · 1,471 ms |
-| relay-BP with a learned router | 5.00e-05 ± 2.0e-05 · 6 pairs · 42.5 ms | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | 6.99e-03 ± 2.5e-04 · 807 pairs · 1,928 ms |
-| PriorTilt, one run | 3.33e-05 ± 1.7e-05 · 4 pairs · 22.7 ms | 6.19e-04 ± 7.2e-05 · 74 pairs · 87.3 ms | 5.10e-03 ± 2.1e-04 · 595 pairs · offline, no time |
-| our hierarchy, lowest-weight tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · offline, no time | 4.76e-04 ± 6.3e-05 · 57 pairs · offline, no time | 4.50e-03 ± 2.0e-04 · 527 pairs · offline, no time |
-| our hierarchy, classical tie-break (lowest weight among the converged candidates) | 3.33e-05 ± 1.7e-05 · 4 pairs · 46.3 ms | 4.43e-04 ± 6.1e-05 · 53 pairs · offline, no time | 3.99e-03 ± 1.8e-04 · 469 pairs · offline, no time |
-| our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · 45.7 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 216 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 825 ms |
-| our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 2.50e-05 ± 1.4e-05 · 3 pairs · 28.9 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 150 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 608 ms |
-| our ensemble (combined offline) | 1.67e-05 ± 1.2e-05 · 2 pairs · offline, no time | 1.33e-04 ± 3.3e-05 · 16 pairs · offline, no time | 3.05e-03 ± 1.6e-04 · 360 pairs · offline, no time; fails exactly TCBP-JOBS's shots |
-| TCBP-JOBS (NVIDIA, GPU) | 2.50e-05 ± 1.4e-05 · 3 pairs · 3.9 ms | 3.42e-04 ± 5.3e-05 · 41 pairs · 7.8 ms | 3.05e-03 ± 1.6e-04 · 360 pairs · 16.9 ms |
+| BP-OSD | 60 · 129 ms | 472 · 302 ms | 2,433 · 581 ms |
+| relay-BP | 5 · 88.0 ms | 83 · 319 ms | 845 · 1,471 ms |
+| router (teammates) | 6 · 42.5 ms | 87 · 315 ms | 807 · 1,928 ms |
+| PriorTilt (IonQ) | 4 · 22.7 ms | 74 · 87.3 ms | 595 · offline |
+| ours, 1 core | 3 · 45.7 ms | 44 · 216 ms | 479 · 825 ms |
+| ours, 2 cores | 3 · 28.9 ms | 44 · 150 ms | 479 · 608 ms |
+| TCBP-JOBS (GPU) | 3 · 3.9 ms | 41 · 7.8 ms | 360 · 16.9 ms |
+| ours, ensemble | 2 · offline | 16 · offline | 360 · offline |
 
-Each cell: logical error rate per cycle ± the kit's error · failed pairs of 10,000 · mean time per pair. "Offline" marks a row combined from saved per-shot answers, with no time measured in one process. Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.
-<!-- END table:test_sweep -->
+Failed pairs of 10,000 test pairs · mean time per pair. "Offline": combined from saved answers, no time. TCBP-JOBS runs on a GPU.
+<!-- END table:test_sweep_slide -->
 
 - <!--f:slide4_relay-->Failed pairs of 10,000, ours against relay-BP on the same pairs: p = 0.003: 3 against 5 (test p = 0.50); p = 0.004: 44 against 83 (test p = 3e-06); p = 0.005: 479 against 845 (test p = 4e-59).<!--/f-->
-- <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, test p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, test p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, test p = 1e-11).<!--/f-->
+- <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, test p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, test p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, test p = 1e-11). TCBP-JOBS against relay-BP's timed row: 3 against 5 at p = 0.003 (test p = 0.62), 41 against 83 at p = 0.004 (test p = 4e-07), 360 against 845 at p = 0.005 (test p = 1e-101).<!--/f-->
 - At p = 0.003 every good decoder fails only a handful of pairs in 10,000, so nothing separates there.
 
 ## Slide 5. <!--f:slide5_title-->Our decoder takes 0.52 to 0.68 of relay-BP's mean time per pair on one core and 0.33 to 0.47 with its two fast decodes on two cores<!--/f-->
@@ -156,7 +152,7 @@ X memory at p = 0.004 only. For scale, Infleqtion's paper arXiv:2408.08288 repor
 for a pair of atoms; the top of our range, 2e-3 per atom, is half of that, by our own reading.
 
 **Where does TCBP-JOBS stand against you?**
-<!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, test p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, test p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, test p = 1e-11).<!--/f--> It needs a GPU; our decoder runs on one CPU core. <!--f:ensemble_statement-->Our ensemble, combined offline from saved answers with its rule frozen beforehand (where two PriorTilt runs and TCBP-JOBS agree, that answer; otherwise joint decoding of both check types, the slow decoder of the measurements before building): at p = 0.003 2 against TCBP-JOBS's 3 failed pairs (only the ensemble fails 0, only TCBP-JOBS 1, test p = 1.00; joint decoding ran on 5 disputed shots, about 5 s each); at p = 0.004 16 against TCBP-JOBS's 41 failed pairs (only the ensemble fails 1, only TCBP-JOBS 26, test p = 4e-07; joint decoding ran on 93 disputed shots, about 24 s each); at p = 0.005 joint decoding was not run, so the ensemble fails exactly TCBP-JOBS's 360 pairs. Its members are NVIDIA's, IonQ's and the kit's; the rule is ours, and it has no time measured as one decoder.<!--/f-->
+<!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, test p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, test p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, test p = 1e-11). TCBP-JOBS against relay-BP's timed row: 3 against 5 at p = 0.003 (test p = 0.62), 41 against 83 at p = 0.004 (test p = 4e-07), 360 against 845 at p = 0.005 (test p = 1e-101).<!--/f--> It needs a GPU; our decoder runs on one CPU core. <!--f:ensemble_statement-->Our ensemble, combined offline from saved answers with its rule frozen beforehand (where two PriorTilt runs and TCBP-JOBS agree, that answer; otherwise joint decoding of both check types, the slow decoder of the measurements before building): at p = 0.003 2 against TCBP-JOBS's 3 failed pairs (only the ensemble fails 0, only TCBP-JOBS 1, test p = 1.00; joint decoding ran on 5 disputed shots, about 5 s each); at p = 0.004 16 against TCBP-JOBS's 41 failed pairs (only the ensemble fails 1, only TCBP-JOBS 26, test p = 4e-07; joint decoding ran on 93 disputed shots, about 24 s each); at p = 0.005 joint decoding was not run, so the ensemble fails exactly TCBP-JOBS's 360 pairs. Its members are NVIDIA's, IonQ's and the kit's; the rule is ours, and it has no time measured as one decoder.<!--/f-->
 
 **"Another team is at 0.3 times the baseline's time." How do you compare?**
 A time ratio means nothing without the accuracy beside it: stopping relay-BP at its first answer is several times

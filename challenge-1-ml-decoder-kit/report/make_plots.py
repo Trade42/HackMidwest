@@ -162,17 +162,23 @@ DODGE = {key: (index - (len(DECODERS) - 1) / 2) * 0.000016 for index, key in enu
 def ler_vs_p(measured):
     figure, axes = new_figure("Logical error rate per cycle on the test shots",
                               "10,000 pairs of an X and a Z shot per noise level; bars: 95% interval; lower is better")
-    lines, own, labels, values = series(measured), {}, [], []
+    lines, own, labels, values, limits = series(measured), {}, [], [], False
     for key, points in lines.items():
         decoder = DECODERS[key]
         if not points:
             continue
         hollow = key == "hierarchy-weight"
         xs = [float(p) + DODGE[key] for p, _ in points]
-        ys = [max(row["rate"], row["interval"][1] / 30) for _, row in points]
-        errors = [[max(y - row["interval"][0], 0) for y, (_, row) in zip(ys, points)], [max(row["interval"][1] - y, 0) for y, (_, row) in zip(ys, points)]]
+        # a row without a single failed pair has no rate to draw: it is drawn at the upper end of its interval, as a limit
+        ys = [row["rate"] if row["failures_pair"] else row["interval"][1] for _, row in points]
+        errors = [[max(y - row["interval"][0], 0) if row["failures_pair"] else 0 for y, (_, row) in zip(ys, points)],
+                  [max(row["interval"][1] - y, 0) for y, (_, row) in zip(ys, points)]]
         axes.errorbar(xs, ys, yerr=errors, color=decoder.colour, marker=decoder.marker, linestyle="--" if hollow else "-",
                       capsize=4, elinewidth=1.6, zorder=3, **marker_style(decoder.colour, hollow))
+        for x, y, (_, row) in zip(xs, ys, points):
+            if not row["failures_pair"]:
+                limits = True
+                axes.plot([x], [y], marker="v", color=decoder.colour, markersize=13, zorder=4, **marker_style(decoder.colour, hollow=True))
         labels.append((ys[-1], decoder.short, decoder.colour, decoder.marker, hollow))
         values += ys + [row["interval"][0] for _, row in points if row["interval"][0] > 0] + [row["interval"][1] for _, row in points]
     if not lines["tcbp"]:
@@ -200,6 +206,8 @@ def ler_vs_p(measured):
     note = missing_note(measured, own)
     if own:
         note += " TCBP-JOBS is drawn from the teammates' run on its own sampled shots (hollow, dotted; interval from the logged error)."
+    if limits:
+        note += " A hollow triangle marks a row without a single failed pair: it is the upper end of the 95% interval, not a measured rate."
     footnote(figure, note.strip())
     return save(figure, "ler_vs_p")
 

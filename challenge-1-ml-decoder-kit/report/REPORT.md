@@ -118,6 +118,11 @@ level, the paired count of our decoder against relay-BP, and where TCBP-JOBS sta
 <!-- BEGIN table:test_p0.005 -->
 <!-- END table:test_p0.005 -->
 
+### Who adds what: paired comparisons on the test shots
+
+<!-- BEGIN table:test_comparisons -->
+<!-- END table:test_comparisons -->
+
 ### TCBP-JOBS, the GPU reference
 
 TCBP-JOBS is NVIDIA's GPU decoder, which the teammates ran as an extra reference. **On its own sampled shots it is

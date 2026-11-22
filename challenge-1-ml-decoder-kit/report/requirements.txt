@@ -1,0 +1,3 @@
+# What report/ needs beyond ../requirements.txt (numpy and scipy are already there).
+matplotlib     # make_plots.py
+pytest         # test_report.py

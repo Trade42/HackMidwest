@@ -40,6 +40,9 @@ SOURCES = [
     ("test/", "origin/server-logs", "files/clean/*/*.ensemble.npz", False),
     ("test/", "origin/server-logs", "files/clean/*/*.ensemble.json", False),
     ("test/clean_rows.out", "origin/server-logs", "clean_rows.out", True),
+    ("test/runner_cpu.out", "origin/server-logs", "runner_cpu.out", True),
+    ("test/runner_gpu.out", "origin/server-logs", "runner_gpu.out", True),
+    ("test/runner_ctl.out", "origin/server-logs", "runner_ctl.out", True),
     # the teammates' earlier rows on the same test shots (other machines, other load): a cross-check only
     ("teammates_earlier/icrn_eval_p0.003/", "tree", "results/icrn/eval_p0.003/summary.*", False),
     ("teammates_earlier/icrn_eval_p0.003/", "tree", "results/icrn/eval_p0.003/02_relay-bp_shots.npz", False),
@@ -59,6 +62,8 @@ SOURCES = [
     ("exploration/priortilt/", "origin/laptop-artifacts", "priortilt/results_network_select_step*.txt", False),
     ("exploration/priortilt/", "origin/laptop-artifacts", "priortilt/results_step9_p0.005_X.txt", False),
     ("exploration/cascade_X_s1/", "origin/laptop-artifacts", "cascade_X_s1/SCORES.md", True),
+    ("exploration/cascade_X_s1/", "origin/laptop-artifacts", "cascade_X_s1/eval/step60000_validation_X_p0.004.npz", False),
+    ("exploration/cascade_X_s1/", "origin/laptop-artifacts", "cascade_X_s1/eval/step60000_train_X_p0.004.npz", False),
     # the networks' training logs
     ("networks/cascade_X_s1.train.log", "origin/laptop-artifacts", "cascade_X_s1/train.log", True),
     ("networks/cascade_Z_s1.train.log", "origin/server-logs", "cascade_Z_s1.train.log", True),
@@ -69,7 +74,6 @@ SOURCES = [
     ("loss/pc/", "tree", "loss/results/L4_timing.json", False),
     ("loss/server/", "origin/server-logs", "files/loss/*/tables.md", False),
     # the machines: what the server printed about itself
-    ("machines/server_job_000.out", "origin/server-logs", "job_cpu_000-sync-and-uptime.out", False),
     ("machines/server_nvidia-smi.txt", "origin/server-logs", "nvidia-smi.txt", True),
     ("machines/cascade_X_s1_SHA256SUMS", "origin/laptop-artifacts", "cascade_X_s1/SHA256SUMS", True),
     # the measurements behind the design, and what did not work (exploration shots)

@@ -10,5 +10,3 @@ What each decoder needed for its row on the test shots. Memory is the peak resid
 | our hierarchy, neural tie-break | not measured | not measured | not measured | a neural network picks among the candidates where the fast decodes disagree |
 | our ensemble (combined offline) | not measured | not measured | not measured | the same network, choosing among more members |
 | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | a model it fits at start-up, per memory basis |
-
-The server (the team's ICRN notebook): 12 CPUs by quota, 226 GB of memory, a slice of 19,968 MiB of an NVIDIA A100-SXM4-80GB (`report/data/machines/server_job_000.out`, `server_nvidia-smi.txt`).

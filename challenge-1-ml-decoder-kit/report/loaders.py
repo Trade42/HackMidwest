@@ -54,12 +54,20 @@ def evaluator_rows(folder):
     for entry in metadata["decoders"]:
         summary = entry["summary"]
         shots = summary["paired_shots"]
+        # what our plugin recorded about itself: the tie-break really used per basis, and where the network ran
+        settings = entry.get("configuration") or {}
+        rule = ({basis: settings[basis]["rule"] for basis in "XZ"}
+                if all(isinstance(settings.get(basis), dict) and "rule" in settings[basis] for basis in "XZ") else None)
+        where_network = str((metadata.get("plugin_options") or {}).get("device", "cpu")).lower()
+        device = "CPU" if not rule or "network" not in rule.values() or where_network == "cpu" else f"CPU, the network on {where_network}"
         row = {"name": entry["name"], "p": metadata["p"], "shots": shots,
                "failures_X": summary["failures_X"], "failures_Z": summary["failures_Z"], "failures_pair": summary["failures_pair"],
                "mean_ms": summary["mean_pair_total_ms"], "median_ms": summary["median_pair_total_ms"], "p99_ms": summary["p99_pair_total_ms"],
                "test_sha256": {basis: metadata["datasets"]["test"][basis]["sha256"] for basis in "XZ"},
                "circuit_sha256": {basis: metadata["circuits"][basis]["sha256"] for basis in "XZ"},
-               "site": site, "workers": workers, "device": "CPU", "failed_pair": None, "seconds_pair": None,
+               "site": site, "workers": workers, "device": device, "rule": rule, "failed_pair": None, "seconds_pair": None,
+               "timer": "the whole decode of a pair (evaluation.evaluate)", "wall_seconds": summary.get("evaluation_wall_seconds"),
+               "network": {basis: settings[basis].get("network") for basis in "XZ"} if rule else None,
                "peak_rss_mb": (entry.get("peak_parent_rss_bytes_after") or 0) / 2**20 or None,
                "setup_seconds": summary.get("setup_seconds"),
                "settings": entry.get("configuration"), "plugin_options": metadata.get("plugin_options"),
@@ -119,6 +127,20 @@ def clean_rows_log(path):
     return runs
 
 
+def runner_logs(paths):
+    """The server runner's lines: {job: start, end}. A job without an END line was still running when the log was copied."""
+    jobs = {}
+    for path in paths:
+        if not Path(path).is_file():
+            continue
+        for line in Path(path).read_text(encoding="utf-8", errors="replace").splitlines():
+            found = re.match(r"(\S+Z) (START|END) (\S+)", line)
+            if found:
+                when = datetime.strptime(found.group(1), "%Y-%m-%dT%H:%M:%SZ")
+                jobs.setdefault(found.group(3), {"start": None, "end": None})["start" if found.group(2) == "START" else "end"] = when
+    return jobs
+
+
 # ---------- TCBP-JOBS ----------
 
 def tcbp_log(path):
@@ -162,7 +184,8 @@ def tcbp_member(folder, p):
             "median_ms": float(np.median(seconds) * 1e3) if timed else None,
             "p99_ms": float(np.percentile(seconds, 99) * 1e3) if timed else None,
             "test_sha256": {basis: str(loaded[basis]["data_sha256"]) for basis in "XZ"},
-            "site": "ICRN server, A100 slice (20 GB)", "workers": 1, "device": "GPU",
+            "site": "ICRN server, A100 slice (20 GB)", "workers": 1, "device": "GPU", "rule": None,
+            "timer": "the decode call alone (hierarchy.tcbp_member), not the evaluator's whole decode", "wall_seconds": None,
             "mode": str(loaded["X"].get("mode", "")), "peak_rss_mb": None,
             "source": str(folder.relative_to(DATA)) + "/test_{X,Z}.tcbp.npz", "per_shot_file": str(files["X"].relative_to(DATA))}
 
@@ -308,6 +331,38 @@ def weight_rule(shots):
     failed = np.where(agreed, shots["failed_P1"].astype(bool), failed_each[np.arange(len(pick)), pick])
     seconds = shots["seconds_P1"] + shots["seconds_P2"] + np.where(agreed, 0.0, shots["seconds_R"])
     return failed, agreed, seconds
+
+
+def network_rule(shots, logits):
+    """The hierarchy with the neural tie-break, scored offline: P1 where P1 and P2 agree; otherwise
+    the candidate among relay-BP, P1 and P2 whose 12 bits the network finds most likely.
+
+    A candidate's score is the sum over the 12 bits of log sigmoid(logit) where it says 1 and
+    log sigmoid(-logit) where it says 0 (hierarchy/rules.py, network_score). Ties go to the first
+    of relay-BP, P1, P2. Returns the per-shot failure mask.
+    """
+    agreed = (shots["predicted_P1"] == shots["predicted_P2"]).all(axis=1)
+    predicted = np.stack([shots["predicted_R"], shots["predicted_P1"], shots["predicted_P2"]])
+    logits = np.asarray(logits, np.float64)
+    score = np.where(predicted == 1, -np.logaddexp(0.0, -logits), -np.logaddexp(0.0, logits)).sum(axis=-1)
+    pick = score.argmax(axis=0)
+    failed_each = np.stack([shots["failed_R"], shots["failed_P1"], shots["failed_P2"]], axis=1).astype(bool)
+    return np.where(agreed, shots["failed_P1"].astype(bool), failed_each[np.arange(len(pick)), pick])
+
+
+def network_logits(folder, names, truth):
+    """The X network's per-shot logits for the same shot files, joined in the order given; None if a file is missing."""
+    parts = []
+    for name in names:
+        file = Path(folder) / name
+        if not file.is_file():
+            return None
+        with np.load(file, allow_pickle=False) as data:
+            parts.append((data["logits"], data["observables"]))
+    logits, observables = (np.concatenate([part[index] for part in parts]) for index in (0, 1))
+    if observables.shape != truth.shape or not np.array_equal(observables, truth):
+        raise Mismatch(f"{folder}: the network's logits are not for the same shots as the candidates")
+    return logits
 
 
 def network_rule_table(path):

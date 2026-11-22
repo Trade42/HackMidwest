@@ -60,6 +60,7 @@ class TestRow:
     folder: str     # under report/data/test/, with {p}
     kind: str       # "evaluator": a row of evaluation.evaluate; "tcbp": hierarchy.tcbp_member files; "ensemble": hierarchy.ensemble
     name: str = ""  # for "evaluator": the decoder's name inside summary.json, when the folder holds several
+    rule: str = ""  # for our plugin: the tie-break the row's own summary.json must record ("network" or "weight")
 
 
 # The rows of the table on the test shots, in table order. Folder names are the server job's.
@@ -68,10 +69,25 @@ TEST_ROWS = [
     TestRow("relay-bp", "eval_p{p}_relay-bp", "evaluator"),
     TestRow("router", "eval_p{p}_router", "evaluator"),
     TestRow("priortilt", "eval_p{p}_priortilt", "evaluator"),
-    TestRow("hierarchy-weight", "eval_p{p}_hierarchy-weight", "evaluator"),
-    TestRow("hierarchy", "eval_p{p}_hierarchy", "evaluator"),
+    TestRow("hierarchy-weight", "eval_p{p}_hierarchy-weight", "evaluator", rule="weight"),
+    TestRow("hierarchy", "eval_p{p}_hierarchy", "evaluator", rule="network"),
     TestRow("ensemble", "ensemble_p{p}", "ensemble"),
     TestRow("tcbp", "tcbp_p{p}", "tcbp"),
+]
+
+# Further paired comparisons on the test shots, (row, against): who adds what, and where TCBP-JOBS stands.
+# Each is made only where both rows have a per-shot file for the same test files.
+COMPARISONS = [
+    ("router", "relay-bp"),
+    ("priortilt", "relay-bp"),
+    ("hierarchy-weight", "priortilt"),
+    ("hierarchy-weight", "relay-bp"),
+    ("hierarchy", "hierarchy-weight"),
+    ("hierarchy", "relay-bp"),
+    ("hierarchy", "tcbp"),
+    ("ensemble", "hierarchy"),
+    ("ensemble", "tcbp"),
+    ("tcbp", "relay-bp"),
 ]
 
 # The teammates' earlier evaluator runs on the same test files: other machines, other load.

@@ -20,13 +20,14 @@ import json
 import os
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import DECODERS, EARLIER_ROWS, LOSS_CONDITIONS, P_VALUES, REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256
+from report.rows import COMPARISONS, DECODERS, EARLIER_ROWS, LOSS_CONDITIONS, P_VALUES, REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256
 
 HERE = Path(__file__).resolve().parent
 # REPORT_OUT sends the tables elsewhere and leaves the documents alone: used by the tests only.
@@ -89,6 +90,7 @@ def write(name, text, records=None):
 def load_test_rows(data=DATA):
     """{p: {decoder key: row or None}} for every registered row, checked against the test files' identity."""
     log = loaders.clean_rows_log(data / "test" / "clean_rows.out")
+    jobs = loaders.runner_logs(sorted((data / "test").glob("runner_*.out"))) if (data / "test").is_dir() else {}
     measured = {}
     for p in P_VALUES:
         measured[p] = {}
@@ -112,9 +114,22 @@ def load_test_rows(data=DATA):
                     raise Mismatch(f"{folder}: the file says p = {row['p']}, the folder says {p}")
                 if row["test_sha256"] != TEST_SHA256[p]:
                     raise Mismatch(f"{folder}: these are not the team's test shots for p = {p} (sha256 {row['test_sha256']})")
+                row["label_note"] = ""
+                if spec.rule:                                   # our plugin: the tie-break its own summary records, per basis
+                    used = row.get("rule")
+                    if not used:
+                        raise Mismatch(f"{folder}: the summary records no tie-break rule, so the row cannot be labelled")
+                    if spec.rule == "weight" and set(used.values()) != {"weight"}:
+                        raise Mismatch(f"{folder}: registered as the row without a network, but its summary records {used}")
+                    if spec.rule == "network" and "network" not in used.values():
+                        raise Mismatch(f"{folder}: registered as the row with the network, but its summary records {used}")
+                    if spec.rule == "network" and set(used.values()) != {"network"}:
+                        row["label_note"] = " (" + ", ".join(f"{basis} memory: {'the network' if used[basis] == 'network' else 'lowest weight'}" for basis in "XZ") + ")"
                 run = log.get((p, spec.folder.format(p=p).removeprefix(f"eval_p{p}_")))
                 row["beside"] = run["beside"] if run else None
                 row["run"] = run
+                row["jobs_beside"] = (sorted(name for name, job in jobs.items() if job["start"] and job["start"] < (run["end"] or datetime.max)
+                                             and (job["end"] or datetime.max) > run["start"]) if run and run["start"] else None)
             measured[p][spec.decoder] = row
         reference = measured[p].get(REFERENCE)
         for key, row in measured[p].items():
@@ -132,6 +147,10 @@ def where_text(row):
     text = f"{row['device']}, {row['workers']} process, {row['site']}"
     if row.get("beside") is not None:
         text += f"; {len(row['beside'])} other evaluator rows running beside it" if row["beside"] else "; no other evaluator row beside it"
+    if row.get("jobs_beside"):
+        text += "; server jobs started in that time: " + ", ".join(row["jobs_beside"])
+    if row["device"] == "GPU":
+        text += "; its time is " + row["timer"]
     return text
 
 
@@ -157,7 +176,7 @@ def test_tables(measured):
                 lines.append([decoder.label, decoder.whose] + [NOT_MEASURED] * 7)
             else:
                 times = " / ".join(ms(row[name]) for name in ("mean_ms", "median_ms", "p99_ms")) if row["mean_ms"] is not None else NOT_MEASURED
-                lines.append([decoder.label, decoder.whose, f"{row['failures_X']}, {row['failures_Z']}",
+                lines.append([decoder.label + row["label_note"], decoder.whose, f"{row['failures_X']}, {row['failures_Z']}",
                               f"{row['failures_pair']} of {row['shots']:,}", rate_text(row["rate"], row["error"]),
                               interval_text(*row["interval"]), times, paired_text(row, key), where_text(row)])
                 paired = row.get("paired") or {}
@@ -186,27 +205,61 @@ def test_tables(measured):
             fact(f"{short}_only_this", paired.get("row_only"), source)
             fact(f"{short}_only_relay", paired.get("reference_only"), source)
             fact(f"{short}_paired_p", stats.p_text(paired["p"]) if paired else None, source)
+            fact(f"{short}_wall_hours", row and row.get("wall_seconds") and f"{row['wall_seconds'] / 3600:.1f}", source)
         note = (f"Test shots, p = {p}: `data/p{p}/test_X.npz` and `test_Z.npz` (10,000 shots per basis, Stim seeds 301 and 302; "
                 f"sha256 `{TEST_SHA256[p]['X'][:12]}…` and `{TEST_SHA256[p]['Z'][:12]}…`). Every measured row decoded these two files.")
         texts[p] = write(f"test_p{p}", note + "\n\n" + markdown(header, lines), [r for r in records if r["p"] == p])
     write("test_all", "\n\n".join(texts[p] for p in P_VALUES), records)
 
     # the sweep in one table: a decoder per row, a noise level per column
+    own = {p: loaders.tcbp_log(DATA / file) for p, file, _usable, _why in TCBP_OWN if (DATA / file).is_file()}
     lines = []
     for key in DECODERS:
         cells = []
         for p in P_VALUES:
             row = measured[p][key]
-            if row is None:
+            if row is None and key == "tcbp" and p in own:
+                cells.append(f"not measured on these shots; on its own shots: {stats.sci(own[p]['rate_printed'])} ± {stats.sci(own[p]['error_printed'], 1)}")
+            elif row is None:
                 cells.append(NOT_MEASURED)
             else:
                 time = f"{ms(row['mean_ms'])} ms" if row["mean_ms"] is not None else "time " + NOT_MEASURED
                 cells.append(f"{rate_text(row['rate'], row['error'])} · {row['failures_pair']} pairs · {time}")
-        lines.append([DECODERS[key].label] + cells)
+        note = next((measured[p][key]["label_note"] for p in P_VALUES if measured[p][key]), "")
+        lines.append([DECODERS[key].label + note] + cells)
     sweep = write("test_sweep", markdown(["Decoder"] + [f"p = {p}" for p in P_VALUES], lines)
                   + "\n\nEach cell: logical error rate per cycle ± the kit's error · failed pairs of 10,000 · mean time per pair. "
                     "Test shots; `report/tables/test_p<p>.md` has the intervals, the paired counts and where each row ran.")
     return texts, sweep
+
+
+def comparisons_table(measured):
+    lines, records = [], []
+    for p in P_VALUES:
+        for first, second in COMPARISONS:
+            a, b = measured[p].get(first), measured[p].get(second)
+            name = f"c{p[-1]}_{first.replace('-', '_')}_vs_{second.replace('-', '_')}"
+            if a is None or b is None or a["failed_pair"] is None or b["failed_pair"] is None:
+                lines.append([p, DECODERS[first].label, DECODERS[second].label] + [NOT_MEASURED] * 4)
+                for part in ("both", "only_first", "only_second", "p"):
+                    fact(f"{name}_{part}", None, "tables/test_comparisons.md")
+                continue
+            paired = stats.paired(b["failed_pair"], a["failed_pair"])
+            lines.append([p, DECODERS[first].label + a["label_note"], DECODERS[second].label + b["label_note"],
+                          f"{a['failures_pair']} against {b['failures_pair']}", paired["both"],
+                          f"{paired['row_only']} / {paired['reference_only']}", stats.p_text(paired["p"])])
+            records.append({"p": p, "first": first, "second": second, "first_failed_pairs": a["failures_pair"], "second_failed_pairs": b["failures_pair"],
+                            "both_fail": paired["both"], "only_first_fails": paired["row_only"], "only_second_fails": paired["reference_only"],
+                            "exact_p": paired["p"]})
+            for part, value in (("both", paired["both"]), ("only_first", paired["row_only"]), ("only_second", paired["reference_only"]),
+                                ("p", stats.p_text(paired["p"]))):
+                fact(f"{name}_{part}", value, "tables/test_comparisons.md")
+    text = ("Paired comparisons on the test shots: two decoders on the same 10,000 pairs, and how many pairs only one of the two fails. "
+            "The exact p is the two-sided binomial test on those pairs (under \"no difference\" each is a fair coin). "
+            "This is where each gain is attributed: PriorTilt is IonQ's, the hierarchy and its tie-break are ours.\n\n"
+            + markdown(["p", "First decoder", "Second decoder", "Failed pairs: first against second", "Both fail",
+                        "Only the first fails / only the second fails", "Exact p"], lines))
+    return write("test_comparisons", text, records)
 
 
 # ---------- the teammates' earlier rows, and the cross-check against the timed rows ----------
@@ -236,6 +289,9 @@ def earlier_table(measured):
             checks.append(f"p = {p}: relay-BP's timed row has not landed, so it cannot be compared with the teammates' earlier run ({where}).")
         else:
             differ = int((timed["failed_pair"] != earlier["failed_pair"]).sum())
+            if differ and timed["site"] == earlier["site"]:
+                raise Mismatch(f"p = {p}: relay-BP's timed row differs from the teammates' earlier run on the same machine on {differ} pairs; "
+                               "relay-BP in one process on the same file should give the same answers")
             checks.append(f"p = {p}: relay-BP's timed row and the teammates' earlier run ({where}) give "
                           + ("the same outcome on every one of the 10,000 pairs." if differ == 0 else
                              f"a different outcome on {differ} of the 10,000 pairs ({timed['failures_pair']} against {earlier['failures_pair']} failed pairs)."))
@@ -279,6 +335,7 @@ def exploration_table():
     if any(value is None for value in shots.values()):
         return write("exploration_p0.004", NOT_MEASURED), {}
     facts, lines, records = {}, [], []
+    tie_break_note = ""
     rule = {basis: loaders.weight_rule(shots[basis]) for basis in "XZ"}
     network = {int(re.search(r"step(\d+)", file.name).group(1)): loaders.network_rule_table(file)
                for file in sorted(folder.glob("results_network_select_step*.txt"), key=lambda file: int(re.search(r"step(\d+)", file.name).group(1)))}
@@ -305,13 +362,35 @@ def exploration_table():
         facts[f"W_{basis}"] = add(scope, "our hierarchy, lowest-weight tie-break", failed, reference, seconds, "ours")
         facts[f"disagree_{basis}"] = int((~agreed).sum())
         if basis == "X":
+            recomputed = {}
+            for step in network:
+                logits = loaders.network_logits(DATA / "exploration" / "cascade_X_s1",
+                                                [f"step{step}_validation_X_p0.004.npz", f"step{step}_train_X_p0.004.npz"], s["truth"])
+                if logits is not None:
+                    recomputed[step] = loaders.network_rule(s, logits)
             for step, table in network.items():
                 if table and "b. network breaks ties" in table["rows"]:
                     count, time = table["rows"]["b. network breaks ties"]
                     if table["rows"]["R alone"][0] != facts["R_X"]:
                         raise Mismatch(f"{table['source']}: relay-BP's failures differ from the per-shot files")
+                    if step in recomputed:
+                        mine = recomputed[step]
+                        if int(mine.sum()) != count:
+                            raise Mismatch(f"{table['source']}: the network rule recomputed from the logits fails {int(mine.sum())} shots, the laptop's table says {count}")
+                        versus, weight = stats.paired(reference, mine), stats.paired(failed, mine)
+                        cell = f"{versus['both']} / {versus['row_only']} / {versus['reference_only']} (p = {stats.p_text(versus['p'])})"
+                        fact("expl_X_N_only_relay", versus["reference_only"], "tables/exploration_p0.004.md")
+                        fact("expl_X_N_only_ours", versus["row_only"], "tables/exploration_p0.004.md")
+                        fact("expl_X_N_vs_W_only_network", weight["row_only"], "tables/exploration_p0.004.md")
+                        fact("expl_X_N_vs_W_only_weight", weight["reference_only"], "tables/exploration_p0.004.md")
+                        fact("expl_X_N_vs_W_p", stats.p_text(weight["p"]), "tables/exploration_p0.004.md")
+                        tie_break_note = (f"The neural tie-break against the lowest-weight tie-break on the same 25,000 X shots (network at training step {step:,}, "
+                                          f"recomputed here from its per-shot logits): both fail {weight['both']}, only the network rule fails {weight['row_only']}, "
+                                          f"only the weight rule fails {weight['reference_only']} (exact p = {stats.p_text(weight['p'])}).")
+                    else:
+                        cell = "the laptop's table gives the count only"
                     lines.append([scope, f"our hierarchy, neural tie-break (network at training step {step:,})", "ours",
-                                  f"{count} of 25,000", percent(count, 25000, 3), "in the laptop's table: not paired here", ms(time)])
+                                  f"{count} of 25,000", percent(count, 25000, 3), cell, ms(time)])
                     records.append({"shots": scope, "row": f"hierarchy, network step {step}", "built_by": "ours", "failures": count, "of": 25000,
                                     "mean_ms_per_shot": time})
                     facts[f"N{step}_X"] = count
@@ -372,6 +451,7 @@ def exploration_table():
             "In this first table a time is per shot of one basis.\n\n"
             + markdown(["Shots", "Decoder", "Built by", "Failures", "Share of shots (95% interval)",
                         "Against relay-BP, same shots: both fail / only this row / only relay-BP (exact p)", "Mean time per shot, ms"], lines)
+            + ("\n\n" + tie_break_note if tie_break_note else "")
             + "\n\nThe same decodes as pairs (shot k of X with shot k of Z), the kit's score; times per pair:\n\n"
             + markdown(["Decoder", "Built by", "Failed pairs", "Rate per cycle ± error", "95% interval",
                         "Against relay-BP: both fail / only this row / only relay-BP (exact p)", "Mean time per pair, ms"], pair_lines)
@@ -644,6 +724,7 @@ def main(argv=None):
         exploration, _ = exploration_table()
         tables = {f"test_p{p}": per_p[p] for p in P_VALUES} | {
             "test_sweep": sweep, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
+            "test_comparisons": comparisons_table(measured),
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
             "resources": resources_table(measured)}
         tables["checks"] = checks_text(measured, extra, cross_checks)

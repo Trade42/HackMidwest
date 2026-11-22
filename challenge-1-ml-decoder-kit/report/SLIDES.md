@@ -74,9 +74,10 @@ Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 **Show:** `figures/loss.png`.
 
 - In a neutral-atom machine an atom can leave its trap. A flag is the measurement that tells us it is gone.
-- At a loss rate of 0.001 per atom per gate, relay-BP that ignores loss fails <!--f:loss_blind-->173 of 300<!--/f--> shots; with the flags it
-  fails <!--f:loss_aware-->176 of 4,000<!--/f-->. Loss without its flags is ruinous; the flags give most of it back.
-- An ORACLE that is told the true round of each loss fails <!--f:loss_oracle-->107 of 4,000<!--/f-->, the same shots: <!--f:loss_oracle_ratio-->1.64<!--/f--> times fewer (<!--f:loss_oracle_ratio_interval-->1.42 to 1.94<!--/f-->).
+- At a loss rate of 0.001 per atom per gate, relay-BP that ignores loss fails <!--f:loss_blind_share-->57.7%<!--/f--> of shots
+  (<!--f:loss_blind-->173 of 300<!--/f-->); with the flags it fails <!--f:loss_aware_share-->4.4%<!--/f--> (<!--f:loss_aware-->176 of 4,000<!--/f-->), <!--f:loss_aware_ratio-->11.5<!--/f--> times fewer on the shots both decoded. Loss without its flags is ruinous; the flags give most of it back.
+- An ORACLE that is told the true round of each loss fails <!--f:loss_oracle_share-->2.7%<!--/f--> (<!--f:loss_oracle-->107 of 4,000<!--/f-->, the same shots):
+  <!--f:loss_oracle_ratio-->1.64<!--/f--> times fewer than with the flags alone (<!--f:loss_oracle_ratio_interval-->1.42 to 1.94<!--/f-->).
   That is a ceiling, not a decoder. Our tracker tries to estimate that round from the syndrome. *Pending: its result.*
 
 Source: `report/tables/loss.md`. The loss model is our own simplified one, not Infleqtion's hardware model.

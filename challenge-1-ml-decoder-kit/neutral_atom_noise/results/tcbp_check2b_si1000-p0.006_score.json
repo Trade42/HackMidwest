@@ -1,0 +1,64 @@
+{
+ "shots_file": "/home/sal/hackMidwest/orchestration/scratch/tcbp-noise/transfer3/si1000-p0.006/si1000-p0.006_X_kitformat_p0.006.npz",
+ "shots_sha256": "747dfdf598edffe70bf1cbe9a1479f5e8c43d46134112f5b23609eed17cad16b",
+ "tcbp_shots_scored": 3000,
+ "label": "exploration, after the main test results; a separate branch",
+ "rows": {
+  "m": {
+   "shots": 3000,
+   "failures": 303,
+   "wilson95": [
+    0.09072237153681008,
+    0.11229814974600004
+   ]
+  },
+  "g": {
+   "shots": 3000,
+   "failures": 546,
+   "wilson95": [
+    0.1686024982043699,
+    0.1962108495849374
+   ]
+  },
+  "h": {
+   "shots": 3000,
+   "failures": 273,
+   "wilson95": [
+    0.0812245702069326,
+    0.10182152805038402
+   ]
+  }
+ },
+ "pairs": [
+  {
+   "a": "h",
+   "b": "g",
+   "shots": 3000,
+   "failures_a": 273,
+   "failures_b": 546,
+   "only_a": 38,
+   "only_b": 311,
+   "sign_test_p": 1.988952190651945e-54
+  },
+  {
+   "a": "h",
+   "b": "m",
+   "shots": 3000,
+   "failures_a": 273,
+   "failures_b": 303,
+   "only_a": 116,
+   "only_b": 146,
+   "sign_test_p": 0.07299073428648087
+  },
+  {
+   "a": "m",
+   "b": "g",
+   "shots": 3000,
+   "failures_a": 303,
+   "failures_b": 546,
+   "only_a": 37,
+   "only_b": 280,
+   "sign_test_p": 2.434317768742303e-47
+  }
+ ]
+}

@@ -219,6 +219,11 @@ record of them (`report/data/background/plain_cnn_runs/`).
 - **Loss** is measured for X memory at p = 0.004 only, under our own loss model.
 - **A dependency with a licence.** PriorTilt is CC BY-NC-SA 4.0 (non-commercial); none of its code is in this
   repository.
+- **Work outside this submission.** Four further studies live on branches of this repository that are not merged
+  into `integration` or `main`, so no number from them is quoted anywhere in this report: `infleqtion-noise`
+  (decoding under a noise model built from Infleqtion's published figures, with and without loss), `predecoder`
+  (a learned predecoder that gives relay-BP per-shot priors), `learned-selector` (a learned choice among the
+  ensemble's members) and `fpga` (a hardware estimate of the tie-break network, in simulation).
 
 ## 8. Resources
 

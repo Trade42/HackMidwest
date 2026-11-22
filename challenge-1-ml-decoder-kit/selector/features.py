@@ -35,31 +35,26 @@ more probable. Weights from different decoders are not directly comparable (TCBP
 lighter corrections than PriorTilt or relay-BP for the same answer), so each source's weight is
 taken relative to TCBP-JOBS's weight on that shot, with its own coefficient.
 
-With the network's logits (optional, model-dependent):
+No network is read: the final networks' logits that the run on the test shots will use did not
+exist on any training file before the model was frozen (the orchestrator, 2026-11-22), so a
+network feature fitted now would not match them.
 
-  network_gap         the network's log-probability of this answer's 12 bits minus the best
-                      answer's of the same shot (0 or below; 0 for every answer without logits)
-
-The truth, the files' `failed_*` masks and the logits' `observables`, `failed` and
-`confidence` are never read here. `labels` (below) is the only function that sees the truth,
+The truth and the files' `failed_*` masks are never read here. `labels` (below) is the only function that sees the truth,
 and it is used only to fit and to score.
 """
 from dataclasses import dataclass
 
 import numpy as np
 
-from hierarchy.ensemble import Member, load_members, load_network, unanimous
-from hierarchy.rules import bits_for_network, network_score
+from hierarchy.ensemble import Member, load_members, unanimous
 
 POOL = ("T", "P1", "P2", "R", "J")      # the order of the answers in a shot; on a tie the earlier answer wins
 ALWAYS_ON = ("P1", "P2", "T")
 PRIORTILT = ("P1", "P2")
 BASE_FEATURES = ("has_T", "n_priortilt", "has_R", "J_converged", "J_unconverged", "pt_converged", "R_converged",
                  "pt_weight_minus_T", "R_weight_minus_T", "pt_log_iterations", "R_log_iterations")
-NETWORK_FEATURES = ("network_gap",)
 WEIGHT_UNIT = 10.0        # weight gaps are in units of 10 (a factor e^10 in probability)
 WEIGHT_CLIP = 5.0         # and clipped to [-5, 5], i.e. +-50
-NETWORK_CLIP = -30.0      # the network's log-probability gap, clipped below
 
 
 @dataclass
@@ -68,9 +63,6 @@ class View:
     members: dict             # name -> Member (hierarchy.ensemble), predictions only
     iterations: dict          # name -> [shots] float, NaN where the file holds none
     n_faults: dict            # name -> [shots] float, NaN where the file holds none
-    logits: np.ndarray = None           # [shots, 12] the network's logits, or None
-    network_answer: np.ndarray = None   # [shots, 12] the kit's bits of the network's own answer
-    model_from_kit: np.ndarray = None   # see hierarchy.rules.bits_for_network
 
     @property
     def shots(self):
@@ -88,8 +80,8 @@ class Info:
     paths: list
 
 
-def load(paths, logits_path=None):
-    """(View, Info) of the member files of ONE data file, and optionally the network's logits of the same shots.
+def load(paths):
+    """(View, Info) of the member files of ONE data file.
 
     hierarchy.ensemble.load_members checks the data sha256 and the alignment; this adds the
     iteration and fault counts, which its Member does not carry.
@@ -109,10 +101,10 @@ def load(paths, logits_path=None):
     for name in ALWAYS_ON:
         if name not in members or not members[name].covers.all():
             raise SystemExit(f"the selector needs {name} on every shot: give its file among the member files ({', '.join(map(str, paths))})")
+    for name in ("P1", "P2", "R"):
+        if name in members and np.isnan(iterations[name][members[name].covers]).any():
+            raise SystemExit(f"{members[name].source} holds no iteration count for {name} on some shots: the selector's features need them")
     view = View(members, iterations, n_faults)
-    if logits_path is not None:
-        network = load_network(logits_path, shots)
-        view.logits, view.network_answer, view.model_from_kit = network.logits, network.answer, network.model_from_kit
     info = Info(shots.truth, shots.data_sha256, shots.data_name or "", shots.basis, shots.p, [str(path) for path in paths])
     return view, info
 
@@ -144,13 +136,12 @@ def _log_iterations(values):
     return float(np.log10(max(values, 1.0)))
 
 
-def table(view, pool=POOL, network=False):
+def table(view, pool=POOL):
     """The choice table of a View: the distinct answers of every choice shot and their features.
 
     pool: the members that may be chosen (a model fitted without J uses a pool without J).
-    network: add the network block (needs view.logits; without logits it is 0 on every row).
     """
-    names = BASE_FEATURES + (NETWORK_FEATURES if network else ())
+    names = BASE_FEATURES
     present = [name for name in pool if name in view.members]
     members = view.members
     shots = np.flatnonzero(choice_shots(view))
@@ -193,15 +184,10 @@ def table(view, pool=POOL, network=False):
             rows_gives.append([name in givers for name in POOL])
             rows_features.append([row[name] for name in names])
         starts.append(len(rows_shot))
+    if rows_features and not np.isfinite(np.array(rows_features, float)).all():
+        raise SystemExit("a feature is not a finite number: a member file lacks a field the selector reads")
     result = Table(np.array(rows_shot, int), np.array(rows_bits, np.uint8).reshape(-1, 12), np.array(rows_gives, bool).reshape(-1, len(POOL)),
                    np.array(rows_features, float).reshape(-1, len(names)), names, np.array(starts, int), shots)
-    if network and view.logits is not None and len(result.shot):
-        own = bits_for_network(result.bits[None], view.logits[result.shot] > 0, view.network_answer[result.shot], view.model_from_kit)
-        score = network_score(own, view.logits[result.shot])[0]
-        column = names.index("network_gap")
-        for i in range(len(shots)):
-            rows = slice(result.starts[i], result.starts[i + 1])
-            result.features[rows, column] = np.maximum(score[rows] - score[rows].max(), NETWORK_CLIP)
     return result
 
 

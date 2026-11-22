@@ -60,6 +60,13 @@ validation shot); against gw 11, 0, 5 (p = 0.06).
 gets the largest weight. That is no gain over rule f, and there is little room for one (the ceiling
 is 8 failed pairs against 11).
 
+### p = 0.003, the p = 0.004 model unchanged
+
+There are no TCBP-JOBS answers on the p = 0.003 train files, so no p = 0.003 model was fitted. The
+p = 0.004 model, applied unchanged to the p = 0.003 validation files (log `logs/validation_p0.003.log`):
+selector [1 0], 1 failed pair of 5,000; T [0 1], 1; f [1 0], 1. Every decoder fails 0 to 5 times
+here, so this says nothing either way.
+
 ## Commands
 
 Run from `challenge-1-ml-decoder-kit/`, in a venv with the kit's `requirements.txt` (see

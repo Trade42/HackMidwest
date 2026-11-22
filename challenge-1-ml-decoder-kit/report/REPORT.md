@@ -271,11 +271,13 @@ record of them (`report/data/background/plain_cnn_runs/`).
 ## 7. Where it falls short
 
 - **TCBP-JOBS.** <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, exact p = 1e-11). TCBP-JOBS against relay-BP's timed row: 3 against 5 at p = 0.003 (exact p = 0.62), 41 against 83 at p = 0.004 (exact p = 4e-07), 360 against 845 at p = 0.005 (exact p = 1e-101).<!--/f--> It needs a GPU; our hierarchy runs on one CPU core.
-- **Agreeing but wrong.** On the exploration shots, <!--f:expl_left_agree-->63<!--/f--> of the <!--f:expl_left-->162<!--/f--> shots the hierarchy still fails
-  are shots where the two fast decodes agree on a wrong answer. No tie-break can fix those; only a better test for a
+- **Agreeing but wrong.** On the test shots at p = 0.004, <!--f:tsplit_fail_agree-->17<!--/f--> of the <!--f:tsplit_fail-->44<!--/f--> shots our decoder
+  still fails are shots where the two fast decodes agree on a wrong answer (on the exploration shots, <!--f:expl_left_agree-->63<!--/f--> of
+  <!--f:expl_left-->162<!--/f-->). No tie-break can fix those; only a better test for a
   hard shot, or more members on every shot, can.
-- **The slowest shots get slower.** A hard shot pays for three decoders one after the other; the 99th-percentile time
-  in `APPENDIX.md` shows it.
+- **The slowest shots get slower.** A hard shot pays for three decoders one after the other. At p = 0.005 our
+  99th-percentile time per pair is <!--f:t5_hierarchy_p99_ms-->9,885<!--/f--> ms against relay-BP's <!--f:t5_relay_bp_p99_ms-->8,270<!--/f--> ms, although our mean is
+  lower (`APPENDIX.md`, the time table).
 - **Low noise.** At p = 0.003 every good decoder fails only a handful of pairs in 10,000, so the rows cannot be told
   apart there.
 - **The network** is small and was trained for hours, not days; the Z network started later than the X network.

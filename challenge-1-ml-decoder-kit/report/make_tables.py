@@ -466,6 +466,12 @@ def earlier_table(measured):
             checks.append(f"p = {p}: relay-BP's timed row and the teammates' earlier run ({where}) give "
                           + ("the same outcome on every one of the 10,000 pairs." if differ == 0 else
                              f"a different outcome on {differ} of the 10,000 pairs ({timed['failures_pair']} against {earlier['failures_pair']} failed pairs)."))
+        router, earlier_router = measured[p].get("router"), rows["router"]
+        if router is not None and router["failed_pair"] is not None and earlier_router["failed_pair"] is not None:
+            differ = int((router["failed_pair"] != earlier_router["failed_pair"]).sum())
+            checks.append(f"p = {p}: the teammates' router, timed row against their earlier run ({where}): "
+                          + ("the same outcome on every one of the 10,000 pairs." if differ == 0 else
+                             f"a different outcome on {differ} of the 10,000 pairs ({router['failures_pair']} against {earlier_router['failures_pair']} failed pairs)."))
     text = ("The teammates' own evaluator runs on the same test files, made earlier on other machines or under other load. "
             "They are a cross-check of the counts. **Their times are not comparable with the timed table** and are shown only with their machine.\n\n"
             + markdown(["p", "Decoder", "Failures X, Z", "Failed pairs", "Rate per cycle ± error", "Time per pair, ms: mean / median / p99",

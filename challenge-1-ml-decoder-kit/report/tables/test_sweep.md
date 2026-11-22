@@ -2,7 +2,7 @@
 |---|---|---|---|
 | BP-OSD (kit baseline) | not measured | 4.02e-03 ± 1.8e-04 · 472 pairs · 302 ms | not measured |
 | relay-BP (kit baseline) | not measured | 6.94e-04 ± 7.6e-05 · 83 pairs · 319 ms | not measured |
-| relay-BP with a learned router | not measured | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | not measured |
+| relay-BP with a learned router | 5.00e-05 ± 2.0e-05 · 6 pairs · 42.5 ms | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | not measured |
 | PriorTilt, one run | not measured | not measured | not measured |
 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured |
 | our hierarchy, neural tie-break | not measured | not measured | not measured |

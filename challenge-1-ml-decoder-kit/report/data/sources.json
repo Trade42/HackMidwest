@@ -585,13 +585,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2702,
-  "commit": "70e1046fdaaef2facead55e47690b719ac996aa1",
-  "copied_utc": "2026-11-22 08:21",
+  "commit": "c4ff6a690c33e19dcfd4aba1a83c3052657c8b7f",
+  "copied_utc": "2026-11-22 08:28",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `70e1046fdaae`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `c4ff6a690c33`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "b06c432aff74ff7da47e4277c459d3b23638383eeed5d2d9f369eff0117855ed"
+  "sha256": "37ec6156bb9e734c8044ec1b56760217dd42725600d04f6873e7dc292f57ac89"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -606,14 +606,14 @@
  },
  "networks/cascade_Z_s1.train.log": {
   "branch": "origin/server-logs",
-  "bytes": 25660,
-  "commit": "da16586ba84edd313cf84a8dba8624def23e131b",
-  "copied_utc": "2026-11-22 08:18",
+  "bytes": 26423,
+  "commit": "c4ff6a690c33e19dcfd4aba1a83c3052657c8b7f",
+  "copied_utc": "2026-11-22 08:28",
   "file": "networks/cascade_Z_s1.train.log",
-  "from": "branch `server-logs` at commit `da16586ba84e`, `cascade_Z_s1.train.log`",
+  "from": "branch `server-logs` at commit `c4ff6a690c33`, `cascade_Z_s1.train.log`",
   "grows": true,
   "path": "cascade_Z_s1.train.log",
-  "sha256": "d97773d9ed9a6b18ebf205190bc6b57acd0f514e4fa1073db2fa6a5dc6df3a00"
+  "sha256": "be70868ce5db28689b222cb23419491be49e952736f8f4491c6a4ecdbc129549"
  },
  "tcbp_own_shots/tcbp-jobs_p0.003_shots10000_seed1_20261122_005215_437826+0000.log": {
   "branch": "tree",
@@ -782,25 +782,58 @@
  },
  "test/clean_rows.out": {
   "branch": "origin/server-logs",
-  "bytes": 1854,
-  "commit": "70e1046fdaaef2facead55e47690b719ac996aa1",
-  "copied_utc": "2026-11-22 08:21",
+  "bytes": 2099,
+  "commit": "c4ff6a690c33e19dcfd4aba1a83c3052657c8b7f",
+  "copied_utc": "2026-11-22 08:28",
   "file": "test/clean_rows.out",
-  "from": "branch `server-logs` at commit `70e1046fdaae`, `clean_rows.out`",
+  "from": "branch `server-logs` at commit `c4ff6a690c33`, `clean_rows.out`",
   "grows": true,
   "path": "clean_rows.out",
-  "sha256": "5517f7dd7e30c86b9e3967eb4009b71d9c63ee5846fd92f79de6c2b65a8a49cf"
+  "sha256": "c4f9aef3009249b913c19e65fb4e817bd76f2564df75477ed8937f92bca1750b"
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 5507,
-  "commit": "70e1046fdaaef2facead55e47690b719ac996aa1",
-  "copied_utc": "2026-11-22 08:21",
+  "bytes": 5979,
+  "commit": "c4ff6a690c33e19dcfd4aba1a83c3052657c8b7f",
+  "copied_utc": "2026-11-22 08:28",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `70e1046fdaae`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `c4ff6a690c33`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "5bdf86fbad682e614089c9bd740c447cc3ed2f21117fe942d3bfc74c0bee586e"
+  "sha256": "7df223872d3c7885b909224e0626c84cf652767ce0e7d976abdf519e808a5e85"
+ },
+ "test/eval_p0.003_router/01_evaluation_router_make_tiered_decoder_shots.npz": {
+  "branch": "origin/server-logs",
+  "bytes": 403598,
+  "commit": "c4ff6a690c33e19dcfd4aba1a83c3052657c8b7f",
+  "copied_utc": "2026-11-22 08:28",
+  "file": "test/eval_p0.003_router/01_evaluation_router_make_tiered_decoder_shots.npz",
+  "from": "branch `server-logs` at commit `c4ff6a690c33`, `files/clean/eval_p0.003_router/01_evaluation_router_make_tiered_decoder_shots.npz`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_router/01_evaluation_router_make_tiered_decoder_shots.npz",
+  "sha256": "28cee4d2903ac91a23f50e0bfb856a50423f6314d54ba5db3979f8a31c784cf4"
+ },
+ "test/eval_p0.003_router/summary.csv": {
+  "branch": "origin/server-logs",
+  "bytes": 914,
+  "commit": "c4ff6a690c33e19dcfd4aba1a83c3052657c8b7f",
+  "copied_utc": "2026-11-22 08:28",
+  "file": "test/eval_p0.003_router/summary.csv",
+  "from": "branch `server-logs` at commit `c4ff6a690c33`, `files/clean/eval_p0.003_router/summary.csv`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_router/summary.csv",
+  "sha256": "e7a37b2828a1d6e282a48d390ca7e1e255dcb65170c31376e3f72fd5a656e578"
+ },
+ "test/eval_p0.003_router/summary.json": {
+  "branch": "origin/server-logs",
+  "bytes": 6506,
+  "commit": "c4ff6a690c33e19dcfd4aba1a83c3052657c8b7f",
+  "copied_utc": "2026-11-22 08:28",
+  "file": "test/eval_p0.003_router/summary.json",
+  "from": "branch `server-logs` at commit `c4ff6a690c33`, `files/clean/eval_p0.003_router/summary.json`",
+  "grows": false,
+  "path": "files/clean/eval_p0.003_router/summary.json",
+  "sha256": "8c8fba80ca7b4d2dabd2554bb420101989761214f4e26eb7245981458277e0cc"
  },
  "test/eval_p0.004_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",

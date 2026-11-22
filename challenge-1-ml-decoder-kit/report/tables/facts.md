@@ -254,10 +254,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_X_wrong3` | 0.8% | `tables/networks.md` |
 | `net_X_wrong4` | 5.2% | `tables/networks.md` |
 | `net_X_wrong5` | 21.2% | `tables/networks.md` |
-| `net_Z_step` | 60,000 | `tables/networks.md` |
-| `net_Z_wrong3` | 1.1% | `tables/networks.md` |
-| `net_Z_wrong4` | 5.8% | `tables/networks.md` |
-| `net_Z_wrong5` | 22.1% | `tables/networks.md` |
+| `net_Z_step` | 62,000 | `tables/networks.md` |
+| `net_Z_wrong3` | 0.9% | `tables/networks.md` |
+| `net_Z_wrong4` | 5.2% | `tables/networks.md` |
+| `net_Z_wrong5` | 22.3% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
 | `t3_bposd_both` | not measured | `tables/test_p0.003.md` |
 | `t3_bposd_error` | not measured | `tables/test_p0.003.md` |
@@ -351,18 +351,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_relay_bp_wall_hours` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_xz` | not measured | `tables/test_p0.003.md` |
 | `t3_router_both` | not measured | `tables/test_p0.003.md` |
-| `t3_router_error` | not measured | `tables/test_p0.003.md` |
-| `t3_router_mean_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_router_median_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_router_error` | 2.0e-05 | `tables/test_p0.003.md` |
+| `t3_router_mean_ms` | 42.5 | `tables/test_p0.003.md` |
+| `t3_router_median_ms` | 9.5 | `tables/test_p0.003.md` |
 | `t3_router_only_relay` | not measured | `tables/test_p0.003.md` |
 | `t3_router_only_this` | not measured | `tables/test_p0.003.md` |
-| `t3_router_p99_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_router_p99_ms` | 627 | `tables/test_p0.003.md` |
 | `t3_router_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_router_pairs` | not measured | `tables/test_p0.003.md` |
-| `t3_router_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_router_pairs` | 6 | `tables/test_p0.003.md` |
+| `t3_router_rate` | 5.00e-05 | `tables/test_p0.003.md` |
 | `t3_router_time_ratio` | not measured | `tables/test_p0.003.md` |
-| `t3_router_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_router_xz` | not measured | `tables/test_p0.003.md` |
+| `t3_router_wall_hours` | 0.1 | `tables/test_p0.003.md` |
+| `t3_router_xz` | 3, 3 | `tables/test_p0.003.md` |
 | `t3_tcbp_both` | not measured | `tables/test_p0.003.md` |
 | `t3_tcbp_error` | not measured | `tables/test_p0.003.md` |
 | `t3_tcbp_mean_ms` | not measured | `tables/test_p0.003.md` |

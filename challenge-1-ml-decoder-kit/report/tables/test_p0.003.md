@@ -4,7 +4,7 @@ Test shots, p = 0.003: `data/p0.003/test_X.npz` and `test_Z.npz` (10,000 shots p
 |---|---|---|---|---|---|---|---|---|---|
 | BP-OSD (kit baseline) | the kit | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | relay-BP (kit baseline) | the kit | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
-| relay-BP with a learned router | teammates | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
+| relay-BP with a learned router | teammates | 3, 3 | 6 of 10,000 | 5.00e-05 ± 2.0e-05 | 2.3e-05 to 1.1e-04 | 42.5 / 9.5 / 627 | relay-BP not measured yet | relay-BP not measured yet | CPU, 1 process, ICRN server (AMD EPYC-Milan, 12 CPUs by quota); while it ran: 11.8 CPUs busy on average (at most 12.0), up to 6 evaluator rows at once, other work of ours at most: tcbp member 1, the CPU quota held the notebook back for 129 s in all |
 | PriorTilt, one run | IonQ (arXiv:2611.13373) | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | our hierarchy, lowest-weight tie-break | ours | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |
 | our hierarchy, neural tie-break | ours | not measured | not measured | not measured | not measured | not measured | not measured | not measured | not measured |

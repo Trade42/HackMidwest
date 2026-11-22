@@ -1,0 +1,79 @@
+Dataset data.npz (seed 9100), rounds counted 1..12.
+
+| version | atoms | most probable round is the true one | within one round | mean P(true round) | mean log P(true round) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| tracker | 1992 | 0.493 | 0.788 | 0.370 | -1.342 | +0.19 |
+
+Kill line (version `tracker`): losses of rounds 1 to 9 within one round of the truth: 0.777 of 1500 (rounds 2 to 10: 0.771 of 1504). The line is 0.5.
+
+By true loss round (version `tracker`):
+
+| true round | atoms | most probable round is the true one | within one round (95% Wilson) | mean P(true round) | mean P(within one) | mean error (rounds) |
+|---|---|---|---|---|---|---|
+| 1 | 172 | 0.651 | 0.831 (0.768–0.880) | 0.559 | 0.780 | +0.73 |
+| 2 | 157 | 0.503 | 0.847 (0.783–0.895) | 0.435 | 0.818 | +0.62 |
+| 3 | 177 | 0.514 | 0.791 (0.725–0.844) | 0.380 | 0.714 | +0.57 |
+| 4 | 162 | 0.420 | 0.753 (0.681–0.813) | 0.326 | 0.662 | +0.44 |
+| 5 | 179 | 0.475 | 0.816 (0.752–0.866) | 0.332 | 0.676 | +0.27 |
+| 6 | 159 | 0.434 | 0.698 (0.623–0.764) | 0.316 | 0.611 | +0.35 |
+| 7 | 170 | 0.447 | 0.741 (0.671–0.801) | 0.325 | 0.656 | +0.07 |
+| 8 | 151 | 0.397 | 0.768 (0.695–0.828) | 0.303 | 0.650 | +0.21 |
+| 9 | 173 | 0.451 | 0.740 (0.670–0.800) | 0.321 | 0.645 | +0.00 |
+| 10 | 176 | 0.477 | 0.778 (0.711–0.833) | 0.320 | 0.686 | -0.06 |
+| 11 | 149 | 0.416 | 0.846 (0.779–0.895) | 0.334 | 0.758 | -0.36 |
+| 12 | 167 | 0.707 | 0.850 (0.788–0.896) | 0.487 | 0.726 | -0.63 |
+
+By what the atom shares (from the heralds alone):
+
+| group | share of the flagged atoms | atoms | true round | within one round | mean log P(true round) |
+|---|---|---|---|---|---|
+| shares no check with another flagged data atom | 0.227 | 453 | 0.510 | 0.786 | -1.304 |
+| shares an X check only | 0.121 | 242 | 0.525 | 0.793 | -1.313 |
+| shares a Z check only | 0.118 | 236 | 0.521 | 0.805 | -1.301 |
+| shares X and Z checks | 0.533 | 1061 | 0.472 | 0.784 | -1.373 |
+| alone, and none of its 6 check atoms was ever flagged | 0.149 | 297 | 0.515 | 0.801 | -1.266 |
+
+Reliability of the round posterior, every (atom, round) pair (expected calibration error 0.0033):
+
+| posterior between | pairs | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.00 and 0.02 | 13866 | 0.003 | 0.004 |
+| 0.02 and 0.05 | 2438 | 0.033 | 0.039 |
+| 0.05 and 0.10 | 2046 | 0.072 | 0.070 |
+| 0.10 and 0.20 | 2038 | 0.144 | 0.144 |
+| 0.20 and 0.30 | 1282 | 0.247 | 0.250 |
+| 0.30 and 0.40 | 800 | 0.346 | 0.315 |
+| 0.40 and 0.50 | 537 | 0.447 | 0.458 |
+| 0.50 and 0.60 | 357 | 0.547 | 0.541 |
+| 0.60 and 0.70 | 265 | 0.645 | 0.638 |
+| 0.70 and 0.80 | 121 | 0.738 | 0.711 |
+| 0.80 and 0.90 | 89 | 0.849 | 0.820 |
+| 0.90 and 1.00 | 65 | 0.956 | 0.938 |
+
+Reliability of the most probable round (expected calibration error 0.0238):
+
+| its posterior between | atoms | mean posterior | share that is the true round |
+|---|---|---|---|
+| 0.10 and 0.20 | 18 | 0.182 | 0.222 |
+| 0.20 and 0.30 | 177 | 0.268 | 0.243 |
+| 0.30 and 0.40 | 415 | 0.352 | 0.301 |
+| 0.40 and 0.50 | 485 | 0.450 | 0.470 |
+| 0.50 and 0.60 | 357 | 0.547 | 0.541 |
+| 0.60 and 0.70 | 265 | 0.645 | 0.638 |
+| 0.70 and 0.80 | 121 | 0.738 | 0.711 |
+| 0.80 and 0.90 | 89 | 0.849 | 0.820 |
+| 0.90 and 1.00 | 65 | 0.956 | 0.938 |
+
+Temperature on the evidence (1 = as fitted; the tracker alone, before any decoding):
+
+| temperature | mean log P(true round) | calibration error of the most probable round |
+|---|---|---|
+| 0.7 | -1.4303 | 0.1101 |
+| 0.85 | -1.3630 | 0.0558 |
+| 1.0 | -1.3415 | 0.0238 |
+| 1.25 | -1.3534 | 0.0497 |
+| 1.5 | -1.3900 | 0.0959 |
+| 2.0 | -1.4803 | 0.1577 |
+| 3.0 | -1.6434 | 0.2277 |
+
+For scale, the uniform guess: mean P(true round) 0.083, mean log P -2.485.

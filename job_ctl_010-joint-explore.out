@@ -245,3 +245,41 @@ train_Z.npz shot 17792: right, converged, 791 iterations, 2 s
 train_Z.npz shot 17380: right, converged, 3068 iterations, 9 s
 train_Z.npz shot 14356: right, converged, 18052 iterations, 62 s
 train_Z.npz shot 17813: right, converged, 3879 iterations, 12 s
+train_Z.npz shot 18951: right, converged, 3727 iterations, 11 s
+train_Z.npz shot 16661: right, converged, 14071 iterations, 44 s
+train_Z.npz shot 16725: failed, NOT converged, 18080 iterations, 50 s
+train_Z.npz shot 19753: right, converged, 3690 iterations, 14 s
+train_Z.npz shot 17270: right, converged, 13701 iterations, 45 s
+train_Z.npz shot 17252: right, converged, 18071 iterations, 53 s
+train_Z.npz shot 19844: right, converged, 1646 iterations, 6 s
+train_Z.npz shot 17346: right, converged, 18010 iterations, 54 s
+train_Z.npz shot 19905: right, converged, 3101 iterations, 9 s
+train_Z.npz shot 18069: failed, NOT converged, 18080 iterations, 50 s
+train_Z.npz shot 19773: right, converged, 10876 iterations, 31 s
+train_Z.npz shot 19371: right, converged, 16156 iterations, 49 s
+train_Z.npz shot 18373: failed, NOT converged, 18080 iterations, 61 s
+train_Z.npz shot 18999: right, converged, 17994 iterations, 55 s
+
+saved /home/blakew3/mlBranchMidwest/runs/joint_p0.004/validation_X.joint.npz
+validation_X.npz: X memory, p = 0.004, 27 listed shots of 5000, data sha256 b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d
+  joint relay-BP on the listed shots: failures 4 of 27  14.8% [5.9%, 32.5%] (a hard subset: not a rate for the whole file); unconverged 3; iterations mean 9057
+  time per listed shot, the decode call alone on a fresh decoder: mean 28.8 s, median 29.2 s, largest 60.1 s; building the decoder: mean 0.06 s; 9 process(es) side by side on AMD EPYC-Milan Processor
+
+saved /home/blakew3/mlBranchMidwest/runs/joint_p0.004/train_X.joint.npz
+train_X.npz: X memory, p = 0.004, 90 listed shots of 20000, data sha256 98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc
+  joint relay-BP on the listed shots: failures 12 of 90  13.3% [7.8%, 21.9%] (a hard subset: not a rate for the whole file); unconverged 10; iterations mean 8070
+  time per listed shot, the decode call alone on a fresh decoder: mean 26.2 s, median 17.2 s, largest 68.7 s; building the decoder: mean 0.06 s; 9 process(es) side by side on AMD EPYC-Milan Processor
+
+saved /home/blakew3/mlBranchMidwest/runs/joint_p0.004/validation_Z.joint.npz
+validation_Z.npz: Z memory, p = 0.004, 27 listed shots of 5000, data sha256 843c4daf24e2b56c5988670550bbcdbac8f50b18dbb9d24beb64969146cb8e20
+  joint relay-BP on the listed shots: failures 1 of 27  3.7% [0.7%, 18.3%] (a hard subset: not a rate for the whole file); unconverged 1; iterations mean 7627
+  time per listed shot, the decode call alone on a fresh decoder: mean 24.3 s, median 15.4 s, largest 64.7 s; building the decoder: mean 0.06 s; 9 process(es) side by side on AMD EPYC-Milan Processor
+
+saved /home/blakew3/mlBranchMidwest/runs/joint_p0.004/train_Z.joint.npz
+train_Z.npz: Z memory, p = 0.004, 112 listed shots of 20000, data sha256 14dce11586fa51256f476224d0fe3965e0562f2d8f68cba6192883a65fb6b24a
+  joint relay-BP on the listed shots: failures 15 of 112  13.4% [8.3%, 20.9%] (a hard subset: not a rate for the whole file); unconverged 13; iterations mean 8837
+  time per listed shot, the decode call alone on a fresh decoder: mean 27.6 s, median 18.6 s, largest 68.5 s; building the decoder: mean 0.05 s; 9 process(es) side by side on AMD EPYC-Milan Processor
+
+wall time of this run: 794 s
+joint_member exit 0
+Sun Nov 22 06:54:06 UTC 2026

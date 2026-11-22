@@ -22,6 +22,7 @@ Files named test_* or go_* are refused without --final.
 """
 import argparse
 import json
+import math
 import time
 from pathlib import Path
 
@@ -57,6 +58,7 @@ class Predecoder:
         self.device = torch.device(device)
         self.trunk, self.head, self.saved = load_head(head_path, self.device, trunk_path)
         self.logit_by_p = {}
+        self.shift = math.log(self.saved["config"]["pos_weight"])     # a weighted loss learns odds pos_weight times too high
         self.record = {"head": str(head_path), "head_sha256": sha256_of(head_path), "head_step": self.saved["step"],
                        "trunk": str(trunk_path or self.saved["trunk_file"]), "trunk_sha256": self.saved["trunk_sha256"],
                        "trunk_step": self.saved["trunk_step"], "head_commit": self.saved["commit"],
@@ -76,7 +78,7 @@ class Predecoder:
             amp = torch.float16 if self.device.type == "cuda" else None
             with torch.autocast(self.device.type, dtype=amp, enabled=amp is not None):
                 features = self.trunk.features(trunk_input)
-            logits = self.head(features, basis, self.prior_logit(p, priors))
+            logits = self.head(features, basis, self.prior_logit(p, priors)) - self.shift
         return logits.float().cpu().numpy()
 
 

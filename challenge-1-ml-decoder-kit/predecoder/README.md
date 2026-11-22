@@ -18,6 +18,8 @@ The measurement is not in yet; every number that is in is listed under "Numbers"
 | `train.py` | trains the head on shots drawn from the error model, with the truly fired faults as labels |
 | `evaluate.py` | runs the network and the head on a shot file, saves every shot's logits, times one shot |
 | `priors.py` | turns the head's logits into one shot's priors (two knobs), and fits the knobs on train shots |
+| `subset.py` | the two train files of the fit: the shots relay-BP fails, and a sample of the rest |
+| `calibration.py` | held-out check of the head against the kit's priors and BP's own beliefs |
 | `decode.py` | relay-BP built with one shot's priors; the paired test and the Wilson interval |
 | `compare.py` | the measurement: the kit's priors against the head's, on the same Stim shots |
 | `plugin.py` | the decoder for the team's evaluator (`evaluation.evaluate`) |
@@ -35,9 +37,10 @@ those detectors are merged into one column, 8,784 columns in all. The kit builds
 problem (`circuit.dem_matrices`). `mapping.py` follows each of the 67,824 faults to the column
 it becomes (or to none: a fault that touches only Z checks is invisible to this problem). A
 column "fired" in a shot when an odd number of its faults fired, because two of them cancel;
-that is exactly how the kit merged their probabilities. Checked three ways, on every sampled
-batch: the merged probabilities equal the kit's priors (to 1e-16); H times the fired columns
-equals the shot's 936 detector bits; L times them equals its 12 logical bits.
+that is exactly how the kit merged their probabilities. Checked three ways: the merged
+probabilities equal the kit's priors (to 1e-16, at every start of training); and on the first
+batch of every training report, in the oracle and in the tests, H times the fired columns
+equals the shot's 936 detector bits and L times them equals its 12 logical bits.
 
 **The head** (`head.py`). For each column, it looks at the network's vectors on the 2 to 6
 detectors the column would light up, and averages them separately over the detectors that
@@ -53,13 +56,19 @@ has the code's symmetry: shifting the shot on the torus shifts its output the sa
 twice) at p = 0.003, 0.004 and 0.005 in turn; the labels are the fired columns. The loss is the
 plain cross-entropy, which rewards honest probabilities: a column the head puts at 2% should
 fire about 2% of the time. That matters because BP reads the numbers as probabilities. The
-network itself stays fixed (frozen); only the head (about 15,000 numbers) learns.
+network itself stays fixed (frozen); only the head (17,617 numbers) learns.
 
 **Two knobs** (`priors.py`). The head has already read the syndrome, and BP reads it again; fed
 the head's numbers as they are, BP counts the same evidence twice and may become overconfident.
 `alpha` mixes the head with the kit (1 = the head as it is, 0 = the kit), in probabilities or
 in log-odds; `eps` keeps every prior inside [eps, 1 - eps]. They are fitted on train shots
-only, never on the shots they are scored on.
+only, never on the shots they are scored on. Failures are too rare to rank settings on a plain
+slice of train shots (about 1 in 200), so the fit decodes two train files made by `subset.py`:
+every train shot that relay-BP with the kit's priors gets wrong, and a sample of the ones it
+gets right. A setting's score is the failures it leaves plus the right shots it breaks (scaled
+to the whole file); ties go to fewer "hard" shots (relay-BP's first 80-iteration leg alone
+does not converge) and then fewer iterations. This rule was fixed before a trained head was
+decoded.
 
 **The measurement** (`compare.py`). Three versions of relay-BP at the kit's settings, on the
 same shots in the same order:
@@ -133,3 +142,52 @@ What it says: BP reads per-shot priors and they steer it strongly. Raising the t
 even to 5% cuts the work tenfold, and half wrong guesses at 5% or 20% cost almost nothing.
 Confident wrong guesses (50%) start to confuse it. 300 shots hold too few failures (the kit's
 priors fail 1) to say anything about failures.
+
+### Smoke runs on this PC (CPU only; the head trained for 300 steps of 8 shots: a plumbing check, not the head we use)
+
+This PC: Ryzen 7 7730U, lane A (4 threads), niced, torch 2.15.0+cpu. Trunk: the X network at
+step 90,000 (`cascade_X_s1/checkpoint_step90000.pt` on `origin/laptop-artifacts` at `f210ebd`,
+sha256 `26a78b77...6f90df89`). Logs in `logs/`.
+
+**Training** (`logs/train_smoke_cpu_step90000_300steps.log`):
+`python -m predecoder.train --trunk <step 90,000> --out <folder> --seed 1 --steps 300 --batch 8
+--report-every 100 --report-shots 100 --p-train 0.004 --device cpu --threads 4 --warmup-steps 50`.
+Held-out error-model shots, 100 at p = 0.004, the same in every report:
+
+| step | shots seen | log-loss per column, head | the kit's priors | fired faults per shot | of them above 0.5 | not fired but above 0.5 |
+|---|---|---|---|---|---|---|
+| 0 | 0 | 0.031571 | 0.031571 | 47.0 | 0.0 | 0.00 |
+| 100 | 800 | 0.010128 | 0.031571 | 47.0 | 27.5 | 12.93 |
+| 300 | 2,400 | 0.008403 | 0.031571 | 47.0 | 30.6 | 10.82 |
+
+**Against BP's own beliefs** (`logs/calibration_smoke_p0.004_300.log`; `python -m predecoder.calibration
+--head <smoke head> --trunk <step 90,000> --p 0.004 --shots 300 --seed 77 --device cpu --threads 4`;
+300 fresh error-model shots, 47.4 fired faults per shot):
+
+| probabilities | log-loss per column | fired faults above 0.5, per shot | not fired but above 0.5, per shot |
+|---|---|---|---|
+| the kit's priors | 0.031654 | 0.0 | 0.00 |
+| BP's belief after 80 iterations (min-sum, memory 0.15) | 0.035037 | 40.2 | 6.91 |
+| the smoke head | 0.008377 | 30.9 | 11.43 |
+
+BP's own beliefs are badly overconfident (of the faults BP puts above 0.97, 87% fired), which
+is why their log-loss is worse than the fixed priors, but they find more of the fired faults
+than the smoke head does. The head has to beat this on the shots where BP struggles.
+
+**The whole chain on 300 train shots** (Stim shots of `data/p0.004/train_X.npz`, exploration;
+`logs/evaluate_smoke_train300.log`, `logs/fit_smoke_train300_grid.log`). The network and the
+head take 50.8 ms median, 63.6 ms mean per shot, one shot at a time on 4 CPU threads. Relay-BP
+at the kit's settings, built per shot:
+
+| priors | failures of 300 | hard shots (first leg alone does not converge) | mean iterations |
+|---|---|---|---|
+| the kit's | 0 | 51 | 349 |
+| log-odds mix, alpha 0.5, eps 1e-4 | 0 | 11 | 158 |
+| log-odds mix, alpha 0.8, eps 1e-4 | 2 | 15 | 326 |
+| the head as it is (alpha 1), eps 1e-4 | 3 | 18 | 390 |
+| linear mix, alpha 0.5, eps 1e-4 | 2 | 12 | 257 |
+
+Even this weak head steers relay-BP: the hard shots fall from 51 to 11 with a half-way mix in
+log-odds. Taken at face value (alpha 1) the head makes BP worse: the double-counting the knobs
+are there for. 300 shots are too few for failures. These numbers set the default grid of the
+fit (log-odds, alpha 0.3 to 0.7); they are train shots, and no knob was chosen on them.

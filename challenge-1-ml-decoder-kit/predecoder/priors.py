@@ -17,19 +17,23 @@ How much to hold back is an empirical question, so it is fitted, on train shots 
 The logits are rounded to float16 before use, everywhere (the saved files hold float16), so a
 shot gets the same priors from a saved file and from the plugin.
 
-Fit, from challenge-1-ml-decoder-kit/ (needs the logits of predecoder.evaluate on a train file):
+Fit, from challenge-1-ml-decoder-kit/. Failures are rare (about 1 shot in 200 at p = 0.004),
+far too rare to rank a dozen settings on a plain slice of train shots. So the fit decodes two
+train files that subset.py writes from a run of compare.py's "fresh" arm on train_X.npz:
 
-  python -m predecoder.priors --data data/p0.004/train_X.npz --logits <folder of predecoder.evaluate> \\
-      --shots 1000 --workers 4 --out <fit.json>
+  train_X_fresh_failed.npz   every train shot relay-BP with the kit's priors gets wrong
+  train_X_fresh_right.npz    a random sample of the shots it gets right
 
-It decodes the first --shots shots under every setting of the grid with relay-BP at the kit's
-settings, a decoder built per shot, and reports for each: failures, "hard" shots (the first
-80-iteration leg did not converge) and mean iterations. Failures are rare (about 1 shot in 200
-at p = 0.004), too rare to rank a dozen settings on 1,000 shots, while hard shots (about 1 in
-7 with the kit's priors) hold almost all failures. So the choice is: among the settings that
-fail no more than the kit's priors do on the same shots plus 2, the fewest hard shots, then the
-fewest failures, then the fewest iterations (if none qualifies: the fewest failures). The
-chosen setting goes into the JSON file with every row.
+  python -m predecoder.priors --data <failed file> <right file> --weights 1 <right shots in all / sample size> \
+      --logits <folder of predecoder.evaluate for each file, in the same order> --workers 4 --out <fit.json>
+
+For every setting of the grid each file is decoded by relay-BP at the kit's settings, a decoder
+built per shot. A setting's score is its weighted failures: the failed shots it leaves wrong
+plus the right shots it breaks, scaled to the whole train file. The chosen setting has the
+lowest score; ties go to fewer weighted hard shots (relay-BP's first leg alone, 80 iterations
+with the same priors, does not converge), then fewer mean iterations. Row 1 is the kit's
+priors, the control: it must fail every shot of the failed file and none of the right file.
+The rule was fixed before any trained head was decoded. Every row goes into the JSON file.
 """
 import argparse
 import itertools
@@ -40,8 +44,7 @@ from pathlib import Path
 
 import numpy as np
 
-from decoders import RELAY_SETTINGS
-from predecoder.decode import decode_with_priors, kit_problem, settings
+from predecoder.decode import decode_with_priors, first_leg_converges, kit_problem, settings
 
 MODES = ("linear", "logodds")
 DEFAULT = {"mode": "linear", "alpha": 1.0, "eps": 1e-6}
@@ -91,20 +94,16 @@ def _decode(task):
     shot, setting, syndrome, truth = task
     priors = shot_priors(_JOB["logits"][shot], _JOB["kit"], setting["alpha"], setting["eps"], setting["mode"])
     result = decode_with_priors(_JOB["H"], _JOB["L"], priors, syndrome)
-    hard = (not result.converged) or result.iterations > RELAY_SETTINGS["pre_iter"]
+    hard = not first_leg_converges(_JOB["H"], priors, syndrome)
     return json.dumps(setting, sort_keys=True), shot, bool((result.predicted != truth).any()), hard, result.iterations
 
 
-RULE = ("among the settings with at most the kit's failures + 2: fewest hard shots, then failures, then iterations; "
-        "if none: fewest failures")
+RULE = "lowest weighted failures (failed shots left wrong + right shots broken, scaled); then weighted hard shots; then iterations"
 
 
-def choose(control, rows):
-    """The chosen row: see RULE."""
-    allowed = [row for row in rows if row["failures"] <= control["failures"] + 2]
-    if not allowed:
-        return min(rows, key=lambda row: (row["failures"], row["hard"], row["mean_iterations"]))
-    return min(allowed, key=lambda row: (row["hard"], row["failures"], row["mean_iterations"]))
+def choose(rows):
+    """The chosen row among the candidates (the control excluded by the caller): see RULE."""
+    return min(rows, key=lambda row: (row["score"], row["hard_weighted"], row["mean_iterations"]))
 
 
 def grid(modes, alphas, epsilons):
@@ -117,48 +116,73 @@ def main(argv=None):
     from predecoder.evaluate import read_logits
 
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--data", required=True, help="a TRAIN shot file of make_dataset.py (its name starts with train_)")
-    parser.add_argument("--logits", required=True, help="the folder predecoder.evaluate wrote for that file")
-    parser.add_argument("--shots", type=int, default=1000, help="the first this many shots of the file")
-    parser.add_argument("--modes", nargs="+", default=["linear", "logodds"], choices=MODES)
-    parser.add_argument("--alphas", type=float, nargs="+", default=[0.5, 0.8, 1.0])
-    parser.add_argument("--eps", type=float, nargs="+", default=[1e-4, 1e-2])
+    parser.add_argument("--data", nargs="+", required=True, help="TRAIN shot files (names start with train_)")
+    parser.add_argument("--weights", type=float, nargs="+", help="one per file: how many train shots one of its shots stands for")
+    parser.add_argument("--logits", nargs="+", required=True, help="the folder predecoder.evaluate wrote for each file")
+    parser.add_argument("--shots", type=int, help="only the first this many shots of each file")
+    # The default grid was set from the smoke head on 300 train shots (logs/fit_smoke_train300_grid.log): log-odds
+    # mixing beat linear mixing there, and alpha = 1 failed most.
+    parser.add_argument("--modes", nargs="+", default=["logodds"], choices=MODES)
+    parser.add_argument("--alphas", type=float, nargs="+", default=[0.3, 0.4, 0.5, 0.6, 0.7])
+    parser.add_argument("--eps", type=float, nargs="+", default=[1e-4])
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--out", required=True, help="the JSON file of the fit")
     args = parser.parse_args(argv)
-    if not Path(args.data).name.startswith("train_"):
-        raise SystemExit("the knobs are fitted on train shots only: give a train_* file")
+    weights = args.weights or [1.0] * len(args.data)
+    if not len(args.data) == len(args.logits) == len(weights):
+        raise SystemExit("give one --logits folder and one weight per --data file")
+    if not all(Path(path).name.startswith("train_") for path in args.data):
+        raise SystemExit("the knobs are fitted on train shots only: give train_* files")
 
     start = time.time()
-    data = load_dataset(args.data)
-    meta, logits_path = read_logits(args.logits, data)
-    problem = kit_problem(data.basis, data.p)
-    shots = min(args.shots, len(data.detectors))
-    syndromes, truth = data.basis_input[:shots], data.observables[:shots]
+    files = []
+    for path, folder in zip(args.data, args.logits, strict=True):
+        data = load_dataset(path)
+        meta, logits_path = read_logits(folder, data)
+        files.append((data, meta, logits_path))
+    problem = kit_problem(files[0][0].basis, files[0][0].p)
+    if any(data.p != problem.p or data.basis != problem.basis for data, _, _ in files):
+        raise SystemExit("all files must have the same basis and p")
     settings_grid = grid(args.modes, args.alphas, args.eps)
-    tasks = [(k, setting, syndromes[k], truth[k]) for setting in settings_grid for k in range(shots)]
-    results = {json.dumps(s, sort_keys=True): np.zeros((shots, 3)) for s in settings_grid}
-    with multiprocessing.get_context("spawn").Pool(args.workers, _start,
-                                                   (problem.H.tocsr(), problem.L, str(logits_path), problem.priors)) as pool:
-        for key, shot, failed, hard, iterations in pool.imap_unordered(_decode, tasks, chunksize=8):
-            results[key][shot] = failed, hard, iterations
+    keys = [json.dumps(setting, sort_keys=True) for setting in settings_grid]
+    results = {}
+    for index, (data, meta, logits_path) in enumerate(files):
+        shots = len(data.detectors) if args.shots is None else min(args.shots, len(data.detectors))
+        tasks = [(k, setting, data.basis_input[k], data.observables[k]) for setting in settings_grid for k in range(shots)]
+        results[index] = {key: np.zeros((shots, 3)) for key in keys}
+        with multiprocessing.get_context("spawn").Pool(args.workers, _start,
+                                                       (problem.H.tocsr(), problem.L, str(logits_path), problem.priors)) as pool:
+            for key, shot, failed, hard, iterations in pool.imap_unordered(_decode, tasks, chunksize=8):
+                results[index][key][shot] = failed, hard, iterations
+        print(f"  {data.path.name}: {shots} shots x {len(settings_grid)} settings, {time.time() - start:.0f} s", flush=True)
     rows = []
-    print(f"fit on {data.path.name} (train), the first {shots} shots, p={data.p:g}; relay-BP at the kit's settings, a decoder "
-          f"built per shot; {args.workers} processes, {time.time() - start:.0f} s")
-    print(f"{'mode':8s} {'alpha':>6s} {'eps':>8s} {'failures':>9s} {'hard shots':>11s} {'mean iterations':>16s}")
-    for setting in settings_grid:
-        values = results[json.dumps(setting, sort_keys=True)]
-        row = setting | {"failures": int(values[:, 0].sum()), "hard": int(values[:, 1].sum()),
-                         "mean_iterations": float(values[:, 2].mean())}
+    print(f"fit on {', '.join(f'{d.path.name} (weight {w:g})' for (d, _, _), w in zip(files, weights))}, p={problem.p:g}; "
+          f"relay-BP at the kit's settings, a decoder built per shot; {args.workers} processes, {time.time() - start:.0f} s")
+    names = [data.path.stem for data, _, _ in files]
+    print(f"{'mode':8s} {'alpha':>6s} {'eps':>8s} " + " ".join(f"{'fail ' + n[:18]:>24s}" for n in names)
+          + f" {'score':>8s} {'hard (weighted)':>16s} {'mean iter':>10s}")
+    for setting, key in zip(settings_grid, keys):
+        per_file = [results[i][key] for i in range(len(files))]
+        failures = [int(values[:, 0].sum()) for values in per_file]
+        hard = [int(values[:, 1].sum()) for values in per_file]
+        total = sum(len(values) * w for values, w in zip(per_file, weights))
+        row = setting | {"failures": failures, "hard": hard,
+                         "score": float(sum(f * w for f, w in zip(failures, weights))),
+                         "hard_weighted": float(sum(h * w for h, w in zip(hard, weights))),
+                         "mean_iterations": float(sum(values[:, 2].sum() * w for values, w in zip(per_file, weights)) / total)}
         rows.append(row)
-        print(f"{row['mode']:8s} {row['alpha']:6g} {row['eps']:8g} {row['failures']:9d} {row['hard']:11d} {row['mean_iterations']:16.1f}")
-    chosen = choose(rows[0], rows[1:])
-    print(f"chosen: mode {chosen['mode']}, alpha {chosen['alpha']:g}, eps {chosen['eps']:g} ({RULE}; the kit's priors "
-          f"are row 1)")
+        print(f"{row['mode']:8s} {row['alpha']:6g} {row['eps']:8g} " + " ".join(f"{f:24d}" for f in failures)
+              + f" {row['score']:8.1f} {row['hard_weighted']:16.1f} {row['mean_iterations']:10.1f}")
+    chosen = choose(rows[1:])
+    print(f"chosen: mode {chosen['mode']}, alpha {chosen['alpha']:g}, eps {chosen['eps']:g} ({RULE}); row 1 is the kit's "
+          f"priors")
+    edge = (chosen["alpha"] in (min(args.alphas), max(args.alphas)) and len(args.alphas) > 1)
+    if edge:
+        print("note: the chosen alpha is at an edge of the grid; extend the grid (on train shots) before freezing it")
     with open(args.out, "w") as file:
-        json.dump({"data": data.identity(), "shots": shots, "logits": meta, "relay": settings(), "rows": rows,
-                   "chosen": {key: chosen[key] for key in DEFAULT}, "rule": RULE},
-                  file, indent=1)
+        json.dump({"data": [data.identity() for data, _, _ in files], "weights": weights, "logits": [m for _, m, _ in files],
+                   "relay": settings(), "rows": rows, "chosen": {key: chosen[key] for key in DEFAULT}, "rule": RULE,
+                   "chosen_at_grid_edge": edge}, file, indent=1)
 
 
 if __name__ == "__main__":

@@ -16,8 +16,9 @@ Three arms, each relay-BP at the kit's settings, on the same Stim shots of the f
 "head" against "kit" is what a user of the kit's decoder would see.
 
 For every arm: the failures (a shot fails when any of its 12 bits is wrong) with a 95% Wilson
-interval, the shots relay-BP did not converge on, the "hard" shots (the first 80-iteration leg
-did not converge), the mean iterations and the time per shot. For every pair: the shots both
+interval, the shots relay-BP did not converge on, the "hard" shots (relay-BP's first leg alone,
+80 iterations with the same priors, does not converge: a separate, untimed decode), the mean
+iterations and the time per shot. For every pair: the shots both
 get wrong, the shots only one gets wrong, and the exact two-sided binomial test on those.
 
 The time per shot of "head" is the network and the head (from predecoder.evaluate, one shot at a
@@ -31,6 +32,7 @@ runs in one process, in file order, and is saved when it ends.
 Files named test_* or go_* are refused without --final.
 """
 import argparse
+import hashlib
 import json
 import multiprocessing
 import os
@@ -40,14 +42,14 @@ from pathlib import Path
 
 import numpy as np
 
-from decoders import RELAY_SETTINGS
 from evaluation.data import load_dataset
-from predecoder.decode import decode_session, decode_with_priors, kit_problem, kit_session, paired, settings, wilson
+from predecoder.decode import (decode_session, decode_with_priors, first_leg_converges, kit_problem, kit_session, paired,
+                               settings, wilson)
 from predecoder.evaluate import HELD_OUT, read_logits
 from predecoder.priors import load_settings, shot_priors
 
 ARMS = ("kit", "fresh", "head")
-FIELDS = ("failed", "converged", "iterations", "seconds_build", "seconds_decode")
+FIELDS = ("failed", "converged", "iterations", "seconds_build", "seconds_decode", "first_leg")
 _JOB = {}
 
 
@@ -56,9 +58,9 @@ def _start(H, L, kit_priors, logits_path, prior_settings, syndromes, truth):
                 settings=prior_settings, syndromes=syndromes, truth=truth)
 
 
-def _row(result, truth):
+def _row(result, truth, first_leg):
     return (bool((result.predicted != truth).any()), result.converged, result.iterations, result.seconds_build,
-            result.seconds_decode)
+            result.seconds_decode, first_leg)
 
 
 def _run(task):
@@ -68,25 +70,27 @@ def _run(task):
     rows = []
     if arm == "kit":
         decoder = kit_session(H, _JOB["kit"])
-        for k in range(first, last):
-            rows.append(_row(decode_session(decoder, L, syndromes[k]), truth[k]))
+        for k in range(first, last):     # its first leg is the fresh arm's (no randomness in a first leg): not run again
+            rows.append(_row(decode_session(decoder, L, syndromes[k]), truth[k], np.nan))
     for k in range(first, last) if arm != "kit" else ():
         if arm == "fresh":
             priors = _JOB["kit"]
         else:
             s = _JOB["settings"]
             priors = shot_priors(_JOB["logits"][k], _JOB["kit"], s["alpha"], s["eps"], s["mode"])
-        rows.append(_row(decode_with_priors(H, L, priors, syndromes[k]), truth[k]))
+        result = decode_with_priors(H, L, priors, syndromes[k])
+        rows.append(_row(result, truth[k], first_leg_converges(H, priors, syndromes[k])))   # untimed
     return arm, first, np.array(rows, dtype=np.float64)
 
 
 def summarise(arm, values, network_seconds=0.0):
     failed, converged, iterations = values["failed"].astype(bool), values["converged"].astype(bool), values["iterations"]
-    hard = (~converged) | (iterations > RELAY_SETTINGS["pre_iter"])
+    first_leg = values["first_leg"]
+    hard = None if np.isnan(first_leg).any() else int((first_leg == 0).sum())
     seconds = values["seconds_build"] + values["seconds_decode"] + network_seconds
     low, high = wilson(int(failed.sum()), len(failed))
     return {"arm": arm, "shots": len(failed), "failures": int(failed.sum()), "share": float(failed.mean()),
-            "wilson95": [low, high], "unconverged": int((~converged).sum()), "hard": int(hard.sum()),
+            "wilson95": [low, high], "unconverged": int((~converged).sum()), "hard": hard,
             "mean_iterations": float(iterations.mean()), "network_seconds_mean": network_seconds,
             "build_seconds_mean": float(values["seconds_build"].mean()), "decode_seconds_mean": float(values["seconds_decode"].mean()),
             "seconds_mean": float(seconds.mean()), "seconds_p99": float(np.percentile(seconds, 99))}
@@ -121,7 +125,12 @@ def main(argv=None):
     (out / "parts").mkdir(parents=True, exist_ok=True)
 
     def part(arm, first):
-        return out / "parts" / f"{arm}_{first:06d}_{shots}.npy"
+        """A part file's name carries a fingerprint of what it holds: the shot file, and for the head arm the head and the knobs."""
+        what = {"data": data.sha256, "arm": arm}
+        if arm == "head":
+            what |= {"head": meta["model"]["head_sha256"], "trunk": meta["model"]["trunk_sha256"], "priors": prior_settings}
+        tag = hashlib.sha256(json.dumps(what, sort_keys=True).encode()).hexdigest()[:12]
+        return out / "parts" / f"{arm}_{tag}_{first:06d}_{shots}.npy"
 
     tasks = []
     if "kit" in args.arms and not part("kit", 0).exists():
@@ -148,6 +157,8 @@ def main(argv=None):
         firsts = [0] if arm == "kit" else range(0, shots, args.chunk)
         rows = np.concatenate([np.load(part(arm, first)) for first in firsts])
         values = {field: rows[:, i] for i, field in enumerate(FIELDS)}
+        if arm == "kit" and "fresh" in args.arms:
+            values["first_leg"] = np.concatenate([np.load(part("fresh", first)) for first in range(0, shots, args.chunk)])[:, 5]
         results[arm] = summarise(arm, values, network if arm == "head" else 0.0)
         for field, column in values.items():
             per_shot[f"{field}_{arm}"] = column
@@ -164,7 +175,7 @@ def main(argv=None):
           f"{'build ms':>8s} {'decode ms':>9s} {'total ms':>8s} {'p99 ms':>7s}")
     for arm, row in results.items():
         print(f"{arm:6s} {row['failures']:9d} {row['share']:9.4f} [{row['wilson95'][0]:.4f}, {row['wilson95'][1]:.4f}] "
-              f"{row['unconverged']:11d} {row['hard']:6d} {row['mean_iterations']:9.0f} {row['build_seconds_mean'] * 1e3:8.1f} "
+              f"{row['unconverged']:11d} {str(row['hard']):>6s} {row['mean_iterations']:9.0f} {row['build_seconds_mean'] * 1e3:8.1f} "
               f"{row['decode_seconds_mean'] * 1e3:9.1f} {row['seconds_mean'] * 1e3:8.1f} {row['seconds_p99'] * 1e3:7.0f}")
     for name, pair in pairs.items():
         a, b = name.split("_vs_")

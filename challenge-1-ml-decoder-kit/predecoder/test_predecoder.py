@@ -20,7 +20,7 @@ from make_circuit import memory_experiment
 from neural.graph import build_graph
 from neural.sampler import DemSampler
 from predecoder import decode as decode_module
-from predecoder.decode import decode_with_priors, kit_problem
+from predecoder.decode import decode_with_priors, first_leg_converges, kit_problem
 from predecoder.head import PriorHead, column_shapes, prior_logit
 from predecoder.mapping import column_map
 from predecoder.priors import head_probabilities, shot_priors
@@ -182,6 +182,7 @@ def test_priors_change_what_relay_bp_does(sampled):
     oracle = decode_with_priors(problem.H, problem.L, told, syndrome)
     assert oracle.converged and np.array_equal(oracle.predicted, observables[0])
     assert oracle.iterations < plain.iterations
+    assert first_leg_converges(problem.H, told, syndrome)
     again = decode_with_priors(problem.H, problem.L, told, syndrome)       # a decoder built per shot repeats itself
     assert again.iterations == oracle.iterations and np.array_equal(again.predicted, oracle.predicted)
 
@@ -291,12 +292,51 @@ def test_held_out_files_are_refused(tmp_path):
 
 
 def test_fit_choice_rule():
-    """Fewest hard shots among the settings that fail at most 2 more than the kit's priors; else fewest failures."""
+    """Lowest weighted failures; ties go to fewer weighted hard shots, then fewer iterations."""
     from predecoder.priors import choose
 
-    control = {"failures": 5, "hard": 140, "mean_iterations": 500}
-    rows = [{"name": "a", "failures": 4, "hard": 90, "mean_iterations": 200},
-            {"name": "b", "failures": 9, "hard": 20, "mean_iterations": 50},     # converges fast but fails more: excluded
-            {"name": "c", "failures": 7, "hard": 60, "mean_iterations": 150}]
-    assert choose(control, rows)["name"] == "c"
-    assert choose({"failures": 0}, rows[1:])["name"] == "c"
+    rows = [{"name": "a", "score": 30.0, "hard_weighted": 90, "mean_iterations": 200},
+            {"name": "b", "score": 25.0, "hard_weighted": 400, "mean_iterations": 500},
+            {"name": "c", "score": 25.0, "hard_weighted": 300, "mean_iterations": 600}]
+    assert choose(rows)["name"] == "c"
+
+
+def test_subsets_and_the_fit_run_end_to_end(trained, tmp_path):
+    """subset.py splits a train file by a per-shot file; evaluate.py and the weighted fit of priors.py run on the parts."""
+    from predecoder import evaluate, priors, subset
+
+    trunk, head_path = trained
+    source = small_file(tmp_path / "train_small_X.npz", 4)
+    data = load_dataset(source)
+    np.savez(tmp_path / "per_shot.npz", truth=data.observables, failed_fresh=np.array([False, True, False, True]))
+    subset.main(["--data", str(source), "--per-shot", str(tmp_path / "per_shot.npz"), "--right", "1", "--seed", "0",
+                 "--out", str(tmp_path / "sub")])
+    failed = load_dataset(tmp_path / "sub" / "train_small_X_fresh_failed.npz")
+    right = load_dataset(tmp_path / "sub" / "train_small_X_fresh_right.npz")
+    assert np.array_equal(failed.detectors, data.detectors[[1, 3]]) and len(right.detectors) == 1
+    with np.load(tmp_path / "sub" / "train_small_X_fresh_right.npz") as file:
+        assert np.array_equal(right.detectors[0], data.detectors[int(file["shot"][0])]) and int(file["shot"][0]) in (0, 2)
+    folders = []
+    for name in ("failed", "right"):
+        folders.append(str(tmp_path / f"logits_{name}"))
+        evaluate.main(["--head", head_path, "--trunk", trunk, "--data", str(tmp_path / "sub" / f"train_small_X_fresh_{name}.npz"),
+                       "--out", folders[-1], "--device", "cpu", "--threads", "2", "--time-shots", "0"])
+    priors.main(["--data", str(tmp_path / "sub" / "train_small_X_fresh_failed.npz"), str(tmp_path / "sub" / "train_small_X_fresh_right.npz"),
+                 "--weights", "1", "2", "--logits", *folders, "--modes", "logodds", "--alphas", "1.0", "--workers", "2",
+                 "--out", str(tmp_path / "fit.json")])
+    fit = json.loads((tmp_path / "fit.json").read_text())
+    assert len(fit["rows"]) == 2 and fit["chosen"]["mode"] == "logodds"
+    control = fit["rows"][0]
+    assert control["score"] == control["failures"][0] + 2 * control["failures"][1]
+    with pytest.raises(SystemExit):        # validation shots are never used to fit
+        priors.main(["--data", str(VALIDATION), "--logits", folders[0], "--out", str(tmp_path / "no.json")])
+
+
+def test_calibration_runs(trained, tmp_path):
+    from predecoder import calibration
+
+    trunk, head_path = trained
+    calibration.main(["--head", head_path, "--trunk", trunk, "--shots", "4", "--chunk", "2", "--device", "cpu",
+                      "--out", str(tmp_path / "cal.json")])
+    rows = json.loads((tmp_path / "cal.json").read_text())["rows"]
+    assert rows["all shots"]["shots"] == 4 and rows["all shots"]["head"]["log_loss"] > 0

@@ -57,6 +57,17 @@ def decode_with_priors(H, L, priors, syndrome, seed=RELAY_SEED, **changes):
                    built - start, done - built)
 
 
+def first_leg_converges(H, priors, syndrome, seed=RELAY_SEED):
+    """Does relay-BP's first leg alone (80 iterations, num_sets=0) converge on this syndrome with these priors?
+
+    The kit's relay-BP goes on after a converged first leg until it holds 5 solutions, so its
+    iteration count does not say whether a shot was easy. This separate, untimed decode does:
+    the shots whose first leg fails hold almost all of relay-BP's failures (gate G1).
+    """
+    decoder = relay_decoder(H, np.asarray(priors, np.float64), seed=seed, num_sets=0, stop_nconv=1)
+    return bool(decoder.decode_detailed(np.ascontiguousarray(syndrome, dtype=np.uint8)).success)
+
+
 def decode_session(decoder, L, syndrome):
     """One shot through a decoder that was built once (the kit's arm)."""
     start = time.perf_counter()

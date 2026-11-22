@@ -77,7 +77,7 @@ def main(argv=None):
                                      alpha=RELAY_SETTINGS["alpha"], gamma0=RELAY_SETTINGS["gamma0"])
     amp = torch.float16 if device.type == "cuda" else None
     generator = torch.Generator(device=device)
-    q_head, q_bp, labels = [], [], []
+    q_head, q_bp, labels, converged = [], [], [], []
     with torch.no_grad():
         for index, start in enumerate(range(0, args.shots, args.chunk)):
             size = min(args.chunk, args.shots - start)
@@ -89,23 +89,39 @@ def main(argv=None):
             q_head.append(torch.sigmoid(logits.double()).cpu().numpy())
             labels.append(fired.cpu().numpy())
             for syndrome in basis_bits.cpu().numpy():
-                ratios = np.asarray(bp.decode_detailed(syndrome).posterior_ratios, np.float64)
+                result = bp.decode_detailed(syndrome)
+                converged.append(bool(result.success))
+                ratios = np.asarray(result.posterior_ratios, np.float64)
                 q_bp.append(1 / (1 + np.exp(np.clip(np.nan_to_num(ratios, nan=0.0), -50, 50))))
-    q_head, y = np.concatenate(q_head).ravel(), np.concatenate(labels).ravel().astype(np.float64)
-    q_bp = np.concatenate(q_bp).ravel()
-    q_kit = np.tile(kit, args.shots)
-    rows = {}
+    columns = len(kit)
+    q_head, y = np.concatenate(q_head), np.concatenate(labels).astype(np.float64)
+    q_bp = np.stack(q_bp)
+    q_kit = np.tile(kit, (args.shots, 1))
+    converged = np.array(converged)
     print(f"held-out error-model shots: X memory, p={args.p:g}, {args.shots} shots (seed {args.seed}, stream "
           f"{CALIBRATION_STREAM}), {y.sum() / args.shots:.1f} fired columns per shot; head {args.head} at step {saved['step']}")
-    for name, q in (("kit", q_kit), ("BP, 80 iterations", q_bp), ("head", q_head)):
-        rows[name] = {"log_loss": log_loss(q, y), "bands": bands(q, y),
-                      "fired_above_half_per_shot": float(((q > 0.5) & (y == 1)).sum() / args.shots),
-                      "not_fired_above_half_per_shot": float(((q > 0.5) & (y == 0)).sum() / args.shots)}
-        print(f"{name:18s} log-loss per column {rows[name]['log_loss']:.6f} | fired and above 0.5: "
-              f"{rows[name]['fired_above_half_per_shot']:.1f} per shot, not fired and above 0.5: "
-              f"{rows[name]['not_fired_above_half_per_shot']:.2f}")
-        print("    " + " | ".join(f"[{b['low']:g},{b['high']:g}) n={b['columns']} q={b['mean_q']:.4f} fired={b['fired']:.4f}"
-                                  for b in rows[name]["bands"]))
+    groups = {"all shots": np.ones(args.shots, bool), "BP's first leg converges": converged,
+              "BP's first leg does not converge": ~converged}
+    rows = {}
+    for group, keep in groups.items():
+        count = int(keep.sum())
+        print(f"{group}: {count} shots")
+        rows[group] = {"shots": count}
+        if not count:
+            continue
+        for name, q in (("kit", q_kit), ("BP, 80 iterations", q_bp), ("head", q_head)):
+            qs, ys = q[keep].ravel(), y[keep].ravel()
+            row = {"log_loss": log_loss(qs, ys), "bands": bands(qs, ys),
+                   "fired_per_shot": float(ys.sum() / count),
+                   "fired_above_half_per_shot": float(((qs > 0.5) & (ys == 1)).sum() / count),
+                   "not_fired_above_half_per_shot": float(((qs > 0.5) & (ys == 0)).sum() / count)}
+            rows[group][name] = row
+            print(f"  {name:18s} log-loss per column {row['log_loss']:.6f} | fired per shot {row['fired_per_shot']:.1f}, "
+                  f"of them above 0.5: {row['fired_above_half_per_shot']:.1f}; not fired and above 0.5: "
+                  f"{row['not_fired_above_half_per_shot']:.2f}")
+            print("      " + " | ".join(f"[{b['low']:g},{b['high']:g}) n={b['columns']} q={b['mean_q']:.4f} "
+                                        f"fired={b['fired']:.4f}" for b in row["bands"]))
+    assert q_head.shape == (args.shots, columns)
     if args.out:
         with open(args.out, "w") as file:
             json.dump({"p": args.p, "shots": args.shots, "seed": args.seed, "head": args.head, "head_step": saved["step"],

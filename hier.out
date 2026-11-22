@@ -266,3 +266,7 @@ validation_X.npz chunk 2: shots 1000 to 1499, failures R 0, P1 0, P2 0, relay-BP
 validation_X.npz chunk 4: shots 2000 to 2499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 30 s
 validation_X.npz chunk 5: shots 2500 to 2999, failures R 1, P1 1, P2 0, relay-BP ran on 500, 30 s
 validation_X.npz chunk 7: shots 3500 to 3999, failures R 1, P1 1, P2 2, relay-BP ran on 500, 27 s
+validation_X.npz chunk 6: shots 3000 to 3499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 38 s
+validation_X.npz chunk 8: shots 4000 to 4499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 26 s
+validation_X.npz chunk 9: shots 4500 to 4999, failures R 0, P1 0, P2 0, relay-BP ran on 500, 36 s
+validation_Z.npz chunk 0: shots 0 to 499, failures R 1, P1 0, P2 1, relay-BP ran on 500, 31 s

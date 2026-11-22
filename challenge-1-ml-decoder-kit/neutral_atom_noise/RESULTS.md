@@ -299,6 +299,69 @@ Paired, on the same shots:
   headline of question 3. (Lost data atoms per shot: 144 × (1 − (1 − s)^72), the count `loss/RESULTS.md` confirms.)
 - Only the generic baseline at the same two-qubit error was run under loss; the fitted one was not.
 
+## Exploration: the TCBP pipeline on this noise (TCBP-JOBS, phase 1)
+
+**Exploration, after the main test results; a separate branch.** Declared before any number in
+[`tcbp_check_declared.md`](tcbp_check_declared.md) (commit `c4b82a0a`). Question 1's X shot file at factor 0.8
+(2,000 shots, seed 4100, sha256 `4e6e2867...`: the same shots as the BP-OSD and relay-BP rows above), decoded by
+TCBP-JOBS (cudaq-qec 0.9.0, preset `tcbp-jobs`, one decoder built per shot) with three prior vectors. The decoder ran in server
+job `cpu/090` on the team's A100 (MIG slice 2g.20gb), one process, one CPU thread. The network ran on the same GPU in
+float32: 23.5 ms per shot, one shot at a time.
+
+- **g, generic:** the kit's uniform priors at p = 0.0326, BP-OSD's p fitted on train seed 5100.
+- **m, matched:** `priors.matched_priors` of the file's own noise.
+- **h, head:** the TCBP pipeline's network and head at its frozen knobs (log-odds, alpha 0.4, eps 1e-4, cap 0.5; no
+  refit). The head was told p = 0.0326, which is also the mixing base. That p is about 6.5 times above the p = 0.003
+  to 0.005 the network was trained on.
+
+| Arm (all on the same 2,000 shots) | Failures | 95% Wilson |
+|---|---|---|
+| TCBP-JOBS, matched priors (m) | **25** | 0.85% to 1.84% |
+| TCBP-JOBS, the head's priors (h) | **209** | 9.2% to 11.9% |
+| TCBP-JOBS, generic at p = 0.0326 (g) | **957** | 45.7% to 50.0% |
+| BP-OSD, matched (above) | 91 | 3.7% to 5.6% |
+| BP-OSD, generic at p = 0.0326 (above) | 442 | 20.3% to 24.0% |
+| relay-BP, matched (above) | 39 | 1.4% to 2.7% |
+| relay-BP, generic at p = 0.0457 (above, first 500 shots) | 65 of 500 | 10.3% to 16.2% |
+
+| Pair (same shots) | Failures | Only the first fails | Only the second fails | Sign test p |
+|---|---|---|---|---|
+| h vs g | 209, 957 | 23 | 771 | 3e-195 |
+| h vs m | 209, 25 | 187 | 3 | 1e-51 |
+| m vs g | 25, 957 | 1 | 933 | 1e-278 |
+| m vs relay-BP matched | 25, 39 | 6 | 20 | 0.009 |
+| m vs BP-OSD matched | 25, 91 | 8 | 74 | 2e-14 |
+| h vs BP-OSD generic | 209, 442 | 57 | 290 | 1e-38 |
+| h vs relay-BP generic (500 shots) | 54, 65 | 18 | 29 | 0.14 |
+
+What this shows:
+
+- **Matched priors are again the big lever**, as declared: with TCBP-JOBS, 25 failures against 957. With matched
+  priors TCBP-JOBS also beats this branch's best decoder, relay-BP (25 against 39, p = 0.009).
+- **The generic arm was weak for TCBP-JOBS.** At BP-OSD's fitted p, TCBP-JOBS fails 957 shots, where BP-OSD itself
+  fails 442 at the same p. That p was fitted for BP-OSD, not for TCBP-JOBS. **So the head's gain over g (209 against
+  957, about 4.6 times) overstates what the head adds over a good generic picture.** Against the decoders' own
+  generic rows the head is better than BP-OSD's (209 against 442) and not clearly different from relay-BP's on the
+  500 shots both have (54 against 65, p = 0.14).
+- **The head transfers part of the way.** It never saw this noise or this strength, yet its priors cut TCBP-JOBS's
+  failures from 957 to 209. The matched picture is still about 8 times better (209 against 25; only-h 187, only-m 3).
+- **Checks:**
+  - Every correction of every arm reproduces its syndrome (H e = s on all 6,000 decodes).
+  - The cap at 0.5 changed 44,884 head-prior columns, about 22 per shot.
+  - The head's probabilities sum to 108 per shot. The matched priors sum to 87 and the generic ones to 367.
+  - TCBP-JOBS's own convergence flag is false on 1,675 (m), 2,000 (g) and 1,743 (h) shots.
+  - Mean build + decode per shot, A100 slice, one thread: 51 ms (m), 131 ms (g), 58 ms (h).
+
+Files:
+- `logs/tcbp_check_decode.log` and `logs/tcbp_check_evaluate.log`: the server's logs;
+- `results/tcbp_check_X_f0.8_per_shot.npz`: every arm's outcome per shot;
+- `results/tcbp_check_X_f0.8_summary.json`: the server's summary;
+- `results/tcbp_check_X_f0.8_score.json`: the table above, rebuilt here with
+  `python -m neutral_atom_noise.tcbp_check score --per-shot results/tcbp_check_X_f0.8_per_shot.npz --shots
+  <X_f0.8_seed4100.npz> --results <run folder>/results --out <json>`.
+
+The server's files are on the branch `server-logs` at `58b6e2d2`, under `files/tcbp-noise/`.
+
 ## What was not done
 
 - **PriorTilt** with matched priors (the brief's optional decoder) and **the network**: not run.

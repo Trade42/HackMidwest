@@ -76,6 +76,11 @@ numbers are for X memory; every comparison is on the same shots.
    between 0.6 and 0.8 of the published rates. **So today's published figures sit far above the range where this code works**, and
    the model still leaves out leakage, atom moves and the mid-circuit readout their machine does not have yet.
 
+4. **Exploration, after the main results: the team's TCBP pipeline on this noise** (TCBP-JOBS, RESULTS.md). On the
+   same 2,000 shots at factor 0.8, TCBP-JOBS fails 25 times with matched priors, 209 with the network's priors and
+   957 with the kit's generic priors at BP-OSD's fitted p. That generic p was weak for TCBP-JOBS (BP-OSD itself fails 442 at
+   it), so the network's gain over it is overstated. Knowing the shape is still worth about 8 times more than the network.
+
 ## What the tables do not show
 
 - **A model, not a machine.** The figures come from Infleqtion's papers; the model is ours. Where a paper gives no

@@ -233,6 +233,124 @@ def decode_command(args):
     print(f"saved {out / 'per_shot.npz'}: {done} shots scored; {time.time() - start:.0f} s", flush=True)
 
 
+def load_task(task, root, logits_root, problem_cache):
+    """One task of a plan: its shots, problem, prior vectors and logits, after the same checks as decode."""
+    from evaluation.data import load_dataset
+    from predecoder.decode import kit_problem
+    from predecoder.files import read_logits
+
+    root = Path(root)
+    with open(root / task["transfer"]) as file:
+        transfer = json.load(file)
+    data = load_dataset(root / task["data"])
+    if data.sha256 != transfer["converted_sha256"]:
+        raise SystemExit(f"{task['name']}: the shot file is not the one of its transfer.json")
+    problem = kit_problem(data.basis, data.p)
+    if matrix_hash(problem.H, problem.L) != transfer["h_l_sha256"]:
+        raise SystemExit(f"{task['name']}: H and L rebuilt here differ from luminaty's")
+    if problem_cache and matrix_hash(problem.H, problem.L) != matrix_hash(problem_cache.H, problem_cache.L):
+        raise SystemExit(f"{task['name']}: another H than the first task's: one TCBP model cannot serve both")
+    vectors = {}
+    for name in ("generic", "matched"):
+        path = root / task[name]
+        if file_sha256(path) != transfer[name]["sha256"]:
+            raise SystemExit(f"{task['name']}: {path} is not the {name} vector of its transfer.json")
+        vector = np.load(path)
+        if vector.shape != (problem.H.shape[1],) or not (0 < vector).all() or (vector > PRIOR_CAP).any():
+            raise SystemExit(f"{task['name']}: the {name} vector has the wrong shape or values outside (0, {PRIOR_CAP}]")
+        vectors[name] = vector
+    if not np.allclose(vectors["generic"], problem.priors, rtol=1e-12, atol=0):
+        raise SystemExit(f"{task['name']}: the generic vector differs from the kit's priors at the file's p")
+    meta, logits_path = read_logits(Path(logits_root) / task["name"], data)
+    logits = np.load(logits_path, mmap_mode="r")
+    if logits.shape != (len(data.detectors), problem.H.shape[1]):
+        raise SystemExit(f"{task['name']}: logits of shape {logits.shape}")
+    return SimpleNamespace(name=task["name"], data=data, problem=problem, transfer=transfer, meta=meta, logits=logits,
+                           problems={"m": SimpleNamespace(H=problem.H, L=problem.L, priors=vectors["matched"]),
+                                     "g": SimpleNamespace(H=problem.H, L=problem.L, priors=vectors["generic"]),
+                                     "h": SimpleNamespace(H=problem.H, L=problem.L, priors=vectors["generic"])})
+
+
+def decode_many_command(args):
+    """Several tasks of one plan (one H): one TCBP model, blocks taken in turn, task after task, until --stop-at."""
+    from predecoder import tcbp
+    from predecoder.priors import load_settings
+
+    with open(args.plan) as file:
+        plan = json.load(file)
+    setting = load_settings(args.settings)
+    if setting != FROZEN:
+        raise SystemExit(f"the knobs are {setting}, not the frozen {FROZEN}")
+    tasks, first_problem = [], None
+    for task in plan["tasks"]:
+        tasks.append(load_task(task, args.root, args.logits_root, first_problem))
+        first_problem = first_problem or tasks[-1].problem
+    version = tcbp.check_environment(args.decoder)
+    stop_at = datetime.fromisoformat(args.stop_at.replace("Z", "+00:00")).timestamp()
+    if tuple(tcbp.FIELDS[:len(FIELDS)]) != FIELDS:
+        raise SystemExit(f"predecoder.tcbp's row fields are {tcbp.FIELDS}, not {FIELDS} first")
+    start = time.time()
+    print(f"plan {args.plan}: tasks {[t.name for t in tasks]}; decoder {args.decoder} ({version}), preset {args.preset}; "
+          f"head knobs {setting}, cap {PRIOR_CAP}; stop at {args.stop_at}; {tcbp.where(args.decoder)}", flush=True)
+    builder = tcbp.Builder(first_problem, args.decoder, args.preset)
+    print(f"  model fitted in {builder.model_seconds:.1f} s (one model, shared by every task); GPU memory {tcbp.gpu_memory()}", flush=True)
+    state = {}
+    for t in tasks:
+        shots = len(t.data.detectors) if args.limit is None else min(args.limit, len(t.data.detectors))
+        out = Path(args.out) / t.name
+        (out / "parts").mkdir(parents=True, exist_ok=True)
+        mirror = Path(args.mirror) / t.name if args.mirror else None
+        if mirror:
+            mirror.mkdir(parents=True, exist_ok=True)
+        state[t.name] = SimpleNamespace(
+            shots=shots, out=out, mirror=mirror, done=0,
+            syndromes=np.ascontiguousarray(t.data.basis_input[:shots], dtype=np.uint8),
+            truth=np.asarray(t.data.observables[:shots], np.uint8),
+            rows={arm: np.zeros((shots, len(tcbp.FIELDS))) for arm in ARMS},
+            hashes={arm: np.zeros(shots, np.uint64) for arm in ARMS}, capped={arm: 0 for arm in ARMS},
+            extra={"task": t.name, "data": t.data.identity(), "transfer": t.transfer, "decoder": args.decoder,
+                   "version": version, "preset": args.preset, "head_knobs": setting, "prior_cap": PRIOR_CAP,
+                   "logits": t.meta, "stop_at": args.stop_at, "block": BLOCK, "arm_order": list(ARMS),
+                   "task_order": [x.name for x in tasks], "model_seconds": builder.model_seconds,
+                   "machine": tcbp.where(args.decoder),
+                   "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process"})
+    warm, stopped = True, False
+    for first in range(0, max(s.shots for s in state.values()), BLOCK):
+        for t in tasks:
+            s = state[t.name]
+            if first >= s.shots:
+                continue
+            if time.time() > stop_at:
+                stopped = True
+                break
+            last = min(first + BLOCK, s.shots)
+            for arm in ARMS:
+                path = s.out / "parts" / f"{arm}_{first:06d}_{last:06d}.npz"
+                if not path.exists():
+                    before = tcbp.CAPPED["columns"]
+                    part, part_hashes = tcbp.decode_shots(builder, t.problems[arm], s.syndromes[first:last],
+                                                          s.truth[first:last], t.logits[first:last] if arm == "h" else None,
+                                                          setting if arm == "h" else None,
+                                                          f"{t.name} {arm} {first}-{last - 1}", warm)
+                    s.capped[arm] += tcbp.CAPPED["columns"] - before
+                    warm = False
+                    np.savez(path, rows=part, hashes=part_hashes)
+                with np.load(path) as file:
+                    s.rows[arm][first:last], s.hashes[arm][first:last] = file["rows"], file["hashes"]
+            s.done = last
+            s.extra |= {"capped_columns": dict(s.capped), "seconds": time.time() - start}
+            save_results(s.out, s.mirror, s.done, s.rows, s.hashes, s.truth, s.extra)
+            print(f"  {t.name} block {first}-{last - 1} done, {time.time() - start:.0f} s; failures so far "
+                  + ", ".join(f"{arm} {int(s.rows[arm][:s.done, 0].sum())}" for arm in ARMS) + f" of {s.done}", flush=True)
+        if stopped:
+            print(f"  stop: {args.stop_at} passed; scored shots " + ", ".join(f"{n} {s.done}" for n, s in state.items()), flush=True)
+            break
+    for name, s in state.items():
+        save_results(s.out, s.mirror, s.done, s.rows, s.hashes, s.truth, s.extra | {"seconds": time.time() - start})
+        print(f"saved {s.out / 'per_shot.npz'}: {s.done} shots scored", flush=True)
+    print(f"done; {time.time() - start:.0f} s", flush=True)
+
+
 # ---------- score (luminaty) ----------
 
 def wilson(failures, shots, z=1.959963984540054):
@@ -279,8 +397,10 @@ def score_command(args):
         raise SystemExit(f"{args.per_shot} was not made from {args.shots}")
     failed = {arm: per_shot[f"failed_{arm}"] > 0 for arm in ARMS}
     stem = Path(args.shots).stem
-    for name, decoder, spec in (("BP-OSD matched", "bposd", "matched"), ("BP-OSD generic (fitted p)", "bposd", None),
-                                ("relay-BP matched", "relay", "matched"), ("relay-BP generic (fitted p)", "relay", None)):
+    others = () if args.results is None else (
+        ("BP-OSD matched", "bposd", "matched"), ("BP-OSD generic (fitted p)", "bposd", None),
+        ("relay-BP matched", "relay", "matched"), ("relay-BP generic (fitted p)", "relay", None))
+    for name, decoder, spec in others:
         if spec is None:
             with open(Path(args.results).parent / "fit.json") as file:
                 p = json.load(file)[Path(args.shots).name][decoder]["p"]
@@ -325,11 +445,20 @@ def main(argv=None):
     decode.add_argument("--decoder", default="tcbp-jobs", choices=("tcbp-jobs", "relay"))
     decode.add_argument("--preset", default="tcbp-jobs")
     decode.add_argument("--limit", type=int, help="only the first this many shots (dry runs)")
+    many = sub.add_parser("decode-many")
+    for name in ("plan", "root", "logits_root", "settings", "stop_at", "out"):
+        many.add_argument(f"--{name.replace('_', '-')}", required=True)
+    many.add_argument("--mirror")
+    many.add_argument("--decoder", default="tcbp-jobs", choices=("tcbp-jobs", "relay"))
+    many.add_argument("--preset", default="tcbp-jobs")
+    many.add_argument("--limit", type=int, help="only the first this many shots of each task (dry runs)")
     score = sub.add_parser("score")
-    for name in ("per_shot", "shots", "results", "out"):
+    for name in ("per_shot", "shots", "out"):
         score.add_argument(f"--{name.replace('_', '-')}", required=True)
+    score.add_argument("--results", help="this branch's result folder, for its BP-OSD and relay-BP rows on the same file")
     args = parser.parse_args(argv)
-    {"convert": convert_command, "decode": decode_command, "score": score_command}[args.command](args)
+    {"convert": convert_command, "decode": decode_command, "decode-many": decode_many_command,
+     "score": score_command}[args.command](args)
 
 
 if __name__ == "__main__":

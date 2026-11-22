@@ -1,0 +1,14 @@
+{
+  "basis": "X",
+  "p": 0.004,
+  "shots": 5000,
+  "easy": 4309,
+  "escalated_fixed": 683,
+  "float_fixed_verdict_flips": 0,
+  "fractional_bits": 20,
+  "model_sha256": "469d032009143adc75ff7bf007b5373d6cd9755302fb5ffd7e64cbb6197eb11d",
+  "original_shots_sha256": "b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d",
+  "uart_vectors": 32,
+  "packet_bytes": 124,
+  "reply_bytes": 8
+}

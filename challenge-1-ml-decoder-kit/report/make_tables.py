@@ -1540,7 +1540,7 @@ def findings(measured):
 
 def ensemble_statement(measured, combined):
     """Our ensemble against TCBP-JOBS on the same test pairs, with what its gain rests on (joint decoding of the disputed shots)."""
-    clauses = []
+    clauses, short = [], []
     for p in P_VALUES:
         ensemble, tcbp = measured[p].get("ensemble"), measured[p].get("tcbp")
         if ensemble is None or tcbp is None or tcbp["failed_pair"] is None:
@@ -1550,8 +1550,12 @@ def ensemble_statement(measured, combined):
         seconds = [entry["ms_per_shot"] / 1e3 for entry in joint if entry["ms_per_shot"]]
         if ensemble.get("same_as_tcbp") and ran == 0:
             clauses.append(f"at p = {p} joint decoding was not run, so the ensemble fails exactly TCBP-JOBS's {tcbp['failures_pair']} pairs")
+            short.append(f"equals TCBP-JOBS at p = {p} (joint decoding not run)")
             continue
         paired = stats.paired(tcbp["failed_pair"], ensemble["failed_pair"])
+        short.append(f"fails {ensemble['failures_pair']} pairs against TCBP-JOBS's {tcbp['failures_pair']} at p = {p} (only the ensemble "
+                     f"{paired['row_only']}, only TCBP-JOBS {paired['reference_only']}, exact p = {stats.p_text(paired['p'])}"
+                     + (f"; joint decoding on {ran} disputed shots, about {sum(seconds) / len(seconds):.0f} s each" if seconds else "") + ")")
         clauses.append(f"at p = {p} {ensemble['failures_pair']} against TCBP-JOBS's {tcbp['failures_pair']} failed pairs (only the ensemble fails "
                        f"{paired['row_only']}, only TCBP-JOBS {paired['reference_only']}, exact p = {stats.p_text(paired['p'])}; joint decoding ran on "
                        f"{ran} disputed shots" + (f", about {sum(seconds) / len(seconds):.0f} s each" if seconds else "") + ")")
@@ -1562,6 +1566,9 @@ def ensemble_statement(measured, combined):
     else:
         text = "Our ensemble is not measured on the test shots yet."
     fact("ensemble_statement", text, "tables/test_p<p>.md (the ensemble and TCBP-JOBS rows)")
+    fact("ensemble_short", short and ("our ensemble rule, frozen beforehand and combined offline from the saved answers of NVIDIA's, IonQ's "
+                                      "and the kit's decoders, with no time measured as one decoder, " + ", ".join(short[:-1])
+                                      + (", and " if len(short) > 1 else "") + short[-1]), "tables/test_p<p>.md (the ensemble and TCBP-JOBS rows)")
 
 
 def ours_at(measured, p):
@@ -1652,12 +1659,12 @@ def readme_section(measured):
     """The one section appended to the top-level README.md: at most 25 lines, every number from the tables above."""
     value = lambda name: FACTS[name][0]
     tcbp = value("tcbp_statement")
-    result = (value("slide4_title") + "; " + (f"as a tie-break the neural network is {value('abl_verdict')} the best hand-written rule, "
-              "so the gain over relay-BP is PriorTilt's and the hierarchy's." if value("abl_verdict") != "better than"
-              else value("slide3_close")[0].lower() + value("slide3_close")[1:]))
+    verdict = (f"on the test shots that network is {value('abl_verdict')} the best hand-written tie-break, so the gain over relay-BP is "
+               "PriorTilt's and the hierarchy's" if value("abl_verdict") != "better than" else value("slide3_close")[0].lower() + value("slide3_close")[1:-1])
+    result = value("slide4_title") + ("; " + value("ensemble_short") if value("ensemble_short") != NOT_MEASURED else "") + "."
     lines = [README_HEADING, "",
              "Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural",
-             "network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). " + result,
+             f"network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`), though {verdict}. " + result,
              f"Under atom loss (our own simplified model), relay-BP with the loss flags fails {value('loss_aware_share')} of shots where a loss-blind one",
              f"fails {value('loss_blind_share')}; our loss-time tracker, which estimates from the syndrome when each atom was lost, recovers "
              f"{value('trk_gain')} of what knowing the true loss time would add (`loss/`, `loss_tracker/`).",

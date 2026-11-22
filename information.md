@@ -1,6 +1,6 @@
 # Information: what we are building, why, and where everything is
 
-Last updated: 2026-11-22 05:35 UTC. This file is the overview of our part of the team's work on
+Last updated: 2026-11-22 05:50 UTC. This file is the overview of our part of the team's work on
 Infleqtion's Challenge 1 (ML-assisted decoding of the Gross code). It lives on the branch
 `integration`, our one working branch: everything we have built is merged here.
 
@@ -16,10 +16,13 @@ twice with different random seeds. When its two answers agree, that answer is fi
 disagree, which happens on about 1 shot in 250, a third decoder joins and a neural network
 that follows the code's structure picks the most likely answer. On 50,000 practice shots at
 p = 0.004 the version without the network fails 34% fewer shots than relay-BP in about a
-quarter less time, and with the network on X memory it fails 47% fewer. Beside it we study atom
-loss, the part the challenge stresses: using the loss flags cuts failures about 13 times, and we
-measured that knowing when an atom was lost would cut them 1.6 times more, so we are building a
-tracker that estimates that time from the syndrome history.
+quarter less time, and with the network on X memory it fails 47% fewer. NVIDIA's GPU decoder
+TCBP-JOBS, which teammates ran as an extra reference, is stronger still at p = 0.004 and 0.005,
+so the next stage adds stronger members and lets the network choose among them. Beside it we
+study atom loss, the part the challenge stresses: a decoder that ignores loss fails on most
+shots, one that uses the loss flags on about 4%, and we measured that knowing when an atom was
+lost would cut that 1.6 times more, so we are building a tracker that estimates that time from
+the syndrome history.
 
 ## 2. The challenge
 
@@ -63,9 +66,21 @@ Baselines, 10,000 shots per basis (the kit's README, the organisers' reference r
 | 0.005 | BP-OSD | 1302, 1286 | 2.3e-2 | 0.59 s |
 | 0.005 | relay-BP | 411, 414 | 6.9e-3 | 1.7 s |
 
-Relay-BP is the baseline to beat. A third reference, run by teammates on a GPU: NVIDIA's
-TCBP-JOBS at p = 0.003 failed [2 3] of 10,000 pairs at a mean of 4.3 ms per pair
-(`results/tcbp-jobs_p0.003_*.log` on `main`).
+Relay-BP is the stronger of the two baselines the challenge names. A third reference, run by
+teammates on a GPU, is NVIDIA's TCBP-JOBS (`tcbp_jobs_baseline.py`, logs in `results/` on
+`main`; its own sampled shots, 10,000 pairs each):
+
+| p | TCBP-JOBS failures X, Z | Rate per cycle | Against relay-BP |
+|---|---|---|---|
+| 0.003 | 2, 3 | 4.2e-5 | equal |
+| 0.004 | 18, 23 | 3.4e-4 | 2.5 times lower |
+| 0.005 | 192, 188 | 3.2e-3 | 2.2 times lower |
+
+- **TCBP-JOBS is therefore the real bar at p = 0.004 and 0.005.**
+- Its logged times (4.3 ms, 42.9 ms and 81.7 ms per pair) are not comparable yet: the runs at
+  p = 0.004 and 0.005 shared the GPU with one of our trainings, so they are inflated. They need
+  repeating on an idle GPU before any latency is quoted.
+- Its rows come from its own sampled shots, not from the team's saved test files.
 
 ## 4. Who does what
 
@@ -74,6 +89,8 @@ TCBP-JOBS at p = 0.003 failed [2 3] of 10,000 pairs at a mean of 4.3 ms per pair
   shots per basis), the evaluator that scores any decoder on them (`evaluation/`), the baseline
   rows, the TCBP-JOBS baseline, and a trained router on relay-BP's first answer
   (`evaluation/router*.py`, `results/router_p0.00x/`). They push to `main`.
+  - Their router on the p = 0.003 test shots (`results/icrn/`): 6 failed pairs against
+    relay-BP's 5, at 47 ms against 86 ms per pair. That is relay-BP's accuracy in 45% less time.
 - **This document covers our line:** the hierarchical decoder, the neural network, the loss
   study, and the measurements that decided the design. Our decoder plugs into the team's
   evaluator, so every row of the final table comes from the same saved test shots.
@@ -135,6 +152,17 @@ beside a GPU training, so compare them with each other only):
 - **Not measured yet:** this decoder at p = 0.003 and 0.005 (running), on Z with a network
   (the Z network started training on 2026-11-22), through the team's evaluator, and on the test
   shots. The one run on the test shots happens once, with every setting frozen.
+- First number at p = 0.005 (20,000 X shots made on the laptop): PriorTilt alone fails 612
+  against relay-BP's 883, 31% fewer, at 201 ms against 937 ms per shot.
+
+**Where this stands against TCBP-JOBS.** At p = 0.004 the hierarchy is at about 5e-4 per cycle
+by estimate from the practice shots: below relay-BP (8.7e-4) and above TCBP-JOBS (3.4e-4). Even
+a perfect tie-breaker over its three candidates would not pass TCBP-JOBS. The next stage is
+therefore an ensemble: stronger members where the fast ones disagree or look doubtful (joint
+decoding, more relay-BP re-rolls, TCBP-JOBS itself), and the network choosing among all of
+them. The evidence that this can work: with 16 relay-BP candidates per shot the right answer is
+among them in 79% of relay-BP's converged-wrong failures, while "lowest weight" picks it in
+only 49% (section 8). A set of decoders whose mistakes differ can beat each of its members.
 
 Code: `challenge-1-ml-decoder-kit/hierarchy/` (`candidates.py`, `select.py`, `rules.py`,
 `stages.py`; the evaluator plugin is being written). Its README has the install and the
@@ -201,7 +229,7 @@ X memory, p = 0.004, s = 1e-3 per atom per CX, relay-BP at the kit's settings, C
 
 | Decoder | Shots | Failures |
 |---|---|---|
-| loss-blind (ignores the flags) | 300 to 400 (preliminary) | 57.7% of shots |
+| loss-blind (ignores the flags) | 300 to 400 (a first, small run) | 57.7% of shots |
 | flag-aware, uniform guess over the loss time | 4,000 | 176 (4.40%) |
 | flag-aware with exact location weights | 4,000 | 189 (no gain) |
 | flag-aware, stopping relay-BP at its first solution | 4,000 | 200 (14% more) |
@@ -209,6 +237,8 @@ X memory, p = 0.004, s = 1e-3 per atom per CX, relay-BP at the kit's settings, C
 
 - The oracle fails 1.64 times less often than the flag-aware decoder (paired 94 against 25
   shots, interval 1.42 to 1.94). So the timing of a loss is worth knowing.
+- At s = 2e-3, about today's hardware: the loss-blind decoder fails 148 of 150 shots, the
+  flag-aware one 173 of 750 (23.1%).
 - **The loss-time tracker (next task).** A lost data atom makes its six neighbouring checks
   fire at random from the moment it is lost. A hidden Markov model over that history, then a
   small network, estimates the loss round and feeds it to relay-BP as per-shot priors. No paper
@@ -222,6 +252,7 @@ Folder `challenge-1-ml-decoder-kit/analysis/`; `RESULTS.md` there has the tables
 |---|---|---|
 | How does relay-BP fail at p = 0.004? | 245 failures in 50,000 shots: 100 did not converge, 145 converged to a wrong answer. 224 of them are among the 14% of shots whose first leg does not converge. | `analysis/`, G1 |
 | What fixes those failures? | A re-run with other random draws: 108 of 245. BP-OSD: 79. Tesseract: 80. Joint decoding: about 9 in 10. | G2 |
+| Is the right answer among relay-BP's candidates? | With 16 candidates per shot it is there in 114 of the 145 converged-wrong failures (79%). The lowest weight picks it in 71 (49%), a vote in 69. Weight is the wrong score; a learned one has room. | G2 |
 | Joint decoding at p = 0.003 | Fixes 43 of relay-BP's 44 failures, breaks 0 of 300 control shots, about 9 s against 0.13 s per shot. | G2 |
 | Joint decoding at p = 0.004 | Fixes 89 of 100 failures, breaks 1 of 200 controls, 135 s per failed shot and 31 s per control shot on our slow PC. | G2 |
 | Can relay-BP's schedule be faster for free? | Stopping after 3 solutions instead of 5 costs nothing measurable (42 against 51 failed pairs) at 1.44 times fewer iterations. Legs of 30 iterations cost accuracy badly (93 to 108). | G3, 16 schedules |
@@ -333,7 +364,9 @@ READMEs are how we keep being able to explain it.
 2. Train the Z network; keep training X.
 3. One run of the frozen decoder on the team's test shots at the three noise levels, through
    the team's evaluator, beside the baseline rows.
-4. Stage 3: joint decoding behind a learned filter, as the slow, accurate end of the hierarchy.
+4. The ensemble: joint decoding, more relay-BP candidates and TCBP-JOBS as further members,
+   with the network as the selector and as the filter that decides when the slow members run.
+   This is what can pass TCBP-JOBS.
 5. The loss-time tracker, then loss at other rates and in Z memory.
 6. The plots, the reproduce script, the README for the judges and the slides.
 7. Stretch: the realistic-noise set, the mismatch test, the FPGA router, a second code.

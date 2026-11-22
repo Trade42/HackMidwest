@@ -1,9 +1,17 @@
 kit_fresh p0.004_X  F  122 fixes   56 (unconv 24/55, conv-wrong 32/67)  C  122 breaks   0  paired p 2.8e-17  est. failures on all 66 [55, 818] vs relay 122
 kit_fresh p0.004_Z  F  123 fixes   52 (unconv 16/45, conv-wrong 36/78)  C  123 breaks   2  paired p 1.6e-13  est. failures on all 476 [109, 1512] vs relay 123
+kit_fresh p0.005_X  F  100 fixes   23 (unconv 13/65, conv-wrong 10/35)  C  100 breaks   3  paired p 8.8e-05  est. failures on all 303 [170, 584] vs relay 207
+kit_fresh p0.005_Z  F  100 fixes   30 (unconv 13/64, conv-wrong 17/36)  C  100 breaks   1  paired p 3e-08  est. failures on all 186 [119, 417] vs relay 197
+big       p0.005_X  F  100 fixes   35 (unconv 22/65, conv-wrong 13/35)  C  100 breaks   1  paired p 1.1e-09  est. failures on all 182 [115, 415] vs relay 207
+big       p0.005_Z  F  100 fixes   39 (unconv 20/64, conv-wrong 19/36)  C  100 breaks   1  paired p 7.5e-11  est. failures on all 168 [101, 401] vs relay 197
 bposd10   p0.004_X  F  122 fixes   43 (unconv 21/55, conv-wrong 22/67)  C  122 breaks   2  paired p 5.9e-11  est. failures on all 487 [117, 1531] vs relay 122
 bposd10   p0.004_Z  F  123 fixes   36 (unconv 11/45, conv-wrong 25/78)  C  123 breaks   4  paired p 1.9e-07  est. failures on all 896 [298, 2116] vs relay 123
+bposd10   p0.005_X  F  100 fixes   14 (unconv 8/65, conv-wrong 6/35)  C  100 breaks   9  paired p 0.4  est. failures on all 609 [362, 977] vs relay 207
+bposd10   p0.005_Z  F  100 fixes   17 (unconv 11/64, conv-wrong 6/36)  C  100 breaks  10  paired p 0.25  est. failures on all 644 [382, 1023] vs relay 197
 bposd_hi  p0.004_X  F  122 fixes   43 (unconv 21/55, conv-wrong 22/67)  C  122 breaks   2  paired p 5.9e-11  est. failures on all 487 [117, 1531] vs relay 122
 bposd_hi  p0.004_Z  F  123 fixes   38 (unconv 12/45, conv-wrong 26/78)  C  123 breaks   4  paired p 5.7e-08  est. failures on all 894 [296, 2114] vs relay 123
+bposd_hi  p0.005_X  F  100 fixes   12 (unconv 7/65, conv-wrong 5/35)  C  100 breaks   9  paired p 0.66  est. failures on all 614 [367, 980] vs relay 207
+bposd_hi  p0.005_Z  F  100 fixes   17 (unconv 11/64, conv-wrong 6/36)  C  100 breaks  10  paired p 0.25  est. failures on all 644 [382, 1023] vs relay 197
 joint     p0.003_X  F   23 fixes   23 (unconv 7/7, conv-wrong 16/16)  C  150 breaks   0  paired p 2.4e-07  est. failures on all 0 [0, 1217] vs relay 23
 joint     p0.003_Z  F   21 fixes   20 (unconv 9/9, conv-wrong 11/12)  C  150 breaks   0  paired p 1.9e-06  est. failures on all 1 [0, 1219] vs relay 21
 joint     p0.004_X  F   50 fixes   45 (unconv 15/16, conv-wrong 30/34)  C  100 breaks   0  paired p 5.7e-14  est. failures on all 12 [4, 928] vs relay 122
@@ -14,15 +22,25 @@ joint600  p0.004_X  F   50 fixes   46 (unconv 15/16, conv-wrong 31/34)  C  100 b
 joint600  p0.004_Z  F   50 fixes   45 (unconv 13/16, conv-wrong 32/34)  C  100 breaks   0  paired p 5.7e-14  est. failures on all 12 [4, 928] vs relay 123
 tesseract p0.004_X  F  122 fixes   43 (unconv 21/55, conv-wrong 22/67)  C  122 breaks   2  paired p 5.9e-11  est. failures on all 487 [117, 1531] vs relay 122
 tesseract p0.004_Z  F  123 fixes   37 (unconv 11/45, conv-wrong 26/78)  C  123 breaks   4  paired p 1e-07  est. failures on all 895 [297, 2115] vs relay 123
+cand16 p0.005_X {'converged_wrong': {'shots': 35, 'any_right': 24, 'lowest_right': 16, 'vote_right': 16, 'lowest_tie': 0, 'none_converged': 0, 'one_distinct': 5, 'distinct_median': 14.0, 'classes_median': 3.0, 'leg1_converged': {'shots': 5, 'any_right': 0, 'lowest_right': 0, 'vote_right': 0, 'one_distinct': 5}, 'leg1_unconverged': {'shots': 30, 'any_right': 24, 'lowest_right': 16, 'vote_right': 16, 'one_distinct': 0}}, 'unconverged_sample': {'shots': 5, 'any_right': 4, 'lowest_right': 4, 'vote_right': 4, 'lowest_tie': 0, 'none_converged': 1, 'one_distinct': 0, 'distinct_median': 6.0, 'classes_median': 1.0, 'leg1_converged': {'shots': 0, 'any_right': 0, 'lowest_right': 0, 'vote_right': 0, 'one_distinct': 0}, 'leg1_unconverged': {'shots': 5, 'any_right': 4, 'lowest_right': 4, 'vote_right': 4, 'one_distinct': 0}}, 'control': {'shots': 100, 'any_right': 100, 'lowest_right': 100, 'vote_right': 100, 'lowest_tie': 0, 'none_converged': 0, 'one_distinct': 73, 'distinct_median': 1.0, 'classes_median': 1.0, 'leg1_converged': {'shots': 73, 'any_right': 73, 'lowest_right': 73, 'vote_right': 73, 'one_distinct': 73}, 'leg1_unconverged': {'shots': 27, 'any_right': 27, 'lowest_right': 27, 'vote_right': 27, 'one_distinct': 0}, 'lowest_breaks': 0, 'lowest_break_rate_ci': (0.0, 0.03621669264517641), 'vote_breaks': 0, 'vote_break_rate_ci': (0.0, 0.03621669264517641)}, 'relay_failures_total': 207, 'relay_right_total': 4793}
+cand16 p0.005_Z {'converged_wrong': {'shots': 36, 'any_right': 32, 'lowest_right': 14, 'vote_right': 14, 'lowest_tie': 0, 'none_converged': 0, 'one_distinct': 2, 'distinct_median': 16.0, 'classes_median': 2.5, 'leg1_converged': {'shots': 2, 'any_right': 0, 'lowest_right': 0, 'vote_right': 0, 'one_distinct': 2}, 'leg1_unconverged': {'shots': 34, 'any_right': 32, 'lowest_right': 14, 'vote_right': 14, 'one_distinct': 0}}, 'unconverged_sample': {'shots': 5, 'any_right': 3, 'lowest_right': 3, 'vote_right': 3, 'lowest_tie': 0, 'none_converged': 1, 'one_distinct': 1, 'distinct_median': 6.0, 'classes_median': 1.0, 'leg1_converged': {'shots': 0, 'any_right': 0, 'lowest_right': 0, 'vote_right': 0, 'one_distinct': 0}, 'leg1_unconverged': {'shots': 5, 'any_right': 3, 'lowest_right': 3, 'vote_right': 3, 'one_distinct': 1}}, 'control': {'shots': 100, 'any_right': 100, 'lowest_right': 100, 'vote_right': 100, 'lowest_tie': 0, 'none_converged': 0, 'one_distinct': 70, 'distinct_median': 1.0, 'classes_median': 1.0, 'leg1_converged': {'shots': 70, 'any_right': 70, 'lowest_right': 70, 'vote_right': 70, 'one_distinct': 70}, 'leg1_unconverged': {'shots': 30, 'any_right': 30, 'lowest_right': 30, 'vote_right': 30, 'one_distinct': 0}, 'lowest_breaks': 0, 'lowest_break_rate_ci': (0.0, 0.03621669264517641), 'vote_breaks': 0, 'vote_break_rate_ci': (0.0, 0.03621669264517641)}, 'relay_failures_total': 197, 'relay_right_total': 4803}
 
 | decoder | p | basis | F (relay-BP wrong) | fixed: all / of unconverged / of converged-wrong | C (relay-BP right) | broken | 2 x 2: both wrong / only relay-BP / only other / both right | exact paired p | break rate [95% CP] | other's failures on all G1 shots, estimate [range] vs relay-BP's | iterations mean F / C | ms mean F / C |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | kit_fresh | 0.004 | X | 122 | 56 / 24 of 55 / 32 of 67 | 122 | 0 | 66 / 56 / 0 / 122 | 2.8e-17 | 0.000 [0.000, 0.030] | 66 [55, 818] vs 122 | 13205 / 373 | 9953 / 292 |
 | kit_fresh | 0.004 | Z | 123 | 52 / 16 of 45 / 36 of 78 | 123 | 2 | 71 / 52 / 2 / 121 | 1.6e-13 | 0.016 [0.002, 0.058] | 476 [109, 1512] vs 123 | 12626 / 752 | 8460 / 540 |
+| kit_fresh | 0.005 | X | 100 | 23 / 13 of 65 / 10 of 35 | 100 | 3 | 77 / 23 / 3 / 97 | 8.8e-05 | 0.030 [0.006, 0.085] | 303 [170, 584] vs 207 | 15551 / 1378 | 12848 / 1139 |
+| kit_fresh | 0.005 | Z | 100 | 30 / 13 of 64 / 17 of 36 | 100 | 1 | 70 / 30 / 1 / 99 | 3e-08 | 0.010 [0.000, 0.054] | 186 [119, 417] vs 197 | 15401 / 1800 | 13385 / 1554 |
+| big | 0.005 | X | 100 | 35 / 22 of 65 / 13 of 35 | 100 | 1 | 65 / 35 / 1 / 99 | 1.1e-09 | 0.010 [0.000, 0.054] | 182 [115, 415] vs 207 | 32924 / 4807 | 28781 / 4312 |
+| big | 0.005 | Z | 100 | 39 / 20 of 64 / 19 of 36 | 100 | 1 | 61 / 39 / 1 / 99 | 7.5e-11 | 0.010 [0.000, 0.054] | 168 [101, 401] vs 197 | 33081 / 6057 | 27200 / 4830 |
 | bposd10 | 0.004 | X | 122 | 43 / 21 of 55 / 22 of 67 | 122 | 2 | 79 / 43 / 2 / 120 | 5.9e-11 | 0.016 [0.002, 0.058] | 487 [117, 1531] vs 122 | 79 / 53 | 1148 / 464 |
 | bposd10 | 0.004 | Z | 123 | 36 / 11 of 45 / 25 of 78 | 123 | 4 | 87 / 36 / 4 / 119 | 1.9e-07 | 0.033 [0.009, 0.081] | 896 [298, 2116] vs 123 | 79 / 52 | 1214 / 419 |
+| bposd10 | 0.005 | X | 100 | 14 / 8 of 65 / 6 of 35 | 100 | 9 | 86 / 14 / 9 / 91 | 0.4 | 0.090 [0.042, 0.164] | 609 [362, 977] vs 207 | 80 / 67 | 1208 / 623 |
+| bposd10 | 0.005 | Z | 100 | 17 / 11 of 64 / 6 of 36 | 100 | 10 | 83 / 17 / 10 / 90 | 0.25 | 0.100 [0.049, 0.176] | 644 [382, 1023] vs 197 | 80 / 70 | 1182 / 759 |
 | bposd_hi | 0.004 | X | 122 | 43 / 21 of 55 / 22 of 67 | 122 | 2 | 79 / 43 / 2 / 120 | 5.9e-11 | 0.016 [0.002, 0.058] | 487 [117, 1531] vs 122 | 79 / 53 | 1331 / 519 |
 | bposd_hi | 0.004 | Z | 123 | 38 / 12 of 45 / 26 of 78 | 123 | 4 | 85 / 38 / 4 / 119 | 5.7e-08 | 0.033 [0.009, 0.081] | 894 [296, 2114] vs 123 | 79 / 52 | 1245 / 441 |
+| bposd_hi | 0.005 | X | 100 | 12 / 7 of 65 / 5 of 35 | 100 | 9 | 88 / 12 / 9 / 91 | 0.66 | 0.090 [0.042, 0.164] | 614 [367, 980] vs 207 | 80 / 67 | 1203 / 633 |
+| bposd_hi | 0.005 | Z | 100 | 17 / 11 of 64 / 6 of 36 | 100 | 10 | 83 / 17 / 10 / 90 | 0.25 | 0.100 [0.049, 0.176] | 644 [382, 1023] vs 197 | 80 / 70 | 1229 / 809 |
 | joint | 0.003 | X | 23 | 23 / 7 of 7 / 16 of 16 | 150 | 0 | 0 / 23 / 0 / 150 | 2.4e-07 | 0.000 [0.000, 0.024] | 0 [0, 1217] vs 23 | 2411 / 658 | 31765 / 9006 |
 | joint | 0.003 | Z | 21 | 20 / 9 of 9 / 11 of 12 | 150 | 0 | 1 / 20 / 0 / 150 | 1.9e-06 | 0.000 [0.000, 0.024] | 1 [0, 1219] vs 21 | 4065 / 519 | 60706 / 7681 |
 | joint | 0.004 | X | 50 | 45 / 15 of 16 / 30 of 34 | 100 | 0 | 5 / 45 / 0 / 100 | 5.7e-14 | 0.000 [0.000, 0.036] | 12 [4, 928] vs 122 | 8987 / 1893 | 134028 / 28221 |
@@ -33,5 +51,14 @@ tesseract p0.004_Z  F  123 fixes   37 (unconv 11/45, conv-wrong 26/78)  C  123 b
 | joint600 | 0.004 | Z | 50 | 45 / 13 of 16 / 32 of 34 | 100 | 0 | 5 / 45 / 0 / 100 | 5.7e-14 | 0.000 [0.000, 0.036] | 12 [4, 928] vs 123 | 13187 / 2591 | 192631 / 38041 |
 | tesseract | 0.004 | X | 122 | 43 / 21 of 55 / 22 of 67 | 122 | 2 | 79 / 43 / 2 / 120 | 5.9e-11 | 0.016 [0.002, 0.058] | 487 [117, 1531] vs 122 | 0 / 0 | 3743 / 571 |
 | tesseract | 0.004 | Z | 123 | 37 / 11 of 45 / 26 of 78 | 123 | 4 | 86 / 37 / 4 / 119 | 1e-07 | 0.033 [0.009, 0.081] | 895 [297, 2115] vs 123 | 0 / 0 | 3676 / 577 |
+
+| p | basis | set | shots | right class among candidates | lowest weight right | vote right | no candidate | one distinct candidate | first leg converged: shots, any / lowest / vote right | first leg unconverged: same |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 0.005 | X | converged_wrong | 35 | 24 | 16 | 16 | 0 | 5 | 5: 0 / 0 / 0 | 30: 24 / 16 / 16 |
+| 0.005 | X | unconverged_sample | 5 | 4 | 4 | 4 | 1 | 0 | 0: 0 / 0 / 0 | 5: 4 / 4 / 4 |
+| 0.005 | X | control | 100 | 100 | 100 | 100 | 0 | 73 | 73: 73 / 73 / 73 | 27: 27 / 27 / 27 |
+| 0.005 | Z | converged_wrong | 36 | 32 | 14 | 14 | 0 | 2 | 2: 0 / 0 / 0 | 34: 32 / 14 / 14 |
+| 0.005 | Z | unconverged_sample | 5 | 3 | 3 | 3 | 1 | 1 | 0: 0 / 0 / 0 | 5: 3 / 3 / 3 |
+| 0.005 | Z | control | 100 | 100 | 100 | 100 | 0 | 70 | 70: 70 / 70 / 70 | 30: 30 / 30 / 30 |
 
 joint600 check: {'run': 47, 'below_floor_decoded': 8, 'below_floor_identical': 8, 'floor_iterations': 17760}

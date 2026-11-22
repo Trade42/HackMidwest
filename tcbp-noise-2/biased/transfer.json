@@ -1,0 +1,40 @@
+{
+ "task": "biased",
+ "what": {
+  "model": "Z-biased one-qubit Pauli noise",
+  "p": 0.003,
+  "eta": 100,
+  "pX_pY_pZ": [
+   1.4851485148514851e-05,
+   1.4851485148514851e-05,
+   0.0029702970297029703
+  ],
+  "stim": "1.16.0"
+ },
+ "shots": 4000,
+ "seed": 7200,
+ "basis": "X",
+ "converted": "biased_X_kitformat_p0.005991.npz",
+ "converted_sha256": "a36b59595c835a608ec72de8fd819cceaf7ef73b872397dc22dee3229fbcea0e",
+ "p": 0.005991,
+ "columns": 8784,
+ "rows": 936,
+ "h_l_sha256": "a4a80003a0b234e0e10b5d65d38ce5181c39670732e0f473df0aee1796c2c8b0",
+ "generic": {
+  "what": "kit uniform model at p = 0.005991",
+  "max": 0.021948306822329035,
+  "min": 0.0016001605136695158,
+  "sum": 70.61212511962364,
+  "capped_columns": 0,
+  "sha256": "822835f794c1d3b88e34385cdbc64ee2561f9496cd0c96e44aa0b5b70dc1c234"
+ },
+ "matched": {
+  "max": 0.023416563441155735,
+  "min": 0.002985148514851415,
+  "sum": 73.85131482239544,
+  "columns_fired": 8784,
+  "capped_columns": 0,
+  "sha256": "5eb6ab0360be366e489f6f4a369e27ba06669bdcd03e2cf40fc4e5adf6faaf3e"
+ },
+ "zero_syndrome_fraction": 0.0
+}

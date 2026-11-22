@@ -1,0 +1,25 @@
+{
+ "tasks": [
+  {
+   "name": "wrong-p",
+   "data": "wrong-p/wrong-p_X_kitformat_p0.004.npz",
+   "generic": "wrong-p/priors_generic.npy",
+   "matched": "wrong-p/priors_matched.npy",
+   "transfer": "wrong-p/transfer.json"
+  },
+  {
+   "name": "si1000",
+   "data": "si1000/si1000_X_kitformat_p0.004.npz",
+   "generic": "si1000/priors_generic.npy",
+   "matched": "si1000/priors_matched.npy",
+   "transfer": "si1000/transfer.json"
+  },
+  {
+   "name": "biased",
+   "data": "biased/biased_X_kitformat_p0.005991.npz",
+   "generic": "biased/priors_generic.npy",
+   "matched": "biased/priors_matched.npy",
+   "transfer": "biased/transfer.json"
+  }
+ ]
+}

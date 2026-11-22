@@ -20,6 +20,8 @@ There are two levels of reproduction:
 | `report/reproduce_ours.sh env` | Python 3.12 venv in `.venv-ours`; the kit's `requirements.txt` (stim, ldpc, numpy, scipy, relay-bp), pytest, matplotlib, torch (CPU build); clones PriorTilt at commit `8eefd37d694b5942fe60ec6d5c82ce97f3d2a450` beside this repository and builds its Rust core | **not run here** as one script. The same commands were run here one by one: the report's venv (the kit's requirements, pytest, matplotlib) and, by the `hierarchy/` task, a venv with torch and PriorTilt built from a clone at that commit |
 
 - `relay-bp` and PriorTilt build from source: a Rust toolchain is needed (https://rustup.rs).
+- The script looks for `python3.12`. If your Python 3.12 has another name, give it: `PY312=/path/to/python3.12`, or
+  with uv, `PY312=$(uv python find 3.12)`.
 - **PriorTilt's licence is CC BY-NC-SA 4.0** (non-commercial, share-alike). None of its code is in this repository;
   it is installed from its authors' repository, https://github.com/ionq-publications/PriorTiltDecoder, and its
   tuned schedule is read from the clone at run time (`PRIORTILT_REPO`).

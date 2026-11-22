@@ -12,7 +12,8 @@
 #
 # <p> is 0.003, 0.004 or 0.005. <row> is bposd, relay-bp, router, hierarchy-weight or hierarchy.
 # Settings, all optional: PYTHON (default .venv-ours/bin/python), PRIORTILT_REPO (default: a folder
-# PriorTiltDecoder beside this repository), OUT (default runs/clean), DEVICE (cpu).
+# PriorTiltDecoder beside this repository), OUT (default runs/clean), DEVICE (cpu), PY312 (a Python 3.12
+# interpreter for the env stage, default python3.12; with uv: PY312=$(uv python find 3.12)).
 set -eu
 cd "$(dirname "$0")/.."
 VENV=${VENV:-.venv-ours}
@@ -50,7 +51,9 @@ case "$stage" in
   env)
     # Python 3.12, the kit's requirements, torch (CPU build), and PriorTilt from its own repository.
     # relay-bp and PriorTilt build from source: a Rust toolchain (cargo, https://rustup.rs) is needed.
-    python3.12 -m venv "$VENV"
+    PY312=${PY312:-python3.12}
+    command -v "$PY312" > /dev/null || { echo "no Python 3.12 found as $PY312: set PY312 (with uv: PY312=\$(uv python find 3.12))" >&2; exit 1; }
+    "$PY312" -m venv "$VENV"
     "$VENV/bin/pip" install -r requirements.txt pytest matplotlib
     "$VENV/bin/pip" install torch --index-url https://download.pytorch.org/whl/cpu
     # PriorTilt (IonQ, arXiv:2611.13373) is licensed CC BY-NC-SA 4.0: none of its code is in this repository.

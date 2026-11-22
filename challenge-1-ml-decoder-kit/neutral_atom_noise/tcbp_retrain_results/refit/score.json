@@ -1,0 +1,76 @@
+{
+ "label": "exploration, task tcbp-retrain",
+ "declared": "neutral_atom_noise/tcbp_retrain_refit_declared.md",
+ "tasks": {
+  "f0.8-seed4900": {
+   "shots_file": "test4900/X_f0.8_seed4900_kitformat_p0.0326371.npz",
+   "shots_sha256": "97807a384cc3da686c2f67bd534a1a148f2edb6f98553ff7b5409db33e26b03f",
+   "shots_scored": 4000,
+   "of": 4000,
+   "rows": {
+    "m": {
+     "shots": 4000,
+     "failures": 35,
+     "wilson95": [
+      0.00629834514548427,
+      0.012144307886647443
+     ],
+     "not_reproduced": 0
+    },
+    "r": {
+     "shots": 4000,
+     "failures": 90,
+     "wilson95": [
+      0.018341680686678588,
+      0.027574587654986334
+     ],
+     "not_reproduced": 0
+    },
+    "rf": {
+     "shots": 4000,
+     "failures": 37,
+     "wilson95": [
+      0.006718438633114451,
+      0.01272325495572756
+     ],
+     "not_reproduced": 0
+    }
+   },
+   "pairs": [
+    {
+     "kind": "primary",
+     "a": "rf",
+     "b": "m",
+     "shots": 4000,
+     "failures_a": 37,
+     "failures_b": 35,
+     "only_a": 8,
+     "only_b": 6,
+     "sign_test_p": 0.79052734375
+    },
+    {
+     "kind": "secondary",
+     "a": "rf",
+     "b": "r",
+     "shots": 4000,
+     "failures_a": 37,
+     "failures_b": 90,
+     "only_a": 5,
+     "only_b": 58,
+     "sign_test_p": 1.6623508125590547e-12
+    },
+    {
+     "kind": "secondary",
+     "a": "r",
+     "b": "m",
+     "shots": 4000,
+     "failures_a": 90,
+     "failures_b": 35,
+     "only_a": 64,
+     "only_b": 9,
+     "sign_test_p": 2.378889919863532e-11
+    }
+   ]
+  }
+ }
+}

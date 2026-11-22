@@ -821,4 +821,69 @@ The server's files are on the branch `server-logs` at `55f88689`, under `files/t
 
 ### The knob refit (server job `cpu/140`; `tcbp_retrain_refit_declared.md`)
 
-Started 19:16:59 UTC. Its results are pending.
+**Declared before any number** in [`tcbp_retrain_refit_declared.md`](tcbp_retrain_refit_declared.md) (`2144eac3`,
+18:49 UTC).
+- **Setup:** the same retrained head and matched base, with TCBP-JOBS as above. The knobs were refitted on a fresh train
+  file and the chosen ones tested once on a fresh test file.
+- **Run:** the job started at 19:16:59 UTC and ran to its end. The fit took 1,308 s and the test 686 s.
+- **The network:** float32 on the A100 slice, 9.4 to 10.0 ms per shot.
+
+**The fit** (train file `X_f0.8_seed5800.npz`, seed 5800, 1,500 Stim shots, sha256 `cb298991...`; train failures, so a
+diagnostic, not a result):
+
+| Setting (log-odds, matched base) | alpha 0 (m) | 0.1 | 0.2 | 0.3 | 0.4 | 0.6 | 0.8 | 1.0 |
+|---|---|---|---|---|---|---|---|---|
+| failures of 1,500, eps 1e-4 | 13 | 16 | 22 | 28 | 33 | 56 | 75 | 90 |
+| failures of 1,500, eps 1e-6 | 13 | **15** | 22 | 28 | 34 | 54 | 74 | 89 |
+| columns capped at 0.5 per shot | 0 | 0 | 0 | 1.7 | 16.7 | 47 | 64 | 76 |
+
+- **Chosen** by the declared rule: alpha 0.1, eps 1e-6, the fewest train failures among the 14 settings.
+- **The failures rise with alpha at every step,** from 13 with no head to 89 to 90 with the head trusted fully.
+  This head's per-shot priors hurt TCBP-JOBS here at every weight. A refit can only bring it back towards m, the
+  smallest alpha of the grid, and the chosen alpha is that edge.
+- **The cap at 0.5 grows with alpha.** At alpha 1 it flattens about 76 columns per shot to exactly 0.5, which erases
+  the head's ranking among them. That is one likely reason high alphas lose. It is not tested separately.
+- **eps** makes almost no difference (at most 2 shots).
+
+**The test** (test file `X_f0.8_seed4900.npz`, seed 4900, 4,000 fresh Stim shots, sha256 `8f61f30b...`, read once; all
+4,000 scored):
+
+| Arm (same 4,000 shots) | Knobs | Failures | 95% Wilson | Build + decode, mean ms |
+|---|---|---|---|---|
+| TCBP-JOBS, matched priors (m) | | **35** | 0.63% to 1.21% | 48 |
+| TCBP-JOBS, retrained head, refitted (rf) | alpha 0.1, eps 1e-6 | **37** | 0.67% to 1.27% | 47 |
+| TCBP-JOBS, retrained head, frozen knobs (r) | alpha 0.4, eps 1e-4 | **90** | 1.83% to 2.76% | 47 |
+
+| Pair | Failures | Only the first fails | Only the second fails | Sign test p |
+|---|---|---|---|---|
+| rf vs m (primary) | 37, 35 | 8 | 6 | 0.79 |
+| rf vs r | 37, 90 | 5 | 58 | 1.7e-12 |
+| r vs m | 90, 35 | 64 | 9 | 2.4e-11 |
+
+What this shows:
+- **The refit removes the harm, but adds nothing over the true model.** rf against m is 37 against 35, with 8 against 6
+  discordant shots (p = 0.79). **By the declared claim rule, the refitted head does not add to the matched priors.**
+- **Against the frozen knobs, the refit is a clear repair:** 37 against 90 (5 against 58, p = 2e-12). r against m
+  repeats runs 1 and 2 on a third file: 90 against 35.
+- **The plain conclusion of this task.** On this noise, TCBP-JOBS with the true error model is as good as any head we
+  have:
+  - **without the true model**, the network's head helps a lot: h against g is 478 against 1,366;
+  - **with it**, the best weight we found for the retrained head is the smallest we tried, and it ties matched priors.
+- **Checks:**
+  - Every correction of every arm reproduces its syndrome.
+  - The plans the server used are the shipped ones (`d94a67d1...` train, `4e719fe2...` test).
+  - The logits carry the retrained head (`b42d71d5...`) on its training base (`181d3c74...`).
+  - The test arms' knobs are recorded in `summary.json` (`knobs_per_arm`).
+
+Files (in [`tcbp_retrain_results/refit/`](tcbp_retrain_results/refit/)):
+- `fit.log`, `fit.json` (every row and the choice), `decode.log` and `evaluate_*.log`;
+- `f0.8-seed4900/per_shot.npz` and `summary.json`;
+- `logits_meta_*.json`, the two plans, `job_cpu_140.sh.txt` and `score.json`.
+
+The server's files are on the branch `server-logs` at `ca1b1f27`, under `files/tcbp-retrain-refit/`.
+
+**What is left:**
+- alphas below 0.1;
+- a head trained against TCBP-JOBS's own outcome rather than for calibrated probabilities;
+- a head retrained with atom loss;
+- other factors, Z memory and the kit's pair score.

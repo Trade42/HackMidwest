@@ -53,12 +53,14 @@ SiLU tables (fixed_point.py: one entry per possible input): 33 tables in the blo
 
 At 16 bits a table is large (65,536 entries); a hardware design would then approximate SiLU in pieces. That was not done here: the tables are exact.
 
+A chip "holds all" when its block RAM takes the weights, one shot's values and the SiLU tables.
+
 | chip | LUTs | DSP slices | block RAM, Mb | holds at 12 bits (stream 16) | holds at 8 bits (stream 16) | time per shot at 100 MHz, every DSP busy |
 |---|---:|---:|---:|---|---|---:|
 | XC7S50 (Urbana's chip) | 32,600 | 120 | 2.76 | neither | neither | 41.1 ms |
 | XC7S75 | 48,000 | 140 | 3.32 | neither | neither | 35.3 ms |
 | XC7S100 (largest Spartan-7) | 64,000 | 160 | 4.42 | neither | neither | 30.8 ms |
-| XC7A100T (Artix-7) | 63,400 | 240 | 4.98 | neither | one shot's values | 20.6 ms |
+| XC7A100T (Artix-7) | 63,400 | 240 | 4.98 | neither | neither | 20.6 ms |
 | XC7A200T (largest Artix-7) | 134,600 | 740 | 13.46 | the weights | all | 6.7 ms |
 
 The time column is an **estimate**, a lower bound: multiply-adds per shot / (DSP slices x 100 MHz), as if every DSP slice did one useful multiply-add on every clock; reading weights from outside the chip would lengthen it.
@@ -70,7 +72,7 @@ The Urbana board has, outside the FPGA: 128 MB of DDR3 memory: "a 1Gbit DDR3 org
 - **The weights do not fit on the Urbana's chip.** At 8 bits they are 7.15 Mb; the XC7S50 has 2.76 Mb of block RAM in all. Even at 4 bits (3.57 Mb) they take more than all of it.
 - **On the Urbana board they would live in the DDR3 memory** (0.89 MB at 8 bits, against 128 MB), and stream into the chip layer by layer. One shot reads every weight once: about 0.42 ms at the memory's peak rate (an **estimate**: 893,697 bytes / 2.13 GB/s; a real memory controller reaches less), small beside the arithmetic below. A batch of shots shares one reading.
 - **One shot's values do not fit either**, once the residual stream keeps its 16 bits (WIDTHS.md): 5.22 Mb at 12 bits and 4.76 Mb at 8 bits, against the XC7S50's 2.76 Mb (the stream alone is 3.83 Mb). On the Urbana they too would go to the DDR3 memory, part by part.
-- **At 12 bits (stream 16), of the chips in the table, none holds the weights and one shot's values together** (15.94 Mb).
-- **At 8 bits (stream 16), of the chips in the table, only the XC7A200T (largest Artix-7) holds the weights and one shot's values together** (11.91 Mb).
+- **At 12 bits (stream 16), of the chips in the table, none holds the weights, one shot's values and the SiLU tables together** (18.61 Mb).
+- **At 8 bits (stream 16), of the chips in the table, only the XC7A200T (largest Artix-7) holds the weights, one shot's values and the SiLU tables together** (13.02 Mb, of 13.46 Mb: just).
   No Spartan-7 holds the weights alone at 8 bits: the largest, the XC7S100, has 4.42 Mb.
 - **Time:** about 41 ms per shot on the XC7S50 at best (estimate, above). For a tie-breaker that runs on about 0.4% of shots this is the cost of those shots only.

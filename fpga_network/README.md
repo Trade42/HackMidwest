@@ -32,7 +32,8 @@ Counted from the final checkpoint (step 120,000; the counts are those of the arc
 finds 533.8 million, because the model computes and discards some products at the first and last rounds); the largest
 set of values kept at once is 354,816 numbers. Against the chips (AMD's DS180): the weights need 10.72 Mb at 12 bits and
 7.15 Mb at 8, one shot's values 5.22 or 4.76 Mb (the residual stream at 16 bits), and the XC7S50 has 2.76 Mb of block
-RAM. At 12 bits no chip compared holds both; at 8 bits only the XC7A200T (13.46 Mb). **Estimated** lower bound on time: multiply-adds / (DSP slices x 100 MHz) = 41 ms
+RAM. At 12 bits no chip compared holds them; at 8 bits only the XC7A200T, just (13.02 Mb with the SiLU tables, of
+13.46 Mb). **Estimated** lower bound on time: multiply-adds / (DSP slices x 100 MHz) = 41 ms
 per shot on the XC7S50's 120 DSP slices, 6.7 ms on an XC7A200T's 740. Reading the weights from the Urbana's DDR3 once
 per shot: about 0.42 ms at the memory's peak rate (**estimated**).
 
@@ -66,8 +67,11 @@ train shots (never the scored shots): either the largest value seen, or (the run
 percentile, so the rarest values saturate; the 16-bit tensors always take the largest. Both kinds of range are in
 `WIDTHS.md`, side by side. **One rounding rule everywhere**: add half, round down, saturate. SiLU is a table.
 
-Two choices were made on smoke tests of 10 to 20 **validation** shots (disclosed, because they were then scored on
-the same file), and then checked on 10 train shots that chose nothing (`logs/diagnostics_train_shots.log`):
+Three choices were made after looking at **validation** shots (disclosed, because they were then scored on the same
+file). The percentile ranges were added after the first table (step 70,000, on `validation_X.npz`) showed ranges from
+the largest value breaking at 10 bits; both kinds are in `WIDTHS.md`, side by side, so nothing is hidden. The other
+two were made on smoke tests of 10 to 20 validation shots, and then checked on 10 train shots that chose nothing
+(`logs/diagnostics_train_shots.log`):
 - the small head at the end (33,281 weights, 0.1% of the work) stays at 16 bits: at 8 bits it alone moved the logits
   by 0.77 (median; on the train shots 1.12) where any other layer at 8 bits moved them by under 0.04;
 - the residual stream stays at 16 bits: at 8 bits it alone changed 9 of 10 answers (on the train shots 10 of 10); its
@@ -113,6 +117,12 @@ does not depend on them, and the last rows use the real calibrations.
 its memories: **8,463 LUTs** (26% of the XC7S50's 32,600), **2,809 flip-flops** (4% of 65,200), **73 DSP48E1** (61% of
 120): 32 for the lanes and 41 for address arithmetic that counters could replace. Its timing is unknown (not placed and
 routed).
+
+**For comparison, and not like for like:** the same network takes 18.8 ms per shot at batch one on the laptop's GPU and
+48 ms on this PC's CPU with 2 threads (`hierarchy/README.md`: measured, the step-30,000 checkpoint of the same
+architecture). The engine's 0.23 s is a simulated clock count times an assumed 100 MHz, for a design that was never
+placed and routed: a different machine and a different kind of number. The engine is a demonstration that the network
+runs in fixed-point hardware, not a faster way to run it.
 
 **Where the clocks go** (from the simulated count of a block, 2,619,666): the multiply-adds themselves are 1,861,632
 clocks (71%); writing the 32 results of a position takes 35 clocks, 453,600 in all (17%); the normalisation, one value

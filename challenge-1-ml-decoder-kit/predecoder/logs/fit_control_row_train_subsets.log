@@ -1,0 +1,10 @@
+train_X_fresh_failed.npz: 89 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/runs/smoke_cpu/logits_failed/logits.npy (13 s in batches of 32 on cpu)
+the head's probabilities sum to 60.2 per shot (the kit's priors: 47.3)
+train_X_fresh_right.npz: 2000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/runs/smoke_cpu/logits_right/logits.npy (117 s in batches of 32 on cpu)
+the head's probabilities sum to 47.5 per shot (the kit's priors: 47.3)
+  train_X_fresh_failed.npz: 89 shots, {'mode': 'linear', 'alpha': 0.0, 'eps': 1e-06}, 278 s
+  train_X_fresh_right.npz: 2000 shots, {'mode': 'linear', 'alpha': 0.0, 'eps': 1e-06}, 511 s
+fit on train_X_fresh_failed.npz (weight 1), train_X_fresh_right.npz (weight 9.9555), p=0.004; relay-BP at the kit's settings, a decoder built per shot; 4 processes, 511 s
+mode      alpha      eps  fail train_X_fresh_fail  fail train_X_fresh_righ    score  hard (weighted)  mean iter
+linear        0    1e-06                       89                        0     89.0           2988.0      552.0
+control only: nothing chosen

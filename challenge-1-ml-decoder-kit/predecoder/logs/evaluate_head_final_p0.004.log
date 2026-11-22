@@ -1,0 +1,7 @@
+train_X_fresh_failed.npz: 89 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/runs/head_final/logits_failed/logits.npy (15 s in batches of 32 on cpu)
+the head's probabilities sum to 56.7 per shot (the kit's priors: 47.3)
+train_X_fresh_right.npz: 2000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/runs/head_final/logits_right/logits.npy (197 s in batches of 32 on cpu)
+the head's probabilities sum to 47.3 per shot (the kit's priors: 47.3)
+validation_X.npz: 5000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/runs/head_final/logits_validation/logits.npy (554 s in batches of 32 on cpu)
+network + head, one shot at a time on cpu (4 threads), 200 shots: mean 170.1 ms, median 81.1 ms, p99 1466.3 ms; batch one against batched: largest logit gap 0.00e+00
+the head's probabilities sum to 47.0 per shot (the kit's priors: 47.3)

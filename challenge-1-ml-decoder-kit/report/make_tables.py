@@ -27,8 +27,8 @@ import numpy as np
 
 from report import loaders, stats
 from report.loaders import DATA, Mismatch
-from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, REFERENCE, TCBP_OWN, TEST_ROWS,
-                         TEST_SHA256)
+from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDITIONS, OPTIONAL_RUNGS, P_VALUES, PREDECODER_FALLBACK, PREDECODER_FALLBACK_LABEL, PREDECODER_LABEL, PREDECODER_TEST,
+                         REFERENCE, TCBP_OWN, TEST_ROWS, TEST_SHA256)
 
 HERE = Path(__file__).resolve().parent
 # REPORT_OUT sends the tables elsewhere and leaves the documents alone: used by the tests only.
@@ -220,7 +220,7 @@ def load_test_rows(data=DATA):
                                  and row["failed_pair"] is not None else None)
                 row["interval"] = stats.per_cycle_interval(row["failures_pair"], row["shots"])
     known = {spec.folder.format(p=p) + suffix for spec in TEST_ROWS for p in P_VALUES for suffix in ("", RETIME)}
-    known |= {f"ensemble_p{p}" for p in P_VALUES} | {f"net_p{p}" for p in P_VALUES}
+    known |= {f"ensemble_p{p}" for p in P_VALUES} | {f"net_p{p}" for p in P_VALUES} | {"predecoder"}
     extra = sorted(path.name for path in (data / "test").glob("*") if path.is_dir() and path.name not in known) if (data / "test").is_dir() else []
     return measured, extra, combined
 
@@ -1601,6 +1601,286 @@ def ensemble_statement(measured, combined):
                                       + (", and " if len(short) > 1 else "") + short[-1]), "tables/test_p<p>.md (the ensemble and TCBP-JOBS rows)")
 
 
+# Rows run or read after the test results were seen, at the team's request. They are ablations: none of them is our decoder,
+# and none may change its headline, its framing or the frozen choice of its rules (choosing on the test shots now would fit them).
+AFTER_TEST = "run after the test results were seen, at the team's request; an ablation, not our decoder"
+SWAP_RULE = "d"   # the ensemble's pre-registered rule closest to TCBP-JOBS in place of relay-BP in our hierarchy
+
+
+def swap_table(combined):
+    """TCBP-JOBS in place of relay-BP in our hierarchy, read from the rules the ensemble already scored on the test shots.
+
+    No rule is computed here. Rule d (majority of P1, P2, T; where all three differ, the network among P1, P2, T, R) is paired
+    against TCBP-JOBS alone (T) and against our frozen decoder's offline decode (rule a), all three from the same files, so the
+    comparison stays in one decode mode. Where its failures differ from T's, the shots are split by what rule d did there.
+    """
+    lines, records, split_lines = [], [], []
+    compact = {"d": [], "T": [], "a": [], "f": []}
+    source = "tables/test_after_swap.md"
+    names = {SWAP_RULE: "rule d: TCBP-JOBS in place of relay-BP (where at least two of the three, the two PriorTilt runs and TCBP-JOBS, agree, "
+                        "that answer; where all three differ, the network among them and relay-BP)",
+             "f": "rule f, the ensemble's frozen rule, for reference (where the two PriorTilt runs and TCBP-JOBS all agree, that answer; "
+                  "elsewhere joint decoding where it converged, else TCBP-JOBS)"}
+    for p in P_VALUES:
+        rows = combined[p]["rows"] if combined.get(p) else {}
+        short = f"swap{p[-1]}"
+        if not all(key in rows for key in (SWAP_RULE, "T", "a", "P1", "aw")):
+            lines.append([p, names[SWAP_RULE]] + [NOT_MEASURED] * 5)
+            for key in compact:
+                compact[key].append(NOT_MEASURED)
+            for name in ("d_pairs", "d_xz", "T_pairs", "a_pairs", "f_pairs", "vsT_both", "vsT_only_d", "vsT_only_T", "vsT_p",
+                         "vsA_only_d", "vsA_only_a", "vsA_p"):
+                fact(f"{short}_{name}", None, source)
+            continue
+        for key in (SWAP_RULE, "f"):
+            if key not in rows:
+                continue
+            row = rows[key]
+            versus_t = stats.paired(rows["T"]["failed_pair"], row["failed_pair"])
+            versus_a = stats.paired(rows["a"]["failed_pair"], row["failed_pair"])
+            lines.append([p, names[key], f"{row['failures_X']}, {row['failures_Z']}", f"{row['failures_pair']} of {row['shots']:,}",
+                          rate_text(row["rate"], row["error"]),
+                          f"{row['failures_pair']} against {rows['T']['failures_pair']}; " + pair_text(versus_t),
+                          f"{row['failures_pair']} against {rows['a']['failures_pair']}; " + pair_text(versus_a)])
+            records.append({"p": p, "rule": key, "failures_X": row["failures_X"], "failures_Z": row["failures_Z"], "failures_pair": row["failures_pair"],
+                            "pairs": row["shots"], "rate_per_cycle": row["rate"], "kit_error": row["error"],
+                            "tcbp_failed_pairs": rows["T"]["failures_pair"], "both_fail_with_tcbp": versus_t["both"],
+                            "only_this_rule_fails_vs_tcbp": versus_t["row_only"], "only_tcbp_fails": versus_t["reference_only"], "exact_p_vs_tcbp": versus_t["p"],
+                            "rule_a_failed_pairs": rows["a"]["failures_pair"], "both_fail_with_rule_a": versus_a["both"],
+                            "only_this_rule_fails_vs_rule_a": versus_a["row_only"], "only_rule_a_fails": versus_a["reference_only"],
+                            "exact_p_vs_rule_a": versus_a["p"], "source": row["source"]})
+            if key == SWAP_RULE:
+                for name, value in (("d_pairs", row["failures_pair"]), ("d_xz", f"{row['failures_X']}, {row['failures_Z']}"),
+                                    ("T_pairs", rows["T"]["failures_pair"]), ("a_pairs", rows["a"]["failures_pair"]),
+                                    ("vsT_both", versus_t["both"]), ("vsT_only_d", versus_t["row_only"]), ("vsT_only_T", versus_t["reference_only"]),
+                                    ("vsT_p", stats.p_text(versus_t["p"])), ("vsA_only_d", versus_a["row_only"]),
+                                    ("vsA_only_a", versus_a["reference_only"]), ("vsA_p", stats.p_text(versus_a["p"]))):
+                    fact(f"{short}_{name}", value, source)
+        fact(f"{short}_f_pairs", rows["f"]["failures_pair"] if "f" in rows else None, source)
+        versus_t, versus_a = (stats.paired(rows[key]["failed_pair"], rows[SWAP_RULE]["failed_pair"]) for key in ("T", "a"))
+        compact["d"].append(f"**{rows[SWAP_RULE]['failures_pair']}** · against T: only d {versus_t['row_only']}, only T {versus_t['reference_only']} "
+                            f"(p = {stats.p_text(versus_t['p'])}) · against a: only d {versus_a['row_only']}, only a {versus_a['reference_only']} "
+                            f"(p = {stats.p_text(versus_a['p'])})")
+        compact["T"].append(str(rows["T"]["failures_pair"]))
+        compact["a"].append(str(rows["a"]["failures_pair"]))
+        compact["f"].append(str(rows["f"]["failures_pair"]) if "f" in rows else NOT_MEASURED)
+        # where rule d and TCBP-JOBS part, per basis, in shots: rule d's answer is P1 where the two runs agree, T's where exactly two
+        # of the three agree and they do not, and the network's pick where all three differ (later_d)
+        cells = {}
+        for basis in "XZ":
+            with np.load(DATA / "test" / f"ensemble_p{p}" / f"test_{basis}.npz", allow_pickle=False) as file:
+                failed_d, failed_t, failed_p1 = (file[f"failed_{key}"].astype(bool) for key in (SWAP_RULE, "T", "P1"))
+                disputed, network = file["later_aw"].astype(bool), file[f"later_{SWAP_RULE}"].astype(bool)
+            if (network & ~disputed).any():
+                raise Mismatch(f"test/ensemble_p{p}: rule d sent a shot to the network where the two PriorTilt runs agree")
+            if (failed_d[~disputed] != failed_p1[~disputed]).any():
+                raise Mismatch(f"test/ensemble_p{p}: rule d does not take the two PriorTilt runs' answer where they agree")
+            two = disputed & ~network
+            if (failed_d[two] != failed_t[two]).any():
+                raise Mismatch(f"test/ensemble_p{p}: rule d differs from TCBP-JOBS where exactly two of the three agree; read as a majority it cannot")
+            only_d, only_t = failed_d & ~failed_t, failed_t & ~failed_d
+            cells[basis] = {"agree": (int((only_d & ~disputed).sum()), int((only_t & ~disputed).sum())),
+                            "network": (int((only_d & network).sum()), int((only_t & network).sum())),
+                            "disputed": int(disputed.sum()), "sent": int(network.sum())}
+        for where, words in (("agree", "the two PriorTilt runs agree: rule d keeps their answer"),
+                             ("network", "all three differ: rule d takes the network's pick among P1, P2, T and R")):
+            split_lines.append([p, words] + [f"{cells[basis][where][0]} / {cells[basis][where][1]}" for basis in "XZ"])
+            for basis in "XZ":
+                fact(f"{short}_{where}_{basis}_only_d", cells[basis][where][0], source)
+                fact(f"{short}_{where}_{basis}_only_T", cells[basis][where][1], source)
+        split_lines.append([p, "exactly two of the three agree: rule d's answer is TCBP-JOBS's (checked on every shot)", "0 / 0", "0 / 0"])
+        for basis in "XZ":
+            fact(f"{short}_sent_{basis}", cells[basis]["sent"], source)
+    text = (f"**{AFTER_TEST[0].upper() + AFTER_TEST[1:]}.** TCBP-JOBS in place of relay-BP in our hierarchy, as the team asked after the test "
+            "results: no new rule is computed, the rows are rules the ensemble scored on the test shots among its pre-registered rules "
+            "(`hierarchy.ensemble`; P1 and P2 PriorTilt under two seeds, T TCBP-JOBS, R relay-BP, all from the same saved answers). Rule d is the "
+            "closest to that swap. Both comparisons stay in one decode mode: TCBP-JOBS alone (T) and our frozen decoder's offline decode "
+            "(rule a: P1 where the two runs agree, else the network among R, P1, P2) come from the same files. Offline rows: no time.\n\n"
+            + markdown(["p", "Rule (scored offline by the ensemble on the test shots)", "Failures X, Z", "Failed pairs", "Rate per cycle ± error",
+                        "Against TCBP-JOBS alone: failed pairs; both fail / only this rule / only TCBP-JOBS (exact p)",
+                        "Against our frozen decoder's offline decode (rule a): failed pairs; both fail / only this rule / only rule a (exact p)"], lines)
+            + ("\n\n**Where rule d and TCBP-JOBS part**, in shots (not pairs): per basis, shots only rule d fails / shots only TCBP-JOBS fails, split by "
+               "what rule d did on the shot.\n\n" + markdown(["p", "On the shots where", "X memory: only rule d / only TCBP-JOBS",
+                                                               "Z memory: only rule d / only TCBP-JOBS"], split_lines) if split_lines else "")
+            + "\n\nSource: `report/data/test/ensemble_p<p>/test_{X,Z}.npz` and `.json`.")
+    words = {"d": f"TCBP-JOBS in place of relay-BP in our hierarchy (the ensemble's rule d; {AFTER_TEST})",
+             "T": "TCBP-JOBS alone (T; NVIDIA, GPU)",
+             "a": "our frozen decoder, the offline decode of the same shots (rule a)",
+             "f": "our ensemble's frozen rule f (TCBP-JOBS plus joint decoding)"}
+    write("test_after_swap_short",
+          f"**{AFTER_TEST[0].upper() + AFTER_TEST[1:]}.** Failed pairs of 10,000 test pairs, every row scored offline by the ensemble on the same "
+          "saved answers (no time); against T and a: the pairs only one of the two fails, exact p. `APPENDIX.md` J has the full table.\n\n"
+          + markdown(["Row"] + [f"p = {p}" for p in P_VALUES], [[words[key]] + cells for key, cells in compact.items()]))
+    return write("test_after_swap", text, records)
+
+
+def swap_statement():
+    """The one or two plain sentences on the swap, from the facts of swap_table."""
+    value = lambda name: FACTS[name][0]
+    if value("swap4_d_pairs") == NOT_MEASURED or value("swap5_d_pairs") == NOT_MEASURED:
+        fact("swap_statement", "TCBP-JOBS in place of relay-BP in our hierarchy is not measured on the test shots.", "tables/test_after_swap.md")
+        return
+
+    def against_t(p):
+        n = p[-1]
+        d, t, pv = int(value(f"swap{n}_d_pairs")), int(value(f"swap{n}_T_pairs")), value(f"swap{n}_vsT_p")
+        words = "level with" if float(pv) >= 0.05 else "behind" if d > t else "ahead of"
+        return words, (f"{words} TCBP-JOBS alone at p = {p} ({d} against {t} failed pairs; only the swap fails {value(f'swap{n}_vsT_only_d')}, "
+                       f"only TCBP-JOBS {value(f'swap{n}_vsT_only_T')}, exact p = {pv})")
+    four, five = against_t("0.004"), against_t("0.005")
+    text = (f"TCBP-JOBS in place of relay-BP in our hierarchy ({AFTER_TEST}; the ensemble's rule d, scored offline on the test shots) is "
+            f"{four[1]} and {five[1]}. Against our frozen decoder's offline decode of the same shots (rule a) it fails "
+            f"{value('swap4_d_pairs')} against {value('swap4_a_pairs')} pairs at p = 0.004 (exact p = {value('swap4_vsA_p')}) and "
+            f"{value('swap5_d_pairs')} against {value('swap5_a_pairs')} at p = 0.005 (exact p = {value('swap5_vsA_p')}): TCBP-JOBS is the "
+            "stronger third candidate, but where the two PriorTilt runs agree the swap keeps their answer. At p = 0.005 they agree on a wrong "
+            f"answer that TCBP-JOBS gets right on {value('swap5_agree_X_only_d')} X and {value('swap5_agree_Z_only_d')} Z shots (and on a right "
+            f"answer where TCBP-JOBS is wrong on {value('swap5_agree_X_only_T')} and {value('swap5_agree_Z_only_T')}); where all three differ, the "
+            f"network's pick fails {value('swap5_network_X_only_d')} X and {value('swap5_network_Z_only_d')} Z shots that TCBP-JOBS gets right "
+            f"({value('swap5_network_X_only_T')} and {value('swap5_network_Z_only_T')} the other way). What beats TCBP-JOBS is the ensemble's "
+            f"rule f, which adds joint decoding: {value('swap4_f_pairs')} against {value('swap4_T_pairs')} failed pairs at p = 0.004.")
+    fact("swap_statement", text, "tables/test_after_swap.md")
+
+
+def predecoder_table(measured):
+    """The learned predecoder on the saved test shots: relay-BP with the head's per-shot priors (H) against relay-BP with the kit's
+    priors built the same way, per shot (fresh: the declared pair), TCBP-JOBS (T) and the evaluator's relay-BP row (R), one basis.
+
+    The counts are the run's own (predecoder.compare and predecoder.secondary); its per-shot file is not in git. T's and R's totals
+    are checked against the rows of this report on the same shots, and the run must name the team's test file.
+    """
+    source = "tables/test_predecoder.md"
+    lines, records = [], []
+    for p, basis in PREDECODER_TEST:
+        n = f"pre{p[-1]}{basis}"
+        files = [DATA / "test" / "predecoder" / f"test_run_p{p}_{basis}_{kind}.json" for kind in ("summary", "secondary")]
+        if not all(file.is_file() for file in files):
+            lines.append([p, basis, "relay-BP with the head's priors (H)"] + [NOT_MEASURED] * 4)
+            for name in ("H", "fresh", "T", "R", "vs_fresh_only_H", "vs_fresh_only_other", "vs_fresh_p", "vs_T_only_H", "vs_T_only_other", "vs_T_p",
+                         "vs_R_only_H", "vs_R_only_other", "vs_R_p", "it_H", "it_fresh", "ratio", "it_ratio"):
+                fact(f"{n}_{name}", None, source)
+            continue
+        summary, secondary = (json.loads(file.read_text(encoding="utf-8")) for file in files)
+        for record in (summary, secondary):
+            if record["data"]["sha256"] != TEST_SHA256[p][basis] or record["data"]["basis"] != basis or abs(record["data"]["p"] - float(p)) > 1e-12:
+                raise Mismatch(f"test/predecoder, p = {p}, {basis}: not the team's test file (sha256 {record['data']['sha256'][:12]})")
+        arms, failures, pairs = summary["arms"], secondary["failures"], secondary["pairs"]
+        key = lambda table, start: next(name for name in table if name.startswith(start))
+        declared, theirs = summary["pairs"]["head_vs_fresh"], pairs[key(pairs, "H against fresh")]
+        if (declared["both"], declared["only_head"], declared["only_fresh"]) != (theirs["both"], theirs["only_H"], theirs["only_other"]):
+            raise Mismatch(f"test/predecoder, p = {p}, {basis}: the summary and the secondary file give other counts for head against fresh")
+        if (arms["head"]["failures"], arms["fresh"]["failures"]) != (failures[key(failures, "H ")]["failures"], failures[key(failures, "fresh")]["failures"]):
+            raise Mismatch(f"test/predecoder, p = {p}, {basis}: the summary and the secondary file give other failures")
+        for start, report_key, words in (("T ", "tcbp", "TCBP-JOBS"), ("R ", REFERENCE, "relay-BP's timed row")):
+            row = measured[p].get(report_key)
+            if row is not None and row[f"failures_{basis}"] != failures[key(failures, start)]["failures"]:
+                raise Mismatch(f"test/predecoder, p = {p}, {basis}: {words} fails {failures[key(failures, start)]['failures']} shots there and "
+                               f"{row[f'failures_{basis}']} in this report's row on the same shots")
+        shots = summary["shots"]
+        rows = [("H", "relay-BP with the head's priors, a decoder built per shot (H; ours)", arms["head"]["failures"], None, arms["head"]),
+                ("fresh", "relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit)", arms["fresh"]["failures"],
+                 theirs, arms["fresh"]),
+                ("T", "TCBP-JOBS (NVIDIA, GPU; its row of this report)", failures[key(failures, "T ")]["failures"], pairs[key(pairs, "H against T")], None),
+                ("R", "relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report)", failures[key(failures, "R ")]["failures"],
+                 pairs[key(pairs, "H against R")], None)]
+        for short, label, count, paired, arm in rows:
+            low, high = stats.wilson(count, shots)
+            lines.append([p, basis, label, f"{count:,} of {shots:,}", f"{count / shots:.2%} ({low:.2%} to {high:.2%})",
+                          "" if paired is None else f"{paired['both']} / {paired['only_H']} / {paired['only_other']} (p = {stats.p_text(paired['p'])})",
+                          "" if arm is None else f"{arm['mean_iterations']:,.0f}; {arm['unconverged']} not converged"])
+            records.append({"p": p, "basis": basis, "row": short, "failures": count, "shots": shots, "wilson95_low": low, "wilson95_high": high,
+                            "both_fail": paired and paired["both"], "only_H_fails": paired and paired["only_H"], "only_this_row_fails": paired and paired["only_other"],
+                            "exact_p": paired and paired["p"], "mean_iterations": arm and arm["mean_iterations"], "unconverged": arm and arm["unconverged"]})
+            fact(f"{n}_{short}", count, source)
+            if paired is not None:
+                tag = {"fresh": "vs_fresh", "T": "vs_T", "R": "vs_R"}[short]
+                fact(f"{n}_{tag}_only_H", paired["only_H"], source)
+                fact(f"{n}_{tag}_only_other", paired["only_other"], source)
+                fact(f"{n}_{tag}_p", stats.p_text(paired["p"]), source)
+        fact("pre_columns", f"{summary['logits']['columns']:,}", source)
+        fact(f"{n}_it_H", f"{arms['head']['mean_iterations']:,.0f}", source)
+        fact(f"{n}_it_fresh", f"{arms['fresh']['mean_iterations']:,.0f}", source)
+        fact(f"{n}_ratio", f"{arms['fresh']['failures'] / arms['head']['failures']:.1f}" if arms["head"]["failures"] else None, source)
+        fact(f"{n}_it_ratio", f"{arms['fresh']['mean_iterations'] / arms['head']['mean_iterations']:.1f}", source)
+    fallback_lines = []
+    for p, basis, what in PREDECODER_FALLBACK:
+        n = f"fb{p[-1]}{basis}"
+        file = DATA / "test" / "predecoder" / f"fallback_test_{basis}_p{p}.json"
+        log = file.with_suffix(".log")
+        if not file.is_file():
+            fallback_lines.append([p, basis, what] + ["not measured yet"] * 6)
+            for name in ("rule", "H", "T", "back", "vs_T_only_rule", "vs_T_only_T", "vs_T_p", "vs_H_only_rule", "vs_H_only_H", "vs_H_p",
+                         "conv_shots", "conv_H", "conv_T", "back_H", "back_T"):
+                fact(f"{n}_{name}", None, source)
+            continue
+        record = json.loads(file.read_text(encoding="utf-8"))
+        if record["data"]["sha256"] != TEST_SHA256[p][basis] or record["data"]["basis"] != basis:
+            raise Mismatch(f"test/predecoder/{file.name}: not the team's test file")
+        failures, pairs, back, shots = record["failures"], record["pairs"], record["fallback_shots"], record["data"]["shots"]
+        held = DATA / "test" / "predecoder" / f"test_run_p{p}_{basis}_summary.json"
+        if held.is_file() and json.loads(held.read_text(encoding="utf-8"))["arms"]["head"]["failures"] != failures["H"]["failures"]:
+            raise Mismatch(f"test/predecoder/{file.name}: H fails {failures['H']['failures']} shots here and otherwise in the held-out run")
+        if measured[p].get("tcbp") is not None and measured[p]["tcbp"][f"failures_{basis}"] != failures["T"]["failures"]:
+            raise Mismatch(f"test/predecoder/{file.name}: TCBP-JOBS fails {failures['T']['failures']} shots here and otherwise in its row")
+        split = re.search(r"H fails (\d+) of its unconverged shots and (\d+) converged ones; T fails (\d+) of the shots that fall back",
+                          log.read_text(encoding="utf-8")) if log.is_file() else None
+        if split is None:
+            raise Mismatch(f"test/predecoder/{log.name}: no line splitting the failures by convergence")
+        back_h, conv_h, back_t = map(int, split.groups())
+        if conv_h + back_h != failures["H"]["failures"] or conv_h + back_t != failures["rule"]["failures"]:
+            raise Mismatch(f"test/predecoder/{log.name}: the split by convergence does not add up to the failures")
+        versus_t, versus_h = pairs["rule against T"], pairs["rule against H"]
+        low, high = stats.wilson(failures["rule"]["failures"], shots)
+        fallback_lines.append([p, basis, what, f"{back:,} of {shots:,}",
+                               f"{failures['rule']['failures']:,} ({failures['rule']['failures'] / shots:.2%}, {low:.2%} to {high:.2%})",
+                               f"{failures['H']['failures']:,}", f"{failures['T']['failures']:,}",
+                               f"{versus_t['both']} / {versus_t['only_rule']} / {versus_t['only_T']} (p = {stats.p_text(versus_t['p'])})",
+                               f"{versus_h['both']} / {versus_h['only_rule']} / {versus_h['only_H']} (p = {stats.p_text(versus_h['p'])})"])
+        records.append({"p": p, "basis": basis, "row": "fallback rule", "failures": failures["rule"]["failures"], "shots": shots,
+                        "wilson95_low": low, "wilson95_high": high, "fallback_shots": back, "post_hoc": basis == "X"})
+        for name, value in (("rule", failures["rule"]["failures"]), ("H", failures["H"]["failures"]), ("T", failures["T"]["failures"]), ("back", back),
+                            ("vs_T_only_rule", versus_t["only_rule"]), ("vs_T_only_T", versus_t["only_T"]), ("vs_T_p", stats.p_text(versus_t["p"])),
+                            ("vs_H_only_rule", versus_h["only_rule"]), ("vs_H_only_H", versus_h["only_H"]), ("vs_H_p", stats.p_text(versus_h["p"])),
+                            ("conv_shots", f"{shots - back:,}"), ("conv_H", conv_h), ("conv_T", failures["T"]["failures"] - back_t),
+                            ("back_H", back_h), ("back_T", back_t)):
+            fact(f"{n}_{name}", value, source)
+    validation = DATA / "exploration" / "predecoder" / "fallback_validation_X_p0.005.json"
+    record = json.loads(validation.read_text(encoding="utf-8")) if validation.is_file() else None
+    for name, value in (("rule", record and record["failures"]["rule"]["failures"]), ("T", record and record["failures"]["T"]["failures"]),
+                        ("H", record and record["failures"]["H"]["failures"]),
+                        ("only_rule", record and record["pairs"]["rule against T"]["only_rule"]),
+                        ("only_T", record and record["pairs"]["rule against T"]["only_T"]),
+                        ("p", record and stats.p_text(record["pairs"]["rule against T"]["p"])), ("back", record and record["fallback_shots"])):
+        fact(f"fbval_{name}", value, "data/exploration/predecoder/fallback_validation_X_p0.005.json")
+    gate = DATA / "exploration" / "predecoder" / "compare_validation_X_summary.json"
+    if gate.is_file():
+        record = json.loads(gate.read_text(encoding="utf-8"))
+        pair = record["pairs"]["head_vs_fresh"]
+        for name, value in (("H", record["arms"]["head"]["failures"]), ("fresh", record["arms"]["fresh"]["failures"]), ("shots", f"{record['shots']:,}"),
+                            ("only_H", pair["only_head"]), ("only_fresh", pair["only_fresh"]), ("p", stats.p_text(pair["p"]))):
+            fact(f"pregate_{name}", value, "data/exploration/predecoder/compare_validation_X_summary.json")
+    else:
+        for name in ("H", "fresh", "shots", "only_H", "only_fresh", "p"):
+            fact(f"pregate_{name}", None, "data/exploration/predecoder/compare_validation_X_summary.json")
+    return write("test_predecoder",
+                 f"**The learned predecoder on the test shots: {PREDECODER_LABEL}.** Relay-BP at the kit's settings, given for each shot the priors "
+                 "that a second output (a \"head\") of our trained network computes from that shot's detectors; truth enters only the scoring. "
+                 "Per noise level and basis: the saved test file of that basis alone, so a row counts shots, not pairs, and cannot sit in the "
+                 "pair-scored tables. H against the others: both fail / only H fails / only the other fails (exact p), on the same shots. "
+                 "Counts from the run's own files (`predecoder.compare`, `predecoder.secondary`); TCBP-JOBS's and relay-BP's totals are checked "
+                 "against their rows in this report.\n\n"
+                 + markdown(["p", "Basis", "Decoder", "Failed shots", "Share (95% interval)", "H against it: both / only H / only it (exact p)",
+                             "Mean BP iterations per shot; shots not converged"], lines)
+                 + "\n\nSource: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.json` (copied from `predecoder/logs/`)."
+                 + f"\n\n**Not held out: the fallback rule, {PREDECODER_FALLBACK_LABEL}.** The rule: for every shot, the answer of relay-BP with "
+                 "the head's priors (H) where that relay-BP converged (its own success flag, no truth), else TCBP-JOBS's answer (T). No knob, no "
+                 "threshold (`predecoder/logs/fallback_rule_frozen.md`). It is not an equal of the rows above.\n\n"
+                 + markdown(["p", "Basis", "What this number is", "Shots that fall back to TCBP-JOBS", "The rule fails (share, 95% interval)",
+                             "H fails", "TCBP-JOBS fails", "Rule against TCBP-JOBS: both / only the rule / only TCBP-JOBS (exact p)",
+                             "Rule against H: both / only the rule / only H (exact p)"], fallback_lines)
+                 + "\n\nSource: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`).",
+                 records)
+
+
 def ours_at(measured, p):
     """Our timed decoder at p: the one-core row, or the two-core row (checked to give the same answers) if the first has not landed."""
     return measured[p].get("hierarchy") or measured[p].get("hierarchy-parallel")
@@ -1761,11 +2041,14 @@ def main(argv=None):
             "where_failures": failure_split_table(combined, measured), "exploration_p0.005": exploration_p5_table(), "time_split": time_split_table(measured),
             "exploration_ensemble": exploration_ensemble_table(), "ablation_80k": ablation_80k_table(),
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
-            "resources": resources_table(measured)}
+            "resources": resources_table(measured), "test_after_swap": swap_table(combined)}
+        tables["test_after_swap_short"] = (TABLES / "test_after_swap_short.md").read_text(encoding="utf-8")
+        tables["test_predecoder"] = predecoder_table(measured)
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)
         ensemble_statement(measured, combined)
+        swap_statement()
         timed_ablation(measured)
         findings(measured)
         slide_facts(measured)

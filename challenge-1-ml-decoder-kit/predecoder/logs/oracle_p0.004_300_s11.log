@@ -1,0 +1,10 @@
+oracle: X memory, p=0.004, 300 DEM shots (seed 11); the mapping reproduces the basis detectors and the observables of every shot; 47.3 fired columns per shot (the kit's priors sum to 47.3; merged priors equal the kit's to 1.1e-16)
+relay-BP at the kit's settings, a decoder built per shot (seed 0), 4 processes, 181 s
+priors                              failures      95% interval unconverged mean iterations   paired against kit
+kit                                        1  [0.0006, 0.0186]           1             499   kit only 0, this only 0, p=1
+true at 0.05                               0  [0.0000, 0.0126]           0              44   kit only 1, this only 0, p=1
+true at 0.2                                0  [0.0000, 0.0126]           0              19   kit only 1, this only 0, p=1
+true at 0.5                                0  [0.0000, 0.0126]           0               5   kit only 1, this only 0, p=1
+true and as many false at 0.05             0  [0.0000, 0.0126]           0              45   kit only 1, this only 0, p=1
+true and as many false at 0.2              0  [0.0000, 0.0126]           0              20   kit only 1, this only 0, p=1
+true and as many false at 0.5              1  [0.0006, 0.0186]           4             310   kit only 1, this only 1, p=1

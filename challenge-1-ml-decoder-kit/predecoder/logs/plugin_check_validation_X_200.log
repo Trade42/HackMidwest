@@ -1,0 +1,1 @@
+validation_X.npz: the first 200 shots through the plugin and evaluation.evaluate.run_basis: the same 12 bits as compare.py's head arm on 200 of 200; failures 1 (compare.py: 1); time per shot, everything inside decode_shot, on cpu with 4 threads: mean 198 ms, median 108 ms, p99 1706 ms

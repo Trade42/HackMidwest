@@ -320,6 +320,43 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
+| `fb5X_H` | 151 | `tables/test_predecoder.md` |
+| `fb5X_T` | 186 | `tables/test_predecoder.md` |
+| `fb5X_back` | 90 | `tables/test_predecoder.md` |
+| `fb5X_back_H` | 88 | `tables/test_predecoder.md` |
+| `fb5X_back_T` | 44 | `tables/test_predecoder.md` |
+| `fb5X_conv_H` | 63 | `tables/test_predecoder.md` |
+| `fb5X_conv_T` | 142 | `tables/test_predecoder.md` |
+| `fb5X_conv_shots` | 9,910 | `tables/test_predecoder.md` |
+| `fb5X_rule` | 107 | `tables/test_predecoder.md` |
+| `fb5X_vs_H_only_H` | 45 | `tables/test_predecoder.md` |
+| `fb5X_vs_H_only_rule` | 1 | `tables/test_predecoder.md` |
+| `fb5X_vs_H_p` | 1e-12 | `tables/test_predecoder.md` |
+| `fb5X_vs_T_only_T` | 95 | `tables/test_predecoder.md` |
+| `fb5X_vs_T_only_rule` | 16 | `tables/test_predecoder.md` |
+| `fb5X_vs_T_p` | 8e-15 | `tables/test_predecoder.md` |
+| `fb5Z_H` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_T` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_back` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_back_H` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_back_T` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_conv_H` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_conv_T` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_conv_shots` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_rule` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_H_only_H` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_H_only_rule` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_H_p` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_T_only_T` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_T_only_rule` | not measured | `tables/test_predecoder.md` |
+| `fb5Z_vs_T_p` | not measured | `tables/test_predecoder.md` |
+| `fbval_H` | 79 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_T` | 91 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_back` | 44 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_only_T` | 53 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_only_rule` | 12 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_p` | 3e-07 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
+| `fbval_rule` | 50 | `data/exploration/predecoder/fallback_validation_X_p0.005.json` |
 | `findings3` | At p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 85.3 ms per pair, or 28.9 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 4 in 22.7 ms per pair. | `tables/test_p0.003.md` |
 | `findings4` | At p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair, or 150 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 74 in 87.3 ms per pair. | `tables/test_p0.004.md` |
 | `findings5` | At p = 0.005 our decoder fails 479 of 10,000 pairs, relay-BP 845 (only ours fails 93, only relay-BP 459, exact p = 4e-59), in 825 ms per pair against relay-BP's 1,471 ms per pair, or 608 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 601 in 264 ms per pair. | `tables/test_p0.005.md` |
@@ -391,6 +428,64 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `netalone4_Z` | 4.3% | `data/test/net_p0.004/` |
 | `netalone5_X` | 18.9% | `data/test/net_p0.005/` |
 | `netalone5_Z` | 18.1% | `data/test/net_p0.005/` |
+| `pre3X_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_R` | not measured | `tables/test_predecoder.md` |
+| `pre3X_T` | not measured | `tables/test_predecoder.md` |
+| `pre3X_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre3X_it_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_it_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre3X_it_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre3X_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_R_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_R_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_R_p` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_T_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_T_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_T_p` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_fresh_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_fresh_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre3X_vs_fresh_p` | not measured | `tables/test_predecoder.md` |
+| `pre4X_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_R` | not measured | `tables/test_predecoder.md` |
+| `pre4X_T` | not measured | `tables/test_predecoder.md` |
+| `pre4X_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre4X_it_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_it_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre4X_it_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre4X_ratio` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_R_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_R_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_R_p` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_T_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_T_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_T_p` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_fresh_only_H` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_fresh_only_other` | not measured | `tables/test_predecoder.md` |
+| `pre4X_vs_fresh_p` | not measured | `tables/test_predecoder.md` |
+| `pre5X_H` | 151 | `tables/test_predecoder.md` |
+| `pre5X_R` | 432 | `tables/test_predecoder.md` |
+| `pre5X_T` | 186 | `tables/test_predecoder.md` |
+| `pre5X_fresh` | 433 | `tables/test_predecoder.md` |
+| `pre5X_it_H` | 711 | `tables/test_predecoder.md` |
+| `pre5X_it_fresh` | 2,436 | `tables/test_predecoder.md` |
+| `pre5X_it_ratio` | 3.4 | `tables/test_predecoder.md` |
+| `pre5X_ratio` | 2.9 | `tables/test_predecoder.md` |
+| `pre5X_vs_R_only_H` | 27 | `tables/test_predecoder.md` |
+| `pre5X_vs_R_only_other` | 308 | `tables/test_predecoder.md` |
+| `pre5X_vs_R_p` | 1e-61 | `tables/test_predecoder.md` |
+| `pre5X_vs_T_only_H` | 61 | `tables/test_predecoder.md` |
+| `pre5X_vs_T_only_other` | 96 | `tables/test_predecoder.md` |
+| `pre5X_vs_T_p` | 0.006 | `tables/test_predecoder.md` |
+| `pre5X_vs_fresh_only_H` | 26 | `tables/test_predecoder.md` |
+| `pre5X_vs_fresh_only_other` | 308 | `tables/test_predecoder.md` |
+| `pre5X_vs_fresh_p` | 2e-62 | `tables/test_predecoder.md` |
+| `pre_columns` | 8,784 | `tables/test_predecoder.md` |
+| `pregate_H` | 14 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_fresh` | 20 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_only_H` | 6 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_only_fresh` | 12 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_p` | 0.24 | `data/exploration/predecoder/compare_validation_X_summary.json` |
+| `pregate_shots` | 5,000 | `data/exploration/predecoder/compare_validation_X_summary.json` |
 | `rule_X` | network | `data/test/test_run.out` |
 | `rule_X_converged` | 67 | `data/test/test_run.out` |
 | `rule_X_network` | 60 | `data/test/test_run.out` |
@@ -410,6 +505,73 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `split3_hierarchy_disagree` | 2 | `tables/time_split.md` |
 | `split4_hierarchy_disagree` | 90 | `tables/time_split.md` |
 | `split5_hierarchy_disagree` | 609 | `tables/time_split.md` |
+| `swap3_T_pairs` | 3 | `tables/test_after_swap.md` |
+| `swap3_a_pairs` | 4 | `tables/test_after_swap.md` |
+| `swap3_agree_X_only_T` | 0 | `tables/test_after_swap.md` |
+| `swap3_agree_X_only_d` | 0 | `tables/test_after_swap.md` |
+| `swap3_agree_Z_only_T` | 1 | `tables/test_after_swap.md` |
+| `swap3_agree_Z_only_d` | 0 | `tables/test_after_swap.md` |
+| `swap3_d_pairs` | 2 | `tables/test_after_swap.md` |
+| `swap3_d_xz` | 1, 1 | `tables/test_after_swap.md` |
+| `swap3_f_pairs` | 2 | `tables/test_after_swap.md` |
+| `swap3_network_X_only_T` | 0 | `tables/test_after_swap.md` |
+| `swap3_network_X_only_d` | 0 | `tables/test_after_swap.md` |
+| `swap3_network_Z_only_T` | 0 | `tables/test_after_swap.md` |
+| `swap3_network_Z_only_d` | 0 | `tables/test_after_swap.md` |
+| `swap3_sent_X` | 1 | `tables/test_after_swap.md` |
+| `swap3_sent_Z` | 0 | `tables/test_after_swap.md` |
+| `swap3_vsA_only_a` | 2 | `tables/test_after_swap.md` |
+| `swap3_vsA_only_d` | 0 | `tables/test_after_swap.md` |
+| `swap3_vsA_p` | 0.50 | `tables/test_after_swap.md` |
+| `swap3_vsT_both` | 2 | `tables/test_after_swap.md` |
+| `swap3_vsT_only_T` | 1 | `tables/test_after_swap.md` |
+| `swap3_vsT_only_d` | 0 | `tables/test_after_swap.md` |
+| `swap3_vsT_p` | 1.00 | `tables/test_after_swap.md` |
+| `swap4_T_pairs` | 41 | `tables/test_after_swap.md` |
+| `swap4_a_pairs` | 50 | `tables/test_after_swap.md` |
+| `swap4_agree_X_only_T` | 6 | `tables/test_after_swap.md` |
+| `swap4_agree_X_only_d` | 4 | `tables/test_after_swap.md` |
+| `swap4_agree_Z_only_T` | 4 | `tables/test_after_swap.md` |
+| `swap4_agree_Z_only_d` | 4 | `tables/test_after_swap.md` |
+| `swap4_d_pairs` | 39 | `tables/test_after_swap.md` |
+| `swap4_d_xz` | 19, 20 | `tables/test_after_swap.md` |
+| `swap4_f_pairs` | 16 | `tables/test_after_swap.md` |
+| `swap4_network_X_only_T` | 0 | `tables/test_after_swap.md` |
+| `swap4_network_X_only_d` | 1 | `tables/test_after_swap.md` |
+| `swap4_network_Z_only_T` | 2 | `tables/test_after_swap.md` |
+| `swap4_network_Z_only_d` | 1 | `tables/test_after_swap.md` |
+| `swap4_sent_X` | 12 | `tables/test_after_swap.md` |
+| `swap4_sent_Z` | 15 | `tables/test_after_swap.md` |
+| `swap4_vsA_only_a` | 15 | `tables/test_after_swap.md` |
+| `swap4_vsA_only_d` | 4 | `tables/test_after_swap.md` |
+| `swap4_vsA_p` | 0.019 | `tables/test_after_swap.md` |
+| `swap4_vsT_both` | 29 | `tables/test_after_swap.md` |
+| `swap4_vsT_only_T` | 12 | `tables/test_after_swap.md` |
+| `swap4_vsT_only_d` | 10 | `tables/test_after_swap.md` |
+| `swap4_vsT_p` | 0.83 | `tables/test_after_swap.md` |
+| `swap5_T_pairs` | 360 | `tables/test_after_swap.md` |
+| `swap5_a_pairs` | 490 | `tables/test_after_swap.md` |
+| `swap5_agree_X_only_T` | 31 | `tables/test_after_swap.md` |
+| `swap5_agree_X_only_d` | 36 | `tables/test_after_swap.md` |
+| `swap5_agree_Z_only_T` | 26 | `tables/test_after_swap.md` |
+| `swap5_agree_Z_only_d` | 42 | `tables/test_after_swap.md` |
+| `swap5_d_pairs` | 403 | `tables/test_after_swap.md` |
+| `swap5_d_xz` | 204, 202 | `tables/test_after_swap.md` |
+| `swap5_f_pairs` | 360 | `tables/test_after_swap.md` |
+| `swap5_network_X_only_T` | 6 | `tables/test_after_swap.md` |
+| `swap5_network_X_only_d` | 19 | `tables/test_after_swap.md` |
+| `swap5_network_Z_only_T` | 7 | `tables/test_after_swap.md` |
+| `swap5_network_Z_only_d` | 16 | `tables/test_after_swap.md` |
+| `swap5_sent_X` | 102 | `tables/test_after_swap.md` |
+| `swap5_sent_Z` | 112 | `tables/test_after_swap.md` |
+| `swap5_vsA_only_a` | 112 | `tables/test_after_swap.md` |
+| `swap5_vsA_only_d` | 25 | `tables/test_after_swap.md` |
+| `swap5_vsA_p` | 2e-14 | `tables/test_after_swap.md` |
+| `swap5_vsT_both` | 291 | `tables/test_after_swap.md` |
+| `swap5_vsT_only_T` | 69 | `tables/test_after_swap.md` |
+| `swap5_vsT_only_d` | 112 | `tables/test_after_swap.md` |
+| `swap5_vsT_p` | 0.002 | `tables/test_after_swap.md` |
+| `swap_statement` | TCBP-JOBS in place of relay-BP in our hierarchy (run after the test results were seen, at the team's request; an ablation, not our decoder; the ensemble's rule d, scored offline on the test shots) is level with TCBP-JOBS alone at p = 0.004 (39 against 41 failed pairs; only the swap fails 10, only TCBP-JOBS 12, exact p = 0.83) and behind TCBP-JOBS alone at p = 0.005 (403 against 360 failed pairs; only the swap fails 112, only TCBP-JOBS 69, exact p = 0.002). Against our frozen decoder's offline decode of the same shots (rule a) it fails 39 against 50 pairs at p = 0.004 (exact p = 0.019) and 403 against 490 at p = 0.005 (exact p = 2e-14): TCBP-JOBS is the stronger third candidate, but where the two PriorTilt runs agree the swap keeps their answer. At p = 0.005 they agree on a wrong answer that TCBP-JOBS gets right on 36 X and 42 Z shots (and on a right answer where TCBP-JOBS is wrong on 31 and 26); where all three differ, the network's pick fails 19 X and 16 Z shots that TCBP-JOBS gets right (6 and 7 the other way). What beats TCBP-JOBS is the ensemble's rule f, which adds joint decoding: 16 against 41 failed pairs at p = 0.004. | `tables/test_after_swap.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |
 | `t3_bposd_mean_ms` | 131 | `tables/test_p0.003.md` |

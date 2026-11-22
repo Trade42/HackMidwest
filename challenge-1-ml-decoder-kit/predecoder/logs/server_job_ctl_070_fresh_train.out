@@ -1,0 +1,34 @@
+Sun Nov 22 09:20:39 UTC 2026
+checkout: c2a6db5 predecoder: first-leg measure, weighted train-subset fit, calibration split by BP convergence
+train_X.npz: 20000 shots, p=0.004, arms ['fresh']; head priors {'mode': 'linear', 'alpha': 1.0, 'eps': 1e-06}; 200 tasks to run in 6 processes (24 CPUs here, jupyter-blakew3)
+  10 of 200 tasks done (fresh from shot 800), 84 s
+  20 of 200 tasks done (fresh from shot 1900), 116 s
+  30 of 200 tasks done (fresh from shot 3100), 145 s
+  40 of 200 tasks done (fresh from shot 4100), 175 s
+  50 of 200 tasks done (fresh from shot 4800), 198 s
+  60 of 200 tasks done (fresh from shot 5900), 225 s
+  70 of 200 tasks done (fresh from shot 6900), 254 s
+  80 of 200 tasks done (fresh from shot 8000), 282 s
+  90 of 200 tasks done (fresh from shot 8900), 312 s
+  100 of 200 tasks done (fresh from shot 10200), 352 s
+  110 of 200 tasks done (fresh from shot 10900), 385 s
+  120 of 200 tasks done (fresh from shot 11800), 416 s
+  130 of 200 tasks done (fresh from shot 12800), 452 s
+  140 of 200 tasks done (fresh from shot 13800), 479 s
+  150 of 200 tasks done (fresh from shot 15300), 510 s
+  160 of 200 tasks done (fresh from shot 15800), 539 s
+  170 of 200 tasks done (fresh from shot 17000), 567 s
+  180 of 200 tasks done (fresh from shot 18000), 597 s
+  190 of 200 tasks done (fresh from shot 18800), 633 s
+  200 of 200 tasks done (fresh from shot 19900), 666 s
+relay-BP at the kit's settings; 666 s. Time per shot: build + decode in these worker processes
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+fresh         89    0.0044 [0.0036, 0.0055]          40   2759       534      4.1     164.3    168.4    3408
+predecoder.compare exit 0 (124 = stopped at 10:10 UTC; it resumes from parts/ if started again)
+total 254
+drwxrwxr-x+ 2 nobody nogroup   4096 Nov 22 09:32 .
+drwxrwxr-x+ 2 nobody nogroup   4096 Nov 22 09:21 ..
+drwxrwxr-x+ 2 nobody nogroup   4096 Nov 22 09:32 parts
+-rw-rw-r--+ 1 nobody nogroup 259579 Nov 22 09:32 per_shot.npz
+-rw-rw-r--+ 1 nobody nogroup   1208 Nov 22 09:32 summary.json
+Sun Nov 22 09:32:55 UTC 2026

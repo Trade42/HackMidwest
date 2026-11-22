@@ -2389,6 +2389,28 @@
   "path": "files/test/net_p0.005/netZ_test_Z.json",
   "sha256": "dca5279a90471b3dd3d7242248059dfd8e7beea249bc4a1f25cf3accbfdbfe1a"
  },
+ "test/predecoder/fallback_test_X_p0.004.json": {
+  "branch": "tree",
+  "bytes": 1135,
+  "commit": "87b484a646c3433c16d6306a7eb621e4d5764dfa",
+  "copied_utc": "2026-11-22 14:59",
+  "file": "test/predecoder/fallback_test_X_p0.004.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/fallback_test_X_p0.004.json` (last changed in commit `87b484a646c3`)",
+  "grows": false,
+  "path": "predecoder/logs/fallback_test_X_p0.004.json",
+  "sha256": "ffaf0939073b3930fecceee64b54b6ff0cff1b588fbf717dbb33a68826ae14c1"
+ },
+ "test/predecoder/fallback_test_X_p0.004.log": {
+  "branch": "tree",
+  "bytes": 715,
+  "commit": "87b484a646c3433c16d6306a7eb621e4d5764dfa",
+  "copied_utc": "2026-11-22 14:59",
+  "file": "test/predecoder/fallback_test_X_p0.004.log",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/fallback_test_X_p0.004.log` (last changed in commit `87b484a646c3`)",
+  "grows": false,
+  "path": "predecoder/logs/fallback_test_X_p0.004.log",
+  "sha256": "e0103540f6a6d8b95608e047fb4af1cd8a573b84adaccb59ca7f34415fa4af9f"
+ },
  "test/predecoder/fallback_test_X_p0.005.json": {
   "branch": "tree",
   "bytes": 1159,
@@ -2410,6 +2432,28 @@
   "grows": false,
   "path": "predecoder/logs/fallback_test_X_p0.005.log",
   "sha256": "cca8c05dc0150ae9f753bbe7ef6a1510595a0b60bb719513d7c089b8cebe5cf1"
+ },
+ "test/predecoder/test_run_p0.004_X_secondary.json": {
+  "branch": "tree",
+  "bytes": 1806,
+  "commit": "87b484a646c3433c16d6306a7eb621e4d5764dfa",
+  "copied_utc": "2026-11-22 14:59",
+  "file": "test/predecoder/test_run_p0.004_X_secondary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.004_X_secondary.json` (last changed in commit `87b484a646c3`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.004_X_secondary.json",
+  "sha256": "f7ca89620b803516b2ac227a0dd2813e8c81b31656e76723f76cbf62e66f6d31"
+ },
+ "test/predecoder/test_run_p0.004_X_summary.json": {
+  "branch": "tree",
+  "bytes": 3211,
+  "commit": "87b484a646c3433c16d6306a7eb621e4d5764dfa",
+  "copied_utc": "2026-11-22 14:59",
+  "file": "test/predecoder/test_run_p0.004_X_summary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.004_X_summary.json` (last changed in commit `87b484a646c3`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.004_X_summary.json",
+  "sha256": "0a1e8aec6b7beef04bdfc0836730ec38248e48e8151b60b57977a762aa494926"
  },
  "test/predecoder/test_run_p0.005_X_secondary.json": {
   "branch": "tree",

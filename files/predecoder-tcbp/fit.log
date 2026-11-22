@@ -6,3 +6,15 @@ fit of the knobs for tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/N
   train_X_T_failed.npz: 390 shots, {'mode': 'linear', 'alpha': 0.0, 'eps': 1e-06}, failures 341, 81 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
     train_X_T_right alpha 0: 200 of 2000 shots, build 40.9 ms, decode 8.5 ms mean (last 200: 40.9 + 8.5 ms), 11 s
     train_X_T_right alpha 0: 400 of 2000 shots, build 41.5 ms, decode 9.2 ms mean (last 200: 42.0 + 9.8 ms), 23 s
+    train_X_T_right alpha 0: 600 of 2000 shots, build 41.3 ms, decode 8.7 ms mean (last 200: 41.1 + 7.7 ms), 34 s
+    train_X_T_right alpha 0: 800 of 2000 shots, build 41.2 ms, decode 8.7 ms mean (last 200: 41.0 + 8.6 ms), 45 s
+    train_X_T_right alpha 0: 1000 of 2000 shots, build 41.2 ms, decode 8.5 ms mean (last 200: 41.1 + 7.7 ms), 56 s
+    train_X_T_right alpha 0: 1200 of 2000 shots, build 41.2 ms, decode 8.5 ms mean (last 200: 41.0 + 8.7 ms), 67 s
+    train_X_T_right alpha 0: 1400 of 2000 shots, build 41.2 ms, decode 8.6 ms mean (last 200: 41.0 + 9.1 ms), 78 s
+    train_X_T_right alpha 0: 1600 of 2000 shots, build 41.3 ms, decode 8.6 ms mean (last 200: 42.0 + 8.6 ms), 89 s
+    train_X_T_right alpha 0: 1800 of 2000 shots, build 41.2 ms, decode 8.5 ms mean (last 200: 41.0 + 8.1 ms), 100 s
+    train_X_T_right alpha 0: 2000 of 2000 shots, build 41.2 ms, decode 8.5 ms mean (last 200: 40.8 + 7.9 ms), 111 s
+  train_X_T_right.npz: 2000 shots, {'mode': 'linear', 'alpha': 0.0, 'eps': 1e-06}, failures 5, 192 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+    train_X_T_failed alpha 0.1: 200 of 390 shots, build 41.1 ms, decode 14.8 ms mean (last 200: 41.1 + 14.8 ms), 12 s
+  train_X_T_failed.npz: 390 shots, {'mode': 'logodds', 'alpha': 0.1, 'eps': 0.0001}, failures 175, 216 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+    train_X_T_right alpha 0.1: 200 of 2000 shots, build 41.0 ms, decode 4.7 ms mean (last 200: 41.0 + 4.7 ms), 10 s

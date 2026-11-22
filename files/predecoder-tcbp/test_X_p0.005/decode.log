@@ -13,3 +13,4 @@ test_X.npz: 10000 shots, p=0.005, arms ['head', 'fresh'], decoder tcbp-jobs (cud
   head: 9000 of 10000 shots, 559 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: 10000 of 10000 shots, 611 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
   head: failures 72 of 10000, 0.0072 [0.0057, 0.0091]; not reproduced 0; flagged not converged 7793; build 42.6 ms + decode 3.8 ms mean, p99 69 ms
+  fresh: 1000 of 10000 shots, 683 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]

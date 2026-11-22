@@ -16,6 +16,7 @@ The rules, with R = relay-BP, P1 and P2 = PriorTilt under two seeds:
 
   R, P1, P2 alone
   weight     P1; where P2 differs, the lowest weight of R, P1, P2       (the plugin's "weight" rule)
+  weight_converged   P1; where P2 differs, the lowest weight among the converged   (the plugin's "converged" rule)
   converged  the lowest weight among the converged of R, P1, P2          (runs all three on every shot)
   network    P1; where P2 differs, the candidate the network finds most likely   (the plugin's "network" rule)
   network C  as network, with the score "network minus weight / C"
@@ -155,6 +156,8 @@ def score(pool, network=None, constants=()):
     rows.append(chosen("P2", "P2: PriorTilt, second seed", np.full(len(truth), ORDER.index("P2")), ms[ORDER.index("P2")]))
     rows.append(chosen("weight", "P1; where P2 differs, the lowest weight of R, P1, P2",
                        tie_break(predicted, lowest_weight(weight, ran)), hierarchy_ms))
+    rows.append(chosen("weight_converged", "P1; where P2 differs, the lowest weight among the converged",
+                       tie_break(predicted, lowest_weight(weight, pool["converged"] & ran)), hierarchy_ms))
     if relay_everywhere:
         rows.append(chosen("converged", "the lowest weight among the converged of R, P1, P2",
                            lowest_weight(weight, pool["converged"] & ran), ms.sum(axis=0)))
@@ -250,10 +253,11 @@ def report(pool, sources, rows, network_note=None, out=print):
     stuck = count["none_converged"]
     by_key = {row.key: row for row in rows}
     if "network" in by_key:
-        both, only_network, only_weight, p_value = paired_test(by_key["network"].failed, by_key["weight"].failed)
         out("")
-        out(f"the network rule against the weight rule on the same shots: both fail {both}, the network rule only {only_network}, "
-            f"the weight rule only {only_weight}, exact two-sided p = {p_value:.3g}")
+        for key, label in (("weight", "the weight rule"), ("weight_converged", "the converged-weight rule")):
+            both, only_network, only_other, p_value = paired_test(by_key["network"].failed, by_key[key].failed)
+            out(f"the network rule against {label} on the same shots: both fail {both}, the network rule only {only_network}, "
+                f"{label} only {only_other}, exact two-sided p = {p_value:.3g}")
     out("")
     out(f"shots where no candidate converged: {int(stuck.sum())}; the weight rule fails on {int(by_key['weight'].failed[stuck].sum())} of them"
         + (f", the network rule on {int(by_key['network'].failed[stuck].sum())}" if "network" in by_key else ""))
@@ -283,7 +287,7 @@ def check_evaluator(path, rows, key, sources, out=print):
     basis = sources[0]["basis"]
     if len(sources) != 1 or basis is None:
         raise SystemExit("--evaluator-shots compares one candidates file of hierarchy.candidates with one basis of one evaluator run")
-    row = {row.key: row for row in rows}.get(key)
+    row = {row.key: row for row in rows}.get({"converged": "weight_converged"}.get(key, key))
     if row is None or row.predicted is None:
         raise SystemExit(f"the rule {key!r} was not scored on these files")
     with np.load(path, allow_pickle=False) as file:
@@ -308,7 +312,7 @@ def main(argv=None):
     parser.add_argument("--fit-logits", nargs="+", help="the logits of the fit shots")
     parser.add_argument("--constants", type=float, nargs="+", help="the values of C to try on the fit shots")
     parser.add_argument("--evaluator-shots", help="a *_shots.npz of evaluation.evaluate for the plugin on the same shots, to compare with")
-    parser.add_argument("--evaluator-rule", default=None, help="the rule the plugin used: weight or network (default: network if --logits)")
+    parser.add_argument("--evaluator-rule", default=None, help="the rule the plugin used: network, weight or converged (default: network if --logits)")
     parser.add_argument("--save", help="write the numbers of the report to this .json file")
     args = parser.parse_args(argv)
 

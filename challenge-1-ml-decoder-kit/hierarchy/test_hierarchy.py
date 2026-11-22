@@ -198,7 +198,7 @@ def test_select_scores_every_rule_on_hand_made_candidates(tmp_path):
     assert network.ms is None                                                   # no .json beside the logits
     network.ms = 10.0
     rows = select.score(pool, network, constants=[(1.0, "given")])
-    assert failures(rows) == {"R": 2, "P1": 3, "P2": 3, "weight": 4, "converged": 3, "network": 3,
+    assert failures(rows) == {"R": 2, "P1": 3, "P2": 3, "weight": 4, "weight_converged": 4, "converged": 3, "network": 3,
                               "network_C1": 4, "perfect": 1, "perfect_tie_break": 2}
     by_key = {row.key: row for row in rows}
     assert by_key["network"].failed.tolist() == [False, True, False, True, True]
@@ -210,13 +210,13 @@ def test_select_scores_every_rule_on_hand_made_candidates(tmp_path):
     assert by_key["network"].ms.mean() == pytest.approx(200 + 310 * 3 / 5)
     assert by_key["converged"].ms.mean() == pytest.approx(500)
     numbers = select.numbers(pool, sources, rows)
-    assert numbers["rules"][5]["right_picks"] == 1 and numbers["right_pick_possible"] == 3
+    assert numbers["rules"][6]["key"] == "network" and numbers["rules"][6]["right_picks"] == 1 and numbers["right_pick_possible"] == 3
 
 
 def test_select_marks_what_a_session_file_cannot_measure(tmp_path):
     pool, sources = select.load_candidates([write_candidates(tmp_path / "s.npz", HAND_MADE, session=True)])
     rows = select.score(pool, select.load_logits([write_logits(tmp_path / "l.npz", HAND_MADE_LOGITS)], pool, sources))
-    assert failures(rows) == {"R": None, "P1": 3, "P2": 3, "weight": 4, "converged": None, "network": 3,
+    assert failures(rows) == {"R": None, "P1": 3, "P2": 3, "weight": 4, "weight_converged": 4, "converged": None, "network": 3,
                               "perfect": None, "perfect_tie_break": 2}
     assert "relay-BP ran on 3 of 5 shots" in rows[0].note
     # Two files are scored as one set, in the order given.
@@ -343,6 +343,12 @@ def test_weight_rule_and_constant():
     result = by_weight.decode_shot(*shot)
     assert result.metrics["winner"] == "P2" and result.metrics["stage"] == "weight" and "logits" not in result.metrics
     assert result.metrics["converged"] is False and result.metrics["any_converged"] is True
+    # Among the converged candidates only, the lightest is relay-BP's: P2 did not converge.
+    by_converged = HierarchySession(fake_problem(), {"rule": "converged"}, hierarchy=stages).decode_shot(*shot)
+    assert by_converged.metrics["winner"] == "R" and by_converged.metrics["stage"] == "converged"
+    none = StubHierarchy(candidate("P1", RIGHT, 9.0, converged=False), candidate("P2", WRONG_A, 4.0, converged=False),
+                         candidate("R", WRONG_B, 6.0, converged=False))
+    assert HierarchySession(fake_problem(), {"rule": "converged"}, hierarchy=none).decode_shot(*shot).metrics["winner"] == "P2"
     # The network prefers P1's answer by a little; with a small constant the lightest candidate wins.
     mild = StubNetwork(RIGHT, strength=0.05)
     assert HierarchySession(fake_problem(), {"rule": "network"}, hierarchy=stages, network=mild).decode_shot(*shot).metrics["winner"] == "P1"
@@ -607,6 +613,8 @@ def test_ensemble_rules_on_hand_made_members(tmp_path):
     assert failed["J"] == [3, 6] and rows["J"]["shots"] == 4 and not rows["J"]["whole"]    # J is scored on the shots it decoded
     assert failed["a"] == [1, 2, 4]            # part 1: two agreeing wrong answers are accepted
     assert failed["aw"] == [1, 3, 4, 6]
+    assert failed["ac"] == [1, 3, 4, 6]        # every hand-made candidate converged, so this equals aw here
+    assert failed["h"] == [2, 3, 6]            # J converged wherever it ran, so the network is asked only on shot 2, where it is wrong
     assert failed["b"] == [2, 4]               # a split goes to the scorer, which follows the network
     assert failed["bw"] == [2, 4]
     assert failed["c"] == [2]                  # J is a candidate where it exists (shot 4) and is left out where it does not (shot 2)
@@ -647,7 +655,7 @@ def test_ensemble_command_selection_and_rule_choice(tmp_path, capsys):
     assert selection["members"].tolist() == ["P1", "P2", "T"]
     saved = json.loads((tmp_path / "train.json").read_text())
     assert {row["key"]: row.get("failures") for row in saved["rows"] if row["kind"] == "rule"} == {
-        "a": 3, "aw": 4, "b": 2, "bw": 2, "c": 1, "d": 3, "e": 2, "f": 3, "g": 2, "gw": 3}
+        "a": 3, "aw": 4, "ac": 4, "b": 2, "bw": 2, "c": 1, "d": 3, "e": 2, "f": 3, "h": 3, "g": 2, "gw": 3}
     assert saved["ablation"]["a_against_aw"] == {"failures_with_the_network": 3, "failures_without": 4, "both_fail": 2,
                                                  "only_the_network_rule_fails": 1, "only_the_rule_without_fails": 2, "p": 1.0}
     assert "the network's own increment" in printed and "g against gw: failures 2 against 3" in printed

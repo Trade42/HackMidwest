@@ -104,10 +104,13 @@ def test_explain_mode(tracker, shots):
 
 def test_a_shot_does_not_depend_on_its_batch(tracker, shots):
     feat = features(tracker.geo, shots["detectors"], shots["heralds"])
-    shot, atom, ll = tracker.loglik(feat, chunk=7)
     one = features(tracker.geo, shots["detectors"][11:12], shots["heralds"][11:12])
-    _, atom1, ll1 = tracker.loglik(one)
-    assert (atom[shot == 11] == atom1).all() and np.allclose(ll[shot == 11], ll1, atol=1e-9)
+    for explain in (False, True):                                          # True is the tracker of step 3
+        shot, atom, ll = tracker.loglik(feat, chunk=7, explain=explain)
+        _, atom1, ll1 = tracker.loglik(one, explain=explain)
+        assert (atom[shot == 11] == atom1).all() and np.allclose(ll[shot == 11], ll1, atol=1e-9)
+        shot2, atom2, ll2 = tracker.loglik(feat, chunk=40, explain=explain)
+        assert (shot2 == shot).all() and (atom2 == atom).all() and np.allclose(ll2, ll, atol=1e-9)
 
 
 def test_no_flag_gives_the_lossless_priors(tracker, builder, shots):

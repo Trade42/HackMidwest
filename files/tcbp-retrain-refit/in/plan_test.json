@@ -1,0 +1,47 @@
+{
+ "label": "exploration, task tcbp-retrain",
+ "declared": "neutral_atom_noise/tcbp_retrain_refit_declared.md",
+ "tasks": [
+  {
+   "name": "f0.8-seed4900",
+   "data": "test4900/X_f0.8_seed4900_kitformat_p0.0326371.npz",
+   "transfer": "test4900/transfer.json",
+   "generic": "test4900/priors_generic.npy",
+   "matched": "test4900/priors_matched.npy",
+   "arms": [
+    "m",
+    "r",
+    "rf"
+   ],
+   "shots": 4000,
+   "seed": 4900,
+   "factor": 0.8,
+   "p": 0.0326371
+  }
+ ],
+ "heads": {
+  "kit": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+  "retrained": "b42d71d584c95da84aa4f086c8c23fa49d846f559407ae11fd7a4d89abf091fa"
+ },
+ "knobs": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "prior_cap": 0.5,
+ "block": 100,
+ "arm_order": [
+  "m",
+  "g",
+  "h",
+  "hm",
+  "r",
+  "rf"
+ ],
+ "primary": [
+  [
+   "rf",
+   "m"
+  ]
+ ]
+}

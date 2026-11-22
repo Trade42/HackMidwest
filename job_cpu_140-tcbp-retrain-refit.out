@@ -1,2 +1,27 @@
 Sun Nov 22 19:16:59 UTC 2026
 STOP=2026-11-22T20:16:59Z
+plan_train.json: OK
+plan_test.json: OK
+train5800/priors_generic.npy: OK
+train5800/priors_matched.npy: OK
+train5800/transfer.json: OK
+train5800/X_f0.8_seed5800_kitformat_p0.0326371.npz: OK
+train5800/X_f0.8_seed5800.npz: OK
+test4900/priors_generic.npy: OK
+test4900/priors_matched.npy: OK
+test4900/transfer.json: OK
+test4900/X_f0.8_seed4900_kitformat_p0.0326371.npz: OK
+test4900/X_f0.8_seed4900.npz: OK
+head_X_na0.8.pt: OK
+trunk_X.pt: OK
+plan_train.json: OK
+plan_test.json: OK
+train5800/X_f0.8_seed5800.npz: OK
+test4900/X_f0.8_seed4900.npz: OK
+train5800/priors_matched.npy: OK
+test4900/priors_matched.npy: OK
+predecoder/logs/fit_tcbp_X_p0.005.json: OK
+PYT=/home/blakew3/.conda/envs/cascade/bin/python
+Sun Nov 22 19:18:11 UTC 2026
+name, memory.used [MiB], utilization.gpu [%]
+NVIDIA A100-SXM4-80GB, [Insufficient Permissions], [N/A]

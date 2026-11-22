@@ -120,6 +120,39 @@
   "path": "ml_decoder/logs/train_X_p0.0001_seed1.log",
   "sha256": "9a39dd0b616da66d5c84bdde7de50443a9b3fc7b05b51228a524857644cc26be"
  },
+ "exploration/ablation_80k/per_shot.npz": {
+  "branch": "origin/hierarchy@534d428136a2d6d43886f675a71e2c91ee69b86f",
+  "bytes": 487800,
+  "commit": "534d428136a2d6d43886f675a71e2c91ee69b86f",
+  "copied_utc": "2026-11-22 10:28",
+  "file": "exploration/ablation_80k/per_shot.npz",
+  "from": "branch `hierarchy` at commit `534d428136a2`, `challenge-1-ml-decoder-kit/hierarchy/results/ablation_p0.004_X/per_shot.npz`",
+  "grows": false,
+  "path": "challenge-1-ml-decoder-kit/hierarchy/results/ablation_p0.004_X/per_shot.npz",
+  "sha256": "6ad83b90cd698ec0e5d3ffce07a0e412654c6beb9f792952391b08ab429af262"
+ },
+ "exploration/ablation_80k/select_printout.txt": {
+  "branch": "origin/hierarchy@534d428136a2d6d43886f675a71e2c91ee69b86f",
+  "bytes": 9608,
+  "commit": "534d428136a2d6d43886f675a71e2c91ee69b86f",
+  "copied_utc": "2026-11-22 10:28",
+  "file": "exploration/ablation_80k/select_printout.txt",
+  "from": "branch `hierarchy` at commit `534d428136a2`, `challenge-1-ml-decoder-kit/hierarchy/results/ablation_p0.004_X/select_printout.txt`",
+  "grows": false,
+  "path": "challenge-1-ml-decoder-kit/hierarchy/results/ablation_p0.004_X/select_printout.txt",
+  "sha256": "ab0c9e77ce241f835baf2a282986aa280a5e1e31b2ed22a970c8e8677f074cee"
+ },
+ "exploration/ablation_80k/summary.json": {
+  "branch": "origin/hierarchy@534d428136a2d6d43886f675a71e2c91ee69b86f",
+  "bytes": 6165,
+  "commit": "534d428136a2d6d43886f675a71e2c91ee69b86f",
+  "copied_utc": "2026-11-22 10:28",
+  "file": "exploration/ablation_80k/summary.json",
+  "from": "branch `hierarchy` at commit `534d428136a2`, `challenge-1-ml-decoder-kit/hierarchy/results/ablation_p0.004_X/summary.json`",
+  "grows": false,
+  "path": "challenge-1-ml-decoder-kit/hierarchy/results/ablation_p0.004_X/summary.json",
+  "sha256": "edfedc16d7a0c3e3241563aed284fb971ce7a9448386e7900c3cf928a6213bd7"
+ },
  "exploration/cascade_X_s1/SCORES.md": {
   "branch": "origin/laptop-artifacts",
   "bytes": 2651,
@@ -805,13 +838,13 @@
  "machines/server_nvidia-smi.txt": {
   "branch": "origin/server-logs",
   "bytes": 2610,
-  "commit": "ce700eaa6c65ec80c04c044ae4fc6b4625b44188",
-  "copied_utc": "2026-11-22 10:12",
+  "commit": "514283a93c077eebfa7a3075de2929106f52ecef",
+  "copied_utc": "2026-11-22 10:28",
   "file": "machines/server_nvidia-smi.txt",
-  "from": "branch `server-logs` at commit `ce700eaa6c65`, `nvidia-smi.txt`",
+  "from": "branch `server-logs` at commit `514283a93c07`, `nvidia-smi.txt`",
   "grows": true,
   "path": "nvidia-smi.txt",
-  "sha256": "9a34b96091dccac43984b9e034996359f0abedd111824d2f60976ce094f2ad95"
+  "sha256": "8b7a44e8a70abd6bface1795bfc0cbe2205034d34ac25c045ada43ff9ee8634f"
  },
  "networks/cascade_X_s1.train.log": {
   "branch": "origin/laptop-artifacts",
@@ -1013,14 +1046,14 @@
  },
  "test/cpu_monitor.out": {
   "branch": "origin/server-logs",
-  "bytes": 11638,
-  "commit": "ce700eaa6c65ec80c04c044ae4fc6b4625b44188",
-  "copied_utc": "2026-11-22 10:12",
+  "bytes": 12559,
+  "commit": "514283a93c077eebfa7a3075de2929106f52ecef",
+  "copied_utc": "2026-11-22 10:28",
   "file": "test/cpu_monitor.out",
-  "from": "branch `server-logs` at commit `ce700eaa6c65`, `cpu_monitor.out`",
+  "from": "branch `server-logs` at commit `514283a93c07`, `cpu_monitor.out`",
   "grows": true,
   "path": "cpu_monitor.out",
-  "sha256": "0b290450977330eb5e60b71625aa2df693ca74cfda41c49bc10138ae4becb7aa"
+  "sha256": "261e86c7fc091e751d6ec8f9ae61e8381eaae030d7bdd526e1bdc7fcf0861ae1"
  },
  "test/eval_p0.003_bposd/01_bposd_shots.npz": {
   "branch": "origin/server-logs",
@@ -1286,15 +1319,26 @@
   "path": "runner_gpu.out",
   "sha256": "28a14412604b44a440cf33072cfad2a7cdd0f215213d7cba7ac056553ec9c3fc"
  },
+ "test/test_rows.out": {
+  "branch": "origin/server-logs",
+  "bytes": 1270,
+  "commit": "514283a93c077eebfa7a3075de2929106f52ecef",
+  "copied_utc": "2026-11-22 10:28",
+  "file": "test/test_rows.out",
+  "from": "branch `server-logs` at commit `514283a93c07`, `test_rows.out`",
+  "grows": true,
+  "path": "test_rows.out",
+  "sha256": "b57bca6f2e34b523e1c990e465da22f039361f67bf12c81a9659175a1efe9efc"
+ },
  "test/test_run.out": {
   "branch": "origin/server-logs",
-  "bytes": 4082,
-  "commit": "ce700eaa6c65ec80c04c044ae4fc6b4625b44188",
-  "copied_utc": "2026-11-22 10:12",
+  "bytes": 4918,
+  "commit": "514283a93c077eebfa7a3075de2929106f52ecef",
+  "copied_utc": "2026-11-22 10:28",
   "file": "test/test_run.out",
-  "from": "branch `server-logs` at commit `ce700eaa6c65`, `test_run.out`",
+  "from": "branch `server-logs` at commit `514283a93c07`, `test_run.out`",
   "grows": true,
   "path": "test_run.out",
-  "sha256": "352b32dc6137517e6bda7bec0ddd574c132681804ab53d1fb9f366ed322a9e6b"
+  "sha256": "8f208105183da569910dda9009d5430d8b6c8a71be70910bb3af1224f46bfae1"
  }
 }

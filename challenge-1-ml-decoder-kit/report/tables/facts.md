@@ -2,6 +2,29 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 
 | Name | Value | From |
 |---|---|---|
+| `a80_P1` | 357 | `tables/ablation_80k.md` |
+| `a80_P2` | 348 | `tables/ablation_80k.md` |
+| `a80_a` | 237 | `tables/ablation_80k.md` |
+| `a80_a_right` | 252 | `tables/ablation_80k.md` |
+| `a80_a_vs_ac_only_first` | 39 | `tables/ablation_80k.md` |
+| `a80_a_vs_ac_only_second` | 55 | `tables/ablation_80k.md` |
+| `a80_a_vs_ac_p` | 0.12 | `tables/ablation_80k.md` |
+| `a80_a_vs_aw_only_first` | 26 | `tables/ablation_80k.md` |
+| `a80_a_vs_aw_only_second` | 87 | `tables/ablation_80k.md` |
+| `a80_a_vs_aw_p` | 7e-09 | `tables/ablation_80k.md` |
+| `a80_ac` | 253 | `tables/ablation_80k.md` |
+| `a80_ac_right` | 236 | `tables/ablation_80k.md` |
+| `a80_ac_vs_aw_only_first` | 1 | `tables/ablation_80k.md` |
+| `a80_ac_vs_aw_only_second` | 46 | `tables/ablation_80k.md` |
+| `a80_ac_vs_aw_p` | 7e-13 | `tables/ablation_80k.md` |
+| `a80_agree_wrong` | 123 | `tables/ablation_80k.md` |
+| `a80_aw` | 298 | `tables/ablation_80k.md` |
+| `a80_aw_right` | 191 | `tables/ablation_80k.md` |
+| `a80_chance` | 302 | `tables/ablation_80k.md` |
+| `a80_differ` | 366 | `tables/ablation_80k.md` |
+| `a80_network_alone` | 4.1% | `tables/ablation_80k.md` |
+| `a80_perfect_tie_break` | 187 | `tables/ablation_80k.md` |
+| `a80_shots` | 80,000 | `tables/ablation_80k.md` |
 | `abl3_a_pairs` | not measured | `tables/test_ablation.md` |
 | `abl3_aw_pairs` | not measured | `tables/test_ablation.md` |
 | `abl3_only_network` | not measured | `tables/test_ablation.md` |

@@ -122,6 +122,15 @@ The sentence under "What the numbers say" is chosen by this table: it credits th
 pooled exact test on the pairs that only one of the two rules fails is below 0.05. The network is never credited
 with the gain of the hierarchy itself, which needs no learning of ours.
 
+**The same ablation at scale** (exploration shots never used for a fit: <!--f:a80_shots-->80,000<!--/f--> fresh X-memory shots at
+p = 0.004). The neural tie-break fails <!--f:a80_a-->237<!--/f-->, the lowest-weight rule <!--f:a80_aw-->298<!--/f-->, the best classical rule (lowest
+weight among the converged candidates) <!--f:a80_ac-->253<!--/f-->, and a perfect tie-break on the same candidates <!--f:a80_perfect_tie_break-->187<!--/f-->.
+Against the lowest-weight rule the network's gain is clear (<!--f:a80_a_vs_aw_only_first-->26<!--/f--> against <!--f:a80_a_vs_aw_only_second-->87<!--/f-->
+shots that only one rule fails, p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f-->). Against the best classical rule it is smaller and not significant
+(<!--f:a80_a_vs_ac_only_first-->39<!--/f--> against <!--f:a80_a_vs_ac_only_second-->55<!--/f-->, p = <!--f:a80_a_vs_ac_p-->0.12<!--/f-->). Where the two fast decodes differ
+and some candidate is right (<!--f:a80_chance-->302<!--/f--> shots), the network picks a right one <!--f:a80_a_right-->252<!--/f--> times, the best
+classical rule <!--f:a80_ac_right-->236<!--/f-->, lowest weight <!--f:a80_aw_right-->191<!--/f-->. The full table is in `APPENDIX.md`.
+
 ### On the exploration shots (not test shots)
 
 At p = 0.004, on <!--f:expl_pairs-->25,000<!--/f--> pairs of the train and validation files: relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one

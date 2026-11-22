@@ -1,0 +1,22 @@
+2026-11-22T10:23:42Z GO: the preflight and the rehearsal passed; frozen fd3aed3c0d1f2e9e8bd181bd22c9853a19e2dfc5; options {
+  "rule": {
+    "X": "network",
+    "Z": "network"
+  },
+  "seeds": [
+    1,
+    1001
+  ],
+  "checkpoints": {
+    "X": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt",
+    "Z": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt"
+  },
+  "device": "cpu",
+  "torch_threads": 1
+}
+2026-11-22T10:23:48Z START tcbp_p0.005 (serial mode). GPU processes: none: the GPU is idle [CPUs in use 2.3, tokens 1, throttled so far 4837.8 s, load 5.22]
+2026-11-22T10:23:59Z START eval_p0.005_hierarchy: weight 1, pid 213306; before it: tokens 1, CPUs in use 2.6, throttled so far 4837.8 s
+2026-11-22T10:24:39Z START eval_p0.004_hierarchy: weight 1, pid 213718; before it: tokens 2, CPUs in use 4.1, throttled so far 4837.8 s
+2026-11-22T10:25:19Z START eval_p0.003_hierarchy: weight 1, pid 214383; before it: tokens 3, CPUs in use 5.1, throttled so far 4837.8 s
+2026-11-22T10:25:59Z START eval_p0.005_hierarchy-parallel: weight 2, pid 215142; before it: tokens 4, CPUs in use 6.3, throttled so far 4837.8 s
+2026-11-22T10:26:39Z START eval_p0.004_hierarchy-parallel: weight 2, pid 215572; before it: tokens 6, CPUs in use 7.4, throttled so far 4837.8 s

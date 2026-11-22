@@ -795,6 +795,63 @@ def exploration_ensemble_table():
                  + "\n\nSource: `report/data/exploration/ensemble/ens_p<p>/validation_{X,Z}.npz` and `.json`.", records)
 
 
+def ablation_80k_table():
+    """The ablation on 80,000 fresh X shots at p = 0.004, never used for a fit: recomputed from the per-shot file, checked against its summary."""
+    folder = DATA / "exploration" / "ablation_80k"
+    if not (folder / "per_shot.npz").is_file():
+        return write("ablation_80k", NOT_MEASURED)
+    summary = json.loads((folder / "summary.json").read_text(encoding="utf-8"))
+    with np.load(folder / "per_shot.npz", allow_pickle=False) as file:
+        shots = {key: file[key] for key in file.files}
+    total = len(shots["failed_a"])
+    rows = [("P1", "PriorTilt, one run (seed A)", "IonQ"), ("P2", "PriorTilt, one run (seed B)", "IonQ"),
+            ("aw", "our hierarchy, lowest-weight tie-break", "ours, nothing learned"),
+            ("ac", "our hierarchy, lowest weight among the converged candidates", "ours, nothing learned"),
+            ("a", "our hierarchy, neural tie-break (final X network)", "ours, learned"),
+            ("perfect_tie_break", "ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder)", "needs the truth")]
+    listed = {key.split(":")[0].removeprefix("failed_"): value["failures"] for key, value in summary["rows"].items()}
+    differ = shots["p1_p2_differ"].astype(bool)
+    floor = shots["failed_perfect_tie_break"].astype(bool)
+    chance = differ & ~floor                       # the shots where the two runs differ and some candidate is right
+    lines = []
+    for key, label, whose in rows:
+        failed = shots[f"failed_{key}"].astype(bool)
+        count = int(failed.sum())
+        if key in listed and listed[key] != count:
+            raise Mismatch(f"exploration/ablation_80k: {key} fails {count} shots in per_shot.npz and {listed[key]} in summary.json")
+        right = "" if key in ("P1", "P2", "perfect_tie_break") else f"{int((chance & ~failed).sum())} of {int(chance.sum())}"
+        lines.append([label, whose, f"{count} of {total:,}", percent(count, total, 3), right])
+        fact(f"a80_{key}", count, "tables/ablation_80k.md")
+    paired_lines = []
+    for first, second in (("a", "aw"), ("a", "ac"), ("ac", "aw")):
+        paired = stats.paired(shots[f"failed_{second}"], shots[f"failed_{first}"])
+        name = f"{first} against {second}"
+        theirs = summary["paired"].get(name)
+        if theirs and (theirs["first_only"], theirs["second_only"]) != (paired["row_only"], paired["reference_only"]):
+            raise Mismatch(f"exploration/ablation_80k: {name} discordant counts differ between per_shot.npz and summary.json")
+        names = {"a": "the neural tie-break", "aw": "lowest weight", "ac": "lowest weight among the converged"}
+        paired_lines.append([f"{names[first]} against {names[second]}", paired["both"], paired["row_only"], paired["reference_only"], stats.p_text(paired["p"])])
+        for part, value in (("only_first", paired["row_only"]), ("only_second", paired["reference_only"]), ("p", stats.p_text(paired["p"]))):
+            fact(f"a80_{first}_vs_{second}_{part}", value, "tables/ablation_80k.md")
+    fact("a80_shots", f"{total:,}", "tables/ablation_80k.md")
+    fact("a80_differ", int(differ.sum()), "tables/ablation_80k.md")
+    fact("a80_chance", int(chance.sum()), "tables/ablation_80k.md")
+    for key in ("a", "ac", "aw"):
+        fact(f"a80_{key}_right", int((chance & ~shots[f"failed_{key}"].astype(bool)).sum()), "tables/ablation_80k.md")
+    fact("a80_agree_wrong", int((~differ & floor).sum()), "tables/ablation_80k.md")
+    fact("a80_network_alone", f"{shots['network_alone_failed'].mean():.1%}", "tables/ablation_80k.md")
+    return write("ablation_80k",
+                 f"**The ablation at scale, on exploration shots never used for a fit**: {total:,} fresh X-memory shots at p = 0.004 (Stim seeds "
+                 f"{int(shots['file_seed'].min())} to {int(shots['file_seed'].max())}), decoded in session mode as the plugin decodes, the final X network "
+                 f"(step 120,000). One shot is one X-memory shot, not a pair. The two PriorTilt runs differ on {int(differ.sum())} shots; on "
+                 f"{int(chance.sum())} of them at least one candidate is right, and the last column counts how often each tie-break picks a right one there.\n\n"
+                 + markdown(["Decoder", "Whose work", "Failures", "Share of shots (95% interval)", "Right pick where one existed"], lines)
+                 + "\n\nPaired, on the same shots:\n\n"
+                 + markdown(["Comparison", "Both fail", "Only the first fails", "Only the second fails", "Exact p"], paired_lines)
+                 + "\n\nSource: `report/data/exploration/ablation_80k/per_shot.npz` (recomputed here) and `summary.json` (checked against it), "
+                   "from branch `hierarchy` at commit `534d428`. Relay-BP alone was not decoded on these shots.")
+
+
 def exploration_p5_table():
     """p = 0.005 on exploration shots: the team's validation_X file, the first look at the hierarchy at that noise."""
     shots = loaders.selector_files(DATA / "exploration" / "priortilt_p0.005", ["selector_validation_X.npz"])
@@ -1309,7 +1366,7 @@ def main(argv=None):
             "test_sweep": sweep, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
             "test_comparisons": comparisons_table(measured), "test_ladder": ladder, "test_ablation": ablated,
             "where_failures": failure_split_table(combined), "exploration_p0.005": exploration_p5_table(),
-            "exploration_ensemble": exploration_ensemble_table(),
+            "exploration_ensemble": exploration_ensemble_table(), "ablation_80k": ablation_80k_table(),
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
             "resources": resources_table(measured)}
         test_job_facts()

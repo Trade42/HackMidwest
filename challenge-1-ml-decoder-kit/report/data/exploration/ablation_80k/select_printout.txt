@@ -1,0 +1,55 @@
+candidates: 80000 shots from 16 file(s)
+  scratch/hierarchy/ablation/cand/fresh_X_s9401.session.npz: 5000 shots of the data file with sha256 3638060fe71fc20cf8814acb6d99f757be73d4eda35e284807330186461841f2
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9402.session.npz: 5000 shots of the data file with sha256 779256e01e62f5518433ff3c35b21aca167447894ae4b448c769bc78ae9128f4
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9403.session.npz: 5000 shots of the data file with sha256 b685dce8b5ee5eb3b22594fdadff05f2e3a1b79788eb0ee0e47315833bf32e3d
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9404.session.npz: 5000 shots of the data file with sha256 c3667a76c7ad066724688f416b5da7f4874a8caf35cb49ca7bf98e802e04df41
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9405.session.npz: 5000 shots of the data file with sha256 d47b317b7f4a4474f242585106aaa4fcf7ed03aa8c4afe08d105c03d16adc5e9
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9406.session.npz: 5000 shots of the data file with sha256 1cb6a7437b6b2edff9a825b76517e8b3f83392681f3ebc31da63963ae2f3fce5
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9407.session.npz: 5000 shots of the data file with sha256 411642386b78ec4bb0337046b4ee8dc17db7cbb83392cd5df554b5f0ed2d14f4
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9408.session.npz: 5000 shots of the data file with sha256 60a44c03d4f43df56a4b6271558764370b6cc877c22a12fd5690d09e10213f12
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9409.session.npz: 5000 shots of the data file with sha256 fde5e8467ffa76f78351c1b4850e05d05a8d5866ed76658bf9f7d1e496580457
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9410.session.npz: 5000 shots of the data file with sha256 53519a9db182186dde185ce883b53b468900c6588e04253ffc7055a1df389519
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9411.session.npz: 5000 shots of the data file with sha256 88a8c92f31e169b34adb22f18cc8702f2aa6f19ebdd05e88de801fa954ef7362
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9412.session.npz: 5000 shots of the data file with sha256 4d31625b7690696c45a200e22f2742b10aef04a6d2a6e4159bfc348f4aa414bd
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9413.session.npz: 5000 shots of the data file with sha256 cdb27d700655336c906219c585b3b1e59ab13d1951a4900aa7bd4319d528ad8c
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9414.session.npz: 5000 shots of the data file with sha256 39b20ef97d6371eb058cc73a8c0de86956caa1169548ea4f616fff5bf8b01bd7
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9415.session.npz: 5000 shots of the data file with sha256 f9fc1fcd5adff72df1d3045d631dea311529d101fafef9902d497ed4da48673a
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+  scratch/hierarchy/ablation/cand/fresh_X_s9416.session.npz: 5000 shots of the data file with sha256 e6d951c43f6064d544aa60ccb9d8a80e8eb96d989cf58edd661114dbca195381
+    X memory, p = 0.004, session: decoders built once, shots in file order, PriorTilt seeds 1 (P1) and 1001 (P2), relay-BP only where P1 and P2 differ; times: 4 process(es) side by side on AMD Ryzen 7 7730U with Radeon Graphics
+network: logits from scratch/hierarchy/ablation/net_final/fresh_X_s9401.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9402.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9403.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9404.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9405.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9406.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9407.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9408.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9409.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9410.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9411.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9412.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9413.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9414.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9415.npz, scratch/hierarchy/ablation/net_final/fresh_X_s9416.npz; time per call 49.2 ms (batch-one mean on CPU x86_64, 2 torch threads, from the .json beside the logits)
+P1 and P2 differ on 366 shots (0.458%): only there the hierarchy runs relay-BP and asks the rule
+relay-BP ran on 366 shots; the candidates that ran are not all equal on 366 shots (0.458%), and on 302 of those one of them is right
+unconverged: R 92, P1 90, P2 87; no candidate converged on 33 shots
+
+rule                                                     failures     rate  95% Wilson interval    right pick when one existed   ms/shot
+R: relay-BP, kit settings                                not measured: relay-BP ran on 366 of 80000 shots
+P1: PriorTilt, first seed                                     357   0.446%  [0.402%, 0.495%]       132 of 302                      151.5
+P2: PriorTilt, second seed                                    348   0.435%  [0.392%, 0.483%]       141 of 302                      150.8
+P1; where P2 differs, the lowest weight of R, P1, P2          298   0.372%  [0.333%, 0.417%]       191 of 302                      352.0
+P1; where P2 differs, the lowest weight among the converged      253   0.316%  [0.280%, 0.358%]       236 of 302                      352.0
+the lowest weight among the converged of R, P1, P2       not measured: relay-BP ran on 366 of 80000 shots
+P1; where P2 differs, the network's most likely               237   0.296%  [0.261%, 0.336%]       252 of 302                      352.2
+a perfect choice among R, P1, P2 (needs the truth)       not measured: relay-BP ran on 366 of 80000 shots
+P1; where P2 differs, a perfect choice (needs the truth)      187   0.234%  [0.203%, 0.270%]       302 of 302                           
+"right pick when one existed": among the shots where the candidates that ran are not all equal and one is right.
+ms/shot: the mean over all shots of the decode calls the rule makes (and the network's batch-one time where it is asked).
+
+the network rule against the weight rule on the same shots: both fail 211, the network rule only 26, the weight rule only 87, exact two-sided p = 7.12e-09
+the network rule against the converged-weight rule on the same shots: both fail 198, the network rule only 39, the converged-weight rule only 55, exact two-sided p = 0.121
+
+shots where no candidate converged: 33; the weight rule fails on 32 of them, the network rule on 31

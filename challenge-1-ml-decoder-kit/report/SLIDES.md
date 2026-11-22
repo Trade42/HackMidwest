@@ -46,9 +46,9 @@ Source: `report/tables/exploration_p0.004.md`, the last table.
 - Alone it is far worse than relay-BP, so we never use it alone. We only ask it which of two or three given answers
   is more likely.
 - On 25,000 practice shots of X memory, the hierarchy fails <!--f:expl_X_C-->67<!--/f--> times with its best classical tie-break and <!--f:expl_X_N-->60<!--/f-->
-  times with the network (at training step <!--f:expl_X_N_step-->120,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times. On these shots
-  the network's step is not significant (<!--f:expl_X_N_vs_C_only_network-->8<!--/f--> against <!--f:expl_X_N_vs_C_only_classical-->15<!--/f--> shots that only one rule fails,
-  p = <!--f:expl_X_N_vs_C_p-->0.21<!--/f-->): the test shots decide.
+  times with the network (at training step <!--f:expl_X_N_step-->120,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times. On <!--f:a80_shots-->80,000<!--/f-->
+  fresh shots never used for a fit: network <!--f:a80_a-->237<!--/f-->, best classical rule <!--f:a80_ac-->253<!--/f-->, perfect tie-break <!--f:a80_perfect_tie_break-->187<!--/f-->
+  (p = <!--f:a80_a_vs_ac_p-->0.12<!--/f--> against the best classical rule: not significant; p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f--> against lowest weight).
 
 Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
 

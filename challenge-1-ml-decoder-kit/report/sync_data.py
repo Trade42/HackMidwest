@@ -102,6 +102,13 @@ SOURCES = [
     # the machines: what the server printed about itself
     ("machines/server_nvidia-smi.txt", "origin/server-logs", "nvidia-smi.txt", True),
     ("machines/cascade_X_s1_SHA256SUMS", "origin/laptop-artifacts", "cascade_X_s1/SHA256SUMS", True),
+    # the ablation at scale: 80,000 fresh X shots at p = 0.004, never used for a fit (branch hierarchy, commit 534d428)
+    ("exploration/ablation_80k/summary.json", "origin/hierarchy@534d428136a2d6d43886f675a71e2c91ee69b86f",
+     "challenge-1-ml-decoder-kit/hierarchy/results/ablation_p0.004_X/summary.json", False),
+    ("exploration/ablation_80k/per_shot.npz", "origin/hierarchy@534d428136a2d6d43886f675a71e2c91ee69b86f",
+     "challenge-1-ml-decoder-kit/hierarchy/results/ablation_p0.004_X/per_shot.npz", False),
+    ("exploration/ablation_80k/select_printout.txt", "origin/hierarchy@534d428136a2d6d43886f675a71e2c91ee69b86f",
+     "challenge-1-ml-decoder-kit/hierarchy/results/ablation_p0.004_X/select_printout.txt", False),
     # the measurements behind the design, and what did not work (exploration shots)
     ("background/", "tree", "analysis/results/g2_server_p0.004_summary.json", False),
     ("background/", "tree", "analysis/results/g2_summary.json", False),

@@ -48,6 +48,9 @@ as Markdown and as CSV.
 <!-- BEGIN table:exploration_ensemble -->
 <!-- END table:exploration_ensemble -->
 
+<!-- BEGIN table:ablation_80k -->
+<!-- END table:ablation_80k -->
+
 ## F. Atom loss
 
 <!-- BEGIN table:loss -->

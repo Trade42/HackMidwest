@@ -105,3 +105,50 @@ How to read it:
   (`README_tcbp.md`), so it was not used.
 - The p99 of the whole pipeline was not measured as one timer; the network's p99 (19.8 ms) is not inside it.
 - Z memory and other p: not looked at.
+
+## Round 2 at p = 0.005: five more checks (`CRITERION_2.md`, Part A)
+
+Exploration, after the test results; a separate branch. The criterion was committed (`17f86351`, 18:34:29 UTC by the
+commit) before any of these numbers. The same validation shots, the same TH and F (job 3), the same gate (0 added
+failures), the same time model (A100 timers; TH's CSR time 41.7 ms; network 9.4 ms at its mean).
+
+    PYTHONPATH=. python predecoder/fastpath/fastpath2.py --data data/p0.005/validation_X.npz \
+        --arms <server-logs: files/predecoder-tcbp/validation_X_p0.005_per_shot.npz> \
+        --logits <orchestration/scratch/predecoder/runs/val_p0.005_cpu/logits> --settings predecoder/logs/fit_tcbp_X_p0.005.json \
+        --speed <server-logs: files/tcbp-speed/check_per_shot.npz> --time-model csr_total \
+        --alt job1=<files/predecoder-tcbp/validation_X_p0.005_fresh_per_shot.npz>:fresh stored=<files/tcbp_p0.005/validation_X.tcbp.npz>:T \
+        --out predecoder/fastpath/result2_p0.005.json
+
+It checks that every logits row's hash equals job 3's head arm (5,000 of 5,000) and that F built once equals F
+built per shot. Output: `result2_p0.005.json`, `result2_p0.005.log`.
+
+| check, at its t* (largest t with 0 added failures) | fast path | failures (both / only rule / only TH) | mean ms | p99 ms |
+|---|---|---|---|---|
+| TH alone | 0% | 33 | 51.1 | 63.1 |
+| C2 syndrome weight <= 115 (round 1's choice) | 3.9% | 33 (33 / 0 / 0) | 49.3 | 63.1 |
+| C3 total prior move | no safe t (the lowest-move shot is an F-only failure) | 33 | 51.1 | 63.1 |
+| C4 largest prior move <= 4.539 | 0.2% | 33 (33 / 0 / 0) | 51.0 | 63.1 |
+| C5 columns moved by more than 1 | no safe t | 33 | 51.1 | 63.1 |
+| **C6 F's decode time <= 5.51 ms (chosen by the criterion)** | **40.1%** | **33 (33 / 0 / 0)** | **43.4** | **102.9** |
+| C7 F's correction weight <= 48 | 12.9% | 33 (33 / 0 / 0) | 57.3 | 102.9 |
+
+**By the declared criterion, C6 is chosen: 43.4 ms mean, against 51.1 for TH alone (15% lower), with TH's 33
+failures shot for shot.** But it is weak, and it should not go into the pipeline as it stands:
+- **Its p99 is worse: 102.9 ms against 63.1.** F runs first on every shot, so a hard shot pays F's slow decode
+  (F's p99 is 76.7 ms) and then the whole TCBP version.
+  - Not declared, a diagnostic: if F's decode could be stopped at 5.51 ms, the rule would cost 35.2 ms mean and
+    68.3 ms p99. Whether cudaq-qec 0.9.0 can stop a decode was not tested.
+- **The threshold is a time in ms, measured on one run.** In job 1, F's decodes on the same shots were faster
+  (median 5.4 ms against job 3's 7.2; rank correlation 0.78). At the same 5.51 ms, job 1 would send 51% of the shots
+  to F and add 1 failure. An iteration count would not depend on the machine or the load, but no file stores one.
+- **The half split:** C6's t picked on the odd shots adds 1 failure on the even shots. C2 picked on the odd shots
+  (t = 127) adds 3 on the even shots; C4 picked on the even shots adds 2; C7 picked on the odd shots adds 1.
+  Every threshold sits on the edge of these 5,000 shots.
+- **Another model fit of F** at each t*: job 1's fresh arm adds 1 failure under C6 (with job 1's own times) and 0
+  under C2, C4 and C7. The stored file adds 0 under C2, C4 and C7; it has no per-shot times, so C6 is unmeasured.
+- C3 and C5 fail as declared: most of the head's moves are downward, with the head surer than the kit that a column
+  did not fire. C5's "moved by more than 1" covers 6,712 to 8,492 of the 8,784 columns. Counting only upward moves
+  (the faults the head suspects) was not declared and was not tried.
+
+Round 2 in one line: the only check with a real saving is F's own decode time. It saves 15% of the mean and costs a
+worse p99, with a threshold in ms that does not carry from one run to another.

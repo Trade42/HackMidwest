@@ -2,7 +2,7 @@ What each decoder needed for its row on the test shots. Memory is the peak resid
 
 | Decoder | Runs on | Peak memory, MB | Start-up, s | What is learned in it |
 |---|---|---|---|---|
-| BP-OSD (kit baseline) | CPU, 1 process, 1 thread | 284 / 284 / not measured | 0.1 / 0.2 / not measured | nothing |
+| BP-OSD (kit baseline) | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.1 / 0.2 / 0.1 | nothing |
 | relay-BP (kit baseline) | CPU, 1 process, 1 thread | 284 / 284 / not measured | 0.0 / 0.0 / not measured | nothing |
 | relay-BP with a learned router | CPU, 1 process, 1 thread | 284 / 284 / not measured | 0.0 / 0.0 / not measured | a logistic model decides when relay-BP's first answer is enough |
 | PriorTilt, one run | not measured | not measured | not measured | 14 parameters, fitted by its authors |

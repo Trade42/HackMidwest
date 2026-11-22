@@ -256,10 +256,10 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_X_wrong3` | 0.6% | `tables/networks.md` |
 | `net_X_wrong4` | 4.5% | `tables/networks.md` |
 | `net_X_wrong5` | 20.1% | `tables/networks.md` |
-| `net_Z_step` | 66,000 | `tables/networks.md` |
-| `net_Z_wrong3` | 0.8% | `tables/networks.md` |
-| `net_Z_wrong4` | 5.1% | `tables/networks.md` |
-| `net_Z_wrong5` | 21.0% | `tables/networks.md` |
+| `net_Z_step` | 74,000 | `tables/networks.md` |
+| `net_Z_wrong3` | 0.6% | `tables/networks.md` |
+| `net_Z_wrong4` | 4.6% | `tables/networks.md` |
+| `net_Z_wrong5` | 19.6% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |
@@ -496,18 +496,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t4_tcbp_wall_hours` | not measured | `tables/test_p0.004.md` |
 | `t4_tcbp_xz` | not measured | `tables/test_p0.004.md` |
 | `t5_bposd_both` | not measured | `tables/test_p0.005.md` |
-| `t5_bposd_error` | not measured | `tables/test_p0.005.md` |
-| `t5_bposd_mean_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_bposd_median_ms` | not measured | `tables/test_p0.005.md` |
+| `t5_bposd_error` | 4.6e-04 | `tables/test_p0.005.md` |
+| `t5_bposd_mean_ms` | 581 | `tables/test_p0.005.md` |
+| `t5_bposd_median_ms` | 546 | `tables/test_p0.005.md` |
 | `t5_bposd_only_relay` | not measured | `tables/test_p0.005.md` |
 | `t5_bposd_only_this` | not measured | `tables/test_p0.005.md` |
-| `t5_bposd_p99_ms` | not measured | `tables/test_p0.005.md` |
+| `t5_bposd_p99_ms` | 1,093 | `tables/test_p0.005.md` |
 | `t5_bposd_paired_p` | not measured | `tables/test_p0.005.md` |
-| `t5_bposd_pairs` | not measured | `tables/test_p0.005.md` |
-| `t5_bposd_rate` | not measured | `tables/test_p0.005.md` |
+| `t5_bposd_pairs` | 2433 | `tables/test_p0.005.md` |
+| `t5_bposd_rate` | 2.30e-02 | `tables/test_p0.005.md` |
 | `t5_bposd_time_ratio` | not measured | `tables/test_p0.005.md` |
-| `t5_bposd_wall_hours` | not measured | `tables/test_p0.005.md` |
-| `t5_bposd_xz` | not measured | `tables/test_p0.005.md` |
+| `t5_bposd_wall_hours` | 1.6 | `tables/test_p0.005.md` |
+| `t5_bposd_xz` | 1307, 1320 | `tables/test_p0.005.md` |
 | `t5_ensemble_both` | not measured | `tables/test_p0.005.md` |
 | `t5_ensemble_error` | not measured | `tables/test_p0.005.md` |
 | `t5_ensemble_mean_ms` | not measured | `tables/test_p0.005.md` |

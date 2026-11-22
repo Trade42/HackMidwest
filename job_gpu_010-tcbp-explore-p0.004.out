@@ -1,2 +1,7 @@
 checkout: 6aaa44c server-jobs: gpu job 010, TCBP-JOBS on the p = 0.004 exploration files
 Sun Nov 22 06:06:58 UTC 2026
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}, mode batch; 4 shot file(s)
+validation_X.npz: X memory, p = 0.004, 5000 shots, data sha256 b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d
+  H is 936 x 8784; building the decoder ...

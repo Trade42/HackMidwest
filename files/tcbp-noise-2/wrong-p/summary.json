@@ -116,59 +116,59 @@
  "capped_columns": {
   "m": 0,
   "g": 0,
-  "h": 569
+  "h": 612
  },
- "seconds": 1809.0835075378418,
- "shots_scored": 3100,
+ "seconds": 1929.8098583221436,
+ "shots_scored": 3300,
  "arms": {
   "m": {
-   "shots": 3100,
-   "failures": 51,
-   "share": 0.016451612903225808,
+   "shots": 3300,
+   "failures": 56,
+   "share": 0.01696969696969697,
    "wilson95": [
-    0.01253515921486447,
-    0.02156499064248165
+    0.013091543540036069,
+    0.021971113165204482
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 3028,
-   "build_ms_mean": 42.817034318953034,
-   "decode_ms_mean": 14.513619785580124,
-   "build_decode_ms_mean": 57.33065410453315,
-   "build_decode_ms_median": 52.28876601904631,
-   "build_decode_ms_p99": 109.99525341554543
+   "flag_not_converged": 3221,
+   "build_ms_mean": 42.894202709959984,
+   "decode_ms_mean": 14.712262582351368,
+   "build_decode_ms_mean": 57.606465292311356,
+   "build_decode_ms_median": 52.49552452005446,
+   "build_decode_ms_p99": 110.21659785299558
   },
   "g": {
-   "shots": 3100,
-   "failures": 57,
-   "share": 0.018387096774193548,
+   "shots": 3300,
+   "failures": 62,
+   "share": 0.018787878787878787,
    "wilson95": [
-    0.014219384043447338,
-    0.02374694266570393
+    0.014683945552974934,
+    0.024010846697917157
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 3039,
-   "build_ms_mean": 42.832638452077404,
-   "decode_ms_mean": 13.75800704711207,
-   "build_decode_ms_mean": 56.59064549918948,
-   "build_decode_ms_median": 51.750369486398995,
-   "build_decode_ms_p99": 104.66206172830421
+   "flag_not_converged": 3234,
+   "build_ms_mean": 42.83444491924125,
+   "decode_ms_mean": 14.177524634622827,
+   "build_decode_ms_mean": 57.011969553864084,
+   "build_decode_ms_median": 52.11523297475651,
+   "build_decode_ms_p99": 106.38253121636806
   },
   "h": {
-   "shots": 3100,
-   "failures": 17,
-   "share": 0.005483870967741935,
+   "shots": 3300,
+   "failures": 19,
+   "share": 0.005757575757575757,
    "wilson95": [
-    0.0034267381859184164,
-    0.008765076177865174
+    0.0036891061657112513,
+    0.008975381341344797
    ],
    "not_reproduced": 0,
-   "flag_not_converged": 2445,
-   "build_ms_mean": 42.801793236473216,
-   "decode_ms_mean": 6.920196438478607,
-   "build_decode_ms_mean": 49.72198967495182,
-   "build_decode_ms_median": 46.03202099679038,
-   "build_decode_ms_p99": 76.7114420863798
+   "flag_not_converged": 2604,
+   "build_ms_mean": 42.809691281678774,
+   "decode_ms_mean": 7.14533541213975,
+   "build_decode_ms_mean": 49.955026693818525,
+   "build_decode_ms_median": 46.14907701034099,
+   "build_decode_ms_p99": 77.42235415731548
   }
  },
- "saved_utc": "2026-11-22T17:05:44.760773+00:00"
+ "saved_utc": "2026-11-22T17:07:45.491660+00:00"
 }

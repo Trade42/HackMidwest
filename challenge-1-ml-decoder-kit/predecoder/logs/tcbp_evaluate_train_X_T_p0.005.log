@@ -1,0 +1,6 @@
+lane B held from 14:54:54
+train_X_T_failed.npz: 390 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder-tcbp/logits/train_X_T_failed/logits.npy (28 s in batches of 32 on cpu)
+the head's probabilities sum to 67.4 per shot (the kit's priors: 59.0)
+train_X_T_right.npz: 2000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder-tcbp/logits/train_X_T_right/logits.npy (145 s in batches of 32 on cpu)
+the head's probabilities sum to 58.7 per shot (the kit's priors: 59.0)
+done 14:58:03

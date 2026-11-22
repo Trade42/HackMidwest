@@ -98,3 +98,24 @@ There is one server job and one TCBP-JOBS model, fitted once because both files 
   than m with p < 0.05 on the seed-4800 file. Otherwise we report that it does not, with the numbers.
 - **What is not done:** no refit of the knobs, no other factor, no Z memory, no atom loss and no kit pair score.
   These go under "what is left".
+
+## Amendment: the run cut to the deadline (declared before any decode)
+
+Written 2026-11-22 at 18:25 UTC. At that time the head was still training, and no decode with it existed.
+
+**Why:** Sal gave a deadline of 30 minutes at 18:24 UTC, relayed by the orchestrator `dq-orch-6`. The laptop finishes
+at about 18:32, and the full run above needs about 35 minutes after that. So the job is cut, and these lines replace
+the matching ones above:
+
+- **Shots:** the primary file only (seed 4800), and **only its first 1,000 shots** (shots 0 to 999 in file order;
+  `tcbp_retrain decode --limit 1000`). The network still computes logits for all 4,000 shots, but only the first
+  1,000 are decoded and scored. **No seed-4100 task.**
+- **Arms:** **m, h and r only**, in that order inside each block of 100. g and hm are not run.
+- **Pairs:** the primary pairs are unchanged: **r vs m** and **r vs h**. The one secondary pair is h vs m.
+- **Stopping rule:** the deadline is **18:48 UTC**. No block starts after it, and the scored set is the longest prefix
+  of whole blocks that all three arms finished, at most 1,000 shots.
+- **Power, stated now:** m failed 1.25% of shots in phase 1, so about 12 m failures are expected in 1,000 shots, and
+  the r vs m test has little power.
+  - If r vs m is not significant, the result is "not shown at this size", not "no effect".
+  - r vs h should still separate if r behaves as expected (h failed 10.5% in phase 1).
+- **Everything else stands:** the head, its checkpoint rule, the frozen knobs and the claim rule.

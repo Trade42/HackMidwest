@@ -18,9 +18,9 @@ FPGA.** A time for the network is the tie-breaker's time on the shots that need 
 2. In fixed point the network's answers survive: at 16 bits it changes PENDING of 5,000 validation answers, and at
    PENDING bits, with the running sum and the small head kept at 16 bits, PENDING (simulated in software).
 3. We built a 32-unit engine that walks the network layer by layer; in simulation it reproduces our integer reference
-   bit for bit on whole shots, needs 33.4 million clocks per shot (0.33 s at an assumed 100 MHz, about a third of a
-   second for the tie-breaker's rare shots), and synthesises to 6,533 LUTs, 2,668 flip-flops and 67 DSP slices of the
-   XC7S50, without its memories.
+   bit for bit on whole shots, needs 22.7 million clocks per shot (0.23 s at an assumed 100 MHz, for the tie-breaker's
+   rare shots only), and synthesises to 8,463 LUTs, 2,809 flip-flops and 73 DSP slices of the XC7S50, without its
+   memories.
 
 ## What was done, step by step
 
@@ -61,8 +61,8 @@ This is the specification the hardware must meet.
 ### 4. Hardware (`rtl/`)
 
 `rtl/nn_engine.v` is an engine with **32 multiply-add units** ("lanes"). On every clock it reads one value and gives it
-to all 32 lanes, each with its own weight; after the K inputs of a step, it writes the 32 results one by one (round,
-saturate, SiLU table or residual sum). A table of layer descriptions tells it what to do; it knows five kinds of step:
+to all 32 lanes, each with its own weight; after the K inputs of a step, it writes the 32 results, one per clock
+through a three-stage pipeline (round, saturate, SiLU table or residual sum, write). A table of layer descriptions tells it what to do; it knows five kinds of step:
 a linear step, the two collecting steps of the code's graph (with a table of each node's six neighbours, and the
 missing time offsets at the first and last rounds), the per-channel normalisation, and the readout's sums over time.
 The memories (values, weights, biases, shifts, tables, neighbours) are outside the engine, so synthesis counts the
@@ -72,23 +72,27 @@ engine itself.
 
 | test | values compared | result | clocks | log |
 |---|---:|---|---:|---|
-| one linear step (block 0, `down`), shot 0 | 59,904 | equal | 428,691 | `logs/engine_down_w16_shot0.log` |
-| the whole block 0, shot 0 | 654,336 | equal | 3,889,455 | `logs/engine_block_w16_shot0.log` |
-| block 7, shot 1 | 654,336 | equal | 3,889,455 | `logs/engine_block7_w16_shot1.log` |
-| **the whole network, 46 steps, shot 0** | 539,136, and the 12 logits | **equal** | **33,388,774** | `logs/engine_net_w16_shot0.log` |
-| the whole network at 8 bits (`w8p`), shot 0 | 539,136 and 12 logits | equal | 33,388,774 | `logs/engine_net_w8p_shot0.log` |
-| the whole network, shots 1, 2 and 3 | 539,136 and 12 logits, each | equal, each | 33,388,774 each | `logs/engine_net_w16_shots1-3.log` |
+| one linear step (block 0, `down`), shot 0 | 59,904 | equal | 314,499 | `logs/engine_down_w16_shot0.log` |
+| the whole block 0, shot 0 | 654,336 | equal | 2,619,666 | `logs/engine_block0_w16_shot0.log` |
+| block 7, shot 1 | 654,336 | equal | 2,619,666 | `logs/engine_block7_w16_shot1.log` |
+| **the whole network, 46 steps, shots 0, 1, 2, 3** (16 bits) | 539,136 and the 12 logits, each | **equal, each** | **22,702,433** | `logs/engine_net_w16_shot{0,1,2,3}.log` |
+| the whole network at 8 bits (`w8p`), shot 0 | 539,136 and the 12 logits | equal | 22,702,433 | `logs/engine_net_w8p_shot0.log` |
+
+The "values compared" of a whole shot are the residual stream after the last block and every tensor of the readout
+(the normalised values, the sums over time, the collecting step, the pooling, the head), and the 12 logits as 48-bit
+whole numbers. The ranges of these tests come from a 12-shot smoke calibration; the engine's equality with the
+reference does not depend on them.
 
 **Synthesised** (Yosys, `synth_xilinx -family xc7`, not placed and routed; `logs/yosys_engine.log`), the engine without
-its memories: **6,533 LUTs** (20% of the XC7S50's 32,600), **2,668 flip-flops** (4% of 65,200), **67 DSP48E1** (56% of
-120): 32 for the lanes and 35 for address arithmetic that counters could replace. Its timing is unknown (not placed and
+its memories: **8,463 LUTs** (26% of the XC7S50's 32,600), **2,809 flip-flops** (4% of 65,200), **73 DSP48E1** (61% of
+120): 32 for the lanes and 41 for address arithmetic that counters could replace. Its timing is unknown (not placed and
 routed).
 
-**Where the clocks go** (from the simulated count of a block, 3,889,455): the multiply-adds themselves are 1,861,632
-clocks (48%); writing the 32 results of each position one by one at 3 clocks each is 32%; the normalisation, one value
-at 3 clocks, is 18%. **Estimated**: overlapping the writes with the next sums and pipelining the normalisation would
-bring a block near 2.2 million clocks (about 20 million per shot with the readout, 0.2 s at 100 MHz); 120 lanes would
-move it toward the 41 ms bound of step 1.
+**Where the clocks go** (from the simulated count of a block, 2,619,666): the multiply-adds themselves are 1,861,632
+clocks (71%); writing the 32 results of a position takes 35 clocks, 453,600 in all (17%); the normalisation, one value
+per clock, 239,616 (9%). An earlier version that wrote at 3 clocks per value needed 3,889,455 clocks per block and
+33,388,774 per shot (its logs are in the git history). **Estimated**: overlapping the writes with the next sums would
+save most of the 17%; using all 120 DSP slices as lanes would move the time toward the 41 ms bound of step 1.
 
 ## What was not done
 

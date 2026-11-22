@@ -1,9 +1,9 @@
-# the extended engine (readout kinds added), block 7 of shot 1, 2026-11-22T08:27Z, luminaty, Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod); 12-shot smoke calibration
-$ python fpga_network/rtl/run_engine.py ... --run w16 --test block --block 7 --shot 1 --work <scratch>
+# 2026-11-22T08:43Z, luminaty, Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod), engine as committed with this log. Ranges from a 12-shot smoke calibration (widths.py --limit 12): the engine's equality with the reference does not depend on the ranges.
+$ python fpga_network/rtl/run_engine.py --checkpoint <x_step70000.pt> --calibration <smoke>/calibration.json --run w16 --test block --block 7 --shot 1
 engine test 'block', block 7, run w16 ((16, 16, 16) bits), checkpoint step 70000, shot 1 of validation_X.npz; simulated with Verilator:
   b7.in_s   239616 values: equal to the reference
   b7.c_s     59904 values: equal to the reference
   b7.d_s     55296 values: equal to the reference
   b7.o_s     59904 values: equal to the reference
   s8        239616 values: equal to the reference
-PASS: 5 layers in 3,889,455 clocks of the engine (32 multiply-add lanes)
+PASS: 5 layers in 2,619,666 clocks of the engine (32 multiply-add lanes)

@@ -1,5 +1,5 @@
-# the whole network on the engine at 8 bits (run w8p: weights and values 8 bits, stream and head 16, percentile ranges), shot 0, 2026-11-22T08:34Z, luminaty, Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod); 12-shot smoke calibration (does not affect the equality)
-$ python fpga_network/rtl/run_engine.py --checkpoint <x_step70000.pt> --calibration <smoke>/calibration.json --run w8p --test net --shot 0 --work <scratch>
+# 2026-11-22T08:47Z, luminaty, Verilator 5.055 devel rev v5.054-350-gabfb70971 (mod), engine as committed with this log. Ranges from a 12-shot smoke calibration (widths.py --limit 12): the engine's equality with the reference does not depend on the ranges.
+$ python fpga_network/rtl/run_engine.py --checkpoint <x_step70000.pt> --calibration <smoke>/calibration.json --run w8p --test net --shot 0
 engine test 'net', block 0, run w8p ((8, 8, 16) bits), checkpoint step 70000, shot 0 of validation_X.npz; simulated with Verilator:
   s8        239616 values: equal to the reference
   r.in_s    239616 values: equal to the reference
@@ -8,8 +8,4 @@ engine test 'net', block 0, run w8p ((8, 8, 16) bits), checkpoint step 70000, sh
   r.pool      1536 values: equal to the reference
   h_s         3072 values: equal to the reference
   logits        12 values: equal to the reference
-PASS: 46 layers in 33,388,774 clocks of the engine (32 multiply-add lanes)
-
-real	1m49.370s
-user	1m32.299s
-sys	0m2.705s
+PASS: 46 layers in 22,702,433 clocks of the engine (32 multiply-add lanes)

@@ -2,9 +2,10 @@
 //
 // N multiply-add units ("lanes") work on N output channels of one position at once. On every clock one input value
 // is read from the activation memory and given to all lanes, each with its own weight (the weight memory's word holds
-// N weights). After K inputs, each lane's sum gets its bias (preloaded), then the lanes are written one by one:
-// round to the output's scale (add half, arithmetic shift right; or shift left), saturate, optionally look the
-// result up in a SiLU table, optionally add the old residual stream (rescaled, saturated), and write.
+// N weights). After K inputs, each lane's sum gets its bias (preloaded), then the lanes are written, one per clock
+// through a three-stage pipeline: round to the output's scale (add half, arithmetic shift right; or shift left),
+// saturate, optionally look the result up in a SiLU table, optionally add the old residual stream (rescaled,
+// saturated; read through the input port, which is free while writing), and write.
 //
 // A table of layer descriptions (one DW-bit word per layer) tells the controller what to do. Four kinds:
 //   LINEAR  out[p, g*N + l] = f(sum_k W[g][k][l] * in[p*K + k] + bias[g][l])           (down, up)
@@ -98,7 +99,7 @@ module nn_engine #(
     // ---------------------------------------------------------------- state
     localparam [4:0] IDLE = 0, DESC2 = 3, POS0 = 4, POS1 = 5, ACC = 6, DRAIN = 7, DESC0 = 1,
                      WR0 = 8, WR1 = 9, WR2 = 10, NEXT = 11, AF0 = 12, AF2 = 14, AF3 = 15, FINISH = 16,
-                     WR3 = 17, WR4 = 18, TS0 = 19, TSA = 20, TSB = 21, TSW = 22;
+                     WR3 = 17, WR4 = 18, TS0 = 19, TSA = 20, TSB = 21, TSW = 22, WRP = 23, AFP = 24;
     reg [4:0]  state;
     reg [DA-1:0] layer;
     reg [31:0] p, g, e, o;                 // position, group; element and its channel (AFFINE)
@@ -135,9 +136,19 @@ module nn_engine #(
     reg [7:0]  r, sl;                       // TSUM: round inside the sum, and which sum
     reg [31:0] rest;                        // TSUM: node * CH + channel
     reg signed [AW-1:0] raw_acc;
-    // where lane `lane` of this position and group goes (and where its old residual value is)
-    wire [31:0] pos_off = (kind == LINEAR) ? (transpose ? (g * N + lane) * P + p : p * C_out + g * N + lane)
-                                           : (tau * NODES + t) * C_out + g * N + lane;
+    // where a lane of this position and group goes (and where its old residual value is)
+    function [31:0] offset(input [7:0] ln);
+        offset = (kind == LINEAR) ? (transpose ? (g * N + ln) * P + p : p * C_out + g * N + ln)
+                                  : (tau * NODES + t) * C_out + g * N + ln;
+    endfunction
+    wire [31:0] pos_off = offset(lane);
+    // the write pipeline: A takes lane li's sum, B rounds it and starts the table and residual reads, C writes
+    reg [7:0]  li, lane_a, lane_b;
+    reg        va, vb;
+    reg signed [AW-1:0] sum_a; reg signed [7:0] sh_a;
+    reg signed [VW-1:0] rq_b;
+    // the AFFINE pipeline: A reads the value and its channel, B rounds and reads the table, C writes
+    reg        fa_v, fb_v; reg [31:0] e_a, e_b; reg issued;
     integer l;
     always @(posedge clk) begin
         b_we <= 1'b0;
@@ -167,7 +178,8 @@ module nn_engine #(
             DESC2: begin
                 for (l = 0; l < 20; l = l + 1) f[l] <= d_data[l*32 +: 32];
                 p <= 0; g <= 0; e <= 0; o <= 0; tau <= 0; t <= 0;
-                state <= (d_data[3:0] == AFFINE) ? AF0 : (d_data[3:0] == TSUM) ? TS0 : POS0;
+                state <= (d_data[3:0] == AFFINE) ? AFP : (d_data[3:0] == TSUM) ? TS0 : POS0;
+                issued <= 1'b0; fa_v <= 1'b0; fb_v <= 1'b0;
                 sl <= 0; rest <= 0;
             end
 
@@ -208,7 +220,29 @@ module nn_engine #(
             DRAIN: begin                                               // two clocks: the last input passes stages 1 and 2
                 v0 <= 1'b0;
                 drain <= drain + 1'b1;
-                if (drain == 1) begin lane <= 0; state <= WR0; end
+                if (drain == 1) begin lane <= 0; li <= 0; va <= 1'b0; vb <= 1'b0; state <= raw ? WR0 : WRP; end
+            end
+
+            // ---- write the N lanes, one per clock
+            WRP: begin
+                if (vb) begin                                          // stage C: the table and the old stream are here
+                    old_q = saturate(rescale($signed(a_data), res_shift), res_bits);
+                    sum   = rq_b;
+                    sum   = sum + old_q;
+                    b_addr  <= out_base + offset(lane_b);
+                    b_wdata <= use_silu ? t_data : residual ? saturate(sum, res_bits) : rq_b;
+                    b_we    <= 1'b1;
+                end
+                vb <= va;                                              // stage B
+                if (va) begin
+                    rq_b   <= saturate(rescale(sum_a, sh_a), residual ? res_bits : sat_bits);
+                    t_addr <= t_base + table_index(saturate(rescale(sum_a, sh_a), sat_bits), sat_bits);
+                    a_addr <= res_base + offset(lane_a);
+                    lane_b <= lane_a;
+                end
+                va <= (li < N);                                        // stage A
+                if (li < N) begin sum_a <= acc[li]; sh_a <= sh[li]; lane_a <= li; li <= li + 1'b1; end
+                if (li == N && !va && !vb) state <= NEXT;
             end
 
             // ---- write the N lanes one by one
@@ -271,7 +305,23 @@ module nn_engine #(
                 end else begin rest <= rest + 1; state <= TS0; end
             end
 
-            // ---- AFFINE: one value at a time
+            // ---- AFFINE: one value per clock through a three-stage pipeline
+            AFP: begin
+                if (fb_v) begin b_addr <= out_base + e_b; b_wdata <= t_data; b_we <= 1'b1; end      // stage C
+                fb_v <= fa_v;                                                                    // stage B
+                if (fa_v) begin
+                    t_addr <= t_base + table_index(saturate(rescale($signed(c_data[WW-1:0]) * a_data + $signed(c_data[WW +: AW]),
+                                                                    $signed(c_data[WW+AW +: 8])), sat_bits), sat_bits);
+                    e_b <= e_a;
+                end
+                fa_v <= !issued;                                                                 // stage A
+                if (!issued) begin
+                    a_addr <= in_base + e; c_addr <= chan_base + o; e_a <= e;
+                    if (e == P * K - 1) issued <= 1'b1;
+                    else begin e <= e + 1; o <= (o == K - 1) ? 0 : o + 1; end
+                end
+                if (issued && !fa_v && !fb_v) state <= FINISH;
+            end
             AF0: begin a_addr <= in_base + e; c_addr <= chan_base + o; state <= AF2; end
             AF2: begin                                                 // the value and its channel's a, c, shift
                 t_addr <= t_base + table_index(saturate(rescale($signed(c_data[WW-1:0]) * a_data + $signed(c_data[WW +: AW]),

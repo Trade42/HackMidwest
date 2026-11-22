@@ -15,7 +15,7 @@ Task `infleqtion-noise`, branch `infleqtion-noise`. Plain-language summary: [REA
    relay-BP without flags fails 62 of 100 shots at factor 0.6, with flags 9 of the same 100; with flags and
    generic instead of matched priors, 47 of 150 against 10.
 3. **Where the code works:** without loss, up to about 0.9 of the published rates (relay-BP 5.9% of shots failing
-   at 0.9, 17% at 1). With loss, only up to about 0.65 (6% at 0.6, 57% at 0.8). **Today's published figures sit
+   at 0.9, 17% at 1). With loss, only up to somewhere between 0.6 and 0.8 (6% at 0.6, 57% at 0.8). **Today's published figures sit
    above both ranges, far above the one with loss**, and the model still leaves out leakage, atom moves and the
    mid-circuit readout their machine does not have yet.
 
@@ -63,7 +63,7 @@ today's hardware further above factor 1.
 | With every rate at the kit's uniform p = 0.004, our circuit's detector error model equals the kit's term for term (72,864 error terms for X memory, 73,296 for Z), and the circuits are equal | pass, X and Z | `test_uniform_rates_give_the_kits_detector_error_model` |
 | At the model's rates: gates, detectors (1,728), observables (12), detector coordinates equal the kit's; noiseless shots give zero detectors and observables | pass, X and Z | `test_only_the_noise_differs_from_the_kit` |
 | Matched priors are the model circuit's error model on the kit's columns; every model mechanism is a kit column (all 8,784 fire); generic priors come from the kit's uniform circuit; H and L do not depend on p | pass | `test_matched_priors_*`, `test_generic_priors_*` |
-| No fitted quantity is scored on the shots it was fitted on: the generic p is fitted on train seed 5100, scored on test seed 4100 | enforced | `job.py` refuses equal seeds |
+| No fitted quantity is scored on the shots it was fitted on: the generic p is fitted on train seeds 5100 (factor 0.8) and 5101 (factor 0.9), scored on test seed 4100 | enforced | `job.py` refuses equal seeds |
 | Rows of one point decode the same shot file | enforced | `summarize.py` refuses to pair rows whose shot files differ (sha256) |
 | A shot fails when any of the 12 observables is wrong; unconverged shots are scored on the decoder's output | by construction | `run._decode` |
 | The truth reaches no decoder: a decoder gets the 936 X-check detector bits (and, with loss, the heralds); the observables are compared after decoding | by construction | `run._decode`; the loss shot files hold no loss times (`clifft_text(..., probes=False)`) |
@@ -127,7 +127,21 @@ generic row gets wrong, "only matched wrong" the reverse; the p value is the exa
 | 0.9 | BP-OSD | same two-qubit error (p = 0.0134) | 2,000 | 1,113, 238 | 887 | 12 | 3e-244 | 79, 69 | 1,965, 1,482 |
 | 0.9 | BP-OSD | **best p on train shots (p = 0.0719)** | 625 | 253, 82 | 182 | 11 | 4e-41 | 77, 69 | 575, 466 |
 
-**Bold**: the better generic baseline of its point, where both were run. Rows on fewer than 2,000 shots are the
+The generic rows on their own, with intervals (the matched rows are in question 3's table):
+
+| Factor | Decoder | Generic picture | Failed shots (95% Wilson) | Per cycle |
+|---|---|---|---|---|
+| 0.7 | relay-BP | same two-qubit error | 27 / 500 = 5.4% (3.7–7.7%) | 4.6e-3 |
+| 0.7 | BP-OSD | same two-qubit error | 227 / 2,000 = 11.4% (10.0–12.8%) | 1.0e-2 |
+| 0.8 | relay-BP | same two-qubit error | 112 / 500 = 22.4% (19.0–26.3%) | 2.1e-2 |
+| 0.8 | relay-BP | best p on train shots | 65 / 500 = 13.0% (10.3–16.2%) | 1.2e-2 |
+| 0.8 | BP-OSD | same two-qubit error | 613 / 2,000 = 30.7% (28.7–32.7%) | 3.0e-2 |
+| 0.8 | BP-OSD | best p on train shots | 442 / 2,000 = 22.1% (20.3–24.0%) | 2.1e-2 |
+| 0.9 | relay-BP | same two-qubit error | 132 / 250 = 52.8% (46.6–58.9%) | 6.1e-2 |
+| 0.9 | BP-OSD | same two-qubit error | 1,113 / 2,000 = 55.7% (53.5–57.8%) | 6.5e-2 |
+| 0.9 | BP-OSD | best p on train shots | 253 / 625 = 40.5% (36.7–44.4%) | 4.2e-2 |
+
+**Bold** in the paired table: the better generic baseline of its point (lower failure rate), where both were run. Rows on fewer than 2,000 shots are the
 first shots of the 2,000 (relay-BP's generic rows are slow: up to 18,080 iterations a shot). Failure rates of every
 row with intervals: `results/X_tables.md`; per-shot outcomes: `results/X_per_shot.npz`.
 
@@ -174,7 +188,8 @@ logical bits is wrong. Test shots seed 4100 (luminaty, `logs/shots.log`); 2,000 
 With atom loss: `results/X_loss_failure_vs_factor_X_loss.png`; Z memory: `results/Z_failure_vs_factor_Z.png`.
 
 **Relay-BP fails between 0.1% and 10% of shots from factor 0.6 to just above 0.9.** BP-OSD reaches 10% a little
-below 0.9. **With atom loss added (question 2), the range moves down to about factor 0.45 to 0.65**, and at 0.8
+below 0.9. **With atom loss added (question 2), the range moves down: it starts between factors 0.4 and 0.5 and ends
+between 0.6 and 0.8**, and at 0.8
 of the published figures more than half the runs fail.
 
 **Where today's hardware sits.** The Pauli part of the published figures (factor 1) is just above that range:
@@ -182,7 +197,7 @@ relay-BP fails about one shot in six. That is **not** today's machine running th
 above it, for four reasons this model leaves out:
 
 - **atom loss**: about 0.4% of a pair per gate on their best pair, 0.5% from state 1 in their simulator. Question
-  2 below adds it, and then the code works only up to about factor 0.65;
+  2 below adds it, and then the code works only up to a factor between 0.6 and 0.8;
 - **leakage** (5×10⁻⁴ per atom per gate) and **atom moves**: the Gross code needs gates between distant atoms,
   and on today's machine a move costs 2.6% to 4.1% phase error in their table;
 - **mid-circuit readout and reset**: their machine has neither today; the rates here are our assumptions;
@@ -225,7 +240,10 @@ probability 0.25% × factor (half the published 0.5% from state 1). The shots co
 circuit text and readout model, unchanged (`make_shots.sample_loss`): a lost atom takes no part in later gates, its
 readout is flagged and records a random bit, a reset brings a lost check atom back, and a lost data atom stays lost
 and is flagged only at the final readout. At factor 0.4 the loss rate is 10⁻³ per atom per CX, the rate `loss/`
-studied most: 10 data atoms are lost per shot on average. Our choices beyond `loss/`'s: our CX noise is one channel
+studied most: 10 data atoms are lost per shot on average. **The loss share** follows Infleqtion's simulator table
+(0.5% from state 1, beside 0.73% phase error per atom): a CX loses one of its atoms with probability about
+2 × 0.25% = 0.5%, against 1.49% Pauli error, so loss is about a quarter of the CX error here. On their best measured
+pair (arXiv:2408.08288) loss was 58% of the CZ error; we followed the simulator table, which describes the array. Our choices beyond `loss/`'s: our CX noise is one channel
 per atom, so the partner of a lost atom still gets its own phase or bit error (`loss/`'s two-atom channel is
 skipped whole); no loss at readout or idle; flags are perfect.
 
@@ -275,7 +293,8 @@ Paired, on the same shots:
   | 0.6 | 0.15% | about 15 | 60 / 1,000 = 6.0% (4.7–7.7%) | 2,222 |
   | 0.8 | 0.2% | about 20 | 170 / 300 = 56.7% (51.0–62.2%) | 13,217 |
 
-  **With loss the code works (0.1% to 10% of shots failing) only from about factor 0.45 to 0.65.** The published
+  **With loss the code works (0.1% to 10% of shots failing) only from a factor between 0.4 and 0.5 (0 of 2,000
+  at 0.4, 0.8% at 0.5) to one between 0.6 and 0.8 (6% at 0.6, 57% at 0.8).** The published
   figures, loss included, sit far above that range: at 0.8 of them more than half the runs fail. This is the honest
   headline of question 3. (Lost data atoms per shot: 144 × (1 − (1 − s)^72), the count `loss/RESULTS.md` confirms.)
 - Only the generic baseline at the same two-qubit error was run under loss; the fitted one was not.
@@ -299,15 +318,18 @@ Paired, on the same shots:
 
 **Machine.** luminaty (AMD Ryzen 7 7730U, 8 cores / 16 threads), Python 3.12.15, stim 1.16.0, ldpc 2.4.1, relay-bp
 0.2.2, clifft 0.13.0, numpy 2.5.5. Every run used 4 worker processes on one lane of 4 hardware threads, niced
-(lanes B, C, D: CPUs 8-11, 12-15, 0-3). Failure counts and iterations do not depend on the machine or the number of
-processes (every relay-BP shot gets a fresh decoder with seed 1; BP-OSD is deterministic); milliseconds do, and are
+(lanes B, C, D: CPUs 8-11, 12-15, 0-3). Failure counts and iterations do not depend on the number of processes (every relay-BP shot gets a fresh decoder
+with seed 1; BP-OSD is deterministic): one BP-OSD part (125 shots) and one relay-BP part (50 shots) decoded again
+with 1 process gave the same outcome on every shot (`logs/checks.log`). Milliseconds depend on the machine and are
 inflated because both threads of each core were busy.
 
 **Commands.** Every row was made by `python -m neutral_atom_noise.job` (shots, decoding, fit), called by the
 functions of `runs/lane_b.sh`; each call appends to `logs/<name>.log`, which repeats the job's command line, the time
 and the commit at the start of each hold. `runs/collect.sh` rebuilt `results/` from the run folders. To get a table
-back on another machine, run the job with the same arguments (the shots are sampled again from the seed; with the
-same library versions they are the same, and the printed sha256 says so):
+back, run the job with the same arguments. On this PC the same seed gives the same shot file: resampling factor
+0.6, seed 4100 gave the logged sha256 again (`logs/checks.log`). On another machine the shots may differ (the brief:
+seeds do not transfer between machines); the printed sha256 says whether they did, and the rates should then agree
+within their intervals:
 
 | Table | Job arguments (from `challenge-1-ml-decoder-kit/`) | Log |
 |---|---|---|

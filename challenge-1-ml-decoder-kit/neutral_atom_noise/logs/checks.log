@@ -35,3 +35,14 @@ Paired, on the same shots (the generic row against the matched row of its point;
 Iterations are belief-propagation iterations per shot, the same on any machine. Relay-BP often has its answer inside its first leg of 80 iterations and never runs more than 80 + 300 x 60 = 18,080. BP-OSD stops BP at 80 iterations and then runs OSD on every unconverged shot, so for BP-OSD the unconverged count is the costly part.
 
 === 2026-11-22T11:05:40Z checks done
+=== 2026-11-22T12:09:14Z worker-count check: lane B, head f899087
+resampled X factor 0.6 seed 4100 into a scratch folder: sha256 d0c8df80ca56c97a54cda8ce3909b92bc70477e524e62b52a44bac8b1443eb48 (logged: d0c8df80ca56c97a54cda8ce3909b92bc70477e524e62b52a44bac8b1443eb48)
+12:09:16 UTC X_f0.8_seed4100__bposd__matched__000000-000125.npz: bposd, priors matched, flags None, 1 workers
+  125/125 shots, 47 s, 3 failures
+{"result": "X_f0.8_seed4100__bposd__matched__000000-000125.npz", "failures": 3, "shots": 125, "unconverged": 71, "mean_iterations": 59.4, "mean_ms": 353.3, "seconds": 47.0}
+12:10:04 UTC X_f0.7_seed4100__relay__matched__000000-000050.npz: relay, priors matched, flags None, 1 workers
+  50/50 shots, 14 s, 0 failures
+{"result": "X_f0.7_seed4100__relay__matched__000000-000050.npz", "failures": 0, "shots": 50, "unconverged": 0, "mean_iterations": 635.6, "mean_ms": 238.8, "seconds": 14.4}
+X_f0.8_seed4100__bposd__matched__000000-000125.npz 1 worker against 4 workers: {'failed': True, 'converged': True, 'iterations': True, 'wrong_mask': True} failures 3 3
+X_f0.7_seed4100__relay__matched__000000-000050.npz 1 worker against 4 workers: {'failed': True, 'converged': True, 'iterations': True, 'wrong_mask': True} failures 0 0
+=== 2026-11-22T12:10:19Z worker-count check done

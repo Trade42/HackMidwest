@@ -50,6 +50,8 @@ def test_uniform_rates_give_the_kits_detector_error_model(basis):
     ours_dem, kit_dem = ours.detector_error_model().flattened(), kit.detector_error_model().flattened()
     assert len(ours_dem) == len(kit_dem) > 60_000
     assert ours_dem == kit_dem
+    errors = sum(1 for term in ours_dem if term.type == "error")
+    assert errors == {"X": 72_864, "Z": 73_296}[basis]     # the counts quoted in RESULTS.md
     assert ours == kit == memory_experiment("gross", basis, p=p)
 
 
@@ -125,6 +127,7 @@ def test_matched_priors_are_the_models_error_model_on_the_kits_columns(basis):
     H_model, L_model, priors_model = dem_matrices(model_circuit(basis, noise), basis)
     assert priors.shape == (8784,) and priors.min() > 0 and priors.max() < 0.5
     assert fired.sum() == len(priors_model)
+    assert fired.all()      # the model can fire every one of the kit's 8,784 columns (RESULTS.md)
     # the same effect has the same probability in both
     by_effect = dict(zip(effects(H_model, L_model), priors_model, strict=True))
     kit_effects = effects(H, L)

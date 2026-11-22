@@ -150,7 +150,7 @@ def summarize(rows, fit):
                       "unconverged_matched": int((~reference["converged"][:n]).sum())})
     for point in {(p["basis"], p["factor"], p["loss"], p["decoder"], p["flags"]) for p in pairs}:
         group = [p for p in pairs if (p["basis"], p["factor"], p["loss"], p["decoder"], p["flags"]) == point]
-        best = min(group, key=lambda p: (p["a_failures"], p["iterations_generic"]))
+        best = min(group, key=lambda p: (p["a_failures"] / p["shots"], p["iterations_generic"]))   # rates: shot counts differ
         for p in group:
             p["better_generic"] = p is best
     return rates, pairs

@@ -72,8 +72,8 @@ numbers are for X memory; every comparison is on the same shots.
    with matched ones, on the same 150 runs.
 3. **Where the code starts to work.** With matched priors relay-BP fails 0.1% of runs at factor 0.6, 2% at 0.8,
    6% at 0.9 and 17% at factor 1: without atom loss the code works from about 0.9 of the published rates down.
-   **With atom loss** (and its flags) it fails 0.8% at 0.5, 6% at 0.6 and 57% at 0.8: it works only up to about
-   0.65 of the published rates. **So today's published figures sit far above the range where this code works**, and
+   **With atom loss** (and its flags) it fails 0.8% at 0.5, 6% at 0.6 and 57% at 0.8: it works only up to somewhere
+   between 0.6 and 0.8 of the published rates. **So today's published figures sit far above the range where this code works**, and
    the model still leaves out leakage, atom moves and the mid-circuit readout their machine does not have yet.
 
 ## What the tables do not show
@@ -122,6 +122,8 @@ machine and library versions; RESULTS.md gives the sha256 of every shot file we 
 For the runs with atom loss we import, unchanged, from `loss/` as it is on `integration` at `6723626` (the last commit that touched it is `2e5c810`):
 `lossmodel.clifft_text` and `lossmodel.sample_chunk` (the Clifft circuit and its readout model),
 `lossmap.LossMap`, `lossmap.PriorBuilder` and `lossmap.parse_condition` (which columns a flagged atom raises, and
-by how much). These are not a public interface. We set one attribute from outside: `LossMap.pri`, the base priors
+by how much). The checks also use `lossmodel.clifft_model` (the readout model, in one test),
+`lossmodel.load_dataset` (to read `loss.job`'s shots in `loss_check.py`) and `python -m loss.job` itself, run as a
+program by `loss_check.py`. These are not a public interface. We set one attribute from outside: `LossMap.pri`, the base priors
 that the flag bumps are added to. `loss_check.py` and its test confirm that, on the kit's own noise, our loop
 gives the same shots and the same decoding, shot for shot, as `python -m loss.job`.

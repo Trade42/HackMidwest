@@ -536,6 +536,42 @@ def score_command(args):
             json.dump(summary, file, indent=1)
 
 
+# ---------- pair (the kit's score: shot k of X with shot k of Z) ----------
+
+def pair_command(args):
+    """Failed pairs of TH and of the stored TCBP-JOBS files, paired, with the rate per cycle."""
+    from decoders import per_cycle_rate
+    from predecoder.decode import paired, wilson
+
+    failed = {"TH": [], "T": []}
+    for data_path, ours_path, tcbp_path in ((args.data_x, args.ours_x, args.tcbp_x), (args.data_z, args.ours_z, args.tcbp_z)):
+        data = load(data_path, args.final)
+        with np.load(ours_path) as file:
+            ours = {key: file[key] for key in ("truth", "predicted_head")}
+        with np.load(tcbp_path) as file:
+            stored = {key: file[key] for key in ("truth", "predicted_T", "data_sha256")}
+        if not (np.array_equal(ours["truth"], data.observables) and np.array_equal(stored["truth"], data.observables)
+                and str(stored["data_sha256"]) == data.sha256):
+            raise SystemExit(f"{ours_path} or {tcbp_path} was not made from {data_path}")
+        failed["TH"].append((ours["predicted_head"] != data.observables).any(axis=1))
+        failed["T"].append((stored["predicted_T"] != data.observables).any(axis=1))
+    result = {}
+    for name, (fx, fz) in failed.items():
+        pairs = fx | fz
+        low, high = wilson(int(pairs.sum()), len(pairs))
+        rate = [float(value) for value in per_cycle_rate(pairs, args.cycles)]     # (rate, its standard error)
+        result[name] = {"failed_pairs": int(pairs.sum()), "failed_X": int(fx.sum()), "failed_Z": int(fz.sum()),
+                        "pairs": len(pairs), "wilson95": [low, high], "per_cycle_rate": rate}
+        print(f"{name}: {int(pairs.sum())} failed pairs of {len(pairs)} [X {int(fx.sum())} Z {int(fz.sum())}], "
+              f"{pairs.mean():.4f} [{low:.4f}, {high:.4f}], rate per cycle {rate}")
+    both, only_th, only_t, p_value = paired(failed["TH"][0] | failed["TH"][1], failed["T"][0] | failed["T"][1])
+    result["pair"] = {"both": both, "only_TH": only_th, "only_T": only_t, "p": p_value}
+    print(f"TH against T, pairs: both {both}, only TH {only_th}, only T {only_t}, exact two-sided p = {p_value:.3g}")
+    if args.out:
+        with open(args.out, "w") as file:
+            json.dump(result, file, indent=1, default=str)
+
+
 # ---------- logits-diff (no decoder, no torch) ----------
 
 def logits_diff_command(args):
@@ -601,6 +637,12 @@ def main(argv=None):
     sub.add_argument("--logits", help="this PC's logits folder: check that the head arm used the same rows")
     sub.add_argument("--final", action="store_true")
     sub.add_argument("--out")
+    sub = commands.add_parser("pair")
+    for name in ("data-x", "data-z", "ours-x", "ours-z", "tcbp-x", "tcbp-z"):
+        sub.add_argument(f"--{name}", required=True)
+    sub.add_argument("--cycles", type=int, default=12)
+    sub.add_argument("--final", action="store_true")
+    sub.add_argument("--out")
     sub = commands.add_parser("logits-diff")
     sub.add_argument("--a", required=True, help="a folder of predecoder.evaluate")
     sub.add_argument("--b", required=True, help="another, for the same shot file")
@@ -608,7 +650,7 @@ def main(argv=None):
     sub.add_argument("--out")
     args = parser.parse_args(argv)
     {"decode": decode_command, "fit": fit_command, "probe": probe, "score": score_command,
-     "logits-diff": logits_diff_command}[args.command](args)
+     "logits-diff": logits_diff_command, "pair": pair_command}[args.command](args)
 
 
 if __name__ == "__main__":

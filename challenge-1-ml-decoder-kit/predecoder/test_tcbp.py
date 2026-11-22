@@ -146,3 +146,23 @@ def test_logits_diff_counts_rows_and_entries(tmp_path):
     tcbp.main(["logits-diff", "--a", a, "--b", b, "--out", str(tmp_path / "d.json")])
     result = json.loads((tmp_path / "d.json").read_text())
     assert result["rows_differ"] == 1 and result["entries_differ"] == 5 and result["largest_gap"] > 0
+
+
+def test_pair_score(tmp_path):
+    x = small_file(tmp_path / "validation_X.npz", 4)
+    z = small_file(tmp_path / "validation_Z.npz", 4)          # X shots standing in for Z: the plumbing only
+    data = load_dataset(x)
+    truth = data.observables
+    wrong = truth.copy()
+    wrong[1, 0] ^= 1
+    wrong_z = truth.copy()
+    wrong_z[2, 3] ^= 1
+    for name, predicted in (("ox", wrong), ("oz", wrong_z)):
+        np.savez(tmp_path / f"{name}.npz", truth=truth, predicted_head=predicted)
+    for name in ("tx", "tz"):
+        np.savez(tmp_path / f"{name}.npz", truth=truth, predicted_T=truth, data_sha256=data.sha256)
+    tcbp.main(["pair", "--data-x", str(x), "--data-z", str(z), "--ours-x", str(tmp_path / "ox.npz"), "--ours-z",
+               str(tmp_path / "oz.npz"), "--tcbp-x", str(tmp_path / "tx.npz"), "--tcbp-z", str(tmp_path / "tz.npz"),
+               "--out", str(tmp_path / "pair.json")])
+    result = json.loads((tmp_path / "pair.json").read_text())
+    assert result["TH"]["failed_pairs"] == 2 and result["T"]["failed_pairs"] == 0 and result["pair"]["only_TH"] == 2

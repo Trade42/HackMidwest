@@ -76,10 +76,9 @@ report it as it is. Our relay-BP gets a fresh decoder with seed 1 for every shot
 
 ## Pilot (not results)
 
-X memory, seed 900, 40 to 100 shots per point, this PC under load. It fixed the factors 0.6, 0.7, 0.8, 0.9 and the
-marked point 1. Relay-BP with matched priors: 0 of 100 failures at factors 0.4 to 0.7, 1 of 100 at 0.8, 5 of 40 at
-0.9. With generic priors at the same two-qubit error: no failure at 0.5 to 0.7 (82, 58, 23 shots), but 891, 1,357
-and 1,861 mean iterations against 76, 109 and 243 matched.
+The factors 0.6, 0.7, 0.8, 0.9 and the marked point 1 were chosen from a pilot of 40 to 100 shots per point (X
+memory, seed 900, run inline under a one-minute cap; **no committed log**, so none of its numbers is quoted here).
+Every number in the tables below comes from the logged runs.
 
 ## Question 1: what knowing the shape buys
 
@@ -113,8 +112,12 @@ above it, for four reasons this model leaves out:
 - **mid-circuit readout and reset**: their machine has neither today; the rates here are our assumptions;
 - the **figures are the authors' simulator parameters** fitted to small circuits, not a benchmark of this code.
 
+And one choice of ours moves factor 1 itself: the idle error. We charge each idle slot 6 ms at the decoupled
+T2 = 2.8 s (0.107% phase error). The paper's 97% lower bound on T2, 128 ms, would make it 2.3%, about 20 times
+larger, and then factor 1 would sit further above the range.
+
 **Why the factor reaches so far.** At factor 0.7 the two-qubit error is 1.04% per CX, 2.6 times the kit's
-p = 0.004; yet relay-BP fails 0.65% of shots, close to the kit's 0.45% at p = 0.004 (`circuits/README.md`; our
+p = 0.004; yet relay-BP fails 0.65% of shots, close to the kit's 0.45% at p = 0.004 (the kit's `README.md`; our
 reference above: 0.15%). A phase error on a CZ arrives on the kit's CX as Z on the control and X on the target;
 neither spreads through the rest of the check's gates, so this noise makes almost no "hook" faults (one check atom
 spreading its fault onto several data atoms). In the matched picture 0.2% of the expected faults flip 5 or 6

@@ -209,3 +209,16 @@ def test_clifft_samples_our_circuit_like_stim_when_no_atom_is_lost():
     error = np.sqrt(weight_clifft.var() / 600 + weight_stim.var() / 3000)
     assert abs(weight_clifft.mean() - weight_stim.mean()) < 4 * error
     assert 0.4 < obs_clifft.mean() < 0.6        # undecoded logical bits are fair coins, as in the kit
+
+
+def test_the_partner_of_a_lost_atom_keeps_its_own_error_in_clifft():
+    """Our CX noise is one channel per atom, so when one atom of a gate is lost its partner still gets its phase or
+    bit error. (loss/ uses the kit's two-atom DEPOLARIZE2, which Clifft skips whole when either atom is lost.)"""
+    clifft = pytest.importorskip("clifft")
+    from loss.lossmodel import clifft_model
+    ours = "R 0 1\nCX 0 1\nLOSS(1.0) 0\nX_ERROR(1.0) 1\nM 0 1\n"
+    pair = "R 0 1\nCX 0 1\nLOSS(1.0) 0\nDEPOLARIZE2(0.9375) 0 1\nM 0 1\n"
+    for text, partner_flipped in ((ours, 1.0), (pair, 0.0)):
+        shots = clifft.noncomp.compile(text, clifft_model(), execution="online").sample(200, seed=1)
+        assert np.asarray(shots.heralds)[:, 0].all()
+        assert np.asarray(shots.measurements)[:, 1].mean() == partner_flipped

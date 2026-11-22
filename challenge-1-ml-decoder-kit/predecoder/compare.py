@@ -47,7 +47,7 @@ import numpy as np
 from evaluation.data import load_dataset
 from predecoder.decode import (decode_session, decode_with_priors, first_leg_converges, kit_problem, kit_session, paired,
                                settings, wilson)
-from predecoder.evaluate import HELD_OUT, read_logits
+from predecoder.files import HELD_OUT, read_logits
 from predecoder.priors import load_settings, shot_priors
 
 ARMS = ("kit", "fresh", "head")

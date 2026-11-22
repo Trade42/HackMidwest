@@ -115,7 +115,7 @@ def grid(modes, alphas, epsilons):
 
 def main(argv=None):
     from evaluation.data import load_dataset
-    from predecoder.evaluate import read_logits
+    from predecoder.files import read_logits
 
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data", nargs="+", required=True, help="TRAIN shot files (names start with train_)")

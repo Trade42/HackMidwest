@@ -31,20 +31,10 @@ import torch
 
 from evaluation.data import load_dataset
 from predecoder.decode import kit_problem
+from predecoder.files import HELD_OUT, read_logits  # noqa: F401 (read_logits: kept importable from here)
 from predecoder.head import prior_logit
 from predecoder.train import load_head, sha256_of
 
-HELD_OUT = ("test_", "go_")
-
-
-def read_logits(folder, data):
-    """(meta, path of logits.npy) of predecoder.evaluate's output, after checking it belongs to this shot file."""
-    folder = Path(folder)
-    with open(folder / "meta.json") as file:
-        meta = json.load(file)
-    if meta["data"]["sha256"] != data.sha256:
-        raise SystemExit(f"{folder} holds the logits of another shot file ({meta['data']['path']})")
-    return meta, folder / "logits.npy"
 
 
 class Predecoder:

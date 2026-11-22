@@ -1,6 +1,6 @@
 # Information: what we are building, why, and where everything is
 
-Last updated: 2026-11-22 06:10 UTC. This file is the overview of our part of the team's work on
+Last updated: 2026-11-22 06:25 UTC. This file is the overview of our part of the team's work on
 Infleqtion's Challenge 1 (ML-assisted decoding of the Gross code). It lives on the branch
 `integration`, our one working branch: everything we have built is merged here.
 
@@ -55,7 +55,10 @@ Defined by the kit (`challenge-1-ml-decoder-kit/README.md`):
 - **Rate.** With failure fraction P over the pairs, the rate per cycle is `1 - (1 - P)^(1/12)`.
 - **Noise.** One strength p on every operation. Each decoder gets the exact error model.
 
-Baselines, 10,000 shots per basis (the kit's README, the organisers' reference run):
+Baselines, 10,000 shots per basis (the kit's README, the organisers' reference run). **Times in
+this table are per pair: one X shot plus one Z shot.** The tables of section 5 give times per
+shot of one basis, so a time there is about half of a per-pair time; do not compare the two
+directly. The final table uses per pair throughout, as the team's evaluator does.
 
 | p | Decoder | Failures X, Z | Rate per cycle | Mean time per pair |
 |---|---|---|---|---|
@@ -136,19 +139,33 @@ beside a GPU training, so compare them with each other only):
 | Rule | Shots | Failures | Mean time per shot |
 |---|---|---|---|
 | relay-BP, the kit's settings | 50,000 (X and Z) | 245 | 169 ms |
-| PriorTilt once | 50,000 | 208 | 54 ms |
-| PriorTilt twice, relay-BP on disagreement, lowest weight | 50,000 | **162 (34% fewer)** | 124 ms |
+| PriorTilt once, first seed / second seed | 50,000 | 208 / 189 | 54 ms |
+| PriorTilt twice, relay-BP on disagreement, lowest weight | 50,000 | **162 (34% fewer than relay-BP)** | 124 ms |
 | relay-BP | 25,000 (X only) | 122 | 167 ms |
+| PriorTilt once, first seed / second seed | 25,000 (X only) | 102 / 82 | 52 ms |
 | the same rule with lowest weight | 25,000 (X only) | 77 | 118 ms |
-| **the same rule with the network as tie-breaker** (step 40,000 of its training) | 25,000 (X only) | **65 (47% fewer)** | 118 ms |
+| **the same rule with the network as tie-breaker** (step 50,000 of its training) | 25,000 (X only) | **63 (48% fewer than relay-BP)** | 118 ms |
 | a perfect tie-breaker on the same candidates | 25,000 (X only) | 50 | |
+
+**How much of the gain is ours.** Be exact about this when presenting:
+
+- **PriorTilt is IonQ's decoder, not ours.** One run of it already fails 15% to 23% fewer shots
+  than relay-BP, depending on its random seed (208 or 189 against 245). That seed-to-seed spread
+  is itself a finding: a single run is not a stable number.
+- **The hierarchy is ours:** two seeds, the agreement test, relay-BP as a third candidate where
+  they disagree. It takes the average single run (198.5) to 162, 18% fewer, and removes the
+  dependence on the seed.
+- **The learned tie-breaker is ours:** on X memory it takes the lowest-weight rule's 77 failures
+  to 63, another 18% fewer.
+- Several rules were tried on these same shots before these were kept, which flatters them
+  slightly. The run on the test shots, with the rule frozen, is the number to quote.
 
 - The paired comparison of PriorTilt against relay-BP: 127 shots only relay-BP fails, 90 only
   PriorTilt fails, p = 0.014.
 - 29 X shots have two agreeing wrong answers. No tie-breaker fixes those; only a better filter
   or stage 3 can.
-- The network gained little as a tie-breaker between steps 30,000 and 40,000 (66 to 65) while
-  improving a lot on its own. The hard shots are hard for it too.
+- The network gains slowly as a tie-breaker (66, 65 and 63 failures at steps 30,000, 40,000 and
+  50,000) while improving a lot on its own. The hard shots are hard for it too.
 - **Not measured yet:** this decoder at p = 0.003 and 0.005 (running), on Z with a network
   (the Z network started training on 2026-11-22), through the team's evaluator, and on the test
   shots. The one run on the test shots happens once, with every setting frozen.
@@ -278,7 +295,8 @@ Each is kept with its numbers, as the challenge asks where an approach falls sho
   code's syndrome.
 - **Exact location weights for loss:** no gain over the simple map (189 against 176).
 - **Stopping relay-BP at the first solution under loss:** 14% more failures.
-- **Longer training as a tie-breaker:** 66 to 65 failures from step 30,000 to 40,000.
+- **Longer training as a tie-breaker:** only 66, 65 and 63 failures at steps 30,000, 40,000 and
+  50,000, while the network alone improved from 27% to 16% of shots wrong.
 
 ## 10. Result sets planned for the submission
 

@@ -2942,7 +2942,9 @@ def readme_section(measured):
               "| [`selector/`](challenge-1-ml-decoder-kit/selector/), [`ml_decoder/`](challenge-1-ml-decoder-kit/ml_decoder/) | a learned selector; an ML-first decoder |",
               "| [`evaluation/`](challenge-1-ml-decoder-kit/evaluation/) | the team's evaluator and the teammates' learned router |",
               "| [information.md](information.md) | everything we built and why |",
-              "| [`challenge2/`](challenge2/) | the teammates' Challenge 2 work (Give Your LLM a Quantum Backend); see its README |", "",
+              "| [`challenge2/`](challenge2/) | the teammates' Challenge 2 work (Give Your LLM a Quantum Backend): "
+              "[context_selection/README.md](challenge2/context_selection/README.md), "
+              "[qfm_token_relations/README.md](challenge2/qfm_token_relations/README.md) |", "",
               "The section below is the teammates' earlier technical review; current results are above.", README_END]
     return write("readme_section", "\n".join(lines))
 

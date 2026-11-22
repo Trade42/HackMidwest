@@ -22,10 +22,29 @@ def log_sigmoid(x):
     return -np.logaddexp(0.0, -x)
 
 
+def bits_for_network(predicted, network_bits, network_kit_bits, model_from_kit=None):
+    """The candidates' answers in the network's own logical operators: [candidates, shots, 12].
+
+    predicted: the candidates' 12 bits of the kit's observables. A network trained on the
+    kit's observables (model_from_kit None) scores those bits as they are.
+
+    A network trained on other logical operators of the same basis (neural/, --logicals light)
+    has its own 12 bits m, and the kit's bits k of the same answer are k = M m + (a term fixed
+    by the shot's detectors), mod 2. So a candidate with kit bits k' has own bits
+    m' = m + M^-1 (k' + k). Here network_bits is m (logits > 0), network_kit_bits is k (from
+    the network's own kit_bits) and model_from_kit is M^-1.
+    """
+    if model_from_kit is None:
+        return np.asarray(predicted)
+    difference = np.asarray(predicted, np.int64) ^ np.asarray(network_kit_bits, np.int64)
+    return (np.asarray(network_bits, np.int64) ^ (difference @ np.asarray(model_from_kit, np.int64).T) % 2).astype(np.uint8)
+
+
 def network_score(predicted, logits):
     """How likely the network finds each candidate: [candidates, shots].
 
-    predicted: [candidates, shots, 12] bits. logits: [shots, 12], positive = "this bit flipped".
+    predicted: [candidates, shots, 12] bits in the network's own logical operators
+    (bits_for_network). logits: [shots, 12], positive = "this bit flipped".
     The score is the sum over the 12 bits of log sigmoid(logit) for a predicted 1 and
     log sigmoid(-logit) for a predicted 0: the log-probability of the 12 bits if the network's
     outputs were independent probabilities.
@@ -50,6 +69,7 @@ def lowest_weight(weight, allowed=None):
 def most_likely(predicted, logits, weight=None, constant=None, allowed=None):
     """Index [shots] of the candidate the network finds most likely among the allowed ones (None: all).
 
+    predicted holds the candidates' bits in the network's own operators (bits_for_network).
     With a constant, the score is the network's score minus the candidate's weight divided by
     the constant. The constant is fitted, so it comes from other shots than the ones scored.
     """

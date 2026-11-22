@@ -8,7 +8,9 @@ Run from challenge-1-ml-decoder-kit/, always as a module:
 --candidates takes one or more files of hierarchy.candidates (or the laptop's selector_*.npz,
 which have the same arrays); several files are scored as one set, in the order given.
 --logits takes, per candidates file and in the same order, the .npz that
-`python -m neural.evaluate_stim --save` wrote for the same shots.
+`python -m neural.evaluate_stim --save` wrote for the same shots. If the network was trained
+with `--logicals light`, its logits belong to other logical operators than the kit's; the
+candidates' bits are then turned into those operators first (rules.bits_for_network).
 
 The rules, with R = relay-BP, P1 and P2 = PriorTilt under two seeds:
 
@@ -34,7 +36,8 @@ from pathlib import Path
 
 import numpy as np
 
-from hierarchy.rules import ORDER, P1, agree, lowest_weight, most_likely, paired_test, tie_break, wilson_interval
+from hierarchy.rules import (ORDER, P1, agree, bits_for_network, lowest_weight, most_likely, paired_test, tie_break,
+                             wilson_interval)
 
 R = ORDER.index("R")
 FIELDS = ("predicted", "converged", "iterations", "weight", "seconds")
@@ -53,7 +56,8 @@ def load_candidates(paths):
             part["ran"] = np.ones((len(ORDER), shots), bool)
             if "ran_R" in file.files:          # in session mode relay-BP runs only where P1 and P2 differ
                 part["ran"][R] = file["ran_R"]
-            sources.append({"path": str(path), "shots": shots, "data_sha256": str(file["data_sha256"]), "about": _about(file)})
+            sources.append({"path": str(path), "shots": shots, "data_sha256": str(file["data_sha256"]),
+                            "basis": str(file["basis"]) if "basis" in file.files else None, "about": _about(file)})
         parts.append(part)
     pool = {key: np.concatenate([part[key] for part in parts], axis=0 if key == "truth" else 1) for key in parts[0]}
     pool["weight"] = np.where(pool["ran"], pool["weight"], np.inf)
@@ -68,28 +72,51 @@ def _about(file):
             f"{'/'.join(str(n) for n in np.unique(file['processes']))} process(es) side by side on {machine['processor']}")
 
 
+@dataclass
+class NetworkLogits:
+    """What the network said about the scored shots."""
+    logits: np.ndarray        # [shots, 12], of the network's own logical operators
+    candidates: np.ndarray    # [candidates, shots, 12]: the candidates' bits in those operators
+    ms: float = None          # the network's time per call, if known
+    where: str = "not given"  # where that time comes from
+
+
 def load_logits(paths, pool, sources):
-    """The network's logits [shots, 12] for the same shots, and its batch-one time in ms if the .json beside each file has it."""
+    """The network's logits for the same shots, the candidates' bits in the network's operators, and its time per call."""
     if len(paths) != len(sources):
         raise SystemExit("give one logits file per candidates file, in the same order")
-    parts, times, start = [], [], 0
+    logits_parts, candidate_parts, times, start = [], [], [], 0
     for path, source in zip(paths, sources, strict=True):
         with np.load(path, allow_pickle=False) as file:
-            logits, observables = file["logits"].astype(np.float64), file["observables"]
-        truth = pool["truth"][start:start + source["shots"]]
-        if observables.shape != truth.shape or not np.array_equal(observables, truth):
+            logits, observables, answer = file["logits"].astype(np.float64), file["observables"], file["predictions"]
+            operators = str(file["logits_are_for"]).split()[0] if "logits_are_for" in file.files else "kit"
+        rows = slice(start, start + source["shots"])
+        if observables.shape != pool["truth"][rows].shape or not np.array_equal(observables, pool["truth"][rows]):
             raise SystemExit(f"{path} does not hold the shots of {source['path']}: the observables differ")
-        parts.append(logits)
+        logits_parts.append(logits)
+        candidate_parts.append(bits_for_network(pool["predicted"][:, rows], logits > 0, answer,
+                                                _model_from_kit(source["basis"], operators, source["path"])))
         start += source["shots"]
         numbers = Path(path).with_suffix(".json")
         if numbers.is_file():
             record = json.loads(numbers.read_text(encoding="utf-8"))
             times.append((record["latency_ms_mean"], record["latency_shots"], record.get("device", "unknown device")))
-    network_ms, where = None, "not given"
+    network = NetworkLogits(np.concatenate(logits_parts), np.concatenate(candidate_parts, axis=1))
     if len(times) == len(paths):
-        network_ms = sum(ms * shots for ms, shots, _ in times) / sum(shots for _, shots, _ in times)
-        where = f"batch-one mean on {', '.join(sorted({device for _, _, device in times}))}, from the .json beside the logits"
-    return np.concatenate(parts), network_ms, where
+        network.ms = sum(ms * shots for ms, shots, _ in times) / sum(shots for _, shots, _ in times)
+        network.where = f"batch-one mean on {', '.join(sorted({device for _, _, device in times}))}, from the .json beside the logits"
+    return network
+
+
+def _model_from_kit(basis, operators, candidates_path):
+    """The matrix that turns kit bits into the network's bits; None for a network trained on the kit's observables."""
+    if operators == "kit":
+        return None
+    if basis is None:
+        raise SystemExit(f"the logits belong to the {operators!r} logical operators, and {candidates_path} does not say its basis")
+    from neural.graph import build_graph, gf2_inverse    # the operators are defined in neural/graph.py
+
+    return gf2_inverse(build_graph("gross", basis, None, operators).kit_from_model)
 
 
 # ---------- scoring ----------
@@ -104,8 +131,8 @@ class Row:
     note: str = ""
 
 
-def score(pool, logits=None, network_ms=None, constants=()):
-    """One Row per rule. constants: (value, where it comes from) pairs for the "network minus weight / C" rows."""
+def score(pool, network=None, constants=()):
+    """One Row per rule. network: a NetworkLogits. constants: (value, where it comes from) pairs for the "network minus weight / C" rows."""
     predicted, weight, ran, truth = pool["predicted"], pool["weight"], pool["ran"], pool["truth"]
     shots = np.arange(len(truth))
     ms = pool["seconds"] * 1e3
@@ -133,14 +160,14 @@ def score(pool, logits=None, network_ms=None, constants=()):
                            lowest_weight(weight, pool["converged"] & ran), ms.sum(axis=0)))
     else:
         rows.append(Row("converged", "the lowest weight among the converged of R, P1, P2", note=not_measured))
-    if logits is not None:
-        network_time = hierarchy_ms + np.where(differ, network_ms or 0.0, 0.0)
-        note = "" if network_ms is not None else "time without the network's"
+    if network is not None:
+        network_time = hierarchy_ms + np.where(differ, network.ms or 0.0, 0.0)
+        note = "" if network.ms is not None else "time without the network's"
         rows.append(chosen("network", "P1; where P2 differs, the network's most likely",
-                           tie_break(predicted, most_likely(predicted, logits, allowed=ran)), network_time, note))
+                           tie_break(predicted, most_likely(network.candidates, network.logits, allowed=ran)), network_time, note))
         for constant, origin in constants:
             rows.append(chosen(f"network_C{constant:g}", f"  the same with network minus weight / {constant:g}",
-                               tie_break(predicted, most_likely(predicted, logits, weight, constant, allowed=ran)),
+                               tie_break(predicted, most_likely(network.candidates, network.logits, weight, constant, allowed=ran)),
                                network_time, "; ".join(filter(None, [f"C {origin}", note]))))
     if relay_everywhere:
         rows.append(Row("perfect", "a perfect choice among R, P1, P2 (needs the truth)", ~right.any(axis=0)))
@@ -165,7 +192,7 @@ def facts(pool):
             "none_converged": none_converged}
 
 
-def fit_constant(pool, logits, constants):
+def fit_constant(pool, network, constants):
     """The constant with the fewest failures of the "network minus weight / C" rule on these shots.
 
     Equal failures: the largest constant, the one that leans least on the weight. Returns
@@ -173,7 +200,8 @@ def fit_constant(pool, logits, constants):
     """
     failures = {}
     for constant in constants:
-        choice = tie_break(pool["predicted"], most_likely(pool["predicted"], logits, pool["weight"], constant, allowed=pool["ran"]))
+        choice = tie_break(pool["predicted"], most_likely(network.candidates, network.logits, pool["weight"], constant,
+                                                          allowed=pool["ran"]))
         answer = pool["predicted"][choice, np.arange(len(choice))]
         failures[constant] = int((answer != pool["truth"]).any(axis=1).sum())
     return max(constants, key=lambda constant: (-failures[constant], constant)), failures
@@ -247,8 +275,7 @@ def numbers(pool, sources, rows):
 
 def check_evaluator(path, rows, key, sources, out=print):
     """Compare a rule's answers with the predictions the team's evaluator saved for the plugin on the same shots."""
-    with np.load(sources[0]["path"], allow_pickle=False) as file:
-        basis = str(file["basis"]) if "basis" in file.files else None
+    basis = sources[0]["basis"]
     if len(sources) != 1 or basis is None:
         raise SystemExit("--evaluator-shots compares one candidates file of hierarchy.candidates with one basis of one evaluator run")
     row = {row.key: row for row in rows}.get(key)
@@ -281,12 +308,13 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     pool, sources = load_candidates(args.candidates)
-    logits, network_ms, network_note = None, None, None
+    network, network_note = None, None
     if args.logits:
-        logits, network_ms, where = load_logits(args.logits, pool, sources)
+        network = load_logits(args.logits, pool, sources)
         if args.network_ms is not None:
-            network_ms, where = args.network_ms, "given with --network-ms"
-        network_note = f"logits from {', '.join(args.logits)}; time per call " + (f"{network_ms:.1f} ms ({where})" if network_ms is not None else where)
+            network.ms, network.where = args.network_ms, "given with --network-ms"
+        network_note = f"logits from {', '.join(args.logits)}; time per call " + (
+            f"{network.ms:.1f} ms ({network.where})" if network.ms is not None else network.where)
     elif args.constant or args.fit_candidates or args.constants:
         raise SystemExit("a constant belongs to the network rule: give --logits")
 
@@ -295,8 +323,7 @@ def main(argv=None):
         if not (args.fit_candidates and args.fit_logits and args.constants):
             raise SystemExit("fitting C needs --fit-candidates, --fit-logits and --constants together")
         fit_pool, fit_sources = load_candidates(args.fit_candidates)
-        fit_logits, _, _ = load_logits(args.fit_logits, fit_pool, fit_sources)
-        best, failures = fit_constant(fit_pool, fit_logits, args.constants)
+        best, failures = fit_constant(fit_pool, load_logits(args.fit_logits, fit_pool, fit_sources), args.constants)
         fit_hashes = [source["data_sha256"] for source in fit_sources]
         print(f"C fitted on {len(fit_pool['truth'])} shots (data sha256 {', '.join(fit_hashes)}): failures "
               + ", ".join(f"C = {constant:g}: {number}" for constant, number in failures.items()) + f"; chosen C = {best:g}")
@@ -308,12 +335,12 @@ def main(argv=None):
     if args.constant:
         warnings.append("A constant given with --constant counts as a result only if it was chosen on other shots than these.")
 
-    rows = score(pool, logits, network_ms, constants)
+    rows = score(pool, network, constants)
     report(pool, sources, rows, network_note)
     for line in warnings:
         print(line)
     if args.evaluator_shots:
-        check_evaluator(args.evaluator_shots, rows, args.evaluator_rule or ("network" if logits is not None else "weight"), sources)
+        check_evaluator(args.evaluator_shots, rows, args.evaluator_rule or ("network" if network is not None else "weight"), sources)
     if args.save:
         Path(args.save).parent.mkdir(parents=True, exist_ok=True)
         Path(args.save).write_text(json.dumps(numbers(pool, sources, rows), indent=2) + "\n", encoding="utf-8")

@@ -97,6 +97,8 @@ PriorTilt runs, relay-BP where it runs, the network and the rule.
 | `report/reproduce_ours.sh row <p> hierarchy` | our decoder: the hierarchy with the neural tie-break (needs step 4) | **not run here**; measured on the server |
 | `report/reproduce_ours.sh row <p> hierarchy-parallel` | the same decoder with its two PriorTilt runs side by side (two cores) | **not run here**; measured on the server |
 | `report/reproduce_ours.sh row <p> hierarchy-converged` | the hierarchy with the best hand-written tie-break, the ablation arm (no network, no torch needed) | **not run here**; measured on the server |
+| `report/reproduce_ours.sh row <p> hierarchy-weight` | the hierarchy with plain lowest weight as its tie-break; run after the test results were seen, at the team's request (an ablation, not our decoder) | **not run here**; measured on the server (job ctl 120) |
+| `report/reproduce_ours.sh row <p> hierarchy-converged-parallel` | the best hand-written tie-break with the two fast decodes side by side (two cores); run after the test results were seen, at the team's request (an ablation, not our decoder) | **not run here**; measured on the server (job ctl 120) |
 
 What a `row` command runs, written out for our decoder:
 

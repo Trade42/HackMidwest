@@ -137,6 +137,18 @@ def clean_rows_log(*paths):
     return runs
 
 
+def test_run_end(path):
+    """The time of the test job's "TEST RUN END" line, or None: a row that started after it ran after the test results were seen."""
+    path = Path(path)
+    if not path.is_file():
+        return None
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        found = re.match(r"(\S+Z) TEST RUN END\b", line)
+        if found:
+            return datetime.strptime(found.group(1), "%Y-%m-%dT%H:%M:%SZ")
+    return None
+
+
 def cpu_quota(path):
     """The server's CPU quota, from the record's own header ("the quota is 12"), or None."""
     path = Path(path)

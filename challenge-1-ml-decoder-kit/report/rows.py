@@ -54,7 +54,13 @@ DECODERS = {decoder.key: decoder for decoder in [
     Decoder("ensemble", "our ensemble (combined offline)", "ours, ensemble", "ours",
             "only the rules that use the network have a learned part: see the rule named in the row", "#008300", "X", ours=True),
     Decoder("tcbp", "TCBP-JOBS (NVIDIA, GPU)", "TCBP-JOBS (GPU)", "NVIDIA; run by teammates", "a model it fits at start-up, per memory basis", "#1baf7a", "P"),
+    # registered after the test results were seen (server job ctl 120, the team's request): an ablation arm, kept last and out of the figures
+    Decoder("hierarchy-converged-parallel", "our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores",
+            "ours, no network, 2 cores", "ours", "nothing of ours (PriorTilt's parameters are its authors')", "#eb6834", "<", ours=True, figures="none"),
 ]}
+
+# Decoders registered after the test results were seen; the figures leave them out of their spacing so that no earlier point moves.
+REGISTERED_AFTER_TEST = ("hierarchy-converged-parallel",)
 
 REFERENCE = "relay-bp"   # the paired counts are against this row
 
@@ -82,6 +88,7 @@ TEST_ROWS = [
     TestRow("hierarchy-parallel", "eval_p{p}_hierarchy-parallel", "evaluator", rule="network", cores=2),
     TestRow("ensemble", "ensemble_p{p}", "ensemble"),
     TestRow("tcbp", "tcbp_p{p}", "tcbp", member="T"),
+    TestRow("hierarchy-converged-parallel", "eval_p{p}_hierarchy-converged-parallel", "evaluator", rule="converged", cores=2),
 ]
 
 # The ladder "whose gain is whose", on the test shots, from hierarchy.ensemble's offline output: every rung

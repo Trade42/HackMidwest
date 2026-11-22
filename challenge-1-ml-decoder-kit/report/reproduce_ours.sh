@@ -10,7 +10,8 @@
 #   report/reproduce_ours.sh collect             copy the rows you made into report/data/test/
 #   report/reproduce_ours.sh report              the tables and the figures
 #
-# <p> is 0.003, 0.004 or 0.005. <row> is bposd, relay-bp, router, priortilt, hierarchy, hierarchy-parallel or hierarchy-converged.
+# <p> is 0.003, 0.004 or 0.005. <row> is bposd, relay-bp, router, priortilt, hierarchy, hierarchy-parallel or hierarchy-converged,
+# or one of the ablations run after the test results (the team's request): hierarchy-weight, hierarchy-converged-parallel.
 # Settings, all optional: PYTHON (default .venv-ours/bin/python), PRIORTILT_REPO (default: a folder
 # PriorTiltDecoder beside this repository), OUT (default runs/clean), DEVICE (cpu), PY312 (a Python 3.12
 # interpreter for the env stage, default python3.12; with uv: PY312=$(uv python find 3.12)).
@@ -46,6 +47,10 @@ options() {  # write a row's plugin options, as the test run on the server used 
     hierarchy-parallel) extra=', "parallel": true' ;;
     hierarchy-converged)
       printf '{"rule": "converged", "seeds": [1, 1001]}\n' > "$OUT/$1_options.json"; echo "$OUT/$1_options.json"; return ;;
+    hierarchy-converged-parallel)
+      printf '{"rule": "converged", "seeds": [1, 1001], "parallel": true}\n' > "$OUT/$1_options.json"; echo "$OUT/$1_options.json"; return ;;
+    hierarchy-weight)
+      printf '{"rule": "weight", "seeds": [1, 1001]}\n' > "$OUT/$1_options.json"; echo "$OUT/$1_options.json"; return ;;
   esac
   printf '{"rule": {"X": "network", "Z": "network"}, "seeds": [1, 1001], "checkpoints": {"X": "%s", "Z": "%s"}, "device": "%s", "torch_threads": 1%s}\n' \
     "$CHECKPOINTS/cascade_X.pt" "$CHECKPOINTS/cascade_Z.pt" "$DEVICE" "$extra" > "$OUT/$1_options.json"
@@ -114,9 +119,9 @@ EOF
       router)
         printf '{"router_models":{"X":"results/router_p%s/model_X.json","Z":"results/router_p%s/model_Z.json"}}\n' "$p" "$p" > "$OUT/router_options_p$p.json"
         decoder=evaluation.router:make_tiered_decoder; extra="$OUT/router_options_p$p.json" ;;
-      hierarchy|hierarchy-parallel|hierarchy-converged) decoder=hierarchy.plugin:make_decoder; extra=$(options "$row") ;;
+      hierarchy|hierarchy-parallel|hierarchy-converged|hierarchy-converged-parallel|hierarchy-weight) decoder=hierarchy.plugin:make_decoder; extra=$(options "$row") ;;
       priortilt) decoder=hierarchy.priortilt_plugin:make_decoder; extra=$(options priortilt) ;;
-      *) echo "row must be bposd, relay-bp, router, priortilt, hierarchy, hierarchy-parallel or hierarchy-converged" >&2; exit 2 ;;
+      *) echo "row must be bposd, relay-bp, router, priortilt, hierarchy, hierarchy-parallel, hierarchy-converged, hierarchy-converged-parallel or hierarchy-weight" >&2; exit 2 ;;
     esac
     # One process, one thread, the team's evaluator; the timer wraps the whole decode of a shot.
     if [ -n "$extra" ]; then

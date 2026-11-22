@@ -249,3 +249,27 @@ def test_the_predecoder_rows_are_labelled_and_match_their_files():
         assert f"| {pair['both']} / {pair['only_head']} / {pair['only_fresh']} (p = {stats.p_text(pair['p'])}) |" in table
     for name in ("test_sweep", "test_p0.005", "test_comparisons", "readme_section"):
         assert "head's priors" not in (REPORT / "tables" / f"{name}.md").read_text(encoding="utf-8")
+
+
+def test_rows_run_after_the_test_results_are_labelled_where_they_appear():
+    """A timed row is labelled an ablation run after the test results exactly when its START is after the TEST RUN END line."""
+    from report import loaders
+    from report.make_tables import AFTER_SHORT, AFTER_TEST, load_test_rows
+    from report.rows import DECODERS, P_VALUES
+    measured, _, _ = load_test_rows()
+    end = loaders.test_run_end(REPORT / "data" / "test" / "test_rows.out")
+    assert end is not None
+    sweep = (REPORT / "tables" / "test_sweep.md").read_text(encoding="utf-8")
+    for p in P_VALUES:
+        table = (REPORT / "tables" / f"test_p{p}.md").read_text(encoding="utf-8")
+        for key, row in measured[p].items():
+            if row is None or row.get("offline") or row.get("retimed") or not (row.get("run") or {}).get("start"):
+                continue                   # a re-timed row's run is its second, timing-only run; its answers are the first run's
+            after = row["run"]["start"] > end
+            assert row["after_test"] == after and (AFTER_TEST in row["label_note"]) == after, (p, key)
+            if after:
+                assert f"| {DECODERS[key].label}{row['label_note']} |" in table, (p, key)
+                line = next(line for line in sweep.splitlines() if line.startswith(f"| {DECODERS[key].label} |"))
+                assert line.split(" | ")[1 + P_VALUES.index(p)].endswith(f"**{AFTER_SHORT}**") or line.split(" | ")[1 + P_VALUES.index(p)].endswith(f"**{AFTER_SHORT}** |"), (p, key)
+    for p in ("0.003", "0.004"):            # the pre-registered arm of the test run itself
+        assert measured[p]["hierarchy-converged"] is not None and not measured[p]["hierarchy-converged"]["after_test"]

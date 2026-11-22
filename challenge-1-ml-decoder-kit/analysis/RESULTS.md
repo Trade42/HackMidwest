@@ -264,7 +264,7 @@ The ms column: ms per shot inside decode_detailed, 10 processes side by side on 
 **What this says at p = 0.004:**
 
 - **Later legs must stay at 60 iterations.** All 8 schedules with 30-iteration legs fail more than the kit's (93 to 108 failed pairs against 51; paired p at or below 0.003 in every basis). Their unconverged shots grow 2 to 6 times. Short legs are what made 40 / 30 / 1 lose in the review.
-- **The first leg can be 40 or 80.** 40 / 60 / k and 80 / 60 / k are within each other's noise at every k.
+- **The first leg matters little.** At each k, 40 / 60 / k and 80 / 60 / k take nearly the same mean iterations (171 and 167 at k = 1, 376 and 386 at k = 3 in X). Their failed pairs differ by at most 18 (60 against 42 at k = 3). No test between the two was made, and neither 40 / 60 / 3 nor 80 / 60 / 3 differs significantly from the kit.
 - **Stopping after 3 solutions costs nothing measurable and saves 31% of the iterations.** 80 / 60 / 3 runs 1.44 times fewer mean iterations (386 and 376 against 565 and 535) with 42 failed pairs against the kit's 51 (X 14 / 5, p = 0.064; Z 11 / 11). 40 / 60 / 3 runs 1.46 times fewer with 60 pairs (X 7 / 12, Z 8 / 12, p at or above 0.36).
 - **Stopping after 2 saves half (2.0 times) for about 12 more failed pairs.** 80 / 60 / 2 has 63 against 51 (Z 6 / 16, p = 0.052).
 - **Stopping after the first solution saves 3.4 times, at a measurable cost.** 80 / 60 / 1 has 73 pairs against 51, about 40% more failures (Z 6 / 18, p = 0.023; X 10 / 20, p = 0.099).

@@ -9,9 +9,10 @@ ml_options.json:
 
   {"models": {"X": "model_X.pt", "Z": "model_Z.pt"}, "threshold": 6.0}
 
-Optional keys: "device" (default cuda when torch sees a GPU, else cpu) and "relay", a JSON object of relay-BP settings
-to replace, e.g. {"stop_nconv": 1, "pre_iter": 40, "set_max_iter": 30} for a faster schedule. Without "relay" the
-fallback is the kit's relay-BP (decoders.RELAY_SETTINGS: first leg 80, legs of 60, stop at 5 solutions) with seed 1.
+Optional keys: "device" (default cuda when torch sees a GPU, else cpu), "threads" (torch CPU threads, default torch's
+choice; pin it for a repeatable CPU run) and "relay", a JSON object of relay-BP settings to replace, e.g.
+{"stop_nconv": 1, "pre_iter": 40, "set_max_iter": 30} for a faster schedule. Without "relay" the fallback is the kit's
+relay-BP (decoders.RELAY_SETTINGS: first leg 80, legs of 60, stop at 5 solutions) with seed 1.
 The session's settings, which the evaluator saves in summary.json, list every relay-BP setting in use.
 
 A shot keeps the CNN's 12 predicted bits when its smallest |logit| is at least `threshold`. Every other shot is decoded
@@ -35,6 +36,8 @@ class MLFirstSession:
         start = perf_counter()
         self.problem, self.shot_logits = problem, shot_logits
         self.device = options.get("device", "cuda" if torch.cuda.is_available() else "cpu")
+        if options.get("threads"):
+            torch.set_num_threads(int(options["threads"]))
         self.threshold = float(options["threshold"])
         path = options["models"][problem.basis]
         self.model, saved = load_checkpoint(path, problem.basis, self.device)

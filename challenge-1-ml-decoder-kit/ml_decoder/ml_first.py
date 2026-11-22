@@ -6,8 +6,8 @@
 The CNN predicts the 12 logical bits. Its confidence is the smallest |logit| among the 12. Shots above the threshold
 keep the CNN's answer. The rest go to relay-BP. By default that is the kit's relay-BP (decoders.RELAY_SETTINGS: a first
 leg of 80, legs of 60, stop at 5 solutions) with seed 1. --relay replaces single settings, as a JSON object.
-The table sweeps the threshold: the share of shots the CNN keeps, failures among them, total failures with a 95% Wilson
-interval, and mean time per shot. Pick the threshold on one --seed and report on another.
+The table sweeps the threshold: the share of shots the CNN keeps, failures among them and total failures, each with a
+95% Wilson interval, and mean time per shot. Pick the threshold on one --seed and report on another.
 A shot fails when any of its 12 predicted bits is wrong. A relay-BP decoding that did not converge also counts as failed.
 
 The CNN time of every shot is measured on the path plugin.decode_shot runs: numpy in, numpy out, on cuda a synchronise
@@ -99,15 +99,16 @@ def main():
 
     print(f"CNN alone: {int(ml_wrong.sum())} of {n} shots wrong, {ml_ms.mean():.2f} ms per shot. "
           f"Relay-BP alone: {int(bp_wrong.sum())} of {n} failures, {bp_ms.mean():.1f} ms per shot.")
-    print("  CNN keeps | threshold | CNN failures among kept | total failures | 95% Wilson interval | mean ms per shot")
+    print("  CNN keeps | threshold | CNN failures among kept, 95% Wilson | total failures, 95% Wilson    | mean ms per shot")
     for keep in (0.0, 0.1, 0.25, 0.5, 0.75, 0.9, 1.0):
         threshold = np.inf if keep == 0 else -np.inf if keep == 1 else float(np.quantile(confidence, 1 - keep))
         kept = confidence >= threshold
-        total = int(ml_wrong[kept].sum() + bp_wrong[~kept].sum())
+        kept_wrong, total = int(ml_wrong[kept].sum()), int(ml_wrong[kept].sum() + bp_wrong[~kept].sum())
+        kept_low, kept_high = wilson(kept_wrong, int(kept.sum()))
         low, high = wilson(total, n)
         mean_ms = (ml_ms.mean() if keep > 0 else 0.0) + bp_ms[~kept].sum() / n
-        print(f"  {kept.mean():8.1%} | {threshold:9.2f} | {int(ml_wrong[kept].sum()):6d} of {int(kept.sum()):6d}"
-              f"        | {total:5d} of {n} | [{low:.2e}, {high:.2e}]    | {mean_ms:8.2f}")
+        print(f"  {kept.mean():8.1%} | {threshold:9.2f} | {kept_wrong:5d} of {int(kept.sum()):5d} [{kept_low:.1e}, {kept_high:.1e}]"
+              f" | {total:4d} of {n} [{low:.1e}, {high:.1e}] | {mean_ms:8.2f}")
 
 
 if __name__ == "__main__":

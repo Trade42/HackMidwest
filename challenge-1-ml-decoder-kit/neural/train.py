@@ -416,7 +416,8 @@ def main(argv=None):
         saved = time.perf_counter()
         if run.step // config["snapshot_every"] > first // config["snapshot_every"]:
             shutil.copyfile(checkpoint, out / f"checkpoint_step{run.step}.pt")
-        memory = f", peak GPU memory {torch.cuda.max_memory_allocated() / 2 ** 30:.2f} GB" if run.device.type == "cuda" else ""
+        memory = (f", peak GPU memory {torch.cuda.max_memory_allocated() / 2 ** 30:.2f} GB in tensors and "
+                  f"{torch.cuda.max_memory_reserved() / 2 ** 30:.2f} GB held by PyTorch") if run.device.type == "cuda" else ""
         say(f"speed: {(run.step - first) * config['batch'] / trained:.0f} shots/s in training, "
             f"{trained / (run.step - first):.3f} s per step, report {time.perf_counter() - tick - trained:.1f} s{memory}")
         if stop:

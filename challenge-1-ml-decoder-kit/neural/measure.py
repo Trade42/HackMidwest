@@ -8,8 +8,9 @@ Three parts:
    size on a GPU; measured on the CPU in 32-bit floats, float16 needs about half);
 2. one training step of train.py, with its parts timed separately;
 3. the single operations of a residual block at the model's sizes, forward and backward, each
-   with the number of times a step calls it. The gather is timed twice: with this code's
-   backward pass and with PyTorch's own, which scatters.
+   with the number of times a step calls it. Two operations are also timed in a second form
+   that the model does not use, for comparison: the gather with PyTorch's own backward pass
+   (it scatters), and the normalisation on a 3-D view (cuDNN on a GPU).
 
 Every time is the mean over `--repeats` calls after `--warm-up` calls, with the GPU
 synchronised before the clock is read.
@@ -78,6 +79,12 @@ def step_parts(run, repeats, warm_up):
             "optimizer, clipping, moving average": whole - draw - both, "whole step": whole}
 
 
+def batch_norm_3d(norm, x):
+    """The same normalisation on a [positions, channels, 1] view, which lets PyTorch use cuDNN on a GPU."""
+    flat = x.reshape(-1, x.shape[-1], 1)
+    return F.batch_norm(flat, None, None, norm.weight, norm.bias, True, 0.0, norm.eps).reshape(x.shape)
+
+
 def block_operations(run, repeats, warm_up):
     """[(name, seconds per call, calls per step)] for the operations of a residual block, forward and backward."""
     model, device, batch = run.model, run.device, run.config["batch"]
@@ -98,7 +105,8 @@ def block_operations(run, repeats, warm_up):
         ("SiLU at full width", lambda: F.silu(checks_wide), depth),
         (f"linear {width} -> {narrow}", lambda: block.down(checks_wide), depth),
         (f"linear {narrow} -> {width}", lambda: block.up(checks), depth),
-        ("residual sum at full width", lambda: checks_wide + block.branch_scale * checks_wide, depth),
+        ("residual sum at full width", lambda: checks_wide + checks_wide, depth),
+        ("normalisation at full width, 3-D view", lambda: batch_norm_3d(block.norm_in, checks_wide), 0),
         ("normalisation at the bottleneck", lambda: block.norm_checks(checks), 3 * depth),
         ("SiLU at the bottleneck", lambda: F.silu(checks), 3 * depth),
         ("gather, this code's backward", lambda: Gather.apply(checks, neighbours, places), 4 * depth),
@@ -165,7 +173,8 @@ def main():
         total = f"x {calls:3d} = {seconds * calls * 1e3:8.2f}" if calls else "(for comparison)"
         print(f"  {operation:38s} {seconds * 1e3:9.3f} {total}")
     if on_gpu:
-        print(f"peak GPU memory {torch.cuda.max_memory_allocated() / 2 ** 30:.2f} GB")
+        print(f"peak GPU memory {torch.cuda.max_memory_allocated() / 2 ** 30:.2f} GB in tensors, "
+              f"{torch.cuda.max_memory_reserved() / 2 ** 30:.2f} GB held by PyTorch")
 
 
 if __name__ == "__main__":

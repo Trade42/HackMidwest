@@ -395,6 +395,7 @@ def ladder_tables(combined):
     """Whose gain is whose, and the ablation of the learned tie-break: both from the offline combination on the test files."""
     from scipy.stats import binomtest
     lines, ablation, records = [], [], []
+    short = {}                                               # (key, label) -> {p: failed pairs}, for the compact table of REPORT.md
     pooled = {"R": 0, "P1": 0, "aw": 0, "a": 0, "floor": 0, "only_network": 0, "only_weight": 0, "levels": []}
     for p in P_VALUES:
         rows = dict(combined[p]["rows"]) if combined.get(p) else {}
@@ -426,6 +427,7 @@ def ladder_tables(combined):
                             "failures_pair": row["failures_pair"], "pairs": row["shots"], "rate_per_cycle": row["rate"], "kit_error": row["error"]})
             fact(f"lad{p[-1]}_{key}_pairs", row["failures_pair"], "tables/test_ladder.md")
             fact(f"lad{p[-1]}_{key}_rate", stats.sci(row["rate"]), "tables/test_ladder.md")
+            short.setdefault((label, whose), {})[p] = row["failures_pair"]
             previous = row
         for key, label in (("T", "TCBP-JOBS (NVIDIA, GPU), for reference"),):
             if key in rows:
@@ -433,6 +435,7 @@ def ladder_tables(combined):
                 lines.append([p, label, "NVIDIA; run by teammates", f"{row['failures_X']}, {row['failures_Z']}", f"{row['failures_pair']} of {row['shots']:,}",
                               rate_text(row["rate"], row["error"]), "not a rung", pair_text(stats.paired(rows["R"]["failed_pair"], row["failed_pair"]))])
                 fact(f"lad{p[-1]}_{key}_pairs", row["failures_pair"], "tables/test_ladder.md")
+                short.setdefault((label, "NVIDIA"), {})[p] = row["failures_pair"]
         classical = "ac" if "ac" in rows else "aw"          # the best tie-break without learning that the files hold
         pooled["rule"] = "lowest weight among the converged candidates" if classical == "ac" else "lowest weight"
         if "a" in rows:
@@ -521,8 +524,17 @@ def ladder_tables(combined):
                    + markdown(["p", "Rung", "Whose work", "Failures X, Z", "Failed pairs", "Rate per cycle ± error",
                                "Against the rung before: both fail / only this / only the one before (exact p)",
                                "Against relay-BP: both fail / only this / only relay-BP (exact p)"], lines), records)
+    levels_all = [p for p in P_VALUES if all(p in counts for counts in short.values())]
+    write("test_ladder_short",
+          "**Whose gain is whose, on the test shots**: failed pairs of 10,000 per noise level, every rung scored on the same per-shot answers "
+          "(one offline decode: relay-BP and PriorTilt under two seeds on every shot, a fresh decoder per 500 shots; not the timed rows above). "
+          "`APPENDIX.md` B has each rung's paired test against the rung before it and against relay-BP.\n\n"
+          + markdown(["Rung", "Whose work"] + [f"p = {p}" for p in P_VALUES] + ["All three p"],
+                     [[label, whose] + [counts.get(p, NOT_MEASURED) for p in P_VALUES]
+                      + [sum(counts[p] for p in levels_all) if levels_all == list(P_VALUES) else ""]
+                      for (label, whose), counts in short.items()]))
     ablated = write("test_ablation",
-                    "**The ablation: what the learned part adds.** The same hierarchy on the same candidates, with the best tie-break that needs no "
+                    "**The ablation: what the learned part adds** (the offline decode of the ladder above, not the timed rows). The same hierarchy on the same candidates, with the best tie-break that needs no "
                     f"learning ({pooled.get('rule', 'lowest weight')}) and with the neural network. Only the shots where the two fast decodes disagree can differ.\n\n"
                     + markdown(["p", "Counted over", "Shots where the two fast decodes disagree", "Failures, classical tie-break", "Failures, neural tie-break",
                                 "Only the network rule fails / only the classical rule fails", "Exact p"], ablation))
@@ -1417,13 +1429,27 @@ def mode_checks(measured, combined):
                             "generator seeded once, so the two modes give each shot other draws, and the offline mode replays the same seed in every "
                             "500-shot chunk, which the paired test does not account for; a comparison that mixes the two modes is marked \"mixed\")"
                             if paired["p"] < 0.05 else ""))
+        timed = measured[p].get("hierarchy")
+        shots = loaders.plugin_shots(DATA / "test" / f"eval_p{p}_hierarchy") if timed is not None and not timed.get("offline") else None
+        if shots is not None and "aw" in rows and rows["aw"]["later"]:
+            online = np.concatenate([~shots["agreed_X"], ~shots["agreed_Z"]]).astype(bool)
+            offline = np.concatenate([rows["aw"]["later"]["X"], rows["aw"]["later"]["Z"]]).astype(bool)
+            lines.append(f"p = {p}: the two PriorTilt runs disagree on {int(online.sum())} of {len(online):,} shots in our timed row and on "
+                         f"{int(offline.sum())} in the offline decode; {int((online & offline).sum())} of those shots are in both. Both use the same seeds and the "
+                         "same test of agreement (the 12 predicted bits); PriorTilt draws random numbers from shot to shot, so the two modes give "
+                         "other draws and other disputed shots")
     return lines
 
 
 def checks_text(measured, extra, cross_checks, modes=()):
     lines = ["Checks made by `python -m report.make_tables` on this run:", ""]
-    count = sum(row is not None for p in P_VALUES for row in measured[p].values())
-    lines.append(f"- **Rows on the test shots:** {count} of {len(TEST_ROWS) * len(P_VALUES)} registered rows have a file under `report/data/test/`; the others print \"{NOT_MEASURED}\".")
+    timed = [(p, key) for p in P_VALUES for key, row in measured[p].items() if row is not None and not row.get("offline")]
+    offline = [(p, key) for p in P_VALUES for key, row in measured[p].items() if row is not None and row.get("offline")]
+    missing = [(p, key) for p in P_VALUES for key, row in measured[p].items() if row is None]
+    name = lambda pairs: "; ".join(f"{DECODERS[key].short} at p = {p}" for p, key in pairs) or "none"
+    lines.append(f"- **Rows on the test shots:** of {len(TEST_ROWS) * len(P_VALUES)} registered rows, {len(timed)} are timed evaluator rows, "
+                 f"{len(offline)} are combined offline from saved answers with no time in one process ({name(offline)}), and {len(missing)} "
+                 f"print \"{NOT_MEASURED}\" ({name(missing)}).")
     lines.append("- **Same shots for every row:** each measured row names the sha256 of the test files it decoded, and the run stops unless they are "
                  "the team's `data/p<p>/test_X.npz` and `test_Z.npz` (the values are in `report/rows.py`). A paired count is only made between such rows.")
     lines.append("- **The rate uses pairs and 12 cycles:** for each evaluator row the per-shot file is re-counted (X failures, Z failures, pair = X or Z) "
@@ -1506,11 +1532,10 @@ def findings(measured):
         if priortilt is not None and not priortilt.get("offline") and time_words(priortilt):
             text += f"; PriorTilt run once fails {priortilt['failures_pair']} in {time_words(priortilt)}"
         sentences.append(text)
-    if sentences:
-        parts.append("Timed rows, against relay-BP's timed row (one decoder through all 10,000 shots): " + "; ".join(sentences) + ".")
-    else:
-        parts.append("Our decoder's rows on the test shots are not measured yet.")
-    fact("findings", " ".join(parts), "tables/test_p0.003.md, test_p0.004.md, test_p0.005.md")
+    by_p = {sentence.split(" our decoder")[0].removeprefix("at p = "): sentence for sentence in sentences}
+    for p in P_VALUES:
+        text = by_p.get(p)
+        fact(f"findings{p[-1]}", text and (text[0].upper() + text[1:] + "."), f"tables/test_p{p}.md")
 
 
 def ensemble_statement(measured, combined):
@@ -1607,9 +1632,9 @@ def readme_section(measured):
     """The one section appended to the top-level README.md: at most 25 lines, every number from the tables above."""
     value = lambda name: FACTS[name][0]
     tcbp = value("tcbp_statement")
-    result = (value("slide4_title") + ". " + (f"As a tie-break, the neural network is {value('abl_verdict')} the best hand-written rule, "
+    result = (value("slide4_title") + "; " + (f"as a tie-break the neural network is {value('abl_verdict')} the best hand-written rule, "
               "so the gain over relay-BP is PriorTilt's and the hierarchy's." if value("abl_verdict") != "better than"
-              else value("slide3_close")))
+              else value("slide3_close")[0].lower() + value("slide3_close")[1:]))
     lines = [README_HEADING, "",
              "Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural",
              "network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). " + result,
@@ -1674,6 +1699,7 @@ def main(argv=None):
         tables = {f"test_p{p}": per_p[p] for p in P_VALUES} | {"test_time": per_p["time"]} | {
             "test_sweep": sweep, "test_sweep_slide": sweep_slide, "earlier_runs": earlier, "tcbp_own_shots": tcbp_own_table(), "exploration_p0.004": exploration,
             "test_comparisons": comparisons_table(measured), "test_ladder": ladder, "test_ablation": ablated,
+            "test_ladder_short": (TABLES / "test_ladder_short.md").read_text(encoding="utf-8"),
             "where_failures": failure_split_table(combined, measured), "exploration_p0.005": exploration_p5_table(), "time_split": time_split_table(measured),
             "exploration_ensemble": exploration_ensemble_table(), "ablation_80k": ablation_80k_table(),
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
@@ -1692,8 +1718,9 @@ def main(argv=None):
     except Mismatch as problem:
         print(f"STOPPED: {problem}", file=sys.stderr)
         return 1
-    count = sum(row is not None for p in P_VALUES for row in measured[p].values())
-    print(f"wrote {len(tables) + 1} tables to {TABLES}/; {count} of {len(TEST_ROWS) * len(P_VALUES)} test rows measured")
+    timed = sum(row is not None and not row.get("offline") for p in P_VALUES for row in measured[p].values())
+    offline = sum(row is not None and bool(row.get("offline")) for p in P_VALUES for row in measured[p].values())
+    print(f"wrote {len(tables) + 1} tables to {TABLES}/; of {len(TEST_ROWS) * len(P_VALUES)} test rows, {timed} timed and {offline} offline")
     for name in extra:
         print(f"  note: report/data/test/{name} is not a registered row")
     return 0

@@ -48,10 +48,11 @@ Source: `report/tables/where_failures.md`. The design was chosen on practice sho
 
 - The network reads all 1,728 detector bits of a shot, is built along the code's own wiring, and has
   <!--f:net_parameters-->893,697<!--/f--> parameters. Alone, on the test shots at p = 0.004, it gets <!--f:netalone4_X-->4.2%<!--/f--> of X-memory shots wrong; relay-BP gets
-  <!--f:t4_relay_bp_xz-->36, 47<!--/f--> (X, Z) of 10,000 wrong, under 0.5%.
+  <!--f:t4_relay_bp_xz-->36, 47<!--/f--> (X, Z) of 10,000 wrong.
 - As a tie-break it clearly beats the plain lowest-weight rule (on <!--f:a80_shots-->80,000<!--/f--> fresh shots: <!--f:a80_a-->237<!--/f--> against <!--f:a80_aw-->298<!--/f--> failures,
   test p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f-->). Against the best hand-written rule there is no significant difference: <!--f:a80_a-->237<!--/f--> against <!--f:a80_ac-->253<!--/f-->
-  there (test p = <!--f:a80_a_vs_ac_p-->0.12<!--/f-->), and <!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs on the test shots (test p = <!--f:abl_pooled_p-->0.15<!--/f-->).
+  there (test p = <!--f:a80_a_vs_ac_p-->0.12<!--/f-->), and <!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs on the test shots (test p = <!--f:abl_pooled_p-->0.15<!--/f-->; one offline decode of all three
+  p, which is why it is not the sum of slide 4's timed counts).
 - <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
 
 Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
@@ -66,7 +67,7 @@ Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
 | BP-OSD | 60 · 129 ms | 472 · 302 ms | 2,433 · 581 ms |
 | relay-BP | 5 · 88.0 ms | 83 · 319 ms | 845 · 1,471 ms |
 | router (teammates) | 6 · 42.5 ms | 87 · 315 ms | 807 · 1,928 ms |
-| PriorTilt (IonQ) | 4 · 22.7 ms | 74 · 87.3 ms | 595 · offline |
+| PriorTilt (IonQ) | 4 · 22.7 ms | 74 · 87.3 ms | 601 · 264 ms |
 | ours, 1 core | 3 · 45.7 ms | 44 · 216 ms | 479 · 825 ms |
 | ours, 2 cores | 3 · 28.9 ms | 44 · 150 ms | 479 · 608 ms |
 | TCBP-JOBS (GPU) | 3 · 3.9 ms | 41 · 7.8 ms | 360 · 16.9 ms |
@@ -114,7 +115,7 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 
 ## Slide 8. Whose work is whose, and how to check us
 
-**Show:** the table of `REPORT.md`, section 3, and the two commands of section 9.
+**Show:** the table of `REPORT.md`, section 3, and the two commands of section 10.
 
 - PriorTilt is IonQ's decoder; relay-BP and BP-OSD are the kit's; the router and the evaluator are our teammates'.
 - Ours: the hierarchy (two seeds, the agreement test, the third candidate), the learned tie-break (<!--f:abl_verdict-->no better than<!--/f--> the best
@@ -173,6 +174,6 @@ Four things are learned: PriorTilt's 14 parameters (by its authors, IonQ), our n
 - The neural tie-break was motivated by a measurement: among 16 relay-BP candidates the right answer is present on
   <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, but the classical score picks it on only <!--f:cand_lowest-->71<!--/f--> (`report/tables/background.md`).
   It clearly beats that classical score (on 80,000 fresh shots, <!--f:a80_a-->237<!--/f--> against <!--f:a80_aw-->298<!--/f--> failures); on the test shots it
-  is <!--f:abl_verdict-->no better than<!--/f--> the best hand-written rule (<!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs, test p = <!--f:abl_pooled_p-->0.15<!--/f-->). <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
+  is <!--f:abl_verdict-->no better than<!--/f--> the best hand-written rule (<!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs over the three p in one offline decode, test p = <!--f:abl_pooled_p-->0.15<!--/f-->). <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
 - The loss-time tracker is the learned part with a clear gain: it recovers <!--f:trk_gain-->58% (38% to 78%)<!--/f--> of what knowing the true loss time
   would give, on its own test shots.

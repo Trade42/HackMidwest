@@ -954,7 +954,7 @@ z
 " style="stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
     </defs>
     <g>
-     <use xlink:href="#mc98498deac" x="628.452" y="226.078998" style="fill: #6250d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+     <use xlink:href="#mc98498deac" x="628.452" y="196.16256" style="fill: #6250d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
     </g>
    </g>
    <g id="line2d_49">
@@ -1100,6 +1100,7 @@ z
    <g id="line2d_57">
     <path d="M 144.844615 271.486768 
 L 350.46 229.243662 
+L 556.075385 194.654229 
 " clip-path="url(#p9ce2004eb6)" style="fill: none; stroke: #6250d6; stroke-width: 2.4; stroke-linecap: round"/>
     <defs>
      <path id="mf4b20ff288" d="M -0 5.5 
@@ -1111,6 +1112,7 @@ z
     <g clip-path="url(#p9ce2004eb6)">
      <use xlink:href="#mf4b20ff288" x="144.844615" y="271.486768" style="fill: #6250d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
      <use xlink:href="#mf4b20ff288" x="350.46" y="229.243662" style="fill: #6250d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
+     <use xlink:href="#mf4b20ff288" x="556.075385" y="194.654229" style="fill: #6250d6; stroke: #fcfcfb; stroke-width: 2; stroke-linejoin: miter"/>
     </g>
    </g>
    <g id="line2d_58">
@@ -1523,7 +1525,7 @@ z
    </g>
    <g id="text_13">
     <!-- PriorTilt (IonQ) -->
-    <g style="fill: #0b0b0b" transform="translate(640.2132 229.586362) scale(0.135 -0.135)">
+    <g style="fill: #0b0b0b" transform="translate(640.2132 199.669923) scale(0.135 -0.135)">
      <defs>
       <path id="DejaVuSans-2c" d="M 628 4666 
 L 1259 4666 

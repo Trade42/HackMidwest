@@ -1,7 +1,7 @@
 ## Our part: a hierarchical decoder with a learned tie-breaker, and a study of atom loss
 
 Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural
-network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). On the test shots our decoder fails fewer pairs than relay-BP at p = 0.004 and 0.005, and as many within the error at p = 0.003; it is level with TCBP-JOBS at p = 0.003 and 0.004, and behind it at p = 0.005. As a tie-break, the neural network is no better than the best hand-written rule, so the gain over relay-BP is PriorTilt's and the hierarchy's.
+network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). On the test shots our decoder fails fewer pairs than relay-BP at p = 0.004 and 0.005, and as many within the error at p = 0.003; it is level with TCBP-JOBS at p = 0.003 and 0.004, and behind it at p = 0.005; as a tie-break the neural network is no better than the best hand-written rule, so the gain over relay-BP is PriorTilt's and the hierarchy's.
 Under atom loss (our own simplified model), relay-BP with the loss flags fails 4.4% of shots where a loss-blind one
 fails 57.7%; our loss-time tracker, which estimates from the syndrome when each atom was lost, recovers 58% (38% to 78%) of what knowing the true loss time would add (`loss/`, `loss_tracker/`).
 
@@ -9,7 +9,7 @@ fails 57.7%; our loss-time tracker, which estimates from the syndrome when each 
 |---|---|---|---|
 | BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05, 129 ms | 4.02e-03 ± 1.8e-04, 302 ms | 2.30e-02 ± 4.6e-04, 581 ms |
 | relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05, 88.0 ms | 6.94e-04 ± 7.6e-05, 319 ms | 7.33e-03 ± 2.5e-04, 1,471 ms |
-| PriorTilt, one run | 3.33e-05 ± 1.7e-05, 22.7 ms | 6.19e-04 ± 7.2e-05, 87.3 ms | 5.10e-03 ± 2.1e-04, offline, no time |
+| PriorTilt, one run | 3.33e-05 ± 1.7e-05, 22.7 ms | 6.19e-04 ± 7.2e-05, 87.3 ms | 5.15e-03 ± 2.1e-04, 264 ms |
 | our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05, 45.7 ms | 3.67e-04 ± 5.5e-05, 216 ms | 4.08e-03 ± 1.9e-04, 825 ms |
 | TCBP-JOBS (NVIDIA, GPU) | 2.50e-05 ± 1.4e-05, 3.9 ms | 3.42e-04 ± 5.3e-05, 7.8 ms | 3.05e-03 ± 1.6e-04, 16.9 ms |
 

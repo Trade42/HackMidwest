@@ -88,7 +88,7 @@ That is an easier question, and one where the classical score is weak: among 16 
 is present on <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, and the lowest weight picks it on only <!--f:cand_lowest-->71<!--/f-->
 (exploration shots; `APPENDIX.md`, "What we measured before building"). How it turned out: the network clearly beats the
 lowest weight, and on the test shots it is <!--f:abl_verdict-->no better than<!--/f--> the best hand-written rule (lowest weight among the candidates
-that converged): <!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs (section 4, the ablation).
+that converged): in one offline decode of the test shots at the three p, <!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs (section 4, the ablation).
 
 ![The two networks while they train](figures/learning_curves.png)
 
@@ -109,7 +109,7 @@ per-shot files" is combined offline from saved answers and has no time measured 
 | BP-OSD (kit baseline) | 5.01e-04 ± 6.5e-05 · 60 pairs · 129 ms | 4.02e-03 ± 1.8e-04 · 472 pairs · 302 ms | 2.30e-02 ± 4.6e-04 · 2433 pairs · 581 ms |
 | relay-BP (kit baseline) | 4.17e-05 ± 1.9e-05 · 5 pairs · 88.0 ms | 6.94e-04 ± 7.6e-05 · 83 pairs · 319 ms | 7.33e-03 ± 2.5e-04 · 845 pairs · 1,471 ms |
 | relay-BP with a learned router | 5.00e-05 ± 2.0e-05 · 6 pairs · 42.5 ms | 7.28e-04 ± 7.8e-05 · 87 pairs · 315 ms | 6.99e-03 ± 2.5e-04 · 807 pairs · 1,928 ms |
-| PriorTilt, one run | 3.33e-05 ± 1.7e-05 · 4 pairs · 22.7 ms | 6.19e-04 ± 7.2e-05 · 74 pairs · 87.3 ms | 5.10e-03 ± 2.1e-04 · 595 pairs · offline, no time |
+| PriorTilt, one run | 3.33e-05 ± 1.7e-05 · 4 pairs · 22.7 ms | 6.19e-04 ± 7.2e-05 · 74 pairs · 87.3 ms | 5.15e-03 ± 2.1e-04 · 601 pairs · 264 ms |
 | our hierarchy, lowest-weight tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · offline, no time | 4.76e-04 ± 6.3e-05 · 57 pairs · offline, no time | 4.50e-03 ± 2.0e-04 · 527 pairs · offline, no time |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | 3.33e-05 ± 1.7e-05 · 4 pairs · 46.3 ms | 4.43e-04 ± 6.1e-05 · 53 pairs · offline, no time | 3.99e-03 ± 1.8e-04 · 469 pairs · offline, no time |
 | our hierarchy, neural tie-break | 2.50e-05 ± 1.4e-05 · 3 pairs · 45.7 ms | 3.67e-04 ± 5.5e-05 · 44 pairs · 216 ms | 4.08e-03 ± 1.9e-04 · 479 pairs · 825 ms |
@@ -126,7 +126,10 @@ Each cell: logical error rate per cycle ± the kit's error · failed pairs of 10
 
 **What the numbers say.**
 
-- **Our decoder.** <!--f:findings-->Timed rows, against relay-BP's timed row (one decoder through all 10,000 shots): at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair, or 28.9 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 4 in 22.7 ms per pair; at p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair, or 150 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 74 in 87.3 ms per pair; at p = 0.005 our decoder fails 479 of 10,000 pairs, relay-BP 845 (only ours fails 93, only relay-BP 459, exact p = 4e-59), in 825 ms per pair against relay-BP's 1,471 ms per pair, or 608 ms per pair with its two fast decodes side by side on two cores.<!--/f-->
+- **Our decoder**, timed rows, against relay-BP's timed row (one decoder through all 10,000 shots):
+  - <!--f:findings3-->At p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair, or 28.9 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 4 in 22.7 ms per pair.<!--/f-->
+  - <!--f:findings4-->At p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair, or 150 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 74 in 87.3 ms per pair.<!--/f-->
+  - <!--f:findings5-->At p = 0.005 our decoder fails 479 of 10,000 pairs, relay-BP 845 (only ours fails 93, only relay-BP 459, exact p = 4e-59), in 825 ms per pair against relay-BP's 1,471 ms per pair, or 608 ms per pair with its two fast decodes side by side on two cores; PriorTilt run once fails 601 in 264 ms per pair.<!--/f-->
 - **Against TCBP-JOBS.** <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, exact p = 1e-11). TCBP-JOBS against relay-BP's timed row: 3 against 5 at p = 0.003 (exact p = 0.62), 41 against 83 at p = 0.004 (exact p = 4e-07), 360 against 845 at p = 0.005 (exact p = 1e-101).<!--/f-->
 - **The ensemble.** <!--f:ensemble_statement-->Our ensemble, combined offline from saved answers with its rule frozen beforehand (where two PriorTilt runs and TCBP-JOBS agree, that answer; otherwise joint decoding of both check types, the slow decoder of the measurements before building): at p = 0.003 2 against TCBP-JOBS's 3 failed pairs (only the ensemble fails 0, only TCBP-JOBS 1, exact p = 1.00; joint decoding ran on 5 disputed shots, about 5 s each); at p = 0.004 16 against TCBP-JOBS's 41 failed pairs (only the ensemble fails 1, only TCBP-JOBS 26, exact p = 4e-07; joint decoding ran on 93 disputed shots, about 24 s each); at p = 0.005 joint decoding was not run, so the ensemble fails exactly TCBP-JOBS's 360 pairs. Its members are NVIDIA's, IonQ's and the kit's; the rule is ours, and it has no time measured as one decoder.<!--/f-->
 - **Whose gain is whose.** <!--f:framing-->On the test shots (one offline decode of each shot, the same candidates for every rung; p = 0.003, 0.004, 0.005 together), relay-BP fails 889 pairs, PriorTilt run once (IonQ's decoder) 672, and our decoder as frozen (two PriorTilt runs, relay-BP where they disagree, the neural tie-break) 544; a perfect tie-break would fail 429. Of the drop from relay-BP to our decoder, 63% is already there with PriorTilt run once; the hierarchy around it gives the rest. As an ablation, with the best hand-written tie-break (lowest weight among the converged candidates) in place of the network, the hierarchy fails 525 (only the network rule fails 87 pairs, only the hand-written rule 68, exact p = 0.15): the network is no better than the hand-written rule.<!--/f-->
@@ -135,38 +138,24 @@ The exact tests, the intervals, the median and 99th-percentile times and what ra
 
 ### Whose gain is whose
 
-<!-- BEGIN table:test_ladder -->
-**Whose gain is whose, on the test shots.** Every rung is scored on the same per-shot answers (relay-BP and PriorTilt under two seeds on every shot, a fresh decoder per 500 shots), so each step is a paired comparison with the rung before it. These rows are combined offline from per-shot files; they are not the timed rows of the table above. Relay-BP keeps random state from shot to shot, so this decode (a fresh decoder every 500 shots) and the timed row (one decoder through all 10,000 shots) differ: `checks.md` gives both counts and the paired test between them. Compare rungs with rungs, and timed rows with timed rows.
+<!-- BEGIN table:test_ladder_short -->
+**Whose gain is whose, on the test shots**: failed pairs of 10,000 per noise level, every rung scored on the same per-shot answers (one offline decode: relay-BP and PriorTilt under two seeds on every shot, a fresh decoder per 500 shots; not the timed rows above). `APPENDIX.md` B has each rung's paired test against the rung before it and against relay-BP.
 
-| p | Rung | Whose work | Failures X, Z | Failed pairs | Rate per cycle ± error | Against the rung before: both fail / only this / only the one before (exact p) | Against relay-BP: both fail / only this / only relay-BP (exact p) |
-|---|---|---|---|---|---|---|---|
-| 0.003 | relay-BP (kit baseline), a fresh decoder per 500 shots (the ensemble's member) | the kit | 3, 2 | 5 of 10,000 | 4.17e-05 ± 1.9e-05 | the first rung | the reference |
-| 0.003 | PriorTilt, one run (seed A) | IonQ | 3, 3 | 6 of 10,000 | 5.00e-05 ± 2.0e-05 | 4 / 2 / 1 (p = 1.00) | 4 / 2 / 1 (p = 1.00) |
-| 0.003 | our hierarchy, lowest-weight tie-break (nothing learned by us) | ours | 2, 1 | 3 of 10,000 | 2.50e-05 ± 1.4e-05 | 3 / 0 / 3 (p = 0.25) | 3 / 0 / 2 (p = 0.50) |
-| 0.003 | our hierarchy, lowest weight among the converged candidates (nothing learned by us) | ours | 2, 1 | 3 of 10,000 | 2.50e-05 ± 1.4e-05 | 3 / 0 / 0 (p = 1.00) | 3 / 0 / 2 (p = 0.50) |
-| 0.003 | our hierarchy, neural tie-break | ours | 2, 2 | 4 of 10,000 | 3.33e-05 ± 1.7e-05 | 3 / 1 / 0 (p = 1.00) | 3 / 1 / 2 (p = 1.00) |
-| 0.003 | ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder) | nobody: needs the truth | 2, 1 | 3 of 10,000 | 2.50e-05 ± 1.4e-05 | 3 / 0 / 1 (p = 1.00) | 3 / 0 / 2 (p = 0.50) |
-| 0.003 | TCBP-JOBS (NVIDIA, GPU), for reference | NVIDIA; run by teammates | 1, 2 | 3 of 10,000 | 2.50e-05 ± 1.4e-05 | not a rung | 2 / 1 / 3 (p = 0.62) |
-| 0.004 | relay-BP (kit baseline), a fresh decoder per 500 shots (the ensemble's member) | the kit | 42, 48 | 90 of 10,000 | 7.53e-04 ± 7.9e-05 | the first rung | the reference |
-| 0.004 | PriorTilt, one run (seed A) | IonQ | 37, 34 | 71 of 10,000 | 5.94e-04 ± 7.0e-05 | 46 / 25 / 44 (p = 0.029) | 46 / 25 / 44 (p = 0.029) |
-| 0.004 | our hierarchy, lowest-weight tie-break (nothing learned by us) | ours | 26, 31 | 57 of 10,000 | 4.76e-04 ± 6.3e-05 | 51 / 6 / 20 (p = 0.009) | 44 / 13 / 46 (p = 2e-05) |
-| 0.004 | our hierarchy, lowest weight among the converged candidates (nothing learned by us) | ours | 24, 29 | 53 of 10,000 | 4.43e-04 ± 6.1e-05 | 53 / 0 / 4 (p = 0.12) | 40 / 13 / 50 (p = 3e-06) |
-| 0.004 | our hierarchy, neural tie-break | ours | 25, 25 | 50 of 10,000 | 4.18e-04 ± 5.9e-05 | 42 / 8 / 11 (p = 0.65) | 38 / 12 / 52 (p = 5e-07) |
-| 0.004 | ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder) | nobody: needs the truth | 19, 21 | 40 of 10,000 | 3.34e-04 ± 5.3e-05 | 40 / 0 / 10 (p = 0.002) | 33 / 7 / 57 (p = 8e-11) |
-| 0.004 | TCBP-JOBS (NVIDIA, GPU), for reference | NVIDIA; run by teammates | 20, 21 | 41 of 10,000 | 3.42e-04 ± 5.3e-05 | not a rung | 27 / 14 / 63 (p = 1e-08) |
-| 0.005 | relay-BP (kit baseline), a fresh decoder per 500 shots (the ensemble's member) | the kit | 419, 385 | 794 of 10,000 | 6.87e-03 ± 2.4e-04 | the first rung | the reference |
-| 0.005 | PriorTilt, one run (seed A) | IonQ | 303, 296 | 595 of 10,000 | 5.10e-03 ± 2.1e-04 | 413 / 182 / 381 (p = 3e-17) | 413 / 182 / 381 (p = 3e-17) |
-| 0.005 | our hierarchy, lowest-weight tie-break (nothing learned by us) | ours | 269, 262 | 527 of 10,000 | 4.50e-03 ± 2.0e-04 | 461 / 66 / 134 (p = 2e-06) | 443 / 84 / 351 (p = 7e-40) |
-| 0.005 | our hierarchy, lowest weight among the converged candidates (nothing learned by us) | ours | 241, 231 | 469 of 10,000 | 3.99e-03 ± 1.8e-04 | 469 / 0 / 58 (p = 7e-18) | 391 / 78 / 403 (p = 8e-54) |
-| 0.005 | our hierarchy, neural tie-break | ours | 250, 241 | 490 of 10,000 | 4.18e-03 ± 1.9e-04 | 412 / 78 / 57 (p = 0.085) | 393 / 97 / 401 (p = 6e-45) |
-| 0.005 | ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder) | nobody: needs the truth | 195, 192 | 386 of 10,000 | 3.28e-03 ± 1.7e-04 | 386 / 0 / 104 (p = 1e-31) | 332 / 54 / 462 (p = 8e-82) |
-| 0.005 | TCBP-JOBS (NVIDIA, GPU), for reference | NVIDIA; run by teammates | 186, 177 | 360 of 10,000 | 3.05e-03 ± 1.6e-04 | not a rung | 300 / 60 / 494 (p = 7e-86) |
-<!-- END table:test_ladder -->
+| Rung | Whose work | p = 0.003 | p = 0.004 | p = 0.005 | All three p |
+|---|---|---|---|---|---|
+| relay-BP (kit baseline), a fresh decoder per 500 shots (the ensemble's member) | the kit | 5 | 90 | 794 | 889 |
+| PriorTilt, one run (seed A) | IonQ | 6 | 71 | 595 | 672 |
+| our hierarchy, lowest-weight tie-break (nothing learned by us) | ours | 3 | 57 | 527 | 587 |
+| our hierarchy, lowest weight among the converged candidates (nothing learned by us) | ours | 3 | 53 | 469 | 525 |
+| our hierarchy, neural tie-break | ours | 4 | 50 | 490 | 544 |
+| ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder) | nobody: needs the truth | 3 | 40 | 386 | 429 |
+| TCBP-JOBS (NVIDIA, GPU), for reference | NVIDIA | 3 | 41 | 360 | 404 |
+<!-- END table:test_ladder_short -->
 
 ### The ablation: what the learned part adds
 
 <!-- BEGIN table:test_ablation -->
-**The ablation: what the learned part adds.** The same hierarchy on the same candidates, with the best tie-break that needs no learning (lowest weight among the converged candidates) and with the neural network. Only the shots where the two fast decodes disagree can differ.
+**The ablation: what the learned part adds** (the offline decode of the ladder above, not the timed rows). The same hierarchy on the same candidates, with the best tie-break that needs no learning (lowest weight among the converged candidates) and with the neural network. Only the shots where the two fast decodes disagree can differ.
 
 | p | Counted over | Shots where the two fast decodes disagree | Failures, classical tie-break | Failures, neural tie-break | Only the network rule fails / only the classical rule fails | Exact p |
 |---|---|---|---|---|---|---|
@@ -300,7 +289,7 @@ What each decoder needed for its row on the test shots. Memory is the peak resid
 | BP-OSD (kit baseline) | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.1 / 0.2 / 0.1 | nothing |
 | relay-BP (kit baseline) | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.0 / 0.0 / 0.0 | nothing |
 | relay-BP with a learned router | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.0 / 0.0 / 0.0 | a logistic model decides when relay-BP's first answer is enough |
-| PriorTilt, one run | CPU, 1 process, 1 thread | 284 / 284 / not measured | 0.1 / 0.1 / not measured | 14 parameters, fitted by its authors |
+| PriorTilt, one run | CPU, 1 process, 1 thread | 284 / 284 / 284 | 0.1 / 0.1 / 0.1 | 14 parameters, fitted by its authors |
 | our hierarchy, lowest-weight tie-break | CPU, 1 process, 1 thread | not measured / not measured / not measured | not measured / not measured / not measured | nothing of ours (PriorTilt's parameters are its authors') |
 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | CPU, 1 process, 1 thread | 284 / not measured / not measured | 0.2 / not measured / not measured | nothing of ours (PriorTilt's parameters are its authors') |
 | our hierarchy, neural tie-break | CPU, 1 process, 1 thread | 781 / 782 / 788 | 5.1 / 4.9 / 5.2 | a neural network picks among the candidates where the fast decodes disagree |

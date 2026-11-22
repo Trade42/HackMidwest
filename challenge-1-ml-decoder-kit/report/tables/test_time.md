@@ -25,7 +25,7 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.005 | BP-OSD (kit baseline) | 2433 of 10,000 | 581 | 0.40 | 546 | 1,093 | CPU, 1 core |
 | 0.005 | relay-BP (kit baseline) | 845 of 10,000 | 1,471 | the reference | 424 | 8,270 | CPU, 1 core |
 | 0.005 | relay-BP with a learned router | 807 of 10,000 | 1,928 | 1.31 | 303 | 12,708 | CPU, 1 core |
-| 0.005 | PriorTilt, one run (from per-shot files, not a timed evaluator row) | 595 of 10,000 | not timed in one process |  |  |  |  |
+| 0.005 | PriorTilt, one run | 601 of 10,000 | 264 | 0.18 | 120 | 2,167 | CPU, 1 core |
 | 0.005 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 527 of 10,000 | not timed in one process |  |  |  |  |
 | 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 469 of 10,000 | not timed in one process |  |  |  |  |
 | 0.005 | our hierarchy, neural tie-break | 479 of 10,000 | 825 | 0.56 | 246 | 9,885 | CPU, 1 core |

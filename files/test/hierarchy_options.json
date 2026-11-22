@@ -1,0 +1,16 @@
+{
+  "rule": {
+    "X": "network",
+    "Z": "network"
+  },
+  "seeds": [
+    1,
+    1001
+  ],
+  "checkpoints": {
+    "X": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/x_final.pt",
+    "Z": "/home/blakew3/mlBranchMidwest/runs/test/ckpt/z_final.pt"
+  },
+  "device": "cpu",
+  "torch_threads": 1
+}

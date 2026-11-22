@@ -20,8 +20,8 @@ case "${LANE:-B}" in
   *) echo "LANE must be B or C"; return 1 ;;
 esac
 OUT=${OUT:-$S/runs/X_seed4100}      # every row of question 1 (X memory), so one summary holds them all
-SEED=4100                            # test shots
-TRAIN_SEED=5100                      # train shots of the fitted generic p: never the test seed
+SEED=${SEED:-4100}                   # test shots
+TRAIN_SEED=${TRAIN_SEED:-5100}       # train shots of the fitted generic p: never the test seed
 LOGS=neutral_atom_noise/logs
 
 hold() {
@@ -64,6 +64,15 @@ q1_generic_relay()  { stream q1_generic_relay --factors 0.9 --decoders relay --r
                       stream q1_generic_relay --factors 0.8 --decoders relay --rows generic-2q --first 500; }
 q1_fit_bposd()      { stream q1_fit_bposd --factors 0.8 --decoders bposd --rows generic-fit; }
 q1_fit_relay()      { stream q1_fit_relay --factors 0.8 --decoders relay --rows generic-fit --first 500; }
+
+# Question 2 (loss), X memory at factor 0.4 (atom loss 1e-3 per atom per CX, the rate loss/ studied most), its own
+# folder and seeds. Flag-aware (loss/'s `starter`, the published recipe) with matched and with generic Pauli priors;
+# and matched Pauli priors without the flags (`blind`), on fewer shots because most of its shots run relay-BP to
+# its cap of 18,080 iterations.
+LOSS_OUT=$S/runs/X_loss_seed6100
+q2_starter()  { OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.4 --decoders relay --rows starter/matched &&
+                OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.4 --decoders relay --rows starter/generic-2q --first "${FIRST:-1000}"; }
+q2_blind()    { OUT=$LOSS_OUT SEED=6100 stream q2_loss --loss --factors 0.4 --decoders relay --rows blind/matched --first "${FIRST:-150}"; }
 
 # The pipeline on the kit's own noise at p = 0.004: this folder's sampler and decode loop, with the kit's priors.
 # The kit's README has relay-BP at 45 and BP-OSD at 253 failures of 10,000 X shots.

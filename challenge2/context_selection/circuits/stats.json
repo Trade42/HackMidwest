@@ -1,0 +1,186 @@
+{
+ "experiment": "offline",
+ "rows": [
+  {
+   "qid": "5a7125b95542994082a3e5d5",
+   "edges": 19,
+   "bare_all_to_all": 38,
+   "bare_grid": 53,
+   "bus_grid": 163,
+   "direct_all_to_all": 105,
+   "direct_grid": 220,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a712fca5542994082a3e641",
+   "edges": 12,
+   "bare_all_to_all": 24,
+   "bare_grid": 33,
+   "bus_grid": 143,
+   "direct_all_to_all": 91,
+   "direct_grid": 190,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a7143625542994082a3e71e",
+   "edges": 27,
+   "bare_all_to_all": 54,
+   "bare_grid": 84,
+   "bus_grid": 193,
+   "direct_all_to_all": 121,
+   "direct_grid": 231,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a7183575542994082a3e85e",
+   "edges": 16,
+   "bare_all_to_all": 32,
+   "bare_grid": 47,
+   "bus_grid": 153,
+   "direct_all_to_all": 99,
+   "direct_grid": 206,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a72429355429971e9dc9375",
+   "edges": 36,
+   "bare_all_to_all": 72,
+   "bare_grid": 117,
+   "bus_grid": 239,
+   "direct_all_to_all": 139,
+   "direct_grid": 257,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a729cc25542991f9a20c532",
+   "edges": 25,
+   "bare_all_to_all": 50,
+   "bare_grid": 77,
+   "bus_grid": 187,
+   "direct_all_to_all": 117,
+   "direct_grid": 228,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a72a51355429901807daf21",
+   "edges": 28,
+   "bare_all_to_all": 56,
+   "bare_grid": 86,
+   "bus_grid": 203,
+   "direct_all_to_all": 123,
+   "direct_grid": 242,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a72b2dc5542992359bc3173",
+   "edges": 16,
+   "bare_all_to_all": 32,
+   "bare_grid": 47,
+   "bus_grid": 157,
+   "direct_all_to_all": 99,
+   "direct_grid": 207,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a734bb65542994cef4bc50f",
+   "edges": 23,
+   "bare_all_to_all": 46,
+   "bare_grid": 73,
+   "bus_grid": 185,
+   "direct_all_to_all": 113,
+   "direct_grid": 235,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a73987c55429978a71e9039",
+   "edges": 29,
+   "bare_all_to_all": 58,
+   "bare_grid": 91,
+   "bus_grid": 209,
+   "direct_all_to_all": 125,
+   "direct_grid": 242,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a73ae3b55429978a71e907c",
+   "edges": 22,
+   "bare_all_to_all": 44,
+   "bare_grid": 65,
+   "bus_grid": 185,
+   "direct_all_to_all": 111,
+   "direct_grid": 222,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  },
+  {
+   "qid": "5a749af055429979e28829b7",
+   "edges": 21,
+   "bare_all_to_all": 42,
+   "bare_grid": 63,
+   "bus_grid": 177,
+   "direct_all_to_all": 109,
+   "direct_grid": 209,
+   "qubits": {
+    "bare": 10,
+    "bus": 18,
+    "direct": 14
+   }
+  }
+ ],
+ "mean": {
+  "bare_all_to_all": 45.666666666666664,
+  "bare_grid": 69.66666666666667,
+  "bus_grid": 182.83333333333334,
+  "direct_all_to_all": 112.66666666666667,
+  "direct_grid": 224.08333333333334,
+  "edges": 22.833333333333332
+ },
+ "grid": [
+  4,
+  6
+ ],
+ "note": "CZ counts. Grid counts for bare use SWAP routing (best of 16 SABRE seeds); the bus circuit needs no SWAPs; the textbook circuit on the grid is Qiskit level 3, best of several seeds."
+}

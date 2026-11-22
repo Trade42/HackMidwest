@@ -1,0 +1,24 @@
+path: elapsed 32s
+K4: elapsed 75s
+star: elapsed 105s
+none: elapsed 127s
+totals: {('direct', 1, 'faults'): 1732, ('direct', 1, 'circuits'): 4, ('direct', 1, 'harmful'): 124, ('bus', 1, 'faults'): 186624, ('bus', 1, 'circuits'): 192, ('bus', 1, 'harmful'): 6240, ('direct', 2, 'faults'): 2392, ('direct', 2, 'circuits'): 4, ('direct', 2, 'harmful'): 256, ('bus', 2, 'faults'): 51048, ('bus', 2, 'circuits'): 32, ('bus', 2, 'harmful'): 2192}
+readout flips not discarded: 0
+undetected harmful in init/syndrome/measure: 0
+undetected harmful by (style, p, kind, logical footprint):
+    ('bus', 1, 'clean', 1) 4608
+    ('bus', 1, 'clean', 2) 1632
+    ('bus', 2, 'bus-residual', 2) 16
+    ('bus', 2, 'bus-residual', 3) 32
+    ('bus', 2, 'bus-residual', 4) 48
+    ('bus', 2, 'clean', 1) 1536
+    ('bus', 2, 'clean', 2) 560
+    ('direct', 1, 'clean', 1) 32
+    ('direct', 1, 'clean', 2) 33
+    ('direct', 1, 'clean', 3) 27
+    ('direct', 1, 'clean', 4) 32
+    ('direct', 2, 'clean', 1) 64
+    ('direct', 2, 'clean', 2) 69
+    ('direct', 2, 'clean', 3) 59
+    ('direct', 2, 'clean', 4) 64
+latent (kept, harmless here, but residual is not a clean logical operator): {('bus', 1, 'fields'): 768, ('bus', 2, 'fields'): 160}

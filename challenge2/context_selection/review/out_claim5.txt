@@ -1,0 +1,109 @@
+* gate on a qubit after its measurement
+    direct: UnsupportedGateError: gates after a measurement are not supported
+    bus   : UnsupportedGateError: gates after a measurement are not supported
+* gates on other qubits after measuring qubit 0 (legal deferred measurement)
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=5.55e-16 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=8.33e-16 kept=1.000000
+* measure, gate, measure again on same qubit
+    direct: UnsupportedGateError: gates after a measurement are not supported
+    bus   : UnsupportedGateError: gates after a measurement are not supported
+* partial measurement (qubits 1,3 of 4 into clbits 1,3)
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=2.22e-16 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=7.77e-16 kept=1.000000
+* partial measurement into a 2-bit register
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=2.22e-16 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=7.77e-16 kept=1.000000
+* no measurement, readout default
+    direct: encoded ok (8q, 0 clbits, measures=0)
+    bus   : encoded ok (9q, 0 clbits, measures=0)
+* no measurement, readout=True
+    direct: encoded ok (8q, 8 clbits, measures=8)
+    bus   : encoded ok (9q, 9 clbits, measures=9)
+    direct: readout=True on unmeasured circuit vs measured twin: max|diff|=5.55e-16 kept=1.000000
+    bus   : readout=True on unmeasured circuit vs measured twin: max|diff|=6.66e-16 kept=1.000000
+* no measurement, but circuit has a (unused) 5-bit classical register, readout=True
+    direct: encoded ok (8q, 8 clbits, measures=8)
+    bus   : encoded ok (9q, 9 clbits, measures=9)
+* parameterised angles left unbound
+    direct: encoded with 2 free parameters; after binding: max|diff|=6.66e-16 kept=1.000000; metadata kept: True
+    bus   : encoded with 2 free parameters; after binding: max|diff|=1.11e-15 kept=1.000000; metadata kept: True
+* k = 1
+    direct: encoded ok (6q, 6 clbits, measures=6) | max|diff|=6.66e-16 kept=1.000000
+    bus   : encoded ok (6q, 6 clbits, measures=6) | max|diff|=9.99e-16 kept=1.000000
+* k = 1, no gates but H and measure
+    direct: encoded ok (6q, 6 clbits, measures=6) | max|diff|=4.44e-16 kept=1.000000
+    bus   : encoded ok (6q, 6 clbits, measures=6) | max|diff|=4.44e-16 kept=1.000000
+* two qubits measured into the same clbit (bare: last write wins)
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=1.74e-01 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=1.74e-01 kept=1.000000
+* one qubit measured into two clbits
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=1.74e-01 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=1.74e-01 kept=1.000000
+* no leading H layer (logical |0..0> start)
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=5.55e-16 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=9.99e-16 kept=1.000000
+* no leading H layer, odd k
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=6.66e-16 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=8.88e-16 kept=1.000000
+* no leading H, direct checks='z'
+    direct: encoded ok (6q, 6 clbits, measures=6) | max|diff|=0.00e+00 kept=1.000000
+* no leading H, direct checks='x'
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=5.55e-16 kept=1.000000
+* H on only some qubits
+    direct: UnsupportedGateError: the leading H layer must cover every qubit or none of them (found H on [0, 1] of 3 qubits)
+    bus   : UnsupportedGateError: the leading H layer must cover every qubit or none of them
+* H layer interrupted by another gate
+    direct: UnsupportedGateError: the leading H layer must cover every qubit or none of them (found H on [0, 1] of 3 qubits)
+    bus   : UnsupportedGateError: the leading H layer must cover every qubit or none of them
+* leading barrier, id gate
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=1.25e-16 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=2.08e-16 kept=1.000000
+* H twice on a qubit
+    direct: UnsupportedGateError: no logical implementation for gate 'h'; supported gates are rz, rzz, rx, rxx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+    bus   : UnsupportedGateError: no bus implementation for gate 'h'; supported gates are rz, rzz, rx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+* cz, s, t, sdg, tdg, p, x, y, z mixed in
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=2.08e-16 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=5.55e-16 kept=1.000000
+* rxx (documented for direct only)
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=1.67e-16 kept=1.000000
+    bus   : UnsupportedGateError: no bus implementation for gate 'rxx'; supported gates are rz, rzz, rx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+* unsupported: cx
+    direct: UnsupportedGateError: no logical implementation for gate 'cx'; supported gates are rz, rzz, rx, rxx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+    bus   : UnsupportedGateError: no bus implementation for gate 'cx'; supported gates are rz, rzz, rx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+* unsupported: ry
+    direct: UnsupportedGateError: no logical implementation for gate 'ry'; supported gates are rz, rzz, rx, rxx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+    bus   : UnsupportedGateError: no bus implementation for gate 'ry'; supported gates are rz, rzz, rx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+* unsupported: h_mid
+    direct: UnsupportedGateError: no logical implementation for gate 'h'; supported gates are rz, rzz, rx, rxx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+    bus   : UnsupportedGateError: no bus implementation for gate 'h'; supported gates are rz, rzz, rx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+* unsupported: reset
+    direct: UnsupportedGateError: no logical implementation for gate 'reset'; supported gates are rz, rzz, rx, rxx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+    bus   : UnsupportedGateError: no bus implementation for gate 'reset'; supported gates are rz, rzz, rx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+* unsupported: swap
+    direct: UnsupportedGateError: no logical implementation for gate 'swap'; supported gates are rz, rzz, rx, rxx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+    bus   : UnsupportedGateError: no bus implementation for gate 'swap'; supported gates are rz, rzz, rx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+* unsupported: u
+    direct: UnsupportedGateError: no logical implementation for gate 'u'; supported gates are rz, rzz, rx, rxx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+    bus   : UnsupportedGateError: no bus implementation for gate 'u'; supported gates are rz, rzz, rx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+* unsupported: c_if
+    direct: UnsupportedGateError: no logical implementation for gate 'if_else'; supported gates are rz, rzz, rx, rxx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+    bus   : UnsupportedGateError: no bus implementation for gate 'if_else'; supported gates are rz, rzz, rx, p, s, sdg, t, tdg, x, y, z, cz and a leading H layer
+* two quantum + two classical registers, crossed measurement
+    direct: encoded ok (8q, 8 clbits, measures=8) | max|diff|=5.55e-17 kept=1.000000
+    bus   : encoded ok (9q, 9 clbits, measures=9) | max|diff|=1.11e-16 kept=1.000000
+* direct checks='z' with init_flag=False
+    direct: encoded ok (6q, 6 clbits, measures=6) | max|diff|=8.33e-17 kept=1.000000
+* bus with explicit bad placement
+    bus   : ValueError: placement must be a permutation of the data sites
+* bus with short placement for odd k
+    bus   : ValueError: placement must be a permutation of the data sites
+* bus edge_mode typo
+    bus   : ValueError: edge_mode must be 'direct' or 'bus'
+* direct checks typo
+    direct: ValueError: checks must be one of ('both', 'z', 'x')
+* zero-qubit circuit
+    direct: ValueError: need at least one logical qubit
+    bus   : encoded ok (3q, 0 clbits, measures=0)
+* huge angles / multiples of 2pi
+    direct: encoded ok (6q, 6 clbits, measures=6) | max|diff|=2.22e-16 kept=1.000000
+    bus   : encoded ok (6q, 6 clbits, measures=6) | max|diff|=3.61e-16 kept=1.000000

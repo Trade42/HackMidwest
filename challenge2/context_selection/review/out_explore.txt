@@ -1,0 +1,74 @@
+--- k=2 p=1 edges=((0, 1),)
+direct                                     n= 6 faults=  273 harmful= 13 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 7, 2: 6} bus-residual footprints={}
+bus[direct]                                n= 6 faults=  570 harmful= 15 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 12, 2: 3} bus-residual footprints={}
+bus[bus]                                   n= 6 faults=  570 harmful= 15 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 12, 2: 3} bus-residual footprints={}
+   elapsed 0s
+--- k=2 p=2 edges=((0, 1),)
+direct                                     n= 6 faults=  348 harmful= 28 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 15, 2: 13} bus-residual footprints={}
+bus[direct]                                n= 6 faults=  897 harmful= 34 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 24, 2: 6} bus-residual footprints={2: 4}
+      worst bus-residual: [fields] data[21] cx(c1,c0) fault XZ: kept=1.000 TV=0.3234 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 2
+bus[bus]                                   n= 6 faults=  897 harmful= 34 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 24, 2: 6} bus-residual footprints={2: 4}
+      worst bus-residual: [fields] data[21] cx(c1,c0) fault XZ: kept=1.000 TV=0.3234 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 2
+   elapsed 1s
+--- k=3 p=1 edges=((0, 1), (1, 2))
+direct                                     n= 8 faults=  388 harmful= 22 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 6, 2: 5, 3: 5, 4: 6} bus-residual footprints={}
+bus[direct]                                n= 9 faults=  819 harmful= 23 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 18, 2: 5} bus-residual footprints={}
+bus[bus]                                   n= 9 faults=  867 harmful= 24 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 18, 2: 6} bus-residual footprints={}
+   elapsed 2s
+--- k=3 p=2 edges=((0, 1), (0, 2), (1, 2))
+direct                                     n= 8 faults=  538 harmful= 52 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 12, 2: 17, 3: 11, 4: 12} bus-residual footprints={}
+bus[direct]                                n= 9 faults= 1419 harmful= 57 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 36, 2: 17} bus-residual footprints={2: 4}
+      worst bus-residual: [fields] data[31] cx(c2,c1) fault XZ: kept=1.000 TV=0.2046 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 2
+bus[bus]                                   n= 9 faults= 1575 harmful= 58 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 36, 2: 18} bus-residual footprints={3: 4}
+      worst bus-residual: [fields] data[37] cx(c2,c1) fault XZ: kept=1.000 TV=0.4541 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 3
+   elapsed 4s
+--- k=4 p=1 edges=((1, 2), (1, 3), (2, 3))
+direct                                     n= 8 faults=  433 harmful= 30 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 8, 2: 8, 3: 6, 4: 8} bus-residual footprints={}
+bus[direct]                                n= 9 faults=  948 harmful= 32 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 24, 2: 8} bus-residual footprints={}
+bus[bus]                                   n= 9 faults= 1026 harmful= 33 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 24, 2: 9} bus-residual footprints={}
+   elapsed 5s
+--- k=4 p=2 edges=((0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3))
+direct                                     n= 8 faults=  688 harmful= 82 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 16, 2: 35, 3: 15, 4: 16} bus-residual footprints={}
+bus[direct]                                n= 9 faults= 1833 harmful= 86 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 48, 2: 34} bus-residual footprints={4: 4}
+      worst bus-residual: [fields] data[42] cx(c2,c1) fault XZ: kept=1.000 TV=0.3120 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 4
+bus[bus]                                   n= 9 faults= 2025 harmful= 88 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 48, 2: 36} bus-residual footprints={4: 4}
+      worst bus-residual: [fields] data[50] cx(c2,c1) fault XZ: kept=1.000 TV=0.4918 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 4
+   elapsed 9s
+--- k=4 p=2 edges=((1, 2), (1, 3), (2, 3))
+direct                                     n= 8 faults=  598 harmful= 63 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 16, 2: 17, 3: 14, 4: 16} bus-residual footprints={}
+bus[direct]                                n= 9 faults= 1551 harmful= 69 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 48, 2: 17} bus-residual footprints={3: 4}
+      worst bus-residual: [fields] data[31] cx(c2,c1) fault XZ: kept=1.000 TV=0.3163 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 3
+bus[bus]                                   n= 9 faults= 1707 harmful= 70 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 48, 2: 18} bus-residual footprints={3: 4}
+      worst bus-residual: [fields] data[37] cx(c2,c1) fault XZ: kept=1.000 TV=0.3163 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 3
+   elapsed 11s
+--- k=4 p=3 edges=((0, 3), (1, 3))
+direct                                     n= 8 faults=  718 harmful= 88 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 24, 2: 17, 3: 23, 4: 24} bus-residual footprints={}
+bus[direct]                                n= 9 faults= 1965 harmful= 97 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 72, 2: 17} bus-residual footprints={2: 8}
+      worst bus-residual: [fields] data[26] cx(c2,c1) fault XZ: kept=1.000 TV=0.1713 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 2
+bus[bus]                                   n= 9 faults= 2109 harmful= 98 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 72, 2: 18} bus-residual footprints={3: 8}
+      worst bus-residual: [fields] data[30] cx(c2,c1) fault XZ: kept=1.000 TV=0.2583 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 3
+   elapsed 15s
+--- k=5 p=1 edges=((0, 1), (0, 3), (0, 4), (1, 2), (1, 3))
+direct                                     n=10 faults=  563 harmful= 43 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 10, 2: 14, 5: 9, 6: 10} bus-residual footprints={}
+bus[direct]                                n=12 faults= 1212 harmful= 43 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 30, 2: 13} bus-residual footprints={}
+bus[bus]                                   n=12 faults= 1326 harmful= 45 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 30, 2: 15} bus-residual footprints={}
+   elapsed 18s
+--- k=5 p=2 edges=((0, 1), (0, 2), (1, 2), (1, 3), (1, 4), (2, 3))
+direct                                     n=10 faults=  818 harmful= 94 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 20, 2: 35, 5: 19, 6: 20} bus-residual footprints={}
+bus[direct]                                n=12 faults= 2103 harmful= 94 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 60, 2: 34} bus-residual footprints={}
+bus[bus]                                   n=12 faults= 2331 harmful=100 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 60, 2: 36} bus-residual footprints={2: 4}
+      worst bus-residual: [fields] data[52] cx(c3,c2) fault XZ: kept=1.000 TV=0.2413 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 2
+   elapsed 27s
+--- k=6 p=1 edges=((0, 1), (0, 3), (1, 3), (1, 4), (2, 5), (3, 5))
+direct                                     n=10 faults=  608 harmful= 51 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 12, 2: 16, 5: 11, 6: 12} bus-residual footprints={}
+bus[direct]                                n=12 faults= 1293 harmful= 52 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 36, 2: 16} bus-residual footprints={}
+bus[bus]                                   n=12 faults= 1455 harmful= 54 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 36, 2: 18} bus-residual footprints={}
+   elapsed 31s
+--- k=6 p=2 edges=((0, 1), (0, 2), (0, 5), (2, 3), (2, 4), (2, 5), (3, 4), (3, 5))
+direct                                     n=10 faults=  938 harmful=118 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 24, 2: 47, 5: 23, 6: 24} bus-residual footprints={}
+bus[direct]                                n=12 faults= 2451 harmful=122 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 72, 2: 46} bus-residual footprints={4: 4}
+      worst bus-residual: [fields] data[50] cx(c3,c2) fault XZ: kept=1.000 TV=0.4617 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 4
+bus[bus]                                   n=12 faults= 2715 harmful=124 in init/synd/meas=0 meas_flips_discarded=True clean-logical weights={1: 72, 2: 48} bus-residual footprints={4: 4}
+      worst bus-residual: [fields] data[62] cx(c3,c2) fault XZ: kept=1.000 TV=0.4548 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=-1 footprint 4
+   elapsed 43s
+total faults enumerated: 42575

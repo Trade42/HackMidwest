@@ -1,0 +1,18 @@
+# CI smoke run: 6 questions, stub reader, no downloads. Checks plumbing, not accuracy.
+name: smoke
+seed: 0
+data: {questions: data/demo.jsonl, limit: 3}
+scores:
+  dir: scores
+  scorer: {kind: tfidf, overlap: coverage, hop: 3}
+qubo: {tau: 0.5721, theta: -0.5}
+qaoa: {p: 1, p_ideal_extra: 2, shots: 400, top: 3, shot_budgets: [32]}
+iceberg: {style: bus}
+lm: {kind: stub}
+backends:
+  physical: {kind: local-pauli, noise: {p1: 0.0005, p2: 0.005, p_meas: 0.005}}
+  annealer: {kind: local}
+lanes: ["1a", "1b", "2a", "2b", "2c", "rand", "3a", "3b", "3c", "3c-direct", "4"]
+bootstrap: {n_boot: 500, seed: 0}
+output: results/smoke
+figures: figures/smoke

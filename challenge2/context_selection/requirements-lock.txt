@@ -1,0 +1,17 @@
+general-superstaq==0.5.70
+matplotlib==3.11.2
+networkx==3.7
+numpy==2.5.3
+onnxruntime==1.29.0
+pytest==9.1.1
+PyYAML==6.0.3
+qiskit==2.6.2
+qiskit-aer==0.18.4
+qiskit-superstaq==0.5.70
+rustworkx==0.18.1
+scikit-learn==1.9.1
+scipy==1.18.1
+stevedore==5.10.0
+sympy==1.14.0
+tokenizers==0.23.3
+# python 3.13.18

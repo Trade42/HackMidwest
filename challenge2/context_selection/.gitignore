@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+build/
+dist/
+models/
+data/cache/
+results/smoke/
+results/demo/
+figures/smoke/
+results/*/superstaq_cache/pending/
+.DS_Store

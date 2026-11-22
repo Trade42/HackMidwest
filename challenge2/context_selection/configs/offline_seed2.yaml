@@ -1,0 +1,33 @@
+# Seed-variability copy of configs/offline.yaml (seed 2). Scores are reused from the base run.
+# Run: python reproduce.py --config configs/offline_seed2.yaml --only evaluate
+# Offline stand-in run: no Hugging Face, no Superstaq. Everything here ran in a sandbox
+# with network access to PyPI and GitHub only. It exercises the full pipeline with
+#   scorer    TF-IDF with question-coverage overlap and second-hop relevance (no downloads)
+#   reader    t5-base via onnxruntime (scripts/fetch_offline_models.py), temperature 0
+#   noise     local circuit-level Pauli noise at the CZ level (assumed rates, not Sqale data)
+# Use configs/main.yaml for the plan's stack (instruct model, embedding model, Sqale).
+name: offline_seed2
+# circuit_stats omitted: seed-variability run (evaluate only); hand-over files stay untouched
+seed: 2
+scores:
+  dir: scores
+  scorer: {kind: tfidf, overlap: coverage, hop: 3}
+qubo:                      # chosen on the 50 calibration questions by scripts/calibrate.py
+  tau: 0.5721
+  theta: -0.5
+  penalty_scale: 1.5
+  normalize: zscore
+qaoa:
+  p: 1
+  p_ideal_extra: 2
+  shots: 4000
+  top: 3
+  shot_budgets: [64]
+iceberg: {style: bus}
+lm: {kind: onnx-t5, dir: models/t5}
+backends:
+  physical:
+    kind: local-pauli
+    noise: {p1: 0.0005, p2: 0.005, p_meas: 0.005}
+  annealer: {kind: local}
+lanes: ["1a", "1b", "2a", "2b", "2c", "rand", "3a", "3b", "3c", "3c-direct", "4"]

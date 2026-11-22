@@ -1,0 +1,50 @@
+# Seed-variability copy of configs/main.yaml (seed 2). Scores are reused from the base run.
+# Run: python reproduce.py --config configs/main_seed2.yaml --only evaluate
+# The plan's stack: small instruct model, small embedding model, Sqale through Superstaq.
+# Needs:  pip install -e ".[llm,superstaq]"   and   SUPERSTAQ_API_KEY in the environment.
+# First run scripts/check_superstaq.py, then scripts/calibrate.py with these scores and
+# paste the recommended tau and theta below (the values here are from the offline scorer).
+name: main_seed2
+# circuit_stats omitted: seed-variability run (evaluate only); hand-over files stay untouched
+seed: 2
+scores:
+  dir: scores_main
+  # hop, tau, theta from scripts/calibrate.py on the 50 calibration questions (2026-11-21):
+  #   python scripts/calibrate.py --config configs/main.yaml --hops 0,1,2,3 --out results/main/calibration.json
+  # chosen: both gold 0.74, mean size 2.72, mean redundant edges 4.5 (top-3 baseline 0.76)
+  scorer: {kind: sentence-transformers, model: BAAI/bge-small-en-v1.5, overlap: coverage, hop: 0}
+qubo:
+  tau: 0.6074523182413973
+  theta: 0.25
+  penalty_scale: 1.5
+  normalize: zscore
+qaoa:
+  p: 1
+  p_ideal_extra: 2
+  shots: 4000
+  top: 3
+  shot_budgets: [64]
+iceberg: {style: bus}
+# Reader: 1.5B is inside the plan's 0.5-2B range, ungated on Hugging Face, and CPU-runnable.
+# 0.5B is too weak at multi-hop QA for selector differences to show. Rationale in
+# Wavedysfunction_Quantum_Accelerator_Benchmark_Plan.md, section 2 ("Model choice").
+lm: {kind: hf, model: Qwen/Qwen2.5-1.5B-Instruct}
+# Superstaq credits are limited (20 for the team run), so only lanes 3d-b / 3d-c touch
+# Superstaq, on the first `limit` questions. All 150 questions run lanes 3b / 3c on the
+# local Pauli model (same rates as configs/offline.yaml). Before choosing `limit`, run
+#   python scripts/check_superstaq.py --budget
+# and read the per-step costs in results/superstaq_check.json (per job or per circuit).
+# Every Sqale result is cached in results/main/superstaq_cache/, so reruns cost nothing.
+backends:
+  physical:            # lanes 3b and 3c: local Pauli noise, all questions
+    kind: local-pauli
+    noise: {p1: 0.0005, p2: 0.005, p_meas: 0.005}
+  annealer: {kind: local}              # lane 2c locally; submit_qubo would be one billed call per question
+  # Lanes 3d-b / 3d-c (Superstaq execution) are off: `check_superstaq.py --probe` on
+  # 2026-11-21 showed our account's role may only compile (cq_compile, 0.5 credits per
+  # call); every job and submit_qubo returned 403, on every target. Sqale's compiler is
+  # exercised instead by scripts/sqale_compile.py. If job access is granted, set:
+  #   hardware: {kind: superstaq, target: cq_sqale_simulator, method: noise-sim, batch_size: 20, limit: 10}
+  # and add "3d-b", "3d-c" to lanes.
+  hardware: null
+lanes: ["1a", "1b", "2a", "2b", "2c", "rand", "3a", "3b", "3c", "4"]

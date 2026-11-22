@@ -1,0 +1,9 @@
+# The plan's language-model stack (configs/main.yaml). Not installable in the sandbox
+# this repository was first built in, so these are lower bounds, not tested pins.
+torch>=2.2
+transformers>=4.44
+sentence-transformers>=3.0
+accelerate>=0.33
+datasets>=2.20
+pandas>=2.0
+pyarrow>=15

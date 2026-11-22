@@ -1,0 +1,42 @@
+== Aer-sampled counts through iceberg.postselect vs exact bare distribution (40000 shots; TV noise floor ~ sqrt(2^k/shots)/2)
+  k=4 p=1 direct   : kept 40000/40000  TV(pkg, bare exact)=0.0052  (bare Aer sample TV=0.0066)  pkg==mine: True  key width 4
+  k=4 p=1 bus      : kept 40000/40000  TV(pkg, bare exact)=0.0052  (bare Aer sample TV=0.0066)  pkg==mine: True  key width 4
+  k=4 p=1 direct[x]: kept 40000/40000  TV(pkg, bare exact)=0.0050  (bare Aer sample TV=0.0066)  pkg==mine: True  key width 4
+  k=4 p=1 direct[z]: kept 40000/40000  TV(pkg, bare exact)=0.0052  (bare Aer sample TV=0.0066)  pkg==mine: True  key width 4
+  k=5 p=2 direct   : kept 40000/40000  TV(pkg, bare exact)=0.0076  (bare Aer sample TV=0.0063)  pkg==mine: True  key width 5
+  k=5 p=2 bus      : kept 40000/40000  TV(pkg, bare exact)=0.0076  (bare Aer sample TV=0.0063)  pkg==mine: True  key width 5
+  k=5 p=2 direct[x]: kept 40000/40000  TV(pkg, bare exact)=0.0050  (bare Aer sample TV=0.0063)  pkg==mine: True  key width 5
+  k=5 p=2 direct[z]: kept 40000/40000  TV(pkg, bare exact)=0.0076  (bare Aer sample TV=0.0063)  pkg==mine: True  key width 5
+  k=6 p=1 direct   : kept 40000/40000  TV(pkg, bare exact)=0.0093  (bare Aer sample TV=0.0089)  pkg==mine: True  key width 6
+  k=6 p=1 bus      : kept 40000/40000  TV(pkg, bare exact)=0.0093  (bare Aer sample TV=0.0089)  pkg==mine: True  key width 6
+  k=6 p=1 direct[x]: kept 40000/40000  TV(pkg, bare exact)=0.0093  (bare Aer sample TV=0.0089)  pkg==mine: True  key width 6
+  k=6 p=1 direct[z]: kept 40000/40000  TV(pkg, bare exact)=0.0093  (bare Aer sample TV=0.0089)  pkg==mine: True  key width 6
+  k=3 p=2 direct   : kept 40000/40000  TV(pkg, bare exact)=0.0019  (bare Aer sample TV=0.0043)  pkg==mine: True  key width 3
+  k=3 p=2 bus      : kept 40000/40000  TV(pkg, bare exact)=0.0019  (bare Aer sample TV=0.0043)  pkg==mine: True  key width 3
+  k=3 p=2 direct[x]: kept 40000/40000  TV(pkg, bare exact)=0.0022  (bare Aer sample TV=0.0043)  pkg==mine: True  key width 3
+  k=3 p=2 direct[z]: kept 40000/40000  TV(pkg, bare exact)=0.0019  (bare Aer sample TV=0.0043)  pkg==mine: True  key width 3
+== literal keep rule (parity AND ancilla AND flags) applied to checks='x'
+  kept with parity enforced: 0.500000; decoded/kept vs bare max diff 3.89e-16; (package rule, no parity) kept 1.0
+== postselect(counts) with the layout omitted
+  k=2 encode() default  width= 6: no error -> kept 1.000, TV vs bare 0.005   [with layout: kept 1.000]
+  k=2 encode_direct     width= 6: no error -> kept 1.000, TV vs bare 0.005   [with layout: kept 1.000]
+  k=2 direct[z]         width= 5: ValueError: cannot infer the Iceberg layout from the bitstring width; pass the encoded circuit or its 
+  k=3 encode() default  width= 9: ValueError: cannot infer the Iceberg layout from the bitstring width; pass the encoded circuit or its 
+  k=3 encode_direct     width= 8: no error -> kept 1.000, WRONG KEY WIDTH 4 (bare has 3)   [with layout: kept 1.000]
+  k=3 direct[z]         width= 7: ValueError: cannot infer the Iceberg layout from the bitstring width; pass the encoded circuit or its 
+  k=4 encode() default  width= 9: ValueError: cannot infer the Iceberg layout from the bitstring width; pass the encoded circuit or its 
+  k=4 encode_direct     width= 8: no error -> kept 1.000, TV vs bare 0.007   [with layout: kept 1.000]
+  k=4 direct[z]         width= 7: ValueError: cannot infer the Iceberg layout from the bitstring width; pass the encoded circuit or its 
+  k=5 encode() default  width=12: no error -> kept 1.000, WRONG KEY WIDTH 8 (bare has 5)   [with layout: kept 1.000]
+  k=5 encode_direct     width=10: no error -> kept 1.000, WRONG KEY WIDTH 6 (bare has 5)   [with layout: kept 1.000]
+  k=5 direct[z]         width= 9: ValueError: cannot infer the Iceberg layout from the bitstring width; pass the encoded circuit or its 
+  k=6 encode() default  width=12: no error -> kept 1.000, WRONG KEY WIDTH 8 (bare has 6)   [with layout: kept 1.000]
+  k=6 encode_direct     width=10: no error -> kept 1.000, TV vs bare 0.008   [with layout: kept 1.000]
+  k=6 direct[z]         width= 9: ValueError: cannot infer the Iceberg layout from the bitstring width; pass the encoded circuit or its 
+== key formats
+  hex keys: ValueError: invalid literal for int() with base 2: '0x0'
+  int keys: AttributeError: 'int' object has no attribute 'replace'
+  spaces: no error, kept 2000/2000
+  too short (code bits only): no error, kept 2000/2000
+  bare key example: '00 00'  postselect key example: '0011'
+  empty counts: ({}, PostselectStats(shots=0, kept=0, fail_sz=0, fail_sx=0, fail_flag=0))

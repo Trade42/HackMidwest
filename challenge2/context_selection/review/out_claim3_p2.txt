@@ -1,0 +1,151 @@
+instance p2: k=4 edges=((0, 2), (1, 2), (1, 3), (2, 3)) angles=Angles(gammas=(0.731, -0.377), betas=(0.413, 0.887))
+== encode_direct default: 628 faults (612 gate, 8 prep, 8 meas); 8 qubits
+   init      {'discarded': 124, 'harmless': 10}
+   cost      {'discarded': 192, 'harmless': 1, 'harmful': 47}
+   mixer     {'discarded': 96, 'harmless': 1, 'harmful': 23}
+   syndrome  {'discarded': 112, 'harmless': 14}
+   measure   {'discarded': 8}
+   tracker prediction matches exact simulation for 628/628 faults
+   label sanity: ok; rotation kinds per block: {'cost': ['rzz'], 'mixer': ['rxx']}; min stabilizer/logical-X/ancilla-Z expectation after init: 1.000000; model_ok=True []
+   distinct kept masses: [0.0, 1.0]
+   undetected harmful: total 70; in init/syndrome/measure: 0
+   readout flips: 8 ; all discarded: True
+   logical weight (skeleton residual) of undetected harmful faults: {1: 16, 2: 23, 3: 15, 4: 16}; with X left on ancilla: 0
+   harmful faults whose kept dist is an exact XOR shift of the ideal: weights {1: 5, 3: 1} (of 70)
+   ... of which on gates touching b, by weight: {1: 8, 3: 8, 4: 8}
+      max-weight example: [cost] data[20] rzz(d0,b) fault YY: kept=1.000 TV=0.2928 status=harmful L_x=1110 L_z=1 w=4 shift=1110 pure_shift=-1
+      max-weight example: [cost] data[21] rzz(d1,b) fault YY: kept=1.000 TV=0.3486 status=harmful L_x=1101 L_z=10 w=4 shift=1101 pure_shift=-1
+      max-weight example: [cost] data[22] rzz(d2,b) fault YY: kept=1.000 TV=0.3245 status=harmful L_x=1011 L_z=100 w=4 shift=1011 pure_shift=-1
+   time 0.2s
+== encode_bus default: 1581 faults (1563 gate, 9 prep, 9 meas); 9 qubits
+   init      {'discarded': 153, 'harmless': 12}
+   pairs     {'discarded': 280, 'harmless': 10, 'harmful': 22}
+   fields    {'discarded': 400, 'harmless': 16, 'harmful': 28}
+   mixer     {'discarded': 432, 'harmless': 24, 'harmful': 24}
+   syndrome  {'discarded': 152, 'harmless': 19}
+   measure   {'discarded': 9}
+   tracker prediction matches exact simulation for 1581/1581 faults
+   label sanity: ok; rotation kinds per block: {'pairs': ['rz', 'rzz'], 'fields': ['rz'], 'mixer': ['rx']}; min stabilizer/logical-X/ancilla-Z expectation after init: 1.000000; model_ok=True []
+   distinct kept masses: [0.0, 1.0]
+   undetected harmful: total 74; in init/syndrome/measure: 0
+   readout flips: 9 ; all discarded: True
+   logical weight (skeleton residual) of undetected harmful faults: {1: 52, 2: 22}; with X left on ancilla: 4
+   harmful faults whose kept dist is an exact XOR shift of the ideal: weights {1: 12} (of 74)
+   ... of which on gates touching b, by weight: {}
+      max-weight example: [pairs] data[18] rzz(d0,d2) fault YY: kept=1.000 TV=0.4584 status=harmful L_x=101 L_z=101 w=2 shift=101 pure_shift=-1
+      max-weight example: [pairs] data[18] rzz(d0,d2) fault ZZ: kept=1.000 TV=0.4584 status=harmful L_x=0 L_z=101 w=2 shift=0 pure_shift=-1
+      max-weight example: [pairs] data[19] rzz(d1,d3) fault YY: kept=1.000 TV=0.2653 status=harmful L_x=1010 L_z=1010 w=2 shift=1010 pure_shift=-1
+   time 1.2s
+== encode_bus edge_mode=bus: 1713 faults (1695 gate, 9 prep, 9 meas); 9 qubits
+   init      {'discarded': 153, 'harmless': 12}
+   pairs     {'discarded': 408, 'harmless': 12, 'harmful': 24}
+   fields    {'discarded': 400, 'harmless': 16, 'harmful': 28}
+   mixer     {'discarded': 432, 'harmless': 24, 'harmful': 24}
+   syndrome  {'discarded': 152, 'harmless': 19}
+   measure   {'discarded': 9}
+   tracker prediction matches exact simulation for 1713/1713 faults
+   label sanity: ok; rotation kinds per block: {'pairs': ['rz'], 'fields': ['rz'], 'mixer': ['rx']}; min stabilizer/logical-X/ancilla-Z expectation after init: 1.000000; model_ok=True []
+   distinct kept masses: [0.0, 1.0]
+   undetected harmful: total 76; in init/syndrome/measure: 0
+   readout flips: 9 ; all discarded: True
+   logical weight (skeleton residual) of undetected harmful faults: {1: 52, 2: 24}; with X left on ancilla: 4
+   harmful faults whose kept dist is an exact XOR shift of the ideal: weights {1: 12} (of 76)
+   ... of which on gates touching b, by weight: {}
+      max-weight example: [pairs] data[19] cx(d0,c0) fault IZ: kept=1.000 TV=0.4584 status=harmful L_x=0 L_z=101 w=2 shift=0 pure_shift=-1
+      max-weight example: [pairs] data[20] rz(c0) fault Z: kept=1.000 TV=0.4584 status=harmful L_x=0 L_z=101 w=2 shift=0 pure_shift=-1
+      max-weight example: [pairs] data[21] cx(d0,c0) fault ZZ: kept=1.000 TV=0.4584 status=harmful L_x=0 L_z=101 w=2 shift=0 pure_shift=-1
+   time 1.4s
+== encode_direct init_flag=False: 598 faults (582 gate, 8 prep, 8 meas); 8 qubits
+   init      {'discarded': 86, 'harmless': 8, 'harmful': 10}
+   cost      {'discarded': 192, 'harmless': 1, 'harmful': 47}
+   mixer     {'discarded': 96, 'harmless': 1, 'harmful': 23}
+   syndrome  {'discarded': 112, 'harmless': 14}
+   measure   {'discarded': 8}
+   tracker prediction matches exact simulation for 598/598 faults
+   label sanity: ok; rotation kinds per block: {'cost': ['rzz'], 'mixer': ['rxx']}; min stabilizer/logical-X/ancilla-Z expectation after init: 1.000000; model_ok=True []
+   distinct kept masses: [0.0, 1.0]
+   undetected harmful: total 80; in init/syndrome/measure: 10
+       [init] data[-1] reset(d1) fault X: kept=1.000 TV=0.4675 status=harmful L_x=0 L_z=1110 w=3 shift=0 pure_shift=-1
+       [init] data[-1] reset(d3) fault X: kept=1.000 TV=0.1503 status=harmful L_x=0 L_z=1000 w=1 shift=0 pure_shift=-1
+       [init] data[2] cx(d0,d1) fault IX: kept=1.000 TV=0.4675 status=harmful L_x=0 L_z=1110 w=3 shift=0 pure_shift=-1
+       [init] data[2] cx(d0,d1) fault ZY: kept=1.000 TV=0.4675 status=harmful L_x=11 L_z=1110 w=4 shift=11 pure_shift=-1
+       [init] data[3] cx(d1,d2) fault XX: kept=1.000 TV=0.4675 status=harmful L_x=0 L_z=1110 w=3 shift=0 pure_shift=-1
+       [init] data[3] cx(d1,d2) fault YY: kept=1.000 TV=0.4675 status=harmful L_x=110 L_z=1110 w=3 shift=110 pure_shift=-1
+   readout flips: 8 ; all discarded: True
+   logical weight (skeleton residual) of undetected harmful faults: {1: 19, 2: 24, 3: 19, 4: 18}; with X left on ancilla: 0
+   harmful faults whose kept dist is an exact XOR shift of the ideal: weights {1: 5, 3: 1} (of 80)
+   ... of which on gates touching b, by weight: {1: 9, 3: 8, 4: 9}
+      max-weight example: [init] data[2] cx(d0,d1) fault ZY: kept=1.000 TV=0.4675 status=harmful L_x=11 L_z=1110 w=4 shift=11 pure_shift=-1
+      max-weight example: [init] data[5] cx(d3,b) fault YY: kept=1.000 TV=0.1503 status=harmful L_x=111 L_z=1000 w=4 shift=111 pure_shift=-1
+      max-weight example: [cost] data[18] rzz(d0,b) fault YY: kept=1.000 TV=0.2928 status=harmful L_x=1110 L_z=1 w=4 shift=1110 pure_shift=-1
+   time 0.2s
+== encode_direct sx_flag=False: 598 faults (582 gate, 8 prep, 8 meas); 8 qubits
+   init      {'discarded': 124, 'harmless': 10}
+   cost      {'discarded': 192, 'harmless': 1, 'harmful': 47}
+   mixer     {'discarded': 96, 'harmless': 1, 'harmful': 23}
+   syndrome  {'discarded': 76, 'harmless': 12, 'harmful': 8}
+   measure   {'discarded': 8}
+   tracker prediction matches exact simulation for 598/598 faults
+   label sanity: ok; rotation kinds per block: {'cost': ['rzz'], 'mixer': ['rxx']}; min stabilizer/logical-X/ancilla-Z expectation after init: 1.000000; model_ok=True []
+   distinct kept masses: [0.0, 1.0]
+   undetected harmful: total 78; in init/syndrome/measure: 8
+       [syndrome] data[47] cx(a,d0) fault XI: kept=1.000 TV=0.3431 status=harmful L_x=0 L_z=0 w=0 shift=1 pure_shift=1
+       [syndrome] data[47] cx(a,d0) fault XZ: kept=1.000 TV=0.3431 status=harmful L_x=0 L_z=0 w=0 shift=1 pure_shift=1
+       [syndrome] data[48] cx(a,d1) fault XX: kept=1.000 TV=0.3431 status=harmful L_x=0 L_z=0 w=0 shift=1 pure_shift=1
+       [syndrome] data[48] cx(a,d1) fault XY: kept=1.000 TV=0.3431 status=harmful L_x=0 L_z=0 w=0 shift=1 pure_shift=1
+       [syndrome] data[49] cx(a,d2) fault XI: kept=1.000 TV=0.4199 status=harmful L_x=0 L_z=0 w=0 shift=111 pure_shift=7
+       [syndrome] data[49] cx(a,d2) fault XZ: kept=1.000 TV=0.4199 status=harmful L_x=0 L_z=0 w=0 shift=111 pure_shift=7
+   readout flips: 8 ; all discarded: True
+   logical weight (skeleton residual) of undetected harmful faults: {0: 8, 1: 16, 2: 23, 3: 15, 4: 16}; with X left on ancilla: 0
+   harmful faults whose kept dist is an exact XOR shift of the ideal: weights {1: 9, 3: 5} (of 78)
+   ... of which on gates touching b, by weight: {1: 8, 3: 8, 4: 8}
+      max-weight example: [cost] data[20] rzz(d0,b) fault YY: kept=1.000 TV=0.2928 status=harmful L_x=1110 L_z=1 w=4 shift=1110 pure_shift=-1
+      max-weight example: [cost] data[21] rzz(d1,b) fault YY: kept=1.000 TV=0.3486 status=harmful L_x=1101 L_z=10 w=4 shift=1101 pure_shift=-1
+      max-weight example: [cost] data[22] rzz(d2,b) fault YY: kept=1.000 TV=0.3245 status=harmful L_x=1011 L_z=100 w=4 shift=1011 pure_shift=-1
+   time 0.2s
+== encode_bus precopy=False: 1566 faults (1548 gate, 9 prep, 9 meas); 9 qubits
+   init      {'discarded': 149, 'harmless': 12, 'harmful': 4}
+   pairs     {'discarded': 280, 'harmless': 10, 'harmful': 22}
+   fields    {'discarded': 392, 'harmless': 12, 'harmful': 40}
+   mixer     {'discarded': 424, 'harmless': 28, 'harmful': 28}
+   syndrome  {'discarded': 140, 'harmless': 16}
+   measure   {'discarded': 9}
+   tracker prediction matches exact simulation for 1566/1566 faults
+   label sanity: ok; rotation kinds per block: {'pairs': ['rz', 'rzz'], 'fields': ['rz'], 'mixer': ['rx']}; min stabilizer/logical-X/ancilla-Z expectation after init: 1.000000; model_ok=True []
+   distinct kept masses: [0.0, 1.0]
+   undetected harmful: total 94; in init/syndrome/measure: 4
+       [init] data[3] cx(t,c2) fault XI: kept=1.000 TV=0.3515 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=15
+       [init] data[3] cx(t,c2) fault YZ: kept=1.000 TV=0.3515 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=15
+       [init] data[5] cx(t,c2) fault XX: kept=1.000 TV=0.3515 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=15
+       [init] data[5] cx(t,c2) fault XY: kept=1.000 TV=0.3515 status=harmful L_x=-1 L_z=-1 w=1 shift=0 pure_shift=15
+   readout flips: 9 ; all discarded: True
+   logical weight (skeleton residual) of undetected harmful faults: {1: 72, 2: 22}; with X left on ancilla: 24
+   harmful faults whose kept dist is an exact XOR shift of the ideal: weights {1: 12, 4: 4} (of 94)
+   ... of which on gates touching b, by weight: {1: 8}
+      max-weight example: [pairs] data[18] rzz(d0,d2) fault YY: kept=1.000 TV=0.4584 status=harmful L_x=101 L_z=101 w=2 shift=101 pure_shift=-1
+      max-weight example: [pairs] data[18] rzz(d0,d2) fault ZZ: kept=1.000 TV=0.4584 status=harmful L_x=0 L_z=101 w=2 shift=0 pure_shift=-1
+      max-weight example: [pairs] data[19] rzz(d1,d3) fault YY: kept=1.000 TV=0.2653 status=harmful L_x=1010 L_z=1010 w=2 shift=1010 pure_shift=-1
+   time 1.2s
+== encode_bus init_flag=False: 1551 faults (1533 gate, 9 prep, 9 meas); 9 qubits
+   init      {'discarded': 115, 'harmless': 10, 'harmful': 10}
+   pairs     {'discarded': 280, 'harmless': 10, 'harmful': 22}
+   fields    {'discarded': 400, 'harmless': 16, 'harmful': 28}
+   mixer     {'discarded': 432, 'harmless': 24, 'harmful': 24}
+   syndrome  {'discarded': 152, 'harmless': 19}
+   measure   {'discarded': 9}
+   tracker prediction matches exact simulation for 1551/1551 faults
+   label sanity: ok; rotation kinds per block: {'pairs': ['rz', 'rzz'], 'fields': ['rz'], 'mixer': ['rx']}; min stabilizer/logical-X/ancilla-Z expectation after init: 1.000000; model_ok=True []
+   distinct kept masses: [0.0, 1.0]
+   undetected harmful: total 84; in init/syndrome/measure: 10
+       [init] data[-1] reset(d0) fault X: kept=1.000 TV=0.4584 status=harmful L_x=0 L_z=101 w=2 shift=0 pure_shift=-1
+       [init] data[-1] reset(t) fault X: kept=1.000 TV=0.2653 status=harmful L_x=0 L_z=1010 w=2 shift=0 pure_shift=-1
+       [init] data[2] cx(d1,t) fault IX: kept=1.000 TV=0.2653 status=harmful L_x=0 L_z=1010 w=2 shift=0 pure_shift=-1
+       [init] data[2] cx(d1,t) fault ZY: kept=1.000 TV=0.2653 status=harmful L_x=10 L_z=1010 w=2 shift=10 pure_shift=-1
+       [init] data[3] cx(t,c2) fault XX: kept=1.000 TV=0.2653 status=harmful L_x=0 L_z=1010 w=2 shift=0 pure_shift=-1
+       [init] data[3] cx(t,c2) fault YY: kept=1.000 TV=0.2653 status=harmful L_x=0 L_z=1010 w=2 shift=0 pure_shift=-1
+   readout flips: 9 ; all discarded: True
+   logical weight (skeleton residual) of undetected harmful faults: {1: 52, 2: 31, 4: 1}; with X left on ancilla: 4
+   harmful faults whose kept dist is an exact XOR shift of the ideal: weights {1: 12} (of 84)
+   ... of which on gates touching b, by weight: {2: 1, 4: 1}
+      max-weight example: [init] data[6] cx(b,d0) fault ZY: kept=1.000 TV=0.4584 status=harmful L_x=1110 L_z=101 w=4 shift=1110 pure_shift=-1
+   time 1.1s

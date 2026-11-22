@@ -1,0 +1,5 @@
+.venv/
+.qfm-venv/
+__pycache__/
+*.pyc
+output/

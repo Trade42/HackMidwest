@@ -1,0 +1,105 @@
+--- k=7 p=2 E=9
+   direct       n=12 faults= 1098 potentially-harmful undetected= 148 in init/syndrome/measure=11 clean weights={1: 30, 2: 61, 7: 28, 8: 29} bus-residual footprints={}
+       PART: [init] data[1] cx(t,d0) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[1] cx(t,d0) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[2] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+   bus[direct]  n=15 faults= 2787 potentially-harmful undetected= 148 in init/syndrome/measure=10 clean weights={1: 84, 2: 62, 7: 1, 8: 1} bus-residual footprints={}
+       PART: [init] data[1] cx(d3,d5) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=101000 L_z=0 w=2 shift=101000 pure_shift=-1
+       PART: [init] data[1] cx(d3,d5) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=101000 L_z=0 w=2 shift=101000 pure_shift=-1
+       PART: [init] data[2] cx(d5,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=100010 L_z=0 w=2 shift=100010 pure_shift=-1
+   bus[bus]     n=15 faults= 3207 potentially-harmful undetected= 152 in init/syndrome/measure=10 clean weights={1: 84, 2: 62, 7: 1, 8: 1} bus-residual footprints={2: 4}
+       PART: [init] data[1] cx(d3,d5) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=101000 L_z=0 w=2 shift=101000 pure_shift=-1
+       PART: [init] data[1] cx(d3,d5) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=101000 L_z=0 w=2 shift=101000 pure_shift=-1
+       PART: [init] data[2] cx(d5,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=100010 L_z=0 w=2 shift=100010 pure_shift=-1
+--- k=8 p=1 E=9
+   direct       n=12 faults=  783 potentially-harmful undetected=  85 in init/syndrome/measure=11 clean weights={1: 18, 2: 34, 7: 16, 8: 17} bus-residual footprints={}
+       PART: [init] data[1] cx(t,d0) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[1] cx(t,d0) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[2] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+   bus[direct]  n=15 faults= 1746 potentially-harmful undetected=  86 in init/syndrome/measure=11 clean weights={1: 49, 2: 35, 7: 1, 8: 1} bus-residual footprints={}
+       PART: [init] data[1] cx(d6,d3) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1001000 L_z=0 w=2 shift=1001000 pure_shift=-1
+       PART: [init] data[1] cx(d6,d3) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1001000 L_z=0 w=2 shift=1001000 pure_shift=-1
+       PART: [init] data[2] cx(d3,d4) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11000 L_z=0 w=2 shift=11000 pure_shift=-1
+   bus[bus]     n=15 faults= 1914 potentially-harmful undetected=  86 in init/syndrome/measure=11 clean weights={1: 49, 2: 35, 7: 1, 8: 1} bus-residual footprints={}
+       PART: [init] data[1] cx(d5,d6) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1100000 L_z=0 w=2 shift=1100000 pure_shift=-1
+       PART: [init] data[1] cx(d5,d6) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1100000 L_z=0 w=2 shift=1100000 pure_shift=-1
+       PART: [init] data[2] cx(d6,d7) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11000000 L_z=0 w=2 shift=11000000 pure_shift=-1
+--- k=8 p=2 E=11
+   direct       n=12 faults= 1218 potentially-harmful undetected= 172 in init/syndrome/measure=11 clean weights={1: 34, 2: 73, 7: 32, 8: 33} bus-residual footprints={}
+       PART: [init] data[1] cx(t,d0) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[1] cx(t,d0) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[2] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+   bus[direct]  n=15 faults= 3267 potentially-harmful undetected= 177 in init/syndrome/measure=11 clean weights={1: 97, 2: 74, 7: 1, 8: 1} bus-residual footprints={4: 4}
+       PART: [init] data[1] cx(d0,d5) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=100001 L_z=0 w=2 shift=100001 pure_shift=-1
+       PART: [init] data[1] cx(d0,d5) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=100001 L_z=0 w=2 shift=100001 pure_shift=-1
+       PART: [init] data[2] cx(d5,d2) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=100100 L_z=0 w=2 shift=100100 pure_shift=-1
+   bus[bus]     n=15 faults= 3591 potentially-harmful undetected= 177 in init/syndrome/measure=11 clean weights={1: 97, 2: 74, 7: 1, 8: 1} bus-residual footprints={5: 4}
+       PART: [init] data[1] cx(d0,d1) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+       PART: [init] data[1] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+       PART: [init] data[2] cx(d1,d2) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=110 L_z=0 w=2 shift=110 pure_shift=-1
+--- k=9 p=2 E=11
+   direct       n=14 faults= 1348 potentially-harmful undetected= 186 in init/syndrome/measure=13 clean weights={1: 38, 2: 75, 9: 36, 10: 37} bus-residual footprints={}
+       PART: [init] data[1] cx(t,d0) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[1] cx(t,d0) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[2] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+   bus[direct]  n=18 faults= 3441 potentially-harmful undetected= 191 in init/syndrome/measure=13 clean weights={1: 109, 2: 76, 9: 1, 10: 1} bus-residual footprints={3: 4}
+       PART: [init] data[1] cx(d7,d9) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1010000000 L_z=0 w=2 shift=10000000 pure_shift=-1
+       PART: [init] data[1] cx(d7,d9) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1010000000 L_z=0 w=2 shift=10000000 pure_shift=-1
+       PART: [init] data[2] cx(d9,d8) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1100000000 L_z=0 w=2 shift=100000000 pure_shift=-1
+   bus[bus]     n=18 faults= 3957 potentially-harmful undetected= 187 in init/syndrome/measure=13 clean weights={1: 109, 2: 76, 9: 1, 10: 1} bus-residual footprints={}
+       PART: [init] data[1] cx(d2,d4) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=10100 L_z=0 w=2 shift=10100 pure_shift=-1
+       PART: [init] data[1] cx(d2,d4) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=10100 L_z=0 w=2 shift=10100 pure_shift=-1
+       PART: [init] data[2] cx(d4,d3) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11000 L_z=0 w=2 shift=11000 pure_shift=-1
+--- k=10 p=1 E=9
+   direct       n=14 faults=  913 potentially-harmful undetected=  99 in init/syndrome/measure=13 clean weights={1: 22, 2: 36, 9: 20, 10: 21} bus-residual footprints={}
+       PART: [init] data[1] cx(t,d0) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[1] cx(t,d0) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[2] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+   bus[direct]  n=18 faults= 1986 potentially-harmful undetected= 100 in init/syndrome/measure=13 clean weights={1: 61, 2: 37, 9: 1, 10: 1} bus-residual footprints={}
+       PART: [init] data[1] cx(d7,d6) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=11000000 L_z=0 w=2 shift=11000000 pure_shift=-1
+       PART: [init] data[1] cx(d7,d6) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11000000 L_z=0 w=2 shift=11000000 pure_shift=-1
+       PART: [init] data[2] cx(d6,d2) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1000100 L_z=0 w=2 shift=1000100 pure_shift=-1
+   bus[bus]     n=18 faults= 2304 potentially-harmful undetected= 100 in init/syndrome/measure=13 clean weights={1: 61, 2: 37, 9: 1, 10: 1} bus-residual footprints={}
+       PART: [init] data[1] cx(d7,d8) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=110000000 L_z=0 w=2 shift=110000000 pure_shift=-1
+       PART: [init] data[1] cx(d7,d8) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=110000000 L_z=0 w=2 shift=110000000 pure_shift=-1
+       PART: [init] data[2] cx(d8,d2) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=100000100 L_z=0 w=2 shift=100000100 pure_shift=-1
+--- k=10 p=2 E=14
+   direct       n=14 faults= 1498 potentially-harmful undetected= 216 in init/syndrome/measure=13 clean weights={1: 42, 2: 93, 9: 40, 10: 41} bus-residual footprints={}
+       PART: [init] data[1] cx(t,d0) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[1] cx(t,d0) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[2] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+   bus[direct]  n=18 faults= 4011 potentially-harmful undetected= 217 in init/syndrome/measure=13 clean weights={1: 121, 2: 94, 9: 1, 10: 1} bus-residual footprints={}
+       PART: [init] data[1] cx(d4,d8) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=100010000 L_z=0 w=2 shift=100010000 pure_shift=-1
+       PART: [init] data[1] cx(d4,d8) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=100010000 L_z=0 w=2 shift=100010000 pure_shift=-1
+       PART: [init] data[2] cx(d8,d0) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=100000001 L_z=0 w=2 shift=100000001 pure_shift=-1
+   bus[bus]     n=18 faults= 4527 potentially-harmful undetected= 217 in init/syndrome/measure=13 clean weights={1: 121, 2: 94, 9: 1, 10: 1} bus-residual footprints={}
+       PART: [init] data[1] cx(d1,d9) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1000000010 L_z=0 w=2 shift=1000000010 pure_shift=-1
+       PART: [init] data[1] cx(d1,d9) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1000000010 L_z=0 w=2 shift=1000000010 pure_shift=-1
+       PART: [init] data[2] cx(d9,d6) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1001000000 L_z=0 w=2 shift=1001000000 pure_shift=-1
+--- k=10 p=2 E=45
+   direct       n=14 faults= 2428 potentially-harmful undetected= 402 in init/syndrome/measure=13 clean weights={1: 42, 2: 279, 9: 40, 10: 41} bus-residual footprints={}
+       PART: [init] data[1] cx(t,d0) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[1] cx(t,d0) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[2] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+   bus[direct]  n=18 faults= 7665 potentially-harmful undetected= 407 in init/syndrome/measure=13 clean weights={1: 121, 2: 280, 9: 1, 10: 1} bus-residual footprints={10: 4}
+       PART: [init] data[1] cx(d0,d1) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+       PART: [init] data[1] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+       PART: [init] data[2] cx(d1,d2) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=110 L_z=0 w=2 shift=110 pure_shift=-1
+   bus[bus]     n=18 faults= 8073 potentially-harmful undetected= 407 in init/syndrome/measure=13 clean weights={1: 121, 2: 280, 9: 1, 10: 1} bus-residual footprints={10: 4}
+       PART: [init] data[1] cx(d0,d1) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+       PART: [init] data[1] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+       PART: [init] data[2] cx(d1,d2) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=110 L_z=0 w=2 shift=110 pure_shift=-1
+--- k=12 p=2 E=17
+   direct       n=16 faults= 1778 potentially-harmful undetected= 260 in init/syndrome/measure=15 clean weights={1: 50, 2: 113, 11: 48, 12: 49} bus-residual footprints={}
+       PART: [init] data[1] cx(t,d0) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[1] cx(t,d0) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1 L_z=0 w=1 shift=1 pure_shift=-1
+       PART: [init] data[2] cx(d0,d1) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11 L_z=0 w=2 shift=11 pure_shift=-1
+   bus[direct]  n=21 faults= 4791 potentially-harmful undetected= 265 in init/syndrome/measure=15 clean weights={1: 145, 2: 114, 11: 1, 12: 1} bus-residual footprints={4: 4}
+       PART: [init] data[1] cx(d6,d9) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=1001000000 L_z=0 w=2 shift=1001000000 pure_shift=-1
+       PART: [init] data[1] cx(d6,d9) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1001000000 L_z=0 w=2 shift=1001000000 pure_shift=-1
+       PART: [init] data[2] cx(d9,d2) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=1000000100 L_z=0 w=2 shift=1000000100 pure_shift=-1
+   bus[bus]     n=21 faults= 5283 potentially-harmful undetected= 265 in init/syndrome/measure=15 clean weights={1: 145, 2: 114, 11: 1, 12: 1} bus-residual footprints={3: 4}
+       PART: [init] data[1] cx(d6,d7) fault YY: kept=0.000 TV=0.0000 status=harmful L_x=11000000 L_z=0 w=2 shift=11000000 pure_shift=-1
+       PART: [init] data[1] cx(d6,d7) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=11000000 L_z=0 w=2 shift=11000000 pure_shift=-1
+       PART: [init] data[2] cx(d7,d4) fault ZZ: kept=0.000 TV=0.0000 status=harmful L_x=10010000 L_z=0 w=2 shift=10010000 pure_shift=-1
+total faults 73614, 7s

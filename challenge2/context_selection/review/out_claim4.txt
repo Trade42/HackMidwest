@@ -1,0 +1,40 @@
+k=4 on from_grid(3,3): simulate the transpiled circuit
+  ef=0.5 p=1 mode=direct seed_transpiler=0: gates=['cz', 'rz', 'sx', 'x'] 2q=55 budget=56 depth=132 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=1.7e-16 max|enc-transpiled|=2.4e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.5 p=1 mode=direct seed_transpiler=1: gates=['cz', 'rz', 'sx', 'x'] 2q=55 budget=56 depth=132 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=1.7e-16 max|enc-transpiled|=2.4e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.5 p=1 mode=direct seed_transpiler=2: gates=['cz', 'rz', 'sx', 'x'] 2q=55 budget=56 depth=132 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=1.7e-16 max|enc-transpiled|=2.4e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.5 p=1 mode=bus    seed_transpiler=0: gates=['cz', 'rz', 'sx', 'x'] 2q=57 budget=60 depth=145 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=2.5e-16 max|enc-transpiled|=2.2e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.5 p=1 mode=bus    seed_transpiler=1: gates=['cz', 'rz', 'sx', 'x'] 2q=57 budget=60 depth=145 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=2.5e-16 max|enc-transpiled|=2.2e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.5 p=1 mode=bus    seed_transpiler=2: gates=['cz', 'rz', 'sx', 'x'] 2q=57 budget=60 depth=145 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=2.5e-16 max|enc-transpiled|=2.2e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=1.0 p=1 mode=direct seed_transpiler=0: gates=['cz', 'rz', 'sx', 'x'] 2q=65 budget=68 depth=165 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=2.8e-16 max|enc-transpiled|=3.7e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=1.0 p=1 mode=direct seed_transpiler=1: gates=['cz', 'rz', 'sx', 'x'] 2q=65 budget=68 depth=165 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=2.8e-16 max|enc-transpiled|=3.7e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=1.0 p=1 mode=direct seed_transpiler=2: gates=['cz', 'rz', 'sx', 'x'] 2q=65 budget=68 depth=165 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=2.8e-16 max|enc-transpiled|=3.7e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=1.0 p=2 mode=direct seed_transpiler=0: gates=['cz', 'rz', 'sx', 'x'] 2q=111 budget=116 depth=281 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=1.0e-15 max|enc-transpiled|=4.4e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=1.0 p=2 mode=direct seed_transpiler=1: gates=['cz', 'rz', 'sx', 'x'] 2q=111 budget=116 depth=281 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=1.0e-15 max|enc-transpiled|=4.4e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=1.0 p=2 mode=direct seed_transpiler=2: gates=['cz', 'rz', 'sx', 'x'] 2q=111 budget=116 depth=281 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=1.0e-15 max|enc-transpiled|=4.4e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.67 p=2 mode=bus    seed_transpiler=0: gates=['cz', 'rz', 'sx', 'x'] 2q=99 budget=104 depth=250 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=6.7e-16 max|enc-transpiled|=4.4e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.67 p=2 mode=bus    seed_transpiler=1: gates=['cz', 'rz', 'sx', 'x'] 2q=99 budget=104 depth=250 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=6.7e-16 max|enc-transpiled|=4.4e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.67 p=2 mode=bus    seed_transpiler=2: gates=['cz', 'rz', 'sx', 'x'] 2q=99 budget=104 depth=250 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=6.7e-16 max|enc-transpiled|=4.4e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.0 p=1 mode=direct seed_transpiler=0: gates=['cz', 'rz', 'sx', 'x'] 2q=47 budget=48 depth=115 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=3.3e-16 max|enc-transpiled|=4.7e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.0 p=1 mode=direct seed_transpiler=1: gates=['cz', 'rz', 'sx', 'x'] 2q=47 budget=48 depth=115 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=3.3e-16 max|enc-transpiled|=4.7e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.0 p=1 mode=direct seed_transpiler=2: gates=['cz', 'rz', 'sx', 'x'] 2q=47 budget=48 depth=115 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=3.3e-16 max|enc-transpiled|=4.7e-16 kept=1.000000000 pkg_kept=1.000000
+  ef=0.34 p=2 mode=direct seed_transpiler=0: gates=['cz', 'rz', 'sx', 'x'] 2q=87 budget=88 depth=215 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=6.4e-16 max|enc-transpiled|=1.1e-15 kept=1.000000000 pkg_kept=1.000000
+  ef=0.34 p=2 mode=direct seed_transpiler=1: gates=['cz', 'rz', 'sx', 'x'] 2q=87 budget=88 depth=215 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=6.4e-16 max|enc-transpiled|=1.1e-15 kept=1.000000000 pkg_kept=1.000000
+  ef=0.34 p=2 mode=direct seed_transpiler=2: gates=['cz', 'rz', 'sx', 'x'] 2q=87 budget=88 depth=215 on_edges=True metadata_kept=True clbits_ok=True max|logical-bare|=6.4e-16 max|enc-transpiled|=1.1e-15 kept=1.000000000 pkg_kept=1.000000
+elapsed 1s
+k=10 on from_grid(4,6): gate count only
+  ef=0.2 E=9 p=1 mode=direct seed=0: qubits=18 2q=125 budget=130 ok=True swaps_in_layout=False (0.0s)
+  ef=0.2 E=9 p=1 mode=direct seed=1: qubits=18 2q=125 budget=130 ok=True swaps_in_layout=False (0.0s)
+     (encode_direct for contrast: 2q=191 budget=85)
+  ef=0.3 E=14 p=1 mode=direct seed=0: qubits=18 2q=141 budget=144 ok=True swaps_in_layout=False (0.0s)
+  ef=0.3 E=14 p=1 mode=direct seed=1: qubits=18 2q=141 budget=144 ok=True swaps_in_layout=False (0.0s)
+     (encode_direct for contrast: 2q=196 budget=95)
+  ef=0.3 E=14 p=2 mode=direct seed=0: qubits=18 2q=245 budget=250 ok=True swaps_in_layout=False (0.0s)
+  ef=0.3 E=14 p=2 mode=direct seed=1: qubits=18 2q=245 budget=250 ok=True swaps_in_layout=False (0.0s)
+     (encode_direct for contrast: 2q=361 budget=163)
+  ef=0.5 E=23 p=1 mode=bus    seed=0: qubits=18 2q=175 budget=190 ok=True swaps_in_layout=False (0.0s)
+  ef=0.5 E=23 p=1 mode=bus    seed=1: qubits=18 2q=175 budget=190 ok=True swaps_in_layout=False (0.0s)
+     (encode_direct for contrast: 2q=248 budget=113)
+  ef=1.0 E=45 p=1 mode=direct seed=0: qubits=18 2q=249 budget=266 ok=True swaps_in_layout=False (0.0s)
+  ef=1.0 E=45 p=1 mode=direct seed=1: qubits=18 2q=249 budget=266 ok=True swaps_in_layout=False (0.0s)
+     (encode_direct for contrast: 2q=310 budget=157)
+elapsed 1s

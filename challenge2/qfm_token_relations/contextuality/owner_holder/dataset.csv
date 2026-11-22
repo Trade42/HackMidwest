@@ -1,0 +1,513 @@
+scenario,split,sentence,owns,holds
+Nora/tablet,train,Nora owns the tablet; Nora carries it. Ava neither owns nor carries it.,0,0
+Nora/tablet,train,"Nora holds the tablet, which belongs to Nora. Ava neither owns nor holds it.",0,0
+Nora/tablet,train,Nora owns the tablet; Ava carries it.,0,1
+Nora/tablet,train,"Ava holds the tablet, which belongs to Nora.",0,1
+Nora/tablet,train,Ava owns the tablet; Nora carries it.,1,0
+Nora/tablet,train,"Nora holds the tablet, which belongs to Ava.",1,0
+Nora/tablet,train,Ava owns the tablet; Ava carries it. Nora neither owns nor carries it.,1,1
+Nora/tablet,train,"Ava holds the tablet, which belongs to Ava. Nora neither owns nor holds it.",1,1
+Lana/camera,train,Lana owns the camera; Lana carries it. Ava neither owns nor carries it.,0,0
+Lana/camera,train,"Lana holds the camera, which belongs to Lana. Ava neither owns nor holds it.",0,0
+Lana/camera,train,Lana owns the camera; Ava carries it.,0,1
+Lana/camera,train,"Ava holds the camera, which belongs to Lana.",0,1
+Lana/camera,train,Ava owns the camera; Lana carries it.,1,0
+Lana/camera,train,"Lana holds the camera, which belongs to Ava.",1,0
+Lana/camera,train,Ava owns the camera; Ava carries it. Lana neither owns nor carries it.,1,1
+Lana/camera,train,"Ava holds the camera, which belongs to Ava. Lana neither owns nor holds it.",1,1
+Kira/camera,train,Kira owns the camera; Kira carries it. Ava neither owns nor carries it.,0,0
+Kira/camera,train,"Kira holds the camera, which belongs to Kira. Ava neither owns nor holds it.",0,0
+Kira/camera,train,Kira owns the camera; Ava carries it.,0,1
+Kira/camera,train,"Ava holds the camera, which belongs to Kira.",0,1
+Kira/camera,train,Ava owns the camera; Kira carries it.,1,0
+Kira/camera,train,"Kira holds the camera, which belongs to Ava.",1,0
+Kira/camera,train,Ava owns the camera; Ava carries it. Kira neither owns nor carries it.,1,1
+Kira/camera,train,"Ava holds the camera, which belongs to Ava. Kira neither owns nor holds it.",1,1
+Nora/book,train,Nora owns the book; Nora carries it. Ava neither owns nor carries it.,0,0
+Nora/book,train,"Nora holds the book, which belongs to Nora. Ava neither owns nor holds it.",0,0
+Nora/book,train,Nora owns the book; Ava carries it.,0,1
+Nora/book,train,"Ava holds the book, which belongs to Nora.",0,1
+Nora/book,train,Ava owns the book; Nora carries it.,1,0
+Nora/book,train,"Nora holds the book, which belongs to Ava.",1,0
+Nora/book,train,Ava owns the book; Ava carries it. Nora neither owns nor carries it.,1,1
+Nora/book,train,"Ava holds the book, which belongs to Ava. Nora neither owns nor holds it.",1,1
+Mia/charger,train,Mia owns the charger; Mia carries it. Ava neither owns nor carries it.,0,0
+Mia/charger,train,"Mia holds the charger, which belongs to Mia. Ava neither owns nor holds it.",0,0
+Mia/charger,train,Mia owns the charger; Ava carries it.,0,1
+Mia/charger,train,"Ava holds the charger, which belongs to Mia.",0,1
+Mia/charger,train,Ava owns the charger; Mia carries it.,1,0
+Mia/charger,train,"Mia holds the charger, which belongs to Ava.",1,0
+Mia/charger,train,Ava owns the charger; Ava carries it. Mia neither owns nor carries it.,1,1
+Mia/charger,train,"Ava holds the charger, which belongs to Ava. Mia neither owns nor holds it.",1,1
+Kira/coat,train,Kira owns the coat; Kira carries it. Ava neither owns nor carries it.,0,0
+Kira/coat,train,"Kira holds the coat, which belongs to Kira. Ava neither owns nor holds it.",0,0
+Kira/coat,train,Kira owns the coat; Ava carries it.,0,1
+Kira/coat,train,"Ava holds the coat, which belongs to Kira.",0,1
+Kira/coat,train,Ava owns the coat; Kira carries it.,1,0
+Kira/coat,train,"Kira holds the coat, which belongs to Ava.",1,0
+Kira/coat,train,Ava owns the coat; Ava carries it. Kira neither owns nor carries it.,1,1
+Kira/coat,train,"Ava holds the coat, which belongs to Ava. Kira neither owns nor holds it.",1,1
+Nora/key,train,Nora owns the key; Nora carries it. Ava neither owns nor carries it.,0,0
+Nora/key,train,"Nora holds the key, which belongs to Nora. Ava neither owns nor holds it.",0,0
+Nora/key,train,Nora owns the key; Ava carries it.,0,1
+Nora/key,train,"Ava holds the key, which belongs to Nora.",0,1
+Nora/key,train,Ava owns the key; Nora carries it.,1,0
+Nora/key,train,"Nora holds the key, which belongs to Ava.",1,0
+Nora/key,train,Ava owns the key; Ava carries it. Nora neither owns nor carries it.,1,1
+Nora/key,train,"Ava holds the key, which belongs to Ava. Nora neither owns nor holds it.",1,1
+Iris/scarf,train,Iris owns the scarf; Iris carries it. Ava neither owns nor carries it.,0,0
+Iris/scarf,train,"Iris holds the scarf, which belongs to Iris. Ava neither owns nor holds it.",0,0
+Iris/scarf,train,Iris owns the scarf; Ava carries it.,0,1
+Iris/scarf,train,"Ava holds the scarf, which belongs to Iris.",0,1
+Iris/scarf,train,Ava owns the scarf; Iris carries it.,1,0
+Iris/scarf,train,"Iris holds the scarf, which belongs to Ava.",1,0
+Iris/scarf,train,Ava owns the scarf; Ava carries it. Iris neither owns nor carries it.,1,1
+Iris/scarf,train,"Ava holds the scarf, which belongs to Ava. Iris neither owns nor holds it.",1,1
+Eva/charger,train,Eva owns the charger; Eva carries it. Ava neither owns nor carries it.,0,0
+Eva/charger,train,"Eva holds the charger, which belongs to Eva. Ava neither owns nor holds it.",0,0
+Eva/charger,train,Eva owns the charger; Ava carries it.,0,1
+Eva/charger,train,"Ava holds the charger, which belongs to Eva.",0,1
+Eva/charger,train,Ava owns the charger; Eva carries it.,1,0
+Eva/charger,train,"Eva holds the charger, which belongs to Ava.",1,0
+Eva/charger,train,Ava owns the charger; Ava carries it. Eva neither owns nor carries it.,1,1
+Eva/charger,train,"Ava holds the charger, which belongs to Ava. Eva neither owns nor holds it.",1,1
+Lana/folder,train,Lana owns the folder; Lana carries it. Ava neither owns nor carries it.,0,0
+Lana/folder,train,"Lana holds the folder, which belongs to Lana. Ava neither owns nor holds it.",0,0
+Lana/folder,train,Lana owns the folder; Ava carries it.,0,1
+Lana/folder,train,"Ava holds the folder, which belongs to Lana.",0,1
+Lana/folder,train,Ava owns the folder; Lana carries it.,1,0
+Lana/folder,train,"Lana holds the folder, which belongs to Ava.",1,0
+Lana/folder,train,Ava owns the folder; Ava carries it. Lana neither owns nor carries it.,1,1
+Lana/folder,train,"Ava holds the folder, which belongs to Ava. Lana neither owns nor holds it.",1,1
+Lana/scarf,train,Lana owns the scarf; Lana carries it. Ava neither owns nor carries it.,0,0
+Lana/scarf,train,"Lana holds the scarf, which belongs to Lana. Ava neither owns nor holds it.",0,0
+Lana/scarf,train,Lana owns the scarf; Ava carries it.,0,1
+Lana/scarf,train,"Ava holds the scarf, which belongs to Lana.",0,1
+Lana/scarf,train,Ava owns the scarf; Lana carries it.,1,0
+Lana/scarf,train,"Lana holds the scarf, which belongs to Ava.",1,0
+Lana/scarf,train,Ava owns the scarf; Ava carries it. Lana neither owns nor carries it.,1,1
+Lana/scarf,train,"Ava holds the scarf, which belongs to Ava. Lana neither owns nor holds it.",1,1
+Mia/tablet,train,Mia owns the tablet; Mia carries it. Ava neither owns nor carries it.,0,0
+Mia/tablet,train,"Mia holds the tablet, which belongs to Mia. Ava neither owns nor holds it.",0,0
+Mia/tablet,train,Mia owns the tablet; Ava carries it.,0,1
+Mia/tablet,train,"Ava holds the tablet, which belongs to Mia.",0,1
+Mia/tablet,train,Ava owns the tablet; Mia carries it.,1,0
+Mia/tablet,train,"Mia holds the tablet, which belongs to Ava.",1,0
+Mia/tablet,train,Ava owns the tablet; Ava carries it. Mia neither owns nor carries it.,1,1
+Mia/tablet,train,"Ava holds the tablet, which belongs to Ava. Mia neither owns nor holds it.",1,1
+Eva/tablet,train,Eva owns the tablet; Eva carries it. Ava neither owns nor carries it.,0,0
+Eva/tablet,train,"Eva holds the tablet, which belongs to Eva. Ava neither owns nor holds it.",0,0
+Eva/tablet,train,Eva owns the tablet; Ava carries it.,0,1
+Eva/tablet,train,"Ava holds the tablet, which belongs to Eva.",0,1
+Eva/tablet,train,Ava owns the tablet; Eva carries it.,1,0
+Eva/tablet,train,"Eva holds the tablet, which belongs to Ava.",1,0
+Eva/tablet,train,Ava owns the tablet; Ava carries it. Eva neither owns nor carries it.,1,1
+Eva/tablet,train,"Ava holds the tablet, which belongs to Ava. Eva neither owns nor holds it.",1,1
+Nora/coat,train,Nora owns the coat; Nora carries it. Ava neither owns nor carries it.,0,0
+Nora/coat,train,"Nora holds the coat, which belongs to Nora. Ava neither owns nor holds it.",0,0
+Nora/coat,train,Nora owns the coat; Ava carries it.,0,1
+Nora/coat,train,"Ava holds the coat, which belongs to Nora.",0,1
+Nora/coat,train,Ava owns the coat; Nora carries it.,1,0
+Nora/coat,train,"Nora holds the coat, which belongs to Ava.",1,0
+Nora/coat,train,Ava owns the coat; Ava carries it. Nora neither owns nor carries it.,1,1
+Nora/coat,train,"Ava holds the coat, which belongs to Ava. Nora neither owns nor holds it.",1,1
+Bea/book,train,Bea owns the book; Bea carries it. Ava neither owns nor carries it.,0,0
+Bea/book,train,"Bea holds the book, which belongs to Bea. Ava neither owns nor holds it.",0,0
+Bea/book,train,Bea owns the book; Ava carries it.,0,1
+Bea/book,train,"Ava holds the book, which belongs to Bea.",0,1
+Bea/book,train,Ava owns the book; Bea carries it.,1,0
+Bea/book,train,"Bea holds the book, which belongs to Ava.",1,0
+Bea/book,train,Ava owns the book; Ava carries it. Bea neither owns nor carries it.,1,1
+Bea/book,train,"Ava holds the book, which belongs to Ava. Bea neither owns nor holds it.",1,1
+Kira/tablet,train,Kira owns the tablet; Kira carries it. Ava neither owns nor carries it.,0,0
+Kira/tablet,train,"Kira holds the tablet, which belongs to Kira. Ava neither owns nor holds it.",0,0
+Kira/tablet,train,Kira owns the tablet; Ava carries it.,0,1
+Kira/tablet,train,"Ava holds the tablet, which belongs to Kira.",0,1
+Kira/tablet,train,Ava owns the tablet; Kira carries it.,1,0
+Kira/tablet,train,"Kira holds the tablet, which belongs to Ava.",1,0
+Kira/tablet,train,Ava owns the tablet; Ava carries it. Kira neither owns nor carries it.,1,1
+Kira/tablet,train,"Ava holds the tablet, which belongs to Ava. Kira neither owns nor holds it.",1,1
+Eva/folder,train,Eva owns the folder; Eva carries it. Ava neither owns nor carries it.,0,0
+Eva/folder,train,"Eva holds the folder, which belongs to Eva. Ava neither owns nor holds it.",0,0
+Eva/folder,train,Eva owns the folder; Ava carries it.,0,1
+Eva/folder,train,"Ava holds the folder, which belongs to Eva.",0,1
+Eva/folder,train,Ava owns the folder; Eva carries it.,1,0
+Eva/folder,train,"Eva holds the folder, which belongs to Ava.",1,0
+Eva/folder,train,Ava owns the folder; Ava carries it. Eva neither owns nor carries it.,1,1
+Eva/folder,train,"Ava holds the folder, which belongs to Ava. Eva neither owns nor holds it.",1,1
+Kira/folder,train,Kira owns the folder; Kira carries it. Ava neither owns nor carries it.,0,0
+Kira/folder,train,"Kira holds the folder, which belongs to Kira. Ava neither owns nor holds it.",0,0
+Kira/folder,train,Kira owns the folder; Ava carries it.,0,1
+Kira/folder,train,"Ava holds the folder, which belongs to Kira.",0,1
+Kira/folder,train,Ava owns the folder; Kira carries it.,1,0
+Kira/folder,train,"Kira holds the folder, which belongs to Ava.",1,0
+Kira/folder,train,Ava owns the folder; Ava carries it. Kira neither owns nor carries it.,1,1
+Kira/folder,train,"Ava holds the folder, which belongs to Ava. Kira neither owns nor holds it.",1,1
+Eva/book,train,Eva owns the book; Eva carries it. Ava neither owns nor carries it.,0,0
+Eva/book,train,"Eva holds the book, which belongs to Eva. Ava neither owns nor holds it.",0,0
+Eva/book,train,Eva owns the book; Ava carries it.,0,1
+Eva/book,train,"Ava holds the book, which belongs to Eva.",0,1
+Eva/book,train,Ava owns the book; Eva carries it.,1,0
+Eva/book,train,"Eva holds the book, which belongs to Ava.",1,0
+Eva/book,train,Ava owns the book; Ava carries it. Eva neither owns nor carries it.,1,1
+Eva/book,train,"Ava holds the book, which belongs to Ava. Eva neither owns nor holds it.",1,1
+Iris/camera,train,Iris owns the camera; Iris carries it. Ava neither owns nor carries it.,0,0
+Iris/camera,train,"Iris holds the camera, which belongs to Iris. Ava neither owns nor holds it.",0,0
+Iris/camera,train,Iris owns the camera; Ava carries it.,0,1
+Iris/camera,train,"Ava holds the camera, which belongs to Iris.",0,1
+Iris/camera,train,Ava owns the camera; Iris carries it.,1,0
+Iris/camera,train,"Iris holds the camera, which belongs to Ava.",1,0
+Iris/camera,train,Ava owns the camera; Ava carries it. Iris neither owns nor carries it.,1,1
+Iris/camera,train,"Ava holds the camera, which belongs to Ava. Iris neither owns nor holds it.",1,1
+Iris/charger,train,Iris owns the charger; Iris carries it. Ava neither owns nor carries it.,0,0
+Iris/charger,train,"Iris holds the charger, which belongs to Iris. Ava neither owns nor holds it.",0,0
+Iris/charger,train,Iris owns the charger; Ava carries it.,0,1
+Iris/charger,train,"Ava holds the charger, which belongs to Iris.",0,1
+Iris/charger,train,Ava owns the charger; Iris carries it.,1,0
+Iris/charger,train,"Iris holds the charger, which belongs to Ava.",1,0
+Iris/charger,train,Ava owns the charger; Ava carries it. Iris neither owns nor carries it.,1,1
+Iris/charger,train,"Ava holds the charger, which belongs to Ava. Iris neither owns nor holds it.",1,1
+Eva/camera,train,Eva owns the camera; Eva carries it. Ava neither owns nor carries it.,0,0
+Eva/camera,train,"Eva holds the camera, which belongs to Eva. Ava neither owns nor holds it.",0,0
+Eva/camera,train,Eva owns the camera; Ava carries it.,0,1
+Eva/camera,train,"Ava holds the camera, which belongs to Eva.",0,1
+Eva/camera,train,Ava owns the camera; Eva carries it.,1,0
+Eva/camera,train,"Eva holds the camera, which belongs to Ava.",1,0
+Eva/camera,train,Ava owns the camera; Ava carries it. Eva neither owns nor carries it.,1,1
+Eva/camera,train,"Ava holds the camera, which belongs to Ava. Eva neither owns nor holds it.",1,1
+Iris/key,train,Iris owns the key; Iris carries it. Ava neither owns nor carries it.,0,0
+Iris/key,train,"Iris holds the key, which belongs to Iris. Ava neither owns nor holds it.",0,0
+Iris/key,train,Iris owns the key; Ava carries it.,0,1
+Iris/key,train,"Ava holds the key, which belongs to Iris.",0,1
+Iris/key,train,Ava owns the key; Iris carries it.,1,0
+Iris/key,train,"Iris holds the key, which belongs to Ava.",1,0
+Iris/key,train,Ava owns the key; Ava carries it. Iris neither owns nor carries it.,1,1
+Iris/key,train,"Ava holds the key, which belongs to Ava. Iris neither owns nor holds it.",1,1
+Mia/folder,train,Mia owns the folder; Mia carries it. Ava neither owns nor carries it.,0,0
+Mia/folder,train,"Mia holds the folder, which belongs to Mia. Ava neither owns nor holds it.",0,0
+Mia/folder,train,Mia owns the folder; Ava carries it.,0,1
+Mia/folder,train,"Ava holds the folder, which belongs to Mia.",0,1
+Mia/folder,train,Ava owns the folder; Mia carries it.,1,0
+Mia/folder,train,"Mia holds the folder, which belongs to Ava.",1,0
+Mia/folder,train,Ava owns the folder; Ava carries it. Mia neither owns nor carries it.,1,1
+Mia/folder,train,"Ava holds the folder, which belongs to Ava. Mia neither owns nor holds it.",1,1
+Nora/camera,train,Nora owns the camera; Nora carries it. Ava neither owns nor carries it.,0,0
+Nora/camera,train,"Nora holds the camera, which belongs to Nora. Ava neither owns nor holds it.",0,0
+Nora/camera,train,Nora owns the camera; Ava carries it.,0,1
+Nora/camera,train,"Ava holds the camera, which belongs to Nora.",0,1
+Nora/camera,train,Ava owns the camera; Nora carries it.,1,0
+Nora/camera,train,"Nora holds the camera, which belongs to Ava.",1,0
+Nora/camera,train,Ava owns the camera; Ava carries it. Nora neither owns nor carries it.,1,1
+Nora/camera,train,"Ava holds the camera, which belongs to Ava. Nora neither owns nor holds it.",1,1
+Zoe/charger,train,Zoe owns the charger; Zoe carries it. Ava neither owns nor carries it.,0,0
+Zoe/charger,train,"Zoe holds the charger, which belongs to Zoe. Ava neither owns nor holds it.",0,0
+Zoe/charger,train,Zoe owns the charger; Ava carries it.,0,1
+Zoe/charger,train,"Ava holds the charger, which belongs to Zoe.",0,1
+Zoe/charger,train,Ava owns the charger; Zoe carries it.,1,0
+Zoe/charger,train,"Zoe holds the charger, which belongs to Ava.",1,0
+Zoe/charger,train,Ava owns the charger; Ava carries it. Zoe neither owns nor carries it.,1,1
+Zoe/charger,train,"Ava holds the charger, which belongs to Ava. Zoe neither owns nor holds it.",1,1
+Eva/key,train,Eva owns the key; Eva carries it. Ava neither owns nor carries it.,0,0
+Eva/key,train,"Eva holds the key, which belongs to Eva. Ava neither owns nor holds it.",0,0
+Eva/key,train,Eva owns the key; Ava carries it.,0,1
+Eva/key,train,"Ava holds the key, which belongs to Eva.",0,1
+Eva/key,train,Ava owns the key; Eva carries it.,1,0
+Eva/key,train,"Eva holds the key, which belongs to Ava.",1,0
+Eva/key,train,Ava owns the key; Ava carries it. Eva neither owns nor carries it.,1,1
+Eva/key,train,"Ava holds the key, which belongs to Ava. Eva neither owns nor holds it.",1,1
+Kira/charger,train,Kira owns the charger; Kira carries it. Ava neither owns nor carries it.,0,0
+Kira/charger,train,"Kira holds the charger, which belongs to Kira. Ava neither owns nor holds it.",0,0
+Kira/charger,train,Kira owns the charger; Ava carries it.,0,1
+Kira/charger,train,"Ava holds the charger, which belongs to Kira.",0,1
+Kira/charger,train,Ava owns the charger; Kira carries it.,1,0
+Kira/charger,train,"Kira holds the charger, which belongs to Ava.",1,0
+Kira/charger,train,Ava owns the charger; Ava carries it. Kira neither owns nor carries it.,1,1
+Kira/charger,train,"Ava holds the charger, which belongs to Ava. Kira neither owns nor holds it.",1,1
+Nora/folder,train,Nora owns the folder; Nora carries it. Ava neither owns nor carries it.,0,0
+Nora/folder,train,"Nora holds the folder, which belongs to Nora. Ava neither owns nor holds it.",0,0
+Nora/folder,train,Nora owns the folder; Ava carries it.,0,1
+Nora/folder,train,"Ava holds the folder, which belongs to Nora.",0,1
+Nora/folder,train,Ava owns the folder; Nora carries it.,1,0
+Nora/folder,train,"Nora holds the folder, which belongs to Ava.",1,0
+Nora/folder,train,Ava owns the folder; Ava carries it. Nora neither owns nor carries it.,1,1
+Nora/folder,train,"Ava holds the folder, which belongs to Ava. Nora neither owns nor holds it.",1,1
+Lana/book,train,Lana owns the book; Lana carries it. Ava neither owns nor carries it.,0,0
+Lana/book,train,"Lana holds the book, which belongs to Lana. Ava neither owns nor holds it.",0,0
+Lana/book,train,Lana owns the book; Ava carries it.,0,1
+Lana/book,train,"Ava holds the book, which belongs to Lana.",0,1
+Lana/book,train,Ava owns the book; Lana carries it.,1,0
+Lana/book,train,"Lana holds the book, which belongs to Ava.",1,0
+Lana/book,train,Ava owns the book; Ava carries it. Lana neither owns nor carries it.,1,1
+Lana/book,train,"Ava holds the book, which belongs to Ava. Lana neither owns nor holds it.",1,1
+Zoe/coat,train,Zoe owns the coat; Zoe carries it. Ava neither owns nor carries it.,0,0
+Zoe/coat,train,"Zoe holds the coat, which belongs to Zoe. Ava neither owns nor holds it.",0,0
+Zoe/coat,train,Zoe owns the coat; Ava carries it.,0,1
+Zoe/coat,train,"Ava holds the coat, which belongs to Zoe.",0,1
+Zoe/coat,train,Ava owns the coat; Zoe carries it.,1,0
+Zoe/coat,train,"Zoe holds the coat, which belongs to Ava.",1,0
+Zoe/coat,train,Ava owns the coat; Ava carries it. Zoe neither owns nor carries it.,1,1
+Zoe/coat,train,"Ava holds the coat, which belongs to Ava. Zoe neither owns nor holds it.",1,1
+Bea/tablet,train,Bea owns the tablet; Bea carries it. Ava neither owns nor carries it.,0,0
+Bea/tablet,train,"Bea holds the tablet, which belongs to Bea. Ava neither owns nor holds it.",0,0
+Bea/tablet,train,Bea owns the tablet; Ava carries it.,0,1
+Bea/tablet,train,"Ava holds the tablet, which belongs to Bea.",0,1
+Bea/tablet,train,Ava owns the tablet; Bea carries it.,1,0
+Bea/tablet,train,"Bea holds the tablet, which belongs to Ava.",1,0
+Bea/tablet,train,Ava owns the tablet; Ava carries it. Bea neither owns nor carries it.,1,1
+Bea/tablet,train,"Ava holds the tablet, which belongs to Ava. Bea neither owns nor holds it.",1,1
+Nora/charger,train,Nora owns the charger; Nora carries it. Ava neither owns nor carries it.,0,0
+Nora/charger,train,"Nora holds the charger, which belongs to Nora. Ava neither owns nor holds it.",0,0
+Nora/charger,train,Nora owns the charger; Ava carries it.,0,1
+Nora/charger,train,"Ava holds the charger, which belongs to Nora.",0,1
+Nora/charger,train,Ava owns the charger; Nora carries it.,1,0
+Nora/charger,train,"Nora holds the charger, which belongs to Ava.",1,0
+Nora/charger,train,Ava owns the charger; Ava carries it. Nora neither owns nor carries it.,1,1
+Nora/charger,train,"Ava holds the charger, which belongs to Ava. Nora neither owns nor holds it.",1,1
+Bea/charger,train,Bea owns the charger; Bea carries it. Ava neither owns nor carries it.,0,0
+Bea/charger,train,"Bea holds the charger, which belongs to Bea. Ava neither owns nor holds it.",0,0
+Bea/charger,train,Bea owns the charger; Ava carries it.,0,1
+Bea/charger,train,"Ava holds the charger, which belongs to Bea.",0,1
+Bea/charger,train,Ava owns the charger; Bea carries it.,1,0
+Bea/charger,train,"Bea holds the charger, which belongs to Ava.",1,0
+Bea/charger,train,Ava owns the charger; Ava carries it. Bea neither owns nor carries it.,1,1
+Bea/charger,train,"Ava holds the charger, which belongs to Ava. Bea neither owns nor holds it.",1,1
+Kira/book,train,Kira owns the book; Kira carries it. Ava neither owns nor carries it.,0,0
+Kira/book,train,"Kira holds the book, which belongs to Kira. Ava neither owns nor holds it.",0,0
+Kira/book,train,Kira owns the book; Ava carries it.,0,1
+Kira/book,train,"Ava holds the book, which belongs to Kira.",0,1
+Kira/book,train,Ava owns the book; Kira carries it.,1,0
+Kira/book,train,"Kira holds the book, which belongs to Ava.",1,0
+Kira/book,train,Ava owns the book; Ava carries it. Kira neither owns nor carries it.,1,1
+Kira/book,train,"Ava holds the book, which belongs to Ava. Kira neither owns nor holds it.",1,1
+Mia/key,train,Mia owns the key; Mia carries it. Ava neither owns nor carries it.,0,0
+Mia/key,train,"Mia holds the key, which belongs to Mia. Ava neither owns nor holds it.",0,0
+Mia/key,train,Mia owns the key; Ava carries it.,0,1
+Mia/key,train,"Ava holds the key, which belongs to Mia.",0,1
+Mia/key,train,Ava owns the key; Mia carries it.,1,0
+Mia/key,train,"Mia holds the key, which belongs to Ava.",1,0
+Mia/key,train,Ava owns the key; Ava carries it. Mia neither owns nor carries it.,1,1
+Mia/key,train,"Ava holds the key, which belongs to Ava. Mia neither owns nor holds it.",1,1
+Bea/camera,train,Bea owns the camera; Bea carries it. Ava neither owns nor carries it.,0,0
+Bea/camera,train,"Bea holds the camera, which belongs to Bea. Ava neither owns nor holds it.",0,0
+Bea/camera,train,Bea owns the camera; Ava carries it.,0,1
+Bea/camera,train,"Ava holds the camera, which belongs to Bea.",0,1
+Bea/camera,train,Ava owns the camera; Bea carries it.,1,0
+Bea/camera,train,"Bea holds the camera, which belongs to Ava.",1,0
+Bea/camera,train,Ava owns the camera; Ava carries it. Bea neither owns nor carries it.,1,1
+Bea/camera,train,"Ava holds the camera, which belongs to Ava. Bea neither owns nor holds it.",1,1
+Nora/scarf,train,Nora owns the scarf; Nora carries it. Ava neither owns nor carries it.,0,0
+Nora/scarf,train,"Nora holds the scarf, which belongs to Nora. Ava neither owns nor holds it.",0,0
+Nora/scarf,train,Nora owns the scarf; Ava carries it.,0,1
+Nora/scarf,train,"Ava holds the scarf, which belongs to Nora.",0,1
+Nora/scarf,train,Ava owns the scarf; Nora carries it.,1,0
+Nora/scarf,train,"Nora holds the scarf, which belongs to Ava.",1,0
+Nora/scarf,train,Ava owns the scarf; Ava carries it. Nora neither owns nor carries it.,1,1
+Nora/scarf,train,"Ava holds the scarf, which belongs to Ava. Nora neither owns nor holds it.",1,1
+Zoe/camera,train,Zoe owns the camera; Zoe carries it. Ava neither owns nor carries it.,0,0
+Zoe/camera,train,"Zoe holds the camera, which belongs to Zoe. Ava neither owns nor holds it.",0,0
+Zoe/camera,train,Zoe owns the camera; Ava carries it.,0,1
+Zoe/camera,train,"Ava holds the camera, which belongs to Zoe.",0,1
+Zoe/camera,train,Ava owns the camera; Zoe carries it.,1,0
+Zoe/camera,train,"Zoe holds the camera, which belongs to Ava.",1,0
+Zoe/camera,train,Ava owns the camera; Ava carries it. Zoe neither owns nor carries it.,1,1
+Zoe/camera,train,"Ava holds the camera, which belongs to Ava. Zoe neither owns nor holds it.",1,1
+Iris/book,train,Iris owns the book; Iris carries it. Ava neither owns nor carries it.,0,0
+Iris/book,train,"Iris holds the book, which belongs to Iris. Ava neither owns nor holds it.",0,0
+Iris/book,train,Iris owns the book; Ava carries it.,0,1
+Iris/book,train,"Ava holds the book, which belongs to Iris.",0,1
+Iris/book,train,Ava owns the book; Iris carries it.,1,0
+Iris/book,train,"Iris holds the book, which belongs to Ava.",1,0
+Iris/book,train,Ava owns the book; Ava carries it. Iris neither owns nor carries it.,1,1
+Iris/book,train,"Ava holds the book, which belongs to Ava. Iris neither owns nor holds it.",1,1
+Eva/coat,validation,Eva owns the coat; Eva carries it. Ava neither owns nor carries it.,0,0
+Eva/coat,validation,"Eva holds the coat, which belongs to Eva. Ava neither owns nor holds it.",0,0
+Eva/coat,validation,Eva owns the coat; Ava carries it.,0,1
+Eva/coat,validation,"Ava holds the coat, which belongs to Eva.",0,1
+Eva/coat,validation,Ava owns the coat; Eva carries it.,1,0
+Eva/coat,validation,"Eva holds the coat, which belongs to Ava.",1,0
+Eva/coat,validation,Ava owns the coat; Ava carries it. Eva neither owns nor carries it.,1,1
+Eva/coat,validation,"Ava holds the coat, which belongs to Ava. Eva neither owns nor holds it.",1,1
+Mia/scarf,validation,Mia owns the scarf; Mia carries it. Ava neither owns nor carries it.,0,0
+Mia/scarf,validation,"Mia holds the scarf, which belongs to Mia. Ava neither owns nor holds it.",0,0
+Mia/scarf,validation,Mia owns the scarf; Ava carries it.,0,1
+Mia/scarf,validation,"Ava holds the scarf, which belongs to Mia.",0,1
+Mia/scarf,validation,Ava owns the scarf; Mia carries it.,1,0
+Mia/scarf,validation,"Mia holds the scarf, which belongs to Ava.",1,0
+Mia/scarf,validation,Ava owns the scarf; Ava carries it. Mia neither owns nor carries it.,1,1
+Mia/scarf,validation,"Ava holds the scarf, which belongs to Ava. Mia neither owns nor holds it.",1,1
+Bea/scarf,validation,Bea owns the scarf; Bea carries it. Ava neither owns nor carries it.,0,0
+Bea/scarf,validation,"Bea holds the scarf, which belongs to Bea. Ava neither owns nor holds it.",0,0
+Bea/scarf,validation,Bea owns the scarf; Ava carries it.,0,1
+Bea/scarf,validation,"Ava holds the scarf, which belongs to Bea.",0,1
+Bea/scarf,validation,Ava owns the scarf; Bea carries it.,1,0
+Bea/scarf,validation,"Bea holds the scarf, which belongs to Ava.",1,0
+Bea/scarf,validation,Ava owns the scarf; Ava carries it. Bea neither owns nor carries it.,1,1
+Bea/scarf,validation,"Ava holds the scarf, which belongs to Ava. Bea neither owns nor holds it.",1,1
+Zoe/key,validation,Zoe owns the key; Zoe carries it. Ava neither owns nor carries it.,0,0
+Zoe/key,validation,"Zoe holds the key, which belongs to Zoe. Ava neither owns nor holds it.",0,0
+Zoe/key,validation,Zoe owns the key; Ava carries it.,0,1
+Zoe/key,validation,"Ava holds the key, which belongs to Zoe.",0,1
+Zoe/key,validation,Ava owns the key; Zoe carries it.,1,0
+Zoe/key,validation,"Zoe holds the key, which belongs to Ava.",1,0
+Zoe/key,validation,Ava owns the key; Ava carries it. Zoe neither owns nor carries it.,1,1
+Zoe/key,validation,"Ava holds the key, which belongs to Ava. Zoe neither owns nor holds it.",1,1
+Iris/folder,validation,Iris owns the folder; Iris carries it. Ava neither owns nor carries it.,0,0
+Iris/folder,validation,"Iris holds the folder, which belongs to Iris. Ava neither owns nor holds it.",0,0
+Iris/folder,validation,Iris owns the folder; Ava carries it.,0,1
+Iris/folder,validation,"Ava holds the folder, which belongs to Iris.",0,1
+Iris/folder,validation,Ava owns the folder; Iris carries it.,1,0
+Iris/folder,validation,"Iris holds the folder, which belongs to Ava.",1,0
+Iris/folder,validation,Ava owns the folder; Ava carries it. Iris neither owns nor carries it.,1,1
+Iris/folder,validation,"Ava holds the folder, which belongs to Ava. Iris neither owns nor holds it.",1,1
+Lana/coat,validation,Lana owns the coat; Lana carries it. Ava neither owns nor carries it.,0,0
+Lana/coat,validation,"Lana holds the coat, which belongs to Lana. Ava neither owns nor holds it.",0,0
+Lana/coat,validation,Lana owns the coat; Ava carries it.,0,1
+Lana/coat,validation,"Ava holds the coat, which belongs to Lana.",0,1
+Lana/coat,validation,Ava owns the coat; Lana carries it.,1,0
+Lana/coat,validation,"Lana holds the coat, which belongs to Ava.",1,0
+Lana/coat,validation,Ava owns the coat; Ava carries it. Lana neither owns nor carries it.,1,1
+Lana/coat,validation,"Ava holds the coat, which belongs to Ava. Lana neither owns nor holds it.",1,1
+Kira/scarf,validation,Kira owns the scarf; Kira carries it. Ava neither owns nor carries it.,0,0
+Kira/scarf,validation,"Kira holds the scarf, which belongs to Kira. Ava neither owns nor holds it.",0,0
+Kira/scarf,validation,Kira owns the scarf; Ava carries it.,0,1
+Kira/scarf,validation,"Ava holds the scarf, which belongs to Kira.",0,1
+Kira/scarf,validation,Ava owns the scarf; Kira carries it.,1,0
+Kira/scarf,validation,"Kira holds the scarf, which belongs to Ava.",1,0
+Kira/scarf,validation,Ava owns the scarf; Ava carries it. Kira neither owns nor carries it.,1,1
+Kira/scarf,validation,"Ava holds the scarf, which belongs to Ava. Kira neither owns nor holds it.",1,1
+Kira/key,validation,Kira owns the key; Kira carries it. Ava neither owns nor carries it.,0,0
+Kira/key,validation,"Kira holds the key, which belongs to Kira. Ava neither owns nor holds it.",0,0
+Kira/key,validation,Kira owns the key; Ava carries it.,0,1
+Kira/key,validation,"Ava holds the key, which belongs to Kira.",0,1
+Kira/key,validation,Ava owns the key; Kira carries it.,1,0
+Kira/key,validation,"Kira holds the key, which belongs to Ava.",1,0
+Kira/key,validation,Ava owns the key; Ava carries it. Kira neither owns nor carries it.,1,1
+Kira/key,validation,"Ava holds the key, which belongs to Ava. Kira neither owns nor holds it.",1,1
+Bea/key,test,Bea owns the key; Bea carries it. Ava neither owns nor carries it.,0,0
+Bea/key,test,"Bea holds the key, which belongs to Bea. Ava neither owns nor holds it.",0,0
+Bea/key,test,Bea owns the key; Ava carries it.,0,1
+Bea/key,test,"Ava holds the key, which belongs to Bea.",0,1
+Bea/key,test,Ava owns the key; Bea carries it.,1,0
+Bea/key,test,"Bea holds the key, which belongs to Ava.",1,0
+Bea/key,test,Ava owns the key; Ava carries it. Bea neither owns nor carries it.,1,1
+Bea/key,test,"Ava holds the key, which belongs to Ava. Bea neither owns nor holds it.",1,1
+Mia/book,test,Mia owns the book; Mia carries it. Ava neither owns nor carries it.,0,0
+Mia/book,test,"Mia holds the book, which belongs to Mia. Ava neither owns nor holds it.",0,0
+Mia/book,test,Mia owns the book; Ava carries it.,0,1
+Mia/book,test,"Ava holds the book, which belongs to Mia.",0,1
+Mia/book,test,Ava owns the book; Mia carries it.,1,0
+Mia/book,test,"Mia holds the book, which belongs to Ava.",1,0
+Mia/book,test,Ava owns the book; Ava carries it. Mia neither owns nor carries it.,1,1
+Mia/book,test,"Ava holds the book, which belongs to Ava. Mia neither owns nor holds it.",1,1
+Lana/charger,test,Lana owns the charger; Lana carries it. Ava neither owns nor carries it.,0,0
+Lana/charger,test,"Lana holds the charger, which belongs to Lana. Ava neither owns nor holds it.",0,0
+Lana/charger,test,Lana owns the charger; Ava carries it.,0,1
+Lana/charger,test,"Ava holds the charger, which belongs to Lana.",0,1
+Lana/charger,test,Ava owns the charger; Lana carries it.,1,0
+Lana/charger,test,"Lana holds the charger, which belongs to Ava.",1,0
+Lana/charger,test,Ava owns the charger; Ava carries it. Lana neither owns nor carries it.,1,1
+Lana/charger,test,"Ava holds the charger, which belongs to Ava. Lana neither owns nor holds it.",1,1
+Iris/coat,test,Iris owns the coat; Iris carries it. Ava neither owns nor carries it.,0,0
+Iris/coat,test,"Iris holds the coat, which belongs to Iris. Ava neither owns nor holds it.",0,0
+Iris/coat,test,Iris owns the coat; Ava carries it.,0,1
+Iris/coat,test,"Ava holds the coat, which belongs to Iris.",0,1
+Iris/coat,test,Ava owns the coat; Iris carries it.,1,0
+Iris/coat,test,"Iris holds the coat, which belongs to Ava.",1,0
+Iris/coat,test,Ava owns the coat; Ava carries it. Iris neither owns nor carries it.,1,1
+Iris/coat,test,"Ava holds the coat, which belongs to Ava. Iris neither owns nor holds it.",1,1
+Lana/tablet,test,Lana owns the tablet; Lana carries it. Ava neither owns nor carries it.,0,0
+Lana/tablet,test,"Lana holds the tablet, which belongs to Lana. Ava neither owns nor holds it.",0,0
+Lana/tablet,test,Lana owns the tablet; Ava carries it.,0,1
+Lana/tablet,test,"Ava holds the tablet, which belongs to Lana.",0,1
+Lana/tablet,test,Ava owns the tablet; Lana carries it.,1,0
+Lana/tablet,test,"Lana holds the tablet, which belongs to Ava.",1,0
+Lana/tablet,test,Ava owns the tablet; Ava carries it. Lana neither owns nor carries it.,1,1
+Lana/tablet,test,"Ava holds the tablet, which belongs to Ava. Lana neither owns nor holds it.",1,1
+Zoe/folder,test,Zoe owns the folder; Zoe carries it. Ava neither owns nor carries it.,0,0
+Zoe/folder,test,"Zoe holds the folder, which belongs to Zoe. Ava neither owns nor holds it.",0,0
+Zoe/folder,test,Zoe owns the folder; Ava carries it.,0,1
+Zoe/folder,test,"Ava holds the folder, which belongs to Zoe.",0,1
+Zoe/folder,test,Ava owns the folder; Zoe carries it.,1,0
+Zoe/folder,test,"Zoe holds the folder, which belongs to Ava.",1,0
+Zoe/folder,test,Ava owns the folder; Ava carries it. Zoe neither owns nor carries it.,1,1
+Zoe/folder,test,"Ava holds the folder, which belongs to Ava. Zoe neither owns nor holds it.",1,1
+Iris/tablet,test,Iris owns the tablet; Iris carries it. Ava neither owns nor carries it.,0,0
+Iris/tablet,test,"Iris holds the tablet, which belongs to Iris. Ava neither owns nor holds it.",0,0
+Iris/tablet,test,Iris owns the tablet; Ava carries it.,0,1
+Iris/tablet,test,"Ava holds the tablet, which belongs to Iris.",0,1
+Iris/tablet,test,Ava owns the tablet; Iris carries it.,1,0
+Iris/tablet,test,"Iris holds the tablet, which belongs to Ava.",1,0
+Iris/tablet,test,Ava owns the tablet; Ava carries it. Iris neither owns nor carries it.,1,1
+Iris/tablet,test,"Ava holds the tablet, which belongs to Ava. Iris neither owns nor holds it.",1,1
+Lana/key,test,Lana owns the key; Lana carries it. Ava neither owns nor carries it.,0,0
+Lana/key,test,"Lana holds the key, which belongs to Lana. Ava neither owns nor holds it.",0,0
+Lana/key,test,Lana owns the key; Ava carries it.,0,1
+Lana/key,test,"Ava holds the key, which belongs to Lana.",0,1
+Lana/key,test,Ava owns the key; Lana carries it.,1,0
+Lana/key,test,"Lana holds the key, which belongs to Ava.",1,0
+Lana/key,test,Ava owns the key; Ava carries it. Lana neither owns nor carries it.,1,1
+Lana/key,test,"Ava holds the key, which belongs to Ava. Lana neither owns nor holds it.",1,1
+Zoe/scarf,test,Zoe owns the scarf; Zoe carries it. Ava neither owns nor carries it.,0,0
+Zoe/scarf,test,"Zoe holds the scarf, which belongs to Zoe. Ava neither owns nor holds it.",0,0
+Zoe/scarf,test,Zoe owns the scarf; Ava carries it.,0,1
+Zoe/scarf,test,"Ava holds the scarf, which belongs to Zoe.",0,1
+Zoe/scarf,test,Ava owns the scarf; Zoe carries it.,1,0
+Zoe/scarf,test,"Zoe holds the scarf, which belongs to Ava.",1,0
+Zoe/scarf,test,Ava owns the scarf; Ava carries it. Zoe neither owns nor carries it.,1,1
+Zoe/scarf,test,"Ava holds the scarf, which belongs to Ava. Zoe neither owns nor holds it.",1,1
+Eva/scarf,test,Eva owns the scarf; Eva carries it. Ava neither owns nor carries it.,0,0
+Eva/scarf,test,"Eva holds the scarf, which belongs to Eva. Ava neither owns nor holds it.",0,0
+Eva/scarf,test,Eva owns the scarf; Ava carries it.,0,1
+Eva/scarf,test,"Ava holds the scarf, which belongs to Eva.",0,1
+Eva/scarf,test,Ava owns the scarf; Eva carries it.,1,0
+Eva/scarf,test,"Eva holds the scarf, which belongs to Ava.",1,0
+Eva/scarf,test,Ava owns the scarf; Ava carries it. Eva neither owns nor carries it.,1,1
+Eva/scarf,test,"Ava holds the scarf, which belongs to Ava. Eva neither owns nor holds it.",1,1
+Mia/camera,test,Mia owns the camera; Mia carries it. Ava neither owns nor carries it.,0,0
+Mia/camera,test,"Mia holds the camera, which belongs to Mia. Ava neither owns nor holds it.",0,0
+Mia/camera,test,Mia owns the camera; Ava carries it.,0,1
+Mia/camera,test,"Ava holds the camera, which belongs to Mia.",0,1
+Mia/camera,test,Ava owns the camera; Mia carries it.,1,0
+Mia/camera,test,"Mia holds the camera, which belongs to Ava.",1,0
+Mia/camera,test,Ava owns the camera; Ava carries it. Mia neither owns nor carries it.,1,1
+Mia/camera,test,"Ava holds the camera, which belongs to Ava. Mia neither owns nor holds it.",1,1
+Bea/folder,test,Bea owns the folder; Bea carries it. Ava neither owns nor carries it.,0,0
+Bea/folder,test,"Bea holds the folder, which belongs to Bea. Ava neither owns nor holds it.",0,0
+Bea/folder,test,Bea owns the folder; Ava carries it.,0,1
+Bea/folder,test,"Ava holds the folder, which belongs to Bea.",0,1
+Bea/folder,test,Ava owns the folder; Bea carries it.,1,0
+Bea/folder,test,"Bea holds the folder, which belongs to Ava.",1,0
+Bea/folder,test,Ava owns the folder; Ava carries it. Bea neither owns nor carries it.,1,1
+Bea/folder,test,"Ava holds the folder, which belongs to Ava. Bea neither owns nor holds it.",1,1
+Bea/coat,test,Bea owns the coat; Bea carries it. Ava neither owns nor carries it.,0,0
+Bea/coat,test,"Bea holds the coat, which belongs to Bea. Ava neither owns nor holds it.",0,0
+Bea/coat,test,Bea owns the coat; Ava carries it.,0,1
+Bea/coat,test,"Ava holds the coat, which belongs to Bea.",0,1
+Bea/coat,test,Ava owns the coat; Bea carries it.,1,0
+Bea/coat,test,"Bea holds the coat, which belongs to Ava.",1,0
+Bea/coat,test,Ava owns the coat; Ava carries it. Bea neither owns nor carries it.,1,1
+Bea/coat,test,"Ava holds the coat, which belongs to Ava. Bea neither owns nor holds it.",1,1
+Mia/coat,test,Mia owns the coat; Mia carries it. Ava neither owns nor carries it.,0,0
+Mia/coat,test,"Mia holds the coat, which belongs to Mia. Ava neither owns nor holds it.",0,0
+Mia/coat,test,Mia owns the coat; Ava carries it.,0,1
+Mia/coat,test,"Ava holds the coat, which belongs to Mia.",0,1
+Mia/coat,test,Ava owns the coat; Mia carries it.,1,0
+Mia/coat,test,"Mia holds the coat, which belongs to Ava.",1,0
+Mia/coat,test,Ava owns the coat; Ava carries it. Mia neither owns nor carries it.,1,1
+Mia/coat,test,"Ava holds the coat, which belongs to Ava. Mia neither owns nor holds it.",1,1
+Zoe/tablet,test,Zoe owns the tablet; Zoe carries it. Ava neither owns nor carries it.,0,0
+Zoe/tablet,test,"Zoe holds the tablet, which belongs to Zoe. Ava neither owns nor holds it.",0,0
+Zoe/tablet,test,Zoe owns the tablet; Ava carries it.,0,1
+Zoe/tablet,test,"Ava holds the tablet, which belongs to Zoe.",0,1
+Zoe/tablet,test,Ava owns the tablet; Zoe carries it.,1,0
+Zoe/tablet,test,"Zoe holds the tablet, which belongs to Ava.",1,0
+Zoe/tablet,test,Ava owns the tablet; Ava carries it. Zoe neither owns nor carries it.,1,1
+Zoe/tablet,test,"Ava holds the tablet, which belongs to Ava. Zoe neither owns nor holds it.",1,1
+Zoe/book,test,Zoe owns the book; Zoe carries it. Ava neither owns nor carries it.,0,0
+Zoe/book,test,"Zoe holds the book, which belongs to Zoe. Ava neither owns nor holds it.",0,0
+Zoe/book,test,Zoe owns the book; Ava carries it.,0,1
+Zoe/book,test,"Ava holds the book, which belongs to Zoe.",0,1
+Zoe/book,test,Ava owns the book; Zoe carries it.,1,0
+Zoe/book,test,"Zoe holds the book, which belongs to Ava.",1,0
+Zoe/book,test,Ava owns the book; Ava carries it. Zoe neither owns nor carries it.,1,1
+Zoe/book,test,"Ava holds the book, which belongs to Ava. Zoe neither owns nor holds it.",1,1

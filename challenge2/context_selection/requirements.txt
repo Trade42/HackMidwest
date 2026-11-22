@@ -1,0 +1,16 @@
+# Core (quantum side, evaluation, figures). Tested with Python 3.13; needs 3.10+.
+numpy>=1.26
+scipy>=1.11
+qiskit>=1.2
+qiskit-aer>=0.15
+scikit-learn>=1.3
+pyyaml>=6.0
+matplotlib>=3.8
+pytest>=8.0
+
+# Sqale through Superstaq (lanes 3b, 3c, 3d and lane 2c)
+qiskit-superstaq>=0.5.40
+
+# Offline stand-in reader (t5-base as ONNX; see scripts/fetch_offline_models.py)
+onnxruntime>=1.18
+tokenizers>=0.19

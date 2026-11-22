@@ -1,0 +1,378 @@
+[
+ {
+  "_id": "synthetic00",
+  "question": "How long is the river crossed by Alder Bridge?",
+  "answer": "40 kilometres",
+  "type": "bridge",
+  "level": "easy",
+  "supporting_facts": [
+   [
+    "Alder Bridge",
+    1
+   ],
+   [
+    "River Alda",
+    0
+   ]
+  ],
+  "context": [
+   [
+    "Alder Bridge",
+    [
+     "Alder Bridge is a stone bridge in the town of Alder. ",
+     "It crosses the River Alda."
+    ]
+   ],
+   [
+    "Alder Museum",
+    [
+     "The Alder Museum shows local pottery. ",
+     "It opened on a Tuesday."
+    ]
+   ],
+   [
+    "River Alda",
+    [
+     "The River Alda is 40 kilometres long. ",
+     "It flows past Alder toward the sea."
+    ]
+   ],
+   [
+    "Alder Fair",
+    [
+     "The Alder Fair is held every autumn. ",
+     "It features a cheese contest."
+    ]
+   ]
+  ]
+ },
+ {
+  "_id": "synthetic01",
+  "question": "How long is the river crossed by Birch Bridge?",
+  "answer": "41 kilometres",
+  "type": "bridge",
+  "level": "easy",
+  "supporting_facts": [
+   [
+    "Birch Bridge",
+    1
+   ],
+   [
+    "River Bira",
+    0
+   ]
+  ],
+  "context": [
+   [
+    "Birch Bridge",
+    [
+     "Birch Bridge is a stone bridge in the town of Birch. ",
+     "It crosses the River Bira."
+    ]
+   ],
+   [
+    "Birch Museum",
+    [
+     "The Birch Museum shows local pottery. ",
+     "It opened on a Tuesday."
+    ]
+   ],
+   [
+    "River Bira",
+    [
+     "The River Bira is 41 kilometres long. ",
+     "It flows past Birch toward the sea."
+    ]
+   ],
+   [
+    "Birch Fair",
+    [
+     "The Birch Fair is held every autumn. ",
+     "It features a cheese contest."
+    ]
+   ]
+  ]
+ },
+ {
+  "_id": "synthetic02",
+  "question": "How long is the river crossed by Cedar Bridge?",
+  "answer": "42 kilometres",
+  "type": "comparison",
+  "level": "easy",
+  "supporting_facts": [
+   [
+    "Cedar Bridge",
+    1
+   ],
+   [
+    "River Ceda",
+    0
+   ]
+  ],
+  "context": [
+   [
+    "Cedar Bridge",
+    [
+     "Cedar Bridge is a stone bridge in the town of Cedar. ",
+     "It crosses the River Ceda."
+    ]
+   ],
+   [
+    "Cedar Museum",
+    [
+     "The Cedar Museum shows local pottery. ",
+     "It opened on a Tuesday."
+    ]
+   ],
+   [
+    "River Ceda",
+    [
+     "The River Ceda is 42 kilometres long. ",
+     "It flows past Cedar toward the sea."
+    ]
+   ],
+   [
+    "Cedar Fair",
+    [
+     "The Cedar Fair is held every autumn. ",
+     "It features a cheese contest."
+    ]
+   ]
+  ]
+ },
+ {
+  "_id": "synthetic03",
+  "question": "How long is the river crossed by Dunmore Bridge?",
+  "answer": "43 kilometres",
+  "type": "bridge",
+  "level": "easy",
+  "supporting_facts": [
+   [
+    "Dunmore Bridge",
+    1
+   ],
+   [
+    "River Duna",
+    0
+   ]
+  ],
+  "context": [
+   [
+    "Dunmore Bridge",
+    [
+     "Dunmore Bridge is a stone bridge in the town of Dunmore. ",
+     "It crosses the River Duna."
+    ]
+   ],
+   [
+    "Dunmore Museum",
+    [
+     "The Dunmore Museum shows local pottery. ",
+     "It opened on a Tuesday."
+    ]
+   ],
+   [
+    "River Duna",
+    [
+     "The River Duna is 43 kilometres long. ",
+     "It flows past Dunmore toward the sea."
+    ]
+   ],
+   [
+    "Dunmore Fair",
+    [
+     "The Dunmore Fair is held every autumn. ",
+     "It features a cheese contest."
+    ]
+   ]
+  ]
+ },
+ {
+  "_id": "synthetic04",
+  "question": "How long is the river crossed by Elmfield Bridge?",
+  "answer": "44 kilometres",
+  "type": "bridge",
+  "level": "easy",
+  "supporting_facts": [
+   [
+    "Elmfield Bridge",
+    1
+   ],
+   [
+    "River Elma",
+    0
+   ]
+  ],
+  "context": [
+   [
+    "Elmfield Bridge",
+    [
+     "Elmfield Bridge is a stone bridge in the town of Elmfield. ",
+     "It crosses the River Elma."
+    ]
+   ],
+   [
+    "Elmfield Museum",
+    [
+     "The Elmfield Museum shows local pottery. ",
+     "It opened on a Tuesday."
+    ]
+   ],
+   [
+    "River Elma",
+    [
+     "The River Elma is 44 kilometres long. ",
+     "It flows past Elmfield toward the sea."
+    ]
+   ],
+   [
+    "Elmfield Fair",
+    [
+     "The Elmfield Fair is held every autumn. ",
+     "It features a cheese contest."
+    ]
+   ]
+  ]
+ },
+ {
+  "_id": "synthetic05",
+  "question": "How long is the river crossed by Foxley Bridge?",
+  "answer": "45 kilometres",
+  "type": "comparison",
+  "level": "easy",
+  "supporting_facts": [
+   [
+    "Foxley Bridge",
+    1
+   ],
+   [
+    "River Foxa",
+    0
+   ]
+  ],
+  "context": [
+   [
+    "Foxley Bridge",
+    [
+     "Foxley Bridge is a stone bridge in the town of Foxley. ",
+     "It crosses the River Foxa."
+    ]
+   ],
+   [
+    "Foxley Museum",
+    [
+     "The Foxley Museum shows local pottery. ",
+     "It opened on a Tuesday."
+    ]
+   ],
+   [
+    "River Foxa",
+    [
+     "The River Foxa is 45 kilometres long. ",
+     "It flows past Foxley toward the sea."
+    ]
+   ],
+   [
+    "Foxley Fair",
+    [
+     "The Foxley Fair is held every autumn. ",
+     "It features a cheese contest."
+    ]
+   ]
+  ]
+ },
+ {
+  "_id": "synthetic06",
+  "question": "How long is the river crossed by Glenrow Bridge?",
+  "answer": "46 kilometres",
+  "type": "bridge",
+  "level": "easy",
+  "supporting_facts": [
+   [
+    "Glenrow Bridge",
+    1
+   ],
+   [
+    "River Glea",
+    0
+   ]
+  ],
+  "context": [
+   [
+    "Glenrow Bridge",
+    [
+     "Glenrow Bridge is a stone bridge in the town of Glenrow. ",
+     "It crosses the River Glea."
+    ]
+   ],
+   [
+    "Glenrow Museum",
+    [
+     "The Glenrow Museum shows local pottery. ",
+     "It opened on a Tuesday."
+    ]
+   ],
+   [
+    "River Glea",
+    [
+     "The River Glea is 46 kilometres long. ",
+     "It flows past Glenrow toward the sea."
+    ]
+   ],
+   [
+    "Glenrow Fair",
+    [
+     "The Glenrow Fair is held every autumn. ",
+     "It features a cheese contest."
+    ]
+   ]
+  ]
+ },
+ {
+  "_id": "synthetic07",
+  "question": "How long is the river crossed by Harwick Bridge?",
+  "answer": "47 kilometres",
+  "type": "bridge",
+  "level": "easy",
+  "supporting_facts": [
+   [
+    "Harwick Bridge",
+    1
+   ],
+   [
+    "River Hara",
+    0
+   ]
+  ],
+  "context": [
+   [
+    "Harwick Bridge",
+    [
+     "Harwick Bridge is a stone bridge in the town of Harwick. ",
+     "It crosses the River Hara."
+    ]
+   ],
+   [
+    "Harwick Museum",
+    [
+     "The Harwick Museum shows local pottery. ",
+     "It opened on a Tuesday."
+    ]
+   ],
+   [
+    "River Hara",
+    [
+     "The River Hara is 47 kilometres long. ",
+     "It flows past Harwick toward the sea."
+    ]
+   ],
+   [
+    "Harwick Fair",
+    [
+     "The Harwick Fair is held every autumn. ",
+     "It features a cheese contest."
+    ]
+   ]
+  ]
+ }
+]

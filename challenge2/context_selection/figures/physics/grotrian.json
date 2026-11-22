@@ -1,0 +1,45 @@
+{
+  "species": [
+    {
+      "species": "Cs",
+      "ground": "6S1/2",
+      "intermediate": "7P1/2",
+      "rydberg_illustrative": "60S1/2",
+      "first_photon_nm": 459.45,
+      "second_photon_nm": 1041.01,
+      "nominal_nm_from_plan": [
+        459,
+        1040
+      ],
+      "other_fine_structure_path_nm": {
+        "7P3/2": [
+          455.66,
+          1061.01
+        ]
+      },
+      "ionisation_energy_eV": 3.8939,
+      "rydberg_binding_meV": 4.346
+    },
+    {
+      "species": "Rb",
+      "ground": "5S1/2",
+      "intermediate": "6P1/2",
+      "rydberg_illustrative": "60S1/2",
+      "first_photon_nm": 421.67,
+      "second_photon_nm": 1005.85,
+      "nominal_nm_from_plan": [
+        421,
+        1005
+      ],
+      "other_fine_structure_path_nm": {
+        "6P3/2": [
+          420.3,
+          1013.76
+        ]
+      },
+      "ionisation_energy_eV": 4.1771,
+      "rydberg_binding_meV": 4.207
+    }
+  ],
+  "levelplot_headless_ok": true
+}

@@ -1601,6 +1601,146 @@ def ensemble_statement(measured, combined):
                                       + (", and " if len(short) > 1 else "") + short[-1]), "tables/test_p<p>.md (the ensemble and TCBP-JOBS rows)")
 
 
+# Rows run or read after the test results were seen, at the team's request. They are ablations: none of them is our decoder,
+# and none may change its headline, its framing or the frozen choice of its rules (choosing on the test shots now would fit them).
+AFTER_TEST = "run after the test results were seen, at the team's request; an ablation, not our decoder"
+SWAP_RULE = "d"   # the ensemble's pre-registered rule closest to TCBP-JOBS in place of relay-BP in our hierarchy
+
+
+def swap_table(combined):
+    """TCBP-JOBS in place of relay-BP in our hierarchy, read from the rules the ensemble already scored on the test shots.
+
+    No rule is computed here. Rule d (majority of P1, P2, T; where all three differ, the network among P1, P2, T, R) is paired
+    against TCBP-JOBS alone (T) and against our frozen decoder's offline decode (rule a), all three from the same files, so the
+    comparison stays in one decode mode. Where its failures differ from T's, the shots are split by what rule d did there.
+    """
+    lines, records, split_lines = [], [], []
+    compact = {"d": [], "T": [], "a": [], "f": []}
+    source = "tables/test_after_swap.md"
+    names = {SWAP_RULE: "rule d: TCBP-JOBS in place of relay-BP (where at least two of the three, the two PriorTilt runs and TCBP-JOBS, agree, "
+                        "that answer; where all three differ, the network among them and relay-BP)",
+             "f": "rule f, the ensemble's frozen rule, for reference (where the two PriorTilt runs and TCBP-JOBS all agree, that answer; "
+                  "elsewhere joint decoding where it converged, else TCBP-JOBS)"}
+    for p in P_VALUES:
+        rows = combined[p]["rows"] if combined.get(p) else {}
+        short = f"swap{p[-1]}"
+        if not all(key in rows for key in (SWAP_RULE, "T", "a", "P1", "aw")):
+            lines.append([p, names[SWAP_RULE]] + [NOT_MEASURED] * 5)
+            for key in compact:
+                compact[key].append(NOT_MEASURED)
+            for name in ("d_pairs", "d_xz", "T_pairs", "a_pairs", "f_pairs", "vsT_both", "vsT_only_d", "vsT_only_T", "vsT_p",
+                         "vsA_only_d", "vsA_only_a", "vsA_p"):
+                fact(f"{short}_{name}", None, source)
+            continue
+        for key in (SWAP_RULE, "f"):
+            if key not in rows:
+                continue
+            row = rows[key]
+            versus_t = stats.paired(rows["T"]["failed_pair"], row["failed_pair"])
+            versus_a = stats.paired(rows["a"]["failed_pair"], row["failed_pair"])
+            lines.append([p, names[key], f"{row['failures_X']}, {row['failures_Z']}", f"{row['failures_pair']} of {row['shots']:,}",
+                          rate_text(row["rate"], row["error"]),
+                          f"{row['failures_pair']} against {rows['T']['failures_pair']}; " + pair_text(versus_t),
+                          f"{row['failures_pair']} against {rows['a']['failures_pair']}; " + pair_text(versus_a)])
+            records.append({"p": p, "rule": key, "failures_X": row["failures_X"], "failures_Z": row["failures_Z"], "failures_pair": row["failures_pair"],
+                            "pairs": row["shots"], "rate_per_cycle": row["rate"], "kit_error": row["error"],
+                            "tcbp_failed_pairs": rows["T"]["failures_pair"], "both_fail_with_tcbp": versus_t["both"],
+                            "only_this_rule_fails_vs_tcbp": versus_t["row_only"], "only_tcbp_fails": versus_t["reference_only"], "exact_p_vs_tcbp": versus_t["p"],
+                            "rule_a_failed_pairs": rows["a"]["failures_pair"], "both_fail_with_rule_a": versus_a["both"],
+                            "only_this_rule_fails_vs_rule_a": versus_a["row_only"], "only_rule_a_fails": versus_a["reference_only"],
+                            "exact_p_vs_rule_a": versus_a["p"], "source": row["source"]})
+            if key == SWAP_RULE:
+                for name, value in (("d_pairs", row["failures_pair"]), ("d_xz", f"{row['failures_X']}, {row['failures_Z']}"),
+                                    ("T_pairs", rows["T"]["failures_pair"]), ("a_pairs", rows["a"]["failures_pair"]),
+                                    ("vsT_both", versus_t["both"]), ("vsT_only_d", versus_t["row_only"]), ("vsT_only_T", versus_t["reference_only"]),
+                                    ("vsT_p", stats.p_text(versus_t["p"])), ("vsA_only_d", versus_a["row_only"]),
+                                    ("vsA_only_a", versus_a["reference_only"]), ("vsA_p", stats.p_text(versus_a["p"]))):
+                    fact(f"{short}_{name}", value, source)
+        fact(f"{short}_f_pairs", rows["f"]["failures_pair"] if "f" in rows else None, source)
+        versus_t, versus_a = (stats.paired(rows[key]["failed_pair"], rows[SWAP_RULE]["failed_pair"]) for key in ("T", "a"))
+        compact["d"].append(f"**{rows[SWAP_RULE]['failures_pair']}** · against T: only d {versus_t['row_only']}, only T {versus_t['reference_only']} "
+                            f"(p = {stats.p_text(versus_t['p'])}) · against a: only d {versus_a['row_only']}, only a {versus_a['reference_only']} "
+                            f"(p = {stats.p_text(versus_a['p'])})")
+        compact["T"].append(str(rows["T"]["failures_pair"]))
+        compact["a"].append(str(rows["a"]["failures_pair"]))
+        compact["f"].append(str(rows["f"]["failures_pair"]) if "f" in rows else NOT_MEASURED)
+        # where rule d and TCBP-JOBS part, per basis, in shots: rule d's answer is P1 where the two runs agree, T's where exactly two
+        # of the three agree and they do not, and the network's pick where all three differ (later_d)
+        cells = {}
+        for basis in "XZ":
+            with np.load(DATA / "test" / f"ensemble_p{p}" / f"test_{basis}.npz", allow_pickle=False) as file:
+                failed_d, failed_t, failed_p1 = (file[f"failed_{key}"].astype(bool) for key in (SWAP_RULE, "T", "P1"))
+                disputed, network = file["later_aw"].astype(bool), file[f"later_{SWAP_RULE}"].astype(bool)
+            if (network & ~disputed).any():
+                raise Mismatch(f"test/ensemble_p{p}: rule d sent a shot to the network where the two PriorTilt runs agree")
+            if (failed_d[~disputed] != failed_p1[~disputed]).any():
+                raise Mismatch(f"test/ensemble_p{p}: rule d does not take the two PriorTilt runs' answer where they agree")
+            two = disputed & ~network
+            if (failed_d[two] != failed_t[two]).any():
+                raise Mismatch(f"test/ensemble_p{p}: rule d differs from TCBP-JOBS where exactly two of the three agree; read as a majority it cannot")
+            only_d, only_t = failed_d & ~failed_t, failed_t & ~failed_d
+            cells[basis] = {"agree": (int((only_d & ~disputed).sum()), int((only_t & ~disputed).sum())),
+                            "network": (int((only_d & network).sum()), int((only_t & network).sum())),
+                            "disputed": int(disputed.sum()), "sent": int(network.sum())}
+        for where, words in (("agree", "the two PriorTilt runs agree: rule d keeps their answer"),
+                             ("network", "all three differ: rule d takes the network's pick among P1, P2, T and R")):
+            split_lines.append([p, words] + [f"{cells[basis][where][0]} / {cells[basis][where][1]}" for basis in "XZ"])
+            for basis in "XZ":
+                fact(f"{short}_{where}_{basis}_only_d", cells[basis][where][0], source)
+                fact(f"{short}_{where}_{basis}_only_T", cells[basis][where][1], source)
+        split_lines.append([p, "exactly two of the three agree: rule d's answer is TCBP-JOBS's (checked on every shot)", "0 / 0", "0 / 0"])
+        for basis in "XZ":
+            fact(f"{short}_sent_{basis}", cells[basis]["sent"], source)
+    text = (f"**{AFTER_TEST[0].upper() + AFTER_TEST[1:]}.** TCBP-JOBS in place of relay-BP in our hierarchy, as the team asked after the test "
+            "results: no new rule is computed, the rows are rules the ensemble scored on the test shots among its pre-registered rules "
+            "(`hierarchy.ensemble`; P1 and P2 PriorTilt under two seeds, T TCBP-JOBS, R relay-BP, all from the same saved answers). Rule d is the "
+            "closest to that swap. Both comparisons stay in one decode mode: TCBP-JOBS alone (T) and our frozen decoder's offline decode "
+            "(rule a: P1 where the two runs agree, else the network among R, P1, P2) come from the same files. Offline rows: no time.\n\n"
+            + markdown(["p", "Rule (scored offline by the ensemble on the test shots)", "Failures X, Z", "Failed pairs", "Rate per cycle ± error",
+                        "Against TCBP-JOBS alone: failed pairs; both fail / only this rule / only TCBP-JOBS (exact p)",
+                        "Against our frozen decoder's offline decode (rule a): failed pairs; both fail / only this rule / only rule a (exact p)"], lines)
+            + ("\n\n**Where rule d and TCBP-JOBS part**, in shots (not pairs): per basis, shots only rule d fails / shots only TCBP-JOBS fails, split by "
+               "what rule d did on the shot.\n\n" + markdown(["p", "On the shots where", "X memory: only rule d / only TCBP-JOBS",
+                                                               "Z memory: only rule d / only TCBP-JOBS"], split_lines) if split_lines else "")
+            + "\n\nSource: `report/data/test/ensemble_p<p>/test_{X,Z}.npz` and `.json`.")
+    words = {"d": f"TCBP-JOBS in place of relay-BP in our hierarchy (the ensemble's rule d; {AFTER_TEST})",
+             "T": "TCBP-JOBS alone (T; NVIDIA, GPU)",
+             "a": "our frozen decoder, the offline decode of the same shots (rule a)",
+             "f": "our ensemble's frozen rule f (TCBP-JOBS plus joint decoding)"}
+    write("test_after_swap_short",
+          f"**{AFTER_TEST[0].upper() + AFTER_TEST[1:]}.** Failed pairs of 10,000 test pairs, every row scored offline by the ensemble on the same "
+          "saved answers (no time); against T and a: the pairs only one of the two fails, exact p. `APPENDIX.md` J has the full table.\n\n"
+          + markdown(["Row"] + [f"p = {p}" for p in P_VALUES], [[words[key]] + cells for key, cells in compact.items()]))
+    return write("test_after_swap", text, records)
+
+
+def swap_statement():
+    """The one or two plain sentences on the swap, from the facts of swap_table."""
+    value = lambda name: FACTS[name][0]
+    if value("swap4_d_pairs") == NOT_MEASURED or value("swap5_d_pairs") == NOT_MEASURED:
+        fact("swap_statement", "TCBP-JOBS in place of relay-BP in our hierarchy is not measured on the test shots.", "tables/test_after_swap.md")
+        return
+
+    def against_t(p):
+        n = p[-1]
+        d, t, pv = int(value(f"swap{n}_d_pairs")), int(value(f"swap{n}_T_pairs")), value(f"swap{n}_vsT_p")
+        words = "level with" if float(pv) >= 0.05 else "behind" if d > t else "ahead of"
+        return words, (f"{words} TCBP-JOBS alone at p = {p} ({d} against {t} failed pairs; only the swap fails {value(f'swap{n}_vsT_only_d')}, "
+                       f"only TCBP-JOBS {value(f'swap{n}_vsT_only_T')}, exact p = {pv})")
+    four, five = against_t("0.004"), against_t("0.005")
+    text = (f"TCBP-JOBS in place of relay-BP in our hierarchy ({AFTER_TEST}; the ensemble's rule d, scored offline on the test shots) is "
+            f"{four[1]} and {five[1]}. Against our frozen decoder's offline decode of the same shots (rule a) it fails "
+            f"{value('swap4_d_pairs')} against {value('swap4_a_pairs')} pairs at p = 0.004 (exact p = {value('swap4_vsA_p')}) and "
+            f"{value('swap5_d_pairs')} against {value('swap5_a_pairs')} at p = 0.005 (exact p = {value('swap5_vsA_p')}): TCBP-JOBS is the "
+            "stronger third candidate, but where the two PriorTilt runs agree the swap keeps their answer. At p = 0.005 they agree on a wrong "
+            f"answer that TCBP-JOBS gets right on {value('swap5_agree_X_only_d')} X and {value('swap5_agree_Z_only_d')} Z shots (and on a right "
+            f"answer where TCBP-JOBS is wrong on {value('swap5_agree_X_only_T')} and {value('swap5_agree_Z_only_T')}); where all three differ, the "
+            f"network's pick fails {value('swap5_network_X_only_d')} X and {value('swap5_network_Z_only_d')} Z shots that TCBP-JOBS gets right "
+            f"({value('swap5_network_X_only_T')} and {value('swap5_network_Z_only_T')} the other way). What beats TCBP-JOBS is the ensemble's "
+            f"rule f, which adds joint decoding: {value('swap4_f_pairs')} against {value('swap4_T_pairs')} failed pairs at p = 0.004.")
+    fact("swap_statement", text, "tables/test_after_swap.md")
+
+
 def ours_at(measured, p):
     """Our timed decoder at p: the one-core row, or the two-core row (checked to give the same answers) if the first has not landed."""
     return measured[p].get("hierarchy") or measured[p].get("hierarchy-parallel")
@@ -1761,11 +1901,13 @@ def main(argv=None):
             "where_failures": failure_split_table(combined, measured), "exploration_p0.005": exploration_p5_table(), "time_split": time_split_table(measured),
             "exploration_ensemble": exploration_ensemble_table(), "ablation_80k": ablation_80k_table(),
             "loss": loss_table(), "networks": networks_table(), "background": background_table(),
-            "resources": resources_table(measured)}
+            "resources": resources_table(measured), "test_after_swap": swap_table(combined)}
+        tables["test_after_swap_short"] = (TABLES / "test_after_swap_short.md").read_text(encoding="utf-8")
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)
         ensemble_statement(measured, combined)
+        swap_statement()
         timed_ablation(measured)
         findings(measured)
         slide_facts(measured)

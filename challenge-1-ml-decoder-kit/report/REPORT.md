@@ -186,6 +186,30 @@ shots that only one rule fails, p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f-->). Again
 and some candidate is right (<!--f:a80_chance-->302<!--/f--> shots), the network picks a right one <!--f:a80_a_right-->252<!--/f--> times, the best
 classical rule <!--f:a80_ac_right-->236<!--/f-->, lowest weight <!--f:a80_aw_right-->191<!--/f-->. The full table is in `APPENDIX.md`.
 
+### Run after the test results were seen: ablations the team asked for, not our decoder
+
+Everything in this subsection was run, or read from saved answers, **after** the test results above had been seen,
+at the team's request. These rows are ablations. None of them is our decoder, and none of them changes the frozen
+choices above. Where one fails fewer pairs than our decoder, it is still not our result: picking it now would be
+choosing on the test shots.
+
+**TCBP-JOBS in place of relay-BP.** The team asked what happens if TCBP-JOBS replaces relay-BP as the third
+candidate. No new rule is computed for this. The row below is the ensemble's rule d, which the ensemble had already
+scored on the test shots among its pre-registered rules, and it is the closest of them to that swap.
+
+<!-- BEGIN table:test_after_swap_short -->
+**Run after the test results were seen, at the team's request; an ablation, not our decoder.** Failed pairs of 10,000 test pairs, every row scored offline by the ensemble on the same saved answers (no time); against T and a: the pairs only one of the two fails, exact p. `APPENDIX.md` J has the full table.
+
+| Row | p = 0.003 | p = 0.004 | p = 0.005 |
+|---|---|---|---|
+| TCBP-JOBS in place of relay-BP in our hierarchy (the ensemble's rule d; run after the test results were seen, at the team's request; an ablation, not our decoder) | **2** · against T: only d 0, only T 1 (p = 1.00) · against a: only d 0, only a 2 (p = 0.50) | **39** · against T: only d 10, only T 12 (p = 0.83) · against a: only d 4, only a 15 (p = 0.019) | **403** · against T: only d 112, only T 69 (p = 0.002) · against a: only d 25, only a 112 (p = 2e-14) |
+| TCBP-JOBS alone (T; NVIDIA, GPU) | 3 | 41 | 360 |
+| our frozen decoder, the offline decode of the same shots (rule a) | 4 | 50 | 490 |
+| our ensemble's frozen rule f (TCBP-JOBS plus joint decoding) | 2 | 16 | 360 |
+<!-- END table:test_after_swap_short -->
+
+<!--f:swap_statement-->TCBP-JOBS in place of relay-BP in our hierarchy (run after the test results were seen, at the team's request; an ablation, not our decoder; the ensemble's rule d, scored offline on the test shots) is level with TCBP-JOBS alone at p = 0.004 (39 against 41 failed pairs; only the swap fails 10, only TCBP-JOBS 12, exact p = 0.83) and behind TCBP-JOBS alone at p = 0.005 (403 against 360 failed pairs; only the swap fails 112, only TCBP-JOBS 69, exact p = 0.002). Against our frozen decoder's offline decode of the same shots (rule a) it fails 39 against 50 pairs at p = 0.004 (exact p = 0.019) and 403 against 490 at p = 0.005 (exact p = 2e-14): TCBP-JOBS is the stronger third candidate, but where the two PriorTilt runs agree the swap keeps their answer. At p = 0.005 they agree on a wrong answer that TCBP-JOBS gets right on 36 X and 42 Z shots (and on a right answer where TCBP-JOBS is wrong on 31 and 26); where all three differ, the network's pick fails 19 X and 16 Z shots that TCBP-JOBS gets right (6 and 7 the other way). What beats TCBP-JOBS is the ensemble's rule f, which adds joint decoding: 16 against 41 failed pairs at p = 0.004.<!--/f-->
+
 ### On the exploration shots (not test shots)
 
 At p = 0.004, on <!--f:expl_pairs-->25,000<!--/f--> pairs of the train and validation files: relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one

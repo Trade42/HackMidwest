@@ -149,6 +149,7 @@ def test_scripts_on_a_stand_in(tmp_path):
     assert "`framing` | On the test shots (one offline decode of each shot" in facts and "no better than the hand-written rule" in facts
     assert "not measured" in (tmp_path / "tables" / "test_p0.005.md").read_text()
     assert "the same outcome on every one of the 10,000 pairs" in (tmp_path / "tables" / "checks.md").read_text()
+    assert "not measured" in (tmp_path / "tables" / "test_after_swap.md").read_text()      # the stand-in has no rule d
     done = run("report.make_plots", data, tmp_path)
     assert done.returncode == 0, done.stderr
     first = {file.name: file.read_bytes() for file in (tmp_path / "figures").iterdir()}
@@ -215,3 +216,22 @@ def test_the_documents_hold_the_generated_tables():
         for table, body in blocks:
             assert body.strip(), f"{name}: the table {table} is empty"
             assert body.rstrip("\n") == (REPORT / "tables" / f"{table}.md").read_text(encoding="utf-8").rstrip("\n"), f"{name}: {table}"
+
+
+def test_the_rows_run_after_the_test_results_are_labelled_and_recomputed():
+    """The swap (TCBP-JOBS in place of relay-BP, the ensemble's rule d) is labelled as an ablation and re-counted from the saved answers."""
+    from report.make_tables import AFTER_TEST
+    from report.rows import P_VALUES
+    for name in ("test_after_swap", "test_after_swap_short"):
+        assert (REPORT / "tables" / f"{name}.md").read_text(encoding="utf-8").startswith(f"**{AFTER_TEST[0].upper() + AFTER_TEST[1:]}.**")
+    table = (REPORT / "tables" / "test_after_swap.md").read_text(encoding="utf-8")
+    for p in P_VALUES:
+        files = [np.load(REPORT / "data" / "test" / f"ensemble_p{p}" / f"test_{basis}.npz") for basis in "XZ"]
+        pair = {key: files[0][f"failed_{key}"] | files[1][f"failed_{key}"] for key in ("d", "T", "a")}
+        for other in ("T", "a"):
+            paired = stats.paired(pair[other], pair["d"])
+            assert (f"| {int(pair['d'].sum())} against {int(pair[other].sum())}; {paired['both']} / {paired['row_only']} / "
+                    f"{paired['reference_only']} (p = {stats.p_text(paired['p'])}) |") in table, (p, other)
+    facts = (REPORT / "tables" / "facts.md").read_text(encoding="utf-8")
+    statement = next(line for line in facts.splitlines() if line.startswith("| `swap_statement` |"))
+    assert AFTER_TEST in statement and "our result" not in statement

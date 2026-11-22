@@ -15,6 +15,11 @@ Words used, each with its meaning:
 - **p:** the strength of the noise. Higher p, more errors.
 - **BP-OSD, relay-BP:** the two baseline decoders of the kit. Relay-BP is the stronger one.
 - **PriorTilt:** a fast decoder published by IonQ for this code. It is not ours; we build on it.
+- **Tie-break:** the rule that picks one answer when the fast decodes disagree.
+- **Paired count:** two decoders on the same pairs; "only A fails 15, only B fails 54" counts the pairs where they differ.
+- **test p:** the chance of a difference at least that large between two decoders if they were really equally good; below
+  0.05 we call it significant. (Plain "p" on these slides is always the noise strength.)
+- **ORACLE:** a test given the truth on purpose, to show the best any method could do. It is a ceiling, not a decoder.
 - **TCBP-JOBS:** NVIDIA's decoder, which runs on a GPU. The teammates ran it as an extra reference.
 
 ---
@@ -45,10 +50,10 @@ Source: `report/tables/where_failures.md`. The design was chosen on practice sho
 
 - The network reads all 1,728 detector bits of a shot, is built along the code's own wiring, and has
   <!--f:net_parameters-->893,697<!--/f--> parameters. Alone, on the test shots at p = 0.004, it gets <!--f:netalone4_X-->4.2%<!--/f--> of X-memory shots wrong; relay-BP gets
-  <!--f:t4_relay_bp_xz-->36, 47<!--/f--> of 10,000 wrong (X, Z).
+  <!--f:t4_relay_bp_xz-->36, 47<!--/f--> (X, Z) of 10,000 wrong, under 0.5%.
 - As a tie-break it clearly beats the plain lowest-weight rule (on <!--f:a80_shots-->80,000<!--/f--> fresh shots: <!--f:a80_a-->237<!--/f--> against <!--f:a80_aw-->298<!--/f--> failures,
-  p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f-->). Against the best hand-written rule it is level: <!--f:a80_a-->237<!--/f--> against <!--f:a80_ac-->253<!--/f--> there (p = <!--f:a80_a_vs_ac_p-->0.12<!--/f-->), and
-  <!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs on the test shots (p = <!--f:abl_pooled_p-->0.15<!--/f-->).
+  test p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f-->). Against the best hand-written rule there is no significant difference: <!--f:a80_a-->237<!--/f--> against <!--f:a80_ac-->253<!--/f-->
+  there (test p = <!--f:a80_a_vs_ac_p-->0.12<!--/f-->), and <!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs on the test shots (test p = <!--f:abl_pooled_p-->0.15<!--/f-->).
 - <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
 
 Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
@@ -60,8 +65,8 @@ Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
 <!-- BEGIN table:test_sweep -->
 <!-- END table:test_sweep -->
 
-- <!--f:slide4_relay-->Failed pairs of 10,000, ours against relay-BP on the same pairs: p = 0.003: 3 against 5 (exact p = 0.50); p = 0.004: 44 against 83 (exact p = 3e-06); p = 0.005: 479 against 845 (exact p = 4e-59).<!--/f-->
-- <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, exact p = 1e-11).<!--/f-->
+- <!--f:slide4_relay-->Failed pairs of 10,000, ours against relay-BP on the same pairs: p = 0.003: 3 against 5 (test p = 0.50); p = 0.004: 44 against 83 (test p = 3e-06); p = 0.005: 479 against 845 (test p = 4e-59).<!--/f-->
+- <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, test p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, test p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, test p = 1e-11).<!--/f-->
 - At p = 0.003 every good decoder fails only a handful of pairs in 10,000, so nothing separates there.
 
 ## Slide 5. <!--f:slide5_title-->Our decoder takes 0.52 to 0.68 of relay-BP's mean time per pair on one core and 0.33 to 0.47 with its two fast decodes on two cores<!--/f-->
@@ -93,14 +98,17 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 - A plain neural network learned only at noise far below the challenge's; the network that follows the code's wiring
   learns at the challenge's noise, but only as a judge, not as a decoder.
 - Predecoders and faster relay-BP schedules cost accuracy or gained nothing (the table has each count).
-- *Pending the test rows:* where TCBP-JOBS is ahead of us, and what the slowest shots cost.
+- Where we fall short: TCBP-JOBS fails fewer pairs than our decoder at p = 0.005 (<!--f:t5_tcbp_pairs-->360<!--/f--> against <!--f:t5_hierarchy_pairs-->479<!--/f-->),
+  and our slowest shots are slower than relay-BP's there (<!--f:t5_hierarchy_p99_ms-->9,885<!--/f--> against <!--f:t5_relay_bp_p99_ms-->8,270<!--/f--> ms at the 99th percentile):
+  a hard shot pays for three decoders one after the other.
 
 ## Slide 8. Whose work is whose, and how to check us
 
 **Show:** the table of `REPORT.md`, section 3, and the two commands of section 9.
 
 - PriorTilt is IonQ's decoder; relay-BP and BP-OSD are the kit's; the router and the evaluator are our teammates'.
-- Ours: the hierarchy (two seeds, the agreement test, the third candidate), the learned tie-break, and the loss study.
+- Ours: the hierarchy (two seeds, the agreement test, the third candidate), the learned tie-break (<!--f:abl_verdict-->no better than<!--/f--> the best
+  hand-written rule), the ensemble's rule, and the loss study with its tracker.
 - Every table and figure is regenerated by two commands from committed files; much of the code was written with AI
   assistants under our direction, and the READMEs are how we keep being able to explain it.
 
@@ -109,12 +117,9 @@ Source: `report/tables/loss.md`. The loss model is our own simplified one, not I
 ## Questions a judge will ask, with honest answers
 
 **Whose gain is whose?**
-On the test shots: <!--f:framing_slide-->On the test shots (one offline decode of each shot, the same candidates for every rung; p = 0.003, 0.004, 0.005 together), relay-BP fails 889 pairs, PriorTilt run once (IonQ's decoder) 672, and our decoder as frozen (two PriorTilt runs, relay-BP where they disagree, the neural tie-break) 544; a perfect tie-break would fail 429. Of the drop from relay-BP to our decoder, 63% is already there with PriorTilt run once; the hierarchy around it gives the rest. As an ablation, with the best hand-written tie-break (lowest weight among the converged candidates) in place of the network, the hierarchy fails 525: the network is no better than the hand-written rule (no significant difference). The classical tie-break (lowest weight among the converged candidates) fails 525 pairs and the network 544; only the network rule fails 87 pairs, only the classical rule 68, exact p = 0.15.<!--/f--> The table `report/tables/test_ladder.md` has every rung. On the practice shots:
-PriorTilt alone already beats relay-BP on the practice shots, and that part is IonQ's. Our hierarchy adds to it: on
-<!--f:expl_pairs-->25,000<!--/f--> practice pairs at p = 0.004, relay-BP fails <!--f:expl_pairs_R-->245<!--/f--> pairs, one PriorTilt run <!--f:expl_pairs_P1-->207<!--/f--> or <!--f:expl_pairs_P2-->188<!--/f--> depending on its seed, and
-the hierarchy with its best classical tie-break <!--f:expl_pairs_C-->140<!--/f--> (only relay-BP fails <!--f:expl_pairs_C_only_relay-->128<!--/f--> pairs, only the hierarchy <!--f:expl_pairs_C_only_ours-->23<!--/f-->). The neural tie-break's step on top is smaller, and on these shots not significant, measured on X memory
-(<!--f:expl_X_C-->67<!--/f--> to <!--f:expl_X_N-->60<!--/f--> failures of 25,000 shots; only the network rule fails <!--f:expl_X_N_vs_C_only_network-->8<!--/f-->, only the classical rule <!--f:expl_X_N_vs_C_only_classical-->15<!--/f-->, exact p = <!--f:expl_X_N_vs_C_p-->0.21<!--/f-->). *Pending: the same split on the test shots.* Source:
-`report/tables/exploration_p0.004.md`.
+<!--f:framing_slide-->On the test shots (one offline decode of each shot, the same candidates for every rung; p = 0.003, 0.004, 0.005 together), relay-BP fails 889 pairs, PriorTilt run once (IonQ's decoder) 672, and our decoder as frozen (two PriorTilt runs, relay-BP where they disagree, the neural tie-break) 544; a perfect tie-break would fail 429. Of the drop from relay-BP to our decoder, 63% is already there with PriorTilt run once; the hierarchy around it gives the rest. As an ablation, with the best hand-written tie-break (lowest weight among the converged candidates) in place of the network, the hierarchy fails 525: the network is no better than the hand-written rule (no significant difference). The classical tie-break (lowest weight among the converged candidates) fails 525 pairs and the network 544; only the network rule fails 87 pairs, only the classical rule 68, test p = 0.15.<!--/f--> The ensemble's lead over TCBP-JOBS at p = 0.004 comes from joint decoding of the
+disputed shots: its rule is ours, its members are NVIDIA's, IonQ's and the kit's. Source: `report/tables/test_ladder.md`,
+`test_ablation.md`, `test_p0.004.md`.
 
 **What is on the test shots and what is not?**
 On the test shots: the rows of the comparison table and the three plots made from it, decoded with everything frozen
@@ -126,7 +131,8 @@ table says which it is.
 Each CPU row ran through the same evaluator, in one process with one thread, on the same server, and the timer wraps
 the whole decode of a pair, with every stage and rerun. The table says which other rows ran beside each row. Times
 from other machines (a teammate's Mac, our laptop) are in separate tables and are not compared. TCBP-JOBS runs on a
-GPU: its time is shown and marked, and it is a different kind of machine. *Pending: the measured overlaps.*
+GPU: its time is shown and marked, and it is a different kind of machine. Up to <!--f:max_beside-->9<!--/f--> evaluator rows ran side by side
+on the server, and the CPU quota throttled each row for at most <!--f:max_throttle-->2.5%<!--/f--> of its time (the table gives every row's figure).
 
 **What does the loss model assume?**
 After every two-qubit gate each of its two atoms is lost with a fixed probability. A lost check atom is flagged at
@@ -136,11 +142,7 @@ X memory at p = 0.004 only. For scale, Infleqtion's paper arXiv:2408.08288 repor
 for a pair of atoms; the top of our range, 2e-3 per atom, is half of that, by our own reading.
 
 **Where does TCBP-JOBS stand against you?**
-Ahead, at p = 0.004 and 0.005, as measured so far. Its logged rate per cycle at p = 0.004, on its own sampled shots, is
-<!--f:tcbp_own4_rate-->3.42e-04<!--/f-->; on the practice pairs relay-BP is at <!--f:expl_rate_R-->8.20e-04<!--/f--> and our hierarchy with its best classical tie-break at
-<!--f:expl_rate_C-->4.68e-04<!--/f-->. We also ran TCBP-JOBS on those same practice pairs: it fails <!--f:expl_pairs_T-->113<!--/f--> of <!--f:expl_pairs-->25,000<!--/f-->,
-our hierarchy <!--f:expl_pairs_C-->140<!--/f-->, relay-BP <!--f:expl_pairs_R-->245<!--/f-->. *Pending: the same comparison on the saved test shots, pair by pair.* It needs a GPU;
-our hierarchy runs on one CPU core.
+<!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, test p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, test p = 0.74, not a significant difference); at p = 0.005 TCBP-JOBS fails fewer pairs than our decoder (360 against 479; only TCBP-JOBS fails 95, only ours 214, test p = 1e-11).<!--/f--> It needs a GPU; our decoder runs on one CPU core. <!--f:ensemble_statement-->Our ensemble, combined offline from saved answers with its rule frozen beforehand (where two PriorTilt runs and TCBP-JOBS agree, that answer; otherwise joint decoding of both check types, the slow decoder of the measurements before building): at p = 0.003 2 against TCBP-JOBS's 3 failed pairs (only the ensemble fails 0, only TCBP-JOBS 1, test p = 1.00; joint decoding ran on 5 disputed shots, about 5 s each); at p = 0.004 16 against TCBP-JOBS's 41 failed pairs (only the ensemble fails 1, only TCBP-JOBS 26, test p = 4e-07; joint decoding ran on 93 disputed shots, about 24 s each); at p = 0.005 joint decoding was not run, so the ensemble fails exactly TCBP-JOBS's 360 pairs. Its members are NVIDIA's, IonQ's and the kit's; the rule is ours, and it has no time measured as one decoder.<!--/f-->
 
 **"Another team is at 0.3 times the baseline's time." How do you compare?**
 A time ratio means nothing without the accuracy beside it: stopping relay-BP at its first answer is several times
@@ -160,7 +162,7 @@ Four things are learned: PriorTilt's 14 parameters (by its authors, IonQ), our n
 (a statistical model fitted on training shots), and the teammates' router. The honest account of ours:
 - The neural tie-break was motivated by a measurement: among 16 relay-BP candidates the right answer is present on
   <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, but the classical score picks it on only <!--f:cand_lowest-->71<!--/f--> (`report/tables/background.md`).
-  It clearly beats that classical score; on the test shots it is <!--f:abl_verdict-->no better than<!--/f--> the best hand-written rule
-  (<!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs, p = <!--f:abl_pooled_p-->0.15<!--/f-->). <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
+  It clearly beats that classical score (on 80,000 fresh shots, <!--f:a80_a-->237<!--/f--> against <!--f:a80_aw-->298<!--/f--> failures); on the test shots it
+  is <!--f:abl_verdict-->no better than<!--/f--> the best hand-written rule (<!--f:abl_pooled_a-->544<!--/f--> against <!--f:abl_pooled_aw-->525<!--/f--> failed pairs, test p = <!--f:abl_pooled_p-->0.15<!--/f-->). <!--f:slide3_close-->So the gain over relay-BP comes from PriorTilt and the hierarchy; on the test shots the network does not add to it.<!--/f-->
 - The loss-time tracker is the learned part with a clear gain: it recovers <!--f:trk_gain-->58% (38% to 78%)<!--/f--> of what knowing the true loss time
   would give, on its own test shots.

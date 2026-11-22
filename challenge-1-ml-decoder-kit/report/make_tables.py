@@ -334,6 +334,12 @@ def test_tables(measured):
                 f"sha256 `{TEST_SHA256[p]['X'][:12]}…` and `{TEST_SHA256[p]['Z'][:12]}…`). Every measured row decoded these two files.")
         texts[p] = write(f"test_p{p}", note + "\n\n" + markdown(header, lines), [r for r in records if r["p"] == p])
     write("test_all", "\n\n".join(texts[p] for p in P_VALUES), records)
+    shares = [row["throttle_share"] for p in P_VALUES for row in measured[p].values()
+              if row and not row.get("offline") and row.get("throttle_share") is not None]
+    fact("max_throttle", shares and f"{max(shares):.1%}", "tables/test_p<p>.md")
+    beside = [row["during"]["evaluators_max"] for p in P_VALUES for row in measured[p].values()
+              if row and not row.get("offline") and row.get("during")]
+    fact("max_beside", beside and max(beside), "tables/test_p<p>.md")
     texts["time"] = write("test_time", "Times on the test shots, each beside the row's failures, so that a time is never read without its accuracy. "
                           "\"Mean time ÷ relay-BP's\" below 1 means faster than relay-BP on average. One process per row on the team's server; "
                           "a row on two cores or on a GPU says so. A time is marked \"not clean\" when the server's CPU quota throttled it for more than "
@@ -1626,7 +1632,8 @@ def inject(tables):
         unknown = sorted(set(re.findall(r"<!--f:(\w+)-->", text)) - set(FACTS))
         if unknown:
             raise Mismatch(f"{document.name} quotes facts that do not exist: {unknown}")
-        text = re.sub(r"<!--f:(\w+)-->.*?<!--/f-->", lambda found: f"<!--f:{found.group(1)}-->{FACTS[found.group(1)][0]}<!--/f-->", text, flags=re.S)
+        value = (lambda name: FACTS[name][0].replace("exact p = ", "test p = ")) if document.name == "SLIDES.md" else (lambda name: FACTS[name][0])
+        text = re.sub(r"<!--f:(\w+)-->.*?<!--/f-->", lambda found: f"<!--f:{found.group(1)}-->{value(found.group(1))}<!--/f-->", text, flags=re.S)
         document.write_text(text, encoding="utf-8")
 
 

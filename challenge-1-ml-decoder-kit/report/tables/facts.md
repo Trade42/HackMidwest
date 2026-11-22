@@ -369,6 +369,8 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `loss_oracle_ratio` | 1.64 | `tables/loss.md` |
 | `loss_oracle_ratio_interval` | 1.42 to 1.94 | `tables/loss.md` |
 | `loss_oracle_share` | 2.7% | `tables/loss.md` |
+| `max_beside` | 9 | `tables/test_p<p>.md` |
+| `max_throttle` | 2.5% | `tables/test_p<p>.md` |
 | `net_X_step` | 120,000 | `tables/networks.md` |
 | `net_X_wrong3` | 0.5% | `tables/networks.md` |
 | `net_X_wrong4` | 3.8% | `tables/networks.md` |

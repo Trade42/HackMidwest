@@ -115,11 +115,13 @@ class Block(nn.Module):
         x = self.down(F.silu(self.norm_in(checks)))
         x = self.to_data.checks_to_data(F.silu(self.norm_checks(x)))
         x = self.to_checks.data_to_checks(F.silu(self.norm_data(x)))
-        x = self.up(F.silu(self.norm_out(x)))
-        checks = checks.to(x.dtype)   # under mixed precision the whole stream is then half precision
+        x = F.silu(self.norm_out(x))
         if self.scale_skip:
-            return self.branch_scale * checks + x
-        return checks + self.branch_scale * x
+            x = self.up(x)
+            return self.branch_scale * checks.to(x.dtype) + x
+        # x + f(x) / sqrt(2 depth): the factor multiplies the small weight matrix, not the large result.
+        x = F.linear(x, self.up.weight * self.branch_scale, self.up.bias * self.branch_scale)
+        return checks.to(x.dtype) + x   # under mixed precision the whole stream is then half precision
 
 
 class CascadeDecoder(nn.Module):

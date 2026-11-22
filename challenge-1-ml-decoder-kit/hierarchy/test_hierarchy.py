@@ -469,6 +469,12 @@ def test_plugin_with_a_network_on_other_logical_operators_equals_select(tmp_path
     assert np.array_equal(answers, by_key["network"].predicted)
     asked = [not result.metrics["agreed"] for result in results]
     assert asked == pool["ran"][ORDER.index("R")].tolist() and any(asked)
+
+    # The reference plugin "PriorTilt once" gives P1's answers of the same session-mode file, shot for shot.
+    once = create_session("hierarchy.priortilt_plugin:make_decoder", kit_problem("Z", 0.004), dict(QUICK_OPTIONS, rule="network"))
+    first = np.stack([validate_shot_result(once.decode_shot(full, part)) for full, part in zip(data.detectors, data.basis_input, strict=True)])
+    assert np.array_equal(first, pool["predicted"][ORDER.index("P1")]) and once.settings["seed"] == 1
+    json.dumps(once.settings)
     assert not np.array_equal(network.candidates, pool["predicted"])       # the candidates were turned into the light operators
 
 
@@ -642,6 +648,9 @@ def test_ensemble_command_selection_and_rule_choice(tmp_path, capsys):
     saved = json.loads((tmp_path / "train.json").read_text())
     assert {row["key"]: row.get("failures") for row in saved["rows"] if row["kind"] == "rule"} == {
         "a": 3, "aw": 4, "b": 2, "bw": 2, "c": 1, "d": 3, "e": 2, "f": 3, "g": 2, "gw": 3}
+    assert saved["ablation"]["a_against_aw"] == {"failures_with_the_network": 3, "failures_without": 4, "both_fail": 2,
+                                                 "only_the_network_rule_fails": 1, "only_the_rule_without_fails": 2, "p": 1.0}
+    assert "the network's own increment" in printed and "g against gw: failures 2 against 3" in printed
     assert saved["rows"][4]["key"] == "J" and next(row for row in saved["rows"] if row["key"] == "c")["against_T"] == {
         "both": 1, "row_only": 0, "reference_only": 1, "p": 1.0}
 

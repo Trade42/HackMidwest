@@ -1,0 +1,7 @@
+# Repeatability check of the seeded, shot-limited trainer. The same command was run twice from challenge-1-ml-decoder-kit/:
+#   python ml_decoder/train_logical_cnn.py --p-train 0.0001 --p-report 0.0001 --width 32 --depth 2 --batch 256 --seed 1 --threads 4 --train-shots 100000 --report-shots 50000 --basis X --out model_X_short.pt
+# and each checkpoint was moved to its own folder, a/ and b/, before the next run.
+$ diff train_X_p0.0001_seed1_100k.a.log train_X_p0.0001_seed1_100k.b.log
+(no difference)
+$ cmp a/model_X_short.pt b/model_X_short.pt
+(identical bytes)

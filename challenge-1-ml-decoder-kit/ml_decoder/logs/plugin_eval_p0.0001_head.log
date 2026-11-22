@@ -1,0 +1,24 @@
+# from challenge-1-ml-decoder-kit/ (head): ml_decoder/ml_options_p0.0001.json is
+{"models": {"X": "model_X_p0.0001.pt", "Z": "model_Z_p0.0001.pt"}, "threshold": 6.92, "device": "cpu", "threads": 2}
+$ python make_dataset.py --basis X --p 0.0001 --shots 2000 --seed 301 --out data/p0.0001/test_X.npz
+data/p0.0001/test_X.npz detectors (2000, 1728), observables (2000, 12)
+$ python make_dataset.py --basis Z --p 0.0001 --shots 2000 --seed 302 --out data/p0.0001/test_Z.npz
+data/p0.0001/test_Z.npz detectors (2000, 1728), observables (2000, 12)
+$ python -m evaluation.evaluate --test-x data/p0.0001/test_X.npz --test-z data/p0.0001/test_Z.npz --decoder ml_decoder.plugin:make_decoder --plugin-options ml_decoder/ml_options_p0.0001.json --out results/ml_first_p0.0001
+saved 1 decoder summaries in results/ml_first_p0.0001
+$ the decoder's settings and summary row, from results/ml_first_p0.0001/summary.json, and a 95% Wilson interval of the pair failures
+X {"threshold": 6.92, "relay": {"alpha": 1.0, "gamma0": 0.15, "pre_iter": 80, "num_sets": 300, "set_max_iter": 60, "gamma_dist_interval": [-0.22628432386414646, 0.6216020925981884], "stop_nconv": 5, "seed": 1}, "relay_changes": {"seed": 1}, "model": "model_X_p0.0001.pt", "device": "cpu", "torch_threads": 2, "checkpoint": {"basis": "X", "p_train": [0.0001], "seed": 1, "shots": 500224}}
+Z {"threshold": 6.92, "relay": {"alpha": 1.0, "gamma0": 0.15, "pre_iter": 80, "num_sets": 300, "set_max_iter": 60, "gamma_dist_interval": [-0.22628432386414646, 0.6216020925981884], "stop_nconv": 5, "seed": 1}, "relay_changes": {"seed": 1}, "model": "model_Z_p0.0001.pt", "device": "cpu", "torch_threads": 2, "checkpoint": {"basis": "Z", "p_train": [0.0001], "seed": 1, "shots": 400128}}
+shots_X: 2000
+shots_Z: 2000
+paired_shots: 2000
+failures_X: 0
+failures_Z: 0
+failures_pair: 0
+per_cycle_rate: 0.0
+standard_error: 0.0
+fallback_fraction: 0.51725
+mean_iterations: 13.15949734171097
+mean_pair_total_ms: absent in this evaluator version
+threshold: 6.92
+pair failures 0 of 2000, 95% Wilson [0.00e+00, 1.92e-03]; per cycle at most 1.60e-04

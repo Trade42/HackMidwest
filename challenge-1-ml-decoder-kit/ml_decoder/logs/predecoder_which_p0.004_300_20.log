@@ -1,0 +1,8 @@
+# from challenge-1-ml-decoder-kit/: python ml_decoder/diagnostics/predecoder_which.py . 0.004 300 20
+p=0.004 shots=300
+  none                     faults removed  0.0% | first leg fails  16.3% | mean iterations    111 | failures 8/300
+  bp-sure                  faults removed 44.9% | first leg fails  14.7% | mean iterations     99 | failures 7/300
+  iso, bp-sure             faults removed 40.0% | first leg fails  14.0% | mean iterations     98 | failures 6/300
+  iso, bp-unsure           faults removed 26.3% | first leg fails   6.0% | mean iterations     34 | failures 0/300
+  isolated                 faults removed 66.3% | first leg fails   5.7% | mean iterations     32 | failures 0/300
+  not isolated, bp-unsure  faults removed 28.8% | first leg fails   0.0% | mean iterations     10 | failures 0/300

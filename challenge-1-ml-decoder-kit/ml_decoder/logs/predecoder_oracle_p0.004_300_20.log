@@ -1,0 +1,8 @@
+# from challenge-1-ml-decoder-kit/: python ml_decoder/diagnostics/predecoder_oracle.py . 0.004 300 20
+p=0.004 shots=300 capped relay: 20 legs, 43s
+  none                 faults removed  0.0% | syndrome weight   122 | first leg fails  16.3% | mean iterations     92 | failures   9/300 (unconverged 8)
+  random 25%           faults removed 25.3% | syndrome weight    95 | first leg fails   4.0% | mean iterations     26 | failures   0/300 (unconverged 0)
+  random 50%           faults removed 50.6% | syndrome weight    65 | first leg fails   0.3% | mean iterations     11 | failures   0/300 (unconverged 0)
+  isolated             faults removed 66.3% | syndrome weight    32 | first leg fails   5.7% | mean iterations     32 | failures   1/300 (unconverged 1)
+  isolated, half       faults removed 33.1% | syndrome weight    77 | first leg fails  11.0% | mean iterations     50 | failures   3/300 (unconverged 1)
+  isolated + 1 wrong   faults removed 66.3% | syndrome weight    35 | first leg fails   7.0% | mean iterations     37 | failures   1/300 (unconverged 1)

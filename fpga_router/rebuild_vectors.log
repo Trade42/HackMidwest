@@ -1,0 +1,14 @@
+# from fpga_router/ (run in a scratch copy of the folder, next to the kit), then cmp against the committed files
+$ python router_fpga.py shots ../challenge-1-ml-decoder-kit 0.004 300 shots.npz
+300 Stim shots at p=0.004: 15.3% hard, 5 wrong first answers
+mean |posterior| percentiles 1/50/99/max: [71.1, 265.3, 4995978.3, 150571001.9]
+iterations max 1360 | solution weight max 70 | detectors per round max 28
+$ python router_fpga.py standin shots.npz model.npz
+wrote model.npz: stand-in weights, not a trained router
+$ python router_fpga.py export model.npz shots.npz
+FRAC = 18 bits. Largest logit error from rounding: 0.0010. Verdicts changed: 0 of 300
+wrote router_params.vh, vectors.mem (300 shots, 129 bytes each), tb_vectors.vh. Escalated: 20.3%
+$ cmp router_params.vh vectors.mem tb_vectors.vh against the committed files
+router_params.vh: identical
+vectors.mem: identical
+tb_vectors.vh: identical

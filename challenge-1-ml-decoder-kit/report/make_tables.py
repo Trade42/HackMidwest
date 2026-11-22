@@ -1966,7 +1966,10 @@ def predecoder_table(measured):
         f"On the {basis} test shots at p = {p}, relay-BP with the head's priors fails {FACTS[f'pre{p[-1]}{basis}_H'][0]} "
         + (f"against {FACTS[f'pre{p[-1]}{basis}_fresh'][0]} with the kit's priors (only the head's "
            f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_fresh_only_other'][0]}, exact p = "
-           f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_p'][0]})" if FACTS[f"pre{p[-1]}{basis}_fresh"][0] != NOT_MEASURED
+           f"{FACTS[f'pre{p[-1]}{basis}_vs_fresh_p'][0]}"
+           + (": not significant, so the declared line, a paired exact p below 0.05, is not passed at this p)"
+              if float(FACTS[f"pre{p[-1]}{basis}_vs_fresh_p"][0]) >= 0.05 else ": a significant gain)")
+           if FACTS[f"pre{p[-1]}{basis}_fresh"][0] != NOT_MEASURED
            else "(the kit's priors, the declared comparison, not measured yet)")
         + f", and TCBP-JOBS fails {FACTS[f'pre{p[-1]}{basis}_T'][0]} (only the head's "
         f"{FACTS[f'pre{p[-1]}{basis}_vs_T_only_H'][0]} against {FACTS[f'pre{p[-1]}{basis}_vs_T_only_other'][0]}, exact p = {FACTS[f'pre{p[-1]}{basis}_vs_T_p'][0]})."
@@ -2118,6 +2121,62 @@ def predecoder_table(measured):
                             pair_lines)
                  + "\n\nSource: `report/data/test/predecoder/pair_test_p0.005.{json,log}` (`predecoder.pair`).",
                  records)
+
+
+def predecoder_latency_table(measured):
+    """The predecoder's time per X shot, measured cleanly on exploration shots (the first 1,000 of validation_X at p = 0.005, one process,
+    one thread on the team's server), with the test rows' times per X shot beside it for scale, labelled: other shots, so not paired."""
+    folder = DATA / "exploration" / "predecoder" / "latency_validation_X_p0.005"
+    source = "tables/predecoder_latency.md"
+    names = ("lat_net_mean", "lat_net_median", "lat_net_p99", "lat_bp_mean", "lat_bp_median", "lat_bp_p99", "lat_conv", "lat_shots", "lat_conv_ms",
+             "lat_unconv", "lat_unconv_ms", "lat_total", "lat_relay_x", "lat_tcbp_x", "lat_relay_pair", "lat_unconv_share")
+    if not (folder / "summary.json").is_file() or not (folder / "per_shot.npz").is_file():
+        for name in names:
+            fact(name, None, source)
+        return write("predecoder_latency", NOT_MEASURED)
+    summary = json.loads((folder / "summary.json").read_text(encoding="utf-8"))
+    if summary["data"]["basis"] != "X" or abs(summary["data"]["p"] - 0.005) > 1e-12 or summary["data"]["seed"] != 201:
+        raise Mismatch("exploration/predecoder/latency_validation_X_p0.005: not the validation X file at p = 0.005")
+    with np.load(folder / "per_shot.npz", allow_pickle=False) as file:
+        seconds = file["seconds_build_head"] + file["seconds_decode_head"]
+        converged = file["converged_head"].astype(bool)
+    head = summary["arms"]["head"]
+    if abs(seconds.mean() - (head["build_seconds_mean"] + head["decode_seconds_mean"])) > 1e-9 or len(seconds) != summary["shots"]:
+        raise Mismatch("exploration/predecoder/latency_validation_X_p0.005: the per-shot times do not give the summary's mean")
+    network = summary["logits"]["per_shot_seconds"]
+    if summary["logits"]["model"]["torch_threads"] != 1 or summary["workers"] != 1:
+        raise Mismatch("exploration/predecoder/latency_validation_X_p0.005: not one process and one thread")
+    ms_ = lambda value: ms(value * 1e3)
+    relay, tcbp = measured["0.005"].get(REFERENCE), measured["0.005"].get("tcbp")
+    relay_x = tcbp_x = None
+    if relay is not None and relay.get("per_shot_file"):
+        with np.load(DATA / relay["per_shot_file"], allow_pickle=False) as file:
+            relay_x = float(file["seconds_total_X"].mean())
+    if tcbp is not None and (DATA / "test" / "tcbp_p0.005" / "test_X.tcbp.npz").is_file():
+        with np.load(DATA / "test" / "tcbp_p0.005" / "test_X.tcbp.npz", allow_pickle=False) as file:
+            tcbp_x = float(file["seconds_T"].astype(float).mean())
+    values = {"lat_net_mean": ms_(network["mean"]), "lat_net_median": ms_(network["median"]), "lat_net_p99": ms_(network["p99"]),
+              "lat_bp_mean": ms_(seconds.mean()), "lat_bp_median": ms_(float(np.median(seconds))), "lat_bp_p99": ms_(float(np.percentile(seconds, 99))),
+              "lat_conv": f"{int(converged.sum()):,}", "lat_shots": f"{len(seconds):,}", "lat_conv_ms": ms_(seconds[converged].mean()),
+              "lat_unconv": int((~converged).sum()), "lat_unconv_ms": ms_(seconds[~converged].mean()) if (~converged).any() else None,
+              "lat_total": ms_(network["mean"] + seconds.mean()), "lat_relay_x": relay_x and ms_(relay_x), "lat_tcbp_x": tcbp_x and ms_(tcbp_x),
+              "lat_relay_pair": relay and ms(relay["mean_ms"]), "lat_unconv_share": f"{(~converged).mean():.1%}"}
+    for name in names:
+        fact(name, values[name], source)
+    rows = [["the network and the head, on the CPU", values["lat_net_mean"], values["lat_net_median"], values["lat_net_p99"]],
+            ["relay-BP with the head's priors, built and run per shot", values["lat_bp_mean"], values["lat_bp_median"], values["lat_bp_p99"]],
+            [f"the two together (the predecoder's whole decode of an X shot)", values["lat_total"], "", ""]]
+    return write("predecoder_latency",
+                 "**Exploration shots, not test shots: the predecoder's time per X shot.** The team's server, one process and one thread "
+                 f"(server job cpu/050), the first {values['lat_shots']} X shots of `data/p0.005/validation_X.npz` (so no test file was decoded "
+                 "twice); the head and the final X network pinned by sha256 as in the test run. Per X shot, not per pair.\n\n"
+                 + markdown(["Part", "Mean, ms per X shot", "Median", "99th percentile"], rows)
+                 + f"\n\nRelay-BP converged on {values['lat_conv']} of the {values['lat_shots']} shots ({values['lat_conv_ms']} ms on those) and not on "
+                 f"{values['lat_unconv']} ({values['lat_unconv_ms']} ms on those). For scale only, other shots and so no paired comparison: on the test X "
+                 f"shots at p = 0.005, relay-BP's timed row takes {values['lat_relay_x']} ms per X shot (its {values['lat_relay_pair']} ms per pair is an X "
+                 f"shot plus a Z shot) and TCBP-JOBS {values['lat_tcbp_x']} ms per X shot (a GPU decode call alone, not comparable with a CPU time).\n\n"
+                 "Source: `report/data/exploration/predecoder/latency_validation_X_p0.005/` (`summary.json`, `per_shot.npz`, `latency.txt`) and "
+                 "`job_cpu_050-predecoder-latency.out`.")
 
 
 def ours_at(measured, p):
@@ -2284,6 +2343,7 @@ def main(argv=None):
         tables["test_after_swap_short"] = (TABLES / "test_after_swap_short.md").read_text(encoding="utf-8")
         tables["test_predecoder"] = predecoder_table(measured)
         tables["test_network_timed"] = network_timed_table(measured)
+        tables["predecoder_latency"] = predecoder_latency_table(measured)
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)

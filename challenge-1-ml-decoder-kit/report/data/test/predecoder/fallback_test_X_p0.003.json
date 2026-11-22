@@ -1,0 +1,55 @@
+{
+ "data": {
+  "path": "/home/sal/hackMidwest/worktrees/predecoder/challenge-1-ml-decoder-kit/data/p0.003/test_X.npz",
+  "sha256": "f7bc181399a0a8fd1324950c98a8419c0082d7c34940c03dfb34c9e2cefc1ff3",
+  "basis": "X",
+  "p": 0.003,
+  "seed": 301,
+  "shots": 10000,
+  "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+ },
+ "checks": {
+  "ours: truth equals the file's": true,
+  "TCBP-JOBS: data_sha256 equals the file's": true,
+  "TCBP-JOBS: truth equals the file's": true
+ },
+ "fallback_shots": 1,
+ "failures": {
+  "H": {
+   "failures": 2,
+   "wilson95": [
+    5.4848926828014266e-05,
+    0.0007289958505534229
+   ]
+  },
+  "T": {
+   "failures": 1,
+   "wilson95": [
+    1.765267340620363e-05,
+    0.0005662689036505799
+   ]
+  },
+  "rule": {
+   "failures": 1,
+   "wilson95": [
+    1.765267340620363e-05,
+    0.0005662689036505799
+   ]
+  }
+ },
+ "pairs": {
+  "rule against T": {
+   "both": 1,
+   "only_rule": 0,
+   "only_T": 0,
+   "p": 1.0
+  },
+  "rule against H": {
+   "both": 1,
+   "only_rule": 0,
+   "only_H": 1,
+   "p": 1.0
+  }
+ },
+ "rule": "H where relay-BP with the head's priors converged, else TCBP-JOBS"
+}

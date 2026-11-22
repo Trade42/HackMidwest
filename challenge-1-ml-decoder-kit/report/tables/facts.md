@@ -320,21 +320,21 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
-| `fb3X_H` | not measured | `tables/test_predecoder.md` |
-| `fb3X_T` | not measured | `tables/test_predecoder.md` |
-| `fb3X_back` | not measured | `tables/test_predecoder.md` |
-| `fb3X_back_H` | not measured | `tables/test_predecoder.md` |
-| `fb3X_back_T` | not measured | `tables/test_predecoder.md` |
-| `fb3X_conv_H` | not measured | `tables/test_predecoder.md` |
-| `fb3X_conv_T` | not measured | `tables/test_predecoder.md` |
-| `fb3X_conv_shots` | not measured | `tables/test_predecoder.md` |
-| `fb3X_rule` | not measured | `tables/test_predecoder.md` |
-| `fb3X_vs_H_only_H` | not measured | `tables/test_predecoder.md` |
-| `fb3X_vs_H_only_rule` | not measured | `tables/test_predecoder.md` |
-| `fb3X_vs_H_p` | not measured | `tables/test_predecoder.md` |
-| `fb3X_vs_T_only_T` | not measured | `tables/test_predecoder.md` |
-| `fb3X_vs_T_only_rule` | not measured | `tables/test_predecoder.md` |
-| `fb3X_vs_T_p` | not measured | `tables/test_predecoder.md` |
+| `fb3X_H` | 2 | `tables/test_predecoder.md` |
+| `fb3X_T` | 1 | `tables/test_predecoder.md` |
+| `fb3X_back` | 1 | `tables/test_predecoder.md` |
+| `fb3X_back_H` | 1 | `tables/test_predecoder.md` |
+| `fb3X_back_T` | 0 | `tables/test_predecoder.md` |
+| `fb3X_conv_H` | 1 | `tables/test_predecoder.md` |
+| `fb3X_conv_T` | 1 | `tables/test_predecoder.md` |
+| `fb3X_conv_shots` | 9,999 | `tables/test_predecoder.md` |
+| `fb3X_rule` | 1 | `tables/test_predecoder.md` |
+| `fb3X_vs_H_only_H` | 1 | `tables/test_predecoder.md` |
+| `fb3X_vs_H_only_rule` | 0 | `tables/test_predecoder.md` |
+| `fb3X_vs_H_p` | 1.00 | `tables/test_predecoder.md` |
+| `fb3X_vs_T_only_T` | 0 | `tables/test_predecoder.md` |
+| `fb3X_vs_T_only_rule` | 0 | `tables/test_predecoder.md` |
+| `fb3X_vs_T_p` | 1.00 | `tables/test_predecoder.md` |
 | `fb4X_H` | 15 | `tables/test_predecoder.md` |
 | `fb4X_T` | 20 | `tables/test_predecoder.md` |
 | `fb4X_back` | 12 | `tables/test_predecoder.md` |
@@ -432,6 +432,22 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `lad5_aw_rate` | 4.50e-03 | `tables/test_ladder.md` |
 | `lad5_floor_pairs` | 386 | `tables/test_ladder.md` |
 | `lad5_floor_rate` | 3.28e-03 | `tables/test_ladder.md` |
+| `lat_bp_mean` | 185 | `tables/predecoder_latency.md` |
+| `lat_bp_median` | 30.1 | `tables/predecoder_latency.md` |
+| `lat_bp_p99` | 5,467 | `tables/predecoder_latency.md` |
+| `lat_conv` | 992 | `tables/predecoder_latency.md` |
+| `lat_conv_ms` | 142 | `tables/predecoder_latency.md` |
+| `lat_net_mean` | 26.8 | `tables/predecoder_latency.md` |
+| `lat_net_median` | 26.7 | `tables/predecoder_latency.md` |
+| `lat_net_p99` | 28.0 | `tables/predecoder_latency.md` |
+| `lat_relay_pair` | 1,471 | `tables/predecoder_latency.md` |
+| `lat_relay_x` | 760 | `tables/predecoder_latency.md` |
+| `lat_shots` | 1,000 | `tables/predecoder_latency.md` |
+| `lat_tcbp_x` | 8.7 | `tables/predecoder_latency.md` |
+| `lat_total` | 212 | `tables/predecoder_latency.md` |
+| `lat_unconv` | 8 | `tables/predecoder_latency.md` |
+| `lat_unconv_ms` | 5,544 | `tables/predecoder_latency.md` |
+| `lat_unconv_share` | 0.8% | `tables/predecoder_latency.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
 | `loss_aware_ratio` | 11.5 | `tables/loss.md` |
 | `loss_aware_share` | 4.4% | `tables/loss.md` |
@@ -541,23 +557,23 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pair_rule_vs_T_only_mine` | not measured | `tables/test_predecoder.md` |
 | `pair_rule_vs_T_only_other` | not measured | `tables/test_predecoder.md` |
 | `pair_rule_vs_T_p` | not measured | `tables/test_predecoder.md` |
-| `pre3X_H` | not measured | `tables/test_predecoder.md` |
-| `pre3X_R` | not measured | `tables/test_predecoder.md` |
-| `pre3X_T` | not measured | `tables/test_predecoder.md` |
-| `pre3X_fresh` | not measured | `tables/test_predecoder.md` |
-| `pre3X_it_H` | not measured | `tables/test_predecoder.md` |
-| `pre3X_it_fresh` | not measured | `tables/test_predecoder.md` |
-| `pre3X_it_ratio` | not measured | `tables/test_predecoder.md` |
-| `pre3X_ratio` | not measured | `tables/test_predecoder.md` |
-| `pre3X_vs_R_only_H` | not measured | `tables/test_predecoder.md` |
-| `pre3X_vs_R_only_other` | not measured | `tables/test_predecoder.md` |
-| `pre3X_vs_R_p` | not measured | `tables/test_predecoder.md` |
-| `pre3X_vs_T_only_H` | not measured | `tables/test_predecoder.md` |
-| `pre3X_vs_T_only_other` | not measured | `tables/test_predecoder.md` |
-| `pre3X_vs_T_p` | not measured | `tables/test_predecoder.md` |
-| `pre3X_vs_fresh_only_H` | not measured | `tables/test_predecoder.md` |
-| `pre3X_vs_fresh_only_other` | not measured | `tables/test_predecoder.md` |
-| `pre3X_vs_fresh_p` | not measured | `tables/test_predecoder.md` |
+| `pre3X_H` | 2 | `tables/test_predecoder.md` |
+| `pre3X_R` | 2 | `tables/test_predecoder.md` |
+| `pre3X_T` | 1 | `tables/test_predecoder.md` |
+| `pre3X_fresh` | 7 | `tables/test_predecoder.md` |
+| `pre3X_it_H` | 61 | `tables/test_predecoder.md` |
+| `pre3X_it_fresh` | 144 | `tables/test_predecoder.md` |
+| `pre3X_it_ratio` | 2.3 | `tables/test_predecoder.md` |
+| `pre3X_ratio` | 3.5 | `tables/test_predecoder.md` |
+| `pre3X_vs_R_only_H` | 1 | `tables/test_predecoder.md` |
+| `pre3X_vs_R_only_other` | 1 | `tables/test_predecoder.md` |
+| `pre3X_vs_R_p` | 1.00 | `tables/test_predecoder.md` |
+| `pre3X_vs_T_only_H` | 1 | `tables/test_predecoder.md` |
+| `pre3X_vs_T_only_other` | 0 | `tables/test_predecoder.md` |
+| `pre3X_vs_T_p` | 1.00 | `tables/test_predecoder.md` |
+| `pre3X_vs_fresh_only_H` | 1 | `tables/test_predecoder.md` |
+| `pre3X_vs_fresh_only_other` | 6 | `tables/test_predecoder.md` |
+| `pre3X_vs_fresh_p` | 0.12 | `tables/test_predecoder.md` |
 | `pre4X_H` | 15 | `tables/test_predecoder.md` |
 | `pre4X_R` | 36 | `tables/test_predecoder.md` |
 | `pre4X_T` | 20 | `tables/test_predecoder.md` |
@@ -610,7 +626,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pre5Z_vs_fresh_only_other` | not measured | `tables/test_predecoder.md` |
 | `pre5Z_vs_fresh_p` | not measured | `tables/test_predecoder.md` |
 | `pre_columns` | 8,784 | `tables/test_predecoder.md` |
-| `pre_extension` | On the X test shots at p = 0.004, relay-BP with the head's priors fails 15 against 39 with the kit's priors (only the head's 3 against 27, exact p = 8e-06), and TCBP-JOBS fails 20 (only the head's 7 against 12, exact p = 0.36). | `tables/test_predecoder.md` |
+| `pre_extension` | On the X test shots at p = 0.004, relay-BP with the head's priors fails 15 against 39 with the kit's priors (only the head's 3 against 27, exact p = 8e-06: a significant gain), and TCBP-JOBS fails 20 (only the head's 7 against 12, exact p = 0.36). On the X test shots at p = 0.003, relay-BP with the head's priors fails 2 against 7 with the kit's priors (only the head's 1 against 6, exact p = 0.12: not significant, so the declared line, a paired exact p below 0.05, is not passed at this p), and TCBP-JOBS fails 1 (only the head's 1 against 0, exact p = 1.00). | `tables/test_predecoder.md` |
 | `pre_pair` | The pair score at p = 0.005 has not landed yet. | `tables/test_predecoder.md` |
 | `pre_z_reason` | Z memory has no result yet | `tables/test_predecoder.md` |
 | `pregate_H` | 14 | `data/exploration/predecoder/compare_validation_X_summary.json` |

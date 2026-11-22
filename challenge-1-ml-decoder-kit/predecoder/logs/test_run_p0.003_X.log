@@ -1,0 +1,39 @@
+/home/sal/hackMidwest/orchestration/scratch/predecoder/test-run-x.sh: line 47: hostname: command not found
+test run started 2026-11-22 14:54:54 UTC, , commit 1bf0e7b3725fbfb2897bfd18862a8236618d6fd9
+(14:55 UTC: this attempt was stopped by hand while it waited for lane B, before any lock but A was held and before anything was computed: no logits, no decode. Rerun on lanes A and C below.)
+/home/sal/hackMidwest/orchestration/scratch/predecoder/test-run-x.sh: line 49: hostname: command not found
+test run started 2026-11-22 14:55:52 UTC, , commit 1bf0e7b3725fbfb2897bfd18862a8236618d6fd9
+locks A C held from 14:55:52 UTC
+test_X.npz: 10000 shots, logits of 8784 columns in /home/sal/hackMidwest/orchestration/scratch/predecoder/test-run/logits_test_p0.003/logits.npy (433 s in batches of 32 on cpu)
+network + head, one shot at a time on cpu (8 threads), 200 shots: mean 57.5 ms, median 27.4 ms, p99 1214.9 ms; batch one against batched: largest logit gap 0.00e+00
+the head's probabilities sum to 35.5 per shot (the kit's priors: 35.5)
+logits done 15:03:25 UTC
+test_X.npz: 10000 shots, p=0.003, arms ['fresh', 'head']; head priors {'mode': 'logodds', 'alpha': 0.2, 'eps': 0.0001}; 200 tasks to run in 8 processes (16 CPUs here, luminaty)
+  10 of 200 tasks done (fresh from shot 900), 41 s
+  20 of 200 tasks done (fresh from shot 2000), 58 s
+  30 of 200 tasks done (fresh from shot 2900), 83 s
+  40 of 200 tasks done (fresh from shot 4000), 101 s
+  50 of 200 tasks done (fresh from shot 4600), 122 s
+  60 of 200 tasks done (fresh from shot 5600), 140 s
+  70 of 200 tasks done (fresh from shot 7100), 161 s
+  80 of 200 tasks done (fresh from shot 8000), 183 s
+  90 of 200 tasks done (fresh from shot 9000), 201 s
+  100 of 200 tasks done (head from shot 100), 213 s
+  110 of 200 tasks done (head from shot 1000), 224 s
+  120 of 200 tasks done (head from shot 1900), 232 s
+  130 of 200 tasks done (head from shot 2400), 241 s
+  140 of 200 tasks done (head from shot 3800), 250 s
+  150 of 200 tasks done (head from shot 4900), 261 s
+  160 of 200 tasks done (head from shot 5900), 270 s
+  170 of 200 tasks done (head from shot 7100), 282 s
+  180 of 200 tasks done (head from shot 6900), 293 s
+  190 of 200 tasks done (head from shot 9000), 303 s
+  200 of 200 tasks done (head from shot 9800), 310 s
+relay-BP at the kit's settings; 311 s. Time per shot: build + decode in these worker processes, plus the network and head (57.5 ms mean, cpu, from predecoder.evaluate)
+arm     failures          share, 95% interval unconverged   hard mean iter build ms decode ms total ms  p99 ms
+fresh          7    0.0007 [0.0003, 0.0014]           2    354       144     12.7     117.6    130.3     881
+head           2    0.0002 [0.0001, 0.0007]           1     51        61     11.6      46.6    115.7     214
+paired head against fresh: both fail 1, only head 1, only fresh 6, exact two-sided p = 0.125
+kill line (head against fresh: fewer failures, paired, p < 0.05): NOT PASSED
+compare done 15:08:37 UTC
+test run ended 2026-11-22 15:08:37 UTC

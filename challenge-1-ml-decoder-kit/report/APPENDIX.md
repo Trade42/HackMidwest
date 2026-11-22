@@ -99,6 +99,23 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.005 | our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores | not measured | not measured | not measured | not measured | not measured | not measured |
 <!-- END table:test_time -->
 
+The learned predecoder's time per X shot, measured cleanly on exploration shots: its own table, since test and
+exploration shots never share one.
+
+<!-- BEGIN table:predecoder_latency -->
+**Exploration shots, not test shots: the predecoder's time per X shot.** The team's server, one process and one thread (server job cpu/050), the first 1,000 X shots of `data/p0.005/validation_X.npz` (so no test file was decoded twice); the head and the final X network pinned by sha256 as in the test run. Per X shot, not per pair.
+
+| Part | Mean, ms per X shot | Median | 99th percentile |
+|---|---|---|---|
+| the network and the head, on the CPU | 26.8 | 26.7 | 28.0 |
+| relay-BP with the head's priors, built and run per shot | 185 | 30.1 | 5,467 |
+| the two together (the predecoder's whole decode of an X shot) | 212 |  |  |
+
+Relay-BP converged on 992 of the 1,000 shots (142 ms on those) and not on 8 (5,544 ms on those). For scale only, other shots and so no paired comparison: on the test X shots at p = 0.005, relay-BP's timed row takes 760 ms per X shot (its 1,471 ms per pair is an X shot plus a Z shot) and TCBP-JOBS 8.7 ms per X shot (a GPU decode call alone, not comparable with a CPU time).
+
+Source: `report/data/exploration/predecoder/latency_validation_X_p0.005/` (`summary.json`, `per_shot.npz`, `latency.txt`) and `job_cpu_050-predecoder-latency.out`.
+<!-- END table:predecoder_latency -->
+
 <!-- BEGIN table:time_split -->
 Where our decoder's time goes on the test shots, per pair (an X shot and a Z shot), averaged over all 10,000 pairs. The two PriorTilt runs decode every shot; relay-BP and the tie-break run only on the shots where the two runs disagree. From the plugin's own per-shot timers; the last column is the evaluator's timer, which wraps everything.
 
@@ -561,7 +578,10 @@ Source: `report/data/test/ensemble_p<p>/test_{X,Z}.npz` and `.json`.
 | 0.004 | X | relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit) | 39 of 10,000 | 0.39% (0.29% to 0.53%) | 12 / 3 / 27 (p = 8e-06) | 514; 13 not converged |
 | 0.004 | X | TCBP-JOBS (NVIDIA, GPU; its row of this report) | 20 of 10,000 | 0.20% (0.13% to 0.31%) | 8 / 7 / 12 (p = 0.36) |  |
 | 0.004 | X | relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report) | 36 of 10,000 | 0.36% (0.26% to 0.50%) | 10 / 5 / 26 (p = 2e-04) |  |
-| 0.003 | X | relay-BP with the head's priors (H) [run after the p = 0.005 X test result (the registered extension)] | not measured | not measured | not measured | not measured |
+| 0.003 | X | relay-BP with the head's priors, a decoder built per shot (H; ours) [run after the p = 0.005 X test result (the registered extension)] | 2 of 10,000 | 0.02% (0.01% to 0.07%) |  | 61; 1 not converged |
+| 0.003 | X | relay-BP with the kit's priors, a decoder built per shot (the declared comparison; the kit) | 7 of 10,000 | 0.07% (0.03% to 0.14%) | 1 / 1 / 6 (p = 0.12) | 144; 2 not converged |
+| 0.003 | X | TCBP-JOBS (NVIDIA, GPU; its row of this report) | 1 of 10,000 | 0.01% (0.00% to 0.06%) | 1 / 1 / 0 (p = 1.00) |  |
+| 0.003 | X | relay-BP, the evaluator's timed row (one decoder through all shots; its row of this report) | 2 of 10,000 | 0.02% (0.01% to 0.07%) | 1 / 1 / 1 (p = 1.00) |  |
 | 0.005 | Z | relay-BP with the head's priors (H) [run after the p = 0.005 X test result (the registered extension)] | not measured | not measured | not measured | not measured |
 
 Source: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.json` (copied from `predecoder/logs/`).
@@ -572,8 +592,8 @@ Source: `report/data/test/predecoder/test_run_p<p>_<basis>_{summary,secondary}.j
 |---|---|---|---|---|---|---|---|---|
 | 0.005 | X | post hoc: the rule was prompted by these same test shots, so this number is not held out | 90 of 10,000 | 107 (1.07%, 0.89% to 1.29%) | 151 | 186 | 91 / 16 / 95 (p = 8e-15) | 106 / 1 / 45 (p = 1e-12) |
 | 0.005 | Z | its clean test, run after the p = 0.005 X test result (the registered extension); the rule was frozen before the Z test file was opened | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
-| 0.004 | X | post hoc: the rule was designed after the first test result, and frozen before it was applied here; run after the p = 0.005 X test result (the registered extension) | 12 of 10,000 | 10 (0.10%, 0.05% to 0.18%) | 15 | 20 | 8 / 2 / 12 (p = 0.013) | 10 / 0 / 5 (p = 0.062) |
-| 0.003 | X | post hoc: the rule was designed after the first test result, and frozen before it was applied here; run after the p = 0.005 X test result (the registered extension) | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet | not measured yet |
+| 0.004 | X | post hoc: the rule was designed after the first test result, and this test file was opened (for H) before the rule was frozen; run after the p = 0.005 X test result (the registered extension) | 12 of 10,000 | 10 (0.10%, 0.05% to 0.18%) | 15 | 20 | 8 / 2 / 12 (p = 0.013) | 10 / 0 / 5 (p = 0.062) |
+| 0.003 | X | the rule was designed after the first test result and frozen (14:32 UTC) before this test file was opened (14:56 UTC); run after the p = 0.005 X test result (the registered extension) | 1 of 10,000 | 1 (0.01%, 0.00% to 0.06%) | 2 | 1 | 1 / 0 / 0 (p = 1.00) | 1 / 0 / 1 (p = 1.00) |
 
 Source: `report/data/test/predecoder/fallback_test_<basis>_p<p>.{json,log}` (`predecoder.fallback`).
 

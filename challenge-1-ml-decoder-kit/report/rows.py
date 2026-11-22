@@ -88,7 +88,7 @@ TEST_ROWS = [
 # is scored on the same per-shot candidate files, so each step is a paired comparison with the rung before.
 # (key in the ensemble's files, name in the table, whose work the step is)
 LADDER = [
-    ("R", "relay-BP (kit baseline)", "the kit"),
+    ("R", "relay-BP (kit baseline), a fresh decoder per 500 shots (the ensemble's member)", "the kit"),
     ("P1", "PriorTilt, one run (seed A)", "IonQ"),
     ("aw", "our hierarchy, lowest-weight tie-break (nothing learned by us)", "ours"),
     ("ac", "our hierarchy, lowest weight among the converged candidates (nothing learned by us)", "ours"),

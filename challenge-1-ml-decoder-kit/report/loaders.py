@@ -294,7 +294,9 @@ def ensemble(folder, p, split="test"):
     marked = {basis: tables[basis].get("marked_rule") or (str(arrays[basis]["rule"]) if "rule" in arrays[basis] and str(arrays[basis]["rule"]) else None) for basis in "XZ"}
     if marked["X"] != marked["Z"]:
         raise Mismatch(f"{folder}: the frozen rule is {marked['X']} for X memory and {marked['Z']} for Z memory")
-    return {"rows": rows, "rule": marked["X"], "members": {basis: tables[basis].get("members") for basis in "XZ"},
+    joint = {basis: next(({"shots": row.get("shots", 0), "failures": row.get("failures", 0), "ms_per_shot": row.get("ms_per_shot")}
+                          for row in tables[basis]["rows"] if row.get("key") == "J"), None) for basis in "XZ"}
+    return {"rows": rows, "rule": marked["X"], "joint": joint, "members": {basis: tables[basis].get("members") for basis in "XZ"},
             "network_ms": tables["X"].get("network_ms"), "ablation": {basis: tables[basis].get("ablation") or {} for basis in "XZ"}}
 
 

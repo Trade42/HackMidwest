@@ -1380,7 +1380,10 @@ def mode_checks(measured, combined):
             lines.append(f"p = {p}: {words}, timed row (one decoder through all 10,000 shots) {timed['failures_pair']} failed pairs, offline decode "
                          f"(a fresh decoder every 500 shots) {rows[member]['failures_pair']}; only the timed one fails {paired['row_only']}, only the offline one "
                          f"{paired['reference_only']}, exact p = {stats.p_text(paired['p'])}"
-                         + (" (**a significant difference: the two decodes draw relay-BP's random strengths differently**)" if paired["p"] < 0.05 else ""))
+                         + (" (below 0.05; we read it as the run-to-run spread of a randomized decoder: relay-BP draws random strengths from a "
+                            "generator seeded once, so the two modes give each shot other draws, and the offline mode replays the same seed in every "
+                            "500-shot chunk, which the paired test does not account for; a comparison that mixes the two modes is marked \"mixed\")"
+                            if paired["p"] < 0.05 else ""))
     return lines
 
 
@@ -1454,6 +1457,10 @@ def findings(measured):
         mine, theirs = time_words(ours), time_words(relay)
         if mine:
             text += f", in {mine}" + (f" against relay-BP's {theirs}" if theirs else "")
+        priortilt = measured[p].get("priortilt")
+        if priortilt is not None:
+            text += (f"; PriorTilt run once fails {priortilt['failures_pair']}"
+                     + (f" in {time_words(priortilt)}" if time_words(priortilt) else " (offline, no time)"))
         parallel = measured[p].get("hierarchy-parallel")
         if time_words(parallel):
             text += f"; with its two fast decodes side by side on two cores, {time_words(parallel)}"
@@ -1463,7 +1470,34 @@ def findings(measured):
     else:
         parts.append("Our decoder's rows on the test shots are not measured yet.")
     parts.append(FACTS["tcbp_statement"][0])
+    parts.append(FACTS["ensemble_statement"][0])
     fact("findings", " ".join(parts), "tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md")
+
+
+def ensemble_statement(measured, combined):
+    """Our ensemble against TCBP-JOBS on the same test pairs, with what its gain rests on (joint decoding of the disputed shots)."""
+    clauses = []
+    for p in P_VALUES:
+        ensemble, tcbp = measured[p].get("ensemble"), measured[p].get("tcbp")
+        if ensemble is None or tcbp is None or tcbp["failed_pair"] is None:
+            continue
+        joint = [entry for entry in (combined[p] or {}).get("joint", {}).values() if entry]
+        ran = sum(entry["shots"] for entry in joint)
+        seconds = [entry["ms_per_shot"] / 1e3 for entry in joint if entry["ms_per_shot"]]
+        if ensemble.get("same_as_tcbp") and ran == 0:
+            clauses.append(f"at p = {p} joint decoding was not run, so the ensemble fails exactly TCBP-JOBS's {tcbp['failures_pair']} pairs")
+            continue
+        paired = stats.paired(tcbp["failed_pair"], ensemble["failed_pair"])
+        clauses.append(f"at p = {p} {ensemble['failures_pair']} against TCBP-JOBS's {tcbp['failures_pair']} failed pairs (only the ensemble fails "
+                       f"{paired['row_only']}, only TCBP-JOBS {paired['reference_only']}, exact p = {stats.p_text(paired['p'])}; joint decoding ran on "
+                       f"{ran} disputed shots" + (f", about {sum(seconds) / len(seconds):.0f} s each" if seconds else "") + ")")
+    if clauses:
+        text = ("Our ensemble, combined offline from saved answers with its rule frozen beforehand (where two PriorTilt runs and TCBP-JOBS agree, "
+                "that answer; otherwise joint decoding of both check types, the slow decoder of the measurements before building): "
+                + "; ".join(clauses) + ". Its members are NVIDIA's, IonQ's and the kit's; the rule is ours, and it has no time measured as one decoder.")
+    else:
+        text = "Our ensemble is not measured on the test shots yet."
+    fact("ensemble_statement", text, "tables/test_p<p>.md (the ensemble and TCBP-JOBS rows)")
 
 
 def ours_at(measured, p):
@@ -1534,20 +1568,25 @@ def readme_section(measured):
     """The one section appended to the top-level README.md: at most 25 lines, every number from the tables above."""
     value = lambda name: FACTS[name][0]
     tcbp = value("tcbp_statement")
+    result = (value("slide4_title") + ". " + (f"As a tie-break, the neural network is {value('abl_verdict')} the best hand-written rule, "
+              "so the gain over relay-BP is PriorTilt's and the hierarchy's." if value("abl_verdict") != "better than"
+              else value("slide3_close")))
     lines = [README_HEADING, "",
              "Two runs of a fast decoder (IonQ's PriorTilt) settle the shots they agree on; where they disagree, relay-BP joins and a neural",
-             "network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). " + value("framing"),
+             "network picks the most likely answer (`challenge-1-ml-decoder-kit/hierarchy/`, `neural/`). " + result,
              f"Under atom loss (our own simplified model), relay-BP with the loss flags fails {value('loss_aware_share')} of shots where a loss-blind one",
-             f"fails {value('loss_blind_share')}, and an ORACLE told when each atom was lost fails {value('loss_oracle_ratio')} times fewer still: the ceiling for a loss-time tracker (`loss/`).",
+             f"fails {value('loss_blind_share')}; our loss-time tracker, which estimates from the syndrome when each atom was lost, recovers "
+             f"{value('trk_gain')} of what knowing the true loss time would add (`loss/`, `loss_tracker/`).",
              ""]
     header = ["Decoder"] + [f"p = {p}" for p in P_VALUES]
     table = []
-    for key in DECODERS:
+    for key in ("bposd", "relay-bp", "priortilt", "hierarchy", "tcbp"):
         cells = []
         for p in P_VALUES:
-            row = measured[p][key]
+            row = ours_at(measured, p) if key == "hierarchy" else measured[p][key]
             cells.append(NOT_MEASURED if row is None else f"{stats.sci(row['rate'])} ± {stats.sci(row['error'], 1)}, "
-                         + (f"{ms(row['mean_ms'])} ms" if row["mean_ms"] is not None and not row.get("offline") else "not timed"))
+                         + (f"{ms(row['mean_ms'])} ms" + (" (2 cores)" if row is measured[p].get("hierarchy-parallel") else "")
+                            if row["mean_ms"] is not None and not row.get("offline") else "offline, no time"))
         table.append([DECODERS[key].label] + cells)
     lines += markdown(header, table).split("\n")
     lines += ["",
@@ -1599,6 +1638,7 @@ def main(argv=None):
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)
+        ensemble_statement(measured, combined)
         findings(measured)
         slide_facts(measured)
         readme_section(measured)

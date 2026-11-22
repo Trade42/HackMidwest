@@ -364,6 +364,12 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `rule_Z_network` | 68 | `data/test/test_run.out` |
 | `rule_Z_shots` | 25,000 | `data/test/test_run.out` |
 | `rule_Z_step` | 100,000 | `data/test/test_run.out` |
+| `slide3_close` | So the gain over relay-BP comes from the hierarchy itself; on the test shots the network does not add to it. | `tables/test_ablation.md` |
+| `slide3_title` | The network is a poor decoder alone; as a tie-break it is level with the best hand-written rule | `tables/test_ablation.md` |
+| `slide4_relay` | Failed pairs of 10,000, ours against relay-BP on the same pairs: p = 0.003: 3 against 5 (exact p = 0.50); p = 0.004: 44 against 83 (exact p = 3e-06); p = 0.005: 479 against 845 (exact p = 4e-59). | `tables/test_p<p>.md` |
+| `slide4_title` | On the test shots our decoder fails fewer pairs than relay-BP at p = 0.004 and 0.005, and as many within the error at p = 0.003; it is level with TCBP-JOBS at p = 0.003 and 0.004, and behind it at p = 0.005 | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md` |
+| `slide5_lines` | p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 88.0 and 579; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514. | `tables/test_time.md` |
+| `slide5_title` | Our decoder takes 0.52 to 0.68 of relay-BP's mean time per pair on one core and 0.33 to 0.47 with its two fast decodes on two cores | `tables/test_time.md` |
 | `split3_hierarchy_disagree` | 2 | `tables/time_split.md` |
 | `split4_hierarchy_disagree` | 90 | `tables/time_split.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |

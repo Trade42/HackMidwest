@@ -464,11 +464,18 @@ def ladder_tables(combined):
             fact(f"abl_pooled_{name}", value, source)
         fact("framing", framing, source)
         fact("framing_slide", framing, source)
+        beats = pooled["a"] < pooled["aw"] and p_value < 0.05
+        fact("slide3_title", "The network is a poor decoder alone; as a tie-break it " + ("beats the best hand-written rule on the test shots" if beats
+             else "is level with the best hand-written rule"), source)
+        fact("slide3_close", (f"So most of the gain over relay-BP comes from the hierarchy, and the network adds a further {further:.1%} on the test shots."
+                              if beats else "So the gain over relay-BP comes from the hierarchy itself; on the test shots the network does not add to it."), source)
     else:
         fact("framing_slide", "pending: the ablation on the test shots has not landed.", source)
         for name in ("levels", "R", "aw", "a", "floor", "only_network", "only_weight", "p", "further", "gap_closed"):
             fact(f"abl_pooled_{name}", None, source)
         fact("framing", None, source)
+        fact("slide3_title", "The network is a poor decoder alone; its value as a tie-break is decided on the test shots", source)
+        fact("slide3_close", "The test shots decide whether the network adds to the hierarchy.", source)
     ladder = write("test_ladder",
                    "**Whose gain is whose, on the test shots.** Every rung is scored on the same per-shot answers (relay-BP and PriorTilt under two seeds "
                    "on every shot, a fresh decoder per 500 shots), so each step is a paired comparison with the rung before it. These rows are combined "
@@ -1421,6 +1428,65 @@ def findings(measured):
     fact("findings", " ".join(parts), "tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md")
 
 
+def ours_at(measured, p):
+    """Our timed decoder at p: the one-core row, or the two-core row (checked to give the same answers) if the first has not landed."""
+    return measured[p].get("hierarchy") or measured[p].get("hierarchy-parallel")
+
+
+def slide_facts(measured):
+    """The titles and lines of the result slides, written from the data so that they stay true as rows land."""
+    against, fewer, level, tcbp_level, tcbp_ahead, tcbp_behind = [], [], [], [], [], []
+    for p in P_VALUES:
+        ours, relay, tcbp = ours_at(measured, p), measured[p].get(REFERENCE), measured[p].get("tcbp")
+        if ours is None or relay is None or ours["failed_pair"] is None or relay["failed_pair"] is None:
+            continue
+        paired = stats.paired(relay["failed_pair"], ours["failed_pair"])
+        against.append(f"p = {p}: {ours['failures_pair']} against {relay['failures_pair']} (exact p = {stats.p_text(paired['p'])})")
+        (fewer if ours["failures_pair"] < relay["failures_pair"] and paired["p"] < 0.05 else level).append(p)
+        if tcbp is not None and tcbp["failed_pair"] is not None:
+            versus = stats.paired(ours["failed_pair"], tcbp["failed_pair"])
+            if versus["p"] >= 0.05:
+                tcbp_level.append(p)
+            else:
+                (tcbp_ahead if tcbp["failures_pair"] < ours["failures_pair"] else tcbp_behind).append(p)
+    join = lambda levels: ", ".join(levels[:-1]) + (" and " if len(levels) > 1 else "") + levels[-1] if levels else ""
+    if against:
+        title = f"On the test shots our decoder fails fewer pairs than relay-BP at p = {join(fewer)}" if fewer else "On the test shots our decoder is level with relay-BP"
+        if fewer and level:
+            title += f", and as many within the error at p = {join(level)}"
+        parts = ([f"level with TCBP-JOBS at p = {join(tcbp_level)}"] if tcbp_level else []) + \
+                ([f"behind it at p = {join(tcbp_ahead)}"] if tcbp_ahead else []) + ([f"ahead of it at p = {join(tcbp_behind)}"] if tcbp_behind else [])
+        if parts:
+            title += "; it is " + ", and ".join(parts)
+        fact("slide4_title", title, "tables/test_p0.003.md, test_p0.004.md, test_p0.005.md")
+        fact("slide4_relay", "Failed pairs of 10,000, ours against relay-BP on the same pairs: " + "; ".join(against) + ".", "tables/test_p<p>.md")
+    else:
+        fact("slide4_title", "On the test shots: pending the measured rows", "tables/test_p<p>.md")
+        fact("slide4_relay", "Pending: our rows on the test shots.", "tables/test_p<p>.md")
+    one, two = [], []
+    for p in P_VALUES:
+        relay = measured[p].get(REFERENCE)
+        if relay is None or relay["mean_ms"] is None or not relay.get("time_clean", True):
+            continue
+        for key, bucket in (("hierarchy", one), ("hierarchy-parallel", two)):
+            row = measured[p].get(key)
+            if row is not None and row["mean_ms"] is not None and row.get("time_clean", True):
+                bucket.append((p, row["mean_ms"] / relay["mean_ms"], row, relay))
+    span = lambda bucket: (f"{min(r for _, r, _, _ in bucket):.2f}" if len(bucket) == 1 else
+                           f"{min(r for _, r, _, _ in bucket):.2f} to {max(r for _, r, _, _ in bucket):.2f}")
+    if one or two:
+        title = "Our decoder takes " + " and ".join(part for part in (
+            f"{span(one)} of relay-BP's mean time per pair on one core" if one else "",
+            f"{span(two)} with its two fast decodes on two cores" if two else "") if part)
+        fact("slide5_title", title, "tables/test_time.md")
+        lines = [f"p = {p}: ours {ms(row['mean_ms'])} ms mean and {ms(row['p99_ms'])} ms at the 99th percentile, relay-BP {ms(relay['mean_ms'])} and {ms(relay['p99_ms'])}"
+                 for p, _, row, relay in (one or two)]
+        fact("slide5_lines", "; ".join(lines) + ".", "tables/test_time.md")
+    else:
+        fact("slide5_title", "Time: pending the measured rows", "tables/test_time.md")
+        fact("slide5_lines", "Pending.", "tables/test_time.md")
+
+
 # ---------- the section for the top-level README ----------
 
 README_HEADING = "## Our part: a hierarchical decoder with a learned tie-breaker, and a study of atom loss"
@@ -1496,6 +1562,7 @@ def main(argv=None):
         tables["checks"] = checks_text(measured, extra, cross_checks)
         tcbp_statement(measured)
         findings(measured)
+        slide_facts(measured)
         readme_section(measured)
         write("facts", "Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there as `<!--f:name-->value<!--/f-->`), "
                        "each with the generated table it is taken from.\n\n"

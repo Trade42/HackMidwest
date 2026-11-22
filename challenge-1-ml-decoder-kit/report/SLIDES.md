@@ -19,57 +19,57 @@ Words used, each with its meaning:
 
 ---
 
-## Slide 1. Two fast decodes that agree are almost always right; a neural network settles the rest
+## Slide 1. Two fast decodes that agree are almost always right; only the hard shots pay for more
 
 **Show:** the diagram of `REPORT.md`, section 2.
 
 - A decoder reads the syndrome, the list of checks that fired, and says which of the 12 stored bits flipped.
 - We run a fast decoder twice with different random seeds. If the two answers agree, that is the answer.
-- If they differ, a third decoder joins, and a neural network picks the answer it finds most likely.
+- If they differ, relay-BP joins as a third opinion and a tie-break picks one of the answers: a hand-written rule, or
+  a neural network that reads the whole syndrome.
 
 ## Slide 2. The failures hide in the <!--f:expl_disagree_share-->0.4%<!--/f--> of shots where the two decodes disagree
 
-**Show:** `figures/where_failures.png` (practice shots, p = 0.004).
+**Show:** `figures/where_failures.png`.
 
 - On <!--f:expl_shots-->50,000<!--/f--> practice shots the two runs disagree on only <!--f:expl_disagree-->214<!--/f--> shots.
 - Those <!--f:expl_disagree-->214<!--/f--> shots hold <!--f:expl_one_run_wrong_disagree-->145<!--/f--> of the <!--f:expl_one_run_wrong-->208<!--/f--> failures of a single run. So "do they agree?" is a cheap alarm for a hard shot.
 - <!--f:expl_left_agree-->63<!--/f--> failures are shots where both runs agree on a wrong answer. No tie-break can fix those: that is our floor.
 
-Source: `report/tables/exploration_p0.004.md`, the last table.
+Source: `report/tables/exploration_p0.004.md` and `report/tables/where_failures.md`.
 
-## Slide 3. The network is a weak decoder but a useful judge
+## Slide 3. <!--f:slide3_title-->The network is a poor decoder alone; as a tie-break it is level with the best hand-written rule<!--/f-->
 
-**Show:** `figures/learning_curves.png`.
+**Show:** `figures/learning_curves.png`, then the ablation table of `REPORT.md`, section 4.
 
-- The network reads all 1,728 detector bits of a shot. It is built along the code's own wiring, with the same weights
-  at all 72 positions, and has <!--f:net_parameters-->893,697<!--/f--> parameters.
-- Alone it is far worse than relay-BP, so we never use it alone. We only ask it which of two or three given answers
-  is more likely.
-- On 25,000 practice shots of X memory, the hierarchy fails <!--f:expl_X_C-->67<!--/f--> times with its best classical tie-break and <!--f:expl_X_N-->60<!--/f-->
-  times with the network (at training step <!--f:expl_X_N_step-->120,000<!--/f-->); relay-BP fails <!--f:expl_X_R-->122<!--/f--> times. On <!--f:a80_shots-->80,000<!--/f-->
-  fresh shots never used for a fit: network <!--f:a80_a-->237<!--/f-->, best classical rule <!--f:a80_ac-->253<!--/f-->, perfect tie-break <!--f:a80_perfect_tie_break-->187<!--/f-->
-  (p = <!--f:a80_a_vs_ac_p-->0.12<!--/f--> against the best classical rule: not significant; p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f--> against lowest weight).
+- The network reads all 1,728 detector bits of a shot, is built along the code's own wiring, and has
+  <!--f:net_parameters-->893,697<!--/f--> parameters. Alone, on the test shots at p = 0.004, it gets <!--f:netalone4_X-->4.2%<!--/f--> of X-memory shots wrong; relay-BP gets
+  <!--f:t4_relay_bp_xz-->36, 47<!--/f--> of 10,000 wrong (X, Z).
+- As a tie-break it clearly beats the plain lowest-weight rule (on <!--f:a80_shots-->80,000<!--/f--> fresh shots: <!--f:a80_a-->237<!--/f--> against <!--f:a80_aw-->298<!--/f--> failures,
+  p = <!--f:a80_a_vs_aw_p-->7e-09<!--/f-->). Against the best hand-written rule it is level: <!--f:a80_a-->237<!--/f--> against <!--f:a80_ac-->253<!--/f--> there (p = <!--f:a80_a_vs_ac_p-->0.12<!--/f-->), and
+  <!--f:abl_pooled_a-->494<!--/f--> against <!--f:abl_pooled_aw-->472<!--/f--> failed pairs on the test shots (p = <!--f:abl_pooled_p-->0.071<!--/f-->).
+- <!--f:slide3_close-->So the gain over relay-BP comes from the hierarchy itself; on the test shots the network does not add to it.<!--/f-->
 
-Source: `report/tables/exploration_p0.004.md` and `report/tables/networks.md`.
+Source: `report/tables/networks.md`, `ablation_80k.md`, `test_ablation.md`.
 
-## Slide 4. On the test shots: *title pending the measured rows*
+## Slide 4. <!--f:slide4_title-->On the test shots our decoder fails fewer pairs than relay-BP at p = 0.004 and 0.005, and as many within the error at p = 0.003; it is level with TCBP-JOBS at p = 0.003 and 0.004, and behind it at p = 0.005<!--/f-->
 
 **Show:** the table below and `figures/ler_vs_p.png`.
 
 <!-- BEGIN table:test_sweep -->
 <!-- END table:test_sweep -->
 
-- <!--f:framing_slide-->The hierarchy is the result (799 failed pairs for relay-BP, 472 for the hierarchy, over p = 0.003, 0.005); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 472 pairs and the network 494; only the network rule fails 79 pairs, only the classical rule 57, exact p = 0.071.<!--/f-->
-- *Pending.* Our decoder against relay-BP at each p, as a paired count on the same 10,000 pairs.
-- *Pending.* Where TCBP-JOBS stands on the test shots. On the practice shots it is ahead of us (see the questions below).
+- <!--f:slide4_relay-->Failed pairs of 10,000, ours against relay-BP on the same pairs: p = 0.003: 3 against 5 (exact p = 0.50); p = 0.004: 44 against 83 (exact p = 3e-06); p = 0.005: 479 against 845 (exact p = 4e-59).<!--/f-->
+- <!--f:tcbp_statement-->Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference).<!--/f-->
+- At p = 0.003 every good decoder fails only a handful of pairs in 10,000, so nothing separates there.
 
-## Slide 5. Time: *title pending the measured rows*
+## Slide 5. <!--f:slide5_title-->Our decoder takes 0.52 to 0.68 of relay-BP's mean time per pair on one core and 0.33 to 0.47 with its two fast decodes on two cores<!--/f-->
 
 **Show:** `figures/time_vs_p.png`, then `figures/ler_vs_time.png`.
 
-- Every time is per pair, with every stage counted, one process per row on the same server.
-- *Pending.* Our mean time against relay-BP's, and the slowest shots (the p99 column of the table).
-- A GPU row (TCBP-JOBS) is marked as such: it is a different kind of machine.
+- Every time is per pair (an X shot and a Z shot), with every stage counted, one process per row on the same server.
+- <!--f:slide5_lines-->p = 0.003: ours 45.7 ms mean and 395 ms at the 99th percentile, relay-BP 88.0 and 579; p = 0.004: ours 216 ms mean and 2,064 ms at the 99th percentile, relay-BP 319 and 5,514.<!--/f-->
+- TCBP-JOBS runs on a GPU and its timer covers the decode call alone: its time is shown, not compared as a ratio.
 
 ## Slide 6. With atom loss, the flags matter most, and knowing when an atom was lost is worth more still
 

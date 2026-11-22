@@ -2922,6 +2922,28 @@
   "path": "predecoder/logs/test_run_p0.005_Z_head_arm_summary.json",
   "sha256": "8fa0312a8d784c7ed356b2bd6dd8f4b8f4995650e680e56d3235a77213c08481"
  },
+ "test/predecoder/test_run_p0.005_Z_secondary.json": {
+  "branch": "tree",
+  "bytes": 1816,
+  "commit": "13a90976795a079ba8fbb5c2f68fd0ec12ba959f",
+  "copied_utc": "2026-11-22 16:30",
+  "file": "test/predecoder/test_run_p0.005_Z_secondary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.005_Z_secondary.json` (last changed in commit `13a90976795a`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.005_Z_secondary.json",
+  "sha256": "d591e466253c1199110856a477b38e2c820683b6892d2e84711de5f5b9c3e9de"
+ },
+ "test/predecoder/test_run_p0.005_Z_summary.json": {
+  "branch": "tree",
+  "bytes": 3384,
+  "commit": "13a90976795a079ba8fbb5c2f68fd0ec12ba959f",
+  "copied_utc": "2026-11-22 16:30",
+  "file": "test/predecoder/test_run_p0.005_Z_summary.json",
+  "from": "this branch, `challenge-1-ml-decoder-kit/predecoder/logs/test_run_p0.005_Z_summary.json` (last changed in commit `13a90976795a`)",
+  "grows": false,
+  "path": "predecoder/logs/test_run_p0.005_Z_summary.json",
+  "sha256": "c53609f2eaa3d85339cf3268456f4b11e81f712d1e896fe24ce0b8ae60779ae9"
+ },
  "test/predecoder_tcbp/job5_test_X_p0.005_summary.json": {
   "branch": "origin/server-logs",
   "bytes": 3523,

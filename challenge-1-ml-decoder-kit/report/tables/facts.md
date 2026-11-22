@@ -661,24 +661,24 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `pre5X_vs_fresh_only_other` | 308 | `tables/test_predecoder.md` |
 | `pre5X_vs_fresh_p` | 2e-62 | `tables/test_predecoder.md` |
 | `pre5Z_H` | 132 | `tables/test_predecoder.md` |
-| `pre5Z_R` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_T` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_fresh` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_R` | 427 | `tables/test_predecoder.md` |
+| `pre5Z_T` | 177 | `tables/test_predecoder.md` |
+| `pre5Z_fresh` | 398 | `tables/test_predecoder.md` |
 | `pre5Z_it_H` | 695 | `tables/test_predecoder.md` |
-| `pre5Z_it_fresh` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_it_ratio` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_ratio` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_vs_R_only_H` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_vs_R_only_other` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_vs_R_p` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_vs_T_only_H` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_vs_T_only_other` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_vs_T_p` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_vs_fresh_only_H` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_vs_fresh_only_other` | not measured | `tables/test_predecoder.md` |
-| `pre5Z_vs_fresh_p` | not measured | `tables/test_predecoder.md` |
+| `pre5Z_it_fresh` | 2,364 | `tables/test_predecoder.md` |
+| `pre5Z_it_ratio` | 3.4 | `tables/test_predecoder.md` |
+| `pre5Z_ratio` | 3.0 | `tables/test_predecoder.md` |
+| `pre5Z_vs_R_only_H` | 15 | `tables/test_predecoder.md` |
+| `pre5Z_vs_R_only_other` | 310 | `tables/test_predecoder.md` |
+| `pre5Z_vs_R_p` | 8e-73 | `tables/test_predecoder.md` |
+| `pre5Z_vs_T_only_H` | 56 | `tables/test_predecoder.md` |
+| `pre5Z_vs_T_only_other` | 101 | `tables/test_predecoder.md` |
+| `pre5Z_vs_T_p` | 4e-04 | `tables/test_predecoder.md` |
+| `pre5Z_vs_fresh_only_H` | 24 | `tables/test_predecoder.md` |
+| `pre5Z_vs_fresh_only_other` | 290 | `tables/test_predecoder.md` |
+| `pre5Z_vs_fresh_p` | 4e-59 | `tables/test_predecoder.md` |
 | `pre_columns` | 8,784 | `tables/test_predecoder.md` |
-| `pre_extension` | On the X test shots at p = 0.004, relay-BP with the head's priors fails 15 against 39 with the kit's priors (only the head's 3 against 27, exact p = 8e-06: a significant gain), and TCBP-JOBS fails 20 (only the head's 7 against 12, exact p = 0.36). On the X test shots at p = 0.003, relay-BP with the head's priors fails 2 against 7 with the kit's priors (only the head's 1 against 6, exact p = 0.12: not significant, so the declared line, a paired exact p below 0.05, is not passed at this p), and TCBP-JOBS fails 1 (only the head's 1 against 0, exact p = 1.00). On the Z test shots at p = 0.005, relay-BP with the head's priors fails 132 (the kit's priors, the declared comparison, not measured yet); its rows beside TCBP-JOBS and relay-BP are not measured yet. | `tables/test_predecoder.md` |
+| `pre_extension` | On the X test shots at p = 0.004, relay-BP with the head's priors fails 15 against 39 with the kit's priors (only the head's 3 against 27, exact p = 8e-06: a significant gain), and TCBP-JOBS fails 20 (only the head's 7 against 12, exact p = 0.36). On the X test shots at p = 0.003, relay-BP with the head's priors fails 2 against 7 with the kit's priors (only the head's 1 against 6, exact p = 0.12: not significant, so the declared line, a paired exact p below 0.05, is not passed at this p), and TCBP-JOBS fails 1 (only the head's 1 against 0, exact p = 1.00). On the Z test shots at p = 0.005, relay-BP with the head's priors fails 132 against 398 with the kit's priors (only the head's 24 against 290, exact p = 4e-59: a significant gain), and TCBP-JOBS fails 177 (only the head's 56 against 101, exact p = 4e-04). | `tables/test_predecoder.md` |
 | `pre_pair` | Scored as the kit scores (a pair of an X and a Z shot fails when either fails), at p = 0.005: relay-BP with the head's priors fails 281 pairs against TCBP-JOBS's 360 (only H 114, only TCBP-JOBS 193, exact p = 8e-06) and relay-BP's 845 (exact p = 6e-131); the fallback rule, post hoc on its X half, fails 206 (against TCBP-JOBS: only the rule 39, only TCBP-JOBS 193, exact p = 1e-25). This pair score is part of the registered extension, not a held-out result, and it is not in the pair-scored tables of our decoder; accuracy only (its times come from a shared pool on the team's PC); TCBP-JOBS's counts come from its stored test file and carry its fit's spread (above). | `tables/test_predecoder.md` |
 | `pre_z_reason` | the Z run of the registered extension is a later run, shown below | `tables/test_predecoder.md` |
 | `pregate_H` | 14 | `data/exploration/predecoder/compare_validation_X_summary.json` |

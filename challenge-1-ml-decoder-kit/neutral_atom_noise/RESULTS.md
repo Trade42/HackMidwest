@@ -458,6 +458,10 @@ thread, one fitted model for both files. Every arm finished every block before t
 | relay-BP, matched, loss-blind (question 2) | 100 | 62 | 52.2% to 70.9% | not comparable |
 | relay-BP, generic-2q + flags (question 2) | 150 | 47 | 24.5% to 39.1% | not comparable |
 
+The A100 times are TCBP-JOBS's build + decode only, one process, one CPU thread. **The network is not included:** add
+its 11.0 ms (f0.4) and 10.1 ms (f0.6) per shot, measured one shot at a time in float32, and the prior computation,
+to the fh and bh times. Whether the GPU slice was shared with another job (cpu/100) during the run is unknown.
+
 | Pair (same shots) | File | Shots | Failures | Only the first fails | Only the second fails | Sign test p |
 |---|---|---|---|---|---|---|
 | fm vs bm (what the flags add) | f0.4 | 1,000 | 0, 49 | 0 | 49 | 4e-15 |
@@ -481,15 +485,15 @@ What this shows:
   them the two are level (62 against 62 on the 100 shots relay-BP decoded blind).
 - **The flags also rescue the head.** Without them the head's priors fail 93 (f0.4) and 706 (f0.6) shots. With them
   they fail 5 and 242. The flag raise works on top of the head's per-shot priors in the same per-shot build, at no
-  extra decode cost (52 and 81 ms against 56 and 88 ms).
+  extra TCBP-JOBS cost (52 and 81 ms against 56 and 88 ms, network not included).
 - **The TCBP version with loss information (fh) is behind matched + flags (fm).** It is close at f0.4 (5 against 0,
   p = 0.06) and far behind at f0.6 (242 against 37, p = 1e-57). As declared, this pair compares the network on a
   generic base with no network on the matched base, so it is not the head alone. fh is level with relay-BP's generic-2q +
   flags row on the same shots (5 against 3 at f0.4; 44 against 47 of 150 at f0.6). **So here the network, which never
   saw a lost atom, did not make up for not knowing the noise's shape.**
 - **bh is worse than bm**, 93 against 49 and 706 against 562. This pair was not declared, and it mixes the head with
-  the generic-versus-matched base, so it is a description, not a test. It fits the expectation that the head may
-  mislead around lost atoms.
+  the generic-versus-matched base, so it is a description, not a test. Whether the head misleads around lost atoms
+  (the declared worry) is not shown by it.
 - **Not measured:** TCBP-JOBS with the generic-2q base + flags and no network. That arm would separate the head's
   effect from the base's.
 - **Checks:**

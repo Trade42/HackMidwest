@@ -227,6 +227,8 @@ def where_text(row):
     if row.get("jobs_beside"):
         text += "; server jobs started in that time: " + ", ".join(row["jobs_beside"])
     if row["device"] == "GPU":
+        idle = (row.get("run") or {}).get("gpu_idle")
+        text += ("; no other process on the GPU at its start" if idle else "; other processes on the GPU at its start" if idle is False else "")
         text += "; its time is " + row["timer"]
     return text
 

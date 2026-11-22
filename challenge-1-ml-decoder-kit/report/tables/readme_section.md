@@ -16,7 +16,7 @@ fails 57.7%, and an ORACLE told when each atom was lost fails 1.64 times fewer s
 | our hierarchy, neural tie-break | not measured | not measured | not measured |
 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured |
 | our ensemble (combined offline) | not measured | not measured | not measured |
-| TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured |
+| TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | 3.05e-03 ± 1.6e-04, 16.9 ms |
 
 Test shots (10,000 pairs per p): logical error rate per cycle ± the kit's error, mean time per pair. TCBP-JOBS, NVIDIA's GPU decoder, is not measured on the test shots yet; on the exploration shots at p = 0.004 it fails fewer pairs than our hierarchy (113 against 140 of 25,000).
 

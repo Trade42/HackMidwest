@@ -109,19 +109,27 @@ def clean_rows_log(*paths):
     runs = {}
     lines = [line for path in paths if Path(path).is_file() for line in Path(path).read_text(encoding="utf-8", errors="replace").splitlines()]
     for line in lines:
+        # two formats: the baseline job's "START p=0.004 relay-bp [...]" and the test job's "START eval_p0.004_hierarchy: ..." or "START tcbp_p0.004 ..."
         found = re.match(r"(\S+Z) (START|END) p=(\S+) (\S+)(?: exit (\d+))?", line)
-        if not found:
-            continue
-        when = datetime.strptime(found.group(1), "%Y-%m-%dT%H:%M:%SZ")
-        run = runs.setdefault((found.group(3), found.group(4)), {"start": None, "end": None, "exit": None, "state": {}})
-        state = re.search(r"\[load (\S+), evaluators (\d+), joint (\d+), loss\.job (\d+), candidates (\d+), throttled so far (\S+) s\]\s*$", line)
-        if state:        # the machine at that moment: load, our processes by kind, seconds the CPU quota has throttled the notebook so far
-            run["state"][found.group(2)] = {"load": float(state.group(1)), "evaluators": int(state.group(2)), "joint": int(state.group(3)),
-                                            "loss_job": int(state.group(4)), "candidates": int(state.group(5)), "throttled_s": float(state.group(6))}
-        if found.group(2) == "START":
+        if found:
+            when_text, kind, key, code = found.group(1), found.group(2), (found.group(3), found.group(4)), found.group(5)
+        else:
+            found = re.match(r"(\S+Z) (START|END) ((?:eval|tcbp|ensemble|cand|net|sel|joint)_p(\d\.\d+)(?:_([a-z_-]+))?)[:\s](?:.*?exit (\d+))?", line)
+            if not found:
+                continue
+            when_text, kind, code = found.group(1), found.group(2), found.group(6)
+            key = (found.group(4), found.group(5)) if found.group(3).startswith("eval_") else (found.group(4), found.group(3))
+        when = datetime.strptime(when_text, "%Y-%m-%dT%H:%M:%SZ")
+        run = runs.setdefault(key, {"start": None, "end": None, "exit": None, "state": {}})
+        throttled = re.search(r"throttled so far (\S+) s", line)
+        if throttled:    # the seconds the CPU quota has throttled the notebook so far (a running total)
+            run["state"][kind] = {"throttled_s": float(throttled.group(1))}
+        if kind == "START" and "GPU processes:" in line:
+            run["gpu_idle"] = "the GPU is idle" in line
+        if kind == "START":
             run["start"] = when
         else:
-            run["end"], run["exit"] = when, int(found.group(5)) if found.group(5) else None
+            run["end"], run["exit"] = when, int(code) if code else None
     for key, run in runs.items():
         run["beside"] = sorted(f"{other[1]} p={other[0]}" for other, r in runs.items()
                                if other != key and run["start"] and r["start"]

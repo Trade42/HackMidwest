@@ -31,4 +31,4 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.005 | our hierarchy, neural tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.005 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | not measured | not measured | not measured | not measured | not measured | not measured |
 | 0.005 | our ensemble (combined offline) | not measured | not measured | not measured | not measured | not measured | not measured |
-| 0.005 | TCBP-JOBS (NVIDIA, GPU) | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.005 | TCBP-JOBS (NVIDIA, GPU) | 360 of 10,000 | 16.9 | relay-BP not measured yet | 13.3 | 56.4 | GPU, 1 core |

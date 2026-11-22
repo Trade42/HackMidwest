@@ -20,3 +20,5 @@
 2026-11-22T10:25:19Z START eval_p0.003_hierarchy: weight 1, pid 214383; before it: tokens 3, CPUs in use 5.1, throttled so far 4837.8 s
 2026-11-22T10:25:59Z START eval_p0.005_hierarchy-parallel: weight 2, pid 215142; before it: tokens 4, CPUs in use 6.3, throttled so far 4837.8 s
 2026-11-22T10:26:39Z START eval_p0.004_hierarchy-parallel: weight 2, pid 215572; before it: tokens 6, CPUs in use 7.4, throttled so far 4837.8 s
+2026-11-22T10:28:48Z END tcbp_p0.005 exit 0:   failures 186 of 10000  1.860%  95% Wilson interval [1.613%, 2.144%]; the correction does not reproduce the syndrome on 0 shots   failures 177 of 10000  1.770%  95% Wilson interval [1.529%, 2.048%]; the correction does  [CPUs in use 8.3, tokens 8, throttled so far 4838.0 s, load 12.55]
+2026-11-22T10:28:54Z START tcbp_p0.004 (serial mode). GPU processes: none: the GPU is idle [CPUs in use 8.1, tokens 8, throttled so far 4838.0 s, load 12.27]

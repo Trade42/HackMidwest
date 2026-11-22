@@ -708,18 +708,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t5_router_wall_hours` | not measured | `tables/test_p0.005.md` |
 | `t5_router_xz` | not measured | `tables/test_p0.005.md` |
 | `t5_tcbp_both` | not measured | `tables/test_p0.005.md` |
-| `t5_tcbp_error` | not measured | `tables/test_p0.005.md` |
-| `t5_tcbp_mean_ms` | not measured | `tables/test_p0.005.md` |
-| `t5_tcbp_median_ms` | not measured | `tables/test_p0.005.md` |
+| `t5_tcbp_error` | 1.6e-04 | `tables/test_p0.005.md` |
+| `t5_tcbp_mean_ms` | 16.9 | `tables/test_p0.005.md` |
+| `t5_tcbp_median_ms` | 13.3 | `tables/test_p0.005.md` |
 | `t5_tcbp_only_relay` | not measured | `tables/test_p0.005.md` |
 | `t5_tcbp_only_this` | not measured | `tables/test_p0.005.md` |
-| `t5_tcbp_p99_ms` | not measured | `tables/test_p0.005.md` |
+| `t5_tcbp_p99_ms` | 56.4 | `tables/test_p0.005.md` |
 | `t5_tcbp_paired_p` | not measured | `tables/test_p0.005.md` |
-| `t5_tcbp_pairs` | not measured | `tables/test_p0.005.md` |
-| `t5_tcbp_rate` | not measured | `tables/test_p0.005.md` |
+| `t5_tcbp_pairs` | 360 | `tables/test_p0.005.md` |
+| `t5_tcbp_rate` | 3.05e-03 | `tables/test_p0.005.md` |
 | `t5_tcbp_time_ratio` | not measured | `tables/test_p0.005.md` |
 | `t5_tcbp_wall_hours` | not measured | `tables/test_p0.005.md` |
-| `t5_tcbp_xz` | not measured | `tables/test_p0.005.md` |
+| `t5_tcbp_xz` | 186, 177 | `tables/test_p0.005.md` |
 | `tcbp_fit3_s` | 54.5 and 54.8 | `data/tcbp_own_shots/tcbp-jobs_p0.003_shots10000_seed1_20261122_005215_437826+0000.log` |
 | `tcbp_fit4_s` | 120.2 and 121.6 | `data/tcbp_own_shots/tcbp-jobs_p0.004_shots10000_seed1_20261122_043426_147901+0000.log` |
 | `tcbp_fit5_s` | 119.3 and 121.2 | `data/tcbp_own_shots/tcbp-jobs_p0.005_shots10000_seed1_20261122_050203_539870+0000.log` |

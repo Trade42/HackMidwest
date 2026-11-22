@@ -298,7 +298,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
-| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair (a time not clean: the server throttled the row); with its two fast decodes side by side on two cores, 28.9 ms per pair. The two fail equally many pairs at p = 0.003. | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
+| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair; with its two fast decodes side by side on two cores, 28.9 ms per pair. The two fail equally many pairs at p = 0.003. | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
 | `framing` | not measured | `tables/test_ablation.md` |
 | `framing_slide` | pending: the ablation on the test shots has not landed. | `tables/test_ablation.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
@@ -339,7 +339,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `split3_hierarchy_disagree` | 2 | `tables/time_split.md` |
 | `t3_bposd_both` | 5 | `tables/test_p0.003.md` |
 | `t3_bposd_error` | 6.5e-05 | `tables/test_p0.003.md` |
-| `t3_bposd_mean_ms` | 129 (not clean) | `tables/test_p0.003.md` |
+| `t3_bposd_mean_ms` | 129 | `tables/test_p0.003.md` |
 | `t3_bposd_median_ms` | 18.2 | `tables/test_p0.003.md` |
 | `t3_bposd_only_relay` | 0 | `tables/test_p0.003.md` |
 | `t3_bposd_only_this` | 55 | `tables/test_p0.003.md` |
@@ -347,7 +347,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_bposd_paired_p` | 6e-17 | `tables/test_p0.003.md` |
 | `t3_bposd_pairs` | 60 | `tables/test_p0.003.md` |
 | `t3_bposd_rate` | 5.01e-04 | `tables/test_p0.003.md` |
-| `t3_bposd_time_ratio` | not measured | `tables/test_p0.003.md` |
+| `t3_bposd_time_ratio` | 1.46 | `tables/test_p0.003.md` |
 | `t3_bposd_wall_hours` | 0.4 | `tables/test_p0.003.md` |
 | `t3_bposd_xz` | 26, 34 | `tables/test_p0.003.md` |
 | `t3_ensemble_both` | not measured | `tables/test_p0.003.md` |
@@ -395,11 +395,11 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_hierarchy_parallel_paired_p` | 0.50 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_pairs` | 3 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_rate` | 2.50e-05 | `tables/test_p0.003.md` |
-| `t3_hierarchy_parallel_time_ratio` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_parallel_time_ratio` | 0.33 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_wall_hours` | 0.1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_parallel_xz` | 1, 2 | `tables/test_p0.003.md` |
 | `t3_hierarchy_rate` | 2.50e-05 | `tables/test_p0.003.md` |
-| `t3_hierarchy_time_ratio` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_time_ratio` | 0.52 | `tables/test_p0.003.md` |
 | `t3_hierarchy_wall_hours` | 0.1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_both` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_error` | not measured | `tables/test_p0.003.md` |
@@ -430,7 +430,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_priortilt_xz` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_both` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_error` | 1.9e-05 | `tables/test_p0.003.md` |
-| `t3_relay_bp_mean_ms` | 88.0 (not clean) | `tables/test_p0.003.md` |
+| `t3_relay_bp_mean_ms` | 88.0 | `tables/test_p0.003.md` |
 | `t3_relay_bp_median_ms` | 54.0 | `tables/test_p0.003.md` |
 | `t3_relay_bp_only_relay` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_only_this` | not measured | `tables/test_p0.003.md` |
@@ -438,12 +438,12 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_relay_bp_paired_p` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_pairs` | 5 | `tables/test_p0.003.md` |
 | `t3_relay_bp_rate` | 4.17e-05 | `tables/test_p0.003.md` |
-| `t3_relay_bp_time_ratio` | not measured | `tables/test_p0.003.md` |
+| `t3_relay_bp_time_ratio` | 1.00 | `tables/test_p0.003.md` |
 | `t3_relay_bp_wall_hours` | 0.2 | `tables/test_p0.003.md` |
 | `t3_relay_bp_xz` | 2, 3 | `tables/test_p0.003.md` |
 | `t3_router_both` | 4 | `tables/test_p0.003.md` |
 | `t3_router_error` | 2.0e-05 | `tables/test_p0.003.md` |
-| `t3_router_mean_ms` | 42.5 (not clean) | `tables/test_p0.003.md` |
+| `t3_router_mean_ms` | 42.5 | `tables/test_p0.003.md` |
 | `t3_router_median_ms` | 9.5 | `tables/test_p0.003.md` |
 | `t3_router_only_relay` | 1 | `tables/test_p0.003.md` |
 | `t3_router_only_this` | 2 | `tables/test_p0.003.md` |
@@ -451,7 +451,7 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_router_paired_p` | 1.00 | `tables/test_p0.003.md` |
 | `t3_router_pairs` | 6 | `tables/test_p0.003.md` |
 | `t3_router_rate` | 5.00e-05 | `tables/test_p0.003.md` |
-| `t3_router_time_ratio` | not measured | `tables/test_p0.003.md` |
+| `t3_router_time_ratio` | 0.48 | `tables/test_p0.003.md` |
 | `t3_router_wall_hours` | 0.1 | `tables/test_p0.003.md` |
 | `t3_router_xz` | 3, 3 | `tables/test_p0.003.md` |
 | `t3_tcbp_both` | 2 | `tables/test_p0.003.md` |

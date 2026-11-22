@@ -36,7 +36,9 @@ TABLES = Path(os.environ.get("REPORT_OUT") or HERE) / "tables"
 DOCUMENTS = [] if os.environ.get("REPORT_OUT") else [HERE / "REPORT.md", HERE / "APPENDIX.md", HERE / "SLIDES.md", HERE / "REPRODUCE.md"]
 NOT_MEASURED = "not measured"
 # A timed row's time is "not clean" when the notebook's CPU quota throttled it for more than this share of the row's
-# own wall time (the job's START and END lines give the throttled seconds; the counts are not affected, only the time).
+# own wall time (the counts are not affected, only the time). The kernel's throttled seconds are summed over the
+# notebook's per-CPU run queues, and the quota (12 CPUs) throttles only when at least that many CPUs' worth is busy,
+# so one process's throttled share is estimated as throttled seconds / (quota x wall time).
 THROTTLE_LIMIT = 0.05
 
 # Single numbers that the prose of REPORT.md and SLIDES.md quotes. A document writes
@@ -94,7 +96,7 @@ def write(name, text, records=None):
 RETIME = "_retime"   # eval_p<p>_<row>_retime: the same row run again in a quiet window, for its time only
 
 
-def attach_run(row, run, monitor, jobs):
+def attach_run(row, run, monitor, jobs, quota=None):
     """What the server's own records say about a timed row's run: what ran beside it, the throttling, whether its time is clean."""
     row["during"] = loaders.machine_during(monitor, run["start"], run["end"]) if run and run["start"] and run["end"] else None
     if row["during"] and {"START", "END"} <= set(run["state"]):     # the job's own lines give the seconds throttled during the row exactly
@@ -103,7 +105,8 @@ def attach_run(row, run, monitor, jobs):
     if row["during"] and run["end"] and run["start"]:
         wall = (run["end"] - run["start"]).total_seconds()
         row["during"]["wall_s"] = wall
-        row["throttle_share"] = row["during"]["throttled_s"] / wall if wall else None
+        row["during"]["quota"] = quota
+        row["throttle_share"] = row["during"]["throttled_s"] / ((quota or 1) * wall) if wall else None
     row["time_clean"] = not (row["throttle_share"] is not None and row["throttle_share"] > THROTTLE_LIMIT)
     row["beside"] = run["beside"] if run else None
     row["run"] = run
@@ -127,7 +130,7 @@ def take_retime(row, folder, log, monitor, jobs, p):
     first = {"mean_ms": row["mean_ms"], "throttle_share": row.get("throttle_share"), "start": row["run"]["start"] if row.get("run") else None}
     for key in ("mean_ms", "median_ms", "p99_ms", "seconds_pair", "wall_seconds", "peak_rss_mb", "setup_seconds", "site", "workers", "per_shot_file"):
         row[key] = again[key]
-    attach_run(row, log.get((p, folder.name.removeprefix(f"eval_p{p}_"))), monitor, jobs)
+    attach_run(row, log.get((p, folder.name.removeprefix(f"eval_p{p}_"))), monitor, jobs, loaders.cpu_quota(DATA / "test" / "cpu_monitor.out"))
     row["retimed"] = {"first": first, "folder": str(folder.relative_to(DATA)), "source": again["source"]}
     row["source"] = row["source"] + " (counts) and " + again["source"] + " (time)"
 
@@ -142,6 +145,7 @@ def load_test_rows(data=DATA):
     log = loaders.clean_rows_log(data / "test" / "clean_rows.out", data / "test" / "test_rows.out")
     jobs = loaders.runner_logs(sorted((data / "test").glob("runner_*.out"))) if (data / "test").is_dir() else {}
     monitor = loaders.cpu_monitor(data / "test" / "cpu_monitor.out")
+    quota = loaders.cpu_quota(data / "test" / "cpu_monitor.out")
     measured, combined = {}, {}
     for p in P_VALUES:
         measured[p] = {}
@@ -186,7 +190,7 @@ def load_test_rows(data=DATA):
                         row["label_note"] = " (" + ", ".join(f"{basis} memory: " + {"network": "the network", "weight": "lowest weight",
                                                                                      "converged": "lowest weight among the converged"}[used[basis]] for basis in "XZ") + ")"
                 run = None if row.get("offline") else log.get((p, spec.folder.format(p=p).removeprefix(f"eval_p{p}_")))
-                attach_run(row, run, monitor, jobs)
+                attach_run(row, run, monitor, jobs, quota)
                 retime = folder.with_name(folder.name + RETIME)
                 if spec.kind == "evaluator" and not row.get("offline") and (retime / "summary.json").is_file():
                     take_retime(row, retime, log, monitor, jobs, p)
@@ -225,8 +229,9 @@ def where_text(row):
         others = ", ".join(f"{kind.replace('_', ' ')} {count}" for kind, count in during["other_max"].items() if count)
         text += (f"; while it ran: {during['cpus_mean']:.1f} CPUs busy on average (at most {during['cpus_max']:.1f}), up to {during['evaluators_max']} "
                  f"evaluator rows at once" + (f", other work of ours at most: {others}" if others else "")
-                 + f", the CPU quota held the notebook back for {during['throttled_s']:,.0f} s"
-                 + (f" of the row's {during['wall_s']:,.0f} s ({during['throttled_s'] / during['wall_s']:.1%})" if during.get("wall_s") else " in all"))
+                 + f", the CPU quota throttled the notebook for {during['throttled_s']:,.0f} s summed over its CPUs"
+                 + (f" during the row's {during['wall_s']:,.0f} s, about {row['throttle_share']:.1%} of one process's time"
+                    if during.get("wall_s") and row.get("throttle_share") is not None else ""))
         if not row.get("time_clean", True):
             text += f"; **time not clean** (throttled more than {THROTTLE_LIMIT:.0%} of its wall time): the counts stand, the time does not"
     elif row.get("beside") is not None:
@@ -284,7 +289,7 @@ def test_tables(measured):
                 time_lines.append([p, decoder.label + row["label_note"], f"{row['failures_pair']} of {row['shots']:,}",
                                    "not timed in one process" if not timed else ms(row["mean_ms"]) + ("" if clean else " (not clean)"), ratio_text if timed else "",
                                    ms(row["median_ms"]) if timed else "", ms(row["p99_ms"]) if timed else "",
-                                   "" if not timed else f"{row['device']}, {row.get('cores', 1)} core" + ("s" if row.get("cores", 1) > 1 else "")])
+                                   "" if not timed else "GPU" if row["device"] == "GPU" else f"{row['device']}, {row.get('cores', 1)} core" + ("s" if row.get("cores", 1) > 1 else "")])
                 paired = row.get("paired") or {}
                 record |= {"pairs": row["shots"], "failures_X": row["failures_X"], "failures_Z": row["failures_Z"],
                            "failures_pair": row["failures_pair"], "rate_per_cycle": row["rate"], "kit_error": row["error"],
@@ -322,7 +327,8 @@ def test_tables(measured):
     texts["time"] = write("test_time", "Times on the test shots, each beside the row's failures, so that a time is never read without its accuracy. "
                           "\"Mean time ÷ relay-BP's\" below 1 means faster than relay-BP on average. One process per row on the team's server; "
                           "a row on two cores or on a GPU says so. A time is marked \"not clean\" when the server's CPU quota throttled it for more than "
-                          f"{THROTTLE_LIMIT:.0%} of the row's wall time; it is then given no ratio and is not drawn in the time figures.\n\n"
+                          f"{THROTTLE_LIMIT:.0%} of its wall time, estimated as the kernel's throttled seconds (summed over the server's CPUs) divided by "
+                          "the quota of 12 CPUs times the row's wall time; it is then given no ratio and is not drawn in the time figures.\n\n"
                           + markdown(["p", "Decoder", "Failed pairs", "Mean time per pair, ms", "Mean time ÷ relay-BP's", "Median, ms", "99th percentile, ms", "Runs on"],
                                      time_lines))
 
@@ -1118,6 +1124,7 @@ def tracker_parts_check(tracked):
     folder = DATA / "loss" / "tracker" / "parts" / "test"
     parts = sorted(folder.glob("*.npz")) if folder.is_dir() else []
     if not parts:
+        fact("trk_parts", None, "data/loss/tracker/parts/test/")
         return None
     failed, conditions, shots = [], None, []
     for file in parts:
@@ -1372,7 +1379,7 @@ def time_words(row):
     if row is None or row["mean_ms"] is None or row.get("offline"):
         return None
     words = f"{ms(row['mean_ms'])} ms per pair"
-    return words if row.get("time_clean", True) else words + " (a time not clean: the server throttled the row)"
+    return words if row.get("time_clean", True) else words + " (a time not clean: see the table)"
 
 
 def findings(measured):

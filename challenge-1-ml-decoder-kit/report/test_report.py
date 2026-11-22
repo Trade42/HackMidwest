@@ -90,7 +90,7 @@ def test_the_top_readme_holds_the_generated_section():
 def stand_in(folder):
     """A copy of report/data/ whose test/ rows are the teammates' committed evaluator runs."""
     data = folder / "data"
-    shutil.copytree(REPORT / "data", data, ignore=shutil.ignore_patterns("test"))
+    shutil.copytree(REPORT / "data", data, ignore=lambda folder, names: ["test"] if Path(folder) == REPORT / "data" else [])
     log = []
     for p, base, router in (("0.003", "results/icrn/eval_p0.003", "results/icrn/router_eval_p0.003_portable"),
                             ("0.004", "results/mac/eval_p0.004", "results/mac/router_eval_p0.004")):
@@ -106,7 +106,7 @@ def stand_in(folder):
             log += [f"2026-11-22T08:00:00Z START p={p} {row} " + state % "100.0", f"2026-11-22T09:00:00Z END p={p} {row} exit 0: x " + state % "161.0"]
     (data / "test" / "clean_rows.out").write_text("\n".join(log) + "\n")
     (data / "test" / "cpu_monitor.out").write_text(
-        "# time_utc cpus thr_s thr_n | evaluator joint loss_job candidates tcbp_member evaluate_stim python_all | load_1m\n"
+        "# one line per minute (the quota is 12)\n# time_utc cpus thr_s thr_n | evaluator joint loss_job candidates tcbp_member evaluate_stim python_all | load_1m\n"
         + "".join(f"2026-11-22T08:{minute:02d}:30Z 6.0 {100 + minute} 5 | 6 0 0 1 0 0 9 | 6.5\n" for minute in range(0, 60, 10)))
     # the offline combination at p = 0.003: made-up rules on real per-shot outcomes, only to exercise the tables
     relay, other = (np.load(KIT / folder / name) for folder, name in (
@@ -141,7 +141,7 @@ def test_scripts_on_a_stand_in(tmp_path):
     assert "4 / 2 / 1 (p = 1.00)" in table                       # the router against relay-BP, as in the team's comparison.json
     assert "our hierarchy, neural tie-break | ours | not measured" in table
     assert "PriorTilt, one run (from per-shot files, not a timed evaluator row)" in table      # the offline combination stands in
-    assert "6.0 CPUs busy on average" in table and "held the notebook back for 61 s of the row's 3,600 s (1.7%)" in table
+    assert "6.0 CPUs busy on average" in table and "throttled the notebook for 61 s summed over its CPUs during the row's 3,600 s, about 0.1% of one process's time" in table
     assert "time not clean" not in table
     ladder = (tmp_path / "tables" / "test_ladder.md").read_text()
     assert "ORACLE: a perfect tie-break" in ladder and "| 0.004 | every rung | not measured" in ladder

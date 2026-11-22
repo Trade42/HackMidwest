@@ -137,8 +137,20 @@ def clean_rows_log(*paths):
     return runs
 
 
+def cpu_quota(path):
+    """The server's CPU quota, from the record's own header ("the quota is 12"), or None."""
+    path = Path(path)
+    if not path.is_file():
+        return None
+    found = re.search(r"the quota is (\d+)", path.read_text(encoding="utf-8", errors="replace"))
+    return int(found.group(1)) if found else None
+
+
 def cpu_monitor(path):
-    """The server's one-line-a-minute record: [(time, CPUs busy, seconds throttled in the record so far, {process kind: count})]."""
+    """The server's one-line-a-minute record: [(time, {cpus: CPUs busy, thr_s: seconds throttled in that minute, process counts})].
+
+    thr_s is the kernel's throttled time of the notebook's cgroup, summed over its per-CPU run queues: it is not
+    wall time and can exceed 60 s in a minute."""
     path = Path(path)
     if not path.is_file():
         return []

@@ -5,12 +5,12 @@ Times on the test shots, each beside the row's failures, so that a time is never
 | 0.003 | BP-OSD (kit baseline) | 60 of 10,000 | 129 | 1.46 | 18.2 | 792 | CPU, 1 core |
 | 0.003 | relay-BP (kit baseline) | 5 of 10,000 | 88.0 | the reference | 54.0 | 579 | CPU, 1 core |
 | 0.003 | relay-BP with a learned router | 6 of 10,000 | 42.5 | 0.48 | 9.5 | 627 | CPU, 1 core |
-| 0.003 | PriorTilt, one run | not measured | not measured | not measured | not measured | not measured | not measured |
-| 0.003 | our hierarchy, lowest-weight tie-break | not measured | not measured | not measured | not measured | not measured | not measured |
-| 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.003 | PriorTilt, one run (from per-shot files, not a timed evaluator row) | 6 of 10,000 | not timed in one process |  |  |  |  |
+| 0.003 | our hierarchy, lowest-weight tie-break (from per-shot files, not a timed evaluator row) | 3 of 10,000 | not timed in one process |  |  |  |  |
+| 0.003 | our hierarchy, classical tie-break (lowest weight among the converged candidates) (from per-shot files, not a timed evaluator row) | 3 of 10,000 | not timed in one process |  |  |  |  |
 | 0.003 | our hierarchy, neural tie-break | 3 of 10,000 | 45.7 | 0.52 | 14.2 | 395 | CPU, 1 core |
 | 0.003 | our hierarchy, neural tie-break, the two fast decodes side by side on two cores | 3 of 10,000 | 28.9 | 0.33 | 7.8 | 245 | CPU, 2 cores |
-| 0.003 | our ensemble (combined offline) | not measured | not measured | not measured | not measured | not measured | not measured |
+| 0.003 | our ensemble (combined offline) (rule f: P1 where P1 = P2 = T; else J where it converged, else T; frozen on the training shots) | 2 of 10,000 | not timed in one process |  |  |  |  |
 | 0.003 | TCBP-JOBS (NVIDIA, GPU) | 3 of 10,000 | 3.9 | not comparable: another device and timer | 3.8 | 15.0 | GPU |
 | 0.004 | BP-OSD (kit baseline) | 472 of 10,000 | 302 | 0.94 | 350 | 863 | CPU, 1 core |
 | 0.004 | relay-BP (kit baseline) | 83 of 10,000 | 319 | the reference | 106 | 5,514 | CPU, 1 core |

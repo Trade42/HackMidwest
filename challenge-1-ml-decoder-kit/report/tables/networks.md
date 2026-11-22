@@ -25,6 +25,6 @@ The final networks alone on the **test shots** (the team's test files, `neural.e
 
 | p | X network (step 120,000) | Z network (step 100,000) |
 |---|---|---|
-| 0.003 | not measured | not measured |
-| 0.004 | not measured | not measured |
-| 0.005 | not measured | not measured |
+| 0.003 | 64 of 10,000 (0.6%) | 59 of 10,000 (0.6%) |
+| 0.004 | 420 of 10,000 (4.2%) | 434 of 10,000 (4.3%) |
+| 0.005 | 1,885 of 10,000 (18.9%) | 1,810 of 10,000 (18.1%) |

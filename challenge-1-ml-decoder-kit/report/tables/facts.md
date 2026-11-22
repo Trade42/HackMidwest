@@ -25,11 +25,11 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `a80_network_alone` | 4.1% | `tables/ablation_80k.md` |
 | `a80_perfect_tie_break` | 187 | `tables/ablation_80k.md` |
 | `a80_shots` | 80,000 | `tables/ablation_80k.md` |
-| `abl3_a_pairs` | not measured | `tables/test_ablation.md` |
-| `abl3_aw_pairs` | not measured | `tables/test_ablation.md` |
-| `abl3_only_network` | not measured | `tables/test_ablation.md` |
-| `abl3_only_weight` | not measured | `tables/test_ablation.md` |
-| `abl3_p` | not measured | `tables/test_ablation.md` |
+| `abl3_a_pairs` | 4 | `tables/test_ablation.md` |
+| `abl3_aw_pairs` | 3 | `tables/test_ablation.md` |
+| `abl3_only_network` | 1 | `tables/test_ablation.md` |
+| `abl3_only_weight` | 0 | `tables/test_ablation.md` |
+| `abl3_p` | 1.00 | `tables/test_ablation.md` |
 | `abl4_a_pairs` | not measured | `tables/test_ablation.md` |
 | `abl4_aw_pairs` | not measured | `tables/test_ablation.md` |
 | `abl4_only_network` | not measured | `tables/test_ablation.md` |
@@ -40,40 +40,40 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `abl5_only_network` | not measured | `tables/test_ablation.md` |
 | `abl5_only_weight` | not measured | `tables/test_ablation.md` |
 | `abl5_p` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_R` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_a` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_aw` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_floor` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_further` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_gap_closed` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_levels` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_only_network` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_only_weight` | not measured | `tables/test_ablation.md` |
-| `abl_pooled_p` | not measured | `tables/test_ablation.md` |
-| `c3_ensemble_vs_hierarchy_both` | not measured | `tables/test_comparisons.md` |
-| `c3_ensemble_vs_hierarchy_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_ensemble_vs_hierarchy_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_ensemble_vs_hierarchy_p` | not measured | `tables/test_comparisons.md` |
-| `c3_ensemble_vs_tcbp_both` | not measured | `tables/test_comparisons.md` |
-| `c3_ensemble_vs_tcbp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_ensemble_vs_tcbp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_ensemble_vs_tcbp_p` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_both` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_priortilt_p` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_converged_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_converged_both` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_converged_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_converged_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_converged_p` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_weight_both` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_weight_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_weight_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_vs_hierarchy_weight_p` | not measured | `tables/test_comparisons.md` |
+| `abl_pooled_R` | 5 | `tables/test_ablation.md` |
+| `abl_pooled_a` | 4 | `tables/test_ablation.md` |
+| `abl_pooled_aw` | 3 | `tables/test_ablation.md` |
+| `abl_pooled_floor` | 3 | `tables/test_ablation.md` |
+| `abl_pooled_further` | -33.3% | `tables/test_ablation.md` |
+| `abl_pooled_gap_closed` | 0% | `tables/test_ablation.md` |
+| `abl_pooled_levels` | 0.003 | `tables/test_ablation.md` |
+| `abl_pooled_only_network` | 1 | `tables/test_ablation.md` |
+| `abl_pooled_only_weight` | 0 | `tables/test_ablation.md` |
+| `abl_pooled_p` | 1.00 | `tables/test_ablation.md` |
+| `c3_ensemble_vs_hierarchy_both` | 2 | `tables/test_comparisons.md` |
+| `c3_ensemble_vs_hierarchy_only_first` | 0 | `tables/test_comparisons.md` |
+| `c3_ensemble_vs_hierarchy_only_second` | 1 | `tables/test_comparisons.md` |
+| `c3_ensemble_vs_hierarchy_p` | 1.00 | `tables/test_comparisons.md` |
+| `c3_ensemble_vs_tcbp_both` | 2 | `tables/test_comparisons.md` |
+| `c3_ensemble_vs_tcbp_only_first` | 0 | `tables/test_comparisons.md` |
+| `c3_ensemble_vs_tcbp_only_second` | 1 | `tables/test_comparisons.md` |
+| `c3_ensemble_vs_tcbp_p` | 1.00 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_both` | 3 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_only_first` | 0 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_only_second` | 3 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_priortilt_p` | 0.25 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_relay_bp_both` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_relay_bp_only_first` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_relay_bp_only_second` | 3 | `tables/test_comparisons.md` |
+| `c3_hierarchy_converged_vs_relay_bp_p` | 0.62 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_converged_both` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_converged_only_first` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_converged_only_second` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_converged_p` | 1.00 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_weight_both` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_weight_only_first` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_weight_only_second` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_vs_hierarchy_weight_p` | 1.00 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_relay_bp_both` | 3 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_relay_bp_only_first` | 0 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_relay_bp_only_second` | 2 | `tables/test_comparisons.md` |
@@ -82,18 +82,18 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `c3_hierarchy_vs_tcbp_only_first` | 1 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_tcbp_only_second` | 1 | `tables/test_comparisons.md` |
 | `c3_hierarchy_vs_tcbp_p` | 1.00 | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_priortilt_both` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_priortilt_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_priortilt_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_priortilt_p` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_hierarchy_weight_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
-| `c3_priortilt_vs_relay_bp_both` | not measured | `tables/test_comparisons.md` |
-| `c3_priortilt_vs_relay_bp_only_first` | not measured | `tables/test_comparisons.md` |
-| `c3_priortilt_vs_relay_bp_only_second` | not measured | `tables/test_comparisons.md` |
-| `c3_priortilt_vs_relay_bp_p` | not measured | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_priortilt_both` | 3 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_priortilt_only_first` | 0 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_priortilt_only_second` | 3 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_priortilt_p` | 0.25 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_relay_bp_both` | 2 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_relay_bp_only_first` | 1 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_relay_bp_only_second` | 3 | `tables/test_comparisons.md` |
+| `c3_hierarchy_weight_vs_relay_bp_p` | 0.62 | `tables/test_comparisons.md` |
+| `c3_priortilt_vs_relay_bp_both` | 3 | `tables/test_comparisons.md` |
+| `c3_priortilt_vs_relay_bp_only_first` | 3 | `tables/test_comparisons.md` |
+| `c3_priortilt_vs_relay_bp_only_second` | 2 | `tables/test_comparisons.md` |
+| `c3_priortilt_vs_relay_bp_p` | 1.00 | `tables/test_comparisons.md` |
 | `c3_router_vs_relay_bp_both` | 4 | `tables/test_comparisons.md` |
 | `c3_router_vs_relay_bp_only_first` | 2 | `tables/test_comparisons.md` |
 | `c3_router_vs_relay_bp_only_second` | 1 | `tables/test_comparisons.md` |
@@ -298,9 +298,22 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `expl_rate_T` | 3.77e-04 | `tables/exploration_p0.004.md` |
 | `expl_rate_W` | 5.42e-04 | `tables/exploration_p0.004.md` |
 | `expl_shots` | 50,000 | `tables/exploration_p0.004.md` |
-| `findings` | On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair; with its two fast decodes side by side on two cores, 28.9 ms per pair; at p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair; with its two fast decodes side by side on two cores, 150 ms per pair. Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference). | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
-| `framing` | not measured | `tables/test_ablation.md` |
-| `framing_slide` | pending: the ablation on the test shots has not landed. | `tables/test_ablation.md` |
+| `findings` | The hierarchy is the result (5 failed pairs for relay-BP, 3 for the hierarchy, over p = 0.003); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 3 pairs and the network 4; only the network rule fails 1 pairs, only the classical rule 0, exact p = 1.00. On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair; with its two fast decodes side by side on two cores, 28.9 ms per pair; at p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair; with its two fast decodes side by side on two cores, 150 ms per pair. Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference). | `tables/test_p0.003.md, test_p0.004.md, test_p0.005.md, test_ablation.md` |
+| `framing` | The hierarchy is the result (5 failed pairs for relay-BP, 3 for the hierarchy, over p = 0.003); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 3 pairs and the network 4; only the network rule fails 1 pairs, only the classical rule 0, exact p = 1.00. | `tables/test_ablation.md` |
+| `framing_slide` | The hierarchy is the result (5 failed pairs for relay-BP, 3 for the hierarchy, over p = 0.003); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 3 pairs and the network 4; only the network rule fails 1 pairs, only the classical rule 0, exact p = 1.00. | `tables/test_ablation.md` |
+| `lad3_P1_pairs` | 6 | `tables/test_ladder.md` |
+| `lad3_P1_rate` | 5.00e-05 | `tables/test_ladder.md` |
+| `lad3_R_pairs` | 5 | `tables/test_ladder.md` |
+| `lad3_R_rate` | 4.17e-05 | `tables/test_ladder.md` |
+| `lad3_T_pairs` | 3 | `tables/test_ladder.md` |
+| `lad3_a_pairs` | 4 | `tables/test_ladder.md` |
+| `lad3_a_rate` | 3.33e-05 | `tables/test_ladder.md` |
+| `lad3_ac_pairs` | 3 | `tables/test_ladder.md` |
+| `lad3_ac_rate` | 2.50e-05 | `tables/test_ladder.md` |
+| `lad3_aw_pairs` | 3 | `tables/test_ladder.md` |
+| `lad3_aw_rate` | 2.50e-05 | `tables/test_ladder.md` |
+| `lad3_floor_pairs` | 3 | `tables/test_ladder.md` |
+| `lad3_floor_rate` | 2.50e-05 | `tables/test_ladder.md` |
 | `loss_aware` | 176 of 4,000 | `tables/loss.md` |
 | `loss_aware_ratio` | 11.5 | `tables/loss.md` |
 | `loss_aware_share` | 4.4% | `tables/loss.md` |
@@ -320,12 +333,12 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `net_Z_wrong4` | 4.1% | `tables/networks.md` |
 | `net_Z_wrong5` | 18.6% | `tables/networks.md` |
 | `net_parameters` | 893,697 | `tables/networks.md` |
-| `netalone3_X` | not measured | `data/test/net_p0.003/` |
-| `netalone3_Z` | not measured | `data/test/net_p0.003/` |
-| `netalone4_X` | not measured | `data/test/net_p0.004/` |
-| `netalone4_Z` | not measured | `data/test/net_p0.004/` |
-| `netalone5_X` | not measured | `data/test/net_p0.005/` |
-| `netalone5_Z` | not measured | `data/test/net_p0.005/` |
+| `netalone3_X` | 0.6% | `data/test/net_p0.003/` |
+| `netalone3_Z` | 0.6% | `data/test/net_p0.003/` |
+| `netalone4_X` | 4.2% | `data/test/net_p0.004/` |
+| `netalone4_Z` | 4.3% | `data/test/net_p0.004/` |
+| `netalone5_X` | 18.9% | `data/test/net_p0.005/` |
+| `netalone5_Z` | 18.1% | `data/test/net_p0.005/` |
 | `rule_X` | network | `data/test/test_run.out` |
 | `rule_X_converged` | 67 | `data/test/test_run.out` |
 | `rule_X_network` | 60 | `data/test/test_run.out` |
@@ -351,33 +364,33 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_bposd_time_ratio` | 1.46 | `tables/test_p0.003.md` |
 | `t3_bposd_wall_hours` | 0.4 | `tables/test_p0.003.md` |
 | `t3_bposd_xz` | 26, 34 | `tables/test_p0.003.md` |
-| `t3_ensemble_both` | not measured | `tables/test_p0.003.md` |
-| `t3_ensemble_error` | not measured | `tables/test_p0.003.md` |
-| `t3_ensemble_mean_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_ensemble_both` | 2 | `tables/test_p0.003.md` |
+| `t3_ensemble_error` | 1.2e-05 | `tables/test_p0.003.md` |
+| `t3_ensemble_mean_ms` | 50.2 | `tables/test_p0.003.md` |
 | `t3_ensemble_median_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_ensemble_only_relay` | not measured | `tables/test_p0.003.md` |
-| `t3_ensemble_only_this` | not measured | `tables/test_p0.003.md` |
+| `t3_ensemble_only_relay` | 3 | `tables/test_p0.003.md` |
+| `t3_ensemble_only_this` | 0 | `tables/test_p0.003.md` |
 | `t3_ensemble_p99_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_ensemble_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_ensemble_pairs` | not measured | `tables/test_p0.003.md` |
-| `t3_ensemble_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_ensemble_paired_p` | 0.25 | `tables/test_p0.003.md` |
+| `t3_ensemble_pairs` | 2 | `tables/test_p0.003.md` |
+| `t3_ensemble_rate` | 1.67e-05 | `tables/test_p0.003.md` |
 | `t3_ensemble_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_ensemble_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_ensemble_xz` | not measured | `tables/test_p0.003.md` |
+| `t3_ensemble_xz` | 1, 1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_both` | 3 | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_both` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_error` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_mean_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_both` | 2 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_error` | 1.4e-05 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_mean_ms` | 44.1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_median_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_only_relay` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_only_this` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_only_relay` | 3 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_only_this` | 1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_p99_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_pairs` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_paired_p` | 0.62 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_pairs` | 3 | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_rate` | 2.50e-05 | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_converged_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_converged_xz` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_converged_xz` | 2, 1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_error` | 1.4e-05 | `tables/test_p0.003.md` |
 | `t3_hierarchy_mean_ms` | 45.7 | `tables/test_p0.003.md` |
 | `t3_hierarchy_median_ms` | 14.2 | `tables/test_p0.003.md` |
@@ -402,33 +415,33 @@ Single numbers quoted in the prose of `REPORT.md` and `SLIDES.md` (written there
 | `t3_hierarchy_rate` | 2.50e-05 | `tables/test_p0.003.md` |
 | `t3_hierarchy_time_ratio` | 0.52 | `tables/test_p0.003.md` |
 | `t3_hierarchy_wall_hours` | 0.1 | `tables/test_p0.003.md` |
-| `t3_hierarchy_weight_both` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_weight_error` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_weight_mean_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_weight_both` | 2 | `tables/test_p0.003.md` |
+| `t3_hierarchy_weight_error` | 1.4e-05 | `tables/test_p0.003.md` |
+| `t3_hierarchy_weight_mean_ms` | 44.1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_median_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_weight_only_relay` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_weight_only_this` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_weight_only_relay` | 3 | `tables/test_p0.003.md` |
+| `t3_hierarchy_weight_only_this` | 1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_p99_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_weight_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_weight_pairs` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_weight_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_weight_paired_p` | 0.62 | `tables/test_p0.003.md` |
+| `t3_hierarchy_weight_pairs` | 3 | `tables/test_p0.003.md` |
+| `t3_hierarchy_weight_rate` | 2.50e-05 | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_hierarchy_weight_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_hierarchy_weight_xz` | not measured | `tables/test_p0.003.md` |
+| `t3_hierarchy_weight_xz` | 2, 1 | `tables/test_p0.003.md` |
 | `t3_hierarchy_xz` | 1, 2 | `tables/test_p0.003.md` |
-| `t3_priortilt_both` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_error` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_mean_ms` | not measured | `tables/test_p0.003.md` |
+| `t3_priortilt_both` | 3 | `tables/test_p0.003.md` |
+| `t3_priortilt_error` | 2.0e-05 | `tables/test_p0.003.md` |
+| `t3_priortilt_mean_ms` | 22.0 | `tables/test_p0.003.md` |
 | `t3_priortilt_median_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_only_relay` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_only_this` | not measured | `tables/test_p0.003.md` |
+| `t3_priortilt_only_relay` | 2 | `tables/test_p0.003.md` |
+| `t3_priortilt_only_this` | 3 | `tables/test_p0.003.md` |
 | `t3_priortilt_p99_ms` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_paired_p` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_pairs` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_rate` | not measured | `tables/test_p0.003.md` |
+| `t3_priortilt_paired_p` | 1.00 | `tables/test_p0.003.md` |
+| `t3_priortilt_pairs` | 6 | `tables/test_p0.003.md` |
+| `t3_priortilt_rate` | 5.00e-05 | `tables/test_p0.003.md` |
 | `t3_priortilt_time_ratio` | not measured | `tables/test_p0.003.md` |
 | `t3_priortilt_wall_hours` | not measured | `tables/test_p0.003.md` |
-| `t3_priortilt_xz` | not measured | `tables/test_p0.003.md` |
+| `t3_priortilt_xz` | 3, 3 | `tables/test_p0.003.md` |
 | `t3_relay_bp_both` | not measured | `tables/test_p0.003.md` |
 | `t3_relay_bp_error` | 1.9e-05 | `tables/test_p0.003.md` |
 | `t3_relay_bp_mean_ms` | 88.0 | `tables/test_p0.003.md` |

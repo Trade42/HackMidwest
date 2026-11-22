@@ -210,7 +210,7 @@ def load_test_rows(data=DATA):
                                  and row["failed_pair"] is not None else None)
                 row["interval"] = stats.per_cycle_interval(row["failures_pair"], row["shots"])
     known = {spec.folder.format(p=p) + suffix for spec in TEST_ROWS for p in P_VALUES for suffix in ("", RETIME)}
-    known |= {f"ensemble_p{p}" for p in P_VALUES}
+    known |= {f"ensemble_p{p}" for p in P_VALUES} | {f"net_p{p}" for p in P_VALUES}
     extra = sorted(path.name for path in (data / "test").glob("*") if path.is_dir() and path.name not in known) if (data / "test").is_dir() else []
     return measured, extra, combined
 

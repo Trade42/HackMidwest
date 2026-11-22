@@ -1,0 +1,135 @@
+{
+  "basis": "X",
+  "shots": 10000,
+  "failures": 1885,
+  "failure_fraction": 0.1885,
+  "failure_interval": [
+    0.18095452087270159,
+    0.19628471011600254
+  ],
+  "per_cycle": 0.017255299945442282,
+  "per_cycle_interval": [
+    0.016497047263396625,
+    0.018044397020378855
+  ],
+  "always_zero_failures": 9999,
+  "bits_right": 0.9484083333333333,
+  "always_zero_bits_right": 0.5009833333333333,
+  "confidence_sweep": [
+    {
+      "kept_fraction": 0.1,
+      "threshold": 5.402315139770508,
+      "shots_kept": 1000,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.0038267585456940676
+      ],
+      "shots_rest": 9000,
+      "failures_rest": 1885
+    },
+    {
+      "kept_fraction": 0.25,
+      "threshold": 4.547252178192139,
+      "shots_kept": 2500,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.0015342260859488863
+      ],
+      "shots_rest": 7500,
+      "failures_rest": 1885
+    },
+    {
+      "kept_fraction": 0.5,
+      "threshold": 2.7079250812530518,
+      "shots_kept": 5000,
+      "failures_kept": 4,
+      "failure_fraction_kept": 0.0008,
+      "failure_interval_kept": [
+        0.000311146973941722,
+        0.00205532666008572
+      ],
+      "shots_rest": 5000,
+      "failures_rest": 1881
+    },
+    {
+      "kept_fraction": 0.75,
+      "threshold": 0.9805715084075928,
+      "shots_kept": 7500,
+      "failures_kept": 107,
+      "failure_fraction_kept": 0.014266666666666667,
+      "failure_interval_kept": [
+        0.011820667285682637,
+        0.017209991221030094
+      ],
+      "shots_rest": 2500,
+      "failures_rest": 1778
+    },
+    {
+      "kept_fraction": 0.9,
+      "threshold": 0.13269492983818054,
+      "shots_kept": 9000,
+      "failures_kept": 963,
+      "failure_fraction_kept": 0.107,
+      "failure_interval_kept": [
+        0.10078060482037425,
+        0.11355473945400989
+      ],
+      "shots_rest": 1000,
+      "failures_rest": 922
+    },
+    {
+      "kept_fraction": 0.95,
+      "threshold": 0.051163408905267715,
+      "shots_kept": 9500,
+      "failures_kept": 1411,
+      "failure_fraction_kept": 0.14852631578947367,
+      "failure_interval_kept": [
+        0.1415173032510069,
+        0.15581946011014536
+      ],
+      "shots_rest": 500,
+      "failures_rest": 474
+    },
+    {
+      "kept_fraction": 0.99,
+      "threshold": 0.008896615356206894,
+      "shots_kept": 9900,
+      "failures_kept": 1790,
+      "failure_fraction_kept": 0.1808080808080808,
+      "failure_interval_kept": [
+        0.17335124656649847,
+        0.1885125285919252
+      ],
+      "shots_rest": 100,
+      "failures_rest": 95
+    },
+    {
+      "kept_fraction": 1.0,
+      "threshold": 5.7909637689590454e-05,
+      "shots_kept": 10000,
+      "failures_kept": 1885,
+      "failure_fraction_kept": 0.1885,
+      "failure_interval_kept": [
+        0.18095452087270159,
+        0.19628471011600254
+      ],
+      "shots_rest": 0,
+      "failures_rest": 0
+    }
+  ],
+  "latency_ms_mean": 8.145767915993929,
+  "latency_ms_median": 8.137051947414875,
+  "latency_ms_p99": 8.717967011034487,
+  "latency_shots": 200,
+  "device": "GPU NVIDIA A100-SXM4-80GB MIG 2g.20gb",
+  "checkpoint_step": 120000,
+  "checkpoint_commit": "7ff6a68b95916773a67d209959c92b04c2254cd1",
+  "detectors_read": "all",
+  "training_seed": 1,
+  "logicals": "kit",
+  "data": "data/p0.005/test_X.npz (Stim circuit shots, p=0.005, seed 301, basis X)"
+}

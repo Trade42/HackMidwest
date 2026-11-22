@@ -1,0 +1,7 @@
+p,rung,label,built_by,failures_X,failures_Z,failures_pair,pairs,rate_per_cycle,kit_error
+0.003,R,relay-BP (kit baseline),the kit,3,2,5,10000,4.167621832917856e-05,1.8639694121413974e-05
+0.003,P1,"PriorTilt, one run (seed A)",IonQ,3,3,6,10000,5.001375527313723e-05,2.0419813083538685e-05
+0.003,aw,"our hierarchy, lowest-weight tie-break (nothing learned by us)",ours,2,1,3,10000,2.50034381590325e-05,1.4436707608145305e-05
+0.003,ac,"our hierarchy, lowest weight among the converged candidates (nothing learned by us)",ours,2,1,3,10000,2.50034381590325e-05,1.4436707608145305e-05
+0.003,a,"our hierarchy, neural tie-break",ours,2,2,4,10000,3.3339446006586115e-05,1.6670973765342545e-05
+0.003,floor,"ORACLE: a perfect tie-break on the same candidates (a ceiling, not a decoder)",nobody: needs the truth,2,1,3,10000,2.50034381590325e-05,1.4436707608145305e-05

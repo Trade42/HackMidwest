@@ -78,8 +78,9 @@ recipe (arXiv:2604.08358), written by us from the paper's description and scaled
 <!--f:net_parameters-->893,697<!--/f--> parameters per memory basis. It reads all 1,728 detector bits of a shot and gives 12 numbers, one
 per logical bit.
 
-**Its role.** Alone, the network is a poor decoder: at the last training report in our copy of its log it gets
-<!--f:net_X_wrong4-->3.8%<!--/f--> of X shots wrong at p = 0.004, where relay-BP gets <!--f:expl_X_R-->122<!--/f--> of 25,000 wrong on the exploration shots. It is not asked to decode.
+**Its role.** Alone, the network is a poor decoder: on the test shots at p = 0.004 it gets <!--f:netalone4_X-->4.2%<!--/f--> of X-memory
+shots wrong and <!--f:netalone4_Z-->4.3%<!--/f--> of Z-memory shots, where relay-BP gets <!--f:t4_relay_bp_xz-->36, 47<!--/f--> of 10,000 shots wrong (X, Z;
+`APPENDIX.md`, "The networks"). It is not asked to decode.
 It is asked which of two or three given answers is more likely, on the few shots where the fast decoders disagree.
 That is an easier question, and one where the classical score is weak: among 16 relay-BP candidates the right answer
 is present on <!--f:cand_present-->114<!--/f--> of <!--f:cand_shots-->145<!--/f--> hard shots, and the lowest weight picks it on only <!--f:cand_lowest-->71<!--/f-->
@@ -105,7 +106,7 @@ per-shot files" is combined offline from saved answers and has no time measured 
 
 ![Mean decoding time per pair against p](figures/time_vs_p.png)
 
-**What the numbers say.** <!--f:findings-->On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair; with its two fast decodes side by side on two cores, 28.9 ms per pair; at p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair; with its two fast decodes side by side on two cores, 150 ms per pair. Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference).<!--/f--> The exact tests, the intervals, the median and 99th-percentile
+**What the numbers say.** <!--f:findings-->The hierarchy is the result (5 failed pairs for relay-BP, 3 for the hierarchy, over p = 0.003); the neural tie-break did not lower its failures on the test shots. The classical tie-break (lowest weight among the converged candidates) fails 3 pairs and the network 4; only the network rule fails 1 pairs, only the classical rule 0, exact p = 1.00. On the test shots, at p = 0.003 our decoder fails 3 of 10,000 pairs, relay-BP 5 (only ours fails 0, only relay-BP 2, exact p = 0.50), in 45.7 ms per pair against relay-BP's 88.0 ms per pair; with its two fast decodes side by side on two cores, 28.9 ms per pair; at p = 0.004 our decoder fails 44 of 10,000 pairs, relay-BP 83 (only ours fails 15, only relay-BP 54, exact p = 3e-06), in 216 ms per pair against relay-BP's 319 ms per pair; with its two fast decodes side by side on two cores, 150 ms per pair. Against TCBP-JOBS, NVIDIA's GPU decoder, on the same test pairs: at p = 0.003 TCBP-JOBS and our decoder fail as many pairs (3 against 3; only TCBP-JOBS fails 1, only ours 1, exact p = 1.00, not a significant difference); at p = 0.004 TCBP-JOBS fails fewer pairs than our decoder (41 against 44; only TCBP-JOBS fails 17, only ours 20, exact p = 0.74, not a significant difference).<!--/f--> The exact tests, the intervals, the median and 99th-percentile
 times and what ran beside each row are in `APPENDIX.md`.
 
 ### Whose gain is whose

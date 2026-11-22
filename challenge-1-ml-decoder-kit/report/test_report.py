@@ -157,6 +157,33 @@ def test_scripts_on_a_stand_in(tmp_path):
     assert first == {file.name: file.read_bytes() for file in (tmp_path / "figures").iterdir()}
 
 
+def test_a_retimed_row(tmp_path):
+    data = stand_in(tmp_path)
+    first, again = data / "test" / "eval_p0.003_relay-bp", data / "test" / "eval_p0.003_relay-bp_retime"
+    shutil.copytree(first, again)
+    metadata = json.loads((again / "summary.json").read_text())
+    summary = metadata["decoders"][0]["summary"]
+    arrays = dict(np.load(again / summary["artifacts"]))
+    for key in ("seconds_total_X", "seconds_total_Z", "seconds_total_pair"):
+        arrays[key] = arrays[key] / 2                       # the same answers, decoded twice as fast
+    np.savez(again / summary["artifacts"], **arrays)
+    for key in ("mean_pair_total_ms", "median_pair_total_ms", "p99_pair_total_ms"):
+        summary[key] /= 2
+    (again / "summary.json").write_text(json.dumps(metadata))
+    done = run("report.make_tables", data, tmp_path)
+    assert done.returncode == 0, done.stderr
+    table = (tmp_path / "tables" / "test_p0.003.md").read_text()
+    assert "| 42.8 / 26.3 / 278 |" in table and "the first run's mean was 85.7 ms" in table
+    arrays["failed_X"][0] = ~arrays["failed_X"][0]           # other answers: the report must stop
+    arrays["failed_pair"] = arrays["failed_X"] | arrays["failed_Z"]
+    np.savez(again / summary["artifacts"], **arrays)
+    summary["failures_X"], summary["failures_pair"] = int(arrays["failed_X"].sum()), int(arrays["failed_pair"].sum())
+    summary["per_cycle_rate"], summary["standard_error"] = stats.per_cycle_rate(summary["failures_pair"], 10000)
+    (again / "summary.json").write_text(json.dumps(metadata))
+    done = run("report.make_tables", data, tmp_path)
+    assert done.returncode == 1 and "differ from the first run" in done.stderr
+
+
 def test_other_shots_are_refused(tmp_path):
     data = stand_in(tmp_path)
     file = data / "test" / "eval_p0.003_bposd" / "summary.json"

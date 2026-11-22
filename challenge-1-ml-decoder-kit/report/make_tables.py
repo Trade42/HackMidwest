@@ -91,6 +91,47 @@ def write(name, text, records=None):
 
 # ---------- the rows on the test shots ----------
 
+RETIME = "_retime"   # eval_p<p>_<row>_retime: the same row run again in a quiet window, for its time only
+
+
+def attach_run(row, run, monitor, jobs):
+    """What the server's own records say about a timed row's run: what ran beside it, the throttling, whether its time is clean."""
+    row["during"] = loaders.machine_during(monitor, run["start"], run["end"]) if run and run["start"] and run["end"] else None
+    if row["during"] and {"START", "END"} <= set(run["state"]):     # the job's own lines give the seconds throttled during the row exactly
+        row["during"]["throttled_s"] = run["state"]["END"]["throttled_s"] - run["state"]["START"]["throttled_s"]
+    row["throttle_share"] = None
+    if row["during"] and run["end"] and run["start"]:
+        wall = (run["end"] - run["start"]).total_seconds()
+        row["during"]["wall_s"] = wall
+        row["throttle_share"] = row["during"]["throttled_s"] / wall if wall else None
+    row["time_clean"] = not (row["throttle_share"] is not None and row["throttle_share"] > THROTTLE_LIMIT)
+    row["beside"] = run["beside"] if run else None
+    row["run"] = run
+    row["jobs_beside"] = (sorted(name for name, job in jobs.items() if job["start"] and run["start"] <= job["start"] < (run["end"] or datetime.max))
+                          if run and run["start"] else None)
+
+
+def take_retime(row, folder, log, monitor, jobs, p):
+    """The same row decoded again in a quiet window: its answers must equal the first run's pair for pair; then its time replaces the first."""
+    found = loaders.evaluator_rows(folder)
+    again = found.get(row["name"]) if row["name"] in found else (next(iter(found.values())) if len(found) == 1 else None)
+    if again is None:
+        raise Mismatch(f"{folder}: no decoder named {row['name']} in the re-timed run")
+    if again["test_sha256"] != row["test_sha256"]:
+        raise Mismatch(f"{folder}: the re-timed run decoded other shot files than the first run")
+    if row["failed_pair"] is None or again["failed_pair"] is None:
+        raise Mismatch(f"{folder}: a per-shot file is missing, so the re-timed run cannot be shown to give the first run's answers")
+    differ = int((row["failed_pair"] != again["failed_pair"]).sum())
+    if differ or (row["failures_X"], row["failures_Z"]) != (again["failures_X"], again["failures_Z"]):
+        raise Mismatch(f"{folder}: the re-timed run's answers differ from the first run's on {differ} pairs; a re-timing must change only the time")
+    first = {"mean_ms": row["mean_ms"], "throttle_share": row.get("throttle_share"), "start": row["run"]["start"] if row.get("run") else None}
+    for key in ("mean_ms", "median_ms", "p99_ms", "seconds_pair", "wall_seconds", "peak_rss_mb", "setup_seconds", "site", "workers", "per_shot_file"):
+        row[key] = again[key]
+    attach_run(row, log.get((p, folder.name.removeprefix(f"eval_p{p}_"))), monitor, jobs)
+    row["retimed"] = {"first": first, "folder": str(folder.relative_to(DATA)), "source": again["source"]}
+    row["source"] = row["source"] + " (counts) and " + again["source"] + " (time)"
+
+
 def load_test_rows(data=DATA):
     """({p: {decoder key: row or None}}, unregistered folders, {p: the ensemble tool's offline output or None}).
 
@@ -144,18 +185,10 @@ def load_test_rows(data=DATA):
                     if spec.rule == "network" and set(used.values()) != {"network"}:
                         row["label_note"] = " (" + ", ".join(f"{basis} memory: {'the network' if used[basis] == 'network' else 'lowest weight'}" for basis in "XZ") + ")"
                 run = None if row.get("offline") else log.get((p, spec.folder.format(p=p).removeprefix(f"eval_p{p}_")))
-                row["during"] = loaders.machine_during(monitor, run["start"], run["end"]) if run and run["start"] and run["end"] else None
-                if row["during"] and {"START", "END"} <= set(run["state"]):     # the job's own lines give the seconds throttled during the row exactly
-                    row["during"]["throttled_s"] = run["state"]["END"]["throttled_s"] - run["state"]["START"]["throttled_s"]
-                if row["during"] and run["end"] and run["start"]:
-                    wall = (run["end"] - run["start"]).total_seconds()
-                    row["during"]["wall_s"] = wall
-                    row["throttle_share"] = row["during"]["throttled_s"] / wall if wall else None
-                row["time_clean"] = not (row.get("throttle_share") is not None and row["throttle_share"] > THROTTLE_LIMIT)
-                row["beside"] = run["beside"] if run else None
-                row["run"] = run
-                row["jobs_beside"] = (sorted(name for name, job in jobs.items() if job["start"] and run["start"] <= job["start"] < (run["end"] or datetime.max))
-                                      if run and run["start"] else None)
+                attach_run(row, run, monitor, jobs)
+                retime = folder.with_name(folder.name + RETIME)
+                if spec.kind == "evaluator" and not row.get("offline") and (retime / "summary.json").is_file():
+                    take_retime(row, retime, log, monitor, jobs, p)
             measured[p][spec.decoder] = row
         reference = measured[p].get(REFERENCE)
         for key, row in measured[p].items():
@@ -164,7 +197,7 @@ def load_test_rows(data=DATA):
                                  if key != REFERENCE and reference is not None and reference["failed_pair"] is not None
                                  and row["failed_pair"] is not None else None)
                 row["interval"] = stats.per_cycle_interval(row["failures_pair"], row["shots"])
-    known = {spec.folder.format(p=p) for spec in TEST_ROWS for p in P_VALUES}
+    known = {spec.folder.format(p=p) + suffix for spec in TEST_ROWS for p in P_VALUES for suffix in ("", RETIME)}
     known |= {f"ensemble_p{p}" for p in P_VALUES}
     extra = sorted(path.name for path in (data / "test").glob("*") if path.is_dir() and path.name not in known) if (data / "test").is_dir() else []
     return measured, extra, combined
@@ -174,6 +207,11 @@ def where_text(row):
     if row.get("offline"):
         return f"{row['site']} ({row['device']} decoders, ICRN server); its time is {row['timer']}"
     text = f"{row['device']}, {row['workers']} process" + (f" on {row['cores']} cores" if row.get("cores", 1) > 1 else "") + f", {row['site']}"
+    if row.get("retimed"):
+        first = row["retimed"]["first"]
+        text += (f"; **the time is from a second run in a quiet window** (`{row['retimed']['folder']}`), whose answers equal the first run's on every pair; "
+                 f"the first run's mean was {ms(first['mean_ms'])} ms"
+                 + (f", throttled for {first['throttle_share']:.1%} of its wall time" if first.get("throttle_share") is not None else ""))
     if row.get("during"):
         during = row["during"]
         others = ", ".join(f"{kind.replace('_', ' ')} {count}" for kind, count in during["other_max"].items() if count)

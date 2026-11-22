@@ -32,3 +32,88 @@ test_Z.npz chunk 9: shots 4500 to 4999, failures R 1, P1 1, P2 0, relay-BP ran o
 test_Z.npz chunk 10: shots 5000 to 5499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 33 s
 test_Z.npz chunk 11: shots 5500 to 5999, failures R 0, P1 0, P2 0, relay-BP ran on 500, 28 s
 test_Z.npz chunk 12: shots 6000 to 6499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 24 s
+test_Z.npz chunk 13: shots 6500 to 6999, failures R 1, P1 1, P2 1, relay-BP ran on 500, 30 s
+test_Z.npz chunk 14: shots 7000 to 7499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 30 s
+test_Z.npz chunk 15: shots 7500 to 7999, failures R 0, P1 0, P2 0, relay-BP ran on 500, 28 s
+test_Z.npz chunk 16: shots 8000 to 8499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 34 s
+test_Z.npz chunk 17: shots 8500 to 8999, failures R 0, P1 0, P2 0, relay-BP ran on 500, 36 s
+test_Z.npz chunk 18: shots 9000 to 9499, failures R 0, P1 0, P2 0, relay-BP ran on 500, 41 s
+test_Z.npz chunk 19: shots 9500 to 9999, failures R 0, P1 0, P2 0, relay-BP ran on 500, 25 s
+
+saved /home/blakew3/mlBranchMidwest/runs/test/cand_p0.003/test_X.chunks.npz
+test_X.npz: X memory, p = 0.003, 10000 shots, data sha256 f7bc181399a0a8fd1324950c98a8419c0082d7c34940c03dfb34c9e2cefc1ff3
+  chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2)
+  problem sha256 bcc4e9be676aae6e1a0cb251fa70af45208ce49ce32b1c4fe7a4f9f01f22dc28 (H, L and priors from the kit's circuit at this p)
+  decoder   ran on failures     rate  95% Wilson interval  unconverged iterations  ms/shot: mean   median      p99
+  R          10000        3   0.030%  [0.010%, 0.088%]              1      142.3           43.6     23.6      317
+  P1         10000        3   0.030%  [0.010%, 0.088%]              1       96.8           11.2      2.9      123
+  P2         10000        2   0.020%  [0.005%, 0.073%]              0       95.2           11.0      2.9      123
+  times: the decode call alone, 1 process(es) side by side on AMD EPYC-Milan Processor
+
+candidates: 10000 shots from 1 file(s)
+  /home/blakew3/mlBranchMidwest/runs/test/cand_p0.003/test_X.chunks.npz: 10000 shots of the data file with sha256 f7bc181399a0a8fd1324950c98a8419c0082d7c34940c03dfb34c9e2cefc1ff3
+    X memory, p = 0.003, chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2); times: 1 process(es) side by side on AMD EPYC-Milan Processor
+P1 and P2 differ on 2 shots (0.020%): only there the hierarchy runs relay-BP and asks the rule
+relay-BP ran on 10000 shots; the candidates that ran are not all equal on 4 shots (0.040%), and on 2 of those one of them is right
+unconverged: R 1, P1 1, P2 0; no candidate converged on 0 shots
+
+rule                                                     failures     rate  95% Wilson interval    right pick when one existed   ms/shot
+R: relay-BP, kit settings                                       3   0.030%  [0.010%, 0.088%]       1 of 2                           43.6
+P1: PriorTilt, first seed                                       3   0.030%  [0.010%, 0.088%]       1 of 2                           11.2
+P2: PriorTilt, second seed                                      2   0.020%  [0.005%, 0.073%]       2 of 2                           11.0
+P1; where P2 differs, the lowest weight of R, P1, P2            2   0.020%  [0.005%, 0.073%]       2 of 2                           22.5
+P1; where P2 differs, the lowest weight among the converged        2   0.020%  [0.005%, 0.073%]       2 of 2                           22.5
+the lowest weight among the converged of R, P1, P2              2   0.020%  [0.005%, 0.073%]       2 of 2                           65.8
+a perfect choice among R, P1, P2 (needs the truth)              2   0.020%  [0.005%, 0.073%]       2 of 2                               
+P1; where P2 differs, a perfect choice (needs the truth)        2   0.020%  [0.005%, 0.073%]       2 of 2                               
+"right pick when one existed": among the shots where the candidates that ran are not all equal and one is right.
+ms/shot: the mean over all shots of the decode calls the rule makes (and the network's batch-one time where it is asked).
+
+against relay-BP on the same shots: both fail, the rule only, relay-BP only, exact two-sided p (binomial on the discordant shots)
+P1: PriorTilt, first seed                                    2     1     1   p = 1
+P2: PriorTilt, second seed                                   2     0     1   p = 1
+P1; where P2 differs, the lowest weight of R, P1, P2         2     0     1   p = 1
+P1; where P2 differs, the lowest weight among the converged     2     0     1   p = 1
+the lowest weight among the converged of R, P1, P2           2     0     1   p = 1
+
+shots where no candidate converged: 0; the weight rule fails on 0 of them
+
+saved /home/blakew3/mlBranchMidwest/runs/test/cand_p0.003/test_Z.chunks.npz
+test_Z.npz: Z memory, p = 0.003, 10000 shots, data sha256 f5ac5b336f4155870fd8a6792ad61e21d5d76f04e05a9c09419879b6512e7f49
+  chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2)
+  problem sha256 51433d82d8d623f321c6e267939d6ef56da58838e513becda350cbe5bf730fdc (H, L and priors from the kit's circuit at this p)
+  decoder   ran on failures     rate  95% Wilson interval  unconverged iterations  ms/shot: mean   median      p99
+  R          10000        2   0.020%  [0.005%, 0.073%]              0      140.0           41.7     23.2      287
+  P1         10000        3   0.030%  [0.010%, 0.088%]              0       95.4           10.8      2.9      125
+  P2         10000        1   0.010%  [0.002%, 0.057%]              0       94.9           10.7      2.9      123
+  times: the decode call alone, 1 process(es) side by side on AMD EPYC-Milan Processor
+
+candidates: 10000 shots from 1 file(s)
+  /home/blakew3/mlBranchMidwest/runs/test/cand_p0.003/test_Z.chunks.npz: 10000 shots of the data file with sha256 f5ac5b336f4155870fd8a6792ad61e21d5d76f04e05a9c09419879b6512e7f49
+    Z memory, p = 0.003, chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2); times: 1 process(es) side by side on AMD EPYC-Milan Processor
+P1 and P2 differ on 2 shots (0.020%): only there the hierarchy runs relay-BP and asks the rule
+relay-BP ran on 10000 shots; the candidates that ran are not all equal on 2 shots (0.020%), and on 2 of those one of them is right
+unconverged: R 0, P1 0, P2 0; no candidate converged on 0 shots
+
+rule                                                     failures     rate  95% Wilson interval    right pick when one existed   ms/shot
+R: relay-BP, kit settings                                       2   0.020%  [0.005%, 0.073%]       1 of 2                           41.7
+P1: PriorTilt, first seed                                       3   0.030%  [0.010%, 0.088%]       0 of 2                           10.8
+P2: PriorTilt, second seed                                      1   0.010%  [0.002%, 0.057%]       2 of 2                           10.7
+P1; where P2 differs, the lowest weight of R, P1, P2            1   0.010%  [0.002%, 0.057%]       2 of 2                           21.6
+P1; where P2 differs, the lowest weight among the converged        1   0.010%  [0.002%, 0.057%]       2 of 2                           21.6
+the lowest weight among the converged of R, P1, P2              1   0.010%  [0.002%, 0.057%]       2 of 2                           63.3
+a perfect choice among R, P1, P2 (needs the truth)              1   0.010%  [0.002%, 0.057%]       2 of 2                               
+P1; where P2 differs, a perfect choice (needs the truth)        1   0.010%  [0.002%, 0.057%]       2 of 2                               
+"right pick when one existed": among the shots where the candidates that ran are not all equal and one is right.
+ms/shot: the mean over all shots of the decode calls the rule makes (and the network's batch-one time where it is asked).
+
+against relay-BP on the same shots: both fail, the rule only, relay-BP only, exact two-sided p (binomial on the discordant shots)
+P1: PriorTilt, first seed                                    2     1     0   p = 1
+P2: PriorTilt, second seed                                   1     0     1   p = 1
+P1; where P2 differs, the lowest weight of R, P1, P2         1     0     1   p = 1
+P1; where P2 differs, the lowest weight among the converged     1     0     1   p = 1
+the lowest weight among the converged of R, P1, P2           1     0     1   p = 1
+
+shots where no candidate converged: 0; the weight rule fails on 0 of them
+
+wall time of this run: 1297 s

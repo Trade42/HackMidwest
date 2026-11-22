@@ -1,0 +1,144 @@
+Sun Nov 22 07:29:21 UTC 2026
+checkout: 5e08180 server-jobs: ctl 050, a dry run of the preflight and of the three timed rows on validation shots
+-rw-rw-r--+ 1 nobody  nogroup 14668044 Nov 22 06:31 /home/blakew3/mlBranchMidwest/runs/netZ/z_checkpoint_copy.pt
+-rw-rw-r--+ 1 blakew3 blakew3 14690508 Nov 22 07:29 /home/blakew3/mlBranchMidwest/runs/preflight_dry/x_step70000.pt
+{"rule": {"X": "network", "Z": "network"}, "seeds": [1, 1001], "checkpoints": {"X": "/home/blakew3/mlBranchMidwest/runs/preflight_dry/x_step70000.pt", "Z": "/home/blakew3/mlBranchMidwest/runs/netZ/z_checkpoint_copy.pt"}, "device": "cpu", "torch_threads": 1}
+{"rule": {"X": "network", "Z": "network"}, "seeds": [1, 1001], "checkpoints": {"X": "/home/blakew3/mlBranchMidwest/runs/preflight_dry/x_step70000.pt", "Z": "/home/blakew3/mlBranchMidwest/runs/netZ/z_checkpoint_copy.pt"}, "device": "cpu", "torch_threads": 1, "parallel": true}
+
+===== 1. the preflight, TCBP-JOBS in serial mode on the GPU =====
+Sun Nov 22 07:29:23 UTC 2026
+
+--- 0. the first 16 shots of each file
+p = 0.004; from data/p0.004/validation_X.npz (sha256 b00ee09c35ed088a12bcba60b8b704b528c47fb156c7d09cf0f171f90a181f3d) and data/p0.004/validation_Z.npz (sha256 843c4daf24e2b56c5988670550bbcdbac8f50b18dbb9d24beb64969146cb8e20)
+
+--- 1. the plugin through the evaluator's create_session, with the given options
+X: rule network, 16 shots decoded, stages ['agree'], set-up 5.2 s; network step 70000, sha256 692a796f9440..., operators kit, on cpu
+Z: rule network, 16 shots decoded, stages ['agree'], set-up 0.5 s; network step 22000, sha256 2e7d8faa43b2..., operators light, on cpu
+
+--- 2. hierarchy.candidates
+2 job(s) to run on 2 process(es); 0 part(s) kept from an earlier run
+preflight_Z.npz chunk 0: shots 0 to 15, failures R 0, P1 0, P2 0, relay-BP ran on 16, 3 s
+preflight_X.npz chunk 0: shots 0 to 15, failures R 1, P1 0, P2 0, relay-BP ran on 16, 15 s
+
+saved /home/blakew3/mlBranchMidwest/runs/preflight_dry/out_072923/cand/preflight_X.chunks.npz
+preflight_X.npz: X memory, p = 0.004, 16 shots, data sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1
+  chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2)
+  problem sha256 703be059a63a82b803011e0571a9637f9c6914072b68469770591cbc4054eaa1 (H, L and priors from the kit's circuit at this p)
+  decoder   ran on failures     rate  95% Wilson interval  unconverged iterations  ms/shot: mean   median      p99
+  R             16        1   6.250%  [1.112%, 28.329%]              1     2419.8          743.0     46.3     5546
+  P1            16        0   0.000%  [0.000%, 19.361%]              0      720.9           84.7      4.6      695
+  P2            16        0   0.000%  [0.000%, 19.361%]              0      944.8          115.0      4.5      756
+  times: the decode call alone, 2 process(es) side by side on AMD EPYC-Milan Processor
+
+candidates: 16 shots from 1 file(s)
+  /home/blakew3/mlBranchMidwest/runs/preflight_dry/out_072923/cand/preflight_X.chunks.npz: 16 shots of the data file with sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1
+    X memory, p = 0.004, chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2); times: 2 process(es) side by side on AMD EPYC-Milan Processor
+P1 and P2 differ on 0 shots (0.000%): only there the hierarchy runs relay-BP and asks the rule
+relay-BP ran on 16 shots; the candidates that ran are not all equal on 1 shots (6.250%), and on 1 of those one of them is right
+unconverged: R 1, P1 0, P2 0; no candidate converged on 0 shots
+
+rule                                                     failures     rate  95% Wilson interval    right pick when one existed   ms/shot
+R: relay-BP, kit settings                                       1   6.250%  [1.112%, 28.329%]       0 of 1                          743.0
+P1: PriorTilt, first seed                                       0   0.000%  [0.000%, 19.361%]       1 of 1                           84.7
+P2: PriorTilt, second seed                                      0   0.000%  [0.000%, 19.361%]       1 of 1                          115.0
+P1; where P2 differs, the lowest weight of R, P1, P2            0   0.000%  [0.000%, 19.361%]       1 of 1                          199.7
+P1; where P2 differs, the lowest weight among the converged        0   0.000%  [0.000%, 19.361%]       1 of 1                          199.7
+the lowest weight among the converged of R, P1, P2              0   0.000%  [0.000%, 19.361%]       1 of 1                          942.6
+a perfect choice among R, P1, P2 (needs the truth)              0   0.000%  [0.000%, 19.361%]       1 of 1                               
+P1; where P2 differs, a perfect choice (needs the truth)        0   0.000%  [0.000%, 19.361%]       1 of 1                               
+"right pick when one existed": among the shots where the candidates that ran are not all equal and one is right.
+ms/shot: the mean over all shots of the decode calls the rule makes (and the network's batch-one time where it is asked).
+
+against relay-BP on the same shots: both fail, the rule only, relay-BP only, exact two-sided p (binomial on the discordant shots)
+P1: PriorTilt, first seed                                    0     0     1   p = 1
+P2: PriorTilt, second seed                                   0     0     1   p = 1
+P1; where P2 differs, the lowest weight of R, P1, P2         0     0     1   p = 1
+P1; where P2 differs, the lowest weight among the converged     0     0     1   p = 1
+the lowest weight among the converged of R, P1, P2           0     0     1   p = 1
+
+shots where no candidate converged: 0; the weight rule fails on 0 of them
+
+saved /home/blakew3/mlBranchMidwest/runs/preflight_dry/out_072923/cand/preflight_Z.chunks.npz
+preflight_Z.npz: Z memory, p = 0.004, 16 shots, data sha256 795450f37a6ecaaefff72d78f5de5ca473a57e7991447b1b93366155c8a90e63
+  chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2)
+  problem sha256 cd04437a418d0c12385418e75903a21b0aa34d7c5f5bbf018d5852b36ccccbc5 (H, L and priors from the kit's circuit at this p)
+  decoder   ran on failures     rate  95% Wilson interval  unconverged iterations  ms/shot: mean   median      p99
+  R             16        0   0.000%  [0.000%, 19.361%]              0      410.7          124.4     37.5      956
+  P1            16        0   0.000%  [0.000%, 19.361%]              0      276.6           32.7     15.0      164
+  P2            16        0   0.000%  [0.000%, 19.361%]              0      389.4           46.7     21.0      291
+  times: the decode call alone, 2 process(es) side by side on AMD EPYC-Milan Processor
+
+candidates: 16 shots from 1 file(s)
+  /home/blakew3/mlBranchMidwest/runs/preflight_dry/out_072923/cand/preflight_Z.chunks.npz: 16 shots of the data file with sha256 795450f37a6ecaaefff72d78f5de5ca473a57e7991447b1b93366155c8a90e63
+    Z memory, p = 0.004, chunks of 500 shots in file order, fresh decoders per chunk, PriorTilt seeds 1 + chunk index (P1) and 1001 + chunk index (P2); times: 2 process(es) side by side on AMD EPYC-Milan Processor
+P1 and P2 differ on 0 shots (0.000%): only there the hierarchy runs relay-BP and asks the rule
+relay-BP ran on 16 shots; the candidates that ran are not all equal on 0 shots (0.000%), and on 0 of those one of them is right
+unconverged: R 0, P1 0, P2 0; no candidate converged on 0 shots
+
+rule                                                     failures     rate  95% Wilson interval    right pick when one existed   ms/shot
+R: relay-BP, kit settings                                       0   0.000%  [0.000%, 19.361%]       0 of 0                          124.4
+P1: PriorTilt, first seed                                       0   0.000%  [0.000%, 19.361%]       0 of 0                           32.7
+P2: PriorTilt, second seed                                      0   0.000%  [0.000%, 19.361%]       0 of 0                           46.7
+P1; where P2 differs, the lowest weight of R, P1, P2            0   0.000%  [0.000%, 19.361%]       0 of 0                           79.4
+P1; where P2 differs, the lowest weight among the converged        0   0.000%  [0.000%, 19.361%]       0 of 0                           79.4
+the lowest weight among the converged of R, P1, P2              0   0.000%  [0.000%, 19.361%]       0 of 0                          203.8
+a perfect choice among R, P1, P2 (needs the truth)              0   0.000%  [0.000%, 19.361%]       0 of 0                               
+P1; where P2 differs, a perfect choice (needs the truth)        0   0.000%  [0.000%, 19.361%]       0 of 0                               
+"right pick when one existed": among the shots where the candidates that ran are not all equal and one is right.
+ms/shot: the mean over all shots of the decode calls the rule makes (and the network's batch-one time where it is asked).
+
+against relay-BP on the same shots: both fail, the rule only, relay-BP only, exact two-sided p (binomial on the discordant shots)
+P1: PriorTilt, first seed                                    0     0     0   p = 1
+P2: PriorTilt, second seed                                   0     0     0   p = 1
+P1; where P2 differs, the lowest weight of R, P1, P2         0     0     0   p = 1
+P1; where P2 differs, the lowest weight among the converged     0     0     0   p = 1
+the lowest weight among the converged of R, P1, P2           0     0     0   p = 1
+
+shots where no candidate converged: 0; the weight rule fails on 0 of them
+
+wall time of this run: 20 s
+
+--- 3. neural.evaluate_stim with the checkpoints of the options
+checkpoint /home/blakew3/mlBranchMidwest/runs/preflight_dry/x_step70000.pt: step 70000, commit 7ff6a68b95916773a67d209959c92b04c2254cd1, training seed 1, reads detectors=all, logical operators: kit
+data: /home/blakew3/mlBranchMidwest/runs/preflight_dry/out_072923/preflight_X.npz (Stim circuit shots, p=0.004, seed 201, basis X)
+X memory: failures 1 of 16 (always-0 would fail 16)
+  logical error per shot 6.2500e-02, 95% Wilson interval [1.1119e-02, 2.8329e-01]
+  per cycle, this basis alone 5.3638e-03, interval [9.3137e-04, 2.7375e-02]
+  bits right 0.9740 (always-0 0.4844)
+batch-one inference on CPU x86_64, 1 torch threads: mean 22.49 ms, median 22.20 ms, p99 23.15 ms over 3 shots (the timer wraps the copy to the device, the network and the copy back)
+confidence of a shot = the smallest |logit| of its 12 outputs; the most confident shots are kept first:
+   kept  threshold  shots kept  failures kept  share of kept, 95% Wilson interval      failures in the rest
+    10%      5.890           2              0  0.000e+00 [0.000e+00, 6.576e-01]         1 of 14
+    25%      5.413           4              0  0.000e+00 [0.000e+00, 4.899e-01]         1 of 12
+    50%      4.462           8              0  0.000e+00 [0.000e+00, 3.244e-01]         1 of 8
+    75%      2.504          12              0  0.000e+00 [0.000e+00, 2.425e-01]         1 of 4
+    90%      1.226          14              0  0.000e+00 [0.000e+00, 2.153e-01]         1 of 2
+    95%      1.051          15              0  0.000e+00 [0.000e+00, 2.039e-01]         1 of 1
+    99%      0.385          16              1  6.250e-02 [1.112e-02, 2.833e-01]         0 of 0
+   100%      0.385          16              1  6.250e-02 [1.112e-02, 2.833e-01]         0 of 0
+  A threshold read from this table is fitted to these shots: freeze it and report it on another file.
+checkpoint /home/blakew3/mlBranchMidwest/runs/netZ/z_checkpoint_copy.pt: step 22000, commit db2de883f97771dab1140ac4956cad8c06f05aac, training seed 1, reads detectors=all, logical operators: light
+data: /home/blakew3/mlBranchMidwest/runs/preflight_dry/out_072923/preflight_Z.npz (Stim circuit shots, p=0.004, seed 202, basis Z)
+Z memory: failures 1 of 16 (always-0 would fail 16)
+  logical error per shot 6.2500e-02, 95% Wilson interval [1.1119e-02, 2.8329e-01]
+  per cycle, this basis alone 5.3638e-03, interval [9.3137e-04, 2.7375e-02]
+  bits right 0.9896 (always-0 0.5469)
+batch-one inference on CPU x86_64, 1 torch threads: mean 22.18 ms, median 22.08 ms, p99 22.39 ms over 3 shots (the timer wraps the copy to the device, the network and the copy back)
+confidence of a shot = the smallest |logit| of its 12 outputs; the most confident shots are kept first:
+   kept  threshold  shots kept  failures kept  share of kept, 95% Wilson interval      failures in the rest
+    10%      3.593           2              0  0.000e+00 [0.000e+00, 6.576e-01]         1 of 14
+    25%      3.383           4              0  0.000e+00 [0.000e+00, 4.899e-01]         1 of 12
+    50%      1.914           8              0  0.000e+00 [0.000e+00, 3.244e-01]         1 of 8
+    75%      0.683          12              0  0.000e+00 [0.000e+00, 2.425e-01]         1 of 4
+    90%      0.212          14              0  0.000e+00 [0.000e+00, 2.153e-01]         1 of 2
+    95%      0.019          15              1  6.667e-02 [1.187e-02, 2.982e-01]         0 of 1
+    99%      0.006          16              1  6.250e-02 [1.112e-02, 2.833e-01]         0 of 0
+   100%      0.006          16              1  6.250e-02 [1.112e-02, 2.833e-01]         0 of 0
+  A threshold read from this table is fitted to these shots: freeze it and report it on another file.
+
+--- 4. hierarchy.tcbp_member in /home/blakew3/envs/tcbp-py312/bin/python
+/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/__init__.py:8: FutureWarning: The CUDA-Q `sample` and `observe` algorithmic primitives will change in a future release. Existing code may require updates. See https://nvidia.github.io/cuda-quantum/latest/using/migration/upcoming_changes.html for details.
+  import cudaq
+tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}, mode serial; 2 shot file(s)
+preflight_X.npz: X memory, p = 0.004, 16 shots, data sha256 7bf7a4c5b6a4717195a99530e53e7e78b262e7adb55194eda635423357324cd1
+  H is 936 x 8784; building the decoder ...

@@ -1,0 +1,135 @@
+{
+  "basis": "X",
+  "shots": 16,
+  "failures": 1,
+  "failure_fraction": 0.0625,
+  "failure_interval": [
+    0.011119344641247295,
+    0.283287377981482
+  ],
+  "per_cycle": 0.005363773415645645,
+  "per_cycle_interval": [
+    0.000931368229992513,
+    0.027375016234496674
+  ],
+  "always_zero_failures": 16,
+  "bits_right": 0.9739583333333334,
+  "always_zero_bits_right": 0.484375,
+  "confidence_sweep": [
+    {
+      "kept_fraction": 0.1,
+      "threshold": 5.88969087600708,
+      "shots_kept": 2,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.6576197760453506
+      ],
+      "shots_rest": 14,
+      "failures_rest": 1
+    },
+    {
+      "kept_fraction": 0.25,
+      "threshold": 5.413162708282471,
+      "shots_kept": 4,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.4898908403969213
+      ],
+      "shots_rest": 12,
+      "failures_rest": 1
+    },
+    {
+      "kept_fraction": 0.5,
+      "threshold": 4.461544513702393,
+      "shots_kept": 8,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.3244075683414076
+      ],
+      "shots_rest": 8,
+      "failures_rest": 1
+    },
+    {
+      "kept_fraction": 0.75,
+      "threshold": 2.503777027130127,
+      "shots_kept": 12,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.2424940095530979
+      ],
+      "shots_rest": 4,
+      "failures_rest": 1
+    },
+    {
+      "kept_fraction": 0.9,
+      "threshold": 1.22639799118042,
+      "shots_kept": 14,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.21531080540298045
+      ],
+      "shots_rest": 2,
+      "failures_rest": 1
+    },
+    {
+      "kept_fraction": 0.95,
+      "threshold": 1.050940990447998,
+      "shots_kept": 15,
+      "failures_kept": 0,
+      "failure_fraction_kept": 0.0,
+      "failure_interval_kept": [
+        0.0,
+        0.20388330359648707
+      ],
+      "shots_rest": 1,
+      "failures_rest": 1
+    },
+    {
+      "kept_fraction": 0.99,
+      "threshold": 0.3845868706703186,
+      "shots_kept": 16,
+      "failures_kept": 1,
+      "failure_fraction_kept": 0.0625,
+      "failure_interval_kept": [
+        0.011119344641247295,
+        0.283287377981482
+      ],
+      "shots_rest": 0,
+      "failures_rest": 0
+    },
+    {
+      "kept_fraction": 1.0,
+      "threshold": 0.3845868706703186,
+      "shots_kept": 16,
+      "failures_kept": 1,
+      "failure_fraction_kept": 0.0625,
+      "failure_interval_kept": [
+        0.011119344641247295,
+        0.283287377981482
+      ],
+      "shots_rest": 0,
+      "failures_rest": 0
+    }
+  ],
+  "latency_ms_mean": 22.493417995671432,
+  "latency_ms_median": 22.195501951500773,
+  "latency_ms_p99": 23.147182976827025,
+  "latency_shots": 3,
+  "device": "CPU x86_64, 1 torch threads",
+  "checkpoint_step": 70000,
+  "checkpoint_commit": "7ff6a68b95916773a67d209959c92b04c2254cd1",
+  "detectors_read": "all",
+  "training_seed": 1,
+  "logicals": "kit",
+  "data": "/home/blakew3/mlBranchMidwest/runs/preflight_dry/out_072923/preflight_X.npz (Stim circuit shots, p=0.004, seed 201, basis X)"
+}

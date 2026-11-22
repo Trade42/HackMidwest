@@ -1,0 +1,1 @@
+{"rule": {"X": "network", "Z": "network"}, "seeds": [1, 1001], "checkpoints": {"X": "/home/blakew3/mlBranchMidwest/runs/preflight_dry/x_step70000.pt", "Z": "/home/blakew3/mlBranchMidwest/runs/netZ/z_checkpoint_copy.pt"}, "device": "cpu", "torch_threads": 1, "parallel": true}

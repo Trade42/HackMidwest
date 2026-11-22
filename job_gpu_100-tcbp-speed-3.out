@@ -27,3 +27,8 @@ b probe exit 0
 DecoderResult: ['converged', 'opt_results', 'result']
 plugin: {'path': '/home/blakew3/envs/tcbp-py312/lib/python3.12/site-packages/cudaq_qec/lib/decoder-plugins/libcudaq-qec-nv-qldpc-decoder.so', 'exported': {'set_priors': False, 'nvqldpc_set_priors': False, 'nvqldpc_update_priors': False, 'nvqldpc_set_error_rates': False, 'nvqldpc_update_error_rates': False, 'update_error_rates': False, 'set_error_rates': False}, 'strings': {'set_priors': True, 'the JOBS column costs are fixed at construction': True}}
 candidate methods on a built Decoder: none
+c bp-only exit 0
+Sun Nov 22 18:32:33 UTC 2026
+  head: 2000 of 2000 shots, 64 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: failures 1163 of 2000, 0.5815 [0.5597, 0.6029]; not reproduced 1644; flagged not converged 1544; build 3.4 ms + decode 0.5 ms mean, p99 5 ms
+saved /home/blakew3/mlBranchMidwest/runs/tcbp-speed/job3/bp_only/per_shot.npz; 64 s

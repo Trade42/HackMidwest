@@ -4,7 +4,8 @@
 #   powershell -File tools\cascade_eval_one.ps1 -Step 20000 -File a      (a = p0.004 validation_X, b = p0.003 seed 9203, c = p0.005 seed 9205)
 param(
     [Parameter(Mandatory = $true)][int]$Step,
-    [Parameter(Mandatory = $true)][ValidateSet('a', 'b', 'c', 'd')][string]$File,   # d = p0.004 train_X
+    # a/d = p0.004 validation_X/train_X (repo-main); v3/t3, v5/t5 = p0.003, p0.005 validation_X/train_X (origin/main 8f1e767)
+    [Parameter(Mandatory = $true)][ValidateSet('a', 'b', 'c', 'd', 'v3', 't3', 'v5', 't5')][string]$File,
     [int]$MinMiB = 2048
 )
 $ErrorActionPreference = 'Stop'
@@ -17,6 +18,10 @@ $files = @{
     b = @{ label = 'gen_X_seed9203_p0.003'; path = "$root\runs\priortilt\data\p0.003\gen_X_seed9203.npz"; sha = '4625e704682b3a6ef5c465eec33479d04f3d6f9a62912d4e4ce176e51bf7725e' }
     c = @{ label = 'gen_X_seed9205_p0.005'; path = "$root\runs\priortilt\data\p0.005\gen_X_seed9205.npz"; sha = '45a9761e688088c0e502e80a5569258985242e40231eea7f474f7887188213eb' }
     d = @{ label = 'train_X_p0.004'; path = "$root\repo-main\challenge-1-ml-decoder-kit\data\p0.004\train_X.npz"; sha = '98c0afeb2a0b6b27f3b689e832160a060a4c0aeb37d229f84daa1995a9a0f7cc' }
+    v3 = @{ label = 'validation_X_p0.003'; path = "$root\runs\data_main_8f1e767\p0.003\validation_X.npz"; sha = '455311ff7f2c7fa8359af83c09e96d75eb791dd0105bebb66ff56bd016aaa4e8' }
+    t3 = @{ label = 'train_X_p0.003'; path = "$root\runs\data_main_8f1e767\p0.003\train_X.npz"; sha = '09240f1a17533d614af38d2e15455f2bfb1c537df3f084d58c9163bb91bd4ee3' }
+    v5 = @{ label = 'validation_X_p0.005'; path = "$root\runs\data_main_8f1e767\p0.005\validation_X.npz"; sha = '25e9ce8e28714c985e20f9f9a017dd49ff25a26200626a1b830cfee0cc045312' }
+    t5 = @{ label = 'train_X_p0.005'; path = "$root\runs\data_main_8f1e767\p0.005\train_X.npz"; sha = 'cfa08c9113b77521f7ba249ddffc0fb94cda783989066dbfa22b380d1747b26b' }
 }
 $f = $files[$File]
 $avail = (Get-Counter '\Memory\Available MBytes').CounterSamples[0].CookedValue

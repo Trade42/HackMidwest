@@ -1,0 +1,18 @@
+checkpoint C:\Users\salav\Salavat\hackMidwest\runs\cascade_X_s1\checkpoint_step40000.pt: step 40000, commit 7ff6a68b95916773a67d209959c92b04c2254cd1, training seed 1, reads detectors=all
+data: C:\Users\salav\Salavat\hackMidwest\runs\data_main_8f1e767\p0.003\validation_X.npz (Stim circuit shots, p=0.003, seed 201, basis X)
+X memory: failures 308 of 5000 (always-0 would fail 4999)
+  logical error per shot 6.1600e-02, 95% Wilson interval [5.5266e-02, 6.8607e-02]
+  per cycle, this basis alone 5.2842e-03, interval [4.7265e-03, 5.9053e-03]
+  bits right 0.9917 (always-0 0.5069)
+batch-one inference on GPU NVIDIA GeForce RTX 4060 Laptop GPU: mean 18.01 ms, median 17.08 ms, p99 28.47 ms over 200 shots (the timer wraps the copy to the device, the network and the copy back)
+confidence of a shot = the smallest |logit| of its 12 outputs; the most confident shots are kept first:
+   kept  threshold  shots kept  failures kept  share of kept, 95% Wilson interval      failures in the rest
+    10%      4.244         500              0  0.000e+00 [0.000e+00, 7.624e-03]       308 of 4500
+    25%      3.651        1250              0  0.000e+00 [0.000e+00, 3.064e-03]       308 of 3750
+    50%      3.172        2500              0  0.000e+00 [0.000e+00, 1.534e-03]       308 of 2500
+    75%      1.903        3750              5  1.333e-03 [5.697e-04, 3.118e-03]       303 of 1250
+    90%      0.603        4500             57  1.267e-02 [9.790e-03, 1.637e-02]       251 of 500
+    95%      0.290        4750            144  3.032e-02 [2.581e-02, 3.558e-02]       164 of 250
+    99%      0.046        4950            272  5.495e-02 [4.894e-02, 6.165e-02]        36 of 50
+   100%      0.000        5000            308  6.160e-02 [5.527e-02, 6.861e-02]         0 of 0
+  A threshold read from this table is fitted to these shots: freeze it and report it on another file.

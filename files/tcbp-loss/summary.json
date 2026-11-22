@@ -1,0 +1,260 @@
+{
+ "transfer": {
+  "label": "exploration, after the main test results; a separate branch",
+  "prefix": 1000,
+  "condition": "starter",
+  "files": [
+   {
+    "tag": "f0.4",
+    "shots_file": "/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise/runs/X_loss_seed6100/shots/X_f0.4_loss_seed6100.npz",
+    "shots_sha256": "9c225b77e7e5a2913267843ed0e2e11518403fa2e47afcb462eeb2a7600d92fd",
+    "shots_in_file": 2000,
+    "shots": 1000,
+    "seed": 6100,
+    "basis": "X",
+    "factor": 0.4,
+    "noise": {
+     "cx_depolarize2": 0.0,
+     "cx_phase": 0.0029200000000000003,
+     "cx_scatter": 6.276e-05,
+     "idle_depolarize": 0.0,
+     "idle_phase": 0.0004281125727106705,
+     "measure_flip": 0.005000000000000001,
+     "reset_flip": 0.008400000000000008,
+     "loss": 0.001
+    },
+    "p": 0.0059563,
+    "p_what": "generic-2q: noise.two_qubit_error()",
+    "converted": "X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz",
+    "converted_sha256": "1539aa06c4cf839191424de372a1785238c32d5aeece283b4b343ff822e9819f",
+    "columns": 8784,
+    "h_l_sha256": "a4a80003a0b234e0e10b5d65d38ce5181c39670732e0f473df0aee1796c2c8b0",
+    "generic_sum": 70.2074919121304,
+    "matched": {
+     "file": "priors_matched_f0.4.npy",
+     "sha256": "f918a92a4e70fafcbb9d30b14098080e3cdd1697805102f61a9b52f511952fde",
+     "max": 0.030358224681465953,
+     "min": 4.184000000001109e-05,
+     "columns_fired": 8784
+    },
+    "flags": {
+     "file": "flags_f0.4.npz",
+     "sha256": "4f3ddc6ba7c318d61abf2f230c17462c584798a9e2093a9d3706ab2d392a472d",
+     "bumped_entries": 160334,
+     "shots_with_flags": 1000,
+     "mean_heralds_per_shot": 20.519,
+     "largest_gap_to_loss_starter": 1.1102230246251565e-16
+    }
+   },
+   {
+    "tag": "f0.6",
+    "shots_file": "/home/sal/hackMidwest/orchestration/scratch/infleqtion-noise/runs/X_loss_seed6100/shots/X_f0.6_loss_seed6100.npz",
+    "shots_sha256": "bcdcfdf177d27910b3096a2c1948034e6731fc876d68c861847864361c1e2282",
+    "shots_in_file": 2000,
+    "shots": 1000,
+    "seed": 6100,
+    "basis": "X",
+    "factor": 0.6,
+    "noise": {
+     "cx_depolarize2": 0.0,
+     "cx_phase": 0.00438,
+     "cx_scatter": 9.413999999999999e-05,
+     "idle_depolarize": 0.0,
+     "idle_phase": 0.0006421688590660058,
+     "measure_flip": 0.0075,
+     "reset_flip": 0.01260000000000001,
+     "loss": 0.0015
+    },
+    "p": 0.0089274,
+    "p_what": "generic-2q: noise.two_qubit_error()",
+    "converted": "X_f0.6_loss_seed6100_first1000_kitformat_p0.0089274.npz",
+    "converted_sha256": "97f0ef3644d45a06627519e01788e677480b6af86b278697f04fddc7d6c7fe34",
+    "columns": 8784,
+    "h_l_sha256": "a4a80003a0b234e0e10b5d65d38ce5181c39670732e0f473df0aee1796c2c8b0",
+    "generic_sum": 104.67165520575315,
+    "matched": {
+     "file": "priors_matched_f0.6.npy",
+     "sha256": "2f0e3823912ed1cdcc2150ed5b69d22945496205ad0f9b8aa68bd392445d4625",
+     "max": 0.04494114147825642,
+     "min": 6.275999999995578e-05,
+     "columns_fired": 8784
+    },
+    "flags": {
+     "file": "flags_f0.6.npz",
+     "sha256": "5d4629bb3168b99bac25a6f637400c28b4653a94cecc1017ac15776330ef66a4",
+     "bumped_entries": 237563,
+     "shots_with_flags": 1000,
+     "mean_heralds_per_shot": 30.532,
+     "largest_gap_to_loss_starter": 5.551115123125783e-17
+    }
+   }
+  ]
+ },
+ "decoder": "tcbp-jobs",
+ "version": "cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)",
+ "preset": "tcbp-jobs",
+ "head_knobs": {
+  "mode": "logodds",
+  "alpha": 0.4,
+  "eps": 0.0001
+ },
+ "prior_cap": 0.5,
+ "matched_floor": "1e-9",
+ "stop_at": "2026-11-22T17:35:00Z",
+ "block": 100,
+ "pass_1": [
+  "bm",
+  "fm",
+  "fh"
+ ],
+ "pass_2": [
+  "bh"
+ ],
+ "model_seconds": 65.54634493601043,
+ "machine": {
+  "node": "jupyter-blakew3",
+  "processor": "x86_64",
+  "cpus": 24,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "omp_threads": "1"
+ },
+ "timer": "build: get_decoder with the shot's priors; decode: decode() and the cut to 0/1; one process",
+ "seconds": 125.04673719406128,
+ "capped": {
+  "shots": 0,
+  "columns": 0
+ },
+ "saved_utc": "2026-11-22T16:43:55.004275+00:00",
+ "files": {
+  "f0.4": {
+   "data": {
+    "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-loss/in/X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz",
+    "sha256": "1539aa06c4cf839191424de372a1785238c32d5aeece283b4b343ff822e9819f",
+    "basis": "X",
+    "p": 0.0059563,
+    "seed": 6100,
+    "shots": 1000,
+    "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+   },
+   "logits": {
+    "data": {
+     "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-loss/in/X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz",
+     "sha256": "1539aa06c4cf839191424de372a1785238c32d5aeece283b4b343ff822e9819f",
+     "basis": "X",
+     "p": 0.0059563,
+     "seed": 6100,
+     "shots": 1000,
+     "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+    },
+    "shots": 1000,
+    "columns": 8784,
+    "model": {
+     "head": "/home/blakew3/mlBranchMidwest/runs/tcbp-loss/in/head_X.pt",
+     "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+     "head_step": 30000,
+     "trunk": "/home/blakew3/mlBranchMidwest/runs/tcbp-loss/in/trunk_X.pt",
+     "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+     "trunk_step": 120000,
+     "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+     "device": "cuda",
+     "torch": "2.15.0+cu132",
+     "torch_threads": 1,
+     "precision": "float32",
+     "gpu": "NVIDIA A100-SXM4-80GB MIG 2g.20gb"
+    },
+    "seconds_batched_total": 6.2563512325286865,
+    "per_shot_seconds": {
+     "what": "network + head, one shot at a time, on the device named",
+     "shots": 100,
+     "mean": 0.011045455968705938,
+     "median": 0.008415520482230932,
+     "p99": 0.023562378941569487
+    },
+    "batch_one_against_batched_largest_logit_gap": 0.0078125,
+    "mean_probability_sum_per_shot": 80.4648359375,
+    "kit_prior_sum": 70.2074919121304
+   },
+   "scored": {
+    "main": 200,
+    "late": 0
+   },
+   "failures": {
+    "bm": 11,
+    "fm": 0,
+    "fh": 2,
+    "bh": 0
+   },
+   "mean_ms": {
+    "bm": 54.22890500980429,
+    "fm": 49.59959211933892,
+    "fh": 51.49965862859972,
+    "bh": null
+   }
+  },
+  "f0.6": {
+   "data": {
+    "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-loss/in/X_f0.6_loss_seed6100_first1000_kitformat_p0.0089274.npz",
+    "sha256": "97f0ef3644d45a06627519e01788e677480b6af86b278697f04fddc7d6c7fe34",
+    "basis": "X",
+    "p": 0.0089274,
+    "seed": 6100,
+    "shots": 1000,
+    "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+   },
+   "logits": {
+    "data": {
+     "path": "/home/blakew3/mlBranchMidwest/runs/tcbp-loss/in/X_f0.6_loss_seed6100_first1000_kitformat_p0.0089274.npz",
+     "sha256": "97f0ef3644d45a06627519e01788e677480b6af86b278697f04fddc7d6c7fe34",
+     "basis": "X",
+     "p": 0.0089274,
+     "seed": 6100,
+     "shots": 1000,
+     "source_format": "kit_make_dataset_npz_stim_circuit_samples"
+    },
+    "shots": 1000,
+    "columns": 8784,
+    "model": {
+     "head": "/home/blakew3/mlBranchMidwest/runs/tcbp-loss/in/head_X.pt",
+     "head_sha256": "38ab667e251c4e7b991e26e9b660c12e80a2d1206589e638c5b372806a648a0d",
+     "head_step": 30000,
+     "trunk": "/home/blakew3/mlBranchMidwest/runs/tcbp-loss/in/trunk_X.pt",
+     "trunk_sha256": "d8d1c70f552233300f1c10997b69292092042eb8517f5b6526b607c1f6dc4933",
+     "trunk_step": 120000,
+     "head_commit": "c694bcd677e0226ad590b3e76a7ef50f2ce40820",
+     "device": "cuda",
+     "torch": "2.15.0+cu132",
+     "torch_threads": 1,
+     "precision": "float32",
+     "gpu": "NVIDIA A100-SXM4-80GB MIG 2g.20gb"
+    },
+    "seconds_batched_total": 6.18082594871521,
+    "per_shot_seconds": {
+     "what": "network + head, one shot at a time, on the device named",
+     "shots": 100,
+     "mean": 0.010052731925388797,
+     "median": 0.008906193543225527,
+     "p99": 0.021411705756327143
+    },
+    "batch_one_against_batched_largest_logit_gap": 0.00390625,
+    "mean_probability_sum_per_shot": 115.561375,
+    "kit_prior_sum": 104.67165520575315
+   },
+   "scored": {
+    "main": 100,
+    "late": 0
+   },
+   "failures": {
+    "bm": 62,
+    "fm": 7,
+    "fh": 30,
+    "bh": 0
+   },
+   "mean_ms": {
+    "bm": 69.81193486601114,
+    "fm": 68.64282388123684,
+    "fh": 85.81402773503214,
+    "bh": null
+   }
+  }
+ }
+}

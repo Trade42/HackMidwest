@@ -2,3 +2,6 @@
   import cudaq
 files ['X_f0.4_loss_seed6100_first1000_kitformat_p0.0059563.npz', 'X_f0.6_loss_seed6100_first1000_kitformat_p0.0089274.npz'], [1000, 1000] shots, p [0.0059563, 0.0089274] (the network's p input and the head's mixing base); decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs; head knobs {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}, cap 0.5; stop at 2026-11-22T17:35:00Z; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
   model fitted in 65.5 s
+  main block f0.4 0-99 done, 83 s; failures so far bm 5, fm 0, fh 1 of 100
+  main block f0.6 0-99 done, 108 s; failures so far bm 62, fm 7, fh 30 of 100
+  main block f0.4 100-199 done, 125 s; failures so far bm 11, fm 0, fh 2 of 200

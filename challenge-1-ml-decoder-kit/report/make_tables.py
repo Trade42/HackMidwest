@@ -33,7 +33,7 @@ from report.rows import (COMPARISONS, DECODERS, EARLIER_ROWS, LADDER, LOSS_CONDI
 HERE = Path(__file__).resolve().parent
 # REPORT_OUT sends the tables elsewhere and leaves the documents alone: used by the tests only.
 TABLES = Path(os.environ.get("REPORT_OUT") or HERE) / "tables"
-DOCUMENTS = [] if os.environ.get("REPORT_OUT") else [HERE / "REPORT.md", HERE / "APPENDIX.md", HERE / "SLIDES.md"]
+DOCUMENTS = [] if os.environ.get("REPORT_OUT") else [HERE / "REPORT.md", HERE / "APPENDIX.md", HERE / "SLIDES.md", HERE / "REPRODUCE.md"]
 NOT_MEASURED = "not measured"
 
 # Single numbers that the prose of REPORT.md and SLIDES.md quotes. A document writes

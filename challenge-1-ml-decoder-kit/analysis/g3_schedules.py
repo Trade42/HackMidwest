@@ -58,14 +58,20 @@ def cmd_tail(args):
     for f in sorted(Path(args.pershot).glob("g1_p*.npz")):
         with np.load(f) as z:
             rows.append((float(f.stem.split("_")[1][1:]), f.stem.split("_")[2], z["iterations"].astype(np.int64),
-                         z["failed"], z["converged"]))
+                         z["failed"], z["converged"], z["leg1_converged"], z["leg1_iterations"].astype(np.int64),
+                         z["leg1_failed"]))
     groups = {}
-    for p, basis, its, failed, conv in rows:
-        g = groups.setdefault((p, basis), [[], [], []])
-        g[0].append(its), g[1].append(failed), g[2].append(conv)
+    for p, basis, *arrays in rows:
+        g = groups.setdefault((p, basis), [[] for _ in arrays])
+        for lst, a in zip(g, arrays):
+            lst.append(a)
     out = []
-    for (p, basis), (its, failed, conv) in sorted(groups.items()):
-        its, failed, conv = np.concatenate(its), np.concatenate(failed), np.concatenate(conv)
+    for (p, basis), parts in sorted(groups.items()):
+        its, failed, conv, l1c, l1i, l1f = (np.concatenate(x) for x in parts)
+        # derived from G1's two passes: keep the first leg's answer where it converged, else the kit's run.
+        # A real run of this rule would draw other random memory strengths on the other shots.
+        hyb_its = np.where(l1c, l1i, its)
+        hyb_fail = np.where(l1c, l1f, failed)
         s = np.sort(its)[::-1]
         total = s.sum()
         n = len(s)
@@ -75,10 +81,13 @@ def cmd_tail(args):
                    share_unconverged_shots=float(its[~conv].sum() / total), unconverged_shots=int((~conv).sum()),
                    share_failed_shots=float(its[failed].sum() / total), failed_shots=int(failed.sum()),
                    share_at_full_budget=float(its[its >= 80 + 300 * 60].sum() / total),
-                   shots_at_full_budget=int((its >= 80 + 300 * 60).sum()))
+                   shots_at_full_budget=int((its >= 80 + 300 * 60).sum()),
+                   leg1_then_kit_mean_iterations=float(hyb_its.mean()), leg1_then_kit_failures=int(hyb_fail.sum()),
+                   kit_failures=int(failed.sum()), leg1_then_kit_speedup=float(its.mean() / hyb_its.mean()))
         out.append(row)
         print(f"| {p} | {basis} | {n:,} | {row['mean']:.0f} | {row['share_slowest_1pct']:.1%} | {row['share_slowest_10pct']:.1%} | "
-              f"{row['share_unconverged_shots']:.1%} ({row['unconverged_shots']}) | {row['share_failed_shots']:.1%} ({row['failed_shots']}) |")
+              f"{row['share_unconverged_shots']:.1%} ({row['unconverged_shots']}) | {row['share_failed_shots']:.1%} ({row['failed_shots']}) | "
+              f"{row['leg1_then_kit_mean_iterations']:.0f} ({row['leg1_then_kit_speedup']:.2f}x) | {row['leg1_then_kit_failures']} vs {row['kit_failures']} |")
     write_json(Path(args.out) / "g3_tail.json", out)
 
 

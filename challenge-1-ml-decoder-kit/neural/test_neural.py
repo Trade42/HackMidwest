@@ -10,9 +10,9 @@ import scipy.sparse as sp
 import torch
 from torch.nn import functional as F
 
-from circuit import dem_matrices
+from circuit import dem_matrices, detector_ids, sample
 from make_circuit import code_layout, memory_experiment
-from neural import train
+from neural import evaluate_stim, train
 from neural.graph import build_graph
 from neural.model import EVENT_CODES, CascadeDecoder
 from neural.sampler import DemSampler, compare_with_stim
@@ -317,3 +317,42 @@ def test_command_runs_twice_the_same_and_resumes(tmp_path):
     assert log_lines(tmp_path / "a")[-5].startswith("step 6 of 6")
     with pytest.raises(SystemExit):
         train.main(["--out", str(tmp_path / "c"), "--resume", str(tmp_path / "c" / "checkpoint.pt"), "--width", "64"])
+
+
+# ---------- the evaluation on Stim shots ----------
+
+def test_wilson_interval_and_rate_per_cycle():
+    assert evaluate_stim.wilson_interval(5, 100) == pytest.approx((0.0215, 0.1118), abs=5e-4)
+    assert evaluate_stim.wilson_interval(0, 100) == pytest.approx((0.0, 0.0370), abs=5e-4)
+    assert evaluate_stim.wilson_interval(100, 100)[1] == 1.0
+    assert evaluate_stim.per_cycle(0.5, 1) == 0.5 and evaluate_stim.per_cycle(1 - 0.5 ** 12, 12) == pytest.approx(0.5)
+
+
+@pytest.mark.parametrize("detectors", ["all", "basis"])
+def test_evaluation_on_a_saved_file_of_stim_shots(tmp_path, detectors):
+    run = train.new_run(SMALL | {"detectors": detectors}, "cpu")
+    train.train_step(run)
+    checkpoint = str(tmp_path / "checkpoint.pt")
+    train.save_checkpoint(run, checkpoint)
+    circuit = memory_experiment("bb72", "X", 2, 0.003)
+    syndromes, labels = sample(circuit, 300, seed=21)
+    saved = {"p": 0.003, "seed": 21, "basis": "X", "detectors": syndromes, "observables": labels,
+             "basis_detectors": detector_ids(circuit, "X")}                     # the arrays of make_dataset.py
+    np.savez_compressed(tmp_path / "validation_X.npz", **saved)
+    np.savez_compressed(tmp_path / "test_X.npz", **saved)
+
+    numbers = evaluate_stim.main(["--checkpoint", checkpoint, "--data", str(tmp_path / "validation_X.npz"),
+                                  "--latency-shots", "5", "--threads", "1", "--save", str(tmp_path / "result")])
+    model, _ = train.load_decoder(checkpoint)
+    inputs = syndromes if detectors == "all" else syndromes[:, detector_ids(circuit, "X")]
+    wrong = (train.predict(model, torch.from_numpy(inputs)).numpy() != labels).any(axis=1)
+    assert (numbers["failures"], numbers["shots"]) == (int(wrong.sum()), 300)
+    assert numbers["always_zero_failures"] == int(labels.any(axis=1).sum()) and numbers["latency_shots"] == 5
+    assert numbers["failure_interval"][0] <= numbers["failure_fraction"] <= numbers["failure_interval"][1]
+    assert np.array_equal(np.load(tmp_path / "result.npz")["failed"], wrong)
+
+    with pytest.raises(SystemExit):                                              # held-out shots need --final
+        evaluate_stim.main(["--checkpoint", checkpoint, "--data", str(tmp_path / "test_X.npz")])
+    sampled = evaluate_stim.main(["--checkpoint", checkpoint, "--p", "0.003", "--shots", "50", "--seed", "3",
+                                  "--latency-shots", "2", "--threads", "1"])
+    assert sampled["shots"] == 50

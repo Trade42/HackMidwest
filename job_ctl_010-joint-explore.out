@@ -120,3 +120,25 @@ validation_Z.npz shot 268: right, converged, 1431 iterations, 5 s
 validation_Z.npz shot 1307: right, converged, 1035 iterations, 4 s
 validation_Z.npz shot 1158: right, converged, 3959 iterations, 13 s
 validation_Z.npz shot 1327: right, converged, 4079 iterations, 14 s
+validation_Z.npz shot 704: right, converged, 6856 iterations, 21 s
+validation_Z.npz shot 1769: right, converged, 1644 iterations, 5 s
+validation_Z.npz shot 2252: right, converged, 2170 iterations, 6 s
+train_X.npz shot 17794: right, converged, 18050 iterations, 58 s
+train_X.npz shot 18111: right, converged, 18080 iterations, 59 s
+train_X.npz shot 18689: failed, converged, 18057 iterations, 60 s
+validation_Z.npz shot 1416: right, converged, 13615 iterations, 45 s
+train_X.npz shot 19674: failed, NOT converged, 18080 iterations, 58 s
+validation_Z.npz shot 836: failed, NOT converged, 18080 iterations, 57 s
+validation_Z.npz shot 2909: right, converged, 8913 iterations, 28 s
+validation_Z.npz shot 2459: right, converged, 12117 iterations, 34 s
+validation_Z.npz shot 3196: right, converged, 4259 iterations, 12 s
+validation_Z.npz shot 3691: right, converged, 1646 iterations, 5 s
+validation_Z.npz shot 3681: right, converged, 3271 iterations, 10 s
+validation_Z.npz shot 4288: right, converged, 826 iterations, 3 s
+validation_Z.npz shot 1843: right, converged, 18022 iterations, 57 s
+validation_Z.npz shot 3355: right, converged, 6158 iterations, 20 s
+validation_Z.npz shot 4832: right, converged, 399 iterations, 1 s
+validation_Z.npz shot 4961: right, converged, 430 iterations, 1 s
+validation_Z.npz shot 4153: right, converged, 4357 iterations, 12 s
+validation_Z.npz shot 2005: right, converged, 17982 iterations, 59 s
+validation_Z.npz shot 3901: right, converged, 5629 iterations, 15 s

@@ -1,0 +1,134 @@
+{
+  "basis": "X",
+  "shots": 20000,
+  "failures": 7827,
+  "failure_fraction": 0.39135,
+  "failure_interval": [
+    0.38460754463607744,
+    0.39813418479957224
+  ],
+  "per_cycle": 0.04053168910019789,
+  "per_cycle_interval": [
+    0.03965042770147409,
+    0.0414274834490892
+  ],
+  "always_zero_failures": 19994,
+  "bits_right": 0.9028708333333333,
+  "always_zero_bits_right": 0.5000458333333333,
+  "confidence_sweep": [
+    {
+      "kept_fraction": 0.1,
+      "threshold": 3.4213953018188477,
+      "shots_kept": 2000,
+      "failures_kept": 3,
+      "failure_fraction_kept": 0.0015,
+      "failure_interval_kept": [
+        0.0005102635796742399,
+        0.004401032589829253
+      ],
+      "shots_rest": 18000,
+      "failures_rest": 7824
+    },
+    {
+      "kept_fraction": 0.25,
+      "threshold": 2.293900489807129,
+      "shots_kept": 5000,
+      "failures_kept": 28,
+      "failure_fraction_kept": 0.0056,
+      "failure_interval_kept": [
+        0.003877382627089149,
+        0.008081721068149568
+      ],
+      "shots_rest": 15000,
+      "failures_rest": 7799
+    },
+    {
+      "kept_fraction": 0.5,
+      "threshold": 0.7825942635536194,
+      "shots_kept": 10000,
+      "failures_kept": 451,
+      "failure_fraction_kept": 0.0451,
+      "failure_interval_kept": [
+        0.04120432661952687,
+        0.049345035103624035
+      ],
+      "shots_rest": 10000,
+      "failures_rest": 7376
+    },
+    {
+      "kept_fraction": 0.75,
+      "threshold": 0.16898830235004425,
+      "shots_kept": 15000,
+      "failures_kept": 3518,
+      "failure_fraction_kept": 0.23453333333333334,
+      "failure_interval_kept": [
+        0.22782123220656422,
+        0.24138137021857464
+      ],
+      "shots_rest": 5000,
+      "failures_rest": 4309
+    },
+    {
+      "kept_fraction": 0.9,
+      "threshold": 0.04756109416484833,
+      "shots_kept": 18000,
+      "failures_kept": 6036,
+      "failure_fraction_kept": 0.3353333333333333,
+      "failure_interval_kept": [
+        0.3284722425768526,
+        0.34226469356320005
+      ],
+      "shots_rest": 2000,
+      "failures_rest": 1791
+    },
+    {
+      "kept_fraction": 0.95,
+      "threshold": 0.021353647112846375,
+      "shots_kept": 19000,
+      "failures_kept": 6920,
+      "failure_fraction_kept": 0.3642105263157895,
+      "failure_interval_kept": [
+        0.3573962784767387,
+        0.37107967144292797
+      ],
+      "shots_rest": 1000,
+      "failures_rest": 907
+    },
+    {
+      "kept_fraction": 0.99,
+      "threshold": 0.004119947552680969,
+      "shots_kept": 19800,
+      "failures_kept": 7647,
+      "failure_fraction_kept": 0.38621212121212123,
+      "failure_interval_kept": [
+        0.3794531302790855,
+        0.3930152562531029
+      ],
+      "shots_rest": 200,
+      "failures_rest": 180
+    },
+    {
+      "kept_fraction": 1.0,
+      "threshold": 4.680454730987549e-05,
+      "shots_kept": 20000,
+      "failures_kept": 7827,
+      "failure_fraction_kept": 0.39135,
+      "failure_interval_kept": [
+        0.38460754463607744,
+        0.39813418479957224
+      ],
+      "shots_rest": 0,
+      "failures_rest": 0
+    }
+  ],
+  "latency_ms_mean": 17.67174949927721,
+  "latency_ms_median": 16.583199962042272,
+  "latency_ms_p99": 26.492468977812678,
+  "latency_shots": 200,
+  "device": "GPU NVIDIA GeForce RTX 4060 Laptop GPU",
+  "checkpoint_step": 50000,
+  "checkpoint_commit": "7ff6a68b95916773a67d209959c92b04c2254cd1",
+  "detectors_read": "all",
+  "training_seed": 1,
+  "data": "C:\\Users\\salav\\Salavat\\hackMidwest\\runs\\data_main_8f1e767\\p0.005\\train_X.npz (Stim circuit shots, p=0.005, seed 101, basis X)"
+}

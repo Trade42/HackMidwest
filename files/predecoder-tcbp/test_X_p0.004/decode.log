@@ -2,3 +2,4 @@
   import cudaq
 test_X.npz: 10000 shots, p=0.004, arms ['head'], decoder tcbp-jobs (cudaq-qec CUDA-Q QEC 0.9.0 (https://github.com/NVIDIA/cudaqx 9043634b414f5a930484dc494bb46b7cac7b2fe3)), preset tcbp-jobs, overrides {}; head priors {'mode': 'logodds', 'alpha': 0.4, 'eps': 0.0001}; {'node': 'jupyter-blakew3', 'processor': 'x86_64', 'cpus': 24, 'gpu': 'NVIDIA A100-SXM4-80GB', 'omp_threads': '1'}
   model fitted in 87.7 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]
+  head: 1000 of 10000 shots, 139 s; GPU memory [Insufficient Permissions], [Insufficient Permissions]

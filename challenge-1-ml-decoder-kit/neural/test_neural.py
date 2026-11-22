@@ -362,7 +362,8 @@ def test_command_runs_twice_the_same_and_resumes(tmp_path):
 def test_wilson_interval_and_rate_per_cycle():
     assert evaluate_stim.wilson_interval(5, 100) == pytest.approx((0.0215, 0.1118), abs=5e-4)
     assert evaluate_stim.wilson_interval(0, 100) == pytest.approx((0.0, 0.0370), abs=5e-4)
-    assert evaluate_stim.wilson_interval(100, 100)[1] == 1.0
+    assert evaluate_stim.wilson_interval(100, 100)[1] == 1.0 and evaluate_stim.wilson_interval(0, 100)[0] == 0.0
+    assert evaluate_stim.wilson_interval(100, 100)[0] == pytest.approx(0.9630, abs=5e-4)
     assert evaluate_stim.per_cycle(0.5, 1) == 0.5 and evaluate_stim.per_cycle(1 - 0.5 ** 12, 12) == pytest.approx(0.5)
 
 

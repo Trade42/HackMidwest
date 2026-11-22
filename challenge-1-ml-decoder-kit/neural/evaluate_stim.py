@@ -38,7 +38,9 @@ def wilson_interval(failures, shots, z=1.959964):
     fraction = failures / shots
     centre = fraction + z * z / (2 * shots)
     half = z * math.sqrt(fraction * (1 - fraction) / shots + z * z / (4 * shots * shots))
-    return max(0.0, (centre - half) / (1 + z * z / shots)), min(1.0, (centre + half) / (1 + z * z / shots))
+    low = 0.0 if failures == 0 else (centre - half) / (1 + z * z / shots)        # exact ends, free of rounding
+    high = 1.0 if failures == shots else (centre + half) / (1 + z * z / shots)
+    return low, high
 
 
 def per_cycle(fraction, cycles):

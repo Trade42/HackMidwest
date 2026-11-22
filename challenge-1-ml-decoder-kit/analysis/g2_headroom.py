@@ -306,7 +306,7 @@ def cmd_summarize(args):
     sel = load_selection(args.selection)
     paths = dataset_paths(args.data)
     out = dict(ms_label="ms per shot inside the decode call, a fresh decoder per shot (its construction is not timed), "
-                        "8 processes side by side on luminaty (AMD Ryzen 7 7730U), nice 15, cores 8-15",
+                        + args.machine,
                selection=args.selection,
                control_seed=CONTROL_SEED, subsample_seed=SUBSAMPLE_SEED, bposd_hi_order=BPOSD_HI_ORDER,
                tables={}, candidates={})
@@ -509,6 +509,8 @@ def main():
     sub.choices["run"].add_argument("--only", nargs="+", choices=list(VARIANTS))
     sub.choices["run"].add_argument("--p", type=float, nargs="+", help="run only these p")
     sub.choices["summarize"].add_argument("--pershot", default="analysis/results/pershot")
+    sub.choices["summarize"].add_argument("--machine", default="8 processes side by side on luminaty (AMD Ryzen 7 7730U), "
+                                                              "nice 15, cores 8-15")
     sub.choices["summarize"].add_argument("--out", default="analysis/results")
     args = ap.parse_args()
     {"select": cmd_select, "run": cmd_run, "summarize": cmd_summarize}[args.cmd](args)

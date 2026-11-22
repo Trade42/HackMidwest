@@ -106,7 +106,8 @@ def cmd_g2(args):
     run_tasks(tasks, args.processes, out / "cache", log)
     sys.stdout.flush()
     g2.cmd_summarize(Namespace(selection=selection, data=files, cache=str(out / "cache"), caps=args.caps,
-                               pershot=str(ANALYSIS / "results" / "pershot"), out=str(out)))
+                               pershot=str(ANALYSIS / "results" / "pershot"), out=str(out),
+                               machine=f"{args.processes} processes side by side on {platform.node()}"))
     log(f"ms in these tables: per shot inside the decode call, fresh decoder per shot, {args.processes} processes "
         f"side by side on {platform.node()}")
     log("job g2 done")

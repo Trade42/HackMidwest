@@ -2272,6 +2272,69 @@ def operating_rule_table(measured):
                  + markdown(["p", "Method", "X test failures", "Mean time per X shot, ms", "Where the time comes from"], lines))
 
 
+FOLDERS = {"bposd": "`decoders.py` (the kit)", "relay-bp": "`decoders.py` (the kit)", "router": "`evaluation/router.py` (teammates)",
+           "priortilt": "`hierarchy/priortilt_plugin.py` (IonQ's decoder)", "hierarchy-weight": "`hierarchy/`", "hierarchy-converged": "`hierarchy/`",
+           "hierarchy": "`hierarchy/`, `neural/`", "hierarchy-parallel": "`hierarchy/`, `neural/`", "ensemble": "`hierarchy/ensemble.py`",
+           "tcbp": "`hierarchy/tcbp_member.py` (NVIDIA's decoder)", "hierarchy-converged-parallel": "`hierarchy/`"}
+LABELS = {"pre": "pre-registered (the test run)", "pre-offline": "pre-registered (the test run), offline decode, no time",
+          "after": "after-test ablation", "after-offline": "after-test ablation, offline from saved answers, no time",
+          "secondary": "secondary: chosen after the predecoder's p = 0.004 gate failed",
+          "extension": "registered extension, run after the X p = 0.005 test result",
+          "post hoc": "post hoc: designed after the first test result",
+          "after-design": "designed after the first test result; frozen before this file was opened"}
+
+
+def master_table(measured, combined):
+    """Every method at each p, in one table, with the folder it lives in and the label of each number. No pick across label classes:
+    rows of different labels are not equals (the PR #7 review)."""
+    groups = {}
+
+    def put(method, folder, label, p, cell):
+        groups.setdefault((method, folder, LABELS[label]), {})[p] = cell
+
+    for spec in TEST_ROWS:
+        key = spec.decoder
+        for p in P_VALUES:
+            row = measured[p].get(key)
+            if row is None:
+                continue
+            label = ("after-offline" if row.get("offline") else "after") if row.get("after_test") else ("pre-offline" if row.get("offline") else "pre")
+            time = "offline" if row.get("offline") else (f"{ms(row['mean_ms'])} ms per pair" + (" (GPU call)" if row["device"] == "GPU" else ""))
+            put(DECODERS[key].label, FOLDERS.get(key, ""), label, p, f"{row['failures_pair']:,} pairs (X {row['failures_X']:,}) · {time}")
+    for p in P_VALUES:
+        rows = combined[p]["rows"] if combined.get(p) else {}
+        if SWAP_RULE in rows:
+            row = rows[SWAP_RULE]
+            put("TCBP-JOBS in place of relay-BP in our hierarchy (the ensemble's rule d)", "`hierarchy/ensemble.py`", "after-offline", p,
+                f"{row['failures_pair']} pairs (X {row['failures_X']}) · offline")
+    for p, basis, mark in PREDECODER_TEST:
+        n = f"pre{p[-1]}{basis}"
+        if FACTS.get(f"{n}_H", (NOT_MEASURED,))[0] == NOT_MEASURED:
+            continue
+        time = FACTS.get(f"lat{p[-1]}_total", (NOT_MEASURED,))[0] if basis == "X" else NOT_MEASURED
+        put(f"the predecoder: relay-BP with the head's priors ({basis} memory only)", "`predecoder/`", "secondary" if not mark else "extension", p,
+            f"{basis}: {FACTS[n + '_H'][0]} shot{'' if FACTS[n + '_H'][0] == '1' else 's'}" + (f" · {time} ms per X shot (validation sample)" if time != NOT_MEASURED else ""))
+    if FACTS.get("pair_H", (NOT_MEASURED,))[0] != NOT_MEASURED:
+        put("the predecoder in both bases, the kit's pair score", "`predecoder/`", "extension", "0.005", f"{FACTS['pair_H'][0]} pairs")
+    for p, basis, _ in PREDECODER_FALLBACK:
+        n = f"fb{p[-1]}{basis}"
+        if FACTS.get(f"{n}_rule", (NOT_MEASURED,))[0] == NOT_MEASURED:
+            continue
+        label = "after-design" if (p, basis) in (("0.003", "X"), ("0.005", "Z")) else "post hoc"
+        put(f"the predecoder with the fallback to TCBP-JOBS ({basis} memory only)", "`predecoder/fallback.py`", label, p,
+            f"{basis}: {FACTS[n + '_rule'][0]} shot{'' if FACTS[n + '_rule'][0] == '1' else 's'}")
+    if FACTS.get("pair_rule", (NOT_MEASURED,))[0] != NOT_MEASURED:
+        put("the predecoder with the fallback, the kit's pair score", "`predecoder/fallback.py`", "post hoc", "0.005", f"{FACTS['pair_rule'][0]} pairs")
+    lines = [[method, folder, label] + [cells.get(p, "") for p in P_VALUES] for (method, folder, label), cells in groups.items()]
+    return write("master_comparison",
+                 "**Every method we ran on the test shots, in one table.** Each cell is that method's own measured row: failed pairs of 10,000 (the kit's "
+                 "score, with its X failures beside it) and the mean time per pair, or, for a method run on one basis only, its failures of 10,000 shots of "
+                 "that basis. The **Label** says what kind of number it is; rows of different labels are not equals, so this table picks no best method. "
+                 "Times: one process on the team's server unless the cell says otherwise; TCBP-JOBS's is a GPU decode call; the predecoder's is a clean "
+                 "one-thread sample on 1,000 validation shots (exploration shots). The paired tests are in the tables each row comes from.\n\n"
+                 + markdown(["Method", "Folder", "Label"] + [f"p = {p}" for p in P_VALUES], lines))
+
+
 def ours_at(measured, p):
     """Our timed decoder at p: the one-core row, or the two-core row (checked to give the same answers) if the first has not landed."""
     return measured[p].get("hierarchy") or measured[p].get("hierarchy-parallel")
@@ -2438,6 +2501,7 @@ def main(argv=None):
         tables["test_network_timed"] = network_timed_table(measured)
         tables["predecoder_latency"] = predecoder_latency_table(measured)
         tables["operating_rule"] = operating_rule_table(measured)
+        tables["master_comparison"] = master_table(measured, combined)
         test_job_facts()
         tables["checks"] = checks_text(measured, extra, cross_checks, mode_checks(measured, combined))
         tcbp_statement(measured)

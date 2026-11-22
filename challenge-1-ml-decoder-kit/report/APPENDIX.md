@@ -5,6 +5,33 @@ as Markdown and as CSV.
 
 ## A. The test shots: every row, per noise level
 
+Every method in one table first (each row's label says what kind of number it is), then each noise level in full.
+
+<!-- BEGIN table:master_comparison -->
+**Every method we ran on the test shots, in one table.** Each cell is that method's own measured row: failed pairs of 10,000 (the kit's score, with its X failures beside it) and the mean time per pair, or, for a method run on one basis only, its failures of 10,000 shots of that basis. The **Label** says what kind of number it is; rows of different labels are not equals, so this table picks no best method. Times: one process on the team's server unless the cell says otherwise; TCBP-JOBS's is a GPU decode call; the predecoder's is a clean one-thread sample on 1,000 validation shots (exploration shots). The paired tests are in the tables each row comes from.
+
+| Method | Folder | Label | p = 0.003 | p = 0.004 | p = 0.005 |
+|---|---|---|---|---|---|
+| BP-OSD (kit baseline) | `decoders.py` (the kit) | pre-registered (the test run) | 60 pairs (X 26) · 131 ms per pair | 472 pairs (X 230) · 302 ms per pair | 2,433 pairs (X 1,307) · 581 ms per pair |
+| relay-BP (kit baseline) | `decoders.py` (the kit) | pre-registered (the test run) | 5 pairs (X 2) · 85.3 ms per pair | 83 pairs (X 36) · 319 ms per pair | 845 pairs (X 432) · 1,471 ms per pair |
+| relay-BP with a learned router | `evaluation/router.py` (teammates) | pre-registered (the test run) | 6 pairs (X 3) · 41.0 ms per pair | 87 pairs (X 42) · 315 ms per pair | 807 pairs (X 415) · 1,928 ms per pair |
+| PriorTilt, one run | `hierarchy/priortilt_plugin.py` (IonQ's decoder) | pre-registered (the test run) | 4 pairs (X 2) · 22.7 ms per pair | 74 pairs (X 35) · 87.3 ms per pair | 601 pairs (X 303) · 264 ms per pair |
+| our hierarchy, lowest-weight tie-break | `hierarchy/` | after-test ablation | 4 pairs (X 2) · 46.9 ms per pair | 60 pairs (X 27) · 215 ms per pair |  |
+| our hierarchy, lowest-weight tie-break | `hierarchy/` | pre-registered (the test run), offline decode, no time |  |  | 527 pairs (X 269) · offline |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | `hierarchy/` | pre-registered (the test run) | 4 pairs (X 2) · 46.3 ms per pair | 52 pairs (X 25) · 218 ms per pair |  |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates) | `hierarchy/` | pre-registered (the test run), offline decode, no time |  |  | 469 pairs (X 241) · offline |
+| our hierarchy, neural tie-break | `hierarchy/`, `neural/` | pre-registered (the test run) | 3 pairs (X 1) · 45.7 ms per pair | 44 pairs (X 18) · 216 ms per pair | 479 pairs (X 245) · 825 ms per pair |
+| our hierarchy, neural tie-break, the two fast decodes side by side on two cores | `hierarchy/`, `neural/` | pre-registered (the test run) | 3 pairs (X 1) · 28.9 ms per pair | 44 pairs (X 18) · 150 ms per pair | 479 pairs (X 245) · 608 ms per pair |
+| our ensemble (combined offline) | `hierarchy/ensemble.py` | pre-registered (the test run), offline decode, no time | 2 pairs (X 1) · offline | 16 pairs (X 8) · offline | 360 pairs (X 186) · offline |
+| TCBP-JOBS (NVIDIA, GPU) | `hierarchy/tcbp_member.py` (NVIDIA's decoder) | pre-registered (the test run) | 3 pairs (X 1) · 3.9 ms per pair (GPU call) | 41 pairs (X 20) · 7.8 ms per pair (GPU call) | 360 pairs (X 186) · 16.9 ms per pair (GPU call) |
+| our hierarchy, classical tie-break (lowest weight among the converged candidates), the two fast decodes side by side on two cores | `hierarchy/` | after-test ablation | 4 pairs (X 2) · 29.0 ms per pair | 52 pairs (X 25) · 150 ms per pair | 481 pairs (X 239) · 604 ms per pair |
+| TCBP-JOBS in place of relay-BP in our hierarchy (the ensemble's rule d) | `hierarchy/ensemble.py` | after-test ablation, offline from saved answers, no time | 2 pairs (X 1) · offline | 39 pairs (X 19) · offline | 403 pairs (X 204) · offline |
+| the predecoder: relay-BP with the head's priors (X memory only) | `predecoder/` | secondary: chosen after the predecoder's p = 0.004 gate failed |  |  | X: 151 shots · 212 ms per X shot (validation sample) |
+| the predecoder: relay-BP with the head's priors (X memory only) | `predecoder/` | registered extension, run after the X p = 0.005 test result | X: 2 shots · 52.9 ms per X shot (validation sample) | X: 15 shots · 94.0 ms per X shot (validation sample) |  |
+| the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | post hoc: designed after the first test result |  | X: 10 shots | X: 107 shots |
+| the predecoder with the fallback to TCBP-JOBS (X memory only) | `predecoder/fallback.py` | designed after the first test result; frozen before this file was opened | X: 1 shot |  |  |
+<!-- END table:master_comparison -->
+
 <!-- BEGIN table:test_p0.003 -->
 Test shots, p = 0.003: `data/p0.003/test_X.npz` and `test_Z.npz` (10,000 shots per basis, Stim seeds 301 and 302; sha256 `f7bc181399a0…` and `f5ac5b336f41…`). Every measured row decoded these two files.
 

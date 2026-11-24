@@ -1,25 +1,10 @@
-# Atom loss on the Gross code: what it costs relay-BP, what the heralds give back, and the ceiling for a loss-time tracker
+# Atom loss in the Gross-code memory experiment
 
-Task `loss-gates` (gate G5 of `orchestration/PLAN.md`). These are exploration numbers on shots that Clifft
-simulates. They are not final results, and no held-out file of the team is used.
+This report studies how simulated atom loss affects Relay-BP decoding of the Gross code and how much information from loss flags helps. The experiments use Clifft and the loss model specified below. They are **exploratory X-memory shots**, separate from the held-out X/Z software comparison in the [main decoder report](../../fpga_board/MAIN_ROUTER.md). They are not measurements of Infleqtion hardware.
 
-**Read this first: how L2 differs from the brief.** The brief asks to add, one at a time, four pieces of the
-loss-to-prior recipe that "the starter lacks": the final-readout flip at 0.5, the hook columns of flagged check
-atoms of the other basis, lossless priors wherever no flag fired, and the location weights. The starter's code
-(`starter_scripts/loss_starter.py`) already has the first three. Its docstring says that Z-check heralds are not
-used, but its flag-aware decoder does use them, through the hook columns. So L2 is run as leave-one-out from the
-starter's map, plus the one missing piece, the exact location weights. That piece includes a loss inside a run of
-same-role CX, which the starter leaves out. The orchestrator agreed to this by message, 2026-11-22.
+At physical error rate `p = 0.004` and per-atom, per-CX loss probability `s = 0.001`, the flag-aware decoder failed on 176 of 4,000 shots (4.4%). An oracle given the true round of each loss failed on 107 of those same 4,000 shots (2.67%). The oracle shows the possible value of knowing loss timing; it is not an implemented loss-time tracker. A loss-blind comparison used only 300 shots from this experiment and failed on 173 of them (57.67%). The detailed tables below distinguish these sample sizes and paired comparisons.
 
-**In short** (X memory, p = 0.004; details and intervals below). At s = 1e-3 per atom per CX (10 lost data atoms
-per shot), relay-BP on lossless priors fails 58% of shots; with the heralds (the starter's map) 4.4%; told the
-true loss round (ORACLE) 2.7%. So the heralds cut failures 11.5×, and a perfect loss-round tracker could cut
-them 1.64× more (95% 1.42–1.94): L3 passes the brief's 1.5 on the point estimate. Lossless: 0.64%.
-
-**How far it got.** Done: L0; the map checks; L1 at 5e-4 (partly), 1e-3 and 2e-3; L3; L4; one L2 piece.
-Moved by the orchestrator: L1 at 2e-4 and the rest of 5e-4 to server jobs B and C, L2's other pieces to
-server job D, the slot-level oracle and a replication of L3 to server job A (done, included below), and L5 to
-the task `loss-tracker`. The tables of jobs B, C and D are not in this file yet: HANDOFF.md lists them.
+The starter script already accounts for final-readout flips, hooks from flagged check atoms, and lossless priors where no flag appears. The location-weight experiment tests an additional part of the loss-to-prior mapping; its conditions and measured effect are recorded below.
 
 ## The loss model (our assumption)
 

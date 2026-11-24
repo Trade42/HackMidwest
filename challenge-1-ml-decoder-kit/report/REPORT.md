@@ -1,7 +1,8 @@
 # A hierarchical decoder for the Gross code with a learned tie-breaker
 
-Infleqtion Challenge 1 (ML-assisted decoding of the Gross code `[[144, 12, 12]]`), our part of the team's work.
-The teammates' part, a learned router on relay-BP's first answer, is described in the top-level `README.md`.
+This file is an earlier generated report snapshot. Some test rows and conclusions below are placeholders. The [main decoder explanation](../../fpga_board/MAIN_ROUTER.md) records the later held-out software results, and [REPRODUCE.md](REPRODUCE.md) describes the report inputs and methods.
+
+This report describes the hierarchical decoder developed for Infleqtion Challenge 1, which uses the Gross code `[[144, 12, 12]]`. The separate learned router on Relay-BP's first answer is described in the [first-solution router study](../../ROUTER_STUDY.md).
 
 **How to read this page.** Every table below is written by `python -m report.make_tables` and every figure by
 `python -m report.make_plots`, from the result files copied into `report/data/` (`report/data/SOURCES.md` says where

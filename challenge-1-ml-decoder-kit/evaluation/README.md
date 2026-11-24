@@ -1,14 +1,12 @@
 # Gross code saved-shot evaluation
 
-Run commands from `challenge-1-ml-decoder-kit` with its Python 3.12 environment. The
-original `baseline.py`, `decoders.py`, circuits, environment, and `baselines.log` are
-unchanged by these tools.
+Run commands from `challenge-1-ml-decoder-kit` with the Python 3.12 environment described in the [kit setup](../README.md#setup). The examples below use `python` from that activated environment. This guide covers saved-shot evaluation and the backup first-solution router; the [main hierarchy results](../../fpga_board/MAIN_ROUTER.md#what-was-measured) are documented separately.
 
-## Parse the active baseline log (safe during the run)
+## Parse a baseline log
 
 ```sh
-.venv312/bin/python -m evaluation.parse_baselines baselines.log --out-prefix results/baselines_parsed
-.venv312/bin/python -m evaluation.plot_results results/baselines_parsed.csv --out results/plots
+python -m evaluation.parse_baselines baselines.log --out-prefix results/baselines_parsed
+python -m evaluation.plot_results results/baselines_parsed.csv --out results/plots
 ```
 
 The parser writes `results/baselines_parsed.json` and `.csv`. Each run has a completion
@@ -17,21 +15,21 @@ a partial final line is kept only as `partial_tail` in JSON. The log contains pr
 rounded rate, standard error, mean, and p99 only. It has no shot predictions, paired
 failure count, median, or individual timings.
 
-## Saved-shot evaluation (after baselines finish)
+## Saved-shot evaluation
 
 Generate independent train, validation, and test NPZ files for X and Z. This example
 uses the kit's standard circuits and p=0.004:
 
 ```sh
 mkdir -p data/p0.004
-.venv312/bin/python make_dataset.py --basis X --p 0.004 --shots 20000 --seed 101 --out data/p0.004/train_X.npz
-.venv312/bin/python make_dataset.py --basis Z --p 0.004 --shots 20000 --seed 102 --out data/p0.004/train_Z.npz
-.venv312/bin/python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 201 --out data/p0.004/validation_X.npz
-.venv312/bin/python make_dataset.py --basis Z --p 0.004 --shots 5000 --seed 202 --out data/p0.004/validation_Z.npz
-.venv312/bin/python make_dataset.py --basis X --p 0.004 --shots 10000 --seed 301 --out data/p0.004/test_X.npz
-.venv312/bin/python make_dataset.py --basis Z --p 0.004 --shots 10000 --seed 302 --out data/p0.004/test_Z.npz
-.venv312/bin/python -m evaluation.evaluate --train-x data/p0.004/train_X.npz --train-z data/p0.004/train_Z.npz --validation-x data/p0.004/validation_X.npz --validation-z data/p0.004/validation_Z.npz --test-x data/p0.004/test_X.npz --test-z data/p0.004/test_Z.npz --decoder bposd --decoder relay-bp --decoder relay-first-solution --decoder relay-first-leg-or-full --out results/eval_p0.004
-.venv312/bin/python -m evaluation.plot_results results/eval_p0.004/summary.csv --out results/plots
+python make_dataset.py --basis X --p 0.004 --shots 20000 --seed 101 --out data/p0.004/train_X.npz
+python make_dataset.py --basis Z --p 0.004 --shots 20000 --seed 102 --out data/p0.004/train_Z.npz
+python make_dataset.py --basis X --p 0.004 --shots 5000 --seed 201 --out data/p0.004/validation_X.npz
+python make_dataset.py --basis Z --p 0.004 --shots 5000 --seed 202 --out data/p0.004/validation_Z.npz
+python make_dataset.py --basis X --p 0.004 --shots 10000 --seed 301 --out data/p0.004/test_X.npz
+python make_dataset.py --basis Z --p 0.004 --shots 10000 --seed 302 --out data/p0.004/test_Z.npz
+python -m evaluation.evaluate --train-x data/p0.004/train_X.npz --train-z data/p0.004/train_Z.npz --validation-x data/p0.004/validation_X.npz --validation-z data/p0.004/validation_Z.npz --test-x data/p0.004/test_X.npz --test-z data/p0.004/test_Z.npz --decoder bposd --decoder relay-bp --decoder relay-first-solution --decoder relay-first-leg-or-full --out results/eval_p0.004
+python -m evaluation.plot_results results/eval_p0.004/summary.csv --out results/plots
 ```
 
 `reproduce_eval.sh` runs these as separate stages for p=0.003, 0.004, or 0.005:
@@ -72,7 +70,7 @@ frozen-router evaluations have each produced `summary.json` and `*_shots.npz` on
 the same saved X/Z test files, run:
 
 ```sh
-.venv312/bin/python -m evaluation.compare_gain --reference-results results/eval_p0.004 --candidate-results results/router_eval_p0.004 --candidate-decoder evaluation.router:make_tiered_decoder --out results/gain_p0.004
+python -m evaluation.compare_gain --reference-results results/eval_p0.004 --candidate-results results/router_eval_p0.004 --candidate-decoder evaluation.router:make_tiered_decoder --out results/gain_p0.004
 ```
 
 This writes `comparison.json` and `comparison.csv`. It checks both test-file
@@ -161,7 +159,7 @@ The previously frozen router weights and validation thresholds are unchanged.
 
 A measured validation-only risk/latency curve can be produced later with, for
 example, `./reproduce_eval.sh router-sweep 0.004 0.1 0.2 0.3` followed by
-`.venv312/bin/python -m evaluation.plot_results results/router_p0.004/validation_sweep/summary.csv --out results/router_p0.004/plots`.
+`python -m evaluation.plot_results results/router_p0.004/validation_sweep/summary.csv --out results/router_p0.004/plots`.
 Each threshold executes full per-shot decoding and actual fallback reruns; the
 curve is labeled validation-only and is not a held-out result.
 
@@ -175,7 +173,7 @@ frozen models, for example:
 Then run:
 
 ```sh
-.venv312/bin/python -m evaluation.evaluate --test-x data/p0.004/test_X.npz --test-z data/p0.004/test_Z.npz --decoder evaluation.router:make_tiered_decoder --plugin-options results/router_p0.004/eval_options.json --out results/router_eval_p0.004
+python -m evaluation.evaluate --test-x data/p0.004/test_X.npz --test-z data/p0.004/test_Z.npz --decoder evaluation.router:make_tiered_decoder --plugin-options results/router_p0.004/eval_options.json --out results/router_eval_p0.004
 ```
 
 ## Tier 0 layout, data, and frozen commits
@@ -183,8 +181,8 @@ Then run:
 The layout check can run with bounded CPU during the baseline run:
 
 ```sh
-.venv312/bin/python -m evaluation.predecoder_layout --basis X --p 0.004
-.venv312/bin/python -m evaluation.predecoder_layout --basis Z --p 0.004
+python -m evaluation.predecoder_layout --basis X --p 0.004
+python -m evaluation.predecoder_layout --basis Z --p 0.004
 ```
 
 `GrossLayout` maps the 936 detector bits to `(13,12,6)` and each of the 8,784
@@ -198,8 +196,8 @@ An optional synthetic training/diagnostic shard is generated separately from the
 kit's Stim samples:
 
 ```sh
-.venv312/bin/python -m evaluation.make_dem_dataset --basis X --p 0.004 --shots 1000 --seed 10001 --shard 0 --out data/dem/p0.004/X_000.npz
-.venv312/bin/python -m evaluation.oracle_diagnostic --synthetic-shard data/dem/p0.004/X_000.npz
+python -m evaluation.make_dem_dataset --basis X --p 0.004 --shots 1000 --seed 10001 --shard 0 --out data/dem/p0.004/X_000.npz
+python -m evaluation.oracle_diagnostic --synthetic-shard data/dem/p0.004/X_000.npz
 ```
 
 The DEM shard contains sampled mechanism truth and a matrix hash. This truth is
@@ -245,7 +243,7 @@ same validation shots, keeps candidates within the supplied added-failure budget
 and selects the one with the lowest measured mean total latency. Example BP control:
 
 ```sh
-.venv312/bin/python -m evaluation.predecoder_eval select --mode bp --basis X --p 0.004 --validation data/p0.004/validation_X.npz --router-model results/router_p0.004/model_X.json --thresholds 2 4 6 --max-added-failures 0 --out results/commits_p0.004/bp_X.json
+python -m evaluation.predecoder_eval select --mode bp --basis X --p 0.004 --validation data/p0.004/validation_X.npz --router-model results/router_p0.004/model_X.json --thresholds 2 4 6 --max-added-failures 0 --out results/commits_p0.004/bp_X.json
 ```
 
 For CNN commits, use `--mode cnn` with candidate probability or logit thresholds,
@@ -261,7 +259,7 @@ validation data identity. Run the X p=0.004 go/no-go screen only after the BP an
 CNN manifests and router model are frozen:
 
 ```sh
-.venv312/bin/python -m evaluation.predecoder_eval go --test data/p0.004/go_X.npz --router-model results/router_p0.004/model_X.json --bp-manifest results/commits_p0.004/bp_X.json --cnn-manifest results/commits_p0.004/cnn_X.json --out results/go_p0.004
+python -m evaluation.predecoder_eval go --test data/p0.004/go_X.npz --router-model results/router_p0.004/model_X.json --bp-manifest results/commits_p0.004/bp_X.json --cnn-manifest results/commits_p0.004/cnn_X.json --out results/go_p0.004
 ```
 
 The `dataset 0.004` stage creates `go_X.npz` with 5,000 circuit shots and seed 401,

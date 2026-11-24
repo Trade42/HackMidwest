@@ -1,5 +1,7 @@
 # Midwest Quantum Hackathon Infleqtion: ML-assisted decoding of the [[144,12,12]] Gross code
 
+This kit defines the Gross-code memory experiment and the BP-OSD and Relay-BP baselines used throughout the project. It also provides scripts for generating shot files and scoring a decoder. For the completed project and measured comparisons, start at the [repository README](../README.md).
+
 | file | what it does |
 |------|--------------|
 | `circuits/` | the X and Z memory circuits of the Gross code and their schedule |

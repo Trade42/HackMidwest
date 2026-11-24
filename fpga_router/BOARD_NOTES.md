@@ -1,27 +1,12 @@
 # Putting `fpga_board/` on the Urbana board: two ways
 
-For a reader who has the board (and, for building, Vivado) and has never seen this repository. The design is the
-teammate's `fpga_board/`; its README has the details. These notes add what a check on luminaty found
-(`CHECK_OF_fpga_board.md`) and the facts about the board, each with its source. **Nothing here has been run on a
-board yet.** Until a `send` printout from the board is committed, no one may say "it runs on the board".
+This is a supplemental guide to the [trained board demo](../fpga_board/README.md) for readers building or testing on a Real Digital Urbana. The original audit is in [CHECK_OF_fpga_board.md](CHECK_OF_fpga_board.md); its two LED-pin findings have since been fixed in the current constraints file. A successful board run has not been recorded here, so the local simulation results should not be read as board measurements.
 
-Everything comes from one branch: `git fetch origin fpga && git switch fpga` (or `git checkout fpga`).
+Use the repository's `fpga` branch for the trained demo.
 
-## Before building: fix two pins
+## Check the board constraints
 
-`fpga_board/vivado/urbana_router.xdc` puts `led[8]` on B18 and `led[9]` on A18. RealDigital's own constraints file
-for the Urbana (version V2I1 of 2023-01-03, https://www.realdigital.org/downloads/1f07b1146ec59e165634a5b6c782a17d.txt,
-lines 38-39) has LED 8 on **C17** and LED 9 on **B18**, and A18 is a ground pin of the chip, so Vivado is expected to
-refuse to write a bitstream with the file as it is (expected, not run: there is no Vivado on luminaty). Change those two lines to:
-
-```
-set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS33} [get_ports {led[8]}]
-set_property -dict {PACKAGE_PIN B18 IOSTANDARD LVCMOS33} [get_ports {led[9]}]
-```
-
-(That file belongs to the teammate who wrote `fpga_board/`; the fix is his to commit.) Every other pin, including
-the serial pins (the FPGA receives on B16 and sends on A16), matches RealDigital's file
-(`logs/check_fpga_board_pins.log`).
+The current `fpga_board/vivado/urbana_router.xdc` assigns LED 8 to C17 and LED 9 to B18, matching the [Urbana master constraints](https://www.realdigital.org/downloads/1f07b1146ec59e165634a5b6c782a17d.txt). Confirm the file and board revision before building. The FPGA receives serial data on B16 and sends on A16.
 
 ## The board, in brief (RealDigital's Urbana reference manual and schematic)
 
@@ -42,7 +27,7 @@ the serial pins (the FPGA receives on B16 and sends on A16), matches RealDigital
    covers "all 7 Series" devices but needs a free licence file, renewed each year (AMD's Vivado licensing page). To
    save disk space, select only the 7 Series devices in the installer ("Select the required devices or device
    families"). On Windows, also let the installer add the cable drivers (needed for programming over USB).
-2. **Build** (from `fpga_board/`, after the pin fix): `vivado -mode batch -source vivado/build.tcl -nojournal -nolog`.
+2. **Build** (from `fpga_board/`): `vivado -mode batch -source vivado/build.tcl -nojournal -nolog`.
    It writes `build/router_top.bit` only if timing at 100 MHz closes, and it writes `build/utilization_route.rpt`,
    `build/timing_route.rpt` and `build/drc.rpt`. On Windows, run it from the "Vivado Tcl Shell" (or
    `C:\Xilinx\Vivado\<version>\bin\vivado.bat`); on Linux after `source /opt/Xilinx/Vivado/<version>/settings64.sh`.
@@ -50,15 +35,12 @@ the serial pins (the FPGA receives on B16 and sends on A16), matches RealDigital
    unless it sees exactly one XC7S50.
 4. **Run** the self-check below.
 
-## Way 2: build on one machine, commit the bitstream, load on another
+## Way 2: build on one machine, transfer the bitstream, load on another
 
-Useful when Vivado is on one computer (for example the teammate's Debian laptop) and the board on another (for
-example Sal's Windows laptop).
+Useful when Vivado is on one computer and the board is connected to another.
 
-1. On the Vivado machine: steps 1 and 2 of Way 1. Then commit the bitstream and the three reports. `build/` is in
-   `fpga_board/.gitignore`, so copy them out first, for example to `fpga_board/bitstream/`:
-   `router_top.bit`, `utilization_route.rpt`, `timing_route.rpt`, `drc.rpt`, and push to `fpga`.
-2. On the board's machine: `git fetch origin fpga`, then load the `.bit` with one of:
+1. On the Vivado machine, complete steps 1 and 2 of Way 1. Copy `build/router_top.bit` and the utilization, timing, and DRC reports to the board machine using a file transfer method available to you. Keep the reports with the bitstream so the measured board test can be tied to the build that produced it.
+2. On the board machine, load the transferred `.bit` with one of:
    - **Vivado Lab Edition** (free, much smaller than Vivado, only the Hardware Manager), or Vivado itself:
      `vivado_lab -mode batch -source fpga_board/vivado/program.tcl` needs the file at `fpga_board/build/router_top.bit`;
      or open the Hardware Manager, "Open target", "Program device", choose the file.

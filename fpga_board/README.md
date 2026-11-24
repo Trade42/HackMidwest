@@ -37,13 +37,13 @@ Expected: `PASS core: 5000...` and `PASS UART: 32...`. The UART test also abando
 For a separate comparison against the kit's exact NumPy/SciPy decision rule, use its Python environment:
 
 ```bash
-../challenge-1-ml-decoder-kit/.venv312/bin/python tools/verify_reference.py \
+python tools/verify_reference.py \
   --model ../challenge-1-ml-decoder-kit/results/router_p0.004/model_X.json \
   --features ../challenge-1-ml-decoder-kit/results/router_p0.004/validation_X.npz \
   --generated generated
 ```
 
-The expected result is `5000 saved shots: software escalates 683, fixed hardware escalates 683, mismatches 0`. On Debian, any environment with NumPy and SciPy installed works; the `.venv312` path is specific to this checkout.
+The expected result is `5000 saved shots: software escalates 683, fixed hardware escalates 683, mismatches 0`. Use a Python environment with NumPy and SciPy installed for this check.
 
 To refresh or change models, from `fpga_board/`:
 
@@ -65,18 +65,17 @@ yosys -Q -T -p 'read_verilog -sv -Igenerated rtl/router_core.sv rtl/router_front
 
 This is an unrouted mapping, not a Vivado utilization or timing result. The core has four registered stages: `in_valid` is sampled at stage 1 and `out_valid` rises at stage 4. Four 100 MHz clock periods give a nominal 40 ns pipeline budget. UART receive and frontend handoff add cycles; a 124-byte UART packet alone takes about 10.8 ms at 115200 baud, plus the eight-byte reply. Decoder time is additional.
 
-## Transfer with GitHub
+## Get the source
 
-In this checkout, stage only this directory because other experiment files may already be modified:
+Clone the repository and check out its `fpga` branch on the machine used for the build:
 
 ```bash
-git switch -c fpga
-git add fpga_board
-git commit -m "Add trained Urbana FPGA router demo"
-git push -u origin fpga
+git clone https://github.com/Trade42/HackMidwest.git
+cd HackMidwest
+git switch fpga
 ```
 
-If `fpga` already exists, switch to it instead of creating it. On Debian, clone the repository or fetch this branch, then `git switch fpga`. The frozen model, original shots, and this directory all need to be present. No Vivado install is needed on the Mac.
+The branch includes the frozen model, saved shots, generated vectors, and this demo. A source checkout is enough for local simulation; building and programming the board requires Vivado on the machine that performs those steps.
 
 ## Build and program on the Urbana board
 
@@ -87,7 +86,7 @@ If `fpga` already exists, switch to it instead of creating it. On Debian, clone 
 5. Identify the USB serial interface with `ls -l /dev/serial/by-id/`. Use the stable `/dev/serial/by-id/...` path in place of `/dev/ttyUSB0`. Create a Python environment and install the only send-side dependency: `python3 -m venv .venv`, `. .venv/bin/activate`, `python -m pip install pyserial`. If serial access is denied, add your account to Debian's `dialout` group and log in again.
 6. From `fpga_board/`, run `python tools/board_demo.py send --port /dev/serial/by-id/<your-uart> --dir generated --limit 100 --verbose`. Expect `100 board shots, 0 byte-exact mismatches`. The command also prints `SLOW` count and measured per-shot UART round-trip. For the complete saved set use `--limit 5000` (roughly a minute of wire time). The last verdict lights LED0 for `SLOW`; other LEDs show the shot count.
 
-If the board gives no reply, check the serial device, USB cable, baud rate, and RX/TX pin directions in the board's master XDC. A failed timing or DRC gate must be resolved before treating the bitstream as a 100 MHz design. The board test has not been run in this checkout.
+If the board gives no reply, check the serial device, USB cable, baud rate, and RX/TX pin directions in the board's master XDC. A failed timing or DRC gate must be resolved before treating the bitstream as a 100 MHz design. No physical-board test result is documented here.
 
 ## Hackathon demonstration
 

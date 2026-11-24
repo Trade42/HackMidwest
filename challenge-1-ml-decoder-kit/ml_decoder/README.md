@@ -3,6 +3,8 @@
 A fast ML layer in front, a confidence check, and the real decoder as the fallback. Same shape as the DuQuantum
 "ML telescope", moved to the Gross code.
 
+This is an exploratory alternative to the [measured main hierarchy](../../fpga_board/MAIN_ROUTER.md). Its tables and commands document this experiment's own conditions; they are not results for the final hierarchy.
+
 1. A CNN reads the 936-bit basis syndrome (13 rounds on the 12 x 6 torus) and predicts the 12 logical bits.
 2. Confidence is the smallest |logit| of the 12. At or above a frozen threshold, the CNN's answer is final.
 3. Every other shot goes to relay-BP. By default that is the kit's relay-BP (`decoders.RELAY_SETTINGS`: a first leg

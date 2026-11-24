@@ -1,4 +1,6 @@
-# A check of `fpga_board/` (the trained router for the Urbana board)
+# Historical audit of the trained Urbana router
+
+This audit records the state at commit `134de6e` on November 22, 2026. The LED-pin issue described below was fixed in the current `fpga_board/vivado/urbana_router.xdc`. For current build and test instructions, see [the board README](../fpga_board/README.md).
 
 Checked by the fpga worker on 2026-11-22, at commit `134de6e` (GJIMB, "Add trained Urbana FPGA router demo"),
 on luminaty (Ryzen 7 7730U, Linux). Nothing in `fpga_board/` was changed: every run below reads its files and
@@ -9,8 +11,8 @@ in user space; Python 3.12.15, numpy 2.5.5, scipy 1.18.1 in a fresh venv built f
 (not the tracked `.venv312`).
 
 **In short:** the design does what its README says, bit for bit, on all 5,000 validation shots of X memory at
-p = 0.004, including through the UART. Two things must change before the board: **two LED pins in the constraints
-file are wrong, and one of them (A18) is a ground ball of the chip, so Vivado is expected to refuse to write the
+p = 0.004, including through the UART. At the audited commit, two things needed attention before the board: **two LED pins in the constraints
+file were wrong, and one of them (A18) is a ground ball of the chip, so Vivado was expected to refuse to write the
 bitstream**
 (finding 1, a two-line fix); and the exporter's rounded threshold lets a board image for Z at p = 0.003 accept a
 wrong candidate that the software escalates (finding 2, a three-line fix). The committed X p = 0.004 image is not

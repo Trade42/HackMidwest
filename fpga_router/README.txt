@@ -1,10 +1,6 @@
-Router on the Urbana FPGA (XC7S50-CSGA324): the first design, kept as a record
+Earlier 16-feature router for the Urbana FPGA (XC7S50-CSGA324)
 
-THE TRAINED BOARD DEMO IS ../fpga_board/ (a teammate's design: 17 features with the convergence flag, the teammates'
-frozen model results/router_p0.004/model_X.json, Vivado scripts). Build and load that one. This folder is the
-earlier design, checked here with open tools, and a second, independent trained router on 16 whole-number features.
-The check of ../fpga_board/ is CHECK_OF_fpga_board.md; how to build it and load it on the board, with Vivado on
-the same machine or on another one, is BOARD_NOTES.md.
+This directory records the first FPGA router prototype and a separately trained 16-feature model. The current trained board demo is in ../fpga_board/: it uses the project's frozen 17-feature X-memory model and includes Vivado scripts. See CHECK_OF_fpga_board.md for the dated audit of that demo and BOARD_NOTES.md for supplemental board setup. The audit's two LED-pin findings have been fixed in the current ../fpga_board/vivado/urbana_router.xdc.
 
 What the router is. Relay-BP first finds one solution. If that took 1 to 80 iterations the shot is easy and the
 solution is kept. Otherwise a logistic model says "escalate" (run full relay-BP) or "accept". The router chooses

@@ -9,9 +9,7 @@ The team's decoder for the required comparison with BP-OSD and relay-BP. It is a
    the network finds most likely) or a rule without learning ("weight": the most probable
    set of faults).
 
-On 25,000 exploration shots of X memory at p = 0.004 it fails 66 times where relay-BP fails
-122, in 71% of relay-BP's mean time (laptop times; table below). These are not test-set
-numbers: the one run on the test shots has not happened.
+An earlier 25,000-shot X-memory exploration at `p = 0.004` recorded 66 failures for this hierarchy and 122 for Relay-BP, with a mean time of 71% of Relay-BP's on that laptop. The later held-out, paired software comparison is summarized in the [main decoder explanation](../../fpga_board/MAIN_ROUTER.md#what-was-measured). The exploration tables below remain useful for design history but are not the final result.
 
 Run every command from `challenge-1-ml-decoder-kit/`.
 

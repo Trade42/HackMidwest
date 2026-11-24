@@ -1,6 +1,6 @@
-# Gates G1 to G3: how relay-BP fails, how much accuracy sits above it, where its time goes
+# Relay-BP failure analysis and decoder design experiments
 
-**These are exploration numbers on train, validation and exploration shots. Nothing here is a final result.** No test or go file was opened: the loader (`analysis/common.py`, `refuse_held_out`) refuses any file whose name starts with `test_` or `go_`.
+This report examines where the supplied Relay-BP decoder fails, which alternative decoders correct those failures, and where decoding time is spent. All counts here come from training, validation, or other exploration shots; they are separate from the [held-out main decoder results](../../fpga_board/MAIN_ROUTER.md). The analysis loader (`analysis/common.py`, `refuse_held_out`) rejects files whose names begin with `test_` or `go_`.
 
 ## In short
 

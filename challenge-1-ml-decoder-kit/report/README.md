@@ -1,10 +1,10 @@
-# report: the comparison, made by scripts from committed result files
+# Decoder report sources and reproduction
 
-Start with `REPORT.md`. Run every command from `challenge-1-ml-decoder-kit/`.
+This folder contains the report generator, recorded inputs, and instructions for reproducing its tables and figures. For the current published software results, start with the [main decoder explanation](../../fpga_board/MAIN_ROUTER.md); some Markdown tables in this branch are earlier report snapshots and still contain unmeasured placeholders. Run the commands below from `challenge-1-ml-decoder-kit/`.
 
 | file | what it is |
 |------|------------|
-| `REPORT.md` | the write-up: the question, the approach, the results on the test shots, loss, what did not work, resources |
+| `REPORT.md` | an earlier generated report snapshot, including unmeasured placeholders in this branch |
 | `SLIDES.md` | the material for a five-minute talk, and the questions a judge will ask |
 | `REPRODUCE.md`, `reproduce_ours.sh` | every command from a fresh clone to our rows of the table, with what was run where |
 | `make_tables.py` | writes `tables/*.md` and `*.csv`, and the tables and numbers inside `REPORT.md` and `SLIDES.md` |

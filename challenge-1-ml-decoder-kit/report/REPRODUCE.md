@@ -1,5 +1,7 @@
 # How to reproduce our rows of the comparison
 
+This guide includes a dated record of which commands ran on the original PC and server. For the later published held-out results, see the [main decoder explanation](../../fpga_board/MAIN_ROUTER.md#what-was-measured). Paths and machine names below document provenance; readers can use equivalent environments when rerunning the workflow.
+
 Everything runs from `challenge-1-ml-decoder-kit/`. One script has every stage:
 `report/reproduce_ours.sh` (run it without arguments for the list). This page goes through the stages in order
 and says, for each command, whether it was **run here** (and on what) or **not run here**. "Here" is the PC the

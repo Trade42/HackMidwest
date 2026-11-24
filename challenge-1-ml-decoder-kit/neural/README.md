@@ -5,6 +5,8 @@ A neural network that reads the detection events of one memory experiment and pr
 code: "Scalable Neural Decoders for Practical Fault-Tolerant Quantum Computation"
 (arXiv:2604.08358, the "Cascade" decoder), scaled down to train on one laptop GPU.
 
+This README records the model design and its training experiments. For its role in the completed decoder and the held-out comparison, see the [main decoder explanation](../../fpga_board/MAIN_ROUTER.md). Measurements below identify their dataset and machine; training progress and exploratory scores are not the full pipeline's test results.
+
 No code was copied: the paper's authors released none, and nothing here comes from another
 repository. The folder uses only torch, numpy, scipy and stim, and the kit's own
 `circuit.py` and `make_circuit.py`.
@@ -455,7 +457,7 @@ score saved Stim shots with `evaluate_stim.py`, the last checkpoint and a few ke
    happens after the climb.
 2. If those rows get worse than they were during the climb: the target is too high for
    this size. Start a fresh run with `--p-train 0.0045` and compare it with the kept copies
-   (we are judged at 0.003 to 0.005).
+   (the challenge evaluates rates from 0.003 to 0.005).
 3. If the training loss jumps, or the run stops with a non-finite loss: a fresh run with
    `--lr 5e-4`.
 4. A faster climb is safe for a new run, on this evidence: at step 4,000 the network had
